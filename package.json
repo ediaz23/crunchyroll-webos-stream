@@ -1,8 +1,7 @@
 {
-	"name": "crun",
+	"name": "com.crunchyroll.webos.stream",
 	"version": "1.0.0",
-	"description": "A general template for an Enact Sandstone application for webOS TVs",
-	"author": "",
+	"description": "Unofficial Crunchyroll app for LG Smart TVs.",
 	"main": "src/index.js",
 	"scripts": {
 		"serve": "enact serve",
@@ -15,17 +14,25 @@
 		"test": "enact test",
 		"test-watch": "enact test --watch"
 	},
-	"license": "UNLICENSED",
+	"author": "Esteban Díaz <esteban.diazt23@gmail.com>",
+	"license": "Apache-2.0",
 	"private": true,
-	"repository": "",
-	"engines": {
-		"npm": ">=6.9.0"
-	},
+	"repository": "https://github.com/ediaz23/crunchyroll-webos-stream",
+	"keywords": [
+		"anime",
+		"crunchyroll",
+		"webos",
+		"player",
+		"react",
+		"enact",
+		"recoil",
+		"moonstone"
+	],
 	"enact": {
-		"theme": "sandstone"
+		"theme": "moonstone"
 	},
 	"eslintConfig": {
-		"extends": "enact"
+		"extends": "enact-proxy"
 	},
 	"eslintIgnore": [
 		"node_modules/*",
@@ -33,16 +40,24 @@
 		"dist/*"
 	],
 	"dependencies": {
-		"@enact/core": "^4.5.0",
-		"@enact/i18n": "^4.5.0",
-		"@enact/sandstone": "^2.5.0",
-		"@enact/spotlight": "^4.5.0",
-		"@enact/ui": "^4.5.0",
-		"@enact/webos": "^4.5.0",
-		"ilib": "npm:ilib-webos@^14.14.0-webos1",
+		"@cospired/i18n-iso-languages": "^4.1.0",
+		"@enact/core": "^4.6.0",
+		"@enact/i18n": "^4.6.0",
+		"@enact/moonstone": "^4.5.2",
+		"@enact/spotlight": "^4.6.0",
+		"@enact/ui": "^4.6.0",
+		"@enact/webos": "^4.6.0",
+		"crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
+		"ilib": "^14.15.1-webos1",
 		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"web-vitals": "^2.1.4"
+		"recoil": "^0.7.7",
+		"web-vitals": "^3.1.1",
+		"webostvjs": "^1.2.5"
+	},
+	"devDependencies": {
+		"@types/webostvjs": "^1.2.2",
+		"eslint-config-enact-proxy": "^1.0.5"
 	}
 }
