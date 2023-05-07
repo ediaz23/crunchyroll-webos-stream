@@ -1,6 +1,11 @@
 
 import { atom } from 'recoil'
 
+export const pathState = atom({
+    key: 'fileSate',
+    default: '/init'
+})
+
 export const homeIndexState = atom({
     key: 'homeIndexState',
     default: 0

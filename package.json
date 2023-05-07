@@ -12,7 +12,11 @@
 		"lint": "enact lint .",
 		"license": "enact license",
 		"test": "enact test",
-		"test-watch": "enact test --watch"
+		"test-watch": "enact test --watch",
+		"build": "npm run pack && ares-package dist/ -o bin/",
+		"install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.0_all.ipk",
+		"start": "ares-launch com.crunchyroll.stream.app",
+		"play": "npm run build && npm run install-tv && npm run start"
 	},
 	"author": "Esteban Díaz <esteban.diazt23@gmail.com>",
 	"license": "Apache-2.0",
@@ -29,7 +33,12 @@
 		"moonstone"
 	],
 	"enact": {
-		"theme": "moonstone"
+		"theme": "moonstone",
+        "resolveFallback": {
+            "fs": false,
+            "path": false,
+            "node-fetch": false
+        }
 	},
 	"eslintConfig": {
 		"extends": "enact-proxy"

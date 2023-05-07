@@ -1,10 +1,10 @@
 /* global ENACT_PACK_ISOMORPHIC */
 import {createRoot, hydrateRoot} from 'react-dom/client'
-
+import { RecoilRoot } from 'recoil'
 import App from './App'
 //import reportWebVitals from './reportWebVitals'
 
-const appElement = (<App />)
+const appElement = (<RecoilRoot> <App /> </RecoilRoot>)
 
 // In a browser environment, render instead of exporting
 if (typeof window !== 'undefined') {

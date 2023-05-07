@@ -1,12 +1,14 @@
 {
-	"id": "crun",
+	"id": "com.crunchyroll.stream.app",
 	"version": "1.0.0",
 	"vendor": "LGE-SVL",
 	"type": "web",
 	"main": "index.html",
-	"title": "Enact App Template",
+	"title": "Crunchyroll Stream App",
 	"icon": "icon.png",
 	"miniicon": "icon-mini.png",
 	"largeIcon": "icon-large.png",
-	"uiRevision": 2
+	"iconColor": "#1c8adb",
+	"uiRevision": 2,
+	"disableBackHistoryAPI": true
 }
