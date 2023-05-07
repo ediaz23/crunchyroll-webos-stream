@@ -1,8 +1,8 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import InitialPanel from '../views/InitialPanel'
 //import HomePanel from '../views/HomePanel'
@@ -11,10 +11,12 @@ import WarningPanel from '../views/WarningPanel'
 import LoginPanel from '../views/LoginPanel'
 import ContactMePanel from '../views/ContactMePanel'
 import ProfilesPanel from '../views/ProfilesPanel'
-import { pathState } from '../recoilConfig'
+import ConfirmExitPanel from '../views/ConfirnExitPanel'
+import { pathState, initScreenState } from '../recoilConfig'
 import api from '../api'
 //import logger from '../logger'
-import '../back'
+import utils from '../utils'
+import back from '../back'
 import './attachErrorHandler'
 
 
@@ -25,19 +27,36 @@ const App = ({ ...rest }) => {
     const [dbInit, setDBInit] = useState(false)
     /** @type {[String, Function]} */
     const [path, setPath] = useRecoilState(pathState)
+    /** @type {Function} */
+    const setInitScreenState = useSetRecoilState(initScreenState)
+
+    const closeApp = useCallback(() => {
+        if (utils.isTv()) {
+            window.close()
+        }
+    }, [])
 
     useEffect(() => {
         const loadData = async () => {
+            let initPath
             if (await api.isNewInstallation()) {
-                setPath('/warning')
+                initPath = '/warning'
             } else if ((new Date()) > await api.getNextContactDate()) {
-                setPath('/contact')
+                initPath = '/contact'
             } else {
-                setPath('/login')
+                initPath = '/login'
             }
+            setInitScreenState(initPath)
+            setPath(initPath)
         }
         if (dbInit) {
             loadData()
+        }
+    }, [dbInit, setPath, setInitScreenState])
+
+    useEffect(() => {
+        if (dbInit) {
+            back.pushHistory({ doBack: () => setPath('/askClose') })
         }
     }, [dbInit, setPath])
 
@@ -48,14 +67,19 @@ const App = ({ ...rest }) => {
         }
         initDB()
     }, [setDBInit])
+
     return (
-        <RoutablePanels {...rest} path={path} noCloseButton>
-            <Route path='init' component={InitialPanel} {...rest} />
-            <Route path='warning' component={WarningPanel} {...rest} />
-            <Route path='login' component={LoginPanel} {...rest} />
-            <Route path='profiles' component={ProfilesPanel} {...rest} />
-            <Route path='contact' component={ContactMePanel} {...rest} />
-        </RoutablePanels>
+        <div {...rest}>
+            <RoutablePanels {...rest} path={path} noCloseButton
+                onApplicationClose={closeApp}>
+                <Route path='init' component={InitialPanel} {...rest} />
+                <Route path='warning' component={WarningPanel} {...rest} />
+                <Route path='login' component={LoginPanel} {...rest} />
+                <Route path='profiles' component={ProfilesPanel} {...rest} />
+                <Route path='contact' component={ContactMePanel} {...rest} />
+                <Route path='askClose' component={ConfirmExitPanel} {...rest} />
+            </RoutablePanels>
+        </div>
     )
 }
 

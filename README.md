@@ -23,6 +23,16 @@ copyrighted content without permission. We do not condone or support piracy, and
 software is not the responsibility of the project contributors or maintainers.
 
 
+## Help
+
+Control back event.
+
+```
+window.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': 461 }))
+```
+
+
+
 ## ⚖ License
 
 This project is released under [Apache 2.0 License](LICENSE)

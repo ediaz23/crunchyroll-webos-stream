@@ -1,35 +1,32 @@
 
 import 'webostvjs'
 import { onWindowReady } from '@enact/core/snapshot'
-import utils from './utils'
 
 
 /** @type {Array<{doBack: function}>} */
 const historyStack = []
 
-/** @param {{doBack: function}} state */
-const pushHistory = state => historyStack.push(state)
+/** @type {{doBack: function}} */
+let lastState = null
 
+/** @param {{doBack: function}} state */
+const pushHistory = state => {
+    lastState = state
+    historyStack.push(state)
+}
+
+/** @return {{doBack: function}} */
 const popHistory = () => historyStack.pop()
 
 /** @param {{doBack: function}} state */
 const replaceHistory = state => { historyStack[historyStack.length - 1] = state }
 
+/** @return {{doBack: function}} */
+const getLastState = () => lastState
+
 const doBack = () => {
     const state = popHistory()
     state.doBack()
-}
-
-/**
- * @param {Array} backList
- * @param {Function} setFilePath
- */
-const backPath = (backList, setFilePath) => {
-    if (backList.length) {
-        const backList2 = backList.slice(0, backList.length - 1)
-        pushHistory({ doBack: () => backPath(backList2, setFilePath) })
-    }
-    setFilePath(backList)
 }
 
 onWindowReady(() => {
@@ -44,19 +41,11 @@ onWindowReady(() => {
             doBack()
         }
     })
-
-    if (utils.isTv()) {
-        pushHistory({
-            doBack: () => {
-                window.close()
-            }
-        })
-    }
 })
 
 export default {
     pushHistory,
     popHistory,
     replaceHistory,
-    backPath,
+    getLastState,
 }

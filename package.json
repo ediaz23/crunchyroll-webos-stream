@@ -1,72 +1,72 @@
 {
-	"name": "com.crunchyroll.webos.stream",
-	"version": "1.0.0",
-	"description": "Unofficial Crunchyroll app for LG Smart TVs.",
-	"main": "src/index.js",
-	"scripts": {
-		"serve": "enact serve",
-		"pack": "enact pack",
-		"pack-p": "enact pack -p",
-		"watch": "enact pack --watch",
-		"clean": "enact clean",
-		"lint": "enact lint .",
-		"license": "enact license",
-		"test": "enact test",
-		"test-watch": "enact test --watch",
-		"build": "npm run pack && ares-package dist/ -o bin/",
-		"install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.0_all.ipk",
-		"start": "ares-launch com.crunchyroll.stream.app",
-		"play": "npm run build && npm run install-tv && npm run start"
-	},
-	"author": "Esteban Díaz <esteban.diazt23@gmail.com>",
-	"license": "Apache-2.0",
-	"private": true,
-	"repository": "https://github.com/ediaz23/crunchyroll-webos-stream",
-	"keywords": [
-		"anime",
-		"crunchyroll",
-		"webos",
-		"player",
-		"react",
-		"enact",
-		"recoil",
-		"moonstone"
-	],
-	"enact": {
-		"theme": "moonstone",
+    "name": "com.crunchyroll.webos.stream",
+    "version": "1.0.0",
+    "description": "Unofficial Crunchyroll app for LG Smart TVs.",
+    "main": "src/index.js",
+    "scripts": {
+        "serve": "enact serve",
+        "pack": "enact pack",
+        "pack-p": "enact pack -p",
+        "watch": "enact pack --watch",
+        "clean": "enact clean",
+        "lint": "enact lint .",
+        "license": "enact license",
+        "test": "enact test",
+        "test-watch": "enact test --watch",
+        "build": "npm run pack && ares-package dist/ -o bin/",
+        "install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.0_all.ipk",
+        "start": "ares-launch com.crunchyroll.stream.app",
+        "play": "npm run build && npm run install-tv && npm run start"
+    },
+    "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
+    "license": "Apache-2.0",
+    "private": true,
+    "repository": "https://github.com/ediaz23/crunchyroll-webos-stream",
+    "keywords": [
+        "anime",
+        "crunchyroll",
+        "webos",
+        "player",
+        "react",
+        "enact",
+        "recoil",
+        "moonstone"
+    ],
+    "enact": {
+        "theme": "moonstone",
         "resolveFallback": {
             "fs": false,
             "path": false,
             "node-fetch": false
         }
-	},
-	"eslintConfig": {
-		"extends": "enact-proxy"
-	},
-	"eslintIgnore": [
-		"node_modules/*",
-		"build/*",
-		"dist/*"
-	],
-	"dependencies": {
-		"@cospired/i18n-iso-languages": "^4.1.0",
-		"@enact/core": "^4.6.0",
-		"@enact/i18n": "^4.6.0",
-		"@enact/moonstone": "^4.5.2",
-		"@enact/spotlight": "^4.6.0",
-		"@enact/ui": "^4.6.0",
-		"@enact/webos": "^4.6.0",
-		"crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
-		"ilib": "^14.15.1-webos1",
-		"prop-types": "^15.8.1",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"recoil": "^0.7.7",
-		"web-vitals": "^3.1.1",
-		"webostvjs": "^1.2.5"
-	},
-	"devDependencies": {
-		"@types/webostvjs": "^1.2.2",
-		"eslint-config-enact-proxy": "^1.0.5"
-	}
+    },
+    "eslintConfig": {
+        "extends": "enact-proxy"
+    },
+    "eslintIgnore": [
+        "node_modules/*",
+        "build/*",
+        "dist/*"
+    ],
+    "dependencies": {
+        "@cospired/i18n-iso-languages": "^4.1.0",
+        "@enact/core": "^4.6.0",
+        "@enact/i18n": "^4.6.0",
+        "@enact/moonstone": "^4.5.2",
+        "@enact/spotlight": "^4.6.0",
+        "@enact/ui": "^4.6.0",
+        "@enact/webos": "^4.6.0",
+        "crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
+        "ilib": "^14.15.1-webos1",
+        "prop-types": "^15.8.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "recoil": "^0.7.7",
+        "web-vitals": "^3.1.1",
+        "webostvjs": "^1.2.5"
+    },
+    "devDependencies": {
+        "@types/webostvjs": "^1.2.2",
+        "eslint-config-enact-proxy": "^1.0.5"
+    }
 }
