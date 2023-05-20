@@ -11,7 +11,7 @@ import css from './Login.module.less'
 const Login = ({ email, changeEmail, password, changePassword, doLogin, ...rest }) => {
     return (
         <Column className={css.loginForm} {...rest}>
-            <Heading size="title">{$L('Log in')}</Heading>
+            <Heading size="title">{$L('Login')}</Heading>
             <Heading size="small">{$L('Use your email and password.')}</Heading>
             <Row>
                 <Input
@@ -31,7 +31,7 @@ const Login = ({ email, changeEmail, password, changePassword, doLogin, ...rest 
             </Row>
             <Row className={css.loginButton} align="center">
                 <Button onClick={doLogin}>
-                    {$L('Log in')}
+                    {$L('Login')}
                 </Button>
             </Row>
         </Column>

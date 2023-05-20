@@ -29,9 +29,9 @@ const AlertBase = ({ open, title, message, onCancel, onAccept, ...rest }) => {
 }
 
 const AlertSpot = SpotlightContainerDecorator(AlertBase)
-const AlertSkin = Skinnable({ defaultSkin: 'light' }, AlertSpot)
+const Alert = Skinnable({ defaultSkin: 'light' }, AlertSpot)
 
-AlertSkin.propTypes = {
+Alert.propTypes = {
     open: PropTypes.bool,
     title: PropTypes.string,
     message: PropTypes.string,
@@ -39,4 +39,4 @@ AlertSkin.propTypes = {
     onAccept: PropTypes.func.isRequired,
 }
 
-export default AlertSkin
+export default Alert

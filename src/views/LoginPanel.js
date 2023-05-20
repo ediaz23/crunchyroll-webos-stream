@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
 import { Header, Panel } from '@enact/moonstone/Panels'
-import IconButton from '@enact/moonstone/IconButton'
 
 import $L from '@enact/i18n/$L'
 import { useSetRecoilState } from 'recoil'
 
 import Login from '../components/Login'
 import Message from '../components/Message'
+import ContactMe from '../components/ContactMe'
 import { pathState, initScreenState } from '../recoilConfig'
 import api from '../api'
-import back from '../back'
 
 
 const LoginPanel = ({ ...rest }) => {
@@ -52,10 +51,6 @@ const LoginPanel = ({ ...rest }) => {
         setMessage('')
         setPassword(value)
     }, [setPassword, setMessage])
-    const contactMe = useCallback(() => {
-        back.pushHistory({ doBack: () => { setPath('/login') } })
-        setPath('/contact')
-    }, [setPath])
 
     useEffect(() => {
         const loadData = async () => {
@@ -84,7 +79,7 @@ const LoginPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <IconButton size="small" onClick={contactMe}>info</IconButton>
+                <ContactMe origin='login' />
             </Header>
             <Row style={rowStyle}>
                 <Login {...{ email, changeEmail, password, changePassword, doLogin, message }} />
