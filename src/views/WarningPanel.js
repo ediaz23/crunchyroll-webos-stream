@@ -6,7 +6,10 @@ import { useSetRecoilState } from 'recoil'
 import { pathState } from '../recoilConfig'
 import api from '../api'
 
-const WarningPanel = (props) => {
+/**
+ * Show thats no an official app
+ */
+const WarningPanel = ({ ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
 
@@ -16,7 +19,7 @@ const WarningPanel = (props) => {
     }, [setPath])
 
     return (
-        <Panel {...props}>
+        <Panel {...rest}>
             <Header title="Warning" />
             <Button onClick={accept}>Click me</Button>
         </Panel>

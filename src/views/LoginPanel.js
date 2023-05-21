@@ -3,12 +3,12 @@ import { Row } from '@enact/ui/Layout'
 import { Header, Panel } from '@enact/moonstone/Panels'
 
 import $L from '@enact/i18n/$L'
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilState } from 'recoil'
 
 import Login from '../components/Login'
 import Message from '../components/Message'
 import ContactMe from '../components/ContactMe'
-import { pathState, initScreenState } from '../recoilConfig'
+import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
 import api from '../api'
 
 
@@ -23,13 +23,16 @@ const LoginPanel = ({ ...rest }) => {
     const [message, setMessage] = useState('')
     /** @type {Function} */
     const setInitScreenState = useSetRecoilState(initScreenState)
+    /** @type {[Boolean, Function]}  */
+    const [autoLogin, setAutoLogin] = useRecoilState(autoLoginState)
 
     const makeLogin = useCallback(async () => {
         await api.login()
         await api.getAccount()
         setInitScreenState('/profiles')
         setPath('/profiles')
-    }, [setInitScreenState, setPath])
+        setAutoLogin(true)
+    }, [setInitScreenState, setPath, setAutoLogin])
 
     const doLogin = useCallback(async () => {
         if (email && password) {
@@ -61,7 +64,7 @@ const LoginPanel = ({ ...rest }) => {
                     setPassword(credentials.password)
                 }
             }
-            if (await api.getSession()) {
+            if (autoLogin && await api.getSession()) {
                 try {
                     await makeLogin()
                 } catch (_e) {
@@ -72,7 +75,7 @@ const LoginPanel = ({ ...rest }) => {
             }
         }
         loadData()
-    }, [setEmail, setPassword, makeLogin])
+    }, [setEmail, setPassword, makeLogin, autoLogin])
 
     const rowStyle = { justifyContent: 'center', marginTop: '1rem' }
 

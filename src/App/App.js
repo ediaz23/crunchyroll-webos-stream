@@ -4,6 +4,7 @@ import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
+import ErrorBoundary from '../components/ErrorBoundary'
 import InitialPanel from '../views/InitialPanel'
 import HomePanel from '../views/HomePanel'
 //import PlayerPanel from '../views/PlayerPanel'
@@ -70,20 +71,22 @@ const App = ({ ...rest }) => {
     }, [setDBInit])
 
     return (
-        <div {...rest}>
-            <RoutablePanels {...rest} path={path} noCloseButton
-                onApplicationClose={closeApp}>
-                <Route path='init' component={InitialPanel} {...rest} />
-                <Route path='warning' component={WarningPanel} {...rest} />
-                <Route path='login' component={LoginPanel} {...rest} />
-                <Route path='profiles' component={ProfilesPanel} {...rest} >
-                    <Route path='edit' component={EditProfilePanel} {...rest} />
-                    <Route path='home' component={HomePanel} {...rest} />
-                </Route>
-                <Route path='contact' component={ContactMePanel} {...rest} />
-                <Route path='askClose' component={ConfirmExitPanel} {...rest} />
-            </RoutablePanels>
-        </div>
+        <ErrorBoundary>
+            <div {...rest}>
+                <RoutablePanels {...rest} path={path} noCloseButton
+                    onApplicationClose={closeApp}>
+                    <Route path='init' component={InitialPanel} {...rest} />
+                    <Route path='warning' component={WarningPanel} {...rest} />
+                    <Route path='login' component={LoginPanel} {...rest} />
+                    <Route path='profiles' component={ProfilesPanel} {...rest} >
+                        <Route path='edit' component={EditProfilePanel} {...rest} />
+                        <Route path='home' component={HomePanel} {...rest} />
+                    </Route>
+                    <Route path='contact' component={ContactMePanel} {...rest} />
+                    <Route path='askClose' component={ConfirmExitPanel} {...rest} />
+                </RoutablePanels>
+            </div>
+        </ErrorBoundary>
     )
 }
 

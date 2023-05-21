@@ -14,9 +14,11 @@
         "test": "enact test",
         "test-watch": "enact test --watch",
         "build": "npm run pack && ares-package dist/ -o bin/",
+        "build-p": "npm run pack-p && ares-package dist/ -o bin/",
         "install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.0_all.ipk",
         "start": "ares-launch com.crunchyroll.stream.app",
-        "play": "npm run build && npm run install-tv && npm run start"
+        "play": "npm run build && npm run install-tv && npm run start",
+        "play-p": "npm run build-p && npm run install-tv && npm run start"
     },
     "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
     "license": "Apache-2.0",
@@ -66,8 +68,13 @@
         "web-vitals": "^3.1.1",
         "webostvjs": "^1.2.5"
     },
+    "resolutions": {
+        "//": "See https://github.com/facebook/create-react-app/issues/11773",
+        "react-error-overlay": "6.0.9"
+    },
     "devDependencies": {
         "@types/webostvjs": "^1.2.2",
-        "eslint-config-enact-proxy": "^1.0.5"
+        "eslint-config-enact-proxy": "^1.0.5",
+        "react-error-overlay": "^6.0.9"
     }
 }

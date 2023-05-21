@@ -3,31 +3,41 @@ import 'webostvjs'
 import { onWindowReady } from '@enact/core/snapshot'
 
 
-/** @type {Array<{doBack: function}>} */
+/** @type {Array<{doBack: Function}>} */
 const historyStack = []
 
-/** @type {{doBack: function}} */
-let lastState = null
+/**
+ * Push a new state
+ * @param {{doBack: Function}} state
+ */
+const pushHistory = state => historyStack.push(state)
 
-/** @param {{doBack: function}} state */
-const pushHistory = state => {
-    lastState = state
-    historyStack.push(state)
-}
-
-/** @return {{doBack: function}} */
+/**
+ * Return and remove first state
+ * @return {{doBack: Function}}
+ */
 const popHistory = () => historyStack.pop()
 
-/** @param {{doBack: function}} state */
+/**
+ * Replace last state
+ * @param {{doBack: Function}} state
+ */
 const replaceHistory = state => { historyStack[historyStack.length - 1] = state }
 
-/** @return {{doBack: function}} */
-const getLastState = () => lastState
-
+/**
+ * Turn back to the previous view
+ */
 const doBack = () => {
     const state = popHistory()
-    state.doBack()
+    if (state) {
+        state.doBack()
+    }
 }
+
+/**
+ * Clean all history
+ */
+const cleanHistory = () => historyStack.splice(0, historyStack.length)
 
 onWindowReady(() => {
     window.addEventListener('keydown', function(inEvent) {
@@ -47,5 +57,5 @@ export default {
     pushHistory,
     popHistory,
     replaceHistory,
-    getLastState,
+    cleanHistory,
 }

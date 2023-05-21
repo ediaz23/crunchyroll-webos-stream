@@ -25,3 +25,9 @@ export const currentProfileState = atom({
     key: 'currentProfileState',
     default: null
 })
+
+export const autoLoginState = atom({
+    key: 'autoLoginState',
+    default: true
+})
+
