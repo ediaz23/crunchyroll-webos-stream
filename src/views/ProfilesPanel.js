@@ -1,27 +1,80 @@
-import { useCallback } from 'react'
-import Button from '@enact/moonstone/Button'
-import { Panel, Header } from '@enact/moonstone/Panels'
-//import { useSetRecoilState } from 'recoil'
+import { useCallback, useEffect, useState } from 'react'
+import { Row } from '@enact/ui/Layout'
+import { Header, Panel } from '@enact/moonstone/Panels'
+import Heading from '@enact/moonstone/Heading'
 
-//import { pathState } from '../recoilConfig'
-//import api from '../api'
+import $L from '@enact/i18n/$L'
+import { useSetRecoilState } from 'recoil'
 
-const ProfilesPanel = (props) => {
+import Profile from '../components/Profile'
+import ContactMe from '../components/ContactMe'
+import Logout from '../components/Logout'
+import { pathState, currentProfileState } from '../recoilConfig'
+import api from '../api'
+import back from '../back'
+
+
+const ProfilesPanel = ({ ...rest }) => {
     /** @type {Function} */
-    //    const setPath = useSetRecoilState(pathState)
+    const setPath = useSetRecoilState(pathState)
+    /** @type {Function} */
+    const setCurrentProfile = useSetRecoilState(currentProfileState)
+    /** @type {[Array<import('crunchyroll-js-api/src/types').Profile>, Function]}  */
+    const [profiles, setProfiles] = useState([])
 
-    const accept = useCallback(async () => {
-        console.log('click')
-        //        setPath('/contact')
-        //        await api.setInstalled()
+    const setProfile = useCallback((event) => {
+        /** @type {HTMLElement} */
+        const parentElement = event.target.closest('[data-profile-id]')
+        const profileId = parentElement.getAttribute('data-profile-id')
+        const profile = profiles.find(p => p.id === parseInt(profileId))
+        setCurrentProfile(profile)
+    }, [setCurrentProfile, profiles])
+
+    const onSelectProfile = useCallback(event => {
+        setProfile(event)
+        back.pushHistory({ doBack: () => { setPath('/profiles') } })
+        setPath('/profiles/home')
+    }, [setProfile, setPath])
+    const onEditProfile = useCallback(event => {
+        setProfile(event)
+        back.pushHistory({ doBack: () => { setPath('/profiles') } })
+        setPath('/profiles/edit')
+    }, [setProfile, setPath])
+
+
+    useEffect(() => {
+        const loadData = async () => {
+            setProfiles(await api.getProfile())
+        }
+        loadData()
     }, [])
 
+    const rowStyle = { justifyContent: 'center', marginTop: '1rem' }
+
     return (
-        <Panel {...props}>
-            <Header title="Profiles" />
-            <Button onClick={accept}>Click me</Button>
+        <Panel {...rest}>
+            <Header type='compact' hideLine>
+                <ContactMe origin='profiles' />
+                <Logout />
+            </Header>
+            <Row style={rowStyle}>
+                <Heading size='large'>
+                    {$L('Who is watching?')}
+                </Heading>
+            </Row>
+            <Row style={rowStyle}>
+                {profiles.map((profile, i) =>
+                    <Profile profile={profile} key={i}
+                        onSelectProfile={onSelectProfile}
+                        onEditProfile={onEditProfile} />
+                )}
+            </Row>
+            <Row style={rowStyle}>
+                <Logout text={$L('Logout')} />
+            </Row>
         </Panel>
     )
 }
 
 export default ProfilesPanel
+

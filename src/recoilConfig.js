@@ -21,3 +21,7 @@ export const initScreenState = atom({
     default: '/init'
 })
 
+export const currentProfileState = atom({
+    key: 'currentProfileState',
+    default: null
+})

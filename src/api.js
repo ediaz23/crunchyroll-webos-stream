@@ -3,7 +3,7 @@ import 'webostvjs'
 import $L from '@enact/i18n/$L'
 //import utils from './utils'
 import logger from './logger'
-import { localStore, CrunchyrollError, api } from 'crunchyroll-js-api'
+import { localStore, CrunchyrollError, api, config } from 'crunchyroll-js-api'
 import CONST from './const'
 
 
@@ -150,17 +150,42 @@ const getAccount = async () => {
 
 /**
  * Return profile
- * @returns {Promise<import('crunchyroll-js-api/src/types').Profile>}
+ * @returns {Promise<Array<import('crunchyroll-js-api/src/types').Profile>>}
  */
 const getProfile = async () => {
-    let profile = null
+    let profile = []
     try {
-        profile = await api.account.getProfile({ token: await localStore.getAuthToken() })
+        const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
+        if (tmpProfile) {  // hack to allow multi-profile
+            profile = [{ id: 0, ...tmpProfile }]
+        }
     } catch (error) {
         await translateError(error)
     }
     return profile
 }
+
+/**
+ * Return avatar list
+ * @returns {Promise<Array<String>>}
+ */
+const getAvatarList = async () => {
+    let avatarList = null
+    try {
+        const { items } = await api.assets.getAvatar({ token: await localStore.getAuthToken() })
+        avatarList = items
+    } catch (error) {
+        await translateError(error)
+    }
+    return avatarList
+}
+
+/**
+ * Return avatar url
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @returns {String}
+ */
+const getAvatarUrl = profile => `${config.configApp.url_static}/assets/avatar/170x170/${profile.avatar}`
 
 
 export default {
@@ -176,4 +201,6 @@ export default {
     getSession,
     getAccount,
     getProfile,
+    getAvatarList,
+    getAvatarUrl,
 }

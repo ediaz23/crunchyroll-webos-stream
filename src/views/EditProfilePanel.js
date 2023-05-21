@@ -4,7 +4,7 @@ import { Panel, Header } from '@enact/moonstone/Panels'
 const EditProfilePanel = (props) => {
     return (
         <Panel {...props}>
-            <Header title="Home" />
+            <Header title="Editar perfil" />
         </Panel>
     )
 }

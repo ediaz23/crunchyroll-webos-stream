@@ -5,13 +5,14 @@ import { Panels, Routable, Route } from '@enact/moonstone/Panels'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import InitialPanel from '../views/InitialPanel'
-//import HomePanel from '../views/HomePanel'
+import HomePanel from '../views/HomePanel'
 //import PlayerPanel from '../views/PlayerPanel'
 import WarningPanel from '../views/WarningPanel'
 import LoginPanel from '../views/LoginPanel'
 import ContactMePanel from '../views/ContactMePanel'
 import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
+import EditProfilePanel from '../views/EditProfilePanel'
 import { pathState, initScreenState } from '../recoilConfig'
 import api from '../api'
 //import logger from '../logger'
@@ -75,7 +76,10 @@ const App = ({ ...rest }) => {
                 <Route path='init' component={InitialPanel} {...rest} />
                 <Route path='warning' component={WarningPanel} {...rest} />
                 <Route path='login' component={LoginPanel} {...rest} />
-                <Route path='profiles' component={ProfilesPanel} {...rest} />
+                <Route path='profiles' component={ProfilesPanel} {...rest} >
+                    <Route path='edit' component={EditProfilePanel} {...rest} />
+                    <Route path='home' component={HomePanel} {...rest} />
+                </Route>
                 <Route path='contact' component={ContactMePanel} {...rest} />
                 <Route path='askClose' component={ConfirmExitPanel} {...rest} />
             </RoutablePanels>

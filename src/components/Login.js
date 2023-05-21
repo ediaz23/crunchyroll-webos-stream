@@ -11,7 +11,7 @@ import css from './Login.module.less'
 const Login = ({ email, changeEmail, password, changePassword, doLogin, ...rest }) => {
     return (
         <Column className={css.loginForm} {...rest}>
-            <Heading size="title">{$L('Login')}</Heading>
+            <Heading size="large">{$L('Login')}</Heading>
             <Heading size="small">{$L('Use your email and password.')}</Heading>
             <Row>
                 <Input
