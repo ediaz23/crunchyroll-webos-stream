@@ -181,11 +181,42 @@ const getAvatarList = async () => {
 }
 
 /**
+ * Update a profile
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @returns {Promise}
+ */
+const updateProfile = async (profile) => {
+    try {
+        await api.account.updateProfile({ token: await localStore.getAuthToken(), data: profile })
+    } catch (error) {
+        await translateError(error)
+    }
+}
+
+/**
  * Return avatar url
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @returns {String}
  */
 const getAvatarUrl = profile => `${config.configApp.url_static}/assets/avatar/170x170/${profile.avatar}`
+
+/**
+ * Return audio lang list supported
+ * @returns {Array<String>}
+ */
+const getAudioLangList = async () => config.i18n.audio_languages
+
+/**
+ * Return subtitles lang list supported
+ * @returns {Array<String>}
+ */
+const getSubtitleLangList = async () => config.i18n.text_languages
+
+/**
+ * Return content lang list supported
+ * @returns {Array<String>}
+ */
+const getContentLangList = async () => config.i18n.supported
 
 
 export default {
@@ -201,6 +232,10 @@ export default {
     getSession,
     getAccount,
     getProfile,
+    updateProfile,
     getAvatarList,
     getAvatarUrl,
+    getAudioLangList,
+    getSubtitleLangList,
+    getContentLangList,
 }

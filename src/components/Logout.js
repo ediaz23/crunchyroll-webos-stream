@@ -22,6 +22,7 @@ const Logout = ({ text }) => {
 
     const doLogout = useCallback(async () => {
         await api.logout()
+        back.cleanHistory()
         setInitScreenState('/login')
         setPath('/login')
     }, [setInitScreenState, setPath])

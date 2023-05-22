@@ -1,5 +1,8 @@
 
 import { useEffect, useState, useCallback } from 'react'
+import languages from '@cospired/i18n-iso-languages'
+import LocaleInfo from 'ilib/lib/LocaleInfo'
+import I18nDecorator from '@enact/i18n/I18nDecorator'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -13,7 +16,7 @@ import LoginPanel from '../views/LoginPanel'
 import ContactMePanel from '../views/ContactMePanel'
 import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
-import EditProfilePanel from '../views/EditProfilePanel'
+import ProfileEditPanel from '../views/ProfileEditPanel'
 import { pathState, initScreenState } from '../recoilConfig'
 import api from '../api'
 //import logger from '../logger'
@@ -79,7 +82,7 @@ const App = ({ ...rest }) => {
                     <Route path='warning' component={WarningPanel} {...rest} />
                     <Route path='login' component={LoginPanel} {...rest} />
                     <Route path='profiles' component={ProfilesPanel} {...rest} >
-                        <Route path='edit' component={EditProfilePanel} {...rest} />
+                        <Route path='edit' component={ProfileEditPanel} {...rest} />
                         <Route path='home' component={HomePanel} {...rest} />
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />
@@ -90,7 +93,16 @@ const App = ({ ...rest }) => {
     )
 }
 
-const AppLocal = App
+const AppLocal = I18nDecorator({
+    resources: [{
+        resource: options => new Promise(res => {
+            const localeInfo = new LocaleInfo(options.locale).getLocale()
+            import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
+                .then(val => options.onLoad(val)).then(res).catch(res)
+        }),
+        onLoad: res => languages.registerLocale(res)
+    }]
+}, App)
 
 const AppTheme = MoonstoneDecorator(AppLocal)
 
