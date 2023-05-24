@@ -1,7 +1,7 @@
 {
 	"id": "com.crunchyroll.stream.app",
 	"version": "1.0.0",
-	"vendor": "LGE-SVL",
+	"vendor": "Esteban Diaz",
 	"type": "web",
 	"main": "index.html",
 	"title": "Crunchyroll Stream App",

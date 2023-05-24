@@ -35,7 +35,7 @@ const Field = ({ title, children }) => {
  * @property {Array<LangTuple>} audio
  * @property {Array<LangTuple>} content
  * @property {Array<LangTuple>} subtitles
- * 
+ *
  */
 /**
  * @typedef ProfileEditProps
