@@ -3,7 +3,10 @@ import 'webostvjs'
 import $L from '@enact/i18n/$L'
 //import utils from './utils'
 import logger from './logger'
-import { localStore, CrunchyrollError, api, config } from 'crunchyroll-js-api'
+import {
+    localStore, CrunchyrollError, api, config,
+    utils as crunchUtils
+} from 'crunchyroll-js-api'
 import CONST from './const'
 
 
@@ -26,6 +29,14 @@ const init = async () => {
     logger.info('in  => database init')
     await localStore.loadFromLocal()
     logger.info('out => database init')
+}
+
+/**
+ * Set custom fetch function to api
+ * @param {Function} fetchFn
+ */
+const setCustomFetch = (fetchFn) => {
+    crunchUtils.setFetchFunction(fetchFn)
 }
 
 /**
@@ -221,6 +232,7 @@ const getContentLangList = async () => config.i18n.supported
 
 export default {
     init,
+    setCustomFetch,
     isNewInstallation,
     getNextContactDate,
     setInstalled,

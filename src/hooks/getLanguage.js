@@ -20,8 +20,7 @@ const getLanguage = (code) => {
     return desc
 }
 
-const useGetLanguage = () => {
-    return getLanguage
-}
+const useGetLanguage = () => getLanguage
+
 
 export default useGetLanguage

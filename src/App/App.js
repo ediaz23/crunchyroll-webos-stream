@@ -18,6 +18,7 @@ import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import { pathState, initScreenState } from '../recoilConfig'
+import useCustomFetch from '../hooks/customFetch'
 import api from '../api'
 //import logger from '../logger'
 import utils from '../utils'
@@ -28,6 +29,8 @@ import './attachErrorHandler'
 const RoutablePanels = Routable({ navigate: 'onBack' }, Panels)
 
 const App = ({ ...rest }) => {
+    /** @type {Function} */
+    const customFetch = useCustomFetch()
     /** @type {[String, Function]} */
     const [dbInit, setDBInit] = useState(false)
     /** @type {[String, Function]} */
@@ -68,10 +71,11 @@ const App = ({ ...rest }) => {
     useEffect(() => {
         const initDB = async () => {
             await api.init()
+            api.setCustomFetch(customFetch)
             setDBInit(true)
         }
         initDB()
-    }, [setDBInit])
+    }, [setDBInit, customFetch])
 
     return (
         <ErrorBoundary>
