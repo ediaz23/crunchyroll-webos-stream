@@ -44,7 +44,7 @@ const ProfilesPanel = ({ ...rest }) => {
 
     useEffect(() => {
         const loadData = async () => {
-            setProfiles(await api.getProfile())
+            setProfiles(await api.getProfiles())
         }
         loadData()
     }, [])

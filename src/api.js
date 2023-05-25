@@ -1,6 +1,7 @@
 
 import 'webostvjs'
 import $L from '@enact/i18n/$L'
+import Locale from 'ilib/lib/Locale'
 //import utils from './utils'
 import logger from './logger'
 import {
@@ -163,7 +164,7 @@ const getAccount = async () => {
  * Return profile
  * @returns {Promise<Array<import('crunchyroll-js-api/src/types').Profile>>}
  */
-const getProfile = async () => {
+const getProfiles = async () => {
     let profile = []
     try {
         const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
@@ -229,6 +230,32 @@ const getSubtitleLangList = async () => config.i18n.text_languages
  */
 const getContentLangList = async () => config.i18n.supported
 
+/**
+ * Return basic params to query api
+ */
+const getContentParam = async () => {
+    const token = await localStore.getAuthToken()
+    const localeObj = new Locale()
+    const locale = localeObj.getSpec()
+    const accountId = (await localStore.getToken()).accountId
+    return { account: { token, locale, accountId } }
+}
+
+/**
+ * Get index data
+ * @return {Promise}
+ */
+const getHome = async () => {
+    let out = null
+    try {
+        const param = await getContentParam()
+        out = await api.content.getBrowseIndex(param)
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
 
 export default {
     init,
@@ -243,11 +270,12 @@ export default {
     logout,
     getSession,
     getAccount,
-    getProfile,
+    getProfiles,
     updateProfile,
     getAvatarList,
     getAvatarUrl,
     getAudioLangList,
     getSubtitleLangList,
     getContentLangList,
+    getHome,
 }
