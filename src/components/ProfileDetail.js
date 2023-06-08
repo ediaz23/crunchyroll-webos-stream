@@ -11,7 +11,7 @@ import css from './ProfileDetail.module.less'
  */
 const ProfileDetail = ({ profile, langList, saveProfile }) => {
     return (
-        <Row className={css.profileDetail} size="100%">
+        <Row align='baseline space-evenly' className={css.profileDetail} size="100%">
             <Cell>
                 <ProfileInfo profile={profile} />
             </Cell>

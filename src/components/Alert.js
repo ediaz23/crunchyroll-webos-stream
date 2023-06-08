@@ -19,7 +19,7 @@ const AlertBase = ({ open, title, message, onCancel, onAccept, ...rest }) => {
             <Column style={{ height: 'auto' }} {...rest} className={css.content}>
                 {title && <Heading size='medium'>{title}</Heading>}
                 {message && <Heading size="small">{message}</Heading>}
-                <Row>
+                <Row align='baseline flex-end'>
                     {onCancel && <Button onClick={onCancel}>{$L('Cancel')}</Button>}
                     <Button onClick={onAccept}>{$L('Accept')}</Button>
                 </Row>

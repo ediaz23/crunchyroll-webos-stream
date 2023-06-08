@@ -77,17 +77,17 @@ const LoginPanel = ({ ...rest }) => {
         loadData()
     }, [setEmail, setPassword, makeLogin, autoLogin])
 
-    const rowStyle = { justifyContent: 'center', marginTop: '1rem' }
+    const rowStyle = { marginTop: '1rem' }
 
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
                 <ContactMe origin='login' />
             </Header>
-            <Row style={rowStyle}>
+            <Row align='center center' style={rowStyle}>
                 <Login {...{ email, changeEmail, password, changePassword, doLogin, message }} />
             </Row>
-            <Row style={rowStyle}>
+            <Row align='center center' style={rowStyle}>
                 {message && <Message type='error' message={message} />}
             </Row>
         </Panel>

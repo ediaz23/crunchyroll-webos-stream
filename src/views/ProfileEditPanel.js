@@ -47,14 +47,13 @@ const EditProfilePanel = ({ ...rest }) => {
         loadData()
     }, [convertLang, getLanguage])
 
-
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
                 <ContactMe origin='profiles/edit' />
                 <Logout />
             </Header>
-            <Row style={{ justifyContent: 'center' }}>
+            <Row align='center center'>
                 <Heading size='large'>
                     {$L('Profile')}
                 </Heading>

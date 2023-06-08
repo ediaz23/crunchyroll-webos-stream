@@ -49,27 +49,26 @@ const ProfilesPanel = ({ ...rest }) => {
         loadData()
     }, [])
 
-    const rowStyle = { justifyContent: 'center', marginTop: '1rem' }
-
+    const rowStyle = { marginTop: '1rem' }
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
                 <ContactMe origin='profiles' />
                 <Logout />
             </Header>
-            <Row style={rowStyle}>
+            <Row align='center center' style={rowStyle}>
                 <Heading size='large'>
                     {$L('Who is watching?')}
                 </Heading>
             </Row>
-            <Row style={rowStyle}>
+            <Row align='center center' style={rowStyle}>
                 {profiles.map((profile, i) =>
                     <Profile profile={profile} key={i}
                         onSelectProfile={onSelectProfile}
                         onEditProfile={onEditProfile} />
                 )}
             </Row>
-            <Row style={rowStyle}>
+            <Row align='center center' style={rowStyle}>
                 <Logout text={$L('Logout')} />
             </Row>
         </Panel>

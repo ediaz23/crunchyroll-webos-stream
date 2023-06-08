@@ -64,7 +64,7 @@
         "@cospired/i18n-iso-languages": "^4.1.0",
         "@enact/core": "^4.6.0",
         "@enact/i18n": "^4.6.0",
-        "@enact/moonstone": "^4.5.2",
+        "@enact/moonstone": "^4.5.3",
         "@enact/spotlight": "^4.6.0",
         "@enact/ui": "^4.6.0",
         "@enact/webos": "^4.6.0",

@@ -29,7 +29,7 @@ const Login = ({ email, changeEmail, password, changePassword, doLogin, ...rest 
                     onChange={changePassword}
                 />
             </Row>
-            <Row className={css.loginButton} align="center">
+            <Row align="center flex-end">
                 <Button onClick={doLogin}>
                     {$L('Login')}
                 </Button>

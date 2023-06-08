@@ -6,7 +6,7 @@ import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import css from './Profile.module.less'
-import Navegable from '../wrappers/Navegable'
+import Navigable from '../wrappers/Navigable'
 import api from '../api'
 
 
@@ -29,7 +29,7 @@ const ProfileDataBase = ({ profile, ...rest }) => {
     )
 }
 
-const ProfileData = Navegable(ProfileDataBase, css.profileFocus)
+const ProfileData = Navigable(ProfileDataBase, css.profileFocus)
 
 /**
  * @param {Object} obj
@@ -43,7 +43,7 @@ const Profile = ({ profile, onSelectProfile, onEditProfile, ...rest }) => {
     return (
         <Column className={css.profile} {...rest}>
             <ProfileData profile={profile} onClick={onSelectProfile} />
-            <Row className={css.logoutButton} align="center">
+            <Row className={css.logoutButton} align="center center">
                 <IconButton data-profile-id={profile.id}
                     onClick={onEditProfile}>
                     edit

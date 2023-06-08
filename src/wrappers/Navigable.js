@@ -6,7 +6,7 @@ import Spottable from '@enact/spotlight/Spottable'
 /**
  * Make a component navigable and add a special className
  */
-const Navegable = (WrappedComponent, profileFocus) => {
+const Navigable = (WrappedComponent, profileFocus) => {
     const EnhancedComponent = (props) => {
         const [isFocused, setIsFocused] = useState(false)
 
@@ -25,4 +25,4 @@ const Navegable = (WrappedComponent, profileFocus) => {
     return Spottable(EnhancedComponent)
 }
 
-export default Navegable
+export default Navigable
