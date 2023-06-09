@@ -2,13 +2,13 @@
 import 'webostvjs'
 import $L from '@enact/i18n/$L'
 import Locale from 'ilib/lib/Locale'
-//import utils from './utils'
 import logger from './logger'
 import {
     localStore, CrunchyrollError, api, config,
     utils as crunchUtils
 } from 'crunchyroll-js-api'
 import CONST from './const'
+import getMockData from './mock-data/mockData'
 
 
 /**
@@ -21,6 +21,7 @@ import CONST from './const'
 /** @type {ApiStorage} */
 const storage = localStore.storage
 
+const { LOAD_MOCK_DATA } = CONST
 
 /**
  * Initialize storage
@@ -167,9 +168,13 @@ const getAccount = async () => {
 const getProfiles = async () => {
     let profile = []
     try {
-        const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
-        if (tmpProfile) {  // hack to allow multi-profile
-            profile = [{ id: 0, ...tmpProfile }]
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            profile = [await getMockData('profile.json')]
+        } else {
+            const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
+            if (tmpProfile) {  // hack to allow multi-profile
+                profile = [{ id: 0, ...tmpProfile }]
+            }
         }
     } catch (error) {
         await translateError(error)
@@ -245,11 +250,11 @@ const getContentParam = async () => {
  * Get index data
  * @return {Promise}
  */
-const getHome = async () => {
+const getHomeFeed = async () => {
     let out = null
     try {
         const param = await getContentParam()
-        out = await api.content.getBrowseIndex(param)
+        out = await api.content.getHomeFeed(param)
     } catch (error) {
         await translateError(error)
     }
@@ -277,5 +282,5 @@ export default {
     getAudioLangList,
     getSubtitleLangList,
     getContentLangList,
-    getHome,
+    getHomeFeed,
 }

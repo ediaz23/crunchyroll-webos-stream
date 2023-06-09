@@ -4,4 +4,5 @@ export default {
     invalid_password: 'auth.obtain_access_token.invalid_credentials',
     invalid_refresh_token: 'auth.obtain_access_token.oauth2_error',
     invalid_auth_token: 'accounts.get_profile.invalid_auth_token',
+    LOAD_MOCK_DATA: true,
 }
