@@ -31,3 +31,12 @@ export const autoLoginState = atom({
     default: true
 })
 
+export const homefeedBakState = atom({
+    key: 'homefeedBakState',
+    default: '{}'
+})
+
+export const homefeedProcessedState = atom({
+    key: 'homefeedProcessedState',
+    default: []
+})

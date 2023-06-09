@@ -56,5 +56,4 @@ HomeToolbar.defaultProps = {
     hideText: false,
 }
 
-
 export default HomeToolbar

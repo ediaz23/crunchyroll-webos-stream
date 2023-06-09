@@ -1,14 +1,13 @@
 
 import 'webostvjs'
 import $L from '@enact/i18n/$L'
-import Locale from 'ilib/lib/Locale'
 import logger from './logger'
 import {
     localStore, CrunchyrollError, api, config,
     utils as crunchUtils
 } from 'crunchyroll-js-api'
 import CONST from './const'
-import getMockData from './mock-data/mockData'
+import { getMockData } from './mock-data/mockData'
 
 
 /**
@@ -169,7 +168,7 @@ const getProfiles = async () => {
     let profile = []
     try {
         if (__DEV__ && LOAD_MOCK_DATA) {
-            profile = [await getMockData('profile.json')]
+            profile = [await getMockData('profile')]
         } else {
             const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
             if (tmpProfile) {  // hack to allow multi-profile
@@ -237,28 +236,225 @@ const getContentLangList = async () => config.i18n.supported
 
 /**
  * Return basic params to query api
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @returns {Promise<import('crunchyroll-js-api/src/types').AccountAuth>}
  */
-const getContentParam = async () => {
+const getContentParam = async (profile) => {
     const token = await localStore.getAuthToken()
-    const localeObj = new Locale()
-    const locale = localeObj.getSpec()
     const accountId = (await localStore.getToken()).accountId
-    return { account: { token, locale, accountId } }
+    return {
+        token,
+        accountId,
+        locale: profile.preferred_communication_language,
+        audioLanguage: profile.preferred_content_audio_language,
+    }
 }
 
 /**
  * Get index data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @return {Promise}
  */
-const getHomeFeed = async () => {
+const getHomeFeed = async (profile) => {
     let out = null
     try {
-        const param = await getContentParam()
-        out = await api.content.getHomeFeed(param)
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('homefeed')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getHomeFeed({ account })
+        }
     } catch (error) {
         await translateError(error)
     }
     return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Array<String>} objectIds
+ * @return {Promise}
+ */
+const getObjects = async (profile, objectIds) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('objects', objectIds)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getObjects({ account, objectIds })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Array<String>} artistIds
+ * @return {Promise}
+ */
+const getMusicArtists = async (profile, artistIds) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('artist', artistIds)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getMusicArtist({ account, artistIds })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Array<String>} concertIds
+ * @return {Promise}
+ */
+const getMusicConcerts = async (profile, concertIds) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('concerts', concertIds)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getMusicConcerts({ account, concertIds })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Array<String>} musicIds
+ * @return {Promise}
+ */
+const getMusicVideos = async (profile, musicIds) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('musicVideo', musicIds)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getMusicVideo({ account, musicIds })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {Number} [params.quantity]
+ * @param {Boolean} [params.ratings]
+ * @return {Promise}
+ */
+const getHistory = async (profile, params) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('discoverHistory')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getHistory({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {Number} [params.quantity]
+ * @param {Number} [params.start]
+ * @return {Promise}
+ */
+const getWatchlist = async (profile, params) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('discoverWatchlist')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getWatchlist({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {Number} [params.quantity]
+ * @param {Number} [params.start]
+ * @return {Promise}
+ */
+const getRecomendation = async (profile, params) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('discoverRecomendantion')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getRecommendations({ account, params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @param {Number} [params.quantity]
+ * @param {Number} [params.start]
+ * @return {Promise}
+ */
+const getSimilar = async (profile, params) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('similar', params.contentId)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getSimilar({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Expand a sort url
+ * @param {String} url
+ * @return {Promise<Response>}
+ */
+const expandURL = async (url) => {
+    const token = await localStore.getAuthToken()
+    return fetch(url, { headers: { 'Autorization': token } })
 }
 
 
@@ -283,4 +479,13 @@ export default {
     getSubtitleLangList,
     getContentLangList,
     getHomeFeed,
+    getObjects,
+    getMusicArtists,
+    getMusicConcerts,
+    getMusicVideos,
+    getHistory,
+    getWatchlist,
+    getRecomendation,
+    getSimilar,
+    expandURL,
 }

@@ -11,14 +11,33 @@ async function setData(data, name) {
 }
 
 /**
- * Return mock data for name
+ * Returno filename to mockdata
  * @param {String} name
- * @returns {Promise<Object>}
+ * @param {Array<String>} [objectIds]
+ * @returns {String}
  */
-async function getMockData(name) {
-    const data = {}
-    await setData(data, name)
-    return data[name]
+function getMockFilename(name, objectIds) {
+    let suff = ''
+    if (objectIds) {
+        if (!Array.isArray(objectIds)) {
+            objectIds = objectIds.split('-')
+        }
+        suff = '-' + [...objectIds].sort().join('-').substring(0, 200)
+    }
+    return `${name}${suff}.json`
 }
 
-export default getMockData
+/**
+ * Return mock data for name
+ * @param {String} name
+ * @param {Array<String>} [objectIds]
+ * @returns {Promise<Object>}
+ */
+export async function getMockData(name, objectIds) {
+    const data = {}
+    const filename = getMockFilename(name, objectIds)
+    await setData(data, filename)
+    return data[filename]
+}
+
+export default {}

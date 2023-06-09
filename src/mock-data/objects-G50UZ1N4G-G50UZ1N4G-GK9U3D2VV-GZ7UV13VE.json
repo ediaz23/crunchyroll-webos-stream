@@ -1,0 +1,506 @@
+{
+    "total": 4,
+    "data": [
+        {
+            "type": "episode",
+            "id": "G50UZ1N4G",
+            "title": "Aventureras en la ciudad de los principiantes",
+            "promo_title": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "slug": "",
+            "streams_link": "/content/v2/cms/videos/G07FNJW0Z/streams",
+            "external_id": "EPI.895163",
+            "promo_description": "",
+            "description": "Yunyun y Megumin comienzan a hacer trabajos como aventureras, pero primero necesitan un grupo en el que encajen, pero siendo Yunyun tan inocente y Megumin tan ¿problemática?, no les será fácil.",
+            "linked_resource_key": "cms:/episodes/G50UZ1N4G",
+            "channel_id": "crunchyroll",
+            "slug_title": "outlaws-of-the-town-for-beginners",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
+                "availability_notes": "",
+                "availability_starts": "2023-06-07T16:00:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1420046,
+                "eligible_region": "CL",
+                "episode": "10",
+                "episode_air_date": "2023-06-08T00:00:00+09:00",
+                "episode_number": 10,
+                "extended_maturity_rating": {},
+                "free_available_date": "2023-06-07T16:00:00Z",
+                "identifier": "GJ0H7Q5V7|S1|E10",
+                "is_clip": false,
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_premium_only": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "premium_available_date": "2023-06-07T16:00:00Z",
+                "premium_date": null,
+                "season_id": "GY3VC2045",
+                "season_number": 1,
+                "season_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
+                "season_title": "KONOSUBA -An Explosion on This Wonderful World!",
+                "sequence_number": 10,
+                "series_id": "GJ0H7Q5V7",
+                "series_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
+                "series_title": "KONOSUBA -An Explosion on This Wonderful World!",
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "pt-BR",
+                    "ar-SA",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-06-08T00:00:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "G50UZ1N4G",
+                        "is_premium_only": true,
+                        "media_guid": "G07FNJW0Z",
+                        "original": true,
+                        "season_guid": "GY3VC2045",
+                        "variant": ""
+                    }
+                ]
+            }
+        },
+        {
+            "slug_title": "scrambling-and-dripping",
+            "id": "GZ7UV13VE",
+            "promo_title": "",
+            "promo_description": "",
+            "type": "episode",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
+                "availability_notes": "",
+                "availability_starts": "2023-06-06T15:30:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1420004,
+                "eligible_region": "CL",
+                "episode": "10",
+                "episode_air_date": "2023-06-06T23:00:00+09:00",
+                "episode_number": 10,
+                "extended_maturity_rating": {},
+                "free_available_date": "2023-06-06T15:30:00Z",
+                "identifier": "G9VHN9185|S1|E10",
+                "is_clip": false,
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_premium_only": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "premium_available_date": "2023-06-06T15:30:00Z",
+                "premium_date": null,
+                "season_id": "GYMGC38P0",
+                "season_number": 1,
+                "season_slug_title": "skip-and-loafer",
+                "season_title": "Skip and Loafer",
+                "sequence_number": 10,
+                "series_id": "G9VHN9185",
+                "series_slug_title": "skip-and-loafer",
+                "series_title": "Skip and Loafer",
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "es-ES",
+                    "fr-FR",
+                    "pt-BR",
+                    "ar-SA",
+                    "it-IT",
+                    "de-DE",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-06-06T23:00:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "GZ7UV13VE",
+                        "is_premium_only": true,
+                        "media_guid": "G5JFZ1NZV",
+                        "original": true,
+                        "season_guid": "GYMGC38P0",
+                        "variant": ""
+                    }
+                ]
+            },
+            "external_id": "EPI.895002",
+            "channel_id": "crunchyroll",
+            "linked_resource_key": "cms:/episodes/GZ7UV13VE",
+            "streams_link": "/content/v2/cms/videos/G5JFZ1NZV/streams",
+            "description": "Está toda la clase preparando la obra de teatro en la que van a participar, pese a que Sousuke no está muy por la labor de participar.",
+            "slug": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "title": "Mucho trabajo en el festival y el baile lleno de lágrimas"
+        },
+        {
+            "slug_title": "bear-getting-motivated",
+            "type": "episode",
+            "description": "Yuna y compañía llegan a Sielin para la fiesta de Misa y su abuelo, pero allí se encontrarán involucradas en las disputas entre dos familias de la nobleza.",
+            "channel_id": "crunchyroll",
+            "title": "El oso se motiva",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
+                "availability_notes": "",
+                "availability_starts": "2023-06-05T14:00:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1420004,
+                "eligible_region": "CL",
+                "episode": "10",
+                "episode_air_date": "2023-06-05T22:00:00+09:00",
+                "episode_number": 10,
+                "extended_maturity_rating": {},
+                "free_available_date": "2023-06-05T14:00:00Z",
+                "identifier": "GQWH0M990|S2|E10",
+                "is_clip": false,
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_premium_only": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "premium_available_date": "2023-06-05T14:00:00Z",
+                "premium_date": null,
+                "season_id": "G619CPW1J",
+                "season_number": 2,
+                "season_slug_title": "kuma-kuma-kuma-bear---punch",
+                "season_title": "Kuma Kuma Kuma Bear - Punch!",
+                "sequence_number": 10,
+                "series_id": "GQWH0M990",
+                "series_slug_title": "kuma-kuma-kuma-bear",
+                "series_title": "Kuma Kuma Kuma Bear",
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "es-ES",
+                    "fr-FR",
+                    "pt-BR",
+                    "ar-SA",
+                    "it-IT",
+                    "de-DE",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-06-05T22:00:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "GK9U3D2VV",
+                        "is_premium_only": true,
+                        "media_guid": "G3WFXZEKK",
+                        "original": true,
+                        "season_guid": "G619CPW1J",
+                        "variant": ""
+                    }
+                ]
+            },
+            "promo_title": "",
+            "linked_resource_key": "cms:/episodes/GK9U3D2VV",
+            "id": "GK9U3D2VV",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/2c6171a16cd15c871ad73a08c94f214a.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "external_id": "EPI.894916",
+            "slug": "",
+            "streams_link": "/content/v2/cms/videos/G3WFXZEKK/streams",
+            "promo_description": ""
+        },
+        {
+            "promo_description": "",
+            "description": "Yunyun y Megumin comienzan a hacer trabajos como aventureras, pero primero necesitan un grupo en el que encajen, pero siendo Yunyun tan inocente y Megumin tan ¿problemática?, no les será fácil.",
+            "linked_resource_key": "cms:/episodes/G50UZ1N4G",
+            "channel_id": "crunchyroll",
+            "slug_title": "outlaws-of-the-town-for-beginners",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
+                "availability_notes": "",
+                "availability_starts": "2023-06-07T16:00:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1420046,
+                "eligible_region": "CL",
+                "episode": "10",
+                "episode_air_date": "2023-06-08T00:00:00+09:00",
+                "episode_number": 10,
+                "extended_maturity_rating": {},
+                "free_available_date": "2023-06-07T16:00:00Z",
+                "identifier": "GJ0H7Q5V7|S1|E10",
+                "is_clip": false,
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_premium_only": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "premium_available_date": "2023-06-07T16:00:00Z",
+                "premium_date": null,
+                "season_id": "GY3VC2045",
+                "season_number": 1,
+                "season_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
+                "season_title": "KONOSUBA -An Explosion on This Wonderful World!",
+                "sequence_number": 10,
+                "series_id": "GJ0H7Q5V7",
+                "series_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
+                "series_title": "KONOSUBA -An Explosion on This Wonderful World!",
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "pt-BR",
+                    "ar-SA",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-06-08T00:00:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "G50UZ1N4G",
+                        "is_premium_only": true,
+                        "media_guid": "G07FNJW0Z",
+                        "original": true,
+                        "season_guid": "GY3VC2045",
+                        "variant": ""
+                    }
+                ]
+            },
+            "external_id": "EPI.895163",
+            "type": "episode",
+            "title": "Aventureras en la ciudad de los principiantes",
+            "promo_title": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/c63a16edad60fbed3c2484112bdf7961.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "id": "G50UZ1N4G",
+            "slug": "",
+            "streams_link": "/content/v2/cms/videos/G07FNJW0Z/streams"
+        }
+    ],
+    "meta": {}
+}
