@@ -5,12 +5,20 @@
     >div {
         display: flex;
         align-items: center;
-        padding-right: 0.5rem;
         cursor: pointer;
+
+        >div:last-of-type {
+            padding-right: 0.5rem;
+        }
+
+        >div:first-of-type {
+            padding-right: 0;
+        }
     }
 
     .iconFocus {
         background-color: @moon-darker-gray !important;
+        //        background-color: transparent !important;
 
         >div:first-of-type {
             color: @moon-accent !important;
