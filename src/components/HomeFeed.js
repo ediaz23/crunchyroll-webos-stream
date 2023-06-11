@@ -138,9 +138,20 @@ const processDynamicCollection = async (carousel, profile) => {
         res = await api.getRecomendation(profile, { quantity: 20 })
     } else if ('because_you_watched' === carousel.response_type) {
         res = await api.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20 })
+    } else if ('recent_episodes' === carousel.response_type) {
+        res = await api.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added' })
+    } else if ('browse' === carousel.response_type) {
+        const hash = { q: 'quantity', season_tag: 'seasonTag', sort_by: 'sort' }
+        const params = {}
+        if (carousel.query_params) {
+            for (const key of Object.keys(carousel.query_params)) {
+                const newKey = hash[key] || key
+                params[newKey] = carousel.query_params[key]
+            }
+        }
+        res = await api.getBrowseAll(profile, params)
     } else {
-        console.log(`${carousel.resource_type} - ${carousel.response_type}`)
-        //        res = await api.getObjects(profile, carousel.ids)
+        new Error(`Dynamic Collection not supported ${carousel.resource_type} - ${carousel.response_type}`)
     }
     return { ...carousel, items: res.data }
 }

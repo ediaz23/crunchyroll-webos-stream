@@ -11,6 +11,18 @@ async function setData(data, name) {
 }
 
 /**
+ * Convert a object to string
+ * @param {Object} obj
+ * @returns {String}
+ */
+function objectToStringForFileName(obj) {
+    return JSON.stringify(obj)
+        .replace(/[{}"]/g, '')
+        .replace(/:/g, '-')
+        .replace(/,/g, '_');
+}
+
+/**
  * Returno filename to mockdata
  * @param {String} name
  * @param {Array<String>} [objectIds]
@@ -19,8 +31,12 @@ async function setData(data, name) {
 function getMockFilename(name, objectIds) {
     let suff = ''
     if (objectIds) {
-        if (!Array.isArray(objectIds)) {
+        if (objectIds instanceof String || typeof objectIds === 'string') {
             objectIds = objectIds.split('-')
+        } else if (Array.isArray(objectIds)) {
+            // nothing
+        } else {
+            objectIds = [objectToStringForFileName(objectIds)]
         }
         suff = '-' + [...objectIds].sort().join('-').substring(0, 200)
     }

@@ -448,6 +448,35 @@ const getSimilar = async (profile, params) => {
 }
 
 /**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {Number} [params.quantity] Number of records in a result
+ * @param {Number} [params.start] Offset to request
+ * @param {Array<String>} [params.category] Category
+ * @param {String} [params.query] Search pattern
+ * @param {String} [params.seasonTag] season tag
+ * @param {String} [params.sort] sort results
+ * @param {String} [params.type] type for search, example episode
+ * @param {Boolean} [params.ratings]
+ * @return {Promise}
+ */
+const getBrowseAll = async (profile, params) => {
+    let out = null
+    try {
+        if (__DEV__ && LOAD_MOCK_DATA) {
+            out = await getMockData('browse', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content2.getBrowseAll({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
  * Expand a sort url
  * @param {String} url
  * @return {Promise<Response>}
@@ -487,5 +516,6 @@ export default {
     getWatchlist,
     getRecomendation,
     getSimilar,
+    getBrowseAll,
     expandURL,
 }
