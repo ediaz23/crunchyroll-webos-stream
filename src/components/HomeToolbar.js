@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react'
 
+import Spotlight from '@enact/spotlight'
 import { Column } from '@enact/ui/Layout'
 import Icon from '@enact/moonstone/Icon'
 import Marquee from '@enact/moonstone/Marquee'
@@ -16,20 +18,33 @@ export const TOOLBAR_INDEX = {
     movies: { index: 3, icon: 'recordings', label: $L('Movies') },
     categories: { index: 4, icon: 'bulletlist', label: $L('Categories') },
     mylist: { index: 5, icon: 'denselist', label: $L('My List') },
+    close: { index: 6, icon: 'closex', label: $L('Close') },
 }
 
 const NavigableDiv = Navigable('div', css.iconFocus)
 
-const IconText = ({ icon, active, children }) => (
-    <NavigableDiv className={classNames('', { [css.iconActive]: active })}>
-        <Icon>{icon}</Icon>
-        {children &&
-            <Marquee>{children}</Marquee>
-        }
-    </NavigableDiv>
-)
+const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
 
-const HomeToolbar = ({ currentIndex, hideText }) => {
+    const compRef = useRef(null)
+
+    useEffect(() => {
+        if (compRef && autoFocus && active) {
+            Spotlight.focus(compRef.current.node)
+        }
+    }, [compRef, autoFocus, active])
+
+    return (
+        <NavigableDiv className={classNames('', { [css.iconActive]: active })}
+            id={icon} {...rest} ref={compRef}>
+            <Icon>{icon}</Icon>
+            {children &&
+                <Marquee>{children}</Marquee>
+            }
+        </NavigableDiv>
+    )
+}
+
+const HomeToolbar = ({ currentIndex, hideText, ...rest }) => {
 
     return (
         <Column className={css.homeToolbar} align='baseline center'>
@@ -37,7 +52,9 @@ const HomeToolbar = ({ currentIndex, hideText }) => {
                 return (
                     <IconText icon={iconData.icon}
                         key={iconData.index}
-                        active={iconData.index === currentIndex}>
+                        data-index={iconData.index}
+                        active={iconData.index === currentIndex}
+                        {...rest}>
                         {!hideText && iconData.label}
                     </IconText>
                 )
@@ -49,11 +66,15 @@ const HomeToolbar = ({ currentIndex, hideText }) => {
 
 HomeToolbar.propTypes = {
     currentIndex: PropTypes.number,
-    hideText: PropTypes.bool
+    hideText: PropTypes.bool,
+    autoFocus: PropTypes.bool,
+    onClick: PropTypes.func,
+    onBlur: PropTypes.func,
 }
 
 HomeToolbar.defaultProps = {
     hideText: false,
+    autoFocus: false,
 }
 
 export default HomeToolbar
