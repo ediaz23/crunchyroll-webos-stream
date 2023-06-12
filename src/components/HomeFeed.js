@@ -1,4 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import Spinner from '@enact/moonstone/Spinner'
+import GridListImageItem from '@enact/moonstone/GridListImageItem'
+import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import { useRecoilState } from 'recoil'
@@ -45,11 +48,12 @@ const processCarousel = async (carousel, profile) => {
         items: []
     }
     if (__DEV__ && CONST.LOAD_MOCK_DATA) {
-        const { data } = await getMockData('objects', 'G50UZ1N4G-G50UZ1N4G-GK9U3D2VV-GZ7UV13VE')
+        const { data } = await getMockData('objects', 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE')
         out.items = data
     } else {
         const objectIds = await Promise.all(carousel.items.map(convertItem2Object))
-        const { data } = await api.getObjects(profile, objectIds.filter(item => !!item))
+        const uniqueObjectIds = Array.from(new Set(objectIds.filter(item => !!item)))
+        const { data } = await api.getObjects(profile, uniqueObjectIds)
         out.items = data
     }
     return out
@@ -95,7 +99,8 @@ const processInFeedPanels = async (carousel, profile) => {
         out.items = data
     } else {
         const objectIds = await Promise.all(carousel.panels.map(convertItem2Object))
-        const { data } = await api.getObjects(profile, objectIds.filter(item => !!item))
+        const uniqueObjectIds = Array.from(new Set(objectIds.filter(item => !!item)))
+        const { data } = await api.getObjects(profile, uniqueObjectIds)
         out.items = data
     }
 
@@ -214,6 +219,8 @@ const HomeFeed = ({ homefeed, profile }) => {
     const [homefeedBak, setHomefeedBak] = useRecoilState(homefeedBakState)
     /** @type {[Array<Object>, Function]} */
     const [feed, setFeed] = useRecoilState(homefeedProcessedState)
+    /** @type {[Boolean, Function]}  */
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const newHomefeedBak = stringifySorted({ homefeed })
@@ -222,13 +229,25 @@ const HomeFeed = ({ homefeed, profile }) => {
                 setHomefeedBak(newHomefeedBak)
                 console.log(newFeed)
                 setFeed(newFeed)
+                setIsLoading(false)
             })
         }
-    }, [homefeed, profile, homefeedBak, setHomefeedBak, setFeed])
+    }, [homefeed, profile, homefeedBak, setHomefeedBak, setFeed, setIsLoading])
+    if (!isLoading) {
+        console.log(feed[0].items[0])
+    }
+    return isLoading ?
+        (<Spinner transparent centered>{$L('Loading...')}</Spinner>)
+        :
+        (
+            feed[0].items.map(item =>
+                <GridListImageItem
+                    key={item.id}
+                    caption={item.title}
+                    source={(item.images.thumbnail || item.images.poster_tall)[0][5].source} />
+            )
 
-    return (
-        <p>homeFeed</p>
-    )
+        )
 }
 
 HomeFeed.propTypes = {
