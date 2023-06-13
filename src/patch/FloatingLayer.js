@@ -2,7 +2,7 @@
 import FloatingLayer from '@enact/ui/FloatingLayer'
 
 /**
- * Patch FloatingLayerBase not propaging event 
+ * Patch FloatingLayerBase not propaging event
  */
 class FloatingLayerFix extends FloatingLayer {
 

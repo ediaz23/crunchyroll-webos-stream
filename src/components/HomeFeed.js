@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Column, Cell } from '@enact/ui/Layout'
 import Spinner from '@enact/moonstone/Spinner'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import $L from '@enact/i18n/$L'
@@ -7,6 +8,7 @@ import PropTypes from 'prop-types'
 import { useRecoilState } from 'recoil'
 
 import { homefeedBakState, homefeedProcessedState } from '../recoilConfig'
+import HomeContentBanner from './HomeContentBanner'
 import { stringifySorted } from '../utils'
 import api from '../api'
 import CONST from '../const'
@@ -31,6 +33,17 @@ const convertItem2Object = async (item) => {
         logger.error(e)
     }
     return out
+}
+
+/**
+ * Remove panel 
+ * @param {Object} panel
+ * @returns {Object}
+ */
+const removePanelField = (panel) => {
+    const newPanel = Object.assign({}, panel, panel.panel)
+    delete newPanel.panel
+    return newPanel
 }
 
 /**
@@ -70,11 +83,7 @@ const processPanels = async (carousel) => {
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
         display_type: carousel.panels[0].display_type,
-        items: carousel.panels.map(panel => {
-            const newPanel = Object.assign({}, panel, panel.panel)
-            delete newPanel.panel
-            return newPanel
-        })
+        items: carousel.panels.map(removePanelField)
     }
 
     return out
@@ -137,8 +146,10 @@ const processDynamicCollection = async (carousel, profile) => {
     let res = {}
     if ('history' === carousel.response_type) {
         res = await api.getHistory(profile, { quantity: 20 })
+        res = { data: res.data.map(removePanelField) }
     } else if ('watchlist' === carousel.response_type) {
         res = await api.getWatchlist(profile, { quantity: 20 })
+        res = { data: res.data.map(removePanelField) }
     } else if ('recommendations' === carousel.response_type) {
         res = await api.getRecomendation(profile, { quantity: 20 })
     } else if ('because_you_watched' === carousel.response_type) {
@@ -221,33 +232,43 @@ const HomeFeed = ({ homefeed, profile }) => {
     const [feed, setFeed] = useRecoilState(homefeedProcessedState)
     /** @type {[Boolean, Function]}  */
     const [isLoading, setIsLoading] = useState(true)
+    /** @type {[Object, Function]} */
+    const [contentSelected, setContentSelected] = useState(null)
 
     useEffect(() => {
         const newHomefeedBak = stringifySorted({ homefeed })
         if (homefeedBak !== newHomefeedBak) {
             postProcessHomefeed(homefeed, profile).then(newFeed => {
                 setHomefeedBak(newHomefeedBak)
-                console.log(newFeed)
                 setFeed(newFeed)
                 setIsLoading(false)
+                setContentSelected(newFeed[0].items[0])
             })
         }
-    }, [homefeed, profile, homefeedBak, setHomefeedBak, setFeed, setIsLoading])
-    if (!isLoading) {
-        console.log(feed[0].items[0])
-    }
-    return isLoading ?
-        (<Spinner transparent centered>{$L('Loading...')}</Spinner>)
-        :
-        (
-            feed[0].items.map(item =>
-                <GridListImageItem
-                    key={item.id}
-                    caption={item.title}
-                    source={(item.images.thumbnail || item.images.poster_tall)[0][5].source} />
-            )
+    }, [homefeed, profile, homefeedBak, setHomefeedBak, setFeed, setIsLoading, setContentSelected])
 
-        )
+    return (
+        <Column style={{ paddingLeft: '0.5rem' }}>
+            <Cell size="50%">
+                {contentSelected && <HomeContentBanner content={contentSelected} />}
+            </Cell>
+            <Cell>
+                {isLoading ?
+                    (<Spinner transparent centered>{$L('Loading...')}</Spinner>)
+                    :
+                    (
+                        feed[0].items.map(item =>
+                            <GridListImageItem
+                                key={item.id}
+                                caption={item.title}
+                                source={(item.images.thumbnail || item.images.poster_tall)[0][5].source} />
+                        )
+
+                    )
+                }
+            </Cell>
+        </Column>
+    )
 }
 
 HomeFeed.propTypes = {
