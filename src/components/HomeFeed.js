@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
+import ri from '@enact/ui/resolution'
+import VirtualList from '@enact/moonstone/VirtualList'
 import Spinner from '@enact/moonstone/Spinner'
-import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
-import { useRecoilState } from 'recoil'
-
-import { homefeedBakState, homefeedProcessedState } from '../recoilConfig'
 import HomeContentBanner from './HomeContentBanner'
-import { stringifySorted } from '../utils'
+import HomeFeedRow from './HomeFeedRow'
 import api from '../api'
 import CONST from '../const'
 import { getMockData } from '../mock-data/mockData'
 import logger from '../logger'
+import css from './HomeFeed.module.less'
 
 
 /**
@@ -36,7 +35,7 @@ const convertItem2Object = async (item) => {
 }
 
 /**
- * Remove panel 
+ * Remove panel
  * @param {Object} panel
  * @returns {Object}
  */
@@ -58,6 +57,7 @@ const processCarousel = async (carousel, profile) => {
         resource_type: carousel.resource_type,
         response_type: carousel.response_type,
         display_type: carousel.display_type,
+        title: $L('Watch Now'),
         items: []
     }
     if (__DEV__ && CONST.LOAD_MOCK_DATA) {
@@ -83,6 +83,7 @@ const processPanels = async (carousel) => {
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
         display_type: carousel.panels[0].display_type,
+        title: $L('May Like'),
         items: carousel.panels.map(removePanelField)
     }
 
@@ -101,6 +102,7 @@ const processInFeedPanels = async (carousel, profile) => {
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
         display_type: carousel.panels[0].display_type,
+        title: $L('Why Not?'),
         items: []
     }
     if (__DEV__ && CONST.LOAD_MOCK_DATA) {
@@ -179,6 +181,7 @@ const processDynamicCollection = async (carousel, profile) => {
  * @return {Promise<Object>}
  */
 const processItemFeed = async (carousel, profile) => {
+    console.log('processItemFeed')
     let res = Promise.resolve(carousel)
     if (carousel.resource_type === 'hero_carousel') {
         res = processCarousel(carousel, profile)
@@ -202,7 +205,7 @@ const processItemFeed = async (carousel, profile) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @return {Promise<Array<Object>>}
  */
-const postProcessHomefeed = async (feed, profile) => {
+const postProcessHomefeed = async (feed) => {
     const mergedFeed = []
     const panelObject = { resource_type: 'panel', panels: [] }
     const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
@@ -221,51 +224,67 @@ const postProcessHomefeed = async (feed, profile) => {
             mergedFeed.push(item)
         }
     }
-    return (await Promise.all(mergedFeed.map(item => processItemFeed(item, profile))))
+    return mergedFeed
 }
+
 
 const HomeFeed = ({ homefeed, profile }) => {
 
-    /** @type {[String, Function]} */
-    const [homefeedBak, setHomefeedBak] = useRecoilState(homefeedBakState)
     /** @type {[Array<Object>, Function]} */
-    const [feed, setFeed] = useRecoilState(homefeedProcessedState)
-    /** @type {[Boolean, Function]}  */
-    const [isLoading, setIsLoading] = useState(true)
+    const [feed, setFeed] = useState([])
+    /** @type {[Array<Object>, Function]} */
+    const [processFeed, setProcessFeed] = useState(new Array(homefeed.length))
     /** @type {[Object, Function]} */
     const [contentSelected, setContentSelected] = useState(null)
 
-    useEffect(() => {
-        const newHomefeedBak = stringifySorted({ homefeed })
-        if (homefeedBak !== newHomefeedBak) {
-            postProcessHomefeed(homefeed, profile).then(newFeed => {
-                setHomefeedBak(newHomefeedBak)
-                setFeed(newFeed)
-                setIsLoading(false)
-                setContentSelected(newFeed[0].items[0])
+
+    const renderRow = useCallback(({ index, ...rest }) => {
+        let out
+        const feedItem = processFeed[index]
+        if (feedItem) {
+            out = (<HomeFeedRow feed={feedItem} {...rest} />)
+        } else {
+            processItemFeed(feed[index], profile).then(newFeed => {
+                setProcessFeed(prevArray => [
+                    ...prevArray.slice(0, index),
+                    newFeed,
+                    ...prevArray.slice(index + 1)
+                ])
             })
+            const { itemSize } = rest
+            delete rest.itemSize
+            out = (
+                <div {...rest} style={{ height: itemSize }}>
+                    <Spinner />
+                </div>
+            )
         }
-    }, [homefeed, profile, homefeedBak, setHomefeedBak, setFeed, setIsLoading, setContentSelected])
+        return out
+    }, [feed, profile, processFeed, setProcessFeed])
+
+    useEffect(() => { postProcessHomefeed(homefeed).then(setFeed) }, [homefeed, profile])
+    //    setContentSelected(newFeed[0].items[0])
+    //    verticalScrollbar='hidden'
+    //    horizontalScrollbar='hidden'
+    //    dataSize={feed.length}
+    //    childProps={{dataFeed: feed}}
 
     return (
-        <Column style={{ paddingLeft: '0.5rem' }}>
+        <Column className={css.homeFeed}>
             <Cell size="50%">
                 {contentSelected && <HomeContentBanner content={contentSelected} />}
             </Cell>
             <Cell>
-                {isLoading ?
-                    (<Spinner transparent centered>{$L('Loading...')}</Spinner>)
-                    :
-                    (
-                        feed[0].items.map(item =>
-                            <GridListImageItem
-                                key={item.id}
-                                caption={item.title}
-                                source={(item.images.thumbnail || item.images.poster_tall)[0][5].source} />
-                        )
-
-                    )
-                }
+                <VirtualList
+                    className={css.feedList}
+                    dataSize={feed.length}
+                    itemRenderer={renderRow}
+                    itemSize={ri.scale(200)}
+                    childProps={{ itemSize: ri.scale(200) }}
+                    direction='vertical'
+                    verticalScrollbar='hidden'
+                    horizontalScrollbar='hidden'
+                />
             </Cell>
         </Column>
     )

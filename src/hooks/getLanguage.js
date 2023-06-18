@@ -22,5 +22,4 @@ const getLanguage = (code) => {
 
 const useGetLanguage = () => getLanguage
 
-
 export default useGetLanguage

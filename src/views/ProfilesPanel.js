@@ -49,6 +49,15 @@ const ProfilesPanel = ({ ...rest }) => {
         loadData()
     }, [])
 
+    /** @todo remover */
+    useEffect(() => {
+        if (profiles && profiles.length) {
+            setCurrentProfile(profiles[0])
+            back.pushHistory({ doBack: () => { setPath('/profiles') } })
+            setPath('/profiles/home')
+        }
+    }, [profiles, setCurrentProfile, setPath])
+
     const rowStyle = { marginTop: '1rem' }
     return (
         <Panel {...rest}>
