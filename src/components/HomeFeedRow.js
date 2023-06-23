@@ -1,6 +1,7 @@
 
 import ri from '@enact/ui/resolution'
-import VirtualList from '@enact/moonstone/VirtualList'
+//import VirtualList from '@enact/moonstone/VirtualList'
+import VirtualListNested from '../patch/VirtualListNested'
 //import { VirtualGridList } from '@enact/moonstone/VirtualList'
 //import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import Heading from '@enact/moonstone/Heading'
@@ -39,20 +40,22 @@ const HomeFeedItem = ({ feed, index, ...rest }) => {
     )
 }
 
-const HomeFeedRow = ({ feed, itemSize, ...rest }) => {
+const HomeFeedRow = ({ feed, itemSize, cellId, ...rest }) => {
+    rest.style.height = itemSize
     return (
-        <div {...rest} style={{ height: itemSize }}>
+        <div {...rest} >
             <Heading size="title" spacing="small">
                 {feed.title}
             </Heading>
-            <VirtualList
+            <VirtualListNested
                 dataSize={feed.items.length}
                 itemRenderer={HomeFeedItem}
                 itemSize={ri.scale(320)}
-                childProps={{ feed, itemSize: ri.scale(320) }}
+                childProps={{ id: cellId, feed, itemSize: ri.scale(320) }}
                 direction='horizontal'
                 verticalScrollbar='hidden'
                 horizontalScrollbar='hidden'
+                noScrollByWheel
             />
         </div>
     )

@@ -1,6 +1,6 @@
 import ilib from 'ilib'
 import Utils from 'ilib/lib/Utils'
-import Country from 'ilib/lib/Country2'
+import Country from 'ilib/lib/Country'
 
 
 /**

@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
-import VirtualList from '@enact/moonstone/VirtualList'
+//import VirtualList from '@enact/moonstone/VirtualList'
 import Spinner from '@enact/moonstone/Spinner'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import HomeContentBanner from './HomeContentBanner'
 import HomeFeedRow from './HomeFeedRow'
+import VirtualListNested from '../patch/VirtualListNested'
 import api from '../api'
 import CONST from '../const'
 import { getMockData } from '../mock-data/mockData'
@@ -158,6 +159,17 @@ const processDynamicCollection = async (carousel, profile) => {
         res = await api.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20 })
     } else if ('recent_episodes' === carousel.response_type) {
         res = await api.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added' })
+        const added = new Set()
+        res = {
+            data: res.data.filter(val => {
+                let out = true
+                if (val.type === 'episode') {
+                    out = !added.has(val.episode_metadata.series_id)
+                    added.add(val.episode_metadata.series_id)
+                }
+                return out
+            })
+        }
     } else if ('browse' === carousel.response_type) {
         const hash = { q: 'quantity', season_tag: 'seasonTag', sort_by: 'sort' }
         const params = {}
@@ -181,7 +193,6 @@ const processDynamicCollection = async (carousel, profile) => {
  * @return {Promise<Object>}
  */
 const processItemFeed = async (carousel, profile) => {
-    console.log('processItemFeed')
     let res = Promise.resolve(carousel)
     if (carousel.resource_type === 'hero_carousel') {
         res = processCarousel(carousel, profile)
@@ -237,7 +248,6 @@ const HomeFeed = ({ homefeed, profile }) => {
     /** @type {[Object, Function]} */
     const [contentSelected, setContentSelected] = useState(null)
 
-
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
         const feedItem = processFeed[index]
@@ -253,6 +263,7 @@ const HomeFeed = ({ homefeed, profile }) => {
             })
             const { itemSize } = rest
             delete rest.itemSize
+            delete rest.cellId
             out = (
                 <div {...rest} style={{ height: itemSize }}>
                     <Spinner />
@@ -263,11 +274,6 @@ const HomeFeed = ({ homefeed, profile }) => {
     }, [feed, profile, processFeed, setProcessFeed])
 
     useEffect(() => { postProcessHomefeed(homefeed).then(setFeed) }, [homefeed, profile])
-    //    setContentSelected(newFeed[0].items[0])
-    //    verticalScrollbar='hidden'
-    //    horizontalScrollbar='hidden'
-    //    dataSize={feed.length}
-    //    childProps={{dataFeed: feed}}
 
     return (
         <Column className={css.homeFeed}>
@@ -275,12 +281,12 @@ const HomeFeed = ({ homefeed, profile }) => {
                 {contentSelected && <HomeContentBanner content={contentSelected} />}
             </Cell>
             <Cell>
-                <VirtualList
+                <VirtualListNested
                     className={css.feedList}
                     dataSize={feed.length}
                     itemRenderer={renderRow}
                     itemSize={ri.scale(200)}
-                    childProps={{ itemSize: ri.scale(200) }}
+                    childProps={{ id: 'rowFeed', cellId: 'cellFeed', itemSize: ri.scale(200) }}
                     direction='vertical'
                     verticalScrollbar='hidden'
                     horizontalScrollbar='hidden'
