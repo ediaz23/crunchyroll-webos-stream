@@ -15,12 +15,13 @@ const HomeContentBanner = ({ content }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
+    /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
 
     useEffect(() => {
         if (compRef && compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect();
-            setImage(getImagePerResolution({ ...boundingRect, content }))
+            setImage(getImagePerResolution({ height: boundingRect.height, width: boundingRect.width, content }))
         }
     }, [compRef, content, getImagePerResolution])
 
@@ -30,14 +31,14 @@ const HomeContentBanner = ({ content }) => {
                 <Heading size="large">
                     {content.title}
                 </Heading>
-                <BodyText size='small'>
+                <BodyText size='small' component='div'>
                     {content.description}
                 </BodyText>
             </Cell>
             <Cell ref={compRef}>
                 {image.source &&
                     <Image className={css.poster} src={image.source}
-                        sizing='none' style={image.size} />
+                        sizing='fill' style={{ width: '100%', height: '100%' }} />
                 }
             </Cell>
         </Row>

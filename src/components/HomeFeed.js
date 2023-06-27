@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
-//import VirtualList from '@enact/moonstone/VirtualList'
 import Spinner from '@enact/moonstone/Spinner'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
@@ -247,12 +246,13 @@ const HomeFeed = ({ homefeed, profile }) => {
     const [processFeed, setProcessFeed] = useState(new Array(homefeed.length))
     /** @type {[Object, Function]} */
     const [contentSelected, setContentSelected] = useState(null)
+    const itemHeigth = ri.scale(270)
 
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
         const feedItem = processFeed[index]
         if (feedItem) {
-            out = (<HomeFeedRow feed={feedItem} {...rest} />)
+            out = (<HomeFeedRow feed={feedItem} setContent={setContentSelected} {...rest} />)
         } else {
             processItemFeed(feed[index], profile).then(newFeed => {
                 setProcessFeed(prevArray => [
@@ -285,8 +285,8 @@ const HomeFeed = ({ homefeed, profile }) => {
                     className={css.feedList}
                     dataSize={feed.length}
                     itemRenderer={renderRow}
-                    itemSize={ri.scale(200)}
-                    childProps={{ id: 'rowFeed', cellId: 'cellFeed', itemSize: ri.scale(200) }}
+                    itemSize={itemHeigth}
+                    childProps={{ id: 'rowFeed', cellId: 'cellFeed', itemSize: itemHeigth }}
                     direction='vertical'
                     verticalScrollbar='hidden'
                     horizontalScrollbar='hidden'

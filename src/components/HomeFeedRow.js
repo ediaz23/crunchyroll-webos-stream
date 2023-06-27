@@ -1,15 +1,14 @@
 
+import { useRef, useState, useEffect, useMemo } from 'react'
 import ri from '@enact/ui/resolution'
-//import VirtualList from '@enact/moonstone/VirtualList'
 import VirtualListNested from '../patch/VirtualListNested'
-//import { VirtualGridList } from '@enact/moonstone/VirtualList'
-//import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import Heading from '@enact/moonstone/Heading'
 import Image from '@enact/moonstone/Image'
+import PropTypes from 'prop-types'
 
 import useGetImagePerResolution from '../hooks/getImagePerResolution'
 import Navigable from '../wrappers/Navigable'
-
+import css from './HomeFeedRow.module.less'
 
 const NavigableDiv = Navigable('div', '')
 
@@ -27,10 +26,11 @@ const Poster = ({ title, image, itemSize, ...rest }) => {
     )
 }
 
-const HomeFeedItem = ({ feed, index, ...rest }) => {
+const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     const feedItem = feed.items[index]
     const getImagePerResolution = useGetImagePerResolution()
-    const image = getImagePerResolution({ height: 100, width: 300, content: feedItem })
+    const margin = ri.scale(20)
+    const image = getImagePerResolution({ height: itemHeight, width: rest.itemSize - margin, content: feedItem })
     return (
         <Poster
             title={feedItem.title}
@@ -40,25 +40,54 @@ const HomeFeedItem = ({ feed, index, ...rest }) => {
     )
 }
 
-const HomeFeedRow = ({ feed, itemSize, cellId, ...rest }) => {
-    rest.style.height = itemSize
+const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ...rest }) => {
+    /** @type {{current: HTMLElement}} */
+    const compRef = useRef(null)
+    /** @type {[Number, Function]} */
+    const [itemHeight, setItemHeight] = useState(0)
+    const itemWidth = ri.scale(320)
+
+    const selectElement = (ev) => { setContent(feed.items[parseInt(ev.target.dataset.index)]) }
+    const childProps = { id: cellId, feed, itemSize: itemWidth, onFocus: selectElement, itemHeight }
+
+    const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
+    const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
+
+    useEffect(() => {
+        if (compRef && compRef.current) {
+            const boundingRect = compRef.current.getBoundingClientRect()
+            setItemHeight(itemSize - boundingRect.height * 2)
+        }
+    }, [compRef, itemSize])
+
     return (
-        <div {...rest} >
-            <Heading size="title" spacing="small">
+        <div className={newClassName} style={newStyle} {...rest}>
+            <Heading size="title" spacing="small" componentRef={compRef}>
                 {feed.title}
             </Heading>
-            <VirtualListNested
-                dataSize={feed.items.length}
-                itemRenderer={HomeFeedItem}
-                itemSize={ri.scale(320)}
-                childProps={{ id: cellId, feed, itemSize: ri.scale(320) }}
-                direction='horizontal'
-                verticalScrollbar='hidden'
-                horizontalScrollbar='hidden'
-                noScrollByWheel
-            />
+            <div>
+                {itemHeight > 0 &&
+                    <VirtualListNested
+                        dataSize={feed.items.length}
+                        itemRenderer={HomeFeedItem}
+                        itemSize={itemWidth}
+                        childProps={childProps}
+                        direction='horizontal'
+                        verticalScrollbar='hidden'
+                        horizontalScrollbar='hidden'
+                        noScrollByWheel
+                    />
+                }
+            </div>
         </div>
     )
+}
+
+HomeFeedRow.propTypes = {
+    feed: PropTypes.object.isRequired,
+    itemSize: PropTypes.number.isRequired,
+    cellId: PropTypes.string.isRequired,
+    setContent: PropTypes.func.isRequired,
 }
 
 export default HomeFeedRow
