@@ -28,8 +28,8 @@ const convertItem2Object = async (item) => {
     try {
         const res = await api.expandURL(item.link)
         let split = res.url.split('/')
-        if (split.length > 4) {
-            out = split[4]
+        if (split.length > 1) {
+            out = split[split.length - 2]
         }
     } catch (e) {
         logger.error(e)
