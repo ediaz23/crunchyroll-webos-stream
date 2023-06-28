@@ -20,7 +20,8 @@ export const TOOLBAR_INDEX = {
     music: { index: 4, icon: 'music', label: $L('Music') },
     categories: { index: 5, icon: 'bulletlist', label: $L('Categories') },
     mylist: { index: 6, icon: 'denselist', label: $L('My List') },
-    close: { index: 7, icon: 'closex', label: $L('Close') },
+    about: { index: 7, icon: 'info', label: $L('About Me?') },
+    close: { index: 8, icon: 'closex', label: $L('Close') },
 }
 
 const NavigableDiv = Navigable('div', css.iconFocus)

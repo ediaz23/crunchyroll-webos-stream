@@ -18,6 +18,7 @@ const WarningPanel = ({ ...rest }) => {
         setPath('/login')
     }, [setPath])
 
+    /** @todo */
     return (
         <Panel {...rest}>
             <Header title="Warning" />

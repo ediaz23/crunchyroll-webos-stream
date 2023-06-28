@@ -10,6 +10,8 @@ import HomeToolbar, { TOOLBAR_INDEX, HomeToolbarSpotlight } from '../components/
 import HomeFeed from '../components/HomeFeed'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
+import ContactMePanel from './ContactMePanel'
+import ConfirmExitPanel from './ConfirnExitPanel'
 
 
 const ActivityViews = ({ index, children }) => (children[index])
@@ -62,8 +64,11 @@ const HomePanel = (props) => {
                         <p>search</p>
                         <p>series</p>
                         <p>movies</p>
+                        <p>music</p>
                         <p>categories</p>
-                        <p>listo</p>
+                        <p>My list</p>
+                        <ContactMePanel />
+                        <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
                     </ActivityViews>
                 </Cell>
             </Row>

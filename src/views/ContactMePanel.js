@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil'
 import { pathState } from '../recoilConfig'
 import api from '../api'
 
-const ContactMePanel = (props) => {
+const ContactMePanel = (rest) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
 
@@ -15,8 +15,9 @@ const ContactMePanel = (props) => {
         setPath('/login')
     }, [setPath])
 
+    /** @todo terminar */
     return (
-        <Panel {...props}>
+        <Panel {...rest}>
             <Header title="Contact me" />
             <Button onClick={accept}>Click me</Button>
         </Panel>
