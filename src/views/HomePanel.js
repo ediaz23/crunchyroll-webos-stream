@@ -6,7 +6,7 @@ import { Panel } from '@enact/moonstone/Panels'
 import { useRecoilValue } from 'recoil'
 
 import { currentProfileState, homeFeedReadyState } from '../recoilConfig'
-import HomeToolbar, { TOOLBAR_INDEX } from '../components/HomeToolbar'
+import HomeToolbar, { TOOLBAR_INDEX, HomeToolbarSpotlight } from '../components/HomeToolbar'
 import HomeFeed from '../components/HomeFeed'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
@@ -34,8 +34,9 @@ const HomePanel = (props) => {
     }, [setCurrentActivity, setShowFullToolbar])
     /** @type {Boolean} */
     const homeFeedReady = useRecoilValue(homeFeedReadyState)
-    const showToolbar = useCallback(() => {
+    const showToolbar = useCallback((ev) => {
         if (homeFeedReady) {
+            ev.target.blur()
             toggleShowFullToolbar()
         }
     }, [homeFeedReady, toggleShowFullToolbar])
@@ -72,8 +73,10 @@ const HomePanel = (props) => {
                         background: 'linear-gradient(to right, #000000 20%, rgba(0, 0, 0, 0))',
                         paddingLeft: '2rem',
                     }}>
-                    <HomeToolbar currentIndex={currentActivity}
-                        onClick={setActivity} autoFocus />
+                    <HomeToolbarSpotlight currentIndex={currentActivity}
+                        onClick={setActivity}
+                        onLeave={toggleShowFullToolbar}
+                        autoFocus />
                 </FloatingLayerFix>
             </Transition>
         </Panel>

@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
-import Spotlight from '@enact/spotlight'
+import Spotlight, { getDirection } from '@enact/spotlight'
+import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator'
 import { Column } from '@enact/ui/Layout'
 import Icon from '@enact/moonstone/Icon'
 import Marquee from '@enact/moonstone/Marquee'
@@ -26,10 +27,12 @@ const NavigableDiv = Navigable('div', css.iconFocus)
 
 const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
 
+    /** @type {{current: {node: HTMLElement}}} */
     const compRef = useRef(null)
 
     useEffect(() => {
         if (compRef && autoFocus && active) {
+            Spotlight.set(compRef.current.node.parentElement.dataset.spotlightId)
             Spotlight.focus(compRef.current.node)
         }
     }, [compRef, autoFocus, active])
@@ -45,17 +48,31 @@ const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
     )
 }
 
-const HomeToolbar = ({ currentIndex, hideText, ...rest }) => {
+const HomeToolbar = ({ currentIndex, hideText, autoFocus, onClick, onBlur, onFocus, onLeave, ...rest }) => {
+
+    const onKeyDown = useCallback((ev) => {
+        if (onLeave) {
+            const { keyCode } = ev
+            const direction = getDirection(keyCode)
+            if (direction && ['right', 'left'].includes(direction)) {
+                onLeave()
+            }
+        }
+    }, [onLeave])
 
     return (
-        <Column className={css.homeToolbar} align='baseline center'>
+        <Column className={css.homeToolbar} align='baseline center' {...rest}>
             {Object.values(TOOLBAR_INDEX).map(iconData => {
                 return (
                     <IconText icon={iconData.icon}
                         key={iconData.index}
                         data-index={iconData.index}
                         active={iconData.index === currentIndex}
-                        {...rest}>
+                        autoFocus={autoFocus}
+                        onClick={onClick}
+                        onBlur={onBlur}
+                        onFocus={onFocus}
+                        onKeyDown={onKeyDown}>
                         {!hideText && iconData.label}
                     </IconText>
                 )
@@ -66,17 +83,20 @@ const HomeToolbar = ({ currentIndex, hideText, ...rest }) => {
 }
 
 HomeToolbar.propTypes = {
-    currentIndex: PropTypes.number,
+    currentIndex: PropTypes.number.isRequired,
     hideText: PropTypes.bool,
     autoFocus: PropTypes.bool,
     onClick: PropTypes.func,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
+    onLeave: PropTypes.func,
 }
 
 HomeToolbar.defaultProps = {
     hideText: false,
     autoFocus: false,
 }
+
+export const HomeToolbarSpotlight = SpotlightContainerDecorator(HomeToolbar)
 
 export default HomeToolbar
