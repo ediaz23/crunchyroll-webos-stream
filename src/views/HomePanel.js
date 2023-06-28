@@ -5,7 +5,7 @@ import { Panel } from '@enact/moonstone/Panels'
 
 import { useRecoilValue } from 'recoil'
 
-import { currentProfileState } from '../recoilConfig'
+import { currentProfileState, homeFeedReadyState } from '../recoilConfig'
 import HomeToolbar, { TOOLBAR_INDEX } from '../components/HomeToolbar'
 import HomeFeed from '../components/HomeFeed'
 import FloatingLayerFix from '../patch/FloatingLayer'
@@ -32,6 +32,13 @@ const HomePanel = (props) => {
         setShowFullToolbar(false)
         setCurrentActivity(parseInt(ev.currentTarget.dataset.index))
     }, [setCurrentActivity, setShowFullToolbar])
+    /** @type {Boolean} */
+    const homeFeedReady = useRecoilValue(homeFeedReadyState)
+    const showToolbar = useCallback(() => {
+        if (homeFeedReady) {
+            toggleShowFullToolbar()
+        }
+    }, [homeFeedReady, toggleShowFullToolbar])
 
     useEffect(() => {
         const loadData = async () => {
@@ -46,7 +53,7 @@ const HomePanel = (props) => {
             <Row style={{ height: '100%' }}>
                 <Cell shrink>
                     <HomeToolbar currentIndex={currentActivity}
-                        onClick={toggleShowFullToolbar} hideText />
+                        onFocus={showToolbar} hideText />
                 </Cell>
                 <Cell grow>
                     <ActivityViews index={currentActivity} noCloseButton>

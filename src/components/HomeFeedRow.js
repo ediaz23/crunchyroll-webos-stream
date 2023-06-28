@@ -1,5 +1,5 @@
 
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import ri from '@enact/ui/resolution'
 import VirtualListNested from '../patch/VirtualListNested'
 import Heading from '@enact/moonstone/Heading'
@@ -40,13 +40,16 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     )
 }
 
-const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ...rest }) => {
+const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, index, ...rest }) => {
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
     /** @type {[Number, Function]} */
     const [itemHeight, setItemHeight] = useState(0)
     const itemWidth = ri.scale(320)
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
 
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     const selectElement = (ev) => { setContent(feed.items[parseInt(ev.target.dataset.index)]) }
     const childProps = { id: cellId, feed, itemSize: itemWidth, onFocus: selectElement, itemHeight }
 
@@ -59,6 +62,19 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ...
             setItemHeight(itemSize - boundingRect.height * 2)
         }
     }, [compRef, itemSize])
+
+
+    useEffect(() => {
+        if (index === 0) {
+            const interval = setInterval(() => {
+                if (scrollToRef.current) {
+                    scrollToRef.current({ index: 0, animate: false, focus: true })
+                    clearInterval(interval)
+                }
+            }, 300)
+            return () => clearInterval(interval)
+        }
+    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>
@@ -76,6 +92,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ...
                         verticalScrollbar='hidden'
                         horizontalScrollbar='hidden'
                         noScrollByWheel
+                        cbScrollTo={getScrollTo}
                     />
                 }
             </div>

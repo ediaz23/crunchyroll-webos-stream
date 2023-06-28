@@ -16,9 +16,10 @@ export const TOOLBAR_INDEX = {
     search: { index: 1, icon: 'search', label: $L('Search') },
     series: { index: 2, icon: 'resumeplay', label: $L('Series') },
     movies: { index: 3, icon: 'recordings', label: $L('Movies') },
-    categories: { index: 4, icon: 'bulletlist', label: $L('Categories') },
-    mylist: { index: 5, icon: 'denselist', label: $L('My List') },
-    close: { index: 6, icon: 'closex', label: $L('Close') },
+    music: { index: 4, icon: 'music', label: $L('Music') },
+    categories: { index: 5, icon: 'bulletlist', label: $L('Categories') },
+    mylist: { index: 6, icon: 'denselist', label: $L('My List') },
+    close: { index: 7, icon: 'closex', label: $L('Close') },
 }
 
 const NavigableDiv = Navigable('div', css.iconFocus)
@@ -70,6 +71,7 @@ HomeToolbar.propTypes = {
     autoFocus: PropTypes.bool,
     onClick: PropTypes.func,
     onBlur: PropTypes.func,
+    onFocus: PropTypes.func,
 }
 
 HomeToolbar.defaultProps = {

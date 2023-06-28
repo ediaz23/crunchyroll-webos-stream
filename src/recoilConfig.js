@@ -30,3 +30,8 @@ export const autoLoginState = atom({
     key: 'autoLoginState',
     default: true
 })
+
+export const homeFeedReadyState = atom({
+    key: 'homeFeedReadyState',
+    default: false
+})

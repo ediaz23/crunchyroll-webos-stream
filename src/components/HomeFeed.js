@@ -5,6 +5,9 @@ import Spinner from '@enact/moonstone/Spinner'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { useSetRecoilState } from 'recoil'
+
+import { homeFeedReadyState } from '../recoilConfig'
 import HomeContentBanner from './HomeContentBanner'
 import HomeFeedRow from './HomeFeedRow'
 import VirtualListNested from '../patch/VirtualListNested'
@@ -247,12 +250,14 @@ const HomeFeed = ({ homefeed, profile }) => {
     /** @type {[Object, Function]} */
     const [contentSelected, setContentSelected] = useState(null)
     const itemHeigth = ri.scale(270)
+    /** @type {Function} */
+    const setHomeFeedReady = useSetRecoilState(homeFeedReadyState)
 
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
         const feedItem = processFeed[index]
         if (feedItem) {
-            out = (<HomeFeedRow feed={feedItem} setContent={setContentSelected} {...rest} />)
+            out = (<HomeFeedRow feed={feedItem} index={index} setContent={setContentSelected} {...rest} />)
         } else {
             processItemFeed(feed[index], profile).then(newFeed => {
                 setProcessFeed(prevArray => [
@@ -273,7 +278,11 @@ const HomeFeed = ({ homefeed, profile }) => {
         return out
     }, [feed, profile, processFeed, setProcessFeed])
 
-    useEffect(() => { postProcessHomefeed(homefeed).then(setFeed) }, [homefeed, profile])
+    useEffect(() => {
+        postProcessHomefeed(homefeed)
+            .then(setFeed)
+            .then(() => setHomeFeedReady(true))
+    }, [homefeed, profile, setHomeFeedReady])
 
     return (
         <Column className={css.homeFeed}>
