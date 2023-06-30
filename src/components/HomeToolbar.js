@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import Spotlight, { getDirection } from '@enact/spotlight'
+import { getTargetByDirectionFromElement } from '@enact/spotlight/src/target'
 import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator'
 import { Column } from '@enact/ui/Layout'
 import Icon from '@enact/moonstone/Icon'
@@ -41,7 +42,7 @@ const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
     return (
         <NavigableDiv className={classNames('', { [css.iconActive]: active })}
             id={icon} {...rest} ref={compRef}>
-            <Icon>{icon}</Icon>
+            <Icon size='large'>{icon}</Icon>
             {children &&
                 <Marquee>{children}</Marquee>
             }
@@ -53,10 +54,15 @@ const HomeToolbar = ({ currentIndex, hideText, autoFocus, onClick, onBlur, onFoc
 
     const onKeyDown = useCallback((ev) => {
         if (onLeave) {
-            const { keyCode } = ev
+            const { keyCode, target } = ev
             const direction = getDirection(keyCode)
             if (direction && ['right', 'left'].includes(direction)) {
-                onLeave()
+                ev.stopPropagation()
+                if (direction === 'right') {
+                    const candidate = getTargetByDirectionFromElement(direction, target)
+                    onLeave()
+                    Spotlight.focus(candidate)
+                }
             }
         }
     }, [onLeave])

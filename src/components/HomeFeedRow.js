@@ -6,6 +6,9 @@ import Heading from '@enact/moonstone/Heading'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
+import { useSetRecoilState } from 'recoil'
+
+import { homefeedReadyState } from '../recoilConfig'
 import useGetImagePerResolution from '../hooks/getImagePerResolution'
 import Navigable from '../wrappers/Navigable'
 import css from './HomeFeedRow.module.less'
@@ -48,9 +51,13 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     const itemWidth = ri.scale(320)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
-
+    /** @type {Function} */
+    const setHomefeedReady = useSetRecoilState(homefeedReadyState)
+    /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
+    /** @type {Function} */
     const selectElement = (ev) => { setContent(feed.items[parseInt(ev.target.dataset.index)]) }
+
     const childProps = { id: cellId, feed, itemSize: itemWidth, onFocus: selectElement, itemHeight }
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
@@ -68,13 +75,14 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
         if (index === 0) {
             const interval = setInterval(() => {
                 if (scrollToRef.current) {
-                    scrollToRef.current({ index: 0, animate: false, focus: true })
                     clearInterval(interval)
+                    scrollToRef.current({ index: 0, animate: false, focus: true })
+                    setHomefeedReady(true)
                 }
-            }, 300)
+            }, 100)
             return () => clearInterval(interval)
         }
-    }, [])  // eslint-disable-line react-hooks/exhaustive-deps
+    }, [setHomefeedReady])  // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>

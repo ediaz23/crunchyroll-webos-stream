@@ -58,7 +58,8 @@
     "eslintIgnore": [
         "node_modules/*",
         "build/*",
-        "dist/*"
+        "dist/*",
+        "service/*"
     ],
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.1.0",

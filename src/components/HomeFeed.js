@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
-import { homeFeedReadyState } from '../recoilConfig'
+import { processedFeedState, selectedContentState } from '../recoilConfig'
 import HomeContentBanner from './HomeContentBanner'
 import HomeFeedRow from './HomeFeedRow'
 import VirtualListNested from '../patch/VirtualListNested'
@@ -211,54 +211,23 @@ const processItemFeed = async (carousel, profile) => {
     return res
 }
 
-/**
- * Process the feed
- * @param {Array<{resource_type: String}>} feed
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
- * @return {Promise<Array<Object>>}
- */
-const postProcessHomefeed = async (feed) => {
-    const mergedFeed = []
-    const panelObject = { resource_type: 'panel', panels: [] }
-    const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
-    for (const item of feed) {
-        if (item.resource_type === 'panel') {
-            if (panelObject.panels.length === 0) {
-                mergedFeed.push(panelObject)
-            }
-            panelObject.panels.push(item)
-        } else if (item.resource_type === 'in_feed_banner') {
-            if (bannerObject.panels.length === 0) {
-                mergedFeed.push(bannerObject)
-            }
-            bannerObject.panels.push(item)
-        } else {
-            mergedFeed.push(item)
-        }
-    }
-    return mergedFeed
-}
 
 const HomeFeed = ({ homefeed, profile }) => {
 
     /** @type {[Array<Object>, Function]} */
-    const [feed, setFeed] = useState([])
-    /** @type {[Array<Object>, Function]} */
-    const [processFeed, setProcessFeed] = useState(new Array(homefeed.length))
+    const [processedFeed, setProcessedFeed] = useRecoilState(processedFeedState)
     /** @type {[Object, Function]} */
-    const [contentSelected, setContentSelected] = useState(null)
+    const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
     const itemHeigth = ri.scale(270)
-    /** @type {Function} */
-    const setHomeFeedReady = useSetRecoilState(homeFeedReadyState)
 
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
-        const feedItem = processFeed[index]
+        const feedItem = processedFeed[index]
         if (feedItem) {
-            out = (<HomeFeedRow feed={feedItem} index={index} setContent={setContentSelected} {...rest} />)
+            out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
         } else {
-            processItemFeed(feed[index], profile).then(newFeed => {
-                setProcessFeed(prevArray => [
+            processItemFeed(homefeed[index], profile).then(newFeed => {
+                setProcessedFeed(prevArray => [
                     ...prevArray.slice(0, index),
                     newFeed,
                     ...prevArray.slice(index + 1)
@@ -274,23 +243,17 @@ const HomeFeed = ({ homefeed, profile }) => {
             )
         }
         return out
-    }, [feed, profile, processFeed, setProcessFeed])
-
-    useEffect(() => {
-        postProcessHomefeed(homefeed)
-            .then(setFeed)
-            .then(() => setHomeFeedReady(true))
-    }, [homefeed, profile, setHomeFeedReady])
+    }, [homefeed, profile, processedFeed, setProcessedFeed, setSelectedContent])
 
     return (
         <Column className={css.homeFeed}>
             <Cell size="50%">
-                {contentSelected && <HomeContentBanner content={contentSelected} />}
+                {selectedContent && <HomeContentBanner content={selectedContent} />}
             </Cell>
             <Cell>
                 <VirtualListNested
                     className={css.feedList}
-                    dataSize={feed.length}
+                    dataSize={homefeed.length}
                     itemRenderer={renderRow}
                     itemSize={itemHeigth}
                     childProps={{ id: 'rowFeed', cellId: 'cellFeed', itemSize: itemHeigth }}

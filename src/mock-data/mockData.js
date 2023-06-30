@@ -17,12 +17,14 @@ async function setData(data, name) {
  * @returns {String}
  */
 function objectToStringForFileName(obj) {
-    for (const vals of Object.values(obj)) {
+    const newObj = { ...obj }
+    for (const [key, vals] of Object.entries(newObj)) {
         if (Array.isArray(vals)) {
-            vals.sort()
+            newObj[key] = [...vals]
+            newObj[key].sort()
         }
     }
-    return stringifySorted(obj)
+    return stringifySorted(newObj)
         .replace(/[{}"[\]]/g, '')
         .replace(/:/g, '-')
         .replace(/,/g, '_');

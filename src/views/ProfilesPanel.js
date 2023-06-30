@@ -6,10 +6,10 @@ import Heading from '@enact/moonstone/Heading'
 import $L from '@enact/i18n/$L'
 import { useSetRecoilState } from 'recoil'
 
+import { pathState, currentProfileState, homeFeedState, homefeedReadyState } from '../recoilConfig'
 import Profile from '../components/Profile'
 import ContactMe from '../components/ContactMe'
 import Logout from '../components/Logout'
-import { pathState, currentProfileState } from '../recoilConfig'
 import api from '../api'
 import { DEV_FAST_SELECT } from '../const'
 import back from '../back'
@@ -22,6 +22,10 @@ const ProfilesPanel = ({ ...rest }) => {
     const setCurrentProfile = useSetRecoilState(currentProfileState)
     /** @type {[Array<import('crunchyroll-js-api/src/types').Profile>, Function]}  */
     const [profiles, setProfiles] = useState([])
+    /** @type {Function} */
+    const setHomeFeed = useSetRecoilState(homeFeedState)
+    /** @type {Function} */
+    const setHomefeedReady = useSetRecoilState(homefeedReadyState)
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -33,10 +37,12 @@ const ProfilesPanel = ({ ...rest }) => {
 
     /** @type {Function} */
     const doSelectProfile = useCallback(profile => {
+        setHomefeedReady(false)
+        setHomeFeed([])
         setCurrentProfile(profile)
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
-    }, [setCurrentProfile, setPath])
+    }, [setCurrentProfile, setPath, setHomeFeed, setHomefeedReady])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {

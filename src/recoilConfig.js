@@ -31,7 +31,22 @@ export const autoLoginState = atom({
     default: true
 })
 
-export const homeFeedReadyState = atom({
-    key: 'homeFeedReadyState',
+export const homeFeedState = atom({
+    key: 'homeFeedState',
+    default: []
+})
+
+export const processedFeedState = atom({
+    key: 'processedFeedState',
+    default: []
+})
+
+export const selectedContentState = atom({
+    key: 'selectedContentState',
+    default: null
+})
+
+export const homefeedReadyState = atom({
+    key: 'homefeedReadyState',
     default: false
 })
