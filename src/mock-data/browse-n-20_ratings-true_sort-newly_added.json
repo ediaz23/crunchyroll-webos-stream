@@ -2,29 +2,6 @@
     "total": 1472,
     "data": [
         {
-            "series_metadata": {
-                "audio_locales": [],
-                "availability_notes": "",
-                "episode_count": 13,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": false,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 13,
-                "series_launch_year": 2023,
-                "subtitle_locales": []
-            },
-            "slug": "",
-            "title": "Dragon Ball Z: Las Películas",
-            "new": true,
-            "id": "GQWH0M1GG",
-            "channel_id": "crunchyroll",
             "images": {
                 "poster_tall": [
                     [
@@ -137,20 +114,116 @@
                     ]
                 ]
             },
+            "slug": "",
+            "id": "GQWH0M1GG",
             "promo_title": "",
-            "last_public": "2023-06-30T00:07:05Z",
-            "promo_description": "",
             "linked_resource_key": "cms:/series/GQWH0M1GG",
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 13,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 13,
+                "series_launch_year": 2023,
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "pt-BR"
+                ]
+            },
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "16",
+                    "percentage": 4,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "1",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "8",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "22",
+                    "percentage": 6,
+                    "unit": ""
+                },
+                "5s": {
+                    "displayed": "356",
+                    "percentage": 89,
+                    "unit": ""
+                },
+                "average": "4.7",
+                "total": 403
+            },
+            "title": "Dragon Ball Z: Las Películas",
             "slug_title": "dragon-ball-z-movies",
-            "type": "series",
+            "last_public": "2023-06-30T00:07:05Z",
+            "new": true,
+            "external_id": "SRZ.283693",
+            "promo_description": "",
+            "channel_id": "crunchyroll",
             "description": "La reconocida franquicia Dragon Ball nos presenta nuevas historias en las que conocemos más personajes, más enemigos y disfrutamos de la acción protagonizada por Son Goku, Piccolo, Gohan y el resto de personajes que todos los fans conocen.",
-            "external_id": "SRZ.283693"
+            "type": "series"
         },
         {
-            "promo_description": "",
-            "slug_title": "masamune-kuns-revenge",
             "channel_id": "crunchyroll",
+            "promo_description": "",
+            "linked_resource_key": "cms:/series/GYX02P3MR",
             "promo_title": "",
+            "slug_title": "masamune-kuns-revenge",
+            "external_id": "SRZ.272171",
+            "id": "GYX02P3MR",
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP",
+                    "en-US",
+                    "de-DE",
+                    "es-419",
+                    "pt-BR"
+                ],
+                "availability_notes": "",
+                "episode_count": 13,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2017,
+                "subtitle_locales": [
+                    "pt-BR",
+                    "ar-SA",
+                    "fr-FR",
+                    "en-US",
+                    "ru-RU",
+                    "es-419",
+                    "de-DE",
+                    "es-ES",
+                    "it-IT"
+                ]
+            },
             "new": true,
             "images": {
                 "poster_tall": [
@@ -264,60 +337,44 @@
                     ]
                 ]
             },
-            "slug": "",
-            "last_public": "2023-06-29T22:32:50Z",
-            "linked_resource_key": "cms:/series/GYX02P3MR",
-            "description": "\"¡He vuelto a este pueblo buscando venganza!\".\r\n\r\nOcho años antes, Masamune Makabe, un chico débil y gordito, fue rechazado por la hermosa Aki Adagaki. Ahora ha perdido mucho peso, se ha cambiado de nombre y se ha convertido en un apuesto adolescente. Su objetivo: hacer que la \"princesa brutal\" Aki se enamore de él para rechazarla como ella hizo con él años atrás.",
-            "id": "GYX02P3MR",
-            "title": "Masamune-kun's Revenge",
-            "type": "series",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP",
-                    "en-US",
-                    "de-DE",
-                    "es-419",
-                    "pt-BR"
-                ],
-                "availability_notes": "",
-                "episode_count": 13,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 1,
-                "series_launch_year": 2017,
-                "subtitle_locales": [
-                    "pt-BR",
-                    "ar-SA",
-                    "fr-FR",
-                    "en-US",
-                    "ru-RU",
-                    "es-419",
-                    "de-DE",
-                    "es-ES",
-                    "it-IT"
-                ]
+            "rating": {
+                "average": "4.2",
+                "total": 15208,
+                "rating": "",
+                "1s": {
+                    "displayed": "942",
+                    "percentage": 7,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "702",
+                    "percentage": 5,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.6",
+                    "percentage": 11,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "3.4",
+                    "percentage": 23,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "8.5",
+                    "percentage": 57,
+                    "unit": "K"
+                }
             },
-            "external_id": "SRZ.272171"
+            "slug": "",
+            "type": "series",
+            "last_public": "2023-06-29T22:32:50Z",
+            "description": "\"¡He vuelto a este pueblo buscando venganza!\".\r\n\r\nOcho años antes, Masamune Makabe, un chico débil y gordito, fue rechazado por la hermosa Aki Adagaki. Ahora ha perdido mucho peso, se ha cambiado de nombre y se ha convertido en un apuesto adolescente. Su objetivo: hacer que la \"princesa brutal\" Aki se enamore de él para rechazarla como ella hizo con él años atrás.",
+            "title": "Masamune-kun's Revenge"
         },
         {
-            "promo_description": "",
-            "last_public": "2023-06-29T22:03:14Z",
-            "linked_resource_key": "cms:/series/GMEHME8VE",
-            "type": "series",
-            "promo_title": "",
-            "slug_title": "yuri-is-my-job",
-            "external_id": "SRZ.283518",
-            "new": true,
-            "channel_id": "crunchyroll",
-            "title": "Yuri Is My Job",
+            "id": "GMEHME8VE",
             "series_metadata": {
                 "audio_locales": [
                     "es-419",
@@ -351,7 +408,47 @@
                     "it-IT"
                 ]
             },
-            "id": "GMEHME8VE",
+            "type": "series",
+            "last_public": "2023-06-29T22:03:14Z",
+            "new": true,
+            "promo_title": "",
+            "linked_resource_key": "cms:/series/GMEHME8VE",
+            "promo_description": "",
+            "rating": {
+                "total": 3419,
+                "rating": "",
+                "1s": {
+                    "displayed": "438",
+                    "percentage": 13,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "116",
+                    "percentage": 4,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "226",
+                    "percentage": 7,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "418",
+                    "percentage": 13,
+                    "unit": ""
+                },
+                "5s": {
+                    "displayed": "2.2",
+                    "percentage": 65,
+                    "unit": "K"
+                },
+                "average": "4.1"
+            },
+            "external_id": "SRZ.283518",
+            "title": "Yuri Is My Job",
+            "slug": "",
+            "description": "Hime es la perfecta princesita de preparatoria, todos la admiran y no mete la pata nunca. Por eso, el día que por accidente lastima a Mai, gerente de una cafetería, está dispuesta a cubrirle con unos cuantos turnos para intentar conservar su fachada perfecta. Para sorpresa de Hime, la cafetería está tematizada como una academia privada donde el personal femenino se desvive por sus fieles clientes. Hime no tarda mucho en quedarse sorprendida ante la elegancia y belleza de la chica que le ayuda a dar sus primeros pasos en el local, se sonroja y comete un error. En aquel lugar tan decorado y entre risas, Hime comienza a sentir cierta tensión al descubrir más sobre su nuevo trabajo temporal y sobre sus propios sentimientos...",
+            "slug_title": "yuri-is-my-job",
             "images": {
                 "poster_tall": [
                     [
@@ -464,12 +561,11 @@
                     ]
                 ]
             },
-            "description": "Hime es la perfecta princesita de preparatoria, todos la admiran y no mete la pata nunca. Por eso, el día que por accidente lastima a Mai, gerente de una cafetería, está dispuesta a cubrirle con unos cuantos turnos para intentar conservar su fachada perfecta. Para sorpresa de Hime, la cafetería está tematizada como una academia privada donde el personal femenino se desvive por sus fieles clientes. Hime no tarda mucho en quedarse sorprendida ante la elegancia y belleza de la chica que le ayuda a dar sus primeros pasos en el local, se sonroja y comete un error. En aquel lugar tan decorado y entre risas, Hime comienza a sentir cierta tensión al descubrir más sobre su nuevo trabajo temporal y sobre sus propios sentimientos...",
-            "slug": ""
+            "channel_id": "crunchyroll"
         },
         {
-            "slug": "",
-            "channel_id": "crunchyroll",
+            "slug_title": "the-legendary-hero-is-dead",
+            "description": "Lejos, al norte del mundo, se encuentran las Puertas del Infierno, un portal que usaba el Rey Demonio para invadir el reino humano. Gracias al legendario héroe Sion Breydan, portador de la Espada Sagrada, y su leal séquito, sellaron las Puertas y neutralizaron la amenaza demoníaca.\r\n\r\nDesafortunadamente, el sello estaba incompleto y comenzó a debilitarse, lo que permitió que los demonios volvieron a poblar el reino humano. Preocupado por la seguridad de su pueblo, el egoísta y pervertido pueblerino de Touka Scott va tendiendo trampas para defenderse de los demonios. ¡Pero no hay nada que temer porque Sion va de camino para volver a sellar las Puertas del Infierno y salvar a la humanidad!\r\n\r\n\r\nO al menos esa la intención, porque el héroe legendario ha muerto tras caer en una de las trampas que tendió Touka. Por suerte, tratar con los muertos es la especialidad de la nigromante Anri Haynesworth. Si bien no puede revivirlo, Anri al menos puede salvar la misión al forzar el alma de Touka en el cuerpo en descomposición de Sion y arrastrarlo a las Puertas del Infierno en el lugar de Sion. Sin querer perderse la aventura, la amiga de la infancia de Touka, Yuna Yunis, los acompaña. ¡Juntos, los tres se embarcan en lo que podría ser el grupo más disparatado que uno puede imaginarse para intentar salvar el mundo!",
             "images": {
                 "poster_tall": [
                     [
@@ -582,11 +678,9 @@
                     ]
                 ]
             },
-            "title": "The Legendary Hero is Dead!",
-            "description": "Lejos, al norte del mundo, se encuentran las Puertas del Infierno, un portal que usaba el Rey Demonio para invadir el reino humano. Gracias al legendario héroe Sion Breydan, portador de la Espada Sagrada, y su leal séquito, sellaron las Puertas y neutralizaron la amenaza demoníaca.\r\n\r\nDesafortunadamente, el sello estaba incompleto y comenzó a debilitarse, lo que permitió que los demonios volvieron a poblar el reino humano. Preocupado por la seguridad de su pueblo, el egoísta y pervertido pueblerino de Touka Scott va tendiendo trampas para defenderse de los demonios. ¡Pero no hay nada que temer porque Sion va de camino para volver a sellar las Puertas del Infierno y salvar a la humanidad!\r\n\r\n\r\nO al menos esa la intención, porque el héroe legendario ha muerto tras caer en una de las trampas que tendió Touka. Por suerte, tratar con los muertos es la especialidad de la nigromante Anri Haynesworth. Si bien no puede revivirlo, Anri al menos puede salvar la misión al forzar el alma de Touka en el cuerpo en descomposición de Sion y arrastrarlo a las Puertas del Infierno en el lugar de Sion. Sin querer perderse la aventura, la amiga de la infancia de Touka, Yuna Yunis, los acompaña. ¡Juntos, los tres se embarcan en lo que podría ser el grupo más disparatado que uno puede imaginarse para intentar salvar el mundo!",
-            "linked_resource_key": "cms:/series/G3KHEV09J",
+            "slug": "",
             "promo_description": "",
-            "promo_title": "",
+            "channel_id": "crunchyroll",
             "series_metadata": {
                 "audio_locales": [
                     "ja-JP",
@@ -621,16 +715,51 @@
                     "de-DE"
                 ]
             },
-            "type": "series",
-            "last_public": "2023-06-29T21:30:08Z",
-            "new": true,
+            "title": "The Legendary Hero is Dead!",
             "id": "G3KHEV09J",
+            "type": "series",
+            "new": true,
+            "promo_title": "",
+            "rating": {
+                "1s": {
+                    "displayed": "1",
+                    "percentage": 13,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "481",
+                    "percentage": 6,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "810",
+                    "percentage": 10,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "1.4",
+                    "percentage": 17,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "4.6",
+                    "percentage": 56,
+                    "unit": "K"
+                },
+                "average": "4.0",
+                "total": 8328,
+                "rating": ""
+            },
             "external_id": "SRZ.283520",
-            "slug_title": "the-legendary-hero-is-dead"
+            "linked_resource_key": "cms:/series/G3KHEV09J",
+            "last_public": "2023-06-29T21:30:08Z"
         },
         {
-            "title": "Ranking of Kings",
-            "channel_id": "crunchyroll",
+            "slug": "",
+            "id": "G79H23W70",
+            "promo_title": "",
+            "promo_description": "",
+            "linked_resource_key": "cms:/series/G79H23W70",
             "images": {
                 "poster_tall": [
                     [
@@ -753,23 +882,22 @@
                     ]
                 ]
             },
-            "promo_description": "",
-            "external_id": "SRZ.282162",
-            "id": "G79H23W70",
             "slug_title": "ranking-of-kings",
+            "channel_id": "crunchyroll",
+            "new": true,
             "series_metadata": {
                 "audio_locales": [
-                    "hi-IN",
-                    "es-ES",
                     "es-419",
                     "ar-SA",
-                    "ru-RU",
+                    "it-IT",
+                    "de-DE",
+                    "pt-BR",
+                    "en-US",
+                    "hi-IN",
+                    "es-ES",
                     "ja-JP",
                     "fr-FR",
-                    "en-US",
-                    "pt-BR",
-                    "de-DE",
-                    "it-IT"
+                    "ru-RU"
                 ],
                 "availability_notes": "",
                 "episode_count": 33,
@@ -786,28 +914,55 @@
                 "season_count": 2,
                 "series_launch_year": 2023,
                 "subtitle_locales": [
-                    "pt-BR",
+                    "it-IT",
                     "ar-SA",
+                    "es-419",
+                    "es-ES",
+                    "pt-BR",
+                    "ru-RU",
                     "hi-IN",
                     "en-US",
-                    "de-DE",
-                    "es-ES",
                     "fr-FR",
-                    "it-IT",
-                    "ru-RU",
-                    "es-419"
+                    "de-DE"
                 ]
             },
-            "type": "series",
-            "last_public": "2023-06-29T20:44:29Z",
-            "slug": "",
-            "new": true,
-            "promo_title": "",
+            "external_id": "SRZ.282162",
             "description": "Incapaz de oír, hablar o incluso de empuñar una espada, el príncipe Bojji no parece el típico heredero al trono, algo que todo su reino comparte. Pero un encuentro con una misteriosa sombra hace que consiga su primer amigo verdadero. Ambos partirán a una gran aventura y forjarán un vínculo capaz de superar cualquier obstáculo... incluso la dificultad de convertirse en rey.",
-            "linked_resource_key": "cms:/series/G79H23W70"
+            "type": "series",
+            "rating": {
+                "4s": {
+                    "displayed": "2.2",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "38.9",
+                    "percentage": 92,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 42448,
+                "rating": "",
+                "1s": {
+                    "displayed": "583",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "206",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "551",
+                    "percentage": 2,
+                    "unit": ""
+                }
+            },
+            "last_public": "2023-06-29T20:44:29Z",
+            "title": "Ranking of Kings"
         },
         {
-            "promo_description": "",
             "series_metadata": {
                 "audio_locales": [
                     "ru-RU",
@@ -846,7 +1001,41 @@
                     "ru-RU"
                 ]
             },
-            "description": "Chise Hatori, 15 años.\r\n\r\nPerdida, sin esperanza y sin familia, la compran por dinero. Pero quien la compra no es otra persona, sino un hechicero no humano llamado Elias. Aunque al inicio duda, la joven comenzará una nueva vida como su aprendiz y futura esposa.\r\n\r\nSe muda y comienza a vivir una nueva vida pacífica, tranquila pero firme, hasta que un día encuentra un libro ilustrado japonés entre los muchos que le envía Angelica desde Londres. Es un libro que ella descubrió en sus años jóvenes, cuando todavía estaba sola y desamparada.",
+            "external_id": "SRZ.271271",
+            "promo_description": "",
+            "rating": {
+                "1s": {
+                    "displayed": "389",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "246",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "697",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.1",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "23.9",
+                    "percentage": 88,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 27316,
+                "rating": ""
+            },
+            "slug_title": "the-ancient-magus-bride",
+            "linked_resource_key": "cms:/series/GRZXQJJ8Y",
+            "id": "GRZXQJJ8Y",
             "images": {
                 "poster_tall": [
                     [
@@ -960,18 +1149,54 @@
                 ]
             },
             "title": "The Ancient Magus' Bride (Mahou Tsukai no Yome)",
-            "channel_id": "crunchyroll",
             "type": "series",
-            "id": "GRZXQJJ8Y",
-            "promo_title": "",
-            "slug_title": "the-ancient-magus-bride",
-            "last_public": "2023-06-29T20:41:24Z",
-            "linked_resource_key": "cms:/series/GRZXQJJ8Y",
+            "description": "Chise Hatori, 15 años.\r\n\r\nPerdida, sin esperanza y sin familia, la compran por dinero. Pero quien la compra no es otra persona, sino un hechicero no humano llamado Elias. Aunque al inicio duda, la joven comenzará una nueva vida como su aprendiz y futura esposa.\r\n\r\nSe muda y comienza a vivir una nueva vida pacífica, tranquila pero firme, hasta que un día encuentra un libro ilustrado japonés entre los muchos que le envía Angelica desde Londres. Es un libro que ella descubrió en sus años jóvenes, cuando todavía estaba sola y desamparada.",
             "slug": "",
-            "external_id": "SRZ.271271",
+            "last_public": "2023-06-29T20:41:24Z",
+            "channel_id": "crunchyroll",
+            "promo_title": "",
             "new": true
         },
         {
+            "title": "Dr. STONE",
+            "series_metadata": {
+                "audio_locales": [
+                    "pt-BR",
+                    "en-US",
+                    "es-419",
+                    "ar-SA",
+                    "fr-FR",
+                    "it-IT",
+                    "es-ES",
+                    "ja-JP",
+                    "de-DE"
+                ],
+                "availability_notes": "",
+                "episode_count": 48,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 4,
+                "series_launch_year": 2023,
+                "subtitle_locales": [
+                    "es-ES",
+                    "ru-RU",
+                    "it-IT",
+                    "pt-BR",
+                    "en-US",
+                    "ar-SA",
+                    "es-419",
+                    "fr-FR",
+                    "de-DE"
+                ]
+            },
             "channel_id": "crunchyroll",
             "description": "Senku es un joven extremadamente inteligente con un gran don para la ciencia y una ácida personalidad, y su mejor amigo es Taiju, que es muy buena persona pero más apto para usar los músculos que para pensar. Cuando tras cierto incidente toda la humanidad acaba convertida en piedra, ellos logran despertarse en un mundo miles de años después, con la civilización humana completamente desaparecida y con toda la humanidad congelada en piedra como ellos estuvieron. Ahora es su obligación rescatar a la gente y crear un nuevo mundo.",
             "images": {
@@ -1086,64 +1311,50 @@
                     ]
                 ]
             },
-            "promo_title": "",
             "id": "GYEXQKJG6",
-            "promo_description": "",
-            "external_id": "SRZ.278134",
-            "title": "Dr. STONE",
-            "new": true,
             "linked_resource_key": "cms:/series/GYEXQKJG6",
-            "slug": "",
             "type": "series",
-            "last_public": "2023-06-29T20:09:51Z",
+            "promo_description": "",
+            "rating": {
+                "total": 59855,
+                "rating": "",
+                "1s": {
+                    "displayed": "689",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "464",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.2",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "4.7",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "52.8",
+                    "percentage": 89,
+                    "unit": "K"
+                },
+                "average": "4.8"
+            },
+            "external_id": "SRZ.278134",
+            "slug": "",
+            "promo_title": "",
             "slug_title": "dr-stone",
-            "series_metadata": {
-                "audio_locales": [
-                    "pt-BR",
-                    "it-IT",
-                    "es-419",
-                    "fr-FR",
-                    "ar-SA",
-                    "ja-JP",
-                    "en-US",
-                    "de-DE",
-                    "es-ES"
-                ],
-                "availability_notes": "",
-                "episode_count": 48,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 4,
-                "series_launch_year": 2023,
-                "subtitle_locales": [
-                    "fr-FR",
-                    "pt-BR",
-                    "ru-RU",
-                    "en-US",
-                    "de-DE",
-                    "es-ES",
-                    "ar-SA",
-                    "es-419",
-                    "it-IT"
-                ]
-            }
+            "last_public": "2023-06-29T20:09:51Z",
+            "new": true
         },
         {
-            "title": "That Time I Got Reincarnated as a Slime",
-            "last_public": "2023-06-29T19:29:08Z",
-            "new": true,
-            "description": "Satoru Mikami es un hombre de 37 años que tiene un trabajo que no le gusta, sin salida y que no es feliz con la vida que lleva, pero cuando muere a manos de un ladrón y piensa que es su fin, se despierta descubriendo que se ha reencarnado en un mundo de magia y espada… ¡pero como un slime! Ahora tendrá que acostumbrarse a su nueva vida, aunque por suerte contará con dos habilidades únicas que le ayudarán a sobrevivir: una que le proporciona una gran comprensión de todo lo que le rodea, y otra que le permite copiar las habilidades de sus oponentes.",
-            "promo_title": "",
+            "linked_resource_key": "cms:/series/GYZJ43JMR",
             "channel_id": "crunchyroll",
-            "external_id": "SRZ.277041",
             "images": {
                 "poster_tall": [
                     [
@@ -1256,9 +1467,46 @@
                     ]
                 ]
             },
-            "promo_description": "",
-            "type": "series",
             "slug_title": "that-time-i-got-reincarnated-as-a-slime",
+            "id": "GYZJ43JMR",
+            "title": "That Time I Got Reincarnated as a Slime",
+            "external_id": "SRZ.277041",
+            "new": true,
+            "promo_title": "",
+            "slug": "",
+            "description": "Satoru Mikami es un hombre de 37 años que tiene un trabajo que no le gusta, sin salida y que no es feliz con la vida que lleva, pero cuando muere a manos de un ladrón y piensa que es su fin, se despierta descubriendo que se ha reencarnado en un mundo de magia y espada… ¡pero como un slime! Ahora tendrá que acostumbrarse a su nueva vida, aunque por suerte contará con dos habilidades únicas que le ayudarán a sobrevivir: una que le proporciona una gran comprensión de todo lo que le rodea, y otra que le permite copiar las habilidades de sus oponentes.",
+            "last_public": "2023-06-29T19:29:08Z",
+            "promo_description": "",
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "664",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "316",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "828",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "3.4",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "80.2",
+                    "percentage": 94,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 85424
+            },
             "series_metadata": {
                 "audio_locales": [
                     "ar-SA",
@@ -1297,46 +1545,46 @@
                     "es-ES"
                 ]
             },
-            "linked_resource_key": "cms:/series/GYZJ43JMR",
-            "id": "GYZJ43JMR",
-            "slug": ""
+            "type": "series"
         },
         {
-            "description": "Seina vuelve por fin a la Tierra, aunque a su regreso lo esperan numerosos e inesperados cambios.",
-            "promo_description": "",
-            "promo_title": "",
-            "last_public": "2023-06-29T18:30:05Z",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP"
-                ],
-                "availability_notes": "",
-                "episode_count": 2,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 1,
-                "series_launch_year": 2023,
-                "subtitle_locales": [
-                    "ru-RU",
-                    "en-US",
-                    "es-ES",
-                    "es-419",
-                    "it-IT",
-                    "de-DE",
-                    "fr-FR",
-                    "pt-BR"
-                ]
-            },
+            "type": "series",
             "slug": "",
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "18",
+                    "percentage": 8,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "3",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "10",
+                    "percentage": 5,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "19",
+                    "percentage": 9,
+                    "unit": ""
+                },
+                "5s": {
+                    "displayed": "183",
+                    "percentage": 79,
+                    "unit": ""
+                },
+                "average": "4.5",
+                "total": 233
+            },
+            "new": true,
+            "promo_description": "",
             "channel_id": "crunchyroll",
+            "slug_title": "tenchi-muyo-gxp-paradise-starting",
+            "description": "Seina vuelve por fin a la Tierra, aunque a su regreso lo esperan numerosos e inesperados cambios.",
             "images": {
                 "poster_tall": [
                     [
@@ -1449,17 +1697,73 @@
                     ]
                 ]
             },
-            "new": true,
-            "type": "series",
-            "id": "GKEH2G0N1",
-            "slug_title": "tenchi-muyo-gxp-paradise-starting",
-            "linked_resource_key": "cms:/series/GKEH2G0N1",
+            "last_public": "2023-06-29T18:30:05Z",
+            "promo_title": "",
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 2,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2023,
+                "subtitle_locales": [
+                    "ru-RU",
+                    "en-US",
+                    "es-ES",
+                    "es-419",
+                    "it-IT",
+                    "de-DE",
+                    "fr-FR",
+                    "pt-BR"
+                ]
+            },
+            "external_id": "SRZ.283684",
             "title": "Tenchi Muyo! GXP Paradise Starting",
-            "external_id": "SRZ.283684"
+            "id": "GKEH2G0N1",
+            "linked_resource_key": "cms:/series/GKEH2G0N1"
         },
         {
-            "description": "Ryo nos traslada al 1866, una época en la que Japón era un nido de tumultos propiciados por el choque de multitud de ideologías diferentes, incluyendo los que pedían el derrocamiento del shogunato de Tokugawa. Un joven llamado Ryo descubrirá un nuevo sentido a su vida en su camino para convertirse en espadachín.",
-            "promo_title": "",
+            "rating": {
+                "average": "4.0",
+                "total": 49,
+                "rating": "",
+                "1s": {
+                    "displayed": "7",
+                    "percentage": 15,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "2",
+                    "percentage": 5,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "2",
+                    "percentage": 5,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "9",
+                    "percentage": 19,
+                    "unit": ""
+                },
+                "5s": {
+                    "displayed": "29",
+                    "percentage": 60,
+                    "unit": ""
+                }
+            },
             "series_metadata": {
                 "audio_locales": [
                     "ja-JP"
@@ -1488,6 +1792,16 @@
                     "pt-BR"
                 ]
             },
+            "slug": "",
+            "slug_title": "ryo",
+            "linked_resource_key": "cms:/series/GG5H5XQ2P",
+            "promo_description": "",
+            "type": "series",
+            "external_id": "SRZ.283696",
+            "channel_id": "crunchyroll",
+            "title": "Ryo",
+            "promo_title": "",
+            "last_public": "2023-06-29T17:51:05Z",
             "images": {
                 "poster_tall": [
                     [
@@ -1600,16 +1914,8 @@
                     ]
                 ]
             },
-            "last_public": "2023-06-29T17:51:05Z",
-            "slug_title": "ryo",
-            "linked_resource_key": "cms:/series/GG5H5XQ2P",
-            "slug": "",
-            "title": "Ryo",
-            "channel_id": "crunchyroll",
-            "external_id": "SRZ.283696",
+            "description": "Ryo nos traslada al 1866, una época en la que Japón era un nido de tumultos propiciados por el choque de multitud de ideologías diferentes, incluyendo los que pedían el derrocamiento del shogunato de Tokugawa. Un joven llamado Ryo descubrirá un nuevo sentido a su vida en su camino para convertirse en espadachín.",
             "id": "GG5H5XQ2P",
-            "type": "series",
-            "promo_description": "",
             "new": true
         }
     ],

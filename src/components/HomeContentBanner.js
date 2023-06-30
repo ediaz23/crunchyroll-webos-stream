@@ -4,13 +4,14 @@ import { Row, Cell } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
+import LabeledIcon from '@enact/moonstone/LabeledIcon'
 
 import PropTypes from 'prop-types'
 import $L from '@enact/i18n/$L'
 
 import useGetImagePerResolution from '../hooks/getImagePerResolution'
 import css from './HomeContentBanner.module.less'
-import { formatDurationMs } from '../utils'
+
 
 /**
  * @param {Object} metadata
@@ -48,8 +49,8 @@ const setEpisodeMetadata = (metadata, meta) => {
     if (metadata.episode) {
         meta.push(`${$L('Ep')} ${metadata.episode}`)
     }
-    if (metadata.duration_ms !== null) {
-        meta.push(`${$L('Duration')} ${formatDurationMs(metadata.duration_ms)}`)
+    if (metadata.episode_air_date) {
+        meta.push(metadata.episode_air_date.split('-')[0])
     }
 }
 
@@ -65,12 +66,16 @@ const setSerieMetadata = (metadata, meta) => {
         meta.push(`${$L('Episodes')} ${metadata.episode_count}`)
     }
     if (metadata.series_launch_year !== null) {
-        meta.push(`${$L('Year')} ${metadata.series_launch_year}`)
+        meta.push(`${metadata.series_launch_year}`)
     }
 }
 
+/**
+ * Show metadata for a content
+ */
 const ContentMetadata = ({ content }) => {
     const tags = [], meta = []
+    let rating = null
 
     if (content.episode_metadata) {
         setTags(content.episode_metadata, tags)
@@ -80,16 +85,27 @@ const ContentMetadata = ({ content }) => {
         setSerieMetadata(content.series_metadata, meta)
     } else if (content.genres) {
         content.genres.forEach(val => tags.push(val.displayValue))
+        if (content.publishDate) {
+            meta.push(content.publishDate.split('-')[0])
+        }
+    }
+    if (content.rating) {
+        rating = content.rating.average
     }
 
     return (
         <Row align='baseline space-between'>
             <BodyText size='small' noWrap>
-                {tags.join(' | ')}
+                {tags.join(' ')}
             </BodyText>
-            {meta.length > 0 && (
+            {!!rating &&
+                <LabeledIcon icon="star" labelPosition="before">
+                    {rating}
+                </LabeledIcon>
+            }
+            {!!(meta.length) && (
                 <BodyText size='small' noWrap>
-                    {meta.join(' | ')}
+                    {meta.join(' ')}
                 </BodyText>
             )}
         </Row>

@@ -7,7 +7,8 @@ import { stringifySorted } from '../utils'
  * @param {String} name
  */
 async function setData(data, name) {
-    data[name] = await import(`./${name}`)
+    data[name] = true  // hack to avoid unused warning
+    data[name] = await import(`./${name}`)  // comment line to build production
 }
 
 /**

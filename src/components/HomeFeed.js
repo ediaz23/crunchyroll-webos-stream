@@ -179,6 +179,7 @@ const processDynamicCollection = async (carousel, profile) => {
                 params[newKey] = carousel.query_params[key]
             }
         }
+        params.ratings = true
         res = await api.getBrowseAll(profile, params)
     } else {
         new Error(`Dynamic Collection not supported ${carousel.resource_type} - ${carousel.response_type}`)

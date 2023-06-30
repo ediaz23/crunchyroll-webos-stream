@@ -368,7 +368,7 @@ const getHistory = async (profile, params) => {
     let out = null
     try {
         if (__DEV__ && LOAD_MOCK_DATA) {
-            out = await getMockData('discoverHistory')
+            out = await getMockData('discoverHistory', params)
         } else {
             const account = await getContentParam(profile)
             out = await api.content2.getHistory({ account, ...params })
@@ -391,7 +391,7 @@ const getWatchlist = async (profile, params) => {
     let out = null
     try {
         if (__DEV__ && LOAD_MOCK_DATA) {
-            out = await getMockData('discoverWatchlist')
+            out = await getMockData('discoverWatchlist', params)
         } else {
             const account = await getContentParam(profile)
             out = await api.content2.getWatchlist({ account, ...params })
@@ -408,16 +408,17 @@ const getWatchlist = async (profile, params) => {
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
+ * @param {Boolean} [obj.ratings]
  * @return {Promise}
  */
 const getRecomendation = async (profile, params) => {
     let out = null
     try {
         if (__DEV__ && LOAD_MOCK_DATA) {
-            out = await getMockData('discoverRecomendantion')
+            out = await getMockData('discoverRecomendantion', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getRecommendations({ account, params })
+            out = await api.content2.getRecommendations({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -432,6 +433,7 @@ const getRecomendation = async (profile, params) => {
  * @param {String} params.contentId
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
+ * @param {Boolean} [obj.ratings]
  * @return {Promise}
  */
 const getSimilar = async (profile, params) => {

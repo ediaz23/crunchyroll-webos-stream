@@ -2,8 +2,11 @@
     "total": 1472,
     "data": [
         {
-            "promo_description": "",
+            "type": "series",
             "slug": "",
+            "description": "Estamos en la era Taisho de Japón. Tanjiro, un joven que se gana la vida vendiendo carbón, descubre un día que su familia ha sido asesinada por un demonio. Para empeorar las cosas, su hermana menor Nezuko, la única superviviente de la masacre, ha sufrido una transformación en demonio.\r\n\r\nDestrozado por los acontecimientos Tanjiro decide convertirse en un cazador de demonios para poder devolver a su hermana a la normalidad y matar al demonio que masacró a su familia.",
+            "new": false,
+            "promo_description": "",
             "images": {
                 "poster_tall": [
                     [
@@ -116,11 +119,6 @@
                     ]
                 ]
             },
-            "id": "GY5P48XEY",
-            "channel_id": "crunchyroll",
-            "description": "Estamos en la era Taisho de Japón. Tanjiro, un joven que se gana la vida vendiendo carbón, descubre un día que su familia ha sido asesinada por un demonio. Para empeorar las cosas, su hermana menor Nezuko, la única superviviente de la masacre, ha sufrido una transformación en demonio.\r\n\r\nDestrozado por los acontecimientos Tanjiro decide convertirse en un cazador de demonios para poder devolver a su hermana a la normalidad y matar al demonio que masacró a su familia.",
-            "last_public": "2023-06-25T20:28:07Z",
-            "linked_resource_key": "cms:/series/GY5P48XEY",
             "series_metadata": {
                 "audio_locales": [
                     "es-419",
@@ -155,55 +153,87 @@
                     "hi-IN"
                 ]
             },
-            "slug_title": "demon-slayer-kimetsu-no-yaiba",
-            "new": false,
-            "external_id": "SRZ.277768",
-            "type": "series",
+            "channel_id": "crunchyroll",
+            "last_public": "2023-06-25T20:28:07Z",
+            "linked_resource_key": "cms:/series/GY5P48XEY",
+            "id": "GY5P48XEY",
             "promo_title": "",
-            "title": "Demon Slayer: Kimetsu no Yaiba"
+            "slug_title": "demon-slayer-kimetsu-no-yaiba",
+            "external_id": "SRZ.277768",
+            "title": "Demon Slayer: Kimetsu no Yaiba",
+            "rating": {
+                "average": "4.9",
+                "total": 290961,
+                "rating": "",
+                "1s": {
+                    "displayed": "2.9",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "998",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "2.3",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "9.2",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "275.5",
+                    "percentage": 95,
+                    "unit": "K"
+                }
+            }
         },
         {
+            "description": "¡Una oportunidad de regresar!\r\n\r\nUna puerta misteriosa se abre, invitando a un niño que ha sido acosado brutalmente toda su vida a dar un valeroso paso adelante hacia lo desconocido. Al otro lado se encuentra un tesoro de artefactos invaluables y un mundo tan lleno de magia como de monstruos. Sin embargo, la revelación más impactante es que puede llevarse consigo lo que quiera cuando regrese a la Tierra. No pasará mucho tiempo antes de que esta doble vida lo cambie para siempre...",
+            "external_id": "SRZ.283509",
+            "linked_resource_key": "cms:/series/GEXH3W49E",
+            "promo_description": "",
+            "last_public": "2023-06-28T17:00:06Z",
             "new": true,
-            "series_metadata": {
-                "audio_locales": [
-                    "en-US",
-                    "de-DE",
-                    "pt-BR",
-                    "fr-FR",
-                    "it-IT",
-                    "ja-JP",
-                    "es-419"
-                ],
-                "availability_notes": "",
-                "episode_count": 13,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 1,
-                "series_launch_year": 2023,
-                "subtitle_locales": [
-                    "de-DE",
-                    "fr-FR",
-                    "ar-SA",
-                    "it-IT",
-                    "hi-IN",
-                    "es-419",
-                    "pt-BR",
-                    "es-ES",
-                    "ru-RU",
-                    "en-US"
-                ]
-            },
-            "channel_id": "crunchyroll",
             "id": "GEXH3W49E",
+            "promo_title": "",
+            "rating": {
+                "average": "4.6",
+                "total": 47435,
+                "rating": "",
+                "1s": {
+                    "displayed": "2.2",
+                    "percentage": 5,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "1.3",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "3s": {
+                    "displayed": "2",
+                    "percentage": 5,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "3.3",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "38.7",
+                    "percentage": 82,
+                    "unit": "K"
+                }
+            },
+            "slug": "",
             "slug_title": "i-got-a-cheat-skill-in-another-world-and-became-unrivaled-in-the-real-world-too",
+            "channel_id": "crunchyroll",
             "images": {
                 "poster_tall": [
                     [
@@ -316,23 +346,49 @@
                     ]
                 ]
             },
-            "promo_title": "",
-            "slug": "",
-            "external_id": "SRZ.283509",
-            "description": "¡Una oportunidad de regresar!\r\n\r\nUna puerta misteriosa se abre, invitando a un niño que ha sido acosado brutalmente toda su vida a dar un valeroso paso adelante hacia lo desconocido. Al otro lado se encuentra un tesoro de artefactos invaluables y un mundo tan lleno de magia como de monstruos. Sin embargo, la revelación más impactante es que puede llevarse consigo lo que quiera cuando regrese a la Tierra. No pasará mucho tiempo antes de que esta doble vida lo cambie para siempre...",
-            "type": "series",
-            "linked_resource_key": "cms:/series/GEXH3W49E",
             "title": "I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too",
-            "last_public": "2023-06-28T17:00:06Z",
-            "promo_description": ""
+            "type": "series",
+            "series_metadata": {
+                "audio_locales": [
+                    "en-US",
+                    "de-DE",
+                    "pt-BR",
+                    "fr-FR",
+                    "it-IT",
+                    "ja-JP",
+                    "es-419"
+                ],
+                "availability_notes": "",
+                "episode_count": 13,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2023,
+                "subtitle_locales": [
+                    "de-DE",
+                    "fr-FR",
+                    "ar-SA",
+                    "it-IT",
+                    "hi-IN",
+                    "es-419",
+                    "pt-BR",
+                    "es-ES",
+                    "ru-RU",
+                    "en-US"
+                ]
+            }
         },
         {
-            "promo_title": "",
-            "type": "series",
-            "slug": "",
             "title": "Hell's Paradise",
             "promo_description": "",
-            "description": "Gabimaru el Vacío es uno de los asesinos más despiadados de la aldea ninja de Iwagakure. Es cruelmente eficiente, pero una traición lo condena a muerte. Solo le queda una opción para sobrevivir: debe viajar a una isla oculta y recuperar un elixir que hará inmortal al shogun. No puede fracasar. En esa isla, el paraíso y el infierno se entremezclan a partes iguales.",
             "images": {
                 "poster_tall": [
                     [
@@ -445,11 +501,45 @@
                     ]
                 ]
             },
-            "slug_title": "hells-paradise",
-            "new": false,
-            "linked_resource_key": "cms:/series/GJ0H7Q5ZJ",
             "channel_id": "crunchyroll",
             "external_id": "SRZ.283502",
+            "new": false,
+            "type": "series",
+            "slug": "",
+            "id": "GJ0H7Q5ZJ",
+            "slug_title": "hells-paradise",
+            "description": "Gabimaru el Vacío es uno de los asesinos más despiadados de la aldea ninja de Iwagakure. Es cruelmente eficiente, pero una traición lo condena a muerte. Solo le queda una opción para sobrevivir: debe viajar a una isla oculta y recuperar un elixir que hará inmortal al shogun. No puede fracasar. En esa isla, el paraíso y el infierno se entremezclan a partes iguales.",
+            "linked_resource_key": "cms:/series/GJ0H7Q5ZJ",
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "428",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "197",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "506",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.4",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "62.5",
+                    "percentage": 95,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 66039
+            },
             "series_metadata": {
                 "audio_locales": [
                     "ja-JP",
@@ -487,16 +577,10 @@
                     "de-DE"
                 ]
             },
-            "id": "GJ0H7Q5ZJ",
+            "promo_title": "",
             "last_public": "2023-06-24T20:36:05Z"
         },
         {
-            "promo_description": "",
-            "last_public": "2023-06-26T20:08:15Z",
-            "promo_title": "",
-            "linked_resource_key": "cms:/series/GEXH3WKK0",
-            "external_id": "SRZ.282925",
-            "slug": "",
             "images": {
                 "poster_tall": [
                     [
@@ -609,13 +693,12 @@
                     ]
                 ]
             },
-            "description": "Cuando Thors, un gran guerrero viking muere asesinado en batalla a manos de Askeladd, un mercenario, su hijo, Thorfinn, jura vengarse. Para ello tendrá que demostrar su valía antes de ganarse el derecho a retar a un duelo al asesino de su padre.",
-            "new": false,
-            "slug_title": "vinland-saga",
             "channel_id": "crunchyroll",
+            "promo_title": "",
+            "linked_resource_key": "cms:/series/GEXH3WKK0",
             "id": "GEXH3WKK0",
-            "title": "Vinland Saga",
-            "type": "series",
+            "description": "Cuando Thors, un gran guerrero viking muere asesinado en batalla a manos de Askeladd, un mercenario, su hijo, Thorfinn, jura vengarse. Para ello tendrá que demostrar su valía antes de ganarse el derecho a retar a un duelo al asesino de su padre.",
+            "external_id": "SRZ.282925",
             "series_metadata": {
                 "audio_locales": [
                     "it-IT",
@@ -655,7 +738,44 @@
                     "pt-BR",
                     "de-DE"
                 ]
-            }
+            },
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "924",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "407",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "672",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "1.8",
+                    "percentage": 5,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "38.1",
+                    "percentage": 91,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 41960
+            },
+            "title": "Vinland Saga",
+            "slug": "",
+            "last_public": "2023-06-26T20:08:15Z",
+            "type": "series",
+            "slug_title": "vinland-saga",
+            "promo_description": "",
+            "new": false
         },
         {
             "images": {
@@ -770,26 +890,59 @@
                     ]
                 ]
             },
-            "id": "GYEXQKJG6",
-            "slug_title": "dr-stone",
-            "promo_description": "",
-            "new": true,
-            "external_id": "SRZ.278134",
-            "promo_title": "",
             "channel_id": "crunchyroll",
-            "linked_resource_key": "cms:/series/GYEXQKJG6",
+            "promo_description": "",
+            "slug": "",
+            "description": "Senku es un joven extremadamente inteligente con un gran don para la ciencia y una ácida personalidad, y su mejor amigo es Taiju, que es muy buena persona pero más apto para usar los músculos que para pensar. Cuando tras cierto incidente toda la humanidad acaba convertida en piedra, ellos logran despertarse en un mundo miles de años después, con la civilización humana completamente desaparecida y con toda la humanidad congelada en piedra como ellos estuvieron. Ahora es su obligación rescatar a la gente y crear un nuevo mundo.",
+            "id": "GYEXQKJG6",
+            "external_id": "SRZ.278134",
             "last_public": "2023-06-29T20:09:51Z",
+            "new": true,
+            "title": "Dr. STONE",
+            "slug_title": "dr-stone",
+            "promo_title": "",
+            "type": "series",
+            "rating": {
+                "3s": {
+                    "displayed": "1.2",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "4.7",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "52.8",
+                    "percentage": 89,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 59855,
+                "rating": "",
+                "1s": {
+                    "displayed": "689",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "464",
+                    "percentage": 1,
+                    "unit": ""
+                }
+            },
             "series_metadata": {
                 "audio_locales": [
                     "pt-BR",
-                    "it-IT",
-                    "es-419",
-                    "fr-FR",
-                    "ar-SA",
-                    "ja-JP",
                     "en-US",
-                    "de-DE",
-                    "es-ES"
+                    "es-419",
+                    "ar-SA",
+                    "fr-FR",
+                    "it-IT",
+                    "es-ES",
+                    "ja-JP",
+                    "de-DE"
                 ],
                 "availability_notes": "",
                 "episode_count": 48,
@@ -806,31 +959,58 @@
                 "season_count": 4,
                 "series_launch_year": 2023,
                 "subtitle_locales": [
-                    "fr-FR",
-                    "pt-BR",
-                    "ru-RU",
-                    "en-US",
-                    "de-DE",
                     "es-ES",
+                    "ru-RU",
+                    "it-IT",
+                    "pt-BR",
+                    "en-US",
                     "ar-SA",
                     "es-419",
-                    "it-IT"
+                    "fr-FR",
+                    "de-DE"
                 ]
             },
-            "type": "series",
-            "slug": "",
-            "description": "Senku es un joven extremadamente inteligente con un gran don para la ciencia y una ácida personalidad, y su mejor amigo es Taiju, que es muy buena persona pero más apto para usar los músculos que para pensar. Cuando tras cierto incidente toda la humanidad acaba convertida en piedra, ellos logran despertarse en un mundo miles de años después, con la civilización humana completamente desaparecida y con toda la humanidad congelada en piedra como ellos estuvieron. Ahora es su obligación rescatar a la gente y crear un nuevo mundo.",
-            "title": "Dr. STONE"
+            "linked_resource_key": "cms:/series/GYEXQKJG6"
         },
         {
-            "last_public": "2023-06-23T19:41:06Z",
-            "type": "series",
-            "channel_id": "crunchyroll",
+            "promo_title": "",
+            "linked_resource_key": "cms:/series/GDKHZEP8W",
+            "description": "Este es un mundo de magia.\r\n\r\nEste es un mundo en el que todos usan la magia habitualmente.\r\n\r\nEn un bosque profundo y oscuro de este mundo de magia, hay un chico que se ejercita a diario.\r\n \r\nSu nombre es Mash Burnedead y tiene un secreto: no puede usar magia.\r\n\r\nLo único que quería era vivir tranquilo con su familia, pero cuando un día intentan matarlo por no poder usar magia, las cosas se salen de control y acaba inscrito en una escuela mágica, donde su objetivo será convertirse en el \"Iluminado Divino\", el alumno más formidable, el elegido de Dios.\r\n\r\n¿Podrán sus poderosos músculos derrotar a los más brillantes usuarios de magia?\r\n\r\n¡Se alza el telón de esta historia de magia y fantasía peculiar en el que la fuerza puede con la magia!",
             "slug_title": "mashle-magic-and-muscles",
+            "type": "series",
+            "external_id": "SRZ.283547",
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "619",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "318",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "696",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.4",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "38.4",
+                    "percentage": 91,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 42452
+            },
             "slug": "",
-            "id": "GDKHZEP8W",
             "title": "MASHLE: MAGIC AND MUSCLES",
-            "promo_description": "",
             "series_metadata": {
                 "audio_locales": [
                     "hi-IN",
@@ -870,9 +1050,8 @@
                     "it-IT"
                 ]
             },
-            "linked_resource_key": "cms:/series/GDKHZEP8W",
+            "last_public": "2023-06-23T19:41:06Z",
             "new": false,
-            "external_id": "SRZ.283547",
             "images": {
                 "poster_tall": [
                     [
@@ -985,17 +1164,38 @@
                     ]
                 ]
             },
-            "description": "Este es un mundo de magia.\r\n\r\nEste es un mundo en el que todos usan la magia habitualmente.\r\n\r\nEn un bosque profundo y oscuro de este mundo de magia, hay un chico que se ejercita a diario.\r\n \r\nSu nombre es Mash Burnedead y tiene un secreto: no puede usar magia.\r\n\r\nLo único que quería era vivir tranquilo con su familia, pero cuando un día intentan matarlo por no poder usar magia, las cosas se salen de control y acaba inscrito en una escuela mágica, donde su objetivo será convertirse en el \"Iluminado Divino\", el alumno más formidable, el elegido de Dios.\r\n\r\n¿Podrán sus poderosos músculos derrotar a los más brillantes usuarios de magia?\r\n\r\n¡Se alza el telón de esta historia de magia y fantasía peculiar en el que la fuerza puede con la magia!",
-            "promo_title": ""
+            "promo_description": "",
+            "channel_id": "crunchyroll",
+            "id": "GDKHZEP8W"
         },
         {
-            "external_id": "SRZ.257631",
-            "description": "Hora de estreno en Latinoamérica: Domingos a la 1:30 AM PST (Hora del Pacífico)\r\nHora de estreno en España: Domingos a las 09:30 (Hora española peninsular)\r\n\r\nMonkey D. Luffy se niega a que nadie se interponga en su camino para convertirse en Rey de los Piratas. Se lanza a sucar los mares y se convertirá en un capitán dispuesto a no darse por vencido jamás hasta hacerse con el mayor tesoro de la historia: el legendario One Piece.",
-            "title": "One Piece",
-            "slug_title": "one-piece",
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 1287,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 24,
+                "series_launch_year": 2014,
+                "subtitle_locales": [
+                    "es-ES",
+                    "pt-BR",
+                    "en-US",
+                    "es-419"
+                ]
+            },
             "id": "GRMG8ZQZR",
-            "promo_description": "",
-            "slug": "",
+            "external_id": "SRZ.257631",
             "images": {
                 "poster_tall": [
                     [
@@ -1118,80 +1318,52 @@
                     ]
                 ]
             },
-            "promo_title": "",
-            "linked_resource_key": "cms:/series/GRMG8ZQZR",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP"
-                ],
-                "availability_notes": "",
-                "episode_count": 1287,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 24,
-                "series_launch_year": 2014,
-                "subtitle_locales": [
-                    "es-ES",
-                    "pt-BR",
-                    "en-US",
-                    "es-419"
-                ]
-            },
+            "description": "Hora de estreno en Latinoamérica: Domingos a la 1:30 AM PST (Hora del Pacífico)\r\nHora de estreno en España: Domingos a las 09:30 (Hora española peninsular)\r\n\r\nMonkey D. Luffy se niega a que nadie se interponga en su camino para convertirse en Rey de los Piratas. Se lanza a sucar los mares y se convertirá en un capitán dispuesto a no darse por vencido jamás hasta hacerse con el mayor tesoro de la historia: el legendario One Piece.",
             "type": "series",
+            "slug": "",
+            "linked_resource_key": "cms:/series/GRMG8ZQZR",
+            "slug_title": "one-piece",
+            "new": false,
+            "rating": {
+                "5s": {
+                    "displayed": "245.3",
+                    "percentage": 95,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 259577,
+                "rating": "",
+                "1s": {
+                    "displayed": "5.6",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "1.3",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "3s": {
+                    "displayed": "2.1",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "5.3",
+                    "percentage": 3,
+                    "unit": "K"
+                }
+            },
             "channel_id": "crunchyroll",
-            "last_public": "2023-06-25T02:00:13Z",
-            "new": false
+            "promo_title": "",
+            "promo_description": "",
+            "title": "One Piece",
+            "last_public": "2023-06-25T02:00:13Z"
         },
         {
+            "type": "series",
             "promo_description": "",
-            "last_public": "2023-06-27T01:17:12Z",
-            "linked_resource_key": "cms:/series/G3KHEV04J",
-            "slug_title": "dead-mount-death-play",
-            "slug": "",
-            "series_metadata": {
-                "audio_locales": [
-                    "de-DE",
-                    "fr-FR",
-                    "ja-JP",
-                    "en-US"
-                ],
-                "availability_notes": "",
-                "episode_count": 12,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 1,
-                "series_launch_year": 2023,
-                "subtitle_locales": [
-                    "es-ES",
-                    "de-DE",
-                    "ar-SA",
-                    "pt-BR",
-                    "ru-RU",
-                    "it-IT",
-                    "fr-FR",
-                    "es-419",
-                    "en-US"
-                ]
-            },
-            "description": "El momento de un duelo de proporciones épicas: el héroe legendario contra el poderoso nigromante conocido como Dios de los Cadáveres. Cuando el combate llega a su fin, algo falla. Mientras, en otro mundo se despierta un niño llamado Polka Shinoyama. ¿Qué es ese mundo? ¿Qué ese cuerpo en el que está? Nadie podría haber esperado que tan épico duelo terminara de este modo.",
-            "external_id": "SRZ.283586",
-            "promo_title": "",
+            "id": "G3KHEV04J",
             "images": {
                 "poster_tall": [
                     [
@@ -1304,22 +1476,81 @@
                     ]
                 ]
             },
+            "promo_title": "",
+            "description": "El momento de un duelo de proporciones épicas: el héroe legendario contra el poderoso nigromante conocido como Dios de los Cadáveres. Cuando el combate llega a su fin, algo falla. Mientras, en otro mundo se despierta un niño llamado Polka Shinoyama. ¿Qué es ese mundo? ¿Qué ese cuerpo en el que está? Nadie podría haber esperado que tan épico duelo terminara de este modo.",
+            "slug_title": "dead-mount-death-play",
+            "series_metadata": {
+                "audio_locales": [
+                    "de-DE",
+                    "fr-FR",
+                    "ja-JP",
+                    "en-US"
+                ],
+                "availability_notes": "",
+                "episode_count": 12,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2023,
+                "subtitle_locales": [
+                    "es-ES",
+                    "de-DE",
+                    "ar-SA",
+                    "pt-BR",
+                    "ru-RU",
+                    "it-IT",
+                    "fr-FR",
+                    "es-419",
+                    "en-US"
+                ]
+            },
+            "rating": {
+                "average": "4.8",
+                "total": 16216,
+                "rating": "",
+                "1s": {
+                    "displayed": "207",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "120",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "353",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "1.2",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "14.3",
+                    "percentage": 89,
+                    "unit": "K"
+                }
+            },
             "channel_id": "crunchyroll",
+            "linked_resource_key": "cms:/series/G3KHEV04J",
+            "slug": "",
             "title": "Dead Mount Death Play",
-            "type": "series",
-            "id": "G3KHEV04J",
+            "external_id": "SRZ.283586",
+            "last_public": "2023-06-27T01:17:12Z",
             "new": false
         },
         {
-            "description": "Shiina Kazuya muere protegiendo a una niña en una tienda de conveniencia en la que estaba en el momento equivocado. Lo siguiente que sabe es que está en el tipo de mundo con el que solo ha soñado: ¡un mundo de magia y espadas! Se ha reencarnado como Cain von Silford, el tercer hijo de una familia aristocrática, y rápidamente se interesa por las muchas cosas que ve. Luego, en su quinto cumpleaños, es bautizado en una iglesia según la tradición... ¡y los dioses le otorgan varias bendiciones divinas, junto con estadísticas que solo podrían describirse como inusuales y extraordinarias! En su vida reencarnada, cuando se trata de cosas como batallas, romance y estudios, ¿Aparentemente estar un poco roto es lo normal? Cuando hace el esfuerzo habitual para hacer las cosas de manera puntual y adecuada, solo se mete en problemas... ¡Así comienza la caótica vida de Caín en otro mundo!",
-            "slug": "",
-            "slug_title": "the-aristocrats-otherworldly-adventure-serving-gods-who-go-too-far",
-            "new": false,
-            "external_id": "SRZ.283506",
-            "type": "series",
-            "promo_description": "",
-            "title": "The Aristocrat’s Otherworldly Adventure: Serving Gods Who Go Too Far",
-            "channel_id": "crunchyroll",
             "series_metadata": {
                 "audio_locales": [
                     "de-DE",
@@ -1353,7 +1584,15 @@
                     "ru-RU"
                 ]
             },
+            "slug_title": "the-aristocrats-otherworldly-adventure-serving-gods-who-go-too-far",
+            "type": "series",
+            "promo_title": "",
             "id": "GVDHX8QK5",
+            "title": "The Aristocrat’s Otherworldly Adventure: Serving Gods Who Go Too Far",
+            "promo_description": "",
+            "slug": "",
+            "channel_id": "crunchyroll",
+            "description": "Shiina Kazuya muere protegiendo a una niña en una tienda de conveniencia en la que estaba en el momento equivocado. Lo siguiente que sabe es que está en el tipo de mundo con el que solo ha soñado: ¡un mundo de magia y espadas! Se ha reencarnado como Cain von Silford, el tercer hijo de una familia aristocrática, y rápidamente se interesa por las muchas cosas que ve. Luego, en su quinto cumpleaños, es bautizado en una iglesia según la tradición... ¡y los dioses le otorgan varias bendiciones divinas, junto con estadísticas que solo podrían describirse como inusuales y extraordinarias! En su vida reencarnada, cuando se trata de cosas como batallas, romance y estudios, ¿Aparentemente estar un poco roto es lo normal? Cuando hace el esfuerzo habitual para hacer las cosas de manera puntual y adecuada, solo se mete en problemas... ¡Así comienza la caótica vida de Caín en otro mundo!",
             "linked_resource_key": "cms:/series/GVDHX8QK5",
             "last_public": "2023-06-25T18:57:05Z",
             "images": {
@@ -1468,13 +1707,41 @@
                     ]
                 ]
             },
-            "promo_title": ""
+            "external_id": "SRZ.283506",
+            "rating": {
+                "2s": {
+                    "displayed": "662",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.2",
+                    "percentage": 5,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "2.3",
+                    "percentage": 9,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "21.8",
+                    "percentage": 81,
+                    "unit": "K"
+                },
+                "average": "4.6",
+                "total": 26960,
+                "rating": "",
+                "1s": {
+                    "displayed": "991",
+                    "percentage": 4,
+                    "unit": ""
+                }
+            },
+            "new": false
         },
         {
-            "last_public": "2023-06-26T19:36:06Z",
-            "slug": "",
             "external_id": "SRZ.273745",
-            "id": "GYQ4ZWV46",
             "series_metadata": {
                 "audio_locales": [
                     "ja-JP",
@@ -1510,12 +1777,12 @@
                     "ru-RU"
                 ]
             },
-            "type": "series",
-            "new": false,
+            "last_public": "2023-06-26T19:36:06Z",
             "linked_resource_key": "cms:/series/GYQ4ZWV46",
             "promo_description": "",
-            "slug_title": "in-another-world-with-my-smartphone",
-            "promo_title": "",
+            "new": false,
+            "type": "series",
+            "channel_id": "crunchyroll",
             "images": {
                 "poster_tall": [
                     [
@@ -1629,8 +1896,41 @@
                 ]
             },
             "title": "In Another World With My Smartphone",
-            "channel_id": "crunchyroll",
-            "description": "Tras morir por culpa de un error cometido por el mismo Dios, este se disculpa ante Touya Mochizuki y ofrece al joven reencarnarse en otro mundo. Con solo 15 años de edad Touya acepta lo ocurrido, pero Dios le comenta que la única norma es que no puede reencarnarse en el mismo mundo del que proviene. Con ello Touya es enviado a un mundo de magia y espada, pero no sin antes una mejora de sus habilidades físicas por parte de Dios como compensación por haberlo matado por accidente y con el objeto que él mismo decidió que quería conservar: su celular con conexión a Internet de su planeta natal."
+            "id": "GYQ4ZWV46",
+            "description": "Tras morir por culpa de un error cometido por el mismo Dios, este se disculpa ante Touya Mochizuki y ofrece al joven reencarnarse en otro mundo. Con solo 15 años de edad Touya acepta lo ocurrido, pero Dios le comenta que la única norma es que no puede reencarnarse en el mismo mundo del que proviene. Con ello Touya es enviado a un mundo de magia y espada, pero no sin antes una mejora de sus habilidades físicas por parte de Dios como compensación por haberlo matado por accidente y con el objeto que él mismo decidió que quería conservar: su celular con conexión a Internet de su planeta natal.",
+            "promo_title": "",
+            "slug_title": "in-another-world-with-my-smartphone",
+            "rating": {
+                "average": "4.4",
+                "total": 27329,
+                "rating": "",
+                "1s": {
+                    "displayed": "1.9",
+                    "percentage": 7,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "948",
+                    "percentage": 4,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.7",
+                    "percentage": 7,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "3.7",
+                    "percentage": 14,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "19.1",
+                    "percentage": 70,
+                    "unit": "K"
+                }
+            },
+            "slug": ""
         }
     ],
     "meta": {}

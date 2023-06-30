@@ -3,12 +3,16 @@
     "data": [
         {
             "panel": {
-                "slug_title": "no-man-is-an-island",
-                "id": "G2XU0QPP7",
-                "channel_id": "crunchyroll",
-                "description": "Mientras All Might se lamenta por la situación con Izuku, este está de regreso en la U.A. con sus compañeros, quienes intentan cuidar de él y le dan fuerzas renovadas para enfrentarse a la batalla que se avecina. Japón por su parte pide ayuda internacional a héroes de otros países para controlar lo que está ocurriendo.",
+                "linked_resource_key": "cms:/episodes/G2XU0QPP7",
+                "recent_audio_locale": "ja-JP",
                 "title": "Conectados",
+                "external_id": "EPI.886841",
                 "promo_description": "",
+                "type": "episode",
+                "streams_link": "/content/v2/cms/videos/GDVFVX00M/streams",
+                "channel_id": "crunchyroll",
+                "promo_title": "",
+                "slug_title": "no-man-is-an-island",
                 "images": {
                     "thumbnail": [
                         [
@@ -63,6 +67,8 @@
                         ]
                     ]
                 },
+                "slug": "",
+                "description": "Mientras All Might se lamenta por la situación con Izuku, este está de regreso en la U.A. con sus compañeros, quienes intentan cuidar de él y le dan fuerzas renovadas para enfrentarse a la batalla que se avecina. Japón por su parte pide ayuda internacional a héroes de otros países para controlar lo que está ocurriendo.",
                 "episode_metadata": {
                     "audio_locale": "ja-JP",
                     "availability_ends": "9998-11-30T08:00:00Z",
@@ -122,13 +128,7 @@
                         }
                     ]
                 },
-                "linked_resource_key": "cms:/episodes/G2XU0QPP7",
-                "external_id": "EPI.886841",
-                "recent_audio_locale": "ja-JP",
-                "promo_title": "",
-                "streams_link": "/content/v2/cms/videos/GDVFVX00M/streams",
-                "type": "episode",
-                "slug": ""
+                "id": "G2XU0QPP7"
             },
             "new": false,
             "is_favorite": false,
