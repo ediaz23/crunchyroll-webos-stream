@@ -5,17 +5,16 @@
             "slug": "",
             "type": "series",
             "external_id": "SRZ.274357",
-            "channel_id": "crunchyroll",
             "promo_title": "",
-            "slug_title": "black-clover",
-            "linked_resource_key": "cms:/series/GRE50KV36",
+            "id": "GRE50KV36",
+            "title": "Black Clover",
             "series_metadata": {
                 "audio_locales": [
+                    "en-US",
+                    "ja-JP",
                     "pt-BR",
                     "de-DE",
-                    "ja-JP",
-                    "es-419",
-                    "en-US"
+                    "es-419"
                 ],
                 "availability_notes": "",
                 "episode_count": 171,
@@ -32,20 +31,51 @@
                 "season_count": 1,
                 "series_launch_year": 2017,
                 "subtitle_locales": [
-                    "ru-RU",
-                    "es-419",
-                    "es-ES",
-                    "de-DE",
+                    "fr-FR",
+                    "pt-BR",
                     "ar-SA",
                     "it-IT",
-                    "fr-FR",
                     "en-US",
-                    "pt-BR"
+                    "ru-RU",
+                    "es-ES",
+                    "es-419",
+                    "de-DE"
                 ]
             },
+            "slug_title": "black-clover",
+            "channel_id": "crunchyroll",
             "description": "En un mundo en el que la magia lo es todo, Asta y Yuno son dos niños que encuentran abandonados el mismo día en una iglesia. Mientras que Yuno crece demostrando tener unos grandes poderes mágicos, Asta parece ser la única persona en el mundo que no posee capacidad mágica alguna. Eso no importará a los dos jóvenes, que aspirarán a alcanzar el puesto de Rey Mago, el mejor mago de todos. Pero para ello tendrán que ser seleccionados primero por una Orden de Caballeros Mágicos, ¡y Asta no tiene magia!",
-            "promo_description": "",
-            "title": "Black Clover",
+            "rating": {
+                "2s": {
+                    "displayed": "561",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.3",
+                    "percentage": 2,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "4.6",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "56",
+                    "percentage": 89,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 63506,
+                "rating": "",
+                "1s": {
+                    "displayed": "1.1",
+                    "percentage": 2,
+                    "unit": "K"
+                }
+            },
+            "linked_resource_key": "cms:/series/GRE50KV36",
             "images": {
                 "poster_tall": [
                     [
@@ -158,23 +188,55 @@
                     ]
                 ]
             },
+            "promo_description": "",
             "search_metadata": {
-                "popularity_score": 0.7541863,
+                "popularity_score": 1.0784266,
                 "rank": 7,
-                "score": 0.5807263851165771
+                "score": 0.5865968465805054
             },
-            "id": "GRE50KV36",
             "new": false
         },
         {
-            "title": "That Time I Got Reincarnated as a Slime",
-            "description": "Satoru Mikami es un hombre de 37 años que tiene un trabajo que no le gusta, sin salida y que no es feliz con la vida que lleva, pero cuando muere a manos de un ladrón y piensa que es su fin, se despierta descubriendo que se ha reencarnado en un mundo de magia y espada… ¡pero como un slime! Ahora tendrá que acostumbrarse a su nueva vida, aunque por suerte contará con dos habilidades únicas que le ayudarán a sobrevivir: una que le proporciona una gran comprensión de todo lo que le rodea, y otra que le permite copiar las habilidades de sus oponentes.",
-            "id": "GYZJ43JMR",
+            "promo_title": "",
+            "promo_description": "",
             "search_metadata": {
-                "popularity_score": 0.95476246,
+                "popularity_score": 0.7272301,
                 "rank": 11,
-                "score": 0.5398694276809692
+                "score": 0.542596697807312
             },
+            "rating": {
+                "2s": {
+                    "displayed": "316",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "828",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "3.4",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "80.2",
+                    "percentage": 94,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 85408,
+                "rating": "",
+                "1s": {
+                    "displayed": "664",
+                    "percentage": 1,
+                    "unit": ""
+                }
+            },
+            "id": "GYZJ43JMR",
+            "slug_title": "that-time-i-got-reincarnated-as-a-slime",
+            "slug": "",
             "channel_id": "crunchyroll",
             "images": {
                 "poster_tall": [
@@ -288,17 +350,20 @@
                     ]
                 ]
             },
+            "linked_resource_key": "cms:/series/GYZJ43JMR",
+            "external_id": "SRZ.277041",
+            "new": true,
             "series_metadata": {
                 "audio_locales": [
-                    "pt-BR",
                     "ar-SA",
-                    "fr-FR",
-                    "en-US",
-                    "it-IT",
-                    "es-419",
                     "es-ES",
+                    "de-DE",
+                    "pt-BR",
                     "ja-JP",
-                    "de-DE"
+                    "it-IT",
+                    "en-US",
+                    "es-419",
+                    "fr-FR"
                 ],
                 "availability_notes": "",
                 "episode_count": 57,
@@ -315,79 +380,22 @@
                 "season_count": 4,
                 "series_launch_year": 2021,
                 "subtitle_locales": [
-                    "en-US",
-                    "fr-FR",
-                    "it-IT",
-                    "de-DE",
-                    "es-419",
-                    "es-ES",
-                    "ru-RU",
-                    "ar-SA",
-                    "pt-BR"
-                ]
-            },
-            "external_id": "SRZ.277041",
-            "linked_resource_key": "cms:/series/GYZJ43JMR",
-            "promo_description": "",
-            "slug": "",
-            "type": "series",
-            "new": false,
-            "promo_title": "",
-            "slug_title": "that-time-i-got-reincarnated-as-a-slime"
-        },
-        {
-            "channel_id": "crunchyroll",
-            "description": "Kageyama Shigeo, apodado \"Mob\", es un chico con problemas para expresarse pero que en realidad es un poderoso esper. Mob está decidido a llevar una vida normal y mantiene sus poderes especiales reprimidos, pero cuando sus emociones alcancen el nivel del 100%, ¡le ocurrirá algo terrible!\r\n\r\nRodeado por falsos espers, espíritus malignos y misteriosas organizaciones, ¿qué hará Mob? ¿Qué elecciones tomará?",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP",
-                    "de-DE",
                     "pt-BR",
-                    "ru-RU",
-                    "fr-FR",
-                    "en-US",
                     "es-419",
                     "ar-SA",
-                    "es-ES",
-                    "it-IT"
-                ],
-                "availability_notes": "",
-                "episode_count": 39,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 4,
-                "series_launch_year": 2019,
-                "subtitle_locales": [
-                    "pt-BR",
-                    "en-US",
-                    "es-419",
-                    "ar-SA",
-                    "it-IT",
                     "de-DE",
-                    "ru-RU",
+                    "it-IT",
                     "fr-FR",
+                    "ru-RU",
+                    "en-US",
                     "es-ES"
                 ]
             },
-            "title": "Mob Psycho 100",
-            "slug_title": "mob-psycho-100",
-            "search_metadata": {
-                "popularity_score": 0.16213131,
-                "rank": 12,
-                "score": 0.5302156209945679
-            },
-            "promo_description": "",
             "type": "series",
-            "linked_resource_key": "cms:/series/GY190DKQR",
-            "new": false,
+            "title": "That Time I Got Reincarnated as a Slime",
+            "description": "Satoru Mikami es un hombre de 37 años que tiene un trabajo que no le gusta, sin salida y que no es feliz con la vida que lleva, pero cuando muere a manos de un ladrón y piensa que es su fin, se despierta descubriendo que se ha reencarnado en un mundo de magia y espada… ¡pero como un slime! Ahora tendrá que acostumbrarse a su nueva vida, aunque por suerte contará con dos habilidades únicas que le ayudarán a sobrevivir: una que le proporciona una gran comprensión de todo lo que le rodea, y otra que le permite copiar las habilidades de sus oponentes."
+        },
+        {
             "images": {
                 "poster_tall": [
                     [
@@ -500,24 +508,137 @@
                     ]
                 ]
             },
+            "rating": {
+                "1s": {
+                    "displayed": "780",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "358",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "783",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "3.3",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "55.2",
+                    "percentage": 92,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 60475,
+                "rating": ""
+            },
+            "description": "Kageyama Shigeo, apodado \"Mob\", es un chico con problemas para expresarse pero que en realidad es un poderoso esper. Mob está decidido a llevar una vida normal y mantiene sus poderes especiales reprimidos, pero cuando sus emociones alcancen el nivel del 100%, ¡le ocurrirá algo terrible!\r\n\r\nRodeado por falsos espers, espíritus malignos y misteriosas organizaciones, ¿qué hará Mob? ¿Qué elecciones tomará?",
+            "channel_id": "crunchyroll",
+            "promo_title": "",
             "external_id": "SRZ.270683",
-            "slug": "",
+            "slug_title": "mob-psycho-100",
             "id": "GY190DKQR",
-            "promo_title": ""
+            "promo_description": "",
+            "slug": "",
+            "new": false,
+            "title": "Mob Psycho 100",
+            "type": "series",
+            "linked_resource_key": "cms:/series/GY190DKQR",
+            "series_metadata": {
+                "audio_locales": [
+                    "pt-BR",
+                    "de-DE",
+                    "es-419",
+                    "ru-RU",
+                    "ar-SA",
+                    "it-IT",
+                    "es-ES",
+                    "fr-FR",
+                    "ja-JP",
+                    "en-US"
+                ],
+                "availability_notes": "",
+                "episode_count": 39,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 4,
+                "series_launch_year": 2019,
+                "subtitle_locales": [
+                    "es-ES",
+                    "it-IT",
+                    "pt-BR",
+                    "de-DE",
+                    "fr-FR",
+                    "en-US",
+                    "ru-RU",
+                    "ar-SA",
+                    "es-419"
+                ]
+            },
+            "search_metadata": {
+                "popularity_score": 0.2694832,
+                "rank": 12,
+                "score": 0.536003053188324
+            }
         },
         {
-            "promo_title": "",
-            "channel_id": "crunchyroll",
-            "promo_description": "",
-            "linked_resource_key": "cms:/series/GYQWNXPZY",
-            "slug_title": "fire-force",
-            "external_id": "SRZ.278313",
-            "search_metadata": {
-                "popularity_score": 0.22805174,
-                "rank": 13,
-                "score": 0.5294954180717468
+            "series_metadata": {
+                "audio_locales": [
+                    "en-IN",
+                    "hi-IN",
+                    "ja-JP",
+                    "pt-BR",
+                    "en-US",
+                    "es-419"
+                ],
+                "availability_notes": "",
+                "episode_count": 48,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 2,
+                "series_launch_year": 2019,
+                "subtitle_locales": [
+                    "fr-FR",
+                    "ar-SA",
+                    "hi-IN",
+                    "pt-BR",
+                    "ru-RU",
+                    "en-US",
+                    "de-DE",
+                    "es-419"
+                ]
             },
-            "slug": "",
+            "type": "series",
+            "promo_description": "",
+            "slug_title": "fire-force",
+            "search_metadata": {
+                "popularity_score": 0.16442105,
+                "rank": 13,
+                "score": 0.5311228036880493
+            },
+            "new": true,
             "images": {
                 "poster_tall": [
                     [
@@ -630,87 +751,76 @@
                     ]
                 ]
             },
+            "external_id": "SRZ.278313",
+            "channel_id": "crunchyroll",
+            "linked_resource_key": "cms:/series/GYQWNXPZY",
             "id": "GYQWNXPZY",
             "title": "Fire Force",
-            "series_metadata": {
-                "audio_locales": [
-                    "hi-IN",
-                    "en-US",
-                    "ja-JP",
-                    "en-IN",
-                    "pt-BR",
-                    "es-419"
-                ],
-                "availability_notes": "",
-                "episode_count": 48,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 2,
-                "series_launch_year": 2019,
-                "subtitle_locales": [
-                    "ru-RU",
-                    "en-US",
-                    "fr-FR",
-                    "de-DE",
-                    "ar-SA",
-                    "hi-IN",
-                    "es-419",
-                    "pt-BR"
-                ]
-            },
             "description": "",
-            "type": "series",
-            "new": false
+            "promo_title": "",
+            "slug": "",
+            "rating": {
+                "5s": {
+                    "displayed": "27.3",
+                    "percentage": 83,
+                    "unit": "K"
+                },
+                "average": "4.7",
+                "total": 33208,
+                "rating": "",
+                "1s": {
+                    "displayed": "478",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "344",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "4.1",
+                    "percentage": 13,
+                    "unit": "K"
+                }
+            }
         },
         {
-            "id": "GRVD0ZDQR",
-            "type": "series",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP",
-                    "en-US",
-                    "es-419",
-                    "pt-BR"
-                ],
-                "availability_notes": "",
-                "episode_count": 14,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 1,
-                "series_launch_year": 2020,
-                "subtitle_locales": [
-                    "fr-FR",
-                    "pt-BR",
-                    "ar-SA",
-                    "es-419",
-                    "de-DE",
-                    "ru-RU",
-                    "en-US",
-                    "es-ES",
-                    "it-IT"
-                ]
+            "rating": {
+                "1s": {
+                    "displayed": "483",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "470",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.1",
+                    "percentage": 5,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "3.3",
+                    "percentage": 15,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "17.7",
+                    "percentage": 77,
+                    "unit": "K"
+                },
+                "average": "4.6",
+                "total": 23083,
+                "rating": ""
             },
-            "description": "Jin Mori se ha autoproclamado como el estudiante de preparatoria más fuerte del mundo, pero su vida cambia por completo cuando lo invitan a participar en el \"God of High School\", un torneo en el que se decidirá el estudiante más fuerte de todos. Para convencerlo para participar le dicen que si gana podrá pedir cualquier deseo... Todos los participantes son fuertes contrincantes dispuestos a todo para ganar y cumplir sus deseos. ¿Qué aguarda al final del torneo? ¡Da comienzo una caótica batalla entre estudiantes de preparatoria increíblemente fuertes!",
-            "new": false,
-            "linked_resource_key": "cms:/series/GRVD0ZDQR",
-            "title": "The God of High School",
-            "promo_title": "",
             "images": {
                 "poster_tall": [
                     [
@@ -833,23 +943,91 @@
                     ]
                 ]
             },
-            "external_id": "SRZ.279536",
-            "search_metadata": {
-                "popularity_score": 0.04551592,
-                "rank": 14,
-                "score": 0.5286915898323059
+            "linked_resource_key": "cms:/series/GRVD0ZDQR",
+            "series_metadata": {
+                "audio_locales": [
+                    "en-US",
+                    "es-419",
+                    "pt-BR",
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 14,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2020,
+                "subtitle_locales": [
+                    "fr-FR",
+                    "ar-SA",
+                    "pt-BR",
+                    "it-IT",
+                    "en-US",
+                    "es-419",
+                    "ru-RU",
+                    "es-ES",
+                    "de-DE"
+                ]
             },
+            "search_metadata": {
+                "popularity_score": 0.03504555,
+                "rank": 14,
+                "score": 0.5308242440223694
+            },
+            "new": false,
+            "title": "The God of High School",
+            "promo_title": "",
+            "id": "GRVD0ZDQR",
+            "slug_title": "the-god-of-high-school",
             "promo_description": "",
-            "channel_id": "crunchyroll",
             "slug": "",
-            "slug_title": "the-god-of-high-school"
+            "external_id": "SRZ.279536",
+            "type": "series",
+            "channel_id": "crunchyroll",
+            "description": "Jin Mori se ha autoproclamado como el estudiante de preparatoria más fuerte del mundo, pero su vida cambia por completo cuando lo invitan a participar en el \"God of High School\", un torneo en el que se decidirá el estudiante más fuerte de todos. Para convencerlo para participar le dicen que si gana podrá pedir cualquier deseo... Todos los participantes son fuertes contrincantes dispuestos a todo para ganar y cumplir sus deseos. ¿Qué aguarda al final del torneo? ¡Da comienzo una caótica batalla entre estudiantes de preparatoria increíblemente fuertes!"
         },
         {
-            "id": "G6VDMN306",
-            "description": "Una joven sacerdotisa ha formado su primer grupo de aventureros, pero no tardan mucho en verse en serios problemas. Por suerte, quien aparece en su rescate es el Asesino de Goblins, un hombre que ha dedicado su vida a exterminar a todo goblin viviente por los medios que fueran necesarios. Cuando comienzan a circular rumores sobre sus hazañas, no hay forma de saber quién será el próximo en aparecer…",
             "type": "series",
-            "external_id": "SRZ.277074",
-            "slug": "",
+            "slug_title": "goblin-slayer",
+            "rating": {
+                "3s": {
+                    "displayed": "616",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.3",
+                    "percentage": 10,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "20.7",
+                    "percentage": 85,
+                    "unit": "K"
+                },
+                "average": "4.7",
+                "total": 24505,
+                "rating": "",
+                "1s": {
+                    "displayed": "610",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "190",
+                    "percentage": 1,
+                    "unit": ""
+                }
+            },
+            "channel_id": "crunchyroll",
             "images": {
                 "poster_tall": [
                     [
@@ -962,13 +1140,13 @@
                     ]
                 ]
             },
-            "promo_description": "",
+            "description": "Una joven sacerdotisa ha formado su primer grupo de aventureros, pero no tardan mucho en verse en serios problemas. Por suerte, quien aparece en su rescate es el Asesino de Goblins, un hombre que ha dedicado su vida a exterminar a todo goblin viviente por los medios que fueran necesarios. Cuando comienzan a circular rumores sobre sus hazañas, no hay forma de saber quién será el próximo en aparecer…",
             "series_metadata": {
                 "audio_locales": [
-                    "en-US",
-                    "pt-BR",
                     "ja-JP",
-                    "es-419"
+                    "en-US",
+                    "es-419",
+                    "pt-BR"
                 ],
                 "availability_notes": "",
                 "episode_count": 14,
@@ -990,36 +1168,35 @@
                     "pt-BR"
                 ]
             },
-            "search_metadata": {
-                "popularity_score": 0.04130011,
-                "rank": 16,
-                "score": 0.5081945061683655
-            },
+            "new": false,
+            "external_id": "SRZ.277074",
             "linked_resource_key": "cms:/series/G6VDMN306",
             "title": "GOBLIN SLAYER",
-            "slug_title": "goblin-slayer",
-            "promo_title": "",
-            "channel_id": "crunchyroll",
-            "new": false
+            "search_metadata": {
+                "popularity_score": 0.05726099,
+                "rank": 16,
+                "score": 0.5095540285110474
+            },
+            "promo_description": "",
+            "id": "G6VDMN306",
+            "slug": "",
+            "promo_title": ""
         },
         {
+            "slug": "",
             "promo_description": "",
-            "slug_title": "hunter-x-hunter",
+            "external_id": "SRZ.237800",
+            "type": "series",
             "linked_resource_key": "cms:/series/GY3VKX1MR",
             "description": "Gon, un joven que vive en Isla Ballena, sueña con convertirse en un Cazador como lo era su padre, el cual se fue cuando Gon todavía era un niño.",
-            "channel_id": "crunchyroll",
-            "new": false,
             "id": "GY3VKX1MR",
             "promo_title": "",
-            "type": "series",
-            "external_id": "SRZ.237800",
-            "slug": "",
             "search_metadata": {
-                "popularity_score": 0.32598191,
-                "rank": 17,
-                "score": 0.5045391917228699
+                "popularity_score": 0.2718597,
+                "rank": 18,
+                "score": 0.5043030381202698
             },
-            "title": "Hunter x Hunter",
+            "new": false,
             "series_metadata": {
                 "audio_locales": [
                     "ja-JP"
@@ -1039,11 +1216,11 @@
                 "season_count": 1,
                 "series_launch_year": 2011,
                 "subtitle_locales": [
-                    "es-ES",
                     "es-419",
                     "pt-BR",
+                    "ru-RU",
                     "en-US",
-                    "ru-RU"
+                    "es-ES"
                 ]
             },
             "images": {
@@ -1157,46 +1334,42 @@
                         }
                     ]
                 ]
-            }
+            },
+            "slug_title": "hunter-x-hunter",
+            "title": "Hunter x Hunter",
+            "rating": {
+                "1s": {
+                    "displayed": "689",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "241",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "686",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.9",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "52",
+                    "percentage": 93,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 56520,
+                "rating": ""
+            },
+            "channel_id": "crunchyroll"
         },
         {
-            "external_id": "SRZ.257631",
-            "id": "GRMG8ZQZR",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP"
-                ],
-                "availability_notes": "",
-                "episode_count": 1284,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 24,
-                "series_launch_year": 2023,
-                "subtitle_locales": [
-                    "pt-BR",
-                    "es-ES",
-                    "en-US",
-                    "es-419"
-                ]
-            },
-            "slug": "",
-            "title": "One Piece",
-            "description": "Hora de estreno en Latinoamérica: Domingos a la 1:30 AM PST (Hora del Pacífico)\r\nHora de estreno en España: Domingos a las 09:30 (Hora española peninsular)\r\n\r\nMonkey D. Luffy se niega a que nadie se interponga en su camino para convertirse en Rey de los Piratas. Se lanza a sucar los mares y se convertirá en un capitán dispuesto a no darse por vencido jamás hasta hacerse con el mayor tesoro de la historia: el legendario One Piece.",
-            "new": false,
-            "promo_title": "",
-            "search_metadata": {
-                "popularity_score": 30.1392,
-                "rank": 19,
-                "score": 0.5017257332801819
-            },
             "images": {
                 "poster_tall": [
                     [
@@ -1319,13 +1492,89 @@
                     ]
                 ]
             },
+            "id": "GRMG8ZQZR",
+            "promo_title": "",
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 1287,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 24,
+                "series_launch_year": 2014,
+                "subtitle_locales": [
+                    "es-ES",
+                    "pt-BR",
+                    "en-US",
+                    "es-419"
+                ]
+            },
+            "external_id": "SRZ.257631",
             "promo_description": "",
+            "title": "One Piece",
             "slug_title": "one-piece",
-            "type": "series",
+            "rating": {
+                "2s": {
+                    "displayed": "1.3",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "3s": {
+                    "displayed": "2.1",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "5.3",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "245.3",
+                    "percentage": 95,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 259551,
+                "rating": "",
+                "1s": {
+                    "displayed": "5.6",
+                    "percentage": 3,
+                    "unit": "K"
+                }
+            },
+            "search_metadata": {
+                "popularity_score": 24.413975,
+                "rank": 19,
+                "score": 0.5025379061698914
+            },
+            "new": false,
+            "description": "Hora de estreno en Latinoamérica: Domingos a la 1:30 AM PST (Hora del Pacífico)\r\nHora de estreno en España: Domingos a las 09:30 (Hora española peninsular)\r\n\r\nMonkey D. Luffy se niega a que nadie se interponga en su camino para convertirse en Rey de los Piratas. Se lanza a sucar los mares y se convertirá en un capitán dispuesto a no darse por vencido jamás hasta hacerse con el mayor tesoro de la historia: el legendario One Piece.",
             "linked_resource_key": "cms:/series/GRMG8ZQZR",
+            "slug": "",
+            "type": "series",
             "channel_id": "crunchyroll"
         },
         {
+            "slug": "",
+            "external_id": "SRZ.283153",
+            "description": "Yoichi es un joven al que acaban de eliminar junto a su equipo. De pronto recibe una carta donde lo convocan para participar en un extraño experimento sobre fútbol.",
+            "search_metadata": {
+                "popularity_score": 0.7804631,
+                "rank": 20,
+                "score": 0.4921906292438507
+            },
+            "new": true,
             "images": {
                 "poster_tall": [
                     [
@@ -1448,15 +1697,50 @@
                     ]
                 ]
             },
+            "rating": {
+                "5s": {
+                    "displayed": "92.1",
+                    "percentage": 94,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 98763,
+                "rating": "",
+                "1s": {
+                    "displayed": "1.2",
+                    "percentage": 2,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "359",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.1",
+                    "percentage": 2,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "4",
+                    "percentage": 5,
+                    "unit": "K"
+                }
+            },
+            "type": "series",
+            "id": "G4PH0WEKE",
+            "promo_description": "",
+            "channel_id": "crunchyroll",
+            "linked_resource_key": "cms:/series/G4PH0WEKE",
             "series_metadata": {
                 "audio_locales": [
-                    "pt-BR",
+                    "de-DE",
                     "it-IT",
                     "ja-JP",
-                    "es-419",
+                    "pt-BR",
                     "fr-FR",
-                    "de-DE",
-                    "en-US"
+                    "en-US",
+                    "es-419"
                 ],
                 "availability_notes": "",
                 "episode_count": 24,
@@ -1473,207 +1757,94 @@
                 "season_count": 1,
                 "series_launch_year": 2022,
                 "subtitle_locales": [
-                    "es-419",
                     "es-ES",
                     "de-DE",
                     "en-US",
                     "fr-FR",
-                    "ru-RU",
                     "it-IT",
+                    "ar-SA",
                     "pt-BR",
-                    "ar-SA"
+                    "es-419",
+                    "ru-RU"
                 ]
             },
-            "slug_title": "bluelock",
-            "channel_id": "crunchyroll",
-            "external_id": "SRZ.283153",
-            "slug": "",
             "promo_title": "",
-            "linked_resource_key": "cms:/series/G4PH0WEKE",
-            "id": "G4PH0WEKE",
-            "promo_description": "",
-            "title": "BLUELOCK",
-            "new": false,
-            "description": "Yoichi es un joven al que acaban de eliminar junto a su equipo. De pronto recibe una carta donde lo convocan para participar en un extraño experimento sobre fútbol.",
-            "type": "series",
-            "search_metadata": {
-                "popularity_score": 10.449061,
-                "rank": 20,
-                "score": 0.498556524515152
-            }
+            "slug_title": "bluelock",
+            "title": "BLUELOCK"
         },
         {
-            "id": "G6DQN9KGR",
-            "promo_description": "",
-            "type": "series",
-            "slug": "",
-            "description": "Basada en la novela ligera del mismo nombre, escrita por Fujino Omori e ilustrada por Suzuhito Yasuda, Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka se ubica en el mundo de Orario, donde los aventureros se unen y buscan tesoros en un laberinto bajo tierra llamado Dungeon. Sin embargo, para Bell Cranel, la fama y las riquezas son algo secundario a lo que de ver- dad quiere encontrar: chicas. ¡Aunque pronto se dará cuenta que cualquier cosa puede suceder en el Dungeon y él terminará siendo la damisela en apuros!",
-            "images": {
-                "poster_tall": [
-                    [
-                        {
-                            "height": 90,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 60
-                        },
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 120
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 240
-                        },
-                        {
-                            "height": 720,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 480
-                        },
-                        {
-                            "height": 1125,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 750
-                        },
-                        {
-                            "height": 1440,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 960
-                        },
-                        {
-                            "height": 1688,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 1125
-                        },
-                        {
-                            "height": 1800,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 1200
-                        },
-                        {
-                            "height": 2340,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
-                            "type": "poster_tall",
-                            "width": 1560
-                        }
-                    ]
-                ],
-                "poster_wide": [
-                    [
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 320
-                        },
-                        {
-                            "height": 338,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 600
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 640
-                        },
-                        {
-                            "height": 450,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 800
-                        },
-                        {
-                            "height": 675,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 1200
-                        },
-                        {
-                            "height": 810,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 1440
-                        },
-                        {
-                            "height": 900,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 1600
-                        },
-                        {
-                            "height": 1080,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
-                            "type": "poster_wide",
-                            "width": 1920
-                        }
-                    ]
-                ]
-            },
-            "promo_title": "",
-            "search_metadata": {
-                "popularity_score": 0.16241898,
-                "rank": 22,
-                "score": 0.486028254032135
-            },
-            "title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? (Danmachi)",
-            "new": false,
-            "linked_resource_key": "cms:/series/G6DQN9KGR",
-            "external_id": "SRZ.265647",
-            "channel_id": "crunchyroll",
             "series_metadata": {
                 "audio_locales": [
+                    "en-US",
+                    "es-419",
+                    "pt-BR",
                     "ja-JP"
                 ],
                 "availability_notes": "",
-                "episode_count": 25,
+                "episode_count": 13,
                 "extended_description": "",
                 "extended_maturity_rating": {},
-                "is_dubbed": false,
+                "is_dubbed": true,
                 "is_mature": false,
-                "is_simulcast": true,
+                "is_simulcast": false,
                 "is_subbed": true,
                 "mature_blocked": false,
                 "maturity_ratings": [
                     "TV-14"
                 ],
-                "season_count": 2,
-                "series_launch_year": 2015,
+                "season_count": 1,
+                "series_launch_year": 2020,
                 "subtitle_locales": [
-                    "ar-SA",
                     "es-419",
-                    "en-US",
-                    "pt-BR"
+                    "ru-RU",
+                    "it-IT",
+                    "pt-BR",
+                    "es-ES",
+                    "ar-SA",
+                    "de-DE",
+                    "fr-FR",
+                    "en-US"
                 ]
             },
-            "slug_title": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon"
-        },
-        {
-            "search_metadata": {
-                "popularity_score": 0.04275489,
-                "rank": 23,
-                "score": 0.48396560549736023
-            },
-            "linked_resource_key": "cms:/series/G6J0G49DR",
-            "promo_title": "",
-            "new": false,
-            "promo_description": "",
-            "id": "G6J0G49DR",
-            "title": "Tower of God",
             "slug_title": "tower-of-god",
-            "slug": "",
+            "search_metadata": {
+                "popularity_score": 0.0283604,
+                "rank": 22,
+                "score": 0.48538345098495483
+            },
+            "channel_id": "crunchyroll",
+            "linked_resource_key": "cms:/series/G6J0G49DR",
+            "rating": {
+                "rating": "",
+                "1s": {
+                    "displayed": "400",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "264",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "782",
+                    "percentage": 4,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.8",
+                    "percentage": 12,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "20.8",
+                    "percentage": 83,
+                    "unit": "K"
+                },
+                "average": "4.7",
+                "total": 25110
+            },
             "description": "Alcanza la lo más alto y todo será tuyo.\r\n\r\nEn la cima de la torre encontrarás todo lo que existe en este mundo, y todo puede ser tuyo.\r\n\r\nPodrás ser un dios.\r\n\r\nEsta es la historia del inicio y el final de Rachel, la joven que ascendió la torre para poder ver las estrellas, y Bam, el joven que lo único que necesitaba era estar con ella.",
-            "type": "series",
             "images": {
                 "poster_tall": [
                     [
@@ -1796,57 +1967,202 @@
                     ]
                 ]
             },
+            "promo_description": "",
+            "title": "Tower of God",
+            "external_id": "SRZ.279180",
+            "slug": "",
+            "id": "G6J0G49DR",
+            "promo_title": "",
+            "type": "series",
+            "new": true
+        },
+        {
+            "slug": "",
+            "linked_resource_key": "cms:/series/G6DQN9KGR",
             "channel_id": "crunchyroll",
+            "promo_description": "",
+            "search_metadata": {
+                "popularity_score": 0.01457313,
+                "rank": 23,
+                "score": 0.4743882119655609
+            },
+            "type": "series",
+            "slug_title": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon",
+            "promo_title": "",
+            "images": {
+                "poster_tall": [
+                    [
+                        {
+                            "height": 90,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 60
+                        },
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 120
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 240
+                        },
+                        {
+                            "height": 720,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 480
+                        },
+                        {
+                            "height": 1125,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 750
+                        },
+                        {
+                            "height": 1440,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 960
+                        },
+                        {
+                            "height": 1688,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 1125
+                        },
+                        {
+                            "height": 1800,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 1200
+                        },
+                        {
+                            "height": 2340,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/crunchyroll/36a7affbb344f61948242abeee6ec7bb.jpe",
+                            "type": "poster_tall",
+                            "width": 1560
+                        }
+                    ]
+                ],
+                "poster_wide": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/d03055945dfa943ce2fdb3cbbb050699.jpe",
+                            "type": "poster_wide",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "id": "G6DQN9KGR",
             "series_metadata": {
                 "audio_locales": [
-                    "en-US",
-                    "es-419",
-                    "pt-BR",
                     "ja-JP"
                 ],
                 "availability_notes": "",
-                "episode_count": 13,
+                "episode_count": 25,
                 "extended_description": "",
                 "extended_maturity_rating": {},
-                "is_dubbed": true,
+                "is_dubbed": false,
                 "is_mature": false,
-                "is_simulcast": false,
+                "is_simulcast": true,
                 "is_subbed": true,
                 "mature_blocked": false,
                 "maturity_ratings": [
                     "TV-14"
                 ],
-                "season_count": 1,
-                "series_launch_year": 2020,
+                "season_count": 2,
+                "series_launch_year": 2015,
                 "subtitle_locales": [
-                    "ar-SA",
                     "es-419",
-                    "fr-FR",
-                    "es-ES",
-                    "de-DE",
-                    "pt-BR",
                     "en-US",
-                    "it-IT",
-                    "ru-RU"
+                    "ar-SA",
+                    "pt-BR"
                 ]
             },
-            "external_id": "SRZ.279180"
+            "description": "Basada en la novela ligera del mismo nombre, escrita por Fujino Omori e ilustrada por Suzuhito Yasuda, Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka se ubica en el mundo de Orario, donde los aventureros se unen y buscan tesoros en un laberinto bajo tierra llamado Dungeon. Sin embargo, para Bell Cranel, la fama y las riquezas son algo secundario a lo que de ver- dad quiere encontrar: chicas. ¡Aunque pronto se dará cuenta que cualquier cosa puede suceder en el Dungeon y él terminará siendo la damisela en apuros!",
+            "new": false,
+            "rating": {
+                "average": "4.7",
+                "total": 27692,
+                "rating": "",
+                "1s": {
+                    "displayed": "801",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "269",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "890",
+                    "percentage": 4,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.9",
+                    "percentage": 11,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "22.8",
+                    "percentage": 83,
+                    "unit": "K"
+                }
+            },
+            "external_id": "SRZ.265647",
+            "title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? (Danmachi)"
         },
         {
-            "slug": "",
-            "search_metadata": {
-                "popularity_score": 0.2596721,
-                "rank": 24,
-                "score": 0.4669807255268097
-            },
-            "new": false,
-            "id": "G69PZ5PDY",
-            "channel_id": "crunchyroll",
-            "external_id": "SRZ.273203",
-            "linked_resource_key": "cms:/series/G69PZ5PDY",
-            "title": "Overlord",
-            "description": "Cuando un popular MMORPG anuncia su cierre definitivo, el veterano jugador Momonoga decide quedarse en él hasta el mismo cierre, sin salir. El problema es que pasa la horra de cierre y él no se desconecta, pero los NPC han ganado conciencia propia. ¿Está atrapado?",
-            "promo_title": "",
             "images": {
                 "poster_tall": [
                     [
@@ -1959,8 +2275,41 @@
                     ]
                 ]
             },
+            "slug_title": "overlord",
+            "slug": "",
             "type": "series",
-            "promo_description": "",
+            "channel_id": "crunchyroll",
+            "rating": {
+                "3s": {
+                    "displayed": "1",
+                    "percentage": 2,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "3.4",
+                    "percentage": 5,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "63.9",
+                    "percentage": 92,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 69713,
+                "rating": "",
+                "1s": {
+                    "displayed": "1",
+                    "percentage": 2,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "465",
+                    "percentage": 1,
+                    "unit": ""
+                }
+            },
+            "promo_title": "",
             "series_metadata": {
                 "audio_locales": [],
                 "availability_notes": "",
@@ -1979,170 +2328,26 @@
                 "series_launch_year": 2022,
                 "subtitle_locales": []
             },
-            "slug_title": "overlord"
-        },
-        {
-            "id": "GR75Q020Y",
-            "slug": "",
-            "promo_title": "",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP"
-                ],
-                "availability_notes": "",
-                "episode_count": 293,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_simulcast": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 1,
-                "series_launch_year": 2017,
-                "subtitle_locales": [
-                    "en-US",
-                    "pt-BR",
-                    "ar-SA",
-                    "ru-RU",
-                    "es-419",
-                    "es-ES",
-                    "it-IT",
-                    "de-DE"
-                ]
+            "external_id": "SRZ.273203",
+            "id": "G69PZ5PDY",
+            "title": "Overlord",
+            "search_metadata": {
+                "popularity_score": 0.16540392,
+                "rank": 24,
+                "score": 0.468637615442276
             },
             "new": false,
-            "linked_resource_key": "cms:/series/GR75Q020Y",
-            "channel_id": "crunchyroll",
-            "external_id": "SRZ.272781",
-            "search_metadata": {
-                "popularity_score": 2.8821409,
-                "rank": 25,
-                "score": 0.4653622806072235
-            },
-            "description": "En Konoha han entrado en una era de paz y modernidad. Los altos edificios despuntan en las calles, las pantallas gigantes muestran imágenes de todo tipo y los medios de transporte conectan los vairos distritos. Pese a que sigue siendo una aldea ninja, el número de civiles ha aumentado y la vida de los ninja ha cambiado.\r\n\r\nBoruto Uzumaki es hijo del Séptimo Hokage, Naruto Uzumaki, y se ha unido a la Academia Ninja para aprender. Otros estudiantes lo menosprecian de inmediato y consideran que solo está ahí por ser \"hijo del Hokage\", pero pronto Boruto disipará todas esas dudas sobre él.",
-            "type": "series",
-            "slug_title": "boruto-naruto-next-generations",
-            "images": {
-                "poster_tall": [
-                    [
-                        {
-                            "height": 90,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 60
-                        },
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 120
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 240
-                        },
-                        {
-                            "height": 720,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 480
-                        },
-                        {
-                            "height": 1125,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 750
-                        },
-                        {
-                            "height": 1440,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 960
-                        },
-                        {
-                            "height": 1688,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 1125
-                        },
-                        {
-                            "height": 1800,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 1200
-                        },
-                        {
-                            "height": 2340,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
-                            "type": "poster_tall",
-                            "width": 1560
-                        }
-                    ]
-                ],
-                "poster_wide": [
-                    [
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 320
-                        },
-                        {
-                            "height": 338,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 600
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 640
-                        },
-                        {
-                            "height": 450,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 800
-                        },
-                        {
-                            "height": 675,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 1200
-                        },
-                        {
-                            "height": 810,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 1440
-                        },
-                        {
-                            "height": 900,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 1600
-                        },
-                        {
-                            "height": 1080,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
-                            "type": "poster_wide",
-                            "width": 1920
-                        }
-                    ]
-                ]
-            },
+            "description": "Cuando un popular MMORPG anuncia su cierre definitivo, el veterano jugador Momonoga decide quedarse en él hasta el mismo cierre, sin salir. El problema es que pasa la horra de cierre y él no se desconecta, pero los NPC han ganado conciencia propia. ¿Está atrapado?",
             "promo_description": "",
-            "title": "BORUTO: NARUTO NEXT GENERATIONS"
+            "linked_resource_key": "cms:/series/G69PZ5PDY"
         },
         {
+            "title": "Classroom of the Elite",
+            "promo_title": "",
+            "id": "GRVN8MNQY",
             "promo_description": "",
+            "external_id": "SRZ.273743",
+            "type": "series",
             "channel_id": "crunchyroll",
             "images": {
                 "poster_tall": [
@@ -2257,28 +2462,49 @@
                 ]
             },
             "search_metadata": {
-                "popularity_score": 0.10790041,
-                "rank": 27,
-                "score": 0.4602041244506836
+                "popularity_score": 0.09554672,
+                "rank": 25,
+                "score": 0.46662431955337524
             },
-            "title": "Classroom of the Elite",
-            "promo_title": "",
-            "type": "series",
-            "slug_title": "classroom-of-the-elite",
-            "linked_resource_key": "cms:/series/GRVN8MNQY",
-            "external_id": "SRZ.273743",
-            "id": "GRVN8MNQY",
-            "description": "Kiyotaka Ayanokouji acaba de entrar en la Academia Tokyo Koudo Ikusei, de la cual se dice que el 100% de sus estudiantes acaban yendo a la universidad o encontrando un buen trabajo. Sin embargo nuestro protagonista acaba en la Clase 1-D, donde la escuela pone a todos los alumnos con problemas. Y lo que es más, cada mes la escuela otorga a los estudiantes puntos por valor de 100.000 yenes, y las clases emplean un sistema por el cual se puede hablar, dormir e incluso molestar a los compañeros durante las clases.",
             "new": false,
-            "slug": "",
+            "rating": {
+                "3s": {
+                    "displayed": "1.5",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "5.2",
+                    "percentage": 8,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "63.9",
+                    "percentage": 89,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 72369,
+                "rating": "",
+                "1s": {
+                    "displayed": "1.1",
+                    "percentage": 2,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "627",
+                    "percentage": 1,
+                    "unit": ""
+                }
+            },
             "series_metadata": {
                 "audio_locales": [
-                    "pt-BR",
-                    "en-US",
                     "fr-FR",
+                    "pt-BR",
                     "es-419",
-                    "ja-JP",
-                    "de-DE"
+                    "de-DE",
+                    "en-US",
+                    "ja-JP"
                 ],
                 "availability_notes": "",
                 "episode_count": 25,
@@ -2295,65 +2521,24 @@
                 "season_count": 2,
                 "series_launch_year": 2017,
                 "subtitle_locales": [
-                    "fr-FR",
-                    "ru-RU",
-                    "ar-SA",
-                    "it-IT",
                     "en-US",
+                    "ru-RU",
+                    "pt-BR",
+                    "de-DE",
                     "es-ES",
                     "es-419",
-                    "de-DE",
-                    "pt-BR"
+                    "fr-FR",
+                    "ar-SA",
+                    "it-IT"
                 ]
-            }
+            },
+            "slug_title": "classroom-of-the-elite",
+            "slug": "",
+            "linked_resource_key": "cms:/series/GRVN8MNQY",
+            "description": "Kiyotaka Ayanokouji acaba de entrar en la Academia Tokyo Koudo Ikusei, de la cual se dice que el 100% de sus estudiantes acaban yendo a la universidad o encontrando un buen trabajo. Sin embargo nuestro protagonista acaba en la Clase 1-D, donde la escuela pone a todos los alumnos con problemas. Y lo que es más, cada mes la escuela otorga a los estudiantes puntos por valor de 100.000 yenes, y las clases emplean un sistema por el cual se puede hablar, dormir e incluso molestar a los compañeros durante las clases."
         },
         {
-            "series_metadata": {
-                "audio_locales": [
-                    "es-419",
-                    "fr-FR",
-                    "ja-JP",
-                    "pt-BR",
-                    "en-US"
-                ],
-                "availability_notes": "Los usuarios de España solo tienen acceso a la primera temporada de Sword Art Online y al Extra Edition. Sentimos las molestias.",
-                "episode_count": 105,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 6,
-                "series_launch_year": 2012,
-                "subtitle_locales": [
-                    "es-419",
-                    "pt-BR",
-                    "fr-FR",
-                    "ar-SA",
-                    "es-ES",
-                    "en-US"
-                ]
-            },
-            "slug_title": "sword-art-online",
-            "promo_title": "",
-            "slug": "",
             "promo_description": "",
-            "title": "Sword Art Online",
-            "search_metadata": {
-                "popularity_score": 0.16202436,
-                "rank": 28,
-                "score": 0.45955929160118103
-            },
-            "new": false,
-            "channel_id": "crunchyroll",
-            "id": "GR49G9VP6",
-            "description": "En un futuro cercano, un Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG) llamado Sword Art Online permite que los jugadores se introduzcan en el juego directamente mediante el uso del Nerve Gear, un casco que les sumerge por completo.",
-            "linked_resource_key": "cms:/series/GR49G9VP6",
             "images": {
                 "poster_tall": [
                     [
@@ -2466,29 +2651,524 @@
                     ]
                 ]
             },
+            "series_metadata": {
+                "audio_locales": [
+                    "fr-FR",
+                    "pt-BR",
+                    "en-US",
+                    "es-419",
+                    "ja-JP"
+                ],
+                "availability_notes": "Los usuarios de España solo tienen acceso a la primera temporada de Sword Art Online y al Extra Edition. Sentimos las molestias.",
+                "episode_count": 105,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 6,
+                "series_launch_year": 2012,
+                "subtitle_locales": [
+                    "fr-FR",
+                    "es-419",
+                    "pt-BR",
+                    "es-ES",
+                    "en-US",
+                    "ar-SA"
+                ]
+            },
+            "id": "GR49G9VP6",
+            "title": "Sword Art Online",
+            "slug_title": "sword-art-online",
+            "type": "series",
             "external_id": "SRZ.246948",
+            "rating": {
+                "average": "4.7",
+                "total": 46011,
+                "rating": "",
+                "1s": {
+                    "displayed": "1.2",
+                    "percentage": 3,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "744",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.7",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "4.1",
+                    "percentage": 9,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "38.3",
+                    "percentage": 84,
+                    "unit": "K"
+                }
+            },
+            "search_metadata": {
+                "popularity_score": 0.1494045,
+                "rank": 26,
+                "score": 0.45968371629714966
+            },
+            "new": false,
+            "linked_resource_key": "cms:/series/GR49G9VP6",
+            "channel_id": "crunchyroll",
+            "slug": "",
+            "description": "En un futuro cercano, un Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG) llamado Sword Art Online permite que los jugadores se introduzcan en el juego directamente mediante el uso del Nerve Gear, un casco que les sumerge por completo.",
+            "promo_title": ""
+        },
+        {
+            "type": "series",
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 293,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2017,
+                "subtitle_locales": [
+                    "es-ES",
+                    "pt-BR",
+                    "ar-SA",
+                    "es-419",
+                    "ru-RU",
+                    "en-US",
+                    "it-IT",
+                    "de-DE"
+                ]
+            },
+            "channel_id": "crunchyroll",
+            "description": "En Konoha han entrado en una era de paz y modernidad. Los altos edificios despuntan en las calles, las pantallas gigantes muestran imágenes de todo tipo y los medios de transporte conectan los vairos distritos. Pese a que sigue siendo una aldea ninja, el número de civiles ha aumentado y la vida de los ninja ha cambiado.\r\n\r\nBoruto Uzumaki es hijo del Séptimo Hokage, Naruto Uzumaki, y se ha unido a la Academia Ninja para aprender. Otros estudiantes lo menosprecian de inmediato y consideran que solo está ahí por ser \"hijo del Hokage\", pero pronto Boruto disipará todas esas dudas sobre él.",
+            "promo_description": "",
+            "images": {
+                "poster_tall": [
+                    [
+                        {
+                            "height": 90,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 60
+                        },
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 120
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 240
+                        },
+                        {
+                            "height": 720,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 480
+                        },
+                        {
+                            "height": 1125,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 750
+                        },
+                        {
+                            "height": 1440,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 960
+                        },
+                        {
+                            "height": 1688,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 1125
+                        },
+                        {
+                            "height": 1800,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 1200
+                        },
+                        {
+                            "height": 2340,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/crunchyroll/65e3612d8770257c6a0820412be2cd37.jpe",
+                            "type": "poster_tall",
+                            "width": 1560
+                        }
+                    ]
+                ],
+                "poster_wide": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/bdbd4f4e247f7290eb847025021e133b.jpe",
+                            "type": "poster_wide",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "search_metadata": {
+                "popularity_score": 0.16942093,
+                "rank": 29,
+                "score": 0.4543958604335785
+            },
+            "slug_title": "boruto-naruto-next-generations",
+            "slug": "",
+            "new": false,
+            "linked_resource_key": "cms:/series/GR75Q020Y",
+            "external_id": "SRZ.272781",
+            "rating": {
+                "1s": {
+                    "displayed": "14",
+                    "percentage": 26,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "3.2",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "3s": {
+                    "displayed": "5.4",
+                    "percentage": 11,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "6.4",
+                    "percentage": 12,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "25.1",
+                    "percentage": 47,
+                    "unit": "K"
+                },
+                "average": "3.5",
+                "total": 54244,
+                "rating": ""
+            },
+            "promo_title": "",
+            "title": "BORUTO: NARUTO NEXT GENERATIONS",
+            "id": "GR75Q020Y"
+        },
+        {
+            "images": {
+                "poster_tall": [
+                    [
+                        {
+                            "height": 90,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 60
+                        },
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 120
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 240
+                        },
+                        {
+                            "height": 720,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 480
+                        },
+                        {
+                            "height": 1125,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 750
+                        },
+                        {
+                            "height": 1440,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 960
+                        },
+                        {
+                            "height": 1688,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 1125
+                        },
+                        {
+                            "height": 1800,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 1200
+                        },
+                        {
+                            "height": 2340,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
+                            "type": "poster_tall",
+                            "width": 1560
+                        }
+                    ]
+                ],
+                "poster_wide": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
+                            "type": "poster_wide",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "description": "Gojo Wakana es un estudiante de preparatoria que quiere convertirse en un maestro del tradicional arte de crear muñecas Hina. Aunque adora ese arte, no sabe nada de las últimas tendencias y eso hace que le cueste encajar con sus compañeros de clase. Los más populares de la clase, en especial una chica llamada Marin Kitagawa, parecen creer que él vive en un mundo aparte. Todo esto cambia por completo un día cuando Marin comparte un secreto inesperado con él y hace que sus dos mundos coincidan.",
+            "external_id": "SRZ.282178",
+            "promo_title": "",
+            "search_metadata": {
+                "popularity_score": 0.08150103,
+                "rank": 30,
+                "score": 0.447946161031723
+            },
+            "promo_description": "",
+            "slug": "",
+            "series_metadata": {
+                "audio_locales": [
+                    "hi-IN",
+                    "fr-FR",
+                    "ar-SA",
+                    "it-IT",
+                    "es-ES",
+                    "de-DE",
+                    "es-419",
+                    "en-US",
+                    "pt-BR",
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 12,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2022,
+                "subtitle_locales": [
+                    "it-IT",
+                    "ar-SA",
+                    "de-DE",
+                    "fr-FR",
+                    "ru-RU",
+                    "es-419",
+                    "hi-IN",
+                    "en-US",
+                    "es-ES",
+                    "pt-BR"
+                ]
+            },
+            "id": "GQWH0M9N8",
+            "linked_resource_key": "cms:/series/GQWH0M9N8",
+            "slug_title": "my-dress-up-darling",
+            "new": false,
+            "rating": {
+                "4s": {
+                    "displayed": "4.4",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "78.5",
+                    "percentage": 93,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 84978,
+                "rating": "",
+                "1s": {
+                    "displayed": "974",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "256",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "900",
+                    "percentage": 2,
+                    "unit": ""
+                }
+            },
+            "channel_id": "crunchyroll",
+            "title": "My Dress-Up Darling",
             "type": "series"
         },
         {
-            "description": "En el MMORPG Cross Reverie, Takuma Sakamoto es tan poderoso que el resto de jugadores lo aclaman como el “Lord Demoníaco”. Un día Takuma es invocado a otro mundo, ¡pero con el aspecto que tiene en el juego! Allí conocerá a dos chicas que dicen ser quienes lo han invocado y ejecutan un ritual para convertirlo en su esclavo. En ese momento se activa un objeto que posee y que hace que el hechizo se revierta y sean las dos chicas las que se conviertan en sus esclavas y no al revés.",
-            "channel_id": "crunchyroll",
             "promo_description": "",
-            "slug": "",
+            "type": "series",
+            "external_id": "SRZ.276741",
+            "description": "En el MMORPG Cross Reverie, Takuma Sakamoto es tan poderoso que el resto de jugadores lo aclaman como el “Lord Demoníaco”. Un día Takuma es invocado a otro mundo, ¡pero con el aspecto que tiene en el juego! Allí conocerá a dos chicas que dicen ser quienes lo han invocado y ejecutan un ritual para convertirlo en su esclavo. En ese momento se activa un objeto que posee y que hace que el hechizo se revierta y sean las dos chicas las que se conviertan en sus esclavas y no al revés.",
+            "linked_resource_key": "cms:/series/GYZJXWWGR",
+            "rating": {
+                "3s": {
+                    "displayed": "1.2",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "3.5",
+                    "percentage": 16,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "17.1",
+                    "percentage": 75,
+                    "unit": "K"
+                },
+                "average": "4.6",
+                "total": 22828,
+                "rating": "",
+                "1s": {
+                    "displayed": "639",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "419",
+                    "percentage": 2,
+                    "unit": ""
+                }
+            },
             "slug_title": "how-not-to-summon-a-demon-lord",
             "search_metadata": {
-                "popularity_score": 0.07131314,
-                "rank": 30,
-                "score": 0.44482776522636414
+                "popularity_score": 0.05967165,
+                "rank": 31,
+                "score": 0.4470347762107849
             },
-            "external_id": "SRZ.276741",
-            "promo_title": "",
-            "type": "series",
             "new": false,
-            "linked_resource_key": "cms:/series/GYZJXWWGR",
+            "id": "GYZJXWWGR",
+            "title": "How Not to Summon a Demon Lord",
             "series_metadata": {
                 "audio_locales": [
-                    "en-US",
-                    "ja-JP"
+                    "ja-JP",
+                    "en-US"
                 ],
                 "availability_notes": "",
                 "episode_count": 32,
@@ -2505,18 +3185,19 @@
                 "season_count": 3,
                 "series_launch_year": 2018,
                 "subtitle_locales": [
-                    "es-419",
-                    "fr-FR",
-                    "it-IT",
-                    "es-ES",
                     "pt-BR",
                     "ru-RU",
+                    "es-419",
                     "de-DE",
-                    "en-US"
+                    "en-US",
+                    "fr-FR",
+                    "es-ES",
+                    "it-IT"
                 ]
             },
-            "id": "GYZJXWWGR",
-            "title": "How Not to Summon a Demon Lord",
+            "promo_title": "",
+            "channel_id": "crunchyroll",
+            "slug": "",
             "images": {
                 "poster_tall": [
                     [
@@ -2631,19 +3312,11 @@
             }
         },
         {
-            "slug_title": "food-wars-shokugeki-no-soma",
-            "new": false,
-            "linked_resource_key": "cms:/series/G6GG91P26",
-            "external_id": "SRZ.265649",
-            "promo_description": "",
-            "type": "series",
-            "description": "Shokugeki no Soma se centra en la vida de Soma Yukihira, un estudiante de secundaria con el sueño de superar las habilidades culinarias de su padre. Un día, su padre decide cerrar el restaurante de la familia para marcharse a pulir sus habilidades en el extranjero. Antes de irse, inscribe a Soma en una escuela culinaria muy prestigiosa, de la cual menos del 10 % de sus estudiantes consigue graduarse. ¿Estará Soma a la altura de la escuela?",
-            "id": "G6GG91P26",
-            "promo_title": "",
+            "slug": "",
             "series_metadata": {
                 "audio_locales": [
-                    "ja-JP",
-                    "en-US"
+                    "en-US",
+                    "ja-JP"
                 ],
                 "availability_notes": "",
                 "episode_count": 55,
@@ -2660,18 +3333,58 @@
                 "season_count": 4,
                 "series_launch_year": 2019,
                 "subtitle_locales": [
-                    "en-US",
-                    "de-DE",
-                    "es-419",
-                    "fr-FR",
-                    "es-ES",
                     "ar-SA",
+                    "es-ES",
+                    "es-419",
+                    "de-DE",
+                    "en-US",
                     "ru-RU",
                     "pt-BR",
+                    "fr-FR",
                     "it-IT"
                 ]
             },
             "channel_id": "crunchyroll",
+            "external_id": "SRZ.265649",
+            "title": "Shokugeki no Soma",
+            "linked_resource_key": "cms:/series/G6GG91P26",
+            "promo_description": "",
+            "rating": {
+                "5s": {
+                    "displayed": "13.8",
+                    "percentage": 83,
+                    "unit": "K"
+                },
+                "average": "4.7",
+                "total": 16726,
+                "rating": "",
+                "1s": {
+                    "displayed": "358",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "164",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "499",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "1.9",
+                    "percentage": 12,
+                    "unit": "K"
+                }
+            },
+            "search_metadata": {
+                "popularity_score": 0.08424498,
+                "rank": 32,
+                "score": 0.4433736801147461
+            },
+            "promo_title": "",
             "images": {
                 "poster_tall": [
                     [
@@ -2784,35 +3497,23 @@
                     ]
                 ]
             },
-            "slug": "",
-            "title": "Shokugeki no Soma",
-            "search_metadata": {
-                "popularity_score": 0.04195163,
-                "rank": 31,
-                "score": 0.443398118019104
-            }
+            "id": "G6GG91P26",
+            "new": false,
+            "type": "series",
+            "slug_title": "food-wars-shokugeki-no-soma",
+            "description": "Shokugeki no Soma se centra en la vida de Soma Yukihira, un estudiante de secundaria con el sueño de superar las habilidades culinarias de su padre. Un día, su padre decide cerrar el restaurante de la familia para marcharse a pulir sus habilidades en el extranjero. Antes de irse, inscribe a Soma en una escuela culinaria muy prestigiosa, de la cual menos del 10 % de sus estudiantes consigue graduarse. ¿Estará Soma a la altura de la escuela?"
         },
         {
-            "promo_title": "",
-            "channel_id": "crunchyroll",
-            "slug_title": "my-dress-up-darling",
-            "type": "series",
-            "external_id": "SRZ.282178",
+            "promo_description": "",
             "series_metadata": {
                 "audio_locales": [
-                    "es-ES",
-                    "es-419",
-                    "en-US",
-                    "fr-FR",
-                    "pt-BR",
-                    "it-IT",
-                    "de-DE",
-                    "ar-SA",
                     "ja-JP",
-                    "hi-IN"
+                    "es-419",
+                    "pt-BR",
+                    "en-US"
                 ],
                 "availability_notes": "",
-                "episode_count": 12,
+                "episode_count": 23,
                 "extended_description": "",
                 "extended_maturity_rating": {},
                 "is_dubbed": true,
@@ -2823,163 +3524,19 @@
                 "maturity_ratings": [
                     "TV-14"
                 ],
-                "season_count": 1,
-                "series_launch_year": 2022,
+                "season_count": 3,
+                "series_launch_year": 2016,
                 "subtitle_locales": [
-                    "it-IT",
-                    "fr-FR",
                     "ar-SA",
                     "pt-BR",
-                    "de-DE",
-                    "hi-IN",
-                    "es-ES",
                     "ru-RU",
                     "es-419",
                     "en-US"
                 ]
             },
-            "linked_resource_key": "cms:/series/GQWH0M9N8",
-            "promo_description": "",
-            "id": "GQWH0M9N8",
-            "title": "My Dress-Up Darling",
-            "description": "Gojo Wakana es un estudiante de preparatoria que quiere convertirse en un maestro del tradicional arte de crear muñecas Hina. Aunque adora ese arte, no sabe nada de las últimas tendencias y eso hace que le cueste encajar con sus compañeros de clase. Los más populares de la clase, en especial una chica llamada Marin Kitagawa, parecen creer que él vive en un mundo aparte. Todo esto cambia por completo un día cuando Marin comparte un secreto inesperado con él y hace que sus dos mundos coincidan.",
-            "images": {
-                "poster_tall": [
-                    [
-                        {
-                            "height": 90,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 60
-                        },
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 120
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 240
-                        },
-                        {
-                            "height": 720,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 480
-                        },
-                        {
-                            "height": 1125,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 750
-                        },
-                        {
-                            "height": 1440,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 960
-                        },
-                        {
-                            "height": 1688,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 1125
-                        },
-                        {
-                            "height": 1800,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 1200
-                        },
-                        {
-                            "height": 2340,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/crunchyroll/fdfd2e0910d6f141626a7d6f8f76ab72.jpe",
-                            "type": "poster_tall",
-                            "width": 1560
-                        }
-                    ]
-                ],
-                "poster_wide": [
-                    [
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 320
-                        },
-                        {
-                            "height": 338,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 600
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 640
-                        },
-                        {
-                            "height": 450,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 800
-                        },
-                        {
-                            "height": 675,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 1200
-                        },
-                        {
-                            "height": 810,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 1440
-                        },
-                        {
-                            "height": 900,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 1600
-                        },
-                        {
-                            "height": 1080,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/55106611f3f44e55cb25b4da172baf2a.jpe",
-                            "type": "poster_wide",
-                            "width": 1920
-                        }
-                    ]
-                ]
-            },
-            "slug": "",
-            "search_metadata": {
-                "popularity_score": 0.06795731,
-                "rank": 32,
-                "score": 0.44270622730255127
-            },
-            "new": true
-        },
-        {
-            "id": "GYE5K3GQR",
-            "linked_resource_key": "cms:/series/GYE5K3GQR",
-            "promo_description": "",
             "description": "Kazuma Satou es un chico de preparatoria otaku y hikikomori que no suele salir de casa, pero cuando lo hace, un fatídico (y ridículo) accidente acaba con su vida. En el otro mundo aparece una diosa ante él y le propone comenzar de nuevo su vida en un mundo de magia y espada, pero las condiciones son un tanto peculiares, así que acabará comenzando de cero como aventurero y acompañado de una diosa.",
-            "external_id": "SRZ.269071",
-            "promo_title": "",
-            "slug_title": "konosuba--gods-blessing-on-this-wonderful-world",
-            "title": "KONOSUBA -God's blessing on this wonderful world!",
-            "slug": "",
             "channel_id": "crunchyroll",
-            "search_metadata": {
-                "popularity_score": 0.08733121,
-                "rank": 33,
-                "score": 0.44057270884513855
-            },
-            "type": "series",
+            "id": "GYE5K3GQR",
             "images": {
                 "poster_tall": [
                     [
@@ -3092,75 +3649,93 @@
                     ]
                 ]
             },
-            "series_metadata": {
-                "audio_locales": [
-                    "pt-BR",
-                    "ja-JP",
-                    "es-419",
-                    "en-US"
-                ],
-                "availability_notes": "",
-                "episode_count": 23,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": true,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 3,
-                "series_launch_year": 2016,
-                "subtitle_locales": [
-                    "ar-SA",
-                    "en-US",
-                    "ru-RU",
-                    "es-419",
-                    "pt-BR"
-                ]
+            "linked_resource_key": "cms:/series/GYE5K3GQR",
+            "rating": {
+                "5s": {
+                    "displayed": "28.2",
+                    "percentage": 89,
+                    "unit": "K"
+                },
+                "average": "4.8",
+                "total": 31827,
+                "rating": "",
+                "1s": {
+                    "displayed": "450",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "265",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "646",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "2.3",
+                    "percentage": 8,
+                    "unit": "K"
+                }
             },
-            "new": false
+            "slug": "",
+            "external_id": "SRZ.269071",
+            "slug_title": "konosuba--gods-blessing-on-this-wonderful-world",
+            "search_metadata": {
+                "popularity_score": 0.09958904,
+                "rank": 33,
+                "score": 0.4428136646747589
+            },
+            "title": "KONOSUBA -God's blessing on this wonderful world!",
+            "type": "series",
+            "new": false,
+            "promo_title": ""
         },
         {
-            "external_id": "SRZ.260265",
-            "series_metadata": {
-                "audio_locales": [
-                    "ja-JP"
-                ],
-                "availability_notes": "",
-                "episode_count": 93,
-                "extended_description": "",
-                "extended_maturity_rating": {},
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_simulcast": false,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "season_count": 7,
-                "series_launch_year": 2014,
-                "subtitle_locales": [
-                    "es-419",
-                    "pt-BR"
-                ]
-            },
-            "id": "GY8VM8MWY",
-            "description": "Basada en el manga original de Haruichi Furudate, el cual se publica en la Weekly Shonen Jump, Haikyu!! es un anime deportivo protagonizado por Shoyo Hinata y su amor por el voleibol. Siendo de corta estatura, le inspira un jugador al que llamaban el \"Pequeño Gigante\", y decide jugar tal y como lo hizo él. En su último año de secundaria por fin consigue jugar su primer partido oficial, pero es derrotado por completo por el equipo rival y su mejor jugador, \"El rey de la cancha\", Tobio Kageyama. Ya en preparatoria, Hinata se inscribe en la misma escuela en la que jugaba Tobio y...",
             "channel_id": "crunchyroll",
-            "search_metadata": {
-                "popularity_score": 0.20299052,
-                "rank": 34,
-                "score": 0.4382684528827667
+            "rating": {
+                "average": "4.9",
+                "total": 35364,
+                "rating": "",
+                "1s": {
+                    "displayed": "505",
+                    "percentage": 2,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "122",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "252",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "4s": {
+                    "displayed": "1.3",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "33.1",
+                    "percentage": 94,
+                    "unit": "K"
+                }
             },
             "promo_description": "",
-            "promo_title": "",
-            "new": false,
-            "slug_title": "haikyu",
+            "search_metadata": {
+                "popularity_score": 0.16623282,
+                "rank": 35,
+                "score": 0.4398868978023529
+            },
+            "external_id": "SRZ.260265",
             "title": "Haikyu!!",
+            "promo_title": "",
+            "type": "series",
+            "linked_resource_key": "cms:/series/GY8VM8MWY",
             "images": {
                 "poster_tall": [
                     [
@@ -3273,9 +3848,34 @@
                     ]
                 ]
             },
+            "description": "Basada en el manga original de Haruichi Furudate, el cual se publica en la Weekly Shonen Jump, Haikyu!! es un anime deportivo protagonizado por Shoyo Hinata y su amor por el voleibol. Siendo de corta estatura, le inspira un jugador al que llamaban el \"Pequeño Gigante\", y decide jugar tal y como lo hizo él. En su último año de secundaria por fin consigue jugar su primer partido oficial, pero es derrotado por completo por el equipo rival y su mejor jugador, \"El rey de la cancha\", Tobio Kageyama. Ya en preparatoria, Hinata se inscribe en la misma escuela en la que jugaba Tobio y...",
+            "id": "GY8VM8MWY",
+            "slug_title": "haikyu",
             "slug": "",
-            "type": "series",
-            "linked_resource_key": "cms:/series/GY8VM8MWY"
+            "series_metadata": {
+                "audio_locales": [
+                    "ja-JP"
+                ],
+                "availability_notes": "",
+                "episode_count": 93,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_simulcast": false,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 7,
+                "series_launch_year": 2014,
+                "subtitle_locales": [
+                    "es-419",
+                    "pt-BR"
+                ]
+            },
+            "new": false
         }
     ],
     "meta": {}

@@ -273,17 +273,19 @@ const getHomeFeed = async (profile) => {
 /**
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
- * @param {Array<String>} objectIds
+ * @param {Object} params
+ * @param {Array<String>} params.objectIds
+ * @param {Boolean} [params.ratings]
  * @return {Promise}
  */
-const getObjects = async (profile, objectIds) => {
+const getObjects = async (profile, params) => {
     let out = null
     try {
         if (__DEV__ && LOAD_MOCK_DATA) {
-            out = await getMockData('objects', objectIds)
+            out = await getMockData('objects', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getObjects({ account, objectIds })
+            out = await api.content2.getObjects({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -436,7 +438,7 @@ const getSimilar = async (profile, params) => {
     let out = null
     try {
         if (__DEV__ && LOAD_MOCK_DATA) {
-            out = await getMockData('similar', params.contentId)
+            out = await getMockData('similar', params)
         } else {
             const account = await getContentParam(profile)
             out = await api.content2.getSimilar({ account, ...params })

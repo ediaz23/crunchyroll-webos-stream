@@ -2,64 +2,24 @@
     "total": 5,
     "data": [
         {
-            "title": "Aventureras en la ciudad de los principiantes",
             "slug_title": "outlaws-of-the-town-for-beginners",
-            "episode_metadata": {
-                "audio_locale": "ja-JP",
-                "availability_ends": "9998-11-30T08:00:00Z",
-                "availability_notes": "",
-                "availability_starts": "2023-06-07T16:00:00Z",
-                "available_date": null,
-                "available_offline": true,
-                "closed_captions_available": false,
-                "duration_ms": 1420046,
-                "eligible_region": "CL",
-                "episode": "10",
-                "episode_air_date": "2023-06-08T00:00:00+09:00",
-                "episode_number": 10,
-                "extended_maturity_rating": {},
-                "free_available_date": "2023-06-07T16:00:00Z",
-                "identifier": "GJ0H7Q5V7|S1|E10",
-                "is_clip": false,
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_premium_only": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "premium_available_date": "2023-06-07T16:00:00Z",
-                "premium_date": null,
-                "season_id": "GY3VC2045",
-                "season_number": 1,
-                "season_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
-                "season_title": "KONOSUBA -An Explosion on This Wonderful World!",
-                "sequence_number": 10,
-                "series_id": "GJ0H7Q5V7",
-                "series_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
-                "series_title": "KONOSUBA -An Explosion on This Wonderful World!",
-                "subtitle_locales": [
-                    "en-US",
-                    "es-419",
-                    "pt-BR",
-                    "ar-SA",
-                    "ru-RU"
-                ],
-                "upload_date": "2023-06-08T00:00:00+09:00",
-                "versions": [
-                    {
-                        "audio_locale": "ja-JP",
-                        "guid": "G50UZ1N4G",
-                        "is_premium_only": true,
-                        "media_guid": "G07FNJW0Z",
-                        "original": true,
-                        "season_guid": "GY3VC2045",
-                        "variant": ""
-                    }
-                ]
-            },
+            "title": "Aventureras en la ciudad de los principiantes",
+            "promo_description": "",
             "streams_link": "/content/v2/cms/videos/G07FNJW0Z/streams",
+            "channel_id": "crunchyroll",
+            "slug": "",
+            "rating": {
+                "up": {
+                    "displayed": "5.5",
+                    "unit": "K"
+                },
+                "down": {
+                    "displayed": "25",
+                    "unit": ""
+                },
+                "total": 5500
+            },
+            "type": "episode",
             "images": {
                 "thumbnail": [
                     [
@@ -114,36 +74,29 @@
                     ]
                 ]
             },
-            "channel_id": "crunchyroll",
+            "linked_resource_key": "cms:/episodes/G50UZ1N4G",
+            "external_id": "EPI.895163",
             "id": "G50UZ1N4G",
-            "promo_description": "",
-            "type": "episode",
-            "slug": "",
             "description": "Yunyun y Megumin comienzan a hacer trabajos como aventureras, pero primero necesitan un grupo en el que encajen, pero siendo Yunyun tan inocente y Megumin tan ¿problemática?, no les será fácil.",
             "promo_title": "",
-            "external_id": "EPI.895163",
-            "linked_resource_key": "cms:/episodes/G50UZ1N4G"
-        },
-        {
-            "promo_description": "",
             "episode_metadata": {
                 "audio_locale": "ja-JP",
                 "availability_ends": "9998-11-30T08:00:00Z",
                 "availability_notes": "",
-                "availability_starts": "2023-06-06T15:30:00Z",
+                "availability_starts": "2023-06-07T16:00:00Z",
                 "available_date": null,
                 "available_offline": true,
                 "closed_captions_available": false,
-                "duration_ms": 1420004,
+                "duration_ms": 1420046,
                 "eligible_region": "CL",
                 "episode": "10",
-                "episode_air_date": "2023-06-06T23:00:00+09:00",
+                "episode_air_date": "2023-06-08T00:00:00+09:00",
                 "episode_number": 10,
                 "extended_maturity_rating": {},
-                "free_available_date": "2023-06-06T15:30:00Z",
-                "identifier": "G9VHN9185|S1|E10",
+                "free_available_date": "2023-06-07T16:00:00Z",
+                "identifier": "GJ0H7Q5V7|S1|E10",
                 "is_clip": false,
-                "is_dubbed": false,
+                "is_dubbed": true,
                 "is_mature": false,
                 "is_premium_only": true,
                 "is_subbed": true,
@@ -151,113 +104,141 @@
                 "maturity_ratings": [
                     "TV-14"
                 ],
-                "premium_available_date": "2023-06-06T15:30:00Z",
+                "premium_available_date": "2023-06-07T16:00:00Z",
                 "premium_date": null,
-                "season_id": "GYMGC38P0",
+                "season_id": "GY3VC2045",
                 "season_number": 1,
-                "season_slug_title": "skip-and-loafer",
-                "season_title": "Skip and Loafer",
+                "season_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
+                "season_title": "KONOSUBA -An Explosion on This Wonderful World!",
                 "sequence_number": 10,
-                "series_id": "G9VHN9185",
-                "series_slug_title": "skip-and-loafer",
-                "series_title": "Skip and Loafer",
+                "series_id": "GJ0H7Q5V7",
+                "series_slug_title": "konosuba--an-explosion-on-this-wonderful-world",
+                "series_title": "KONOSUBA -An Explosion on This Wonderful World!",
                 "subtitle_locales": [
                     "en-US",
                     "es-419",
-                    "es-ES",
-                    "fr-FR",
                     "pt-BR",
                     "ar-SA",
-                    "it-IT",
-                    "de-DE",
                     "ru-RU"
                 ],
-                "upload_date": "2023-06-06T23:00:00+09:00",
+                "upload_date": "2023-06-08T00:00:00+09:00",
                 "versions": [
                     {
                         "audio_locale": "ja-JP",
-                        "guid": "GZ7UV13VE",
+                        "guid": "G50UZ1N4G",
                         "is_premium_only": true,
-                        "media_guid": "G5JFZ1NZV",
+                        "media_guid": "G07FNJW0Z",
                         "original": true,
-                        "season_guid": "GYMGC38P0",
+                        "season_guid": "GY3VC2045",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "en-US",
+                        "guid": "GJWU2EEZ2",
+                        "is_premium_only": true,
+                        "media_guid": "GM8FXGGKX",
+                        "original": false,
+                        "season_guid": "GR49C7J0E",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "pt-BR",
+                        "guid": "G14U4G18G",
+                        "is_premium_only": true,
+                        "media_guid": "GKKF3DK7D",
+                        "original": false,
+                        "season_guid": "G6X0C4GM9",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "es-419",
+                        "guid": "GJWU2E049",
+                        "is_premium_only": true,
+                        "media_guid": "GM8FXGPJQ",
+                        "original": false,
+                        "season_guid": "GR9PC2QNP",
                         "variant": ""
                     }
                 ]
-            },
-            "promo_title": "",
-            "slug_title": "scrambling-and-dripping",
-            "external_id": "EPI.895002",
-            "type": "episode",
-            "slug": "",
-            "id": "GZ7UV13VE",
-            "channel_id": "crunchyroll",
-            "images": {
-                "thumbnail": [
-                    [
-                        {
-                            "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 320
-                        },
-                        {
-                            "height": 338,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 600
-                        },
-                        {
-                            "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 640
-                        },
-                        {
-                            "height": 450,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 800
-                        },
-                        {
-                            "height": 675,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 1200
-                        },
-                        {
-                            "height": 810,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 1440
-                        },
-                        {
-                            "height": 900,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 1600
-                        },
-                        {
-                            "height": 1080,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
-                            "type": "thumbnail",
-                            "width": 1920
-                        }
-                    ]
-                ]
-            },
-            "description": "Está toda la clase preparando la obra de teatro en la que van a participar, pese a que Sousuke no está muy por la labor de participar.",
-            "title": "Mucho trabajo en el festival y el baile lleno de lágrimas",
-            "linked_resource_key": "cms:/episodes/GZ7UV13VE",
-            "streams_link": "/content/v2/cms/videos/G5JFZ1NZV/streams"
+            }
         },
         {
-            "description": "¡Una oportunidad de regresar!\r\n\r\nUna puerta misteriosa se abre, invitando a un niño que ha sido acosado brutalmente toda su vida a dar un valeroso paso adelante hacia lo desconocido. Al otro lado se encuentra un tesoro de artefactos invaluables y un mundo tan lleno de magia como de monstruos. Sin embargo, la revelación más impactante es que puede llevarse consigo lo que quiera cuando regrese a la Tierra. No pasará mucho tiempo antes de que esta doble vida lo cambie para siempre...",
-            "linked_resource_key": "cms:/series/GEXH3W49E",
-            "promo_title": "",
-            "id": "GEXH3W49E",
+            "promo_description": "",
+            "slug": "",
             "slug_title": "i-got-a-cheat-skill-in-another-world-and-became-unrivaled-in-the-real-world-too",
+            "type": "series",
+            "linked_resource_key": "cms:/series/GEXH3W49E",
+            "description": "¡Una oportunidad de regresar!\r\n\r\nUna puerta misteriosa se abre, invitando a un niño que ha sido acosado brutalmente toda su vida a dar un valeroso paso adelante hacia lo desconocido. Al otro lado se encuentra un tesoro de artefactos invaluables y un mundo tan lleno de magia como de monstruos. Sin embargo, la revelación más impactante es que puede llevarse consigo lo que quiera cuando regrese a la Tierra. No pasará mucho tiempo antes de que esta doble vida lo cambie para siempre...",
             "external_id": "SRZ.283509",
+            "series_metadata": {
+                "audio_locales": [
+                    "en-US",
+                    "de-DE",
+                    "pt-BR",
+                    "fr-FR",
+                    "it-IT",
+                    "ja-JP",
+                    "es-419"
+                ],
+                "availability_notes": "",
+                "episode_count": 13,
+                "extended_description": "",
+                "extended_maturity_rating": {},
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_simulcast": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "season_count": 1,
+                "series_launch_year": 2023,
+                "subtitle_locales": [
+                    "de-DE",
+                    "fr-FR",
+                    "ar-SA",
+                    "it-IT",
+                    "hi-IN",
+                    "es-419",
+                    "pt-BR",
+                    "es-ES",
+                    "ru-RU",
+                    "en-US"
+                ]
+            },
+            "rating": {
+                "4s": {
+                    "displayed": "2.4",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "34.1",
+                    "percentage": 85,
+                    "unit": "K"
+                },
+                "average": "4.7",
+                "total": 40107,
+                "1s": {
+                    "displayed": "1.6",
+                    "percentage": 4,
+                    "unit": "K"
+                },
+                "2s": {
+                    "displayed": "849",
+                    "percentage": 3,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.3",
+                    "percentage": 4,
+                    "unit": "K"
+                }
+            },
+            "id": "GEXH3W49E",
+            "promo_title": "",
+            "channel_id": "crunchyroll",
             "title": "I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too",
             "images": {
                 "poster_tall": [
@@ -370,53 +351,98 @@
                         }
                     ]
                 ]
-            },
-            "channel_id": "crunchyroll",
-            "slug": "",
+            }
+        },
+        {
             "promo_description": "",
-            "series_metadata": {
-                "audio_locales": [
-                    "pt-BR",
-                    "es-419",
-                    "en-US",
-                    "de-DE",
-                    "it-IT",
-                    "fr-FR",
-                    "ja-JP"
-                ],
+            "linked_resource_key": "cms:/episodes/GK9U3D2VV",
+            "channel_id": "crunchyroll",
+            "promo_title": "",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
                 "availability_notes": "",
-                "episode_count": 11,
-                "extended_description": "",
+                "availability_starts": "2023-06-05T14:00:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1420004,
+                "eligible_region": "CL",
+                "episode": "10",
+                "episode_air_date": "2023-06-05T22:00:00+09:00",
+                "episode_number": 10,
                 "extended_maturity_rating": {},
+                "free_available_date": "2023-06-05T14:00:00Z",
+                "identifier": "GQWH0M990|S2|E10",
+                "is_clip": false,
                 "is_dubbed": true,
                 "is_mature": false,
-                "is_simulcast": true,
+                "is_premium_only": true,
                 "is_subbed": true,
                 "mature_blocked": false,
                 "maturity_ratings": [
                     "TV-14"
                 ],
-                "season_count": 1,
-                "series_launch_year": 2023,
+                "premium_available_date": "2023-06-05T14:00:00Z",
+                "premium_date": null,
+                "season_id": "G619CPW1J",
+                "season_number": 2,
+                "season_slug_title": "kuma-kuma-kuma-bear---punch",
+                "season_title": "Kuma Kuma Kuma Bear - Punch!",
+                "sequence_number": 10,
+                "series_id": "GQWH0M990",
+                "series_slug_title": "kuma-kuma-kuma-bear",
+                "series_title": "Kuma Kuma Kuma Bear",
                 "subtitle_locales": [
-                    "ru-RU",
-                    "hi-IN",
-                    "pt-BR",
                     "en-US",
-                    "ar-SA",
-                    "de-DE",
-                    "fr-FR",
                     "es-419",
                     "es-ES",
-                    "it-IT"
+                    "fr-FR",
+                    "pt-BR",
+                    "ar-SA",
+                    "it-IT",
+                    "de-DE",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-06-05T22:00:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "GK9U3D2VV",
+                        "is_premium_only": true,
+                        "media_guid": "G3WFXZEKK",
+                        "original": true,
+                        "season_guid": "G619CPW1J",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "en-US",
+                        "guid": "GMKUXGG34",
+                        "is_premium_only": true,
+                        "media_guid": "GPPFKDDX5",
+                        "original": false,
+                        "season_guid": "GYE5CQ23P",
+                        "variant": ""
+                    }
                 ]
             },
-            "type": "series"
-        },
-        {
-            "promo_description": "",
-            "slug": "",
+            "description": "Yuna y compañía llegan a Sielin para la fiesta de Misa y su abuelo, pero allí se encontrarán involucradas en las disputas entre dos familias de la nobleza.",
+            "title": "El oso se motiva",
             "type": "episode",
+            "slug_title": "bear-getting-motivated",
+            "rating": {
+                "down": {
+                    "displayed": "17",
+                    "unit": ""
+                },
+                "total": 2700,
+                "up": {
+                    "displayed": "2.7",
+                    "unit": "K"
+                }
+            },
+            "slug": "",
+            "id": "GK9U3D2VV",
             "images": {
                 "thumbnail": [
                     [
@@ -471,87 +497,58 @@
                     ]
                 ]
             },
-            "title": "El oso se motiva",
-            "promo_title": "",
-            "external_id": "EPI.894916",
-            "description": "Yuna y compañía llegan a Sielin para la fiesta de Misa y su abuelo, pero allí se encontrarán involucradas en las disputas entre dos familias de la nobleza.",
             "streams_link": "/content/v2/cms/videos/G3WFXZEKK/streams",
-            "linked_resource_key": "cms:/episodes/GK9U3D2VV",
-            "episode_metadata": {
-                "audio_locale": "ja-JP",
-                "availability_ends": "9998-11-30T08:00:00Z",
-                "availability_notes": "",
-                "availability_starts": "2023-06-05T14:00:00Z",
-                "available_date": null,
-                "available_offline": true,
-                "closed_captions_available": false,
-                "duration_ms": 1420004,
-                "eligible_region": "CL",
-                "episode": "10",
-                "episode_air_date": "2023-06-05T22:00:00+09:00",
-                "episode_number": 10,
-                "extended_maturity_rating": {},
-                "free_available_date": "2023-06-05T14:00:00Z",
-                "identifier": "GQWH0M990|S2|E10",
-                "is_clip": false,
-                "is_dubbed": false,
-                "is_mature": false,
-                "is_premium_only": true,
-                "is_subbed": true,
-                "mature_blocked": false,
-                "maturity_ratings": [
-                    "TV-14"
-                ],
-                "premium_available_date": "2023-06-05T14:00:00Z",
-                "premium_date": null,
-                "season_id": "G619CPW1J",
-                "season_number": 2,
-                "season_slug_title": "kuma-kuma-kuma-bear---punch",
-                "season_title": "Kuma Kuma Kuma Bear - Punch!",
-                "sequence_number": 10,
-                "series_id": "GQWH0M990",
-                "series_slug_title": "kuma-kuma-kuma-bear",
-                "series_title": "Kuma Kuma Kuma Bear",
-                "subtitle_locales": [
-                    "en-US",
-                    "es-419",
-                    "es-ES",
-                    "fr-FR",
-                    "pt-BR",
-                    "ar-SA",
-                    "it-IT",
-                    "de-DE",
-                    "ru-RU"
-                ],
-                "upload_date": "2023-06-05T22:00:00+09:00",
-                "versions": [
-                    {
-                        "audio_locale": "ja-JP",
-                        "guid": "GK9U3D2VV",
-                        "is_premium_only": true,
-                        "media_guid": "G3WFXZEKK",
-                        "original": true,
-                        "season_guid": "G619CPW1J",
-                        "variant": ""
-                    }
-                ]
-            },
-            "channel_id": "crunchyroll",
-            "slug_title": "bear-getting-motivated",
-            "id": "GK9U3D2VV"
+            "external_id": "EPI.894916"
         },
         {
+            "type": "series",
+            "description": "Dificultades, arrepentimiento, vergüenza… Los sentimientos negativos de los humanos se convierten en Maldiciones que nos acechan en nuestra vida diaria. Las Maldiciones campan a sus anchas por todo el mundo, y pueden llevar a las personas a sufrir terribles desgracias e incluso dirigirlas a su muerte. Y lo que es peor: solo una Maldición puede exorcizar otra Maldición.",
+            "id": "GRDV0019R",
+            "rating": {
+                "1s": {
+                    "displayed": "995",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "2s": {
+                    "displayed": "409",
+                    "percentage": 1,
+                    "unit": ""
+                },
+                "3s": {
+                    "displayed": "1.3",
+                    "percentage": 1,
+                    "unit": "K"
+                },
+                "4s": {
+                    "displayed": "6.9",
+                    "percentage": 6,
+                    "unit": "K"
+                },
+                "5s": {
+                    "displayed": "126",
+                    "percentage": 93,
+                    "unit": "K"
+                },
+                "average": "4.9",
+                "total": 135698
+            },
+            "title": "JUJUTSU KAISEN",
+            "linked_resource_key": "cms:/series/GRDV0019R",
+            "slug_title": "jujutsu-kaisen",
+            "external_id": "SRZ.279979",
+            "promo_description": "",
             "series_metadata": {
                 "audio_locales": [
-                    "de-DE",
-                    "es-419",
-                    "ja-JP",
-                    "en-US",
-                    "pt-BR",
                     "it-IT",
+                    "ja-JP",
+                    "pt-BR",
+                    "en-US",
+                    "de-DE",
                     "ru-RU",
-                    "es-ES",
-                    "fr-FR"
+                    "es-419",
+                    "fr-FR",
+                    "es-ES"
                 ],
                 "availability_notes": "",
                 "episode_count": 25,
@@ -566,28 +563,20 @@
                     "TV-14"
                 ],
                 "season_count": 2,
-                "series_launch_year": 2021,
+                "series_launch_year": 2020,
                 "subtitle_locales": [
-                    "pt-PT",
-                    "ar-SA",
-                    "en-US",
-                    "pt-BR",
+                    "es-419",
                     "ru-RU",
                     "es-ES",
-                    "fr-FR",
+                    "en-US",
                     "de-DE",
+                    "pt-BR",
+                    "pt-PT",
                     "it-IT",
-                    "es-419"
+                    "fr-FR",
+                    "ar-SA"
                 ]
             },
-            "title": "JUJUTSU KAISEN",
-            "id": "GRDV0019R",
-            "external_id": "SRZ.279979",
-            "channel_id": "crunchyroll",
-            "promo_description": "",
-            "description": "Dificultades, arrepentimiento, vergüenza… Los sentimientos negativos de los humanos se convierten en Maldiciones que nos acechan en nuestra vida diaria. Las Maldiciones campan a sus anchas por todo el mundo, y pueden llevar a las personas a sufrir terribles desgracias e incluso dirigirlas a su muerte. Y lo que es peor: solo una Maldición puede exorcizar otra Maldición.",
-            "linked_resource_key": "cms:/series/GRDV0019R",
-            "promo_title": "",
             "images": {
                 "poster_tall": [
                     [
@@ -710,9 +699,165 @@
                     ]
                 ]
             },
+            "promo_title": "",
+            "channel_id": "crunchyroll",
+            "slug": ""
+        },
+        {
+            "id": "GZ7UV13VE",
+            "channel_id": "crunchyroll",
+            "title": "Mucho trabajo en el festival y el baile lleno de lágrimas",
             "slug": "",
-            "type": "series",
-            "slug_title": "jujutsu-kaisen"
+            "rating": {
+                "up": {
+                    "displayed": "8.5",
+                    "unit": "K"
+                },
+                "down": {
+                    "displayed": "18",
+                    "unit": ""
+                },
+                "total": 8536
+            },
+            "streams_link": "/content/v2/cms/videos/G5JFZ1NZV/streams",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/fbe2c250c76227218e088cba7ab2bd1c.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "description": "Está toda la clase preparando la obra de teatro en la que van a participar, pese a que Sousuke no está muy por la labor de participar.",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
+                "availability_notes": "",
+                "availability_starts": "2023-06-06T15:30:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1420004,
+                "eligible_region": "CL",
+                "episode": "10",
+                "episode_air_date": "2023-06-06T23:00:00+09:00",
+                "episode_number": 10,
+                "extended_maturity_rating": {},
+                "free_available_date": "2023-06-06T15:30:00Z",
+                "identifier": "G9VHN9185|S1|E10",
+                "is_clip": false,
+                "is_dubbed": true,
+                "is_mature": false,
+                "is_premium_only": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "premium_available_date": "2023-06-06T15:30:00Z",
+                "premium_date": null,
+                "season_id": "GYMGC38P0",
+                "season_number": 1,
+                "season_slug_title": "skip-and-loafer",
+                "season_title": "Skip and Loafer",
+                "sequence_number": 10,
+                "series_id": "G9VHN9185",
+                "series_slug_title": "skip-and-loafer",
+                "series_title": "Skip and Loafer",
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "es-ES",
+                    "fr-FR",
+                    "pt-BR",
+                    "ar-SA",
+                    "it-IT",
+                    "de-DE",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-06-06T23:00:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "GZ7UV13VE",
+                        "is_premium_only": true,
+                        "media_guid": "G5JFZ1NZV",
+                        "original": true,
+                        "season_guid": "GYMGC38P0",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "pt-BR",
+                        "guid": "G0DUNJKE4",
+                        "is_premium_only": true,
+                        "media_guid": "G9XFEGMV7",
+                        "original": false,
+                        "season_guid": "GY8VCP87V",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "es-419",
+                        "guid": "GEVUZNDV4",
+                        "is_premium_only": true,
+                        "media_guid": "GXMFQZW8P",
+                        "original": false,
+                        "season_guid": "GR2PCVWNX",
+                        "variant": ""
+                    }
+                ]
+            },
+            "promo_title": "",
+            "external_id": "EPI.895002",
+            "type": "episode",
+            "linked_resource_key": "cms:/episodes/GZ7UV13VE",
+            "promo_description": "",
+            "slug_title": "scrambling-and-dripping"
         }
     ],
     "meta": {}

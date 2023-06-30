@@ -3,7 +3,66 @@
     "data": [
         {
             "panel": {
-                "recent_audio_locale": "ja-JP",
+                "slug_title": "no-man-is-an-island",
+                "id": "G2XU0QPP7",
+                "channel_id": "crunchyroll",
+                "description": "Mientras All Might se lamenta por la situación con Izuku, este está de regreso en la U.A. con sus compañeros, quienes intentan cuidar de él y le dan fuerzas renovadas para enfrentarse a la batalla que se avecina. Japón por su parte pide ayuda internacional a héroes de otros países para controlar lo que está ocurriendo.",
+                "title": "Conectados",
+                "promo_description": "",
+                "images": {
+                    "thumbnail": [
+                        [
+                            {
+                                "height": 180,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 320
+                            },
+                            {
+                                "height": 338,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 600
+                            },
+                            {
+                                "height": 360,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 640
+                            },
+                            {
+                                "height": 450,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 800
+                            },
+                            {
+                                "height": 675,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1200
+                            },
+                            {
+                                "height": 810,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1440
+                            },
+                            {
+                                "height": 900,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1600
+                            },
+                            {
+                                "height": 1080,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1920
+                            }
+                        ]
+                    ]
+                },
                 "episode_metadata": {
                     "audio_locale": "ja-JP",
                     "availability_ends": "9998-11-30T08:00:00Z",
@@ -63,72 +122,13 @@
                         }
                     ]
                 },
-                "promo_description": "",
-                "slug": "",
-                "images": {
-                    "thumbnail": [
-                        [
-                            {
-                                "height": 180,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 320
-                            },
-                            {
-                                "height": 338,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 600
-                            },
-                            {
-                                "height": 360,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 640
-                            },
-                            {
-                                "height": 450,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 800
-                            },
-                            {
-                                "height": 675,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 1200
-                            },
-                            {
-                                "height": 810,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 1440
-                            },
-                            {
-                                "height": 900,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 1600
-                            },
-                            {
-                                "height": 1080,
-                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
-                                "type": "thumbnail",
-                                "width": 1920
-                            }
-                        ]
-                    ]
-                },
-                "title": "Conectados",
-                "type": "episode",
-                "streams_link": "/content/v2/cms/videos/GDVFVX00M/streams",
-                "channel_id": "crunchyroll",
-                "external_id": "EPI.886841",
                 "linked_resource_key": "cms:/episodes/G2XU0QPP7",
-                "id": "G2XU0QPP7",
-                "slug_title": "no-man-is-an-island",
-                "description": "Mientras All Might se lamenta por la situación con Izuku, este está de regreso en la U.A. con sus compañeros, quienes intentan cuidar de él y le dan fuerzas renovadas para enfrentarse a la batalla que se avecina. Japón por su parte pide ayuda internacional a héroes de otros países para controlar lo que está ocurriendo.",
-                "promo_title": ""
+                "external_id": "EPI.886841",
+                "recent_audio_locale": "ja-JP",
+                "promo_title": "",
+                "streams_link": "/content/v2/cms/videos/GDVFVX00M/streams",
+                "type": "episode",
+                "slug": ""
             },
             "new": false,
             "is_favorite": false,

@@ -1,4 +1,5 @@
 
+import { stringifySorted } from '../utils'
 
 /**
  * Set mock data in data object
@@ -6,7 +7,6 @@
  * @param {String} name
  */
 async function setData(data, name) {
-    data[name] = true  // hack to avoid unused warning
     data[name] = await import(`./${name}`)
 }
 
@@ -16,8 +16,13 @@ async function setData(data, name) {
  * @returns {String}
  */
 function objectToStringForFileName(obj) {
-    return JSON.stringify(obj)
-        .replace(/[{}"]/g, '')
+    for (const vals of Object.values(obj)) {
+        if (Array.isArray(vals)) {
+            vals.sort()
+        }
+    }
+    return stringifySorted(obj)
+        .replace(/[{}"[\]]/g, '')
         .replace(/:/g, '-')
         .replace(/,/g, '_');
 }
@@ -28,7 +33,7 @@ function objectToStringForFileName(obj) {
  * @param {Array<String>} [objectIds]
  * @returns {String}
  */
-function getMockFilename(name, objectIds) {
+export function getMockFilename(name, objectIds) {
     let suff = ''
     if (objectIds) {
         if (objectIds instanceof String || typeof objectIds === 'string') {

@@ -2,26 +2,16 @@
     "total": 39,
     "data": [
         {
-            "readyToPublish": true,
-            "slug": "wolf-complete-works-7-merry-go-round-tour-2021-",
-            "description": "Un video que incluye el segmento de la Yokohama Arena de la gira de tres ciudades con seis conciertos titulada \"MAN WITH A MISSION presents ～Merry-Go-Round Tour 2021～\", que tuvo lugar en diciembre de 2021 en Yokohama, Nagoya y Osaka. Incluso la prolongada pandemia no pudo detener a los Wölfe, y el tour en vivo muestra la esencia misma de la banda. Basado en el concepto que divide la época activa de MAN WITH A MISSION en dos fases, el concierto ofrece el mejor repertorio que han podido tener para coronar su décimo aniversario en 2020 y aumentar la emoción por el próximo capítulo.",
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "id": "MC413F8154",
-            "isPremiumOnly": true,
-            "originalRelease": "2022-03-23T00:00:00Z",
-            "publishDate": "2023-05-31T13:00:00Z",
-            "type": "musicConcert",
-            "streams_link": "/content/v2/music/MC413F8154/streams",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
-            "copyright": "© 2022 Sony Music Labels Inc.",
+            "description": "Un video que incluye el segmento de la Yokohama Arena de la gira de tres ciudades con seis conciertos titulada \"MAN WITH A MISSION presents ～Merry-Go-Round Tour 2021～\", que tuvo lugar en diciembre de 2021 en Yokohama, Nagoya y Osaka. Incluso la prolongada pandemia no pudo detener a los Wölfe, y el tour en vivo muestra la esencia misma de la banda. Basado en el concepto que divide la época activa de MAN WITH A MISSION en dos fases, el concierto ofrece el mejor repertorio que han podido tener para coronar su décimo aniversario en 2020 y aumentar la emoción por el próximo capítulo.",
             "images": {
                 "thumbnail": [
                     {
@@ -74,59 +64,35 @@
                     }
                 ]
             },
-            "isMature": false,
-            "sequenceNumber": 0,
-            "title": "Wolf Complete Works 7 -Merry-Go-Round Tour 2021-",
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "durationMs": 11179000,
-            "hash": "0c743dc1ed5c66b78c6fcbf5d2f7e01f",
             "licensor": "BMG",
-            "matureBlocked": false,
-            "updatedAt": "2023-05-31T07:11:21.297Z",
-            "artist": {
-                "id": "MA899F289",
-                "name": "MAN WITH A MISSION",
-                "slug": "man-with-a-mission"
-            },
-            "isPublic": true,
-            "maturityRatings": {}
-        },
-        {
             "sequenceNumber": 0,
-            "slug": "just-like-this-2021",
-            "updatedAt": "2023-05-31T07:11:23.662Z",
+            "slug": "wolf-complete-works-7-merry-go-round-tour-2021-",
+            "title": "Wolf Complete Works 7 -Merry-Go-Round Tour 2021-",
+            "type": "musicConcert",
+            "updatedAt": "2023-05-31T07:11:21.297Z",
+            "streams_link": "/content/v2/music/MC413F8154/streams",
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "hash": "0c743dc1ed5c66b78c6fcbf5d2f7e01f",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "isPublic": true,
+            "readyToPublish": true,
+            "copyright": "© 2022 Sony Music Labels Inc.",
+            "durationMs": 11179000,
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "isPublic": true,
-            "hash": "027aa3cd589ca814f22ce93beff35561",
-            "licensor": "BMG",
+            "id": "MC413F8154",
+            "isMature": false,
             "maturityRatings": {},
-            "publishDate": "2023-05-31T13:00:00Z",
-            "readyToPublish": true,
-            "title": "JUST LIKE THIS 2021",
-            "artist": {
-                "id": "MA2B631720",
-                "name": "SPYAIR",
-                "slug": "spyair"
-            },
-            "description": "El producto visual del concierto al aire libre anual de SPYAIR, titulado \"JUST LIKE THIS 2021\", que tuvo lugar el 17 de julio de 2021 en el Fujikyu Highland Conifer Forest, ¡ya está disponible! Fue un enorme concierto al aire libre que solo los chicos de la banda podían lograr, ya que la formaron a partir de su admiración por las estrellas del rock y los escenarios de los festivales de música en los que esas estrellas habían estado. Esta serie se inició en 2015 y se lleva a cabo todos los veranos, pero debido a la pandemia, la banda tuvo que cancelar el concierto en 2020. En 2021, el primer concierto de la serie en dos años y el sexto en general, tocaron 23 canciones bajo un sol radiante, incluyendo el lema del evento \"All I Need\", su último éxito \"Wadachi\" y por primera vez \"Born To Be Loud\". ¡Es la grabación de un día de verano que emocionó a los fans!",
-            "type": "musicConcert",
+            "originalRelease": "2022-03-23T00:00:00Z"
+        },
+        {
             "createdAt": "2023-02-28T12:48:41.813Z",
-            "durationMs": 7707000,
-            "id": "MC73C8B00A",
-            "isPremiumOnly": true,
-            "originalRelease": "2022-03-09T00:00:00Z",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "matureBlocked": false,
-            "streams_link": "/content/v2/music/MC73C8B00A/streams",
             "images": {
                 "thumbnail": [
                     {
@@ -179,9 +145,68 @@
                     }
                 ]
             },
-            "isMature": false
+            "originalRelease": "2022-03-09T00:00:00Z",
+            "updatedAt": "2023-05-31T07:11:23.662Z",
+            "copyright": "© 2022 Sony Music Labels Inc.",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
+            },
+            "hash": "027aa3cd589ca814f22ce93beff35561",
+            "id": "MC73C8B00A",
+            "isMature": false,
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "artist": {
+                "id": "MA2B631720",
+                "name": "SPYAIR",
+                "slug": "spyair"
+            },
+            "readyToPublish": true,
+            "sequenceNumber": 0,
+            "slug": "just-like-this-2021",
+            "streams_link": "/content/v2/music/MC73C8B00A/streams",
+            "publishDate": "2023-05-31T13:00:00Z",
+            "durationMs": 7707000,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPublic": true,
+            "licensor": "BMG",
+            "title": "JUST LIKE THIS 2021",
+            "description": "El producto visual del concierto al aire libre anual de SPYAIR, titulado \"JUST LIKE THIS 2021\", que tuvo lugar el 17 de julio de 2021 en el Fujikyu Highland Conifer Forest, ¡ya está disponible! Fue un enorme concierto al aire libre que solo los chicos de la banda podían lograr, ya que la formaron a partir de su admiración por las estrellas del rock y los escenarios de los festivales de música en los que esas estrellas habían estado. Esta serie se inició en 2015 y se lleva a cabo todos los veranos, pero debido a la pandemia, la banda tuvo que cancelar el concierto en 2020. En 2021, el primer concierto de la serie en dos años y el sexto en general, tocaron 23 canciones bajo un sol radiante, incluyendo el lema del evento \"All I Need\", su último éxito \"Wadachi\" y por primera vez \"Born To Be Loud\". ¡Es la grabación de un día de verano que emocionó a los fans!",
+            "type": "musicConcert"
         },
         {
+            "slug": "shoko-nakagawa-chou-donyoku-matsuri-in-nippon-budokan",
+            "title": "SHOKO NAKAGAWA Chou Donyoku Matsuri In Nippon Budokan",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "isPublic": true,
+            "licensor": "BMG",
+            "sequenceNumber": 0,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "updatedAt": "2023-05-31T07:11:22.911Z",
+            "artist": {
+                "id": "MA6480DAB5",
+                "name": "Shoko Nakagawa",
+                "slug": "shoko-nakagawa"
+            },
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "description": "Un video completo del legendario concierto de Shoko Nakagawa, su primera actuación en el Nippon Budokan, que tuvo lugar el 24 de octubre de 2009.",
+            "matureBlocked": false,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
+            },
             "images": {
                 "thumbnail": [
                     {
@@ -235,78 +260,53 @@
                 ]
             },
             "originalRelease": "2010-02-10T00:00:00Z",
-            "publishDate": "2023-05-31T13:00:00Z",
             "readyToPublish": true,
-            "sequenceNumber": 0,
-            "type": "musicConcert",
-            "description": "Un video completo del legendario concierto de Shoko Nakagawa, su primera actuación en el Nippon Budokan, que tuvo lugar el 24 de octubre de 2009.",
-            "genres": [
-                {
-                    "displayValue": "J-Pop",
-                    "id": "j-pop"
-                }
-            ],
-            "streams_link": "/content/v2/music/MC547A7654/streams",
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "hash": "bf0996c61c037a5bed58ae513bd15dfe",
-            "id": "MC547A7654",
+            "isMature": false,
             "isPremiumOnly": true,
             "maturityRatings": {},
-            "title": "SHOKO NAKAGAWA Chou Donyoku Matsuri In Nippon Budokan",
-            "artist": {
-                "id": "MA6480DAB5",
-                "name": "Shoko Nakagawa",
-                "slug": "shoko-nakagawa"
-            },
+            "type": "musicConcert",
+            "copyright": "© 2010 Sony Music Labels Inc.",
+            "durationMs": 6450000,
+            "hash": "bf0996c61c037a5bed58ae513bd15dfe",
+            "id": "MC547A7654",
+            "streams_link": "/content/v2/music/MC547A7654/streams"
+        },
+        {
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "licensor": "BMG",
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MCBC5CF5CB/streams",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
-            "updatedAt": "2023-05-31T07:11:22.911Z",
+            "hash": "10e8948f80c9ccd77cc9f20a83175060",
+            "id": "MCBC5CF5CB",
             "isMature": false,
-            "isPublic": true,
-            "licensor": "BMG",
-            "matureBlocked": false,
-            "slug": "shoko-nakagawa-chou-donyoku-matsuri-in-nippon-budokan",
-            "copyright": "© 2010 Sony Music Labels Inc.",
-            "durationMs": 6450000
-        },
-        {
-            "matureBlocked": false,
-            "originalRelease": "2014-03-19T00:00:00Z",
-            "readyToPublish": true,
             "sequenceNumber": 0,
+            "readyToPublish": true,
             "title": "20th L'Anniversary Live -Day1-",
+            "updatedAt": "2023-05-31T07:11:20.876Z",
             "artist": {
                 "id": "MA7A8DC740",
                 "name": "L'Arc-en-Ciel",
                 "slug": "larc-en-ciel"
             },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
+            "copyright": "© 2014 Sony Music Labels Inc.",
+            "description": "Este producto visual captura el primer día de la serie de conciertos \"20th L'Anniversary LIVE\", que tuvo lugar los días 28 y 29 de mayo de 2011. La lista de canciones de este día se centró principalmente en temas de los álbumes \"DUNE\" a \"HEART\".",
+            "matureBlocked": false,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "originalRelease": "2014-03-19T00:00:00Z",
+            "slug": "20th-lanniversary-live-day1-",
+            "createdAt": "2023-02-28T12:48:12.662Z",
+            "durationMs": 8693000,
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "type": "musicConcert",
-            "streams_link": "/content/v2/music/MCBC5CF5CB/streams",
-            "maturityRatings": {},
-            "publishDate": "2023-05-31T13:00:00Z",
-            "slug": "20th-lanniversary-live-day1-",
-            "description": "Este producto visual captura el primer día de la serie de conciertos \"20th L'Anniversary LIVE\", que tuvo lugar los días 28 y 29 de mayo de 2011. La lista de canciones de este día se centró principalmente en temas de los álbumes \"DUNE\" a \"HEART\".",
-            "hash": "10e8948f80c9ccd77cc9f20a83175060",
-            "id": "MCBC5CF5CB",
-            "licensor": "BMG",
-            "copyright": "© 2014 Sony Music Labels Inc.",
-            "durationMs": 8693000,
-            "isMature": false,
-            "isPublic": true,
-            "updatedAt": "2023-05-31T07:11:20.876Z",
-            "createdAt": "2023-02-28T12:48:12.662Z",
             "images": {
                 "thumbnail": [
                     {
@@ -359,27 +359,43 @@
                     }
                 ]
             },
-            "isPremiumOnly": true
+            "maturityRatings": {}
         },
         {
-            "slug": "amazarashi-live-new-logos-order",
-            "title": "amazarashi Live New Logos Order",
+            "type": "musicConcert",
+            "hash": "2b217d3449843c9d92ca4b4b641225a1",
+            "id": "MC173A2E4B",
+            "isPublic": true,
+            "originalRelease": "2019-03-27T00:00:00Z",
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MC173A2E4B/streams",
             "artist": {
                 "id": "MA80B7E38C",
                 "name": "amazarashi",
                 "slug": "amazarashi"
             },
             "copyright": "© 2019 Sony Music Labels Inc.",
-            "durationMs": 7604000,
-            "id": "MC173A2E4B",
-            "licensor": "BMG",
-            "description": "¡El primer concierto de amazarashi en el Budokan, titulado \"Rodoku Enso Jikken Kukan 'Shin-Gengo Chitsujo'\", que tuvo lugar el 16 de noviembre de 2018, finalmente estará disponible en video! Como parte del proyecto \"Shin-Gengo Chitsujo\", la banda experimentó con el concierto, que fue accesible a través de una aplicación para smartphones, el sencillo \"Living Dead\" y una tienda emergente. Durante el espectáculo, el escenario estuvo rodeado de una enorme pantalla LED de 4 paneles, conectada a la aplicación, que mostraba lecturas de poemas, actuaciones y puestas en escena visuales para entusiasmar a los fanáticos.",
-            "matureBlocked": false,
+            "isPremiumOnly": true,
             "maturityRatings": {},
-            "type": "musicConcert",
+            "licensor": "BMG",
             "sequenceNumber": 0,
+            "title": "amazarashi Live New Logos Order",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
+            },
+            "description": "¡El primer concierto de amazarashi en el Budokan, titulado \"Rodoku Enso Jikken Kukan 'Shin-Gengo Chitsujo'\", que tuvo lugar el 16 de noviembre de 2018, finalmente estará disponible en video! Como parte del proyecto \"Shin-Gengo Chitsujo\", la banda experimentó con el concierto, que fue accesible a través de una aplicación para smartphones, el sencillo \"Living Dead\" y una tienda emergente. Durante el espectáculo, el escenario estuvo rodeado de una enorme pantalla LED de 4 paneles, conectada a la aplicación, que mostraba lecturas de poemas, actuaciones y puestas en escena visuales para entusiasmar a los fanáticos.",
+            "durationMs": 7604000,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "publishDate": "2023-05-31T13:00:00Z",
+            "slug": "amazarashi-live-new-logos-order",
             "updatedAt": "2023-05-31T07:11:19.153Z",
-            "streams_link": "/content/v2/music/MC173A2E4B/streams",
+            "createdAt": "2023-02-28T12:47:25.73Z",
             "images": {
                 "thumbnail": [
                     {
@@ -432,32 +448,15 @@
                     }
                 ]
             },
-            "isPremiumOnly": true,
-            "isPublic": true,
-            "originalRelease": "2019-03-27T00:00:00Z",
-            "readyToPublish": true,
-            "publishDate": "2023-05-31T13:00:00Z",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
-            "createdAt": "2023-02-28T12:47:25.73Z",
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "hash": "2b217d3449843c9d92ca4b4b641225a1",
-            "isMature": false
+            "isMature": false,
+            "matureBlocked": false
         },
         {
-            "copyright": "© 1992 Epic Records Japan",
-            "hash": "bf4ebcb387cd371ac45ca910261074d3",
-            "isMature": false,
-            "isPremiumOnly": true,
-            "updatedAt": "2023-05-31T07:11:24.757Z",
-            "streams_link": "/content/v2/music/MC52EDE5AE/streams",
+            "description": "¡El espectáculo de TM NETWORK en el Yokohama Arena del 12 de abril de 1992 ya está disponible como producto visual! Las imágenes en vivo han despertado gran interés gracias a su alto grado de perfección. Disfruta de su actuación suprema con efectos visuales y coreografía.\n\nExtraído de la BD BOX remasterizada en alta definición \"TM NETWORK THE VIDEOS 1984-1994\".\n\nLista de canciones: CRAZY FOR YOU I/JUST LIKE PARADISE/DON'T LET ME CRY/RHYTHM RED BEAT BLACK/JEAN WAS LONELY/PIANO SOLO/Tsuki wa Piano ni Sasowarete/HUMAN SYSTEM/Sayonara no Junbi/GIRL FRIEND/CRAZY FOR YOU II/SELF CONTROL/THE POINT OF LOVERS' NIGHT/LOVE TRAIN/GET WILD/WILD HEAVEN/CRAZY FOR YOU III/ELECTRIC PROPHET/(C) Epic Records Japan",
+            "maturityRatings": {},
+            "originalRelease": "2019-05-22T00:00:00Z",
+            "slug": "tmn-expo-arena-final",
+            "title": "TMN EXPO ARENA FINAL",
             "artist": {
                 "id": "MA9148711",
                 "name": "TM NETWORK",
@@ -470,6 +469,7 @@
                     "id": "j-pop"
                 }
             ],
+            "id": "MC52EDE5AE",
             "images": {
                 "thumbnail": [
                     {
@@ -524,40 +524,47 @@
             },
             "isPublic": true,
             "licensor": "SonyBMG",
-            "matureBlocked": false,
-            "publishDate": "2023-05-31T13:00:00Z",
-            "durationMs": 6365000,
-            "id": "MC52EDE5AE",
-            "maturityRatings": {},
-            "originalRelease": "2019-05-22T00:00:00Z",
             "readyToPublish": true,
             "sequenceNumber": 0,
-            "slug": "tmn-expo-arena-final",
+            "type": "musicConcert",
+            "updatedAt": "2023-06-13T07:57:25.118Z",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
-            "description": "¡El espectáculo de TM NETWORK en el Yokohama Arena del 12 de abril de 1992 ya está disponible como producto visual! Las imágenes en vivo han despertado gran interés gracias a su alto grado de perfección. Disfruta de su actuación suprema con efectos visuales y coreografía.\n\nExtraído de la BD BOX remasterizada en alta definición \"TM NETWORK THE VIDEOS 1984-1994\".\n\nLista de canciones: CRAZY FOR YOU I/JUST LIKE PARADISE/DON'T LET ME CRY/RHYTHM RED BEAT BLACK/JEAN WAS LONELY/PIANO SOLO/Tsuki wa Piano ni Sasowarete/HUMAN SYSTEM/Sayonara no Junbi/GIRL FRIEND/CRAZY FOR YOU II/SELF CONTROL/THE POINT OF LOVERS' NIGHT/LOVE TRAIN/GET WILD/WILD HEAVEN/CRAZY FOR YOU III/ELECTRIC PROPHET/(C) Epic Records Japan",
-            "title": "TMN EXPO ARENA FINAL",
-            "type": "musicConcert"
+            "copyright": "© 1992 Epic Records Japan",
+            "durationMs": 6365000,
+            "hash": "bf4ebcb387cd371ac45ca910261074d3",
+            "isMature": false,
+            "isPremiumOnly": true,
+            "streams_link": "/content/v2/music/MC52EDE5AE/streams",
+            "matureBlocked": false,
+            "publishDate": "2023-05-31T13:00:00Z"
         },
         {
-            "id": "MC9D02A878",
-            "isMature": false,
-            "publishDate": "2023-05-31T13:00:00Z",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
             "createdAt": "2023-02-28T12:46:44.82Z",
             "description": "La aclamada banda de rock SUPER BEAVER firmó de nuevo con una importante discográfica en 2020. Ese mismo año celebraron su 15.º aniversario, y este producto muestra el hito que supuso dicho año, incluyendo el concierto en streaming desde el Shin-Kiba Studio Coast, las escenas tras el escenario, el espectáculo del 3 de octubre en el Hibiya Amphitheater, y más.",
-            "hash": "3bc35502e7170692fbb321fcb716d3a7",
-            "isPremiumOnly": true,
-            "licensor": "BMG",
             "maturityRatings": {},
-            "slug": "live-video-45-tokai-no-rakuda-special-in-2020",
+            "sequenceNumber": 0,
+            "isPublic": true,
+            "licensor": "BMG",
+            "originalRelease": "2021-10-27T00:00:00Z",
+            "artist": {
+                "id": "MA5079E54E",
+                "name": "SUPER BEAVER",
+                "slug": "super-beaver"
+            },
             "copyright": "© 2021 Sony Music Labels Inc.",
-            "type": "musicConcert",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
             "images": {
                 "thumbnail": [
                     {
@@ -610,35 +617,23 @@
                     }
                 ]
             },
-            "matureBlocked": false,
-            "readyToPublish": true,
-            "sequenceNumber": 0,
-            "updatedAt": "2023-05-31T07:11:24.387Z",
-            "artist": {
-                "id": "MA5079E54E",
-                "name": "SUPER BEAVER",
-                "slug": "super-beaver"
-            },
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "isPublic": true,
-            "originalRelease": "2021-10-27T00:00:00Z",
+            "isMature": false,
+            "publishDate": "2023-05-31T13:00:00Z",
             "title": "LIVE VIDEO 4.5 Tokai No Rakuda Special in 2020",
+            "updatedAt": "2023-05-31T07:11:24.387Z",
+            "hash": "3bc35502e7170692fbb321fcb716d3a7",
+            "readyToPublish": true,
+            "type": "musicConcert",
             "streams_link": "/content/v2/music/MC9D02A878/streams",
-            "durationMs": 11096000
+            "durationMs": 11096000,
+            "id": "MC9D02A878",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "slug": "live-video-45-tokai-no-rakuda-special-in-2020"
         },
         {
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
-            "readyToPublish": true,
-            "streams_link": "/content/v2/music/MCBA1F08DA/streams",
-            "id": "MCBA1F08DA",
+            "updatedAt": "2023-06-13T07:57:23.72Z",
+            "createdAt": "2023-02-28T12:46:44.82Z",
             "images": {
                 "thumbnail": [
                     {
@@ -691,23 +686,31 @@
                     }
                 ]
             },
-            "isMature": false,
-            "licensor": "BMG",
+            "isPremiumOnly": true,
+            "isPublic": true,
             "matureBlocked": false,
-            "maturityRatings": {},
             "slug": "sumika-live-tour-2021-kacho-fugetsu-20211103-at-saitama-super-arena",
-            "updatedAt": "2023-05-31T07:11:24.154Z",
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "durationMs": 8213000,
-            "hash": "978c75f0c46e8ad5db7cf74f59a5dde7",
-            "publishDate": "2023-05-31T13:00:00Z",
-            "sequenceNumber": 0,
             "title": "sumika Live Tour 2021 Kacho Fugetsu 2021.11.03 at Saitama Super Arena",
+            "copyright": "© 2022 Sony Music Labels Inc.",
+            "id": "MCBA1F08DA",
+            "maturityRatings": {},
+            "originalRelease": "2022-03-02T00:00:00Z",
+            "sequenceNumber": 0,
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MCBA1F08DA/streams",
             "artist": {
                 "id": "MA1C30AB77",
                 "name": "sumika",
                 "slug": "sumika"
+            },
+            "durationMs": 8213000,
+            "hash": "978c75f0c46e8ad5db7cf74f59a5dde7",
+            "isMature": false,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "readyToPublish": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
             },
             "description": "La grabación completa del concierto de sumika en el Saitama Super Arena el 3 de noviembre de 2021, que marcó el punto culminante de su gira titulada 'Sumika Live Tour: Kachofugetsu' que constó de 23 conciertos.",
             "genres": [
@@ -716,30 +719,10 @@
                     "id": "j-pop"
                 }
             ],
-            "isPremiumOnly": true,
-            "isPublic": true,
-            "originalRelease": "2022-03-02T00:00:00Z",
-            "type": "musicConcert"
+            "licensor": "BMG"
         },
         {
-            "slug": "aqua-timez-final-live-last-dance",
-            "artist": {
-                "id": "MA450A2D0B",
-                "name": "Aqua Timez",
-                "slug": "aqua-timez"
-            },
-            "description": "¡La última presentación de Aqua Timez, que tuvo lugar el 18 de noviembre de 2018 en la Yokohama Arena bajo el título \"FINAL LIVE: last dance\", ya está disponible en formato de video! Desde su debut en CD en 2005, Aqua Timez se había ganado un lugar en los corazones de muchos fans con sus letras directas y significativas, tejidas por Futoshi. Su último espectáculo ofreció una generosa selección de canciones emblemáticas y baladas de amor, que se han convertido en sinónimo de Aqua Timez, incluyendo los grandes éxitos de los 14 años de carrera de la banda, las favoritas incondicionales de los fans y canciones de su álbum de despedida \"Nijuu-Rasen no Masayume\". Este video está dedicado a todos aquellos que pasaron su juventud con Aqua Timez, y presenta la auténtica y completa última gran actuación de la banda: \"Last Dance\".",
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "isMature": false,
-            "isPremiumOnly": true,
-            "updatedAt": "2023-05-31T07:11:19.748Z",
-            "createdAt": "2023-02-28T12:47:29.863Z",
-            "id": "MC67D32057",
+            "durationMs": 13804000,
             "images": {
                 "thumbnail": [
                     {
@@ -792,40 +775,59 @@
                     }
                 ]
             },
-            "maturityRatings": {},
-            "title": "Aqua Timez Final Live Last Dance",
-            "readyToPublish": true,
-            "sequenceNumber": 0,
-            "type": "musicConcert",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
-            "copyright": "© 2019 Sony Music Labels Inc.",
-            "durationMs": 13804000,
-            "isPublic": true,
-            "originalRelease": "2019-03-27T00:00:00Z",
             "hash": "1134e020a27ac4dd5d48b107ce207ceb",
+            "isMature": false,
             "licensor": "BMG",
+            "maturityRatings": {},
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "copyright": "© 2019 Sony Music Labels Inc.",
+            "description": "¡La última presentación de Aqua Timez, que tuvo lugar el 18 de noviembre de 2018 en la Yokohama Arena bajo el título \"FINAL LIVE: last dance\", ya está disponible en formato de video! Desde su debut en CD en 2005, Aqua Timez se había ganado un lugar en los corazones de muchos fans con sus letras directas y significativas, tejidas por Futoshi. Su último espectáculo ofreció una generosa selección de canciones emblemáticas y baladas de amor, que se han convertido en sinónimo de Aqua Timez, incluyendo los grandes éxitos de los 14 años de carrera de la banda, las favoritas incondicionales de los fans y canciones de su álbum de despedida \"Nijuu-Rasen no Masayume\". Este video está dedicado a todos aquellos que pasaron su juventud con Aqua Timez, y presenta la auténtica y completa última gran actuación de la banda: \"Last Dance\".",
+            "isPremiumOnly": true,
+            "isPublic": true,
             "matureBlocked": false,
+            "type": "musicConcert",
+            "updatedAt": "2023-06-13T07:57:12.742Z",
+            "artist": {
+                "id": "MA450A2D0B",
+                "name": "Aqua Timez",
+                "slug": "aqua-timez"
+            },
+            "streams_link": "/content/v2/music/MC67D32057/streams",
+            "id": "MC67D32057",
+            "originalRelease": "2019-03-27T00:00:00Z",
             "publishDate": "2023-05-31T13:00:00Z",
-            "streams_link": "/content/v2/music/MC67D32057/streams"
+            "readyToPublish": true,
+            "sequenceNumber": 0,
+            "slug": "aqua-timez-final-live-last-dance",
+            "title": "Aqua Timez Final Live Last Dance",
+            "createdAt": "2023-02-28T12:47:29.863Z"
         },
         {
-            "createdAt": "2023-02-28T12:48:35.288Z",
-            "description": "La gira nacional \"NICO Touches the Walls OUR2012: HUMANIA\" fue la más grande de NICO, con el doble de público en comparación con la gira anterior.  ¡Este video incluye completa la presentación adicional y final en Makuhari titulada \"Ground of HUMANIA\"!",
-            "hash": "fb0f1f7c32dc3b91e29b35b4e539b89c",
-            "licensor": "BMG",
-            "title": "NICO Touches The Walls Ground Of Humania 2012.3.20 In Makuhari",
-            "type": "musicConcert",
+            "readyToPublish": true,
             "sequenceNumber": 0,
-            "artist": {
-                "id": "MA4304E94",
-                "name": "NICO Touches the Walls",
-                "slug": "nico-touches-the-walls"
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
             },
-            "durationMs": 7734000,
             "id": "MC9CE5282F",
+            "isMature": false,
+            "isPublic": true,
+            "licensor": "BMG",
+            "maturityRatings": {},
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MC9CE5282F/streams",
+            "description": "La gira nacional \"NICO Touches the Walls OUR2012: HUMANIA\" fue la más grande de NICO, con el doble de público en comparación con la gira anterior.  ¡Este video incluye completa la presentación adicional y final en Makuhari titulada \"Ground of HUMANIA\"!",
+            "slug": "nico-touches-the-walls-ground-of-humania-2012320-in-makuhari",
+            "updatedAt": "2023-06-13T07:57:19.444Z",
             "images": {
                 "thumbnail": [
                     {
@@ -879,29 +881,54 @@
                 ]
             },
             "isPremiumOnly": true,
-            "isPublic": true,
+            "artist": {
+                "id": "MA4304E94",
+                "name": "NICO Touches the Walls",
+                "slug": "nico-touches-the-walls"
+            },
+            "copyright": "© 2012 SonyMusic",
+            "createdAt": "2023-02-28T12:48:35.288Z",
+            "durationMs": 7734000,
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "isMature": false,
-            "originalRelease": "2012-07-25T00:00:00Z",
-            "readyToPublish": true,
-            "slug": "nico-touches-the-walls-ground-of-humania-2012320-in-makuhari",
-            "streams_link": "/content/v2/music/MC9CE5282F/streams",
+            "hash": "fb0f1f7c32dc3b91e29b35b4e539b89c",
+            "matureBlocked": false,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "title": "NICO Touches The Walls Ground Of Humania 2012.3.20 In Makuhari",
+            "originalRelease": "2012-07-25T00:00:00Z"
+        },
+        {
+            "durationMs": 7760000,
+            "hash": "6dc4ec85bee6a71017a87a17f4a9e028",
+            "maturityRatings": {},
+            "sequenceNumber": 0,
+            "title": "Okuchi Pokaan Last Tour Netemo Sametemo Negoto Jyanaito",
+            "type": "musicConcert",
+            "updatedAt": "2023-05-31T07:11:22.012Z",
+            "streams_link": "/content/v2/music/MC9FE731C9/streams",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
-            "copyright": "© 2012 SonyMusic",
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "publishDate": "2023-05-31T13:00:00Z",
-            "updatedAt": "2023-05-31T07:11:22.228Z"
-        },
-        {
+            "id": "MC9FE731C9",
+            "readyToPublish": true,
+            "artist": {
+                "id": "MA44073169",
+                "name": "NEGOTO",
+                "slug": "negoto"
+            },
+            "copyright": "© 2019 Sony Music Labels Inc.",
+            "createdAt": "2023-02-28T12:50:07.688Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
             "images": {
                 "thumbnail": [
                     {
@@ -954,52 +981,46 @@
                     }
                 ]
             },
-            "isPremiumOnly": true,
-            "streams_link": "/content/v2/music/MC9FE731C9/streams",
-            "copyright": "© 2019 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:50:07.688Z",
-            "description": "Negoto pusierojn fin a su banda en su concierto del Zepp Divercity del 20 de julio de 2019. Este es el producto visual de su concierto final. ¡Incluye una llista compuesta por 25 temas de lo mejor de la banda, como  \"Sukitooru Shodo\", \"DESTINY\", \"sharp #\", \"Mayonaka no Anthem\", \"Syncromanica\", \"Mercirou\", \"ETERNALBEAT\", \"Suisei Syrup\" y \"Charon\"!",
-            "readyToPublish": true,
-            "sequenceNumber": 0,
-            "type": "musicConcert",
-            "artist": {
-                "id": "MA44073169",
-                "name": "NEGOTO",
-                "slug": "negoto"
-            },
-            "isMature": false,
-            "isPublic": true,
-            "originalRelease": "2019-10-23T00:00:00Z",
-            "publishDate": "2023-05-31T13:00:00Z",
-            "title": "Okuchi Pokaan Last Tour Netemo Sametemo Negoto Jyanaito",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "id": "MC9FE731C9",
             "licensor": "BMG",
-            "slug": "okuchi-pokaan-last-tour-netemo-sametemo-negoto-jyanaito",
-            "updatedAt": "2023-05-31T07:11:22.012Z",
-            "durationMs": 7760000,
+            "matureBlocked": false,
+            "originalRelease": "2019-10-23T00:00:00Z",
+            "description": "Negoto pusierojn fin a su banda en su concierto del Zepp Divercity del 20 de julio de 2019. Este es el producto visual de su concierto final. ¡Incluye una llista compuesta por 25 temas de lo mejor de la banda, como  \"Sukitooru Shodo\", \"DESTINY\", \"sharp #\", \"Mayonaka no Anthem\", \"Syncromanica\", \"Mercirou\", \"ETERNALBEAT\", \"Suisei Syrup\" y \"Charon\"!",
+            "isMature": false,
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "slug": "okuchi-pokaan-last-tour-netemo-sametemo-negoto-jyanaito"
+        },
+        {
+            "isPublic": true,
+            "publishDate": "2023-04-27T13:00:00Z",
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MC6E07A759/streams",
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "hash": "6dc4ec85bee6a71017a87a17f4a9e028"
-        },
-        {
-            "isMature": false,
-            "isPremiumOnly": true,
-            "isPublic": true,
-            "streams_link": "/content/v2/music/MC6E07A759/streams",
+            "id": "MC6E07A759",
+            "matureBlocked": false,
+            "slug": "this-is-burnout-syndromes-live-in-japan-",
+            "artist": {
+                "id": "MA29ED68B",
+                "name": "BURNOUT SYNDROMES",
+                "slug": "burnout-syndromes"
+            },
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-04-27T13:00:00Z"
             },
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "createdAt": "2023-02-28T12:47:41.974Z",
+            "maturityRatings": {},
+            "originalRelease": "2021-03-03T00:00:00Z",
+            "title": "THIS IS BURNOUT SYNDROMES-Live in JAPAN-",
+            "updatedAt": "2023-04-27T07:41:47.429Z",
+            "durationMs": 8812000,
             "images": {
                 "thumbnail": [
                     {
@@ -1052,64 +1073,24 @@
                     }
                 ]
             },
-            "durationMs": 8812000,
-            "originalRelease": "2021-03-03T00:00:00Z",
-            "readyToPublish": true,
-            "slug": "this-is-burnout-syndromes-live-in-japan-",
-            "title": "THIS IS BURNOUT SYNDROMES-Live in JAPAN-",
-            "type": "musicConcert",
-            "artist": {
-                "id": "MA29ED68B",
-                "name": "BURNOUT SYNDROMES",
-                "slug": "burnout-syndromes"
-            },
-            "createdAt": "2023-02-28T12:47:41.974Z",
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "hash": "69abb3a2bf1acafa19adb05d644179e6",
-            "publishDate": "2023-04-27T13:00:00Z",
+            "isMature": false,
+            "isPremiumOnly": true,
             "sequenceNumber": 0,
-            "updatedAt": "2023-04-27T07:41:47.429Z",
-            "copyright": "© 2021 Sony Music Labels Inc.",
             "description": "Este contenido audiovisual incluye no solo el concierto principal del quinto aniversario del debut de BURNOUT SYNDROMES en el Namba Hatch Osaka, celebrado en febrero de 2020, sino también otras actuaciones de giras anteriores seleccionadas por los fans a través de una encuesta. Podrás disfrutar de muchas de las emblemáticas canciones de BURNOUT SYNDROMES para anime a lo largo de cinco años de recorrido. ¡No te lo pierdas!",
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "id": "MC6E07A759",
-            "licensor": "BMG"
+            "hash": "69abb3a2bf1acafa19adb05d644179e6",
+            "licensor": "BMG",
+            "readyToPublish": true
         },
         {
-            "isPublic": true,
-            "originalRelease": "2016-12-21T00:00:00Z",
-            "readyToPublish": true,
-            "slug": "cho-ikimonogakari-matsuri-2016-jimoto-de-show--ebina-desho--",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
-            "description": "Ikimonogakari celebró su décimo aniversario en 2016 llevando a cabo una serie de grandes eventos al aire libre en sus ciudades natales titulados \"Cho Ikimono Matsuri 2016: Jimoto de SHOW!\". Los conciertos de Ebina y Atsugi ahora están disponibles en formato audiovisual.\n\"Cho Ikimono Matsuri 2016: Jimoto de SHOW! - ¡Ebina desho!\" tuvo lugar en el Parque Deportivo de Ebina. El producto presenta el concierto completo sin editar del 28 de agosto de 2016, el segundo día de los dos días de duración.\n[Lista de canciones: Opening/Arigato/Kaze ga Fuiteiru/Kimi ga Iru/Bluebird/Last Scene/Tsubasa/Hoshi/Happy Smile Again/Uruwashiki Hito/YELL/Interval 1/Hana wa Sakura Kimi wa Utsukushi/Love to Peace!/Sweet! Sweet! Music!/Kimagure Romantic/Joufull/Waratte Itainda/Kokoro no Hana wo Sakaseyo/Interval 2/Bokura no Yume/Koi Suru Otome/SAKURA].",
-            "durationMs": 7688000,
-            "isPremiumOnly": true,
-            "matureBlocked": false,
-            "publishDate": "2023-04-27T13:00:00Z",
             "artist": {
                 "id": "MAA34EECE2",
                 "name": "Ikimonogakari",
                 "slug": "ikimonogakari"
             },
-            "createdAt": "2023-02-28T12:49:55.28Z",
-            "isMature": false,
-            "type": "musicConcert",
-            "updatedAt": "2023-04-27T07:41:47.66Z",
-            "genres": [
-                {
-                    "displayValue": "J-Pop",
-                    "id": "j-pop"
-                }
-            ],
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            },
             "images": {
                 "thumbnail": [
                     {
@@ -1163,47 +1144,64 @@
                 ]
             },
             "sequenceNumber": 0,
+            "type": "musicConcert",
+            "durationMs": 7688000,
+            "hash": "1db0e0b5510327d62c09d9ee32ff3804",
+            "isMature": false,
+            "isPublic": true,
             "licensor": "SonyBMG",
-            "maturityRatings": {},
+            "matureBlocked": false,
+            "readyToPublish": true,
             "title": "Cho Ikimonogakari Matsuri 2016 Jimoto de SHOW!! ~ Ebina desho-!!! ~",
+            "createdAt": "2023-02-28T12:49:55.28Z",
+            "description": "Ikimonogakari celebró su décimo aniversario en 2016 llevando a cabo una serie de grandes eventos al aire libre en sus ciudades natales titulados \"Cho Ikimono Matsuri 2016: Jimoto de SHOW!\". Los conciertos de Ebina y Atsugi ahora están disponibles en formato audiovisual.\n\"Cho Ikimono Matsuri 2016: Jimoto de SHOW! - ¡Ebina desho!\" tuvo lugar en el Parque Deportivo de Ebina. El producto presenta el concierto completo sin editar del 28 de agosto de 2016, el segundo día de los dos días de duración.\n[Lista de canciones: Opening/Arigato/Kaze ga Fuiteiru/Kimi ga Iru/Bluebird/Last Scene/Tsubasa/Hoshi/Happy Smile Again/Uruwashiki Hito/YELL/Interval 1/Hana wa Sakura Kimi wa Utsukushi/Love to Peace!/Sweet! Sweet! Music!/Kimagure Romantic/Joufull/Waratte Itainda/Kokoro no Hana wo Sakaseyo/Interval 2/Bokura no Yume/Koi Suru Otome/SAKURA].",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "id": "MC7F27972E",
+            "maturityRatings": {},
+            "publishDate": "2023-04-27T13:00:00Z",
             "streams_link": "/content/v2/music/MC7F27972E/streams",
             "copyright": "© 2016 Sony Music Labels Inc.",
-            "hash": "1db0e0b5510327d62c09d9ee32ff3804",
-            "id": "MC7F27972E"
+            "isPremiumOnly": true,
+            "originalRelease": "2016-12-21T00:00:00Z",
+            "slug": "cho-ikimonogakari-matsuri-2016-jimoto-de-show--ebina-desho--",
+            "updatedAt": "2023-04-27T07:41:47.66Z"
         },
         {
-            "artist": {
-                "id": "MA93EE6275",
-                "name": "ASIAN KUNG-FU GENERATION",
-                "slug": "asian-kung-fu-generation"
-            },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "isPublic": true,
-            "updatedAt": "2023-04-27T07:41:46.263Z",
-            "streams_link": "/content/v2/music/MC30D02C0B/streams",
-            "description": "El concierto en el Budokan durante su gira, que se llevó a cabo desde 2016 hasta 2017, celebrando sus 20 años de trayectoria. Fascinaron al público con una actuación que hacía honor al aniversario, interpretando canciones tan conocidas como \"Haruka Kanata\", \"Solanin\" y \"Shinseiki no Love Song\".",
-            "isMature": false,
             "isPremiumOnly": true,
-            "publishDate": "2023-04-27T13:00:00Z",
-            "readyToPublish": true,
-            "copyright": "©2017 Sony Music Labels Inc.",
-            "durationMs": 10292000,
+            "licensor": "BMG",
             "matureBlocked": false,
+            "originalRelease": "2017-11-29T00:00:00Z",
+            "readyToPublish": true,
             "title": "Eizo Sakuhinshu Vol.13 ~Tour 2016-2017 20th Anniversary Live At Nippon Budokan~",
-            "type": "musicConcert",
-            "sequenceNumber": 0,
-            "createdAt": "2023-02-28T12:47:38.23Z",
-            "hash": "497eef387cc5e0581e2738e5eaff9baa",
+            "description": "El concierto en el Budokan durante su gira, que se llevó a cabo desde 2016 hasta 2017, celebrando sus 20 años de trayectoria. Fascinaron al público con una actuación que hacía honor al aniversario, interpretando canciones tan conocidas como \"Haruka Kanata\", \"Solanin\" y \"Shinseiki no Love Song\".",
             "id": "MC30D02C0B",
+            "streams_link": "/content/v2/music/MC30D02C0B/streams",
+            "durationMs": 10292000,
+            "copyright": "©2017 Sony Music Labels Inc.",
+            "hash": "497eef387cc5e0581e2738e5eaff9baa",
+            "isPublic": true,
+            "maturityRatings": {},
+            "publishDate": "2023-04-27T13:00:00Z",
+            "sequenceNumber": 0,
+            "slug": "eizo-sakuhinshu-vol13-tour-2016-2017-20th-anniversary-live-at-nippon-budokan",
+            "artist": {
+                "id": "MA93EE6275",
+                "name": "ASIAN KUNG-FU GENERATION",
+                "slug": "asian-kung-fu-generation"
+            },
+            "type": "musicConcert",
+            "createdAt": "2023-02-28T12:47:38.23Z",
             "images": {
                 "thumbnail": [
                     {
@@ -1256,46 +1254,43 @@
                     }
                 ]
             },
-            "licensor": "BMG",
-            "maturityRatings": {},
-            "originalRelease": "2017-11-29T00:00:00Z",
-            "slug": "eizo-sakuhinshu-vol13-tour-2016-2017-20th-anniversary-live-at-nippon-budokan"
+            "isMature": false,
+            "updatedAt": "2023-04-27T07:41:46.263Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            }
         },
         {
-            "licensor": "BMG",
-            "originalRelease": "2022-03-30T00:00:00Z",
             "artist": {
                 "id": "MA2AF8023E",
                 "name": "Porno Graffitti",
                 "slug": "porno-graffitti"
             },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
-            "description": "Metraje del concierto celebrado el 22 de diciembre de 2021 en el Tokyo Garden Theater y que supuso el cierre de la gira de ese año, titulada \"17th Live Circuit 'Zoku: PornoGraffitti\".",
-            "durationMs": 8709000,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "publishDate": "2023-04-27T13:00:00Z",
+            "sequenceNumber": 0,
+            "isPremiumOnly": true,
+            "licensor": "BMG",
+            "title": "17th Live circuit zoku Porno Graffitti Live at TOKYO GARDEN THEATER 2021",
+            "streams_link": "/content/v2/music/MC62137299/streams",
             "genres": [
                 {
                     "displayValue": "J-Pop",
                     "id": "j-pop"
                 }
             ],
-            "readyToPublish": true,
-            "slug": "17th-live-circuit-zoku-porno-graffitti-live-at-tokyo-garden-theater-2021",
-            "type": "musicConcert",
             "hash": "c3ec4151daf758d8a72ae7ccd88b0e11",
             "id": "MC62137299",
-            "isPremiumOnly": true,
-            "maturityRatings": {},
-            "publishDate": "2023-04-27T13:00:00Z",
-            "updatedAt": "2023-04-27T07:41:47.124Z",
-            "streams_link": "/content/v2/music/MC62137299/streams",
-            "matureBlocked": false,
-            "sequenceNumber": 0,
-            "title": "17th Live circuit zoku Porno Graffitti Live at TOKYO GARDEN THEATER 2021",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            },
             "copyright": "© 2022 Sony Music Labels Inc.",
             "createdAt": "2023-02-28T12:50:15.197Z",
+            "description": "Metraje del concierto celebrado el 22 de diciembre de 2021 en el Tokyo Garden Theater y que supuso el cierre de la gira de ese año, titulada \"17th Live Circuit 'Zoku: PornoGraffitti\".",
+            "durationMs": 8709000,
             "images": {
                 "thumbnail": [
                     {
@@ -1348,23 +1343,50 @@
                     }
                 ]
             },
-            "isMature": false,
-            "isPublic": true
-        },
-        {
-            "maturityRatings": {},
             "readyToPublish": true,
             "type": "musicConcert",
-            "streams_link": "/content/v2/music/MCA42004A5/streams",
-            "createdAt": "2023-02-28T12:49:36.946Z",
+            "isMature": false,
+            "isPublic": true,
+            "originalRelease": "2022-03-30T00:00:00Z",
+            "slug": "17th-live-circuit-zoku-porno-graffitti-live-at-tokyo-garden-theater-2021",
+            "updatedAt": "2023-04-27T07:41:47.124Z"
+        },
+        {
+            "originalRelease": "2020-09-16T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "sequenceNumber": 0,
+            "title": "KING'S PARADE FINAL at Tokyo Dome 2019.12.20",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            },
             "description": "Ven y disfruta del mayor concierto exclusivo para hombres de Japón: ¡Noche de chicos: 45 000 contra 6! Este concierto, conocido como \"Otokomatsuri (festival de hombres)\", tuvo lugar el 20 de diciembre de 2019. ¡Disfruta desde la comodidad de tu hogar de este intenso concierto celebrado ante un público formado por 45 000 hombres!",
+            "durationMs": 7121000,
+            "maturityRatings": {},
+            "streams_link": "/content/v2/music/MCA42004A5/streams",
+            "readyToPublish": true,
+            "updatedAt": "2023-04-27T07:41:47.856Z",
+            "artist": {
+                "id": "MA1212BDFF",
+                "name": "UVERworld",
+                "slug": "uverworld"
+            },
+            "copyright": "© 2020 Sony Music Labels Inc.",
+            "isMature": false,
+            "isPublic": true,
+            "createdAt": "2023-02-28T12:49:36.946Z",
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
+            "licensor": "BMG",
+            "type": "musicConcert",
+            "matureBlocked": false,
+            "slug": "kings-parade-final-at-tokyo-dome-20191220",
             "hash": "7afa16c371ea113f9f6d9a9e6a751f91",
+            "id": "MCA42004A5",
             "images": {
                 "thumbnail": [
                     {
@@ -1417,47 +1439,19 @@
                     }
                 ]
             },
-            "publishDate": "2023-04-27T13:00:00Z",
-            "sequenceNumber": 0,
-            "slug": "kings-parade-final-at-tokyo-dome-20191220",
+            "isPremiumOnly": true
+        },
+        {
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-04-27T13:00:00Z"
             },
-            "durationMs": 7121000,
-            "isMature": false,
             "isPublic": true,
-            "licensor": "BMG",
-            "originalRelease": "2020-09-16T00:00:00Z",
-            "updatedAt": "2023-04-27T07:41:47.856Z",
-            "copyright": "© 2020 Sony Music Labels Inc.",
-            "id": "MCA42004A5",
-            "matureBlocked": false,
-            "title": "KING'S PARADE FINAL at Tokyo Dome 2019.12.20",
-            "artist": {
-                "id": "MA1212BDFF",
-                "name": "UVERworld",
-                "slug": "uverworld"
-            },
-            "isPremiumOnly": true
-        },
-        {
-            "createdAt": "2023-02-28T12:50:29.94Z",
-            "streams_link": "/content/v2/music/MC1EEEA945/streams",
-            "copyright": "© 2019 Sony Music Labels Inc.",
-            "durationMs": 4991000,
-            "isMature": false,
-            "isPremiumOnly": true,
-            "isPublic": true,
-            "originalRelease": "2019-03-27T00:00:00Z",
+            "title": "FLAT Hall Live 2018",
             "type": "musicConcert",
-            "readyToPublish": true,
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
+            "createdAt": "2023-02-28T12:50:29.94Z",
+            "description": "La primera serie de conciertos en recintos cerrados de Queen Bee, titulada \"FLAT\", tuvo lugar en Osaka y Tokio en octubre de 2018. Los conciertos alcanzaron un estatus de exclusividad al agotarse rápidamente las entradas. Este esperado lanzamiento audiovisual del concierto de Tokio del tour en Nakano Sunplaza Hall el 16 de octubre de 2018, incluye todas las canciones de la lista, incluido el bis.",
+            "durationMs": 4991000,
             "hash": "ce56fb571b7da6f52fded119d2824fdb",
             "images": {
                 "thumbnail": [
@@ -1511,56 +1505,59 @@
                     }
                 ]
             },
+            "isMature": false,
             "licensor": "BMG",
-            "matureBlocked": false,
             "maturityRatings": {},
-            "publishDate": "2023-04-27T13:00:00Z",
-            "sequenceNumber": 0,
-            "slug": "flat-hall-live-2018",
-            "title": "FLAT Hall Live 2018",
             "updatedAt": "2023-04-27T07:41:45.025Z",
+            "streams_link": "/content/v2/music/MC1EEEA945/streams",
+            "originalRelease": "2019-03-27T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
             "artist": {
                 "id": "MA1508520E",
                 "name": "Queen Bee",
                 "slug": "queen-bee"
             },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
-            "description": "La primera serie de conciertos en recintos cerrados de Queen Bee, titulada \"FLAT\", tuvo lugar en Osaka y Tokio en octubre de 2018. Los conciertos alcanzaron un estatus de exclusividad al agotarse rápidamente las entradas. Este esperado lanzamiento audiovisual del concierto de Tokio del tour en Nakano Sunplaza Hall el 16 de octubre de 2018, incluye todas las canciones de la lista, incluido el bis.",
-            "id": "MC1EEEA945"
+            "copyright": "© 2019 Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "id": "MC1EEEA945",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "sequenceNumber": 0,
+            "slug": "flat-hall-live-2018"
         },
         {
-            "streams_link": "/content/v2/music/MC16CF43DA/streams",
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "description": "Concierto del segundo aniversario de Milet en KT Zepp Yokohama el 6 de marzo de 2021.",
             "genres": [
                 {
                     "displayValue": "J-Pop",
                     "id": "j-pop"
                 }
             ],
-            "isPublic": true,
-            "originalRelease": "2022-02-02T00:00:00Z",
-            "publishDate": "2023-04-27T13:00:00Z",
-            "type": "musicConcert",
-            "updatedAt": "2023-04-27T07:41:44.87Z",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
-            "id": "MC16CF43DA",
-            "isPremiumOnly": true,
+            "hash": "8364b4a065ededf8e369087d6848551a",
+            "isMature": false,
             "licensor": "BMG",
-            "readyToPublish": true,
-            "sequenceNumber": 0,
-            "slug": "milet-2nd-anniversary-live-you--i",
-            "title": "milet 2nd anniversary live You & I",
+            "matureBlocked": false,
             "artist": {
                 "id": "MA7972F224",
                 "name": "milet",
                 "slug": "milet"
             },
-            "description": "Concierto del segundo aniversario de Milet en KT Zepp Yokohama el 6 de marzo de 2021.",
+            "readyToPublish": true,
+            "sequenceNumber": 0,
+            "slug": "milet-2nd-anniversary-live-you--i",
+            "streams_link": "/content/v2/music/MC16CF43DA/streams",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "durationMs": 5045000,
+            "isPublic": true,
+            "updatedAt": "2023-04-27T07:41:44.87Z",
+            "copyright": "© 2022 Sony Music Labels Inc.",
             "images": {
                 "thumbnail": [
                     {
@@ -1613,19 +1610,32 @@
                     }
                 ]
             },
-            "isMature": false,
-            "matureBlocked": false,
+            "isPremiumOnly": true,
+            "originalRelease": "2022-02-02T00:00:00Z",
+            "type": "musicConcert",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            },
             "maturityRatings": {},
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "durationMs": 5045000,
-            "hash": "8364b4a065ededf8e369087d6848551a"
+            "title": "milet 2nd anniversary live You & I",
+            "id": "MC16CF43DA"
         },
         {
+            "createdAt": "2023-03-24T23:55:50.875Z",
+            "durationMs": 43738000,
+            "id": "MCA6E72829",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "artist": {
+                "id": "MA109BB8C5",
+                "name": "Ryokuoushoku Shakai",
+                "slug": "ryokuoushoku-shakai"
+            },
+            "isMature": false,
+            "isPublic": true,
             "maturityRatings": {},
-            "originalRelease": "2022-01-26T00:00:00Z",
+            "slug": "ryokushaka-keikaku-2021-july-4th-2021-at-tokyo-garden-theater",
             "title": "Ryokushaka Keikaku 2021 July 4th 2021 at Tokyo Garden Theater",
-            "updatedAt": "2023-04-27T07:41:48.076Z",
             "description": "Grabación completa del concierto de Ryokuoushoku Shakai en Tokio como parte de su primera gira nacional.\nLa actuación cuenta con una variada lista de canciones en la que Ryokuoushoku Shakai demuestra lo que le gusta hacer y las cosas que le gusta probar.",
             "genres": [
                 {
@@ -1633,23 +1643,18 @@
                     "id": "j-pop"
                 }
             ],
-            "matureBlocked": false,
-            "isMature": false,
-            "isPublic": true,
+            "hash": "768ba5dc6d4aee0d6d4cbc41145d6c22",
             "licensor": "BMG",
-            "slug": "ryokushaka-keikaku-2021-july-4th-2021-at-tokyo-garden-theater",
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "durationMs": 43738000,
-            "id": "MCA6E72829",
-            "publishDate": "2023-04-27T13:00:00Z",
-            "sequenceNumber": 0,
+            "matureBlocked": false,
+            "readyToPublish": true,
             "type": "musicConcert",
-            "artist": {
-                "id": "MA109BB8C5",
-                "name": "Ryokuoushoku Shakai",
-                "slug": "ryokuoushoku-shakai"
+            "updatedAt": "2023-04-27T07:41:48.076Z",
+            "streams_link": "/content/v2/music/MCA6E72829/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
             },
-            "createdAt": "2023-03-24T23:55:50.875Z",
+            "copyright": "© 2022 Sony Music Labels Inc.",
             "images": {
                 "thumbnail": [
                     {
@@ -1702,27 +1707,31 @@
                     }
                 ]
             },
+            "isPremiumOnly": true,
+            "originalRelease": "2022-01-26T00:00:00Z",
+            "sequenceNumber": 0
+        },
+        {
+            "isPublic": true,
+            "licensor": "BMG",
             "readyToPublish": true,
-            "streams_link": "/content/v2/music/MCA6E72829/streams",
+            "slug": "hitsujibungaku-tour-2022-ooparts-2022628",
+            "title": "Hitsujibungaku Tour 2022 OOPARTS 2022.6.28",
+            "type": "musicConcert",
+            "durationMs": 6750000,
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-04-27T13:00:00Z"
             },
-            "hash": "768ba5dc6d4aee0d6d4cbc41145d6c22",
-            "isPremiumOnly": true
-        },
-        {
-            "isPremiumOnly": true,
-            "licensor": "BMG",
-            "title": "Hitsujibungaku Tour 2022 OOPARTS 2022.6.28",
-            "type": "musicConcert",
-            "artist": {
-                "id": "MA2F45ABDB",
-                "name": "Hitsujibungaku",
-                "slug": "hitsujibungaku"
-            },
+            "copyright": "©2022 F.C.L.S.",
             "createdAt": "2023-03-24T23:55:50.875Z",
-            "description": "La grabación del concierto que cerró la primera gira nacional de hitsujibungaku, llamada \"TOUR 2022 'OOPARTS'\", celebrada en julio de 2022. Este producto incluye el metraje completo sin cortes del concierto final celebrado en el Zepp DiverCity Tokyo, donde tocaron un total de 20 canciones, principalmente de su último álbum \"our hope\". Con este contenido, podrás sumergirte por completo en el mundo de hitsujibungaku.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "hash": "2a57c0b60e765f3daf926a1a62e02884",
             "images": {
                 "thumbnail": [
                     {
@@ -1775,47 +1784,59 @@
                     }
                 ]
             },
-            "updatedAt": "2023-04-27T07:41:46.82Z",
-            "durationMs": 6750000,
-            "hash": "2a57c0b60e765f3daf926a1a62e02884",
+            "isMature": false,
+            "artist": {
+                "id": "MA2F45ABDB",
+                "name": "Hitsujibungaku",
+                "slug": "hitsujibungaku"
+            },
+            "maturityRatings": {},
+            "isPremiumOnly": true,
+            "publishDate": "2023-04-27T13:00:00Z",
+            "streams_link": "/content/v2/music/MC5DFBF41A/streams",
+            "originalRelease": "2022-11-23T00:00:00Z",
+            "id": "MC5DFBF41A",
             "matureBlocked": false,
-            "readyToPublish": true,
-            "slug": "hitsujibungaku-tour-2022-ooparts-2022628",
+            "sequenceNumber": 0,
+            "updatedAt": "2023-04-27T07:41:46.82Z",
+            "description": "La grabación del concierto que cerró la primera gira nacional de hitsujibungaku, llamada \"TOUR 2022 'OOPARTS'\", celebrada en julio de 2022. Este producto incluye el metraje completo sin cortes del concierto final celebrado en el Zepp DiverCity Tokyo, donde tocaron un total de 20 canciones, principalmente de su último álbum \"our hope\". Con este contenido, podrás sumergirte por completo en el mundo de hitsujibungaku."
+        },
+        {
+            "slug": "kinemaclub-and-shinjukureny-onemanlive-digest-video",
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "id": "MC5DFBF41A",
-            "maturityRatings": {},
-            "originalRelease": "2022-11-23T00:00:00Z",
-            "publishDate": "2023-04-27T13:00:00Z",
+            "isPublic": true,
+            "hash": "1ddac4fa5a08ae86b521822d64a2c8dd",
+            "id": "MC7ED96AD0",
+            "isPremiumOnly": true,
+            "originalRelease": "2017-05-17T00:00:00Z",
             "sequenceNumber": 0,
-            "streams_link": "/content/v2/music/MC5DFBF41A/streams",
+            "type": "musicConcert",
+            "copyright": "© 2017 Sony Music Labels Inc.",
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "updatedAt": "2023-04-27T07:41:47.526Z",
+            "durationMs": 1150000,
+            "title": "kinemaclub and shinjukureny onemanlive digest video",
+            "artist": {
+                "id": "MAB426E167",
+                "name": "SAYURI",
+                "slug": "sayuri"
+            },
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-04-27T13:00:00Z"
             },
-            "copyright": "©2022 F.C.L.S.",
             "isMature": false,
-            "isPublic": true
-        },
-        {
-            "slug": "kinemaclub-and-shinjukureny-onemanlive-digest-video",
-            "copyright": "© 2017 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "description": "Este contenido incluye fragmentos de los conciertos de Sayuri en el Tokyo Kinema Club (26 de junio de 2016) y el Shinjuku ReNY (3 de noviembre de 2016) que originalmente formaron parte del DVD la primera edición limitada B de su primer álbum, \"Mikazuki no Kokai\".",
-            "durationMs": 1150000,
-            "isPremiumOnly": true,
-            "isPublic": true,
-            "publishDate": "2023-04-27T13:00:00Z",
-            "title": "kinemaclub and shinjukureny onemanlive digest video",
-            "streams_link": "/content/v2/music/MC7ED96AD0/streams",
-            "id": "MC7ED96AD0",
+            "licensor": "BMG",
             "matureBlocked": false,
-            "sequenceNumber": 0,
-            "type": "musicConcert",
+            "maturityRatings": {},
+            "publishDate": "2023-04-27T13:00:00Z",
+            "readyToPublish": true,
+            "description": "Este contenido incluye fragmentos de los conciertos de Sayuri en el Tokyo Kinema Club (26 de junio de 2016) y el Shinjuku ReNY (3 de noviembre de 2016) que originalmente formaron parte del DVD la primera edición limitada B de su primer álbum, \"Mikazuki no Kokai\".",
             "images": {
                 "thumbnail": [
                     {
@@ -1868,49 +1889,26 @@
                     }
                 ]
             },
-            "licensor": "BMG",
-            "readyToPublish": true,
-            "artist": {
-                "id": "MAB426E167",
-                "name": "SAYURI",
-                "slug": "sayuri"
-            },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "hash": "1ddac4fa5a08ae86b521822d64a2c8dd",
-            "isMature": false,
-            "maturityRatings": {},
-            "originalRelease": "2017-05-17T00:00:00Z",
-            "updatedAt": "2023-04-27T07:41:47.526Z"
+            "streams_link": "/content/v2/music/MC7ED96AD0/streams"
         },
         {
-            "artist": {
-                "id": "MAF2654CA",
-                "name": "hitorie",
-                "slug": "hitorie"
-            },
+            "description": "Después del repentino fallecimiento del cantante wowaka en abril de 2019, este lanzamiento audiovisual se lanzó en el cumpleaños de wowaka, el 4 de noviembre del mismo año. Incluye material nunca antes visto de dos conciertos: uno que cerró la gira UNKNOWN-TOUR 2018 \"Loveless\" en el EX Theater Roppongi y otro que se llevó a cabo en Shin-Kiba Studio Coast, siendo el clímax de la gira en solitario a nivel nacional de 2017 llamada \"Zenkoku One-Man Tour 2017 'IKI'\".",
+            "isPublic": true,
+            "readyToPublish": true,
+            "sequenceNumber": 0,
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-04-27T13:00:00Z"
             },
+            "createdAt": "2023-02-28T12:50:11.53Z",
             "durationMs": 12118000,
-            "hash": "8fdaf9eb7f9c56304a62d1db7857720d",
-            "maturityRatings": {},
-            "updatedAt": "2023-04-27T07:41:45.672Z",
-            "isMature": false,
-            "isPremiumOnly": true,
-            "licensor": "BMG",
-            "slug": "hitorie-live-tour-unknown-2018-loveless-2017-iki",
-            "streams_link": "/content/v2/music/MC23942048/streams",
             "id": "MC23942048",
+            "isMature": false,
+            "maturityRatings": {},
+            "slug": "hitorie-live-tour-unknown-2018-loveless-2017-iki",
+            "title": "HITORIE LIVE TOUR UNKNOWN 2018 \"Loveless\"- 2017 \"IKI\"",
+            "copyright": "©2019 Sony Music Labels Inc.",
+            "type": "musicConcert",
             "images": {
                 "thumbnail": [
                     {
@@ -1963,50 +1961,48 @@
                     }
                 ]
             },
-            "title": "HITORIE LIVE TOUR UNKNOWN 2018 \"Loveless\"- 2017 \"IKI\"",
-            "type": "musicConcert",
-            "copyright": "©2019 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:50:11.53Z",
-            "description": "Después del repentino fallecimiento del cantante wowaka en abril de 2019, este lanzamiento audiovisual se lanzó en el cumpleaños de wowaka, el 4 de noviembre del mismo año. Incluye material nunca antes visto de dos conciertos: uno que cerró la gira UNKNOWN-TOUR 2018 \"Loveless\" en el EX Theater Roppongi y otro que se llevó a cabo en Shin-Kiba Studio Coast, siendo el clímax de la gira en solitario a nivel nacional de 2017 llamada \"Zenkoku One-Man Tour 2017 'IKI'\".",
+            "matureBlocked": false,
+            "updatedAt": "2023-04-27T07:41:45.672Z",
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "isPublic": true,
-            "matureBlocked": false,
+            "hash": "8fdaf9eb7f9c56304a62d1db7857720d",
+            "isPremiumOnly": true,
+            "licensor": "BMG",
             "originalRelease": "2019-11-04T00:00:00Z",
             "publishDate": "2023-04-27T13:00:00Z",
-            "readyToPublish": true,
-            "sequenceNumber": 0
+            "streams_link": "/content/v2/music/MC23942048/streams",
+            "artist": {
+                "id": "MAF2654CA",
+                "name": "hitorie",
+                "slug": "hitorie"
+            }
         },
         {
+            "artist": {
+                "id": "MA488A2B9F",
+                "name": "okazakitaiiku",
+                "slug": "okazakitaiiku"
+            },
+            "isMature": false,
             "isPremiumOnly": true,
-            "maturityRatings": {},
-            "originalRelease": "2022-03-02T00:00:00Z",
+            "licensor": "BMG",
             "sequenceNumber": 0,
-            "slug": "meccha-mecha-omoshiro-live-at-yokohama-arena",
             "type": "musicConcert",
-            "genres": [
-                {
-                    "displayValue": "J-Pop",
-                    "id": "j-pop"
-                }
-            ],
-            "hash": "8d4fd53913c692b9c0b8c7ab4a62da4b",
-            "updatedAt": "2023-04-27T07:41:48.434Z",
-            "isPublic": true,
-            "matureBlocked": false,
             "publishDate": "2023-04-27T13:00:00Z",
-            "title": "Meccha Mecha Omoshiro Live at Yokohama Arena",
             "streams_link": "/content/v2/music/MCE5F876B/streams",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-04-27T13:00:00Z"
             },
-            "isMature": false,
+            "copyright": "© 2022 Sony Music Labels Inc.",
+            "durationMs": 7099000,
+            "hash": "8d4fd53913c692b9c0b8c7ab4a62da4b",
             "id": "MCE5F876B",
+            "isPublic": true,
             "images": {
                 "thumbnail": [
                     {
@@ -2059,22 +2055,58 @@
                     }
                 ]
             },
-            "licensor": "BMG",
+            "maturityRatings": {},
             "readyToPublish": true,
-            "artist": {
-                "id": "MA488A2B9F",
-                "name": "okazakitaiiku",
-                "slug": "okazakitaiiku"
-            },
-            "durationMs": 7099000,
+            "slug": "meccha-mecha-omoshiro-live-at-yokohama-arena",
+            "updatedAt": "2023-04-27T07:41:48.434Z",
+            "createdAt": "2023-02-28T12:50:25.649Z",
             "description": "Segundo lanzamiento audiovisual de los conciertos individuales de Okazakitaiiku que incluye el \"Okazakitaiiku One-Man Live: Metcha Mecha Omoshiro Live\" celebrado en el Yokohama Arena y que fue el primer concierto que daba en la región de Kanto desde junio de 2019.",
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:50:25.649Z"
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "matureBlocked": false,
+            "originalRelease": "2022-03-02T00:00:00Z",
+            "title": "Meccha Mecha Omoshiro Live at Yokohama Arena"
         },
         {
-            "type": "musicConcert",
-            "description": "Grabación del concierto en exteriores celebrado por DISH// el 17 de octubre de 2021 y que supuso retomar las actuaciones con público tras dos años. El metraje muestra su evolucíón como banda en una fecha que ya estaba cercana a su décimo aniversario.",
+            "isPublic": true,
+            "licensor": "BMG",
+            "originalRelease": "2022-03-02T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            },
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
             "id": "MC4C23F2CF",
+            "artist": {
+                "id": "MA59467FCD",
+                "name": "DISH//",
+                "slug": "dish"
+            },
+            "description": "Grabación del concierto en exteriores celebrado por DISH// el 17 de octubre de 2021 y que supuso retomar las actuaciones con público tras dos años. El metraje muestra su evolucíón como banda en una fecha que ya estaba cercana a su décimo aniversario.",
+            "isMature": false,
+            "sequenceNumber": 0,
+            "slug": "dish-summer-amusement-2021-shinrabanshou-",
+            "title": "DISH// SUMMER AMUSEMENT 2021 -Shinrabanshou-",
+            "updatedAt": "2023-04-27T07:41:46.726Z",
+            "copyright": "© 2022 Sony Music Labels Inc.",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MC4C23F2CF/streams",
+            "type": "musicConcert",
+            "durationMs": 7100000,
+            "hash": "79640d636a31c090756a12af97a17e08",
             "images": {
                 "thumbnail": [
                     {
@@ -2127,60 +2159,16 @@
                     }
                 ]
             },
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "publishDate": "2023-04-27T13:00:00Z",
-            "readyToPublish": true,
-            "streams_link": "/content/v2/music/MC4C23F2CF/streams",
-            "hash": "79640d636a31c090756a12af97a17e08",
-            "isMature": false,
-            "slug": "dish-summer-amusement-2021-shinrabanshou-",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "durationMs": 7100000,
-            "isPublic": true,
-            "title": "DISH// SUMMER AMUSEMENT 2021 -Shinrabanshou-",
-            "artist": {
-                "id": "MA59467FCD",
-                "name": "DISH//",
-                "slug": "dish"
-            },
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "genres": [
-                {
-                    "displayValue": "J-Pop",
-                    "id": "j-pop"
-                }
-            ],
-            "isPremiumOnly": true,
-            "licensor": "BMG",
-            "originalRelease": "2022-03-02T00:00:00Z",
-            "sequenceNumber": 0,
-            "updatedAt": "2023-04-27T07:41:46.726Z"
+            "maturityRatings": {}
         },
         {
-            "createdAt": "2023-02-28T12:48:02.974Z",
-            "description": "Este lanzamiento audiovisual es el concierto final de la primera gira de FLOWER FLOWER, una banda de cuatro miembros liderada por Yui.",
-            "hash": "efbe95864a7149744d4c69a07b5a91e9",
-            "id": "MC95C81E38",
-            "isPremiumOnly": true,
-            "licensor": "BMG",
-            "sequenceNumber": 0,
-            "updatedAt": "2023-04-27T07:41:47.968Z",
-            "streams_link": "/content/v2/music/MC95C81E38/streams",
-            "artist": {
-                "id": "MA49036CDA",
-                "name": "FLOWER FLOWER",
-                "slug": "flower-flower"
-            },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-04-27T13:00:00Z"
-            },
+            "title": "Incono Have A Nice Day Tour 2018.05.09 Zepp Tokyo",
             "durationMs": 8001000,
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "updatedAt": "2023-04-27T07:41:47.968Z",
+            "createdAt": "2023-02-28T12:48:02.974Z",
             "genres": [
                 {
                     "displayValue": "J-Pop",
@@ -2188,15 +2176,14 @@
                 }
             ],
             "isPublic": true,
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "readyToPublish": true,
-            "slug": "incono-have-a-nice-day-tour-20180509-zepp-tokyo",
-            "title": "Incono Have A Nice Day Tour 2018.05.09 Zepp Tokyo",
-            "copyright": "© 2018 Sony Music Labels Inc.",
-            "isMature": false,
-            "publishDate": "2023-04-27T13:00:00Z",
+            "licensor": "BMG",
+            "sequenceNumber": 0,
             "type": "musicConcert",
+            "streams_link": "/content/v2/music/MC95C81E38/streams",
+            "copyright": "© 2018 Sony Music Labels Inc.",
+            "id": "MC95C81E38",
+            "originalRelease": "2018-08-29T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
             "images": {
                 "thumbnail": [
                     {
@@ -2249,25 +2236,36 @@
                     }
                 ]
             },
-            "originalRelease": "2018-08-29T00:00:00Z"
+            "isMature": false,
+            "maturityRatings": {},
+            "slug": "incono-have-a-nice-day-tour-20180509-zepp-tokyo",
+            "artist": {
+                "id": "MA49036CDA",
+                "name": "FLOWER FLOWER",
+                "slug": "flower-flower"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-04-27T13:00:00Z"
+            },
+            "description": "Este lanzamiento audiovisual es el concierto final de la primera gira de FLOWER FLOWER, una banda de cuatro miembros liderada por Yui.",
+            "hash": "efbe95864a7149744d4c69a07b5a91e9"
         },
         {
+            "description": "LiVE is Smile Always ~364+JOKER~, un concierto en el que LiSA estuvo como artista principal en el Yokohama Arena los días 29 y 30 de abril de 2019, \"los dos últimos días de la era Heisei\", ¡ya disponible en video!",
+            "hash": "935df85f3ff76c3cc1c1aab61fc9ef32",
             "id": "MC2E2AC135",
             "isMature": false,
-            "matureBlocked": false,
-            "publishDate": "2023-03-04T06:00:00Z",
-            "updatedAt": "2023-05-17T01:28:44.956Z",
+            "sequenceNumber": 0,
+            "slug": "live-is-smile-always-364joker-at-yokohama-arena",
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MC2E2AC135/streams",
             "artist": {
                 "id": "MA179CB50D",
                 "name": "LiSA",
                 "slug": "lisa"
             },
-            "description": "LiVE is Smile Always ~364+JOKER~, un concierto en el que LiSA estuvo como artista principal en el Yokohama Arena los días 29 y 30 de abril de 2019, \"los dos últimos días de la era Heisei\", ¡ya disponible en video!",
-            "maturityRatings": {},
-            "originalRelease": "2020-03-04T00:00:00Z",
-            "title": "LiVE is Smile Always-364+JOKER- at YOKOHAMA ARENA",
-            "streams_link": "/content/v2/music/MC2E2AC135/streams",
-            "copyright": "© 2020 Sony Music Labels Inc.",
+            "durationMs": 6457000,
             "images": {
                 "thumbnail": [
                     {
@@ -2320,35 +2318,53 @@
                     }
                 ]
             },
-            "isPremiumOnly": true,
             "isPublic": true,
-            "licensor": "BMG",
-            "readyToPublish": true,
-            "slug": "live-is-smile-always-364joker-at-yokohama-arena",
-            "type": "musicConcert",
-            "durationMs": 6457000,
+            "matureBlocked": false,
+            "title": "LiVE is Smile Always-364+JOKER- at YOKOHAMA ARENA",
+            "updatedAt": "2023-05-17T01:28:44.956Z",
+            "copyright": "© 2020 Sony Music Labels Inc.",
             "genres": [
                 {
                     "displayValue": "J-Pop",
                     "id": "j-pop"
                 }
             ],
-            "hash": "935df85f3ff76c3cc1c1aab61fc9ef32",
-            "sequenceNumber": 0,
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "originalRelease": "2020-03-04T00:00:00Z",
+            "readyToPublish": true,
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-03-04T06:00:00Z"
             },
-            "createdAt": "2023-02-28T12:55:06.907Z"
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "licensor": "BMG",
+            "publishDate": "2023-03-04T06:00:00Z"
         },
         {
-            "durationMs": 4344000,
-            "publishDate": "2023-03-04T06:00:00Z",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "id": "MC220EAB3A",
+            "isPublic": true,
             "originalRelease": "2020-12-23T00:00:00Z",
-            "copyright": "© 2020 Sony Music Labels Inc.",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "slug": "eir-aoi-live-tour-2020-i-will-have-hope",
+            "updatedAt": "2023-05-17T01:28:49.911Z",
+            "streams_link": "/content/v2/music/MC220EAB3A/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
             "createdAt": "2023-02-28T12:55:47.808Z",
             "description": "La retransmisión en vivo celebrada el 16 de agosto de 2020, también conocida como \"Día de Eir\" (8/16 puede leerse técnicamente \"Eir\" en japonés), causó sensación por su gran calidad visual y de audio. ¡Ahora disponible en video!",
-            "id": "MC220EAB3A",
+            "licensor": "",
+            "maturityRatings": {},
+            "copyright": "© 2020 Sony Music Labels Inc.",
+            "durationMs": 4344000,
             "images": {
                 "thumbnail": [
                     {
@@ -2401,73 +2417,40 @@
                     }
                 ]
             },
-            "isPublic": true,
-            "maturityRatings": {},
-            "sequenceNumber": 0,
-            "type": "musicConcert",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
-            "hash": "2845df98f31e95b238d8214bf29eda33",
+            "isMature": false,
             "matureBlocked": false,
-            "slug": "eir-aoi-live-tour-2020-i-will-have-hope",
-            "title": "Eir Aoi LIVE TOUR 2020 I will... have hope",
-            "streams_link": "/content/v2/music/MC220EAB3A/streams",
+            "type": "musicConcert",
             "artist": {
                 "id": "MA92F62B17",
                 "name": "Eir Aoi",
                 "slug": "eir-aoi"
             },
-            "genres": [
-                {
-                    "displayValue": "Anime",
-                    "id": "anime"
-                }
-            ],
-            "isMature": false,
+            "hash": "2845df98f31e95b238d8214bf29eda33",
             "isPremiumOnly": true,
-            "licensor": "",
             "readyToPublish": true,
-            "updatedAt": "2023-05-17T01:28:49.911Z"
+            "sequenceNumber": 0,
+            "title": "Eir Aoi LIVE TOUR 2020 I will... have hope"
         },
         {
-            "isMature": false,
-            "isPremiumOnly": true,
-            "publishDate": "2023-03-04T06:00:00Z",
-            "readyToPublish": true,
-            "slug": "aimer-live-in-budokan-blanc-et-noir",
-            "hash": "9de5d631f565061d6794d989acf5c9dd",
-            "id": "MC15114822",
-            "licensor": "BMG",
-            "originalRelease": "2017-12-13T00:00:00Z",
-            "title": "Aimer Live In Budokan Blanc Et Noir",
+            "sequenceNumber": 0,
             "type": "musicConcert",
-            "updatedAt": "2023-05-17T01:28:33.079Z",
             "copyright": "© 2017 Sony Music Labels Inc.",
-            "description": "Video del \"Aimer Live in Budokan 'blanc et noir'\" celebrado el 29 de agosto de 2017. Tras el lanzamiento de su primera colección \"best of\" titulada \"BEST SELECTION 'blanc'\" y \"BEST SELECTION 'noir'\".\nA pesar de celebrarse un día entre semana, su primer espectáculo como cabeza de cartel en el Budokan atrajo a más de 13 000 personas y se retransmitió en directo a 26 localizaciones de todo Japón, así como en Hong Kong, Taiwán y Corea. El primer lanzamiento en viudeo de Aimer captura fielmente aquella noche histórica, en la que cantó muchas de sus temas más conocidos de su serie \"best of\", como \"Chouchou Musubi\" y \"Brave Shine\", además de presentar por primera vez sus nuevas canciones \"Hana no Uta\" y \"ONE\".",
-            "durationMs": 7273000,
+            "isPublic": true,
+            "readyToPublish": true,
+            "hash": "9de5d631f565061d6794d989acf5c9dd",
+            "isMature": false,
+            "title": "Aimer Live In Budokan Blanc Et Noir",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
+            "createdAt": "2023-02-28T12:55:06.907Z",
             "genres": [
                 {
                     "displayValue": "J-Pop",
                     "id": "j-pop"
                 }
             ],
-            "isPublic": true,
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "sequenceNumber": 0,
-            "artist": {
-                "id": "MA8A56333D",
-                "name": "Aimer",
-                "slug": "aimer"
-            },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
-            "streams_link": "/content/v2/music/MC15114822/streams",
-            "createdAt": "2023-02-28T12:55:06.907Z",
             "images": {
                 "thumbnail": [
                     {
@@ -2519,11 +2502,58 @@
                         "width": 1920
                     }
                 ]
-            }
+            },
+            "isPremiumOnly": true,
+            "licensor": "BMG",
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "description": "Video del \"Aimer Live in Budokan 'blanc et noir'\" celebrado el 29 de agosto de 2017. Tras el lanzamiento de su primera colección \"best of\" titulada \"BEST SELECTION 'blanc'\" y \"BEST SELECTION 'noir'\".\nA pesar de celebrarse un día entre semana, su primer espectáculo como cabeza de cartel en el Budokan atrajo a más de 13 000 personas y se retransmitió en directo a 26 localizaciones de todo Japón, así como en Hong Kong, Taiwán y Corea. El primer lanzamiento en viudeo de Aimer captura fielmente aquella noche histórica, en la que cantó muchas de sus temas más conocidos de su serie \"best of\", como \"Chouchou Musubi\" y \"Brave Shine\", además de presentar por primera vez sus nuevas canciones \"Hana no Uta\" y \"ONE\".",
+            "durationMs": 7273000,
+            "id": "MC15114822",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "updatedAt": "2023-05-17T01:28:33.079Z",
+            "streams_link": "/content/v2/music/MC15114822/streams",
+            "artist": {
+                "id": "MA8A56333D",
+                "name": "Aimer",
+                "slug": "aimer"
+            },
+            "originalRelease": "2017-12-13T00:00:00Z",
+            "slug": "aimer-live-in-budokan-blanc-et-noir"
         },
         {
-            "title": "The Film",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
             "hash": "5544acbdb8c07fb4ed2ad2c3bb249c69",
+            "isPublic": true,
+            "licensor": "BMG",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "sequenceNumber": 0,
+            "updatedAt": "2023-05-17T01:28:47.825Z",
+            "description": "THE FILM, la primera colección de metraje en video de YOASOBI, captura tres conciertos: \"KEEP OUT THEATER\", el primer concierto del dúo en vivo y en streaming celebrado en febrero de 2021 desde las obras del lugar que solían ocupar los cines Shinjuku Mikano-za; \"SING YOUR WORLD\", otro concierto en vivo y streaming celebrado en 2021 desde el UNIQLO CITY TOKYO en la sede general de Uniqlo en Ariake; y \"NICE TO MEET YOU\", un concierto de dos días celebrados en el Budokan el pasado diciembre y que supuso su primer concierto en directo con público (el metraje es del 5 de diciembre).",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "isMature": false,
+            "maturityRatings": {},
+            "originalRelease": "2022-03-23T00:00:00Z",
+            "readyToPublish": true,
+            "artist": {
+                "id": "MA28286FC2",
+                "name": "YOASOBI",
+                "slug": "yoasobi"
+            },
+            "durationMs": 12229000,
+            "isPremiumOnly": true,
+            "slug": "the-film",
+            "copyright": "2022 Sony Music Entertainment(Japan)Inc.",
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "id": "MC5FD0DF9E",
             "images": {
                 "thumbnail": [
                     {
@@ -2576,76 +2606,38 @@
                     }
                 ]
             },
-            "isPublic": true,
-            "licensor": "BMG",
             "matureBlocked": false,
-            "originalRelease": "2022-03-23T00:00:00Z",
-            "id": "MC5FD0DF9E",
-            "readyToPublish": true,
-            "sequenceNumber": 0,
+            "title": "The Film",
             "type": "musicConcert",
-            "maturityRatings": {},
-            "slug": "the-film",
+            "streams_link": "/content/v2/music/MC5FD0DF9E/streams"
+        },
+        {
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-03-04T06:00:00Z"
             },
-            "copyright": "2022 Sony Music Entertainment(Japan)Inc.",
-            "createdAt": "2023-02-28T12:55:06.907Z",
-            "genres": [
-                {
-                    "displayValue": "J-Pop",
-                    "id": "j-pop"
-                }
-            ],
-            "isMature": false,
-            "isPremiumOnly": true,
-            "artist": {
-                "id": "MA28286FC2",
-                "name": "YOASOBI",
-                "slug": "yoasobi"
-            },
-            "description": "THE FILM, la primera colección de metraje en video de YOASOBI, captura tres conciertos: \"KEEP OUT THEATER\", el primer concierto del dúo en vivo y en streaming celebrado en febrero de 2021 desde las obras del lugar que solían ocupar los cines Shinjuku Mikano-za; \"SING YOUR WORLD\", otro concierto en vivo y streaming celebrado en 2021 desde el UNIQLO CITY TOKYO en la sede general de Uniqlo en Ariake; y \"NICE TO MEET YOU\", un concierto de dos días celebrados en el Budokan el pasado diciembre y que supuso su primer concierto en directo con público (el metraje es del 5 de diciembre).",
-            "durationMs": 12229000,
-            "publishDate": "2023-03-04T06:00:00Z",
-            "updatedAt": "2023-05-17T01:28:47.825Z",
-            "streams_link": "/content/v2/music/MC5FD0DF9E/streams"
-        },
-        {
-            "createdAt": "2023-02-28T12:55:06.907Z",
-            "durationMs": 6866000,
             "id": "MCE4FD83D",
             "isPublic": true,
-            "publishDate": "2023-03-04T06:00:00Z",
-            "streams_link": "/content/v2/music/MCE4FD83D/streams",
+            "licensor": "BMG",
+            "maturityRatings": {},
+            "originalRelease": "2017-07-12T00:00:00Z",
+            "title": "ClariS 1st Budokan Concert Futatsu No Kamen To Ushinawareta Taiyo",
+            "artist": {
+                "id": "MA78053FF6",
+                "name": "ClariS",
+                "slug": "claris"
+            },
             "genres": [
                 {
                     "displayValue": "Anime",
                     "id": "anime"
                 }
             ],
-            "isMature": false,
-            "originalRelease": "2017-07-12T00:00:00Z",
-            "title": "ClariS 1st Budokan Concert Futatsu No Kamen To Ushinawareta Taiyo",
-            "updatedAt": "2023-05-17T01:28:43.637Z",
-            "slug": "claris-1st-budokan-concert-futatsu-no-kamen-to-ushinawareta-taiyo",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
-            "hash": "67c6386a9c86024807d92e0071691748",
-            "licensor": "BMG",
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "readyToPublish": true,
             "sequenceNumber": 0,
-            "artist": {
-                "id": "MA78053FF6",
-                "name": "ClariS",
-                "slug": "claris"
-            },
-            "copyright": "© 2017 Sony Music Labels Inc.",
+            "streams_link": "/content/v2/music/MCE4FD83D/streams",
+            "createdAt": "2023-02-28T12:55:06.907Z",
             "description": "¡Ya está disponible el video del concierto de ClariS en el Budokan del 10 de febrero de 2017! Este es su primer lanzamiento en video. ¿Podremos conocer al fin las verdaderas identidades de este dúo?",
+            "hash": "67c6386a9c86024807d92e0071691748",
             "images": {
                 "thumbnail": [
                     {
@@ -2698,37 +2690,22 @@
                     }
                 ]
             },
+            "readyToPublish": true,
+            "type": "musicConcert",
+            "copyright": "© 2017 Sony Music Labels Inc.",
+            "isMature": false,
             "isPremiumOnly": true,
-            "type": "musicConcert"
+            "matureBlocked": false,
+            "publishDate": "2023-03-04T06:00:00Z",
+            "slug": "claris-1st-budokan-concert-futatsu-no-kamen-to-ushinawareta-taiyo",
+            "updatedAt": "2023-05-17T01:28:43.637Z",
+            "durationMs": 6866000
         },
         {
-            "hash": "73c481f66cc2ec4f9cb00b61bd371dad",
-            "maturityRatings": {},
-            "slug": "trysail-live-2021-double-the-cape",
-            "type": "musicConcert",
-            "streams_link": "/content/v2/music/MCA0492D98/streams",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-02-02T00:00:00Z"
-            },
             "description": "¡La representación visual del sueño hecho de realidad de TrySail, su primer concierto en vivo con público tras 19 meses y celebrado en el Primer Gimnasio de Yoyogi el 7 de marzo de 2021! Este concierto es apto para todos, desde quienes estuvieron allí y quieren experimentar de nuevo las electrizantes sensaciones del momento, a quienes no pudieron estar presentes.",
-            "genres": [
-                {
-                    "displayValue": "Anime",
-                    "id": "anime"
-                }
-            ],
-            "id": "MCA0492D98",
-            "isMature": false,
-            "licensor": "BMG",
+            "maturityRatings": {},
             "sequenceNumber": 1,
             "title": "TrySail Live 2021 Double the Cape",
-            "createdAt": "2023-02-03T06:22:44.153Z",
-            "durationMs": 5696000,
-            "isPremiumOnly": true,
-            "isPublic": true,
-            "originalRelease": "2021-08-04T00:00:00Z",
-            "copyright": "© 2021 Sony Music Labels Inc.",
             "images": {
                 "thumbnail": [
                     {
@@ -2781,30 +2758,40 @@
                     }
                 ]
             },
-            "publishDate": "2023-02-02T00:00:00Z",
+            "isMature": false,
+            "originalRelease": "2021-08-04T00:00:00Z",
             "readyToPublish": true,
-            "updatedAt": "2023-05-17T01:28:47.064Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-02-02T00:00:00Z"
+            },
+            "durationMs": 5696000,
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "hash": "73c481f66cc2ec4f9cb00b61bd371dad",
+            "type": "musicConcert",
             "artist": {
                 "id": "MA1FB7B18",
                 "name": "TrySail",
                 "slug": "trysail"
             },
-            "matureBlocked": false
+            "createdAt": "2023-02-03T06:22:44.153Z",
+            "isPremiumOnly": true,
+            "slug": "trysail-live-2021-double-the-cape",
+            "matureBlocked": false,
+            "publishDate": "2023-02-02T00:00:00Z",
+            "updatedAt": "2023-05-17T01:28:47.064Z",
+            "streams_link": "/content/v2/music/MCA0492D98/streams",
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "id": "MCA0492D98",
+            "isPublic": true,
+            "licensor": "BMG"
         },
         {
-            "description": "Una colección especial de sus tres eventos en directo de 2020, reconstruidos para crear una lista de temas compeltamente nueva. Con nuevas escenas disponibles únicamente en este lanzamiento, ¡se incluyen todos los espectáculos y se va creando una historia!",
-            "id": "MC48CCBBE0",
-            "isPremiumOnly": true,
-            "maturityRatings": {},
-            "slug": "egoist-live-on-bd-20201-chrysalizion-code-404--side-by-side",
-            "streams_link": "/content/v2/music/MC48CCBBE0/streams",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
-            "sequenceNumber": 0,
-            "isMature": false,
-            "createdAt": "2023-02-28T12:55:06.907Z",
             "durationMs": 7054000,
             "genres": [
                 {
@@ -2812,7 +2799,31 @@
                     "id": "anime"
                 }
             ],
+            "isMature": false,
+            "type": "musicConcert",
+            "updatedAt": "2023-05-17T01:28:44.302Z",
+            "maturityRatings": {},
+            "publishDate": "2023-03-04T06:00:00Z",
+            "artist": {
+                "id": "MAA3FA9202",
+                "name": "EGOIST",
+                "slug": "egoist"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "isPremiumOnly": true,
+            "licensor": "BMG",
+            "matureBlocked": false,
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "description": "Una colección especial de sus tres eventos en directo de 2020, reconstruidos para crear una lista de temas compeltamente nueva. Con nuevas escenas disponibles únicamente en este lanzamiento, ¡se incluyen todos los espectáculos y se va creando una historia!",
+            "isPublic": true,
+            "slug": "egoist-live-on-bd-20201-chrysalizion-code-404--side-by-side",
+            "title": "EGOIST LIVE on BD 2020+1 chrysalizion code 404 : side-by-side",
             "hash": "7c3f0154d2e8f0857e5b593209b8d0ba",
+            "id": "MC48CCBBE0",
             "images": {
                 "thumbnail": [
                     {
@@ -2865,56 +2876,31 @@
                     }
                 ]
             },
-            "licensor": "BMG",
             "originalRelease": "2021-11-30T00:00:00Z",
-            "artist": {
-                "id": "MAA3FA9202",
-                "name": "EGOIST",
-                "slug": "egoist"
-            },
             "readyToPublish": true,
-            "type": "musicConcert",
-            "updatedAt": "2023-05-17T01:28:44.302Z",
-            "publishDate": "2023-03-04T06:00:00Z",
-            "isPublic": true,
-            "matureBlocked": false,
-            "title": "EGOIST LIVE on BD 2020+1 chrysalizion code 404 : side-by-side",
-            "copyright": "© 2021 Sony Music Labels Inc."
+            "sequenceNumber": 0,
+            "streams_link": "/content/v2/music/MC48CCBBE0/streams"
         },
         {
-            "isPublic": true,
-            "maturityRatings": {},
-            "publishDate": "2023-02-02T00:00:00Z",
+            "streams_link": "/content/v2/music/MCB3E02384/streams",
             "artist": {
                 "id": "MAB4DFE372",
                 "name": "ASCA",
                 "slug": "asca"
             },
+            "createdAt": "2023-02-03T06:51:08.28Z",
+            "id": "MCB3E02384",
+            "maturityRatings": {},
+            "publishDate": "2023-02-02T00:00:00Z",
+            "isPublic": true,
+            "licensor": "BMG",
+            "readyToPublish": true,
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-02-02T00:00:00Z"
             },
             "copyright": "© 2021 Sony Music Labels Inc.",
-            "createdAt": "2023-02-03T06:51:08.28Z",
-            "id": "MCB3E02384",
-            "title": "ASCA LIVE TOUR -Kachofugetsu-",
-            "updatedAt": "2023-05-17T01:28:34.005Z",
-            "sequenceNumber": 1,
-            "streams_link": "/content/v2/music/MCB3E02384/streams",
-            "type": "musicConcert",
             "durationMs": 4706000,
-            "genres": [
-                {
-                    "displayValue": "Anime",
-                    "id": "anime"
-                }
-            ],
-            "licensor": "BMG",
-            "originalRelease": "2021-06-02T00:00:00Z",
-            "slug": "asca-live-tour-kachofugetsu-",
-            "matureBlocked": false,
-            "readyToPublish": true,
-            "description": "El 7 de noviembre de 2020 ASCA celebraba un espectáculo en streaming titulado \"ASCA LIVE TOUR - Koachofugetsu -\". Contando con 'CHAIN', el opening del anime para televisión \"Darwin's Game\" y 'Howling', el opening de otro anime, \"The Irregular at Magic High School: Visitor Arc\", ¡este video recupera su espectáculo en solitario con incluso mejor sonido!",
             "hash": "c6c2c09025562e20e4b84a5bf6c4b856",
             "images": {
                 "thumbnail": [
@@ -2969,32 +2955,33 @@
                 ]
             },
             "isMature": false,
-            "isPremiumOnly": true
+            "isPremiumOnly": true,
+            "sequenceNumber": 1,
+            "title": "ASCA LIVE TOUR -Kachofugetsu-",
+            "updatedAt": "2023-05-17T01:28:34.005Z",
+            "type": "musicConcert",
+            "description": "El 7 de noviembre de 2020 ASCA celebraba un espectáculo en streaming titulado \"ASCA LIVE TOUR - Koachofugetsu -\". Contando con 'CHAIN', el opening del anime para televisión \"Darwin's Game\" y 'Howling', el opening de otro anime, \"The Irregular at Magic High School: Visitor Arc\", ¡este video recupera su espectáculo en solitario con incluso mejor sonido!",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "matureBlocked": false,
+            "originalRelease": "2021-06-02T00:00:00Z",
+            "slug": "asca-live-tour-kachofugetsu-"
         },
         {
-            "maturityRatings": {},
+            "readyToPublish": true,
+            "title": "Hiroyuki SAWANO LIVE BEST OF VOCAL WORKS [nZk] Side SawanoHiroyuki[nZk]",
+            "type": "musicConcert",
             "updatedAt": "2023-05-17T01:28:50.58Z",
-            "artist": {
-                "id": "MAAC1C79B9",
-                "name": "Hiroyuki Sawano",
-                "slug": "hiroyuki-sawano"
-            },
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-03-04T06:00:00Z"
             },
-            "durationMs": 5525000,
-            "id": "MCBEF041F5",
-            "isPremiumOnly": true,
-            "matureBlocked": false,
             "copyright": "© 2021 Sony Music Labels Inc.",
-            "description": "Hiroyuki Sawano realizó una serie de conciertos en streaming durante dos días que tituló \"Hiroyuki Sawano LIVE 'BEST OF VOCAL WORKS [nZk]' Side Hiroyuki Sawano\" los días 6 y 7 de agosto de 2020. ¡Esta producción audiovisual presenta aquel segundo día!",
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
+            "id": "MCBEF041F5",
             "images": {
                 "thumbnail": [
                     {
@@ -3047,46 +3034,51 @@
                     }
                 ]
             },
-            "isPublic": true,
-            "title": "Hiroyuki SAWANO LIVE BEST OF VOCAL WORKS [nZk] Side SawanoHiroyuki[nZk]",
-            "createdAt": "2023-02-28T12:56:00.764Z",
-            "isMature": false,
-            "licensor": "BMG",
-            "publishDate": "2023-03-04T06:00:00Z",
-            "type": "musicConcert",
-            "hash": "4210279db9f06e70fec6e089082ff9ee",
             "originalRelease": "2021-03-03T00:00:00Z",
-            "readyToPublish": true,
+            "publishDate": "2023-03-04T06:00:00Z",
             "sequenceNumber": 0,
             "slug": "hiroyuki-sawano-live-best-of-vocal-works-nzk-side-sawanohiroyukinzk",
-            "streams_link": "/content/v2/music/MCBEF041F5/streams"
-        },
-        {
-            "durationMs": 7096000,
-            "id": "MC1A9E6F8B",
-            "isPublic": true,
+            "description": "Hiroyuki Sawano realizó una serie de conciertos en streaming durante dos días que tituló \"Hiroyuki Sawano LIVE 'BEST OF VOCAL WORKS [nZk]' Side Hiroyuki Sawano\" los días 6 y 7 de agosto de 2020. ¡Esta producción audiovisual presenta aquel segundo día!",
+            "durationMs": 5525000,
+            "hash": "4210279db9f06e70fec6e089082ff9ee",
             "matureBlocked": false,
-            "originalRelease": "2020-01-29T00:00:00Z",
-            "sequenceNumber": 0,
-            "slug": "penguin-go-a-road-2019-final-yokohama-duel",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
+            "streams_link": "/content/v2/music/MCBEF041F5/streams",
+            "maturityRatings": {},
+            "createdAt": "2023-02-28T12:56:00.764Z",
+            "isMature": false,
             "isPremiumOnly": true,
-            "type": "musicConcert",
-            "copyright": "© 2020 Sony Music Labels Inc.",
+            "licensor": "BMG",
+            "artist": {
+                "id": "MAAC1C79B9",
+                "name": "Hiroyuki Sawano",
+                "slug": "hiroyuki-sawano"
+            },
             "genres": [
                 {
                     "displayValue": "Rock",
                     "id": "rock"
                 }
             ],
-            "isMature": false,
+            "isPublic": true
+        },
+        {
             "updatedAt": "2023-05-17T01:28:45.653Z",
-            "description": "Lanzamiento en video del \"Yokohama Ketto\" celebrado el 10 de agosto de 2019 en el Gimnasio Cultural de Yokohama y que fue la culminación de la gira nacional \"Penguin Go a Road 2019\" de PENGUIN RESEARCH. Este es el primer lanzamiento en video de PENGUIN RESEARCH.",
-            "createdAt": "2023-02-28T12:55:06.907Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
             "hash": "fc2049043e6303ad11052bc7c9ea4648",
+            "isMature": false,
+            "isPublic": true,
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "durationMs": 7096000,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
             "images": {
                 "thumbnail": [
                     {
@@ -3139,32 +3131,51 @@
                     }
                 ]
             },
+            "sequenceNumber": 0,
+            "originalRelease": "2020-01-29T00:00:00Z",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "copyright": "© 2020 Sony Music Labels Inc.",
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "description": "Lanzamiento en video del \"Yokohama Ketto\" celebrado el 10 de agosto de 2019 en el Gimnasio Cultural de Yokohama y que fue la culminación de la gira nacional \"Penguin Go a Road 2019\" de PENGUIN RESEARCH. Este es el primer lanzamiento en video de PENGUIN RESEARCH.",
+            "id": "MC1A9E6F8B",
             "licensor": "",
             "maturityRatings": {},
-            "publishDate": "2023-03-04T06:00:00Z",
-            "readyToPublish": true,
+            "slug": "penguin-go-a-road-2019-final-yokohama-duel",
+            "title": "Penguin Go a Road 2019 FINAL Yokohama Duel",
+            "streams_link": "/content/v2/music/MC1A9E6F8B/streams",
             "artist": {
                 "id": "MA8408DDAC",
                 "name": "PENGUIN RESEARCH",
                 "slug": "penguin-research"
             },
-            "streams_link": "/content/v2/music/MC1A9E6F8B/streams",
-            "title": "Penguin Go a Road 2019 FINAL Yokohama Duel"
+            "isPremiumOnly": true,
+            "type": "musicConcert"
         },
         {
-            "licensor": "BMG",
-            "matureBlocked": false,
+            "slug": "live-tour-2021-we-are-in-bloom-at-tokyo-garden-theater",
+            "artist": {
+                "id": "MA11CEE4CF",
+                "name": "Soma Saito",
+                "slug": "soma-saito"
+            },
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "description": "Soma Saito publicó su segundo álbum completo \"in bloom\" en diciembre de 2020, en el que escribió la letra y la música de todas las canciones y mostró claramente su gusto por la música alternativa. Para apoyar el álbum, se embarcó en su primera gira en vivo, en la que reconstruyó toda una nueva visión del mundo adaptando su particular mundo lírico y su visión musical al entorno de los conciertos en vivo. Esta versión es la grabación del último concierto de la gira y permite disfrutar plenamente de las dos caras del artista, como cantante/letrista y como miembro de una banda tocando la guitarra.",
+            "maturityRatings": {},
+            "originalRelease": "2021-09-01T00:00:00Z",
+            "publishDate": "2023-03-04T06:00:00Z",
             "readyToPublish": true,
+            "title": "Live Tour 2021 \"We are in bloom!\" at Tokyo Garden Theater",
             "type": "musicConcert",
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-03-04T06:00:00Z"
             },
-            "copyright": "© 2021 Sony Music Labels Inc.",
-            "description": "Soma Saito publicó su segundo álbum completo \"in bloom\" en diciembre de 2020, en el que escribió la letra y la música de todas las canciones y mostró claramente su gusto por la música alternativa. Para apoyar el álbum, se embarcó en su primera gira en vivo, en la que reconstruyó toda una nueva visión del mundo adaptando su particular mundo lírico y su visión musical al entorno de los conciertos en vivo. Esta versión es la grabación del último concierto de la gira y permite disfrutar plenamente de las dos caras del artista, como cantante/letrista y como miembro de una banda tocando la guitarra.",
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "hash": "462e14dfab93f1cec58bc457e700379e",
+            "licensor": "BMG",
+            "matureBlocked": false,
+            "sequenceNumber": 0,
             "id": "MC21A00685",
-            "isMature": false,
-            "isPremiumOnly": true,
             "updatedAt": "2023-05-17T01:28:49.205Z",
             "streams_link": "/content/v2/music/MC21A00685/streams",
             "durationMs": 4857000,
@@ -3174,17 +3185,6 @@
                     "id": "anime"
                 }
             ],
-            "hash": "462e14dfab93f1cec58bc457e700379e",
-            "maturityRatings": {},
-            "sequenceNumber": 0,
-            "slug": "live-tour-2021-we-are-in-bloom-at-tokyo-garden-theater",
-            "title": "Live Tour 2021 \"We are in bloom!\" at Tokyo Garden Theater",
-            "artist": {
-                "id": "MA11CEE4CF",
-                "name": "Soma Saito",
-                "slug": "soma-saito"
-            },
-            "createdAt": "2023-02-28T12:55:06.907Z",
             "images": {
                 "thumbnail": [
                     {
@@ -3237,26 +3237,32 @@
                     }
                 ]
             },
-            "isPublic": true,
-            "originalRelease": "2021-09-01T00:00:00Z",
-            "publishDate": "2023-03-04T06:00:00Z"
-        },
-        {
-            "artist": {
-                "id": "MA890E31FF",
-                "name": "ReoNa",
-                "slug": "reona"
-            },
             "isMature": false,
             "isPremiumOnly": true,
+            "isPublic": true
+        },
+        {
+            "id": "MC10F6B450",
+            "maturityRatings": {},
+            "originalRelease": "2021-08-11T00:00:00Z",
+            "readyToPublish": true,
             "type": "musicConcert",
-            "publishDate": "2023-03-04T06:00:00Z",
-            "sequenceNumber": 0,
-            "streams_link": "/content/v2/music/MC10F6B450/streams",
+            "updatedAt": "2023-05-17T01:28:46.37Z",
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "hash": "f48b4a5aff91839208f66e344cca83f0",
+            "matureBlocked": false,
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-03-04T06:00:00Z"
             },
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "isMature": false,
+            "publishDate": "2023-03-04T06:00:00Z",
+            "sequenceNumber": 0,
+            "slug": "reona-one-man-concert-tour-unknown-live-at-pacifico-yokohama",
+            "title": "ReoNa ONE-MAN Concert Tour \"unknown\" Live at PACIFICO YOKOHAMA",
+            "streams_link": "/content/v2/music/MC10F6B450/streams",
+            "description": "El espectáculo celebrado por ReoNa el 29 de abril de 2021 como parte de su \"ReoNa ONE-MAN Concert Tour 'unknown'\" ya está disponible en video, ¡el primer lanzamiento de este tipo de la artista!",
             "durationMs": 5129000,
             "images": {
                 "thumbnail": [
@@ -3310,41 +3316,53 @@
                     }
                 ]
             },
+            "isPremiumOnly": true,
             "isPublic": true,
-            "matureBlocked": false,
-            "slug": "reona-one-man-concert-tour-unknown-live-at-pacifico-yokohama",
-            "updatedAt": "2023-05-17T01:28:46.37Z",
-            "copyright": "© 2021 Sony Music Labels Inc.",
+            "licensor": "",
+            "artist": {
+                "id": "MA890E31FF",
+                "name": "ReoNa",
+                "slug": "reona"
+            },
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ]
+        },
+        {
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "description": "Sora Amamiya festejaba su quinto aniversario como artista con una serie de dos días de conciertos titulados \"LAWSON presents Sora Amamiya Live 2020 'The Clearest SKY'\" celebrados en el Makuharu Messe los días 18 y 19 de enero de 2020. Siendo sus mayores conciertos hasta la fecha, sus primeras actuaciones con una banda en vivo y con unas especificaciones impresionantes para la época, el aniversario fue realmente intento e inolvidable tanto para Amamiya como para sus fans. \"Hibana\", el primer tema para el que escribió la letra y compuso la música, se pudo escuchar por primera vez en estos conciertos. Además de sus atractivas actuaciones en vivo, la caracterizan sus encantadoras expresiones y su radiante personalidad. Este álbum en vivo captura la totalidad de dichos conciertos, incluyendo los dos encores donde su personalidad brilla con más fuerza que nunca. ¡Siente las emociones tras las lágrimas que derramó Sora Amamiya! ¡Esta es la Sora Amamiya que tanto apoyaron hasta la fecha y la convirtieron en lo que es hoy en día!",
             "genres": [
                 {
                     "displayValue": "Anime",
                     "id": "anime"
                 }
             ],
-            "hash": "f48b4a5aff91839208f66e344cca83f0",
-            "licensor": "",
             "maturityRatings": {},
-            "title": "ReoNa ONE-MAN Concert Tour \"unknown\" Live at PACIFICO YOKOHAMA",
-            "createdAt": "2023-02-28T12:55:06.907Z",
-            "description": "El espectáculo celebrado por ReoNa el 29 de abril de 2021 como parte de su \"ReoNa ONE-MAN Concert Tour 'unknown'\" ya está disponible en video, ¡el primer lanzamiento de este tipo de la artista!",
-            "id": "MC10F6B450",
-            "originalRelease": "2021-08-11T00:00:00Z",
-            "readyToPublish": true
-        },
-        {
-            "readyToPublish": true,
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MC287E5072/streams",
+            "updatedAt": "2023-05-17T01:28:48.496Z",
             "artist": {
                 "id": "MAA2158A87",
                 "name": "Sora Amamiya",
                 "slug": "sora-amamiya"
             },
-            "isMature": false,
-            "isPremiumOnly": true,
-            "sequenceNumber": 0,
-            "streams_link": "/content/v2/music/MC287E5072/streams",
+            "copyright": "© 2020 SonyMusic",
+            "durationMs": 6591000,
             "hash": "dea69e1e2323f0ffcd9a50788245854a",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
+            "isMature": false,
             "isPublic": true,
-            "licensor": "BMG",
+            "readyToPublish": true,
+            "slug": "amamiya-sora-live-2020-the-clearest-sky",
+            "title": "Amamiya Sora Live 2020 \"The Clearest SKY\"",
             "id": "MC287E5072",
             "images": {
                 "thumbnail": [
@@ -3398,54 +3416,13 @@
                     }
                 ]
             },
+            "licensor": "BMG",
             "originalRelease": "2020-07-08T00:00:00Z",
-            "copyright": "© 2020 SonyMusic",
-            "createdAt": "2023-02-28T12:55:06.907Z",
-            "description": "Sora Amamiya festejaba su quinto aniversario como artista con una serie de dos días de conciertos titulados \"LAWSON presents Sora Amamiya Live 2020 'The Clearest SKY'\" celebrados en el Makuharu Messe los días 18 y 19 de enero de 2020. Siendo sus mayores conciertos hasta la fecha, sus primeras actuaciones con una banda en vivo y con unas especificaciones impresionantes para la época, el aniversario fue realmente intento e inolvidable tanto para Amamiya como para sus fans. \"Hibana\", el primer tema para el que escribió la letra y compuso la música, se pudo escuchar por primera vez en estos conciertos. Además de sus atractivas actuaciones en vivo, la caracterizan sus encantadoras expresiones y su radiante personalidad. Este álbum en vivo captura la totalidad de dichos conciertos, incluyendo los dos encores donde su personalidad brilla con más fuerza que nunca. ¡Siente las emociones tras las lágrimas que derramó Sora Amamiya! ¡Esta es la Sora Amamiya que tanto apoyaron hasta la fecha y la convirtieron en lo que es hoy en día!",
-            "matureBlocked": false,
-            "maturityRatings": {},
             "publishDate": "2023-03-04T06:00:00Z",
-            "slug": "amamiya-sora-live-2020-the-clearest-sky",
-            "title": "Amamiya Sora Live 2020 \"The Clearest SKY\"",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
-            "durationMs": 6591000,
-            "genres": [
-                {
-                    "displayValue": "Anime",
-                    "id": "anime"
-                }
-            ],
-            "type": "musicConcert",
-            "updatedAt": "2023-05-17T01:28:48.496Z"
+            "sequenceNumber": 0
         },
         {
-            "artist": {
-                "id": "MA2AFBD7F6",
-                "name": "FLOW",
-                "slug": "flow"
-            },
-            "createdAt": "2023-02-28T12:55:06.907Z",
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "id": "MCA94FB7DF",
-            "isPublic": true,
             "title": "FLOW THE LIVE 2016",
-            "isMature": false,
-            "publishDate": "2023-03-04T06:00:00Z",
-            "readyToPublish": true,
-            "sequenceNumber": 0,
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-03-04T06:00:00Z"
-            },
-            "copyright": "© 2017 Sony Music Labels Inc.",
             "images": {
                 "thumbnail": [
                     {
@@ -3498,18 +3475,41 @@
                     }
                 ]
             },
+            "isPublic": true,
+            "licensor": "BMG",
+            "isMature": false,
+            "isPremiumOnly": true,
             "maturityRatings": {},
             "originalRelease": "2017-03-15T00:00:00Z",
-            "slug": "flow-the-live-2016",
-            "type": "musicConcert",
-            "streams_link": "/content/v2/music/MCA94FB7DF/streams",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "artist": {
+                "id": "MA2AFBD7F6",
+                "name": "FLOW",
+                "slug": "flow"
+            },
             "description": "¡Un producto en 2 DVD que incluye los mejores espectáculos de FLOW de 2016!\nIncluye principalmente su actuación única en el Zepp Tokyo del 26 de marzo de 2016 y su actuación de Nochevieja en el Differ Ariake del 31 de diciembre de 2016, ¡así como otros videos de sus actuaciones en el extranjero!",
             "durationMs": 10593000,
-            "hash": "62caccd156b888c7e76ee61de4f95d43",
-            "isPremiumOnly": true,
-            "licensor": "BMG",
+            "slug": "flow-the-live-2016",
+            "streams_link": "/content/v2/music/MCA94FB7DF/streams",
+            "id": "MCA94FB7DF",
             "matureBlocked": false,
-            "updatedAt": "2023-05-17T01:28:35.542Z"
+            "sequenceNumber": 0,
+            "type": "musicConcert",
+            "copyright": "© 2017 Sony Music Labels Inc.",
+            "createdAt": "2023-02-28T12:55:06.907Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "updatedAt": "2023-05-17T01:28:35.542Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-03-04T06:00:00Z"
+            },
+            "hash": "62caccd156b888c7e76ee61de4f95d43",
+            "readyToPublish": true
         }
     ],
     "meta": {}
