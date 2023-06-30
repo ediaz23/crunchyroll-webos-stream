@@ -6,7 +6,7 @@ import {
     localStore, CrunchyrollError, api, config,
     utils as crunchUtils
 } from 'crunchyroll-js-api'
-import CONST from './const'
+import { LOAD_MOCK_DATA, ERROR_CODES } from './const'
 import { getMockData } from './mock-data/mockData'
 
 
@@ -19,8 +19,6 @@ import { getMockData } from './mock-data/mockData'
  */
 /** @type {ApiStorage} */
 const storage = localStore.storage
-
-const { LOAD_MOCK_DATA } = CONST
 
 /**
  * Initialize storage
@@ -104,14 +102,14 @@ const getSession = async () => storage.token
 const translateError = async (error) => {
     let newError = error
     if (error instanceof CrunchyrollError) {
-        if (error.code === CONST.invalid_email_password) {
+        if (error.code === ERROR_CODES.invalid_email_password) {
             newError = new CrunchyrollError($L('Please check your email and password.'), error.code)
-        } else if (error.code === CONST.invalid_password) {
+        } else if (error.code === ERROR_CODES.invalid_password) {
             newError = new CrunchyrollError($L('Wrong password.'), error.code)
-        } else if (error.code === CONST.invalid_refresh_token) {
+        } else if (error.code === ERROR_CODES.invalid_refresh_token) {
             newError = new CrunchyrollError($L('Invalid access token, try to log in again.'), error.code)
             await localStore.setNewData({ token: null })
-        } else if (error.code === CONST.invalid_auth_token) {
+        } else if (error.code === ERROR_CODES.invalid_auth_token) {
             newError = new CrunchyrollError($L('Invalid access token, try to log in again.'), error.code)
             await localStore.setNewData({ token: null })
         }
@@ -167,7 +165,7 @@ const getAccount = async () => {
 const getProfiles = async () => {
     let profile = []
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             profile = [await getMockData('profile')]
         } else {
             const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
@@ -258,7 +256,7 @@ const getContentParam = async (profile) => {
 const getHomeFeed = async (profile) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('homefeed')
         } else {
             const account = await getContentParam(profile)
@@ -281,7 +279,7 @@ const getHomeFeed = async (profile) => {
 const getObjects = async (profile, params) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('objects', params)
         } else {
             const account = await getContentParam(profile)
@@ -302,7 +300,7 @@ const getObjects = async (profile, params) => {
 const getMusicArtists = async (profile, artistIds) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('artist', artistIds)
         } else {
             const account = await getContentParam(profile)
@@ -323,7 +321,7 @@ const getMusicArtists = async (profile, artistIds) => {
 const getMusicConcerts = async (profile, concertIds) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('concerts', concertIds)
         } else {
             const account = await getContentParam(profile)
@@ -344,7 +342,7 @@ const getMusicConcerts = async (profile, concertIds) => {
 const getMusicVideos = async (profile, musicIds) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('musicVideo', musicIds)
         } else {
             const account = await getContentParam(profile)
@@ -367,7 +365,7 @@ const getMusicVideos = async (profile, musicIds) => {
 const getHistory = async (profile, params) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('discoverHistory', params)
         } else {
             const account = await getContentParam(profile)
@@ -390,7 +388,7 @@ const getHistory = async (profile, params) => {
 const getWatchlist = async (profile, params) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('discoverWatchlist', params)
         } else {
             const account = await getContentParam(profile)
@@ -414,7 +412,7 @@ const getWatchlist = async (profile, params) => {
 const getRecomendation = async (profile, params) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('discoverRecomendantion', params)
         } else {
             const account = await getContentParam(profile)
@@ -439,7 +437,7 @@ const getRecomendation = async (profile, params) => {
 const getSimilar = async (profile, params) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('similar', params)
         } else {
             const account = await getContentParam(profile)
@@ -468,7 +466,7 @@ const getSimilar = async (profile, params) => {
 const getBrowseAll = async (profile, params) => {
     let out = null
     try {
-        if (__DEV__ && LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA) {
             out = await getMockData('browse', params)
         } else {
             const account = await getContentParam(profile)

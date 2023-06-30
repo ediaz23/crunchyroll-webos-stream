@@ -11,6 +11,7 @@ import ContactMe from '../components/ContactMe'
 import Logout from '../components/Logout'
 import { pathState, currentProfileState } from '../recoilConfig'
 import api from '../api'
+import { DEV_FAST_SELECT } from '../const'
 import back from '../back'
 
 
@@ -22,41 +23,40 @@ const ProfilesPanel = ({ ...rest }) => {
     /** @type {[Array<import('crunchyroll-js-api/src/types').Profile>, Function]}  */
     const [profiles, setProfiles] = useState([])
 
-    const setProfile = useCallback((event) => {
+    /** @type {Function} */
+    const getProfileFromEvent = useCallback((event) => {
         /** @type {HTMLElement} */
         const parentElement = event.target.closest('[data-profile-id]')
         const profileId = parentElement.getAttribute('data-profile-id')
-        const profile = profiles.find(p => p.id === parseInt(profileId))
-        setCurrentProfile(profile)
-    }, [setCurrentProfile, profiles])
+        return profiles.find(p => p.id === parseInt(profileId))
+    }, [profiles])
 
-    const onSelectProfile = useCallback(event => {
-        setProfile(event)
+    /** @type {Function} */
+    const doSelectProfile = useCallback(profile => {
+        setCurrentProfile(profile)
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
-    }, [setProfile, setPath])
+    }, [setCurrentProfile, setPath])
+
+    /** @type {Function} */
+    const onSelectProfile = useCallback(event => {
+        doSelectProfile(getProfileFromEvent(event))
+    }, [getProfileFromEvent, doSelectProfile])
+
+    /** @type {Function} */
     const onEditProfile = useCallback(event => {
-        setProfile(event)
+        setCurrentProfile(getProfileFromEvent(event))
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/edit')
-    }, [setProfile, setPath])
-
+    }, [getProfileFromEvent, setCurrentProfile, setPath])
 
     useEffect(() => {
-        const loadData = async () => {
-            setProfiles(await api.getProfiles())
+        if (DEV_FAST_SELECT && profiles && profiles.length) {
+            doSelectProfile(profiles[0])
         }
-        loadData()
-    }, [])
+    }, [profiles, doSelectProfile])
 
-    /** @todo remover */
-    useEffect(() => {
-        if (profiles && profiles.length) {
-            setCurrentProfile(profiles[0])
-            back.pushHistory({ doBack: () => { setPath('/profiles') } })
-            setPath('/profiles/home')
-        }
-    }, [profiles, setCurrentProfile, setPath])
+    useEffect(() => { api.getProfiles().then(setProfiles) }, [])
 
     const rowStyle = { marginTop: '1rem' }
     return (

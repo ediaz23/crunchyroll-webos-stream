@@ -12,7 +12,7 @@ import HomeContentBanner from './HomeContentBanner'
 import HomeFeedRow from './HomeFeedRow'
 import VirtualListNested from '../patch/VirtualListNested'
 import api from '../api'
-import CONST from '../const'
+import { LOAD_MOCK_DATA } from '../const'
 import logger from '../logger'
 import css from './HomeFeed.module.less'
 
@@ -63,7 +63,7 @@ const processCarousel = async (carousel, profile) => {
         items: []
     }
     let objectIds
-    if (__DEV__ && CONST.LOAD_MOCK_DATA) {
+    if (LOAD_MOCK_DATA) {
         objectIds = 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE'.split('-')
     } else {
         const resObjectIds = await Promise.all(carousel.items.map(convertItem2Object))
@@ -108,7 +108,7 @@ const processInFeedPanels = async (carousel, profile) => {
         items: []
     }
     let objectIds
-    if (__DEV__ && CONST.LOAD_MOCK_DATA) {
+    if (LOAD_MOCK_DATA) {
         objectIds = 'G4PH0WEKE-GNVHKNPQ7-GY8DWQN5Y'.split('-')
     } else {
         const resOjectIds = await Promise.all(carousel.panels.map(convertItem2Object))
