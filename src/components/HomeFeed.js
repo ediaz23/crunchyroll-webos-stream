@@ -13,7 +13,6 @@ import HomeFeedRow from './HomeFeedRow'
 import VirtualListNested from '../patch/VirtualListNested'
 import api from '../api'
 import CONST from '../const'
-import { getMockData } from '../mock-data/mockData'
 import logger from '../logger'
 import css from './HomeFeed.module.less'
 
@@ -63,15 +62,15 @@ const processCarousel = async (carousel, profile) => {
         title: $L('Watch Now'),
         items: []
     }
+    let objectIds
     if (__DEV__ && CONST.LOAD_MOCK_DATA) {
-        const { data } = await getMockData('objects', 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE')
-        out.items = data
+        objectIds = 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE'.split('-')
     } else {
-        const objectIds = await Promise.all(carousel.items.map(convertItem2Object))
-        const uniqueObjectIds = Array.from(new Set(objectIds.filter(item => !!item)))
-        const { data } = await api.getObjects(profile, uniqueObjectIds)
-        out.items = data
+        const resObjectIds = await Promise.all(carousel.items.map(convertItem2Object))
+        objectIds = Array.from(new Set(resObjectIds.filter(item => !!item)))
     }
+    const { data } = await api.getObjects(profile, { objectIds, ratings: true })
+    out.items = data
     return out
 }
 
@@ -108,16 +107,15 @@ const processInFeedPanels = async (carousel, profile) => {
         title: $L('Why Not?'),
         items: []
     }
+    let objectIds
     if (__DEV__ && CONST.LOAD_MOCK_DATA) {
-        const { data } = await getMockData('objects', 'G4PH0WEKE-GNVHKNPQ7-GY8DWQN5Y')
-        out.items = data
+        objectIds = 'G4PH0WEKE-GNVHKNPQ7-GY8DWQN5Y'.split('-')
     } else {
-        const objectIds = await Promise.all(carousel.panels.map(convertItem2Object))
-        const uniqueObjectIds = Array.from(new Set(objectIds.filter(item => !!item)))
-        const { data } = await api.getObjects(profile, uniqueObjectIds)
-        out.items = data
+        const resOjectIds = await Promise.all(carousel.panels.map(convertItem2Object))
+        objectIds = Array.from(new Set(resOjectIds.filter(item => !!item)))
     }
-
+    const { data } = await api.getObjects(profile, { objectIds, ratings: true })
+    out.items = data
     return out
 }
 
@@ -136,7 +134,7 @@ const processCuratedCollection = async (carousel, profile) => {
     } else if ('music_video' === carousel.response_type) {
         res = await api.getMusicVideos(profile, carousel.ids)
     } else {
-        res = await api.getObjects(profile, carousel.ids)
+        res = await api.getObjects(profile, { objectIds: carousel.ids, ratings: true })
     }
     return { ...carousel, items: res.data }
 }
@@ -150,17 +148,17 @@ const processCuratedCollection = async (carousel, profile) => {
 const processDynamicCollection = async (carousel, profile) => {
     let res = {}
     if ('history' === carousel.response_type) {
-        res = await api.getHistory(profile, { quantity: 20 })
+        res = await api.getHistory(profile, { quantity: 20, ratings: true })
         res = { data: res.data.map(removePanelField) }
     } else if ('watchlist' === carousel.response_type) {
-        res = await api.getWatchlist(profile, { quantity: 20 })
+        res = await api.getWatchlist(profile, { quantity: 20, ratings: true })
         res = { data: res.data.map(removePanelField) }
     } else if ('recommendations' === carousel.response_type) {
-        res = await api.getRecomendation(profile, { quantity: 20 })
+        res = await api.getRecomendation(profile, { quantity: 20, ratings: true })
     } else if ('because_you_watched' === carousel.response_type) {
-        res = await api.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20 })
+        res = await api.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20, ratings: true })
     } else if ('recent_episodes' === carousel.response_type) {
-        res = await api.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added' })
+        res = await api.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added', ratings: true })
         const added = new Set()
         res = {
             data: res.data.filter(val => {
@@ -239,7 +237,6 @@ const postProcessHomefeed = async (feed) => {
     }
     return mergedFeed
 }
-
 
 const HomeFeed = ({ homefeed, profile }) => {
 

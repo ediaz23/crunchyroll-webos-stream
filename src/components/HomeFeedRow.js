@@ -33,7 +33,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     const image = getImagePerResolution({ height: itemHeight, width: rest.itemSize - margin, content: feedItem })
     return (
         <Poster
-            title={feedItem.title}
+            title={feedItem.title || feedItem.name || ''}
             image={image}
             {...rest}
         />
