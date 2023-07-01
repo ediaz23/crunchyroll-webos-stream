@@ -8,10 +8,12 @@ import PropTypes from 'prop-types'
 
 import { useSetRecoilState } from 'recoil'
 
-import { homefeedReadyState } from '../recoilConfig'
+import { homefeedReadyState, pathState } from '../recoilConfig'
 import useGetImagePerResolution from '../hooks/getImagePerResolution'
 import Navigable from '../wrappers/Navigable'
 import css from './HomeFeedRow.module.less'
+import back from '../back'
+import { DEV_FAST_SELECT } from '../const'
 
 const NavigableDiv = Navigable('div', '')
 
@@ -54,11 +56,28 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     /** @type {Function} */
     const setHomefeedReady = useSetRecoilState(homefeedReadyState)
     /** @type {Function} */
+    const setPath = useSetRecoilState(pathState)
+    /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
-    const selectElement = (ev) => { setContent(feed.items[parseInt(ev.target.dataset.index)]) }
-
-    const childProps = { id: cellId, feed, itemSize: itemWidth, onFocus: selectElement, itemHeight }
+    const selectElement = useCallback((ev) => {
+        setContent(feed.items[parseInt(ev.target.dataset.index)])
+    }, [setContent, feed.items])
+    /** @type {Function} */
+    const doSelectElement = useCallback(content => {
+        if (content.type === 'series') {
+            setContent(content)
+            back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
+            setPath('/profiles/home/serie')
+        }
+    }, [setContent, setPath])
+    /** @type {Function} */
+    const showContentDetail = useCallback((ev) => {
+        /** @type {HTMLElement} */
+        const parentElement = ev.target.closest(`#${cellId}`)
+        const content = feed.items[parseInt(parentElement.dataset.index)]
+        doSelectElement(content)
+    }, [cellId, doSelectElement, feed.items])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -69,7 +88,6 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
             setItemHeight(itemSize - boundingRect.height * 2)
         }
     }, [compRef, itemSize])
-
 
     useEffect(() => {
         if (index === 0) {
@@ -84,6 +102,16 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
         }
     }, [setHomefeedReady])  // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        if (DEV_FAST_SELECT) {
+            const content = feed.items.find(val => val.type === 'series' &&
+                val.id === 'GRDV0019R' && val.search_metadata)
+            if (content) {
+                doSelectElement(content)
+            }
+        }
+    }, [feed.items, doSelectElement])
+
     return (
         <div className={newClassName} style={newStyle} {...rest}>
             <Heading size="title" spacing="small" componentRef={compRef}>
@@ -95,7 +123,14 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
                         dataSize={feed.items.length}
                         itemRenderer={HomeFeedItem}
                         itemSize={itemWidth}
-                        childProps={childProps}
+                        childProps={{
+                            id: cellId,
+                            feed,
+                            itemSize: itemWidth,
+                            onFocus: selectElement,
+                            onClick: showContentDetail,
+                            itemHeight,
+                        }}
                         direction='horizontal'
                         verticalScrollbar='hidden'
                         horizontalScrollbar='hidden'

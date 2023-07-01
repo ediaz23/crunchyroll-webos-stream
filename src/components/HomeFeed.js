@@ -256,7 +256,11 @@ const HomeFeed = ({ homefeed, profile }) => {
                     dataSize={homefeed.length}
                     itemRenderer={renderRow}
                     itemSize={itemHeigth}
-                    childProps={{ id: 'rowFeed', cellId: 'cellFeed', itemSize: itemHeigth }}
+                    childProps={{
+                        id: 'rowFeed',
+                        cellId: 'cellFeed',
+                        itemSize: itemHeigth
+                    }}
                     direction='vertical'
                     verticalScrollbar='hidden'
                     horizontalScrollbar='hidden'

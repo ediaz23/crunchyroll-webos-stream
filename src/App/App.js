@@ -5,8 +5,10 @@ import LocaleInfo from 'ilib/lib/LocaleInfo'
 import I18nDecorator from '@enact/i18n/I18nDecorator'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
+
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
+import { pathState, initScreenState } from '../recoilConfig'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InitialPanel from '../views/InitialPanel'
 import HomePanel from '../views/HomePanel'
@@ -17,7 +19,7 @@ import ContactMePanel from '../views/ContactMePanel'
 import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
-import { pathState, initScreenState } from '../recoilConfig'
+import ContentSeriePanel from '../views/ContentSeriePanel'
 import useCustomFetch from '../hooks/customFetch'
 import api from '../api'
 //import logger from '../logger'
@@ -87,7 +89,9 @@ const App = ({ ...rest }) => {
                     <Route path='login' component={LoginPanel} {...rest} />
                     <Route path='profiles' component={ProfilesPanel} {...rest} >
                         <Route path='edit' component={ProfileEditPanel} {...rest} />
-                        <Route path='home' component={HomePanel} {...rest} />
+                        <Route path='home' component={HomePanel} {...rest}>
+                            <Route path='serie' component={ContentSeriePanel} {...rest} />
+                        </Route>
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />
                     <Route path='askClose' component={ConfirmExitPanel} {...rest} />
