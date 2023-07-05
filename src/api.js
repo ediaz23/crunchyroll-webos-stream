@@ -260,7 +260,7 @@ const getHomeFeed = async (profile) => {
             out = await getMockData('homefeed')
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getHomeFeed({ account })
+            out = await api.discover.getHomeFeed({ account })
         }
     } catch (error) {
         await translateError(error)
@@ -283,7 +283,7 @@ const getObjects = async (profile, params) => {
             out = await getMockData('objects', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getObjects({ account, ...params })
+            out = await api.cms.getObjects({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -304,7 +304,7 @@ const getMusicArtists = async (profile, artistIds) => {
             out = await getMockData('artist', artistIds)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getMusicArtist({ account, artistIds })
+            out = await api.music.getArtist({ account, artistIds })
         }
     } catch (error) {
         await translateError(error)
@@ -325,7 +325,7 @@ const getMusicConcerts = async (profile, concertIds) => {
             out = await getMockData('concerts', concertIds)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getMusicConcerts({ account, concertIds })
+            out = await api.music.getConcerts({ account, concertIds })
         }
     } catch (error) {
         await translateError(error)
@@ -346,7 +346,7 @@ const getMusicVideos = async (profile, musicIds) => {
             out = await getMockData('musicVideo', musicIds)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getMusicVideo({ account, musicIds })
+            out = await api.music.getVideo({ account, musicIds })
         }
     } catch (error) {
         await translateError(error)
@@ -369,7 +369,7 @@ const getHistory = async (profile, params) => {
             out = await getMockData('discoverHistory', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getHistory({ account, ...params })
+            out = await api.discover.getHistory({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -392,7 +392,7 @@ const getWatchlist = async (profile, params) => {
             out = await getMockData('discoverWatchlist', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getWatchlist({ account, ...params })
+            out = await api.discover.getWatchlist({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -416,7 +416,7 @@ const getRecomendation = async (profile, params) => {
             out = await getMockData('discoverRecomendantion', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getRecommendations({ account, ...params })
+            out = await api.discover.getRecommendations({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -441,7 +441,7 @@ const getSimilar = async (profile, params) => {
             out = await getMockData('similar', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getSimilar({ account, ...params })
+            out = await api.discover.getSimilar({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -470,7 +470,7 @@ const getBrowseAll = async (profile, params) => {
             out = await getMockData('browse', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.content2.getBrowseAll({ account, ...params })
+            out = await api.discover.getBrowseAll({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
