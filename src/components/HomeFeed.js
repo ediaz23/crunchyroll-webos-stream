@@ -25,7 +25,7 @@ import css from './HomeFeed.module.less'
 const convertItem2Object = async (item) => {
     let out = null
     try {
-        const res = await api.expandURL(item.link)
+        const res = await api.misc.expandURL(item.link)
         let split = res.url.split('/')
         if (split.length > 1) {
             out = split[split.length - 2]
@@ -69,7 +69,7 @@ const processCarousel = async (carousel, profile) => {
         const resObjectIds = await Promise.all(carousel.items.map(convertItem2Object))
         objectIds = Array.from(new Set(resObjectIds.filter(item => !!item)))
     }
-    const { data } = await api.getObjects(profile, { objectIds, ratings: true })
+    const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
     out.items = data
     return out
 }
@@ -114,7 +114,7 @@ const processInFeedPanels = async (carousel, profile) => {
         const resOjectIds = await Promise.all(carousel.panels.map(convertItem2Object))
         objectIds = Array.from(new Set(resOjectIds.filter(item => !!item)))
     }
-    const { data } = await api.getObjects(profile, { objectIds, ratings: true })
+    const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
     out.items = data
     return out
 }
@@ -128,13 +128,13 @@ const processInFeedPanels = async (carousel, profile) => {
 const processCuratedCollection = async (carousel, profile) => {
     let res = {}
     if ('artist' === carousel.response_type) {
-        res = await api.getMusicArtists(profile, carousel.ids)
+        res = await api.music.getArtists(profile, carousel.ids)
     } else if ('music_concert' === carousel.response_type) {
-        res = await api.getMusicConcerts(profile, carousel.ids)
+        res = await api.music.getConcerts(profile, carousel.ids)
     } else if ('music_video' === carousel.response_type) {
-        res = await api.getMusicVideos(profile, carousel.ids)
+        res = await api.music.getVideos(profile, carousel.ids)
     } else {
-        res = await api.getObjects(profile, { objectIds: carousel.ids, ratings: true })
+        res = await api.cms.getObjects(profile, { objectIds: carousel.ids, ratings: true })
     }
     return { ...carousel, items: res.data }
 }
@@ -148,17 +148,17 @@ const processCuratedCollection = async (carousel, profile) => {
 const processDynamicCollection = async (carousel, profile) => {
     let res = {}
     if ('history' === carousel.response_type) {
-        res = await api.getHistory(profile, { quantity: 20, ratings: true })
+        res = await api.discover.getHistory(profile, { quantity: 20, ratings: true })
         res = { data: res.data.map(removePanelField) }
     } else if ('watchlist' === carousel.response_type) {
-        res = await api.getWatchlist(profile, { quantity: 20, ratings: true })
+        res = await api.discover.getWatchlist(profile, { quantity: 20, ratings: true })
         res = { data: res.data.map(removePanelField) }
     } else if ('recommendations' === carousel.response_type) {
-        res = await api.getRecomendation(profile, { quantity: 20, ratings: true })
+        res = await api.discover.getRecomendation(profile, { quantity: 20, ratings: true })
     } else if ('because_you_watched' === carousel.response_type) {
-        res = await api.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20, ratings: true })
+        res = await api.discover.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20, ratings: true })
     } else if ('recent_episodes' === carousel.response_type) {
-        res = await api.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added', ratings: true })
+        res = await api.discover.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added', ratings: true })
         const added = new Set()
         res = {
             data: res.data.filter(val => {
@@ -180,7 +180,7 @@ const processDynamicCollection = async (carousel, profile) => {
             }
         }
         params.ratings = true
-        res = await api.getBrowseAll(profile, params)
+        res = await api.discover.getBrowseAll(profile, params)
     } else {
         new Error(`Dynamic Collection not supported ${carousel.resource_type} - ${carousel.response_type}`)
     }

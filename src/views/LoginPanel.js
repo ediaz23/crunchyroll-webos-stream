@@ -27,8 +27,8 @@ const LoginPanel = ({ ...rest }) => {
     const [autoLogin, setAutoLogin] = useRecoilState(autoLoginState)
 
     const makeLogin = useCallback(async () => {
-        await api.login()
-        await api.getAccount()
+        await api.auth.login()
+        await api.account.getAccount()
         setInitScreenState('/profiles')
         setPath('/profiles')
         setAutoLogin(true)
@@ -37,7 +37,7 @@ const LoginPanel = ({ ...rest }) => {
     const doLogin = useCallback(async () => {
         if (email && password) {
             try {
-                await api.setCredentials({ username: email, password })
+                await api.auth.setCredentials({ username: email, password })
                 await makeLogin()
             } catch (error) {
                 setMessage(error.message)
@@ -58,13 +58,13 @@ const LoginPanel = ({ ...rest }) => {
     useEffect(() => {
         const loadData = async () => {
             const setCredentiasl = async () => {
-                const credentials = await api.getCredentials()
+                const credentials = await api.auth.getCredentials()
                 if (credentials) {
                     setEmail(credentials.username)
                     setPassword(credentials.password)
                 }
             }
-            if (autoLogin && await api.getSession()) {
+            if (autoLogin && await api.auth.getSession()) {
                 try {
                     await makeLogin()
                 } catch (_e) {

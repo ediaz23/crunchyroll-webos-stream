@@ -21,7 +21,7 @@ const ProfileDataBase = ({ profile, ...rest }) => {
                 <Heading size="medium" style={{ marginBottom: '1rem' }}>
                     {profile.username}
                 </Heading>
-                <Image src={api.getAvatarUrl(profile)}
+                <Image src={api.assets.getAvatarUrl(profile)}
                     alt={$L('Profile Picture')}
                     style={{ height: '10rem', width: '10rem' }} />
             </Column>

@@ -34,15 +34,15 @@ const EditProfilePanel = ({ ...rest }) => {
     const saveProfile = useCallback(async (name, value) => {
         const newValue = {}
         newValue[name] = value
-        await api.updateProfile(newValue)
+        await api.account.updateProfile(newValue)
         setProfile({ ...profile, ...newValue })
     }, [setProfile, profile])
 
     useEffect(() => {
         const loadData = async () => {
-            setAudioLangList((await api.getAudioLangList()).map(convertLang))
-            setSubtitleLangList((await api.getSubtitleLangList()).map(convertLang))
-            setContentLangList((await api.getContentLangList()).map(convertLang))
+            setAudioLangList((await api.misc.getAudioLangList()).map(convertLang))
+            setSubtitleLangList((await api.misc.getSubtitleLangList()).map(convertLang))
+            setContentLangList((await api.misc.getContentLangList()).map(convertLang))
         }
         loadData()
     }, [convertLang, getLanguage])

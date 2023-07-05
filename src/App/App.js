@@ -49,9 +49,9 @@ const App = ({ ...rest }) => {
     useEffect(() => {
         const loadData = async () => {
             let initPath
-            if (await api.isNewInstallation()) {
+            if (await api.config.isNewInstallation()) {
                 initPath = '/warning'
-            } else if ((new Date()) > await api.getNextContactDate()) {
+            } else if ((new Date()) > await api.config.getNextContactDate()) {
                 initPath = '/contact'
             } else {
                 initPath = '/login'
@@ -72,8 +72,8 @@ const App = ({ ...rest }) => {
 
     useEffect(() => {
         const initDB = async () => {
-            await api.init()
-            api.setCustomFetch(customFetch)
+            await api.config.init()
+            api.config.setCustomFetch(customFetch)
             setDBInit(true)
         }
         initDB()

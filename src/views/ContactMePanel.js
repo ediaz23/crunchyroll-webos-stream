@@ -11,7 +11,7 @@ const ContactMePanel = (rest) => {
     const setPath = useSetRecoilState(pathState)
 
     const accept = useCallback(async () => {
-        await api.setNextContactDate()
+        await api.config.setNextContactDate()
         setPath('/login')
     }, [setPath])
 

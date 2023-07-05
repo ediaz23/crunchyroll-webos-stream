@@ -35,7 +35,7 @@ const ProfileInfo = ({ profile, ...rest }) => {
             <Heading size="large">{$L('Information')}</Heading>
             <Heading size="small">{$L('Some info about your profile.')}</Heading>
             <Field>
-                <Image src={api.getAvatarUrl(profile)}
+                <Image src={api.assets.getAvatarUrl(profile)}
                     alt={$L('Profile Picture')}
                     style={{ height: '7.5rem', width: '7.5rem' }} />
             </Field>

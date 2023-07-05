@@ -104,11 +104,12 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
 
     useEffect(() => {
         if (DEV_FAST_SELECT) {
-            const content = feed.items.find(val => val.type === 'series' &&
-                val.id === 'GRDV0019R' && val.search_metadata)
-            if (content) {
-                doSelectElement(content)
-            }
+            // serie
+//            const filterFn = val => val.type === 'series' && val.id === 'GRDV0019R' && val.search_metadata
+//            const content = feed.items.find(filterFn)
+//            if (content) {
+//                doSelectElement(content)
+//            }
         }
     }, [feed.items, doSelectElement])
 

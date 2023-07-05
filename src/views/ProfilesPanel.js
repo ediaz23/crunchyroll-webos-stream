@@ -62,7 +62,7 @@ const ProfilesPanel = ({ ...rest }) => {
         }
     }, [profiles, doSelectProfile])
 
-    useEffect(() => { api.getProfiles().then(setProfiles) }, [])
+    useEffect(() => { api.account.getProfiles().then(setProfiles) }, [])
 
     const rowStyle = { marginTop: '1rem' }
     return (

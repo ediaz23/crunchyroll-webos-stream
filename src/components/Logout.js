@@ -21,7 +21,7 @@ const Logout = ({ text }) => {
     const setInitScreenState = useSetRecoilState(initScreenState)
 
     const doLogout = useCallback(async () => {
-        await api.logout()
+        await api.auth.logout()
         back.cleanHistory()
         setInitScreenState('/login')
         setPath('/login')

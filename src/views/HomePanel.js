@@ -84,7 +84,7 @@ const HomePanel = (props) => {
 
     useEffect(() => {
         if (homefeed.length === 0) {
-            api.getHomeFeed(profile).then(({ data }) => {
+            api.discover.getHomeFeed(profile).then(({ data }) => {
                 /** @type {Array} */
                 const filterFeed = data.filter(item => item.response_type !== 'news_feed')
                 setSelectedContent(null)

@@ -14,7 +14,7 @@ const WarningPanel = ({ ...rest }) => {
     const setPath = useSetRecoilState(pathState)
 
     const accept = useCallback(async () => {
-        await api.setInstalled()
+        await api.config.setInstalled()
         setPath('/login')
     }, [setPath])
 
