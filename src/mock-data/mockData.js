@@ -1,4 +1,5 @@
 
+import logger from '../logger'
 import { stringifySorted } from '../utils'
 
 /**
@@ -60,6 +61,7 @@ export function getMockFilename(name, objectIds) {
 export async function getMockData(name, objectIds) {
     const data = {}
     const filename = getMockFilename(name, objectIds)
+    logger.debug(`mock ${filename}`)
     await setData(data, filename)
     return data[filename]
 }

@@ -8,6 +8,7 @@ import * as config from './api/config'
 import * as discover from './api/discover'
 import * as misc from './api/misc'
 import * as music from './api/music'
+import * as review from './api/review'
 
 
 export default {
@@ -19,4 +20,5 @@ export default {
     discover,
     misc,
     music,
+    review,
 }

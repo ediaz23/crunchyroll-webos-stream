@@ -19,7 +19,7 @@ import ContactMePanel from '../views/ContactMePanel'
 import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
-import ContentSeriePanel from '../views/ContentSeriePanel'
+import ContentPanel from '../views/ContentPanel'
 import useCustomFetch from '../hooks/customFetch'
 import api from '../api'
 //import logger from '../logger'
@@ -90,7 +90,7 @@ const App = ({ ...rest }) => {
                     <Route path='profiles' component={ProfilesPanel} {...rest} >
                         <Route path='edit' component={ProfileEditPanel} {...rest} />
                         <Route path='home' component={HomePanel} {...rest}>
-                            <Route path='serie' component={ContentSeriePanel} {...rest} />
+                            <Route path='content' component={ContentPanel} {...rest} />
                         </Route>
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />

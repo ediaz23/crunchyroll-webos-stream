@@ -1,0 +1,186 @@
+{
+    "total": 2,
+    "data": [
+        {
+            "channel_id": "crunchyroll",
+            "extended_maturity_rating": {},
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G6Q9GGV46",
+                    "original": true,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "de-DE",
+                    "guid": "GR09CXQMJ",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GR75CDK31",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GR9PC2W90",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G6X0C4N21",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "fr-FR",
+                    "guid": "GYE5CQ5WX",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-ES",
+                    "guid": "GYWEC3KX7",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "it-IT",
+                    "guid": "G65VCD4PZ",
+                    "original": false,
+                    "variant": ""
+                }
+            ],
+            "season_sequence_number": 0,
+            "season_number": 1,
+            "title": "[JAP] JUJUTSU KAISEN",
+            "keywords": [],
+            "series_id": "GRDV0019R",
+            "season_display_number": "",
+            "is_subbed": false,
+            "seo_description": "",
+            "number_of_episodes": 24,
+            "season_tags": [],
+            "mature_blocked": false,
+            "is_dubbed": true,
+            "audio_locales": [
+                "es-419"
+            ],
+            "description": "Dificultades, arrepentimiento, vergüenza… Los sentimientos negativos de los humanos se convierten en Maldiciones que nos acechan en nuestra vida diaria. Las Maldiciones campan a sus anchas por todo el mundo, y pueden llevar a las personas a sufrir terribles desgracias e incluso dirigirlas a su muerte. Y lo que es peor: solo una Maldición puede exorcizar otra Maldición.",
+            "is_mature": false,
+            "audio_locale": "es-419",
+            "identifier": "GRDV0019R|S1",
+            "images": {},
+            "is_simulcast": false,
+            "seo_title": "",
+            "availability_notes": "",
+            "id": "GR9PC2W90",
+            "slug_title": "jujutsu-kaisen-spanish-dub",
+            "is_complete": false,
+            "subtitle_locales": [
+                "es-419"
+            ]
+        },
+        {
+            "extended_maturity_rating": {},
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G6DQCGD78",
+                    "original": true,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GYQ4CZ7WV",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GY5VCDWGV",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "fr-FR",
+                    "guid": "GRWEC3G02",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "de-DE",
+                    "guid": "GRGGCV0PW",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "ru-RU",
+                    "guid": "G609CX4EW",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "it-IT",
+                    "guid": "GRE5CQKVQ",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-ES",
+                    "guid": "G675CD0N4",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G69PC27V9",
+                    "original": false,
+                    "variant": ""
+                }
+            ],
+            "identifier": "GRDV0019R|M",
+            "series_id": "GRDV0019R",
+            "season_sequence_number": 0,
+            "keywords": [],
+            "audio_locales": [
+                "es-419"
+            ],
+            "is_subbed": false,
+            "slug_title": "jujutsu-kaisen-0-spanish-dub",
+            "is_complete": false,
+            "is_simulcast": true,
+            "channel_id": "crunchyroll",
+            "seo_title": "",
+            "audio_locale": "es-419",
+            "description": "Cuando apenas eran unos niños, Rika Orimoto murió en un accidente de tráfico justo ante los ojos de su buen amigo Yuka Okkotsu.\r\n\r\n“Es una promesa. Cuando seamos grandes, nos casaremos”.\r\n\r\nRika se convirtió en un espíritu y Yuta llegó a desear su propia muerte tras sufrir su maldición, pero el gran hechicero Satoru Gojo le dio la bienvenida a la Academia de Hechicería.\r\n\r\nAllí Yuta conoce a sus compañeros: Maki Zen’in, Toge Inumaki y Panda, y por fin encuentra la determinación que le faltaba.\r\n\r\n“¡Por fin tengo la confianza para decir que no es malo que siga viviendo!”.\r\n\r\n“Estando en la Academia de Hechicería podré romper la maldición de Rika”.\r\n\r\nMientras tanto, el malvado usuario de maldiciones Suguru Geto, quien fue expulsado de la academia de hechicería por asesinar a inocentes, aparece ante Yuta y el resto.\r\n\r\n“El próximo 24 de diciembre celebraremos el Desfile Nocturno de los Cien Demonios”.\r\n\r\nGeto aspira a crear un paraíso exclusivo para hechiceros y decide liberar miles de maldiciones en Shinjuku y Kyoto para exterminar a todos los que no son hechiceros.\r\n\r\n¿Podrá Yuta detener a Geto?\r\n\r\n¿Y qué ocurrirá con lo de romper la maldición de Rika?",
+            "mature_blocked": false,
+            "availability_notes": "",
+            "id": "GYQ4CZ7WV",
+            "season_display_number": "",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "is_mature": false,
+            "seo_description": "",
+            "number_of_episodes": 1,
+            "season_number": 6,
+            "season_tags": [],
+            "images": {},
+            "is_dubbed": true,
+            "subtitle_locales": [
+                "es-419"
+            ],
+            "title": "[JAP] JUJUTSU KAISEN 0"
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    }
+}

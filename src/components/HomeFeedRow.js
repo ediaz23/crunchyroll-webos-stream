@@ -65,11 +65,10 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     }, [setContent, feed.items])
     /** @type {Function} */
     const doSelectElement = useCallback(content => {
-        if (content.type === 'series') {
-            setContent(content)
-            back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
-            setPath('/profiles/home/serie')
-        }
+        setContent(content)
+        back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
+        setPath('/profiles/home/content')
+
     }, [setContent, setPath])
     /** @type {Function} */
     const showContentDetail = useCallback((ev) => {
@@ -105,11 +104,11 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     useEffect(() => {
         if (DEV_FAST_SELECT) {
             // serie
-//            const filterFn = val => val.type === 'series' && val.id === 'GRDV0019R' && val.search_metadata
-//            const content = feed.items.find(filterFn)
-//            if (content) {
-//                doSelectElement(content)
-//            }
+            const filterType = 'series', filterId = 'GRDV0019R'
+            const content = feed.items.find(val => val.type === filterType && val.id === filterId)
+            if (content) {
+                doSelectElement(content)
+            }
         }
     }, [feed.items, doSelectElement])
 

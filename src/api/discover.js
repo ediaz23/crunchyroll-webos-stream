@@ -38,6 +38,28 @@ export const getBrowseAll = async (profile, params) => {
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
+ * @param {Number} [params.contentId]
+ * @return {Promise}
+ */
+export const getCategories = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('categories', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getCategories({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Boolean} [params.ratings]
  * @return {Promise}
@@ -122,6 +144,36 @@ export const getSimilar = async (profile, params) => {
         }
     } catch (error) {
         await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @return {Promise}
+ */
+export const getUpNext = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            //            out = await getMockData('upNext', params)  return null
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getUpNext({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    if (out) {
+        out.data = out.data.map(val => {
+            const { panel } = val
+            const newVal = { ...panel, ...val }
+            delete newVal.panel
+            return newVal
+        })
     }
     return out
 }

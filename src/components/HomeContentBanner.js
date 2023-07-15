@@ -73,7 +73,7 @@ const setSerieMetadata = (metadata, meta) => {
 /**
  * Show metadata for a content
  */
-const ContentMetadata = ({ content }) => {
+export const ContentMetadata = ({ content }) => {
     const tags = [], meta = []
     let rating = null
 
@@ -95,18 +95,18 @@ const ContentMetadata = ({ content }) => {
 
     return (
         <Row align='baseline space-between'>
-            <BodyText size='small' noWrap>
+            <Heading size='small' spacing="small">
                 {tags.join(' ')}
-            </BodyText>
+            </Heading>
             {!!rating &&
                 <LabeledIcon icon="star" labelPosition="before">
                     {rating}
                 </LabeledIcon>
             }
             {!!(meta.length) && (
-                <BodyText size='small' noWrap>
+                <Heading size='small' spacing="small">
                     {meta.join(' ')}
-                </BodyText>
+                </Heading>
             )}
         </Row>
     )
@@ -146,8 +146,7 @@ const HomeContentBanner = ({ content }) => {
             </Cell>
             <Cell ref={compRef}>
                 {image.source &&
-                    <Image className={css.poster} src={image.source}
-                        sizing='fill' style={{ width: '100%', height: '100%' }} />
+                    <Image className={css.poster} src={image.source} sizing='fill' />
                 }
             </Cell>
         </Row>
