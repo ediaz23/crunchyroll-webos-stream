@@ -102,7 +102,7 @@ const HomePanel = (props) => {
                         onFocus={showToolbar} hideText />
                 </Cell>
                 <Cell grow>
-                    <ActivityViews index={currentActivity} noCloseButton>
+                    <ActivityViews index={currentActivity}>
                         <HomeFeed profile={profile} homefeed={homefeed} />
                         <p>search</p>
                         <p>series</p>

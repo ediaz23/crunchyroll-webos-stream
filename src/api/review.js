@@ -5,8 +5,6 @@ import { getMockData } from '../mock-data/mockData'
 import { translateError, getContentParam } from './utils'
 
 
-//api.review.getRatings()
-
 /**
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
@@ -24,6 +22,25 @@ export const getRatings = async (profile, params) => {
             const account = await getContentParam(profile)
             out = await api.review.getRatings({ account, ...params })
         }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @param {String} params.rating
+ * @param {String} params.contentType
+ * @returns {Promise<import('../types').RatingStars>}
+ */
+export const updateRating = async (profile, params) => {
+    let out = null
+    try {
+        const account = await getContentParam(profile)
+        out = await api.review.addRating({account, ...params})
     } catch (error) {
         await translateError(error)
     }

@@ -159,7 +159,8 @@ export const getUpNext = async (profile, params) => {
     let out = null
     try {
         if (LOAD_MOCK_DATA) {
-            //            out = await getMockData('upNext', params)  return null
+            const { contentId } = params
+            out = await getMockData('upNext', { contentId })
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getUpNext({ account, ...params })

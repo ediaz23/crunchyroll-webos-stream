@@ -63,21 +63,21 @@
     ],
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.1.0",
-        "@enact/core": "^4.7.1",
-        "@enact/i18n": "^4.7.1",
-        "@enact/moonstone": "^4.5.3",
-        "@enact/spotlight": "^4.7.1",
-        "@enact/ui": "^4.7.1",
-        "@enact/webos": "^4.7.1",
+        "@enact/core": "^4.7.6",
+        "@enact/i18n": "^4.7.6",
+        "@enact/moonstone": "^4.5.4",
+        "@enact/spotlight": "^4.7.6",
+        "@enact/ui": "^4.7.6",
+        "@enact/webos": "^4.7.6",
         "classnames": "^2.3.2",
         "crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
-        "i18n-iso-countries": "^7.6.0",
-        "ilib": "^14.17.0",
+        "i18n-iso-countries": "^7.7.0",
+        "ilib": "^14.18.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "recoil": "^0.7.7",
-        "web-vitals": "^3.3.2",
+        "web-vitals": "^3.5.0",
         "webostvjs": "^1.2.5"
     },
     "resolutions": {
@@ -85,9 +85,9 @@
         "react-error-overlay": "6.0.9"
     },
     "devDependencies": {
-        "@types/webostvjs": "^1.2.2",
-        "del": "^7.0.0",
-        "eslint-config-enact-proxy": "^1.0.5",
+        "@types/webostvjs": "^1.2.4",
+        "del": "^7.1.0",
+        "eslint-config-enact-proxy": "^1.0.7",
         "gulp": "^4.0.2",
         "gulp-shell": "^0.8.0",
         "react-error-overlay": "^6.0.11"

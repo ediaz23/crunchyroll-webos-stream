@@ -13,7 +13,7 @@ import useGetImagePerResolution from '../hooks/getImagePerResolution'
 import Navigable from '../wrappers/Navigable'
 import css from './HomeFeedRow.module.less'
 import back from '../back'
-import { DEV_FAST_SELECT } from '../const'
+import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../const'
 
 const NavigableDiv = Navigable('div', '')
 
@@ -38,7 +38,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     const image = getImagePerResolution({ height: itemHeight, width: rest.itemSize - margin, content: feedItem })
     return (
         <Poster
-            title={feedItem.title || feedItem.name || ''}
+            title={feedItem.name}
             image={image}
             {...rest}
         />
@@ -102,10 +102,12 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     }, [setHomefeedReady])  // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (DEV_FAST_SELECT) {
-            // serie
-            const filterType = 'series', filterId = 'GRDV0019R'
-            const content = feed.items.find(val => val.type === filterType && val.id === filterId)
+        if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
+            const testContent = {
+                series: 'GRDV0019R'
+            }
+            const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
+                val.id === testContent[DEV_CONTENT_TYPE])
             if (content) {
                 doSelectElement(content)
             }
@@ -117,7 +119,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
             <Heading size="title" spacing="small" componentRef={compRef}>
                 {feed.title}
             </Heading>
-            <div>
+            <div style={{ height: `${itemHeight}px` }}>
                 {itemHeight > 0 &&
                     <VirtualListNested
                         dataSize={feed.items.length}

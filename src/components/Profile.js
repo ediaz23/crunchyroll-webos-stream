@@ -13,10 +13,9 @@ import api from '../api'
 /**
  * @param {{profile: import('crunchyroll-js-api/src/types').Profile, rest: Object}}
  */
-const ProfileDataBase = ({ profile, ...rest }) => {
-
+const ProfileDataBase = ({ profile, compRef, ...rest }) => {
     return (
-        <Row {...rest} data-profile-id={profile.id}>
+        <Row {...rest} data-profile-id={profile.id} ref={compRef}>
             <Column >
                 <Heading size="medium" style={{ marginBottom: '1rem' }}>
                     {profile.username}
@@ -36,13 +35,14 @@ const ProfileData = Navigable(ProfileDataBase, css.profileFocus)
  * @param {import('crunchyroll-js-api/src/types').Profile} obj.profile
  * @param {Function} obj.onSelectProfile
  * @param {Function} obj.onEditProfile
+ * @param {Function} obj.compRef
  * @param {Object} obj.rest
  */
-const Profile = ({ profile, onSelectProfile, onEditProfile, ...rest }) => {
+const Profile = ({ profile, onSelectProfile, onEditProfile, compRef, ...rest }) => {
 
     return (
         <Column className={css.profile} {...rest}>
-            <ProfileData profile={profile} onClick={onSelectProfile} />
+            <ProfileData profile={profile} onClick={onSelectProfile} compRef={compRef} />
             <Row className={css.logoutButton} align="center center">
                 <IconButton data-profile-id={profile.id}
                     onClick={onEditProfile}>
@@ -57,6 +57,7 @@ Profile.propTypes = {
     profile: PropTypes.object.isRequired,
     onSelectProfile: PropTypes.func.isRequired,
     onEditProfile: PropTypes.func.isRequired,
+    compRef: PropTypes.func.isRequired,
 }
 
 export default Profile

@@ -1,0 +1,139 @@
+{
+    "total": 1,
+    "data": [
+        {
+            "channel_id": "crunchyroll",
+            "slug": "",
+            "id": "G0DUNJ2JP",
+            "title": "El tesoro escondido",
+            "streams_link": "/content/v2/cms/videos/G9XFEG0GJ/streams",
+            "episode_metadata": {
+                "audio_locale": "ja-JP",
+                "availability_ends": "9998-11-30T08:00:00Z",
+                "availability_notes": "",
+                "availability_starts": "2023-07-06T17:00:00Z",
+                "available_date": null,
+                "available_offline": true,
+                "closed_captions_available": false,
+                "duration_ms": 1435019,
+                "eligible_region": "CL",
+                "episode": "25",
+                "episode_air_date": "2023-07-06T23:56:00+09:00",
+                "episode_number": 25,
+                "extended_maturity_rating": {},
+                "free_available_date": "2023-07-06T17:00:00Z",
+                "identifier": "GRDV0019R|S2|E25",
+                "is_clip": false,
+                "is_dubbed": false,
+                "is_mature": false,
+                "is_premium_only": true,
+                "is_subbed": true,
+                "mature_blocked": false,
+                "maturity_ratings": [
+                    "TV-14"
+                ],
+                "premium_available_date": "2023-07-06T17:00:00Z",
+                "premium_date": null,
+                "season_id": "G6MGC3778",
+                "season_number": 2,
+                "season_slug_title": "jujutsu-kaisen-season-2",
+                "season_title": "JUJUTSU KAISEN",
+                "sequence_number": 25,
+                "series_id": "GRDV0019R",
+                "series_slug_title": "jujutsu-kaisen",
+                "series_title": "JUJUTSU KAISEN",
+                "subtitle_locales": [
+                    "en-US",
+                    "es-419",
+                    "es-ES",
+                    "fr-FR",
+                    "pt-BR",
+                    "ar-SA",
+                    "it-IT",
+                    "de-DE",
+                    "ru-RU"
+                ],
+                "upload_date": "2023-07-06T23:56:00+09:00",
+                "versions": [
+                    {
+                        "audio_locale": "ja-JP",
+                        "guid": "G0DUNJ2JP",
+                        "is_premium_only": true,
+                        "media_guid": "G9XFEG0GJ",
+                        "original": true,
+                        "season_guid": "G6MGC3778",
+                        "variant": ""
+                    }
+                ]
+            },
+            "external_id": "EPI.905007",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "linked_resource_key": "cms:/episodes/G0DUNJ2JP",
+            "slug_title": "hidden-inventory",
+            "type": "episode",
+            "description": "La historia nos devuelve al pasado, cuando Gojo y Geto todavía eran compañeros y no eran completos enemigos.",
+            "promo_title": "",
+            "promo_description": "",
+            "fully_watched": false,
+            "never_watched": false,
+            "playhead": 29,
+            "shortcut": false
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    }
+}

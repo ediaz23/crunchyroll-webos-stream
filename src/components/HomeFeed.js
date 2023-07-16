@@ -5,9 +5,9 @@ import Spinner from '@enact/moonstone/Spinner'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { processedFeedState, selectedContentState } from '../recoilConfig'
+import { processedFeedState, selectedContentState, homeFeedState } from '../recoilConfig'
 import HomeContentBanner from './HomeContentBanner'
 import HomeFeedRow from './HomeFeedRow'
 import VirtualListNested from '../patch/VirtualListNested'
@@ -25,10 +25,12 @@ import css from './HomeFeed.module.less'
 const convertItem2Object = async (item) => {
     let out = null
     try {
-        const res = await api.misc.expandURL(item.link)
-        let split = res.url.split('/')
-        if (split.length > 1) {
-            out = split[split.length - 2]
+        if (item.slug || item.resource_type === 'in_feed_banner') {
+            const res = await api.misc.expandURL(item.link)
+            let split = res.url.split('/')
+            if (split.length > 1) {
+                out = split[split.length - 2]
+            }
         }
     } catch (e) {
         logger.error(e)
@@ -62,6 +64,7 @@ const processCarousel = async (carousel, profile) => {
         title: $L('Watch Now'),
         items: []
     }
+    /** @type {Array<String>} */
     let objectIds
     if (LOAD_MOCK_DATA) {
         objectIds = 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE'.split('-')
@@ -69,8 +72,10 @@ const processCarousel = async (carousel, profile) => {
         const resObjectIds = await Promise.all(carousel.items.map(convertItem2Object))
         objectIds = Array.from(new Set(resObjectIds.filter(item => !!item)))
     }
-    const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
-    out.items = data
+    if (objectIds.length) {
+        const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
+        out.items = data
+    }
     return out
 }
 
@@ -107,6 +112,7 @@ const processInFeedPanels = async (carousel, profile) => {
         title: $L('Why Not?'),
         items: []
     }
+    /** @type {Array<String>} */
     let objectIds
     if (LOAD_MOCK_DATA) {
         objectIds = 'G4PH0WEKE-GNVHKNPQ7-GY8DWQN5Y'.split('-')
@@ -114,8 +120,10 @@ const processInFeedPanels = async (carousel, profile) => {
         const resOjectIds = await Promise.all(carousel.panels.map(convertItem2Object))
         objectIds = Array.from(new Set(resOjectIds.filter(item => !!item)))
     }
-    const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
-    out.items = data
+    if (objectIds.length) {
+        const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
+        out.items = data
+    }
     return out
 }
 
@@ -194,6 +202,7 @@ const processDynamicCollection = async (carousel, profile) => {
  * @return {Promise<Object>}
  */
 const processItemFeed = async (carousel, profile) => {
+    carousel = { ...carousel }
     let res = Promise.resolve(carousel)
     if (carousel.resource_type === 'hero_carousel') {
         res = processCarousel(carousel, profile)
@@ -208,12 +217,41 @@ const processItemFeed = async (carousel, profile) => {
     } else {
         new Error(`Feed not supported ${carousel.resource_type} - ${carousel.response_type}`)
     }
-    return res
+    return res.then(async res2 => {
+        if (res2.items) {
+            res2.items = await Promise.all(
+                res2.items.map(async val => {
+                    val = { ...val }
+                    const { data } = await api.discover.getCategories(profile, { contentId: val.id })
+                    if (val.title) {
+                        val.name = val.title
+                    }
+                    if (val.type === 'episode') {
+                        val.subTitle = val.title
+                        if (val.episode_metadata && val.episode_metadata.series_title) {
+                            val.name = `${val.episode_metadata.series_title} - ${val.title}`
+                            val.title = val.episode_metadata.series_title
+                        }
+                    } else if (val.type === 'musicConcert') {
+                        if (val.artist && val.artist.name) {
+                            val.subTitle = val.artist.name
+                        }
+                    } else if (val.type === 'musicArtist') {
+                        val.title = val.name
+                    }
+                    val.categories = data.map(val2 => val2.localization.title)
+                    return val
+                })
+            )
+        }
+        return res2
+    })
 }
 
 
 const HomeFeed = ({ homefeed, profile }) => {
-
+    /** @type {Function} */
+    const setHomefeed = useSetRecoilState(homeFeedState)
     /** @type {[Array<Object>, Function]} */
     const [processedFeed, setProcessedFeed] = useRecoilState(processedFeedState)
     /** @type {[Object, Function]} */
@@ -227,11 +265,15 @@ const HomeFeed = ({ homefeed, profile }) => {
             out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
         } else {
             processItemFeed(homefeed[index], profile).then(newFeed => {
-                setProcessedFeed(prevArray => [
-                    ...prevArray.slice(0, index),
-                    newFeed,
-                    ...prevArray.slice(index + 1)
-                ])
+                if (newFeed.items.length) {
+                    setProcessedFeed(prevArray => [
+                        ...prevArray.slice(0, index),
+                        newFeed,
+                        ...prevArray.slice(index + 1)
+                    ])
+                } else {
+                    setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                }
             })
             const { itemSize } = rest
             delete rest.itemSize
@@ -243,7 +285,7 @@ const HomeFeed = ({ homefeed, profile }) => {
             )
         }
         return out
-    }, [homefeed, profile, processedFeed, setProcessedFeed, setSelectedContent])
+    }, [homefeed, profile, processedFeed, setProcessedFeed, setSelectedContent, setHomefeed])
 
     return (
         <Column className={css.homeFeed}>

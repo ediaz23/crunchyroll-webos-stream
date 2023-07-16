@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
+import Spotlight from '@enact/spotlight'
+
 import { Header, Panel } from '@enact/moonstone/Panels'
 import Heading from '@enact/moonstone/Heading'
 
@@ -56,6 +58,14 @@ const ProfilesPanel = ({ ...rest }) => {
         setPath('/profiles/edit')
     }, [getProfileFromEvent, setCurrentProfile, setPath])
 
+    /** @type {Function} */
+    const setFocus = useCallback(node => {
+        if (node && node.dataset.profileId === '0') {
+            node.focus()
+            Spotlight.focus(node)
+        }
+    }, [])
+
     useEffect(() => {
         if (DEV_FAST_SELECT && profiles && profiles.length) {
             doSelectProfile(profiles[0])
@@ -80,7 +90,8 @@ const ProfilesPanel = ({ ...rest }) => {
                 {profiles.map((profile, i) =>
                     <Profile profile={profile} key={i}
                         onSelectProfile={onSelectProfile}
-                        onEditProfile={onEditProfile} />
+                        onEditProfile={onEditProfile}
+                        compRef={setFocus} />
                 )}
             </Row>
             <Row align='center center' style={rowStyle}>

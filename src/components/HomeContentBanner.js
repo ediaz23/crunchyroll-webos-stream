@@ -112,19 +112,39 @@ export const ContentMetadata = ({ content }) => {
     )
 }
 
+/**
+ * Show header for content, with title
+ * @param {{content: Object}}
+ */
+export const ContentHeader = ({ content }) => {
+
+    return (
+        <>
+            <Heading size="large">
+                {content.title}
+            </Heading>
+            {content.subTitle && (
+                <Heading size="small">
+                    {content.subTitle}
+                </Heading>
+            )}
+            <ContentMetadata content={content} />
+            {!!(content.categories.length) && (
+                <Heading size='small' spacing="small">
+                    {content.categories.join(' - ')}
+                </Heading>
+            )}
+        </>
+    )
+}
+
+
 const HomeContentBanner = ({ content }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
-    let title = content.title
-
-    if (content.type === 'episode' && content.episode_metadata && content.episode_metadata.series_title) {
-        title = content.episode_metadata.series_title
-    } else if (content.type === 'musicArtist') {
-        title = content.name
-    }
 
     useEffect(() => {
         if (compRef && compRef.current) {
@@ -136,10 +156,7 @@ const HomeContentBanner = ({ content }) => {
     return (
         <Row className={css.homeContentBanner} >
             <Cell size="50%">
-                <Heading size="large">
-                    {title}
-                </Heading>
-                <ContentMetadata content={content} />
+                <ContentHeader content={content} />
                 <BodyText size='small'>
                     {content.description}
                 </BodyText>

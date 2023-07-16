@@ -9,7 +9,7 @@ import { stringifySorted } from '../utils'
  */
 async function setData(data, name) {
     data[name] = true  // hack to avoid unused warning
-    data[name] = await import(`./data/${name}`)  // comment line to build production
+    data[name] = { ...await import(`./data/${name}`) }  // comment line to build production
 }
 
 /**

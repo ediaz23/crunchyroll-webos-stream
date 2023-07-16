@@ -1,3 +1,5 @@
+
+import $L from '@enact/i18n/$L'
 import Locale from 'ilib/lib/Locale'
 import Country from '../patch/Country'
 import languages from '@cospired/i18n-iso-languages'
@@ -7,6 +9,7 @@ import languages from '@cospired/i18n-iso-languages'
  * @returns {String}
  */
 const getLanguage = (code) => {
+    if (code === 'off') { return $L('None') }
     const localeInfo = new Locale()
     /** @type {Array<String>} */
     const split = code.split('-')
