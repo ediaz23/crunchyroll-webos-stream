@@ -1,0 +1,267 @@
+{
+    "total": 3,
+    "data": [
+        {
+            "id": "action",
+            "images": {
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_755cb279c2ebe9842695b9b358427d05.jpg"
+                    }
+                ],
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_63eb67c0a58d9c2ae71e7afebcbbfa16.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_63eb67c0a58d9c2ae71e7afebcbbfa16.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_63eb67c0a58d9c2ae71e7afebcbbfa16.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_63eb67c0a58d9c2ae71e7afebcbbfa16.png"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Acción",
+                "description": "¡Para que no extrañes tus explosiones del día!",
+                "locale": "es-419"
+            },
+            "slug": "action"
+        },
+        {
+            "id": "fantasy",
+            "images": {
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_0f01d0e82698ef25fa5def6c1ff91243.jpg"
+                    }
+                ],
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_a8bd8432ca3d453db8f930d12bc65183.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_a8bd8432ca3d453db8f930d12bc65183.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_a8bd8432ca3d453db8f930d12bc65183.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_a8bd8432ca3d453db8f930d12bc65183.png"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Fantasia",
+                "description": "¡La magia y los monstruos no son nada contra los aventureros!",
+                "locale": "es-419"
+            },
+            "slug": "fantasy"
+        },
+        {
+            "id": "shonen",
+            "images": {
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    }
+                ],
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Shounen",
+                "description": "Trabajo en equipo, el poder de la amistad, sueños que alcanzar, ¡y combates! Aquí hay de todo.",
+                "locale": "es-419"
+            },
+            "slug": "shonen"
+        }
+    ],
+    "meta": {}
+}

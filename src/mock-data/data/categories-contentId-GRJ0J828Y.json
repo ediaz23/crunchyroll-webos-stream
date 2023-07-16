@@ -1,0 +1,267 @@
+{
+    "total": 3,
+    "data": [
+        {
+            "id": "comedy",
+            "images": {
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_5ea0c990d8ae721b5655a3dbbe6e13de.jpg"
+                    }
+                ],
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_5bec6e03550d84bcf412cb51e902d496.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_5bec6e03550d84bcf412cb51e902d496.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_5bec6e03550d84bcf412cb51e902d496.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_5bec6e03550d84bcf412cb51e902d496.png"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Comedia",
+                "description": "Ríe a carcajadas con chistes clásicos y bromas modernas sin sentido.",
+                "locale": "es-419"
+            },
+            "slug": "comedy"
+        },
+        {
+            "id": "romance",
+            "images": {
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_bba77b156b5b2e9fc12128a14e794ee0.jpg"
+                    }
+                ],
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_86e998b3e41f6da3c10d0bbd9c3244fe.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_86e998b3e41f6da3c10d0bbd9c3244fe.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_86e998b3e41f6da3c10d0bbd9c3244fe.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_86e998b3e41f6da3c10d0bbd9c3244fe.png"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Romance",
+                "description": "¿Quieres que tu corazón se acelere y creer en el amor? Satisface aquí tu romanticismo.",
+                "locale": "es-419"
+            },
+            "slug": "romance"
+        },
+        {
+            "id": "seinen",
+            "images": {
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_d6402a29ba0475aeed41a068465b9ff5.jpg"
+                    }
+                ],
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_d997593cad00938fcd4a6fe3a8b4af09.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_d997593cad00938fcd4a6fe3a8b4af09.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_d997593cad00938fcd4a6fe3a8b4af09.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_d997593cad00938fcd4a6fe3a8b4af09.png"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Seinen",
+                "description": "¿Tu lado más adulto también quiere algo? Pues aquí podrás encontrar con qué convencerlo.",
+                "locale": "es-419"
+            },
+            "slug": "seinen"
+        }
+    ],
+    "meta": {}
+}

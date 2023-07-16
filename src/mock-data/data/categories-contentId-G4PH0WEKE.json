@@ -1,0 +1,180 @@
+{
+    "total": 2,
+    "data": [
+        {
+            "id": "drama",
+            "images": {
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_82cedbb5de3071cdf0c466d76ee171c6.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_82cedbb5de3071cdf0c466d76ee171c6.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_82cedbb5de3071cdf0c466d76ee171c6.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_82cedbb5de3071cdf0c466d76ee171c6.png"
+                    }
+                ],
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_758c965085ab7af9ed6d7552cf7ea495.jpg"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Drama",
+                "description": "Hoy buscas algo más profundo, ¡algo con más sentimiento!",
+                "locale": "es-419"
+            },
+            "slug": "drama"
+        },
+        {
+            "id": "sports",
+            "images": {
+                "background": [
+                    {
+                        "width": 320,
+                        "height": 180,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/320x180/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 600,
+                        "height": 338,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/600x338/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 640,
+                        "height": 360,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/640x360/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 800,
+                        "height": 450,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/800x450/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 1200,
+                        "height": 675,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1200x675/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 1440,
+                        "height": 810,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1440x810/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 1600,
+                        "height": 900,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1600x900/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    },
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "type": "background",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_0ec8cf3113732264d302ec07474c2179.jpg"
+                    }
+                ],
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_a073b4de6948709b51b15136ef78bc0c.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_a073b4de6948709b51b15136ef78bc0c.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_a073b4de6948709b51b15136ef78bc0c.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_a073b4de6948709b51b15136ef78bc0c.png"
+                    }
+                ]
+            },
+            "localization": {
+                "title": "Deportes",
+                "description": "¡No puedes vivir sin tu pelota (o sin hacer algún tipo de ejercicio físico)! Pues entra aquí.",
+                "locale": "es-419"
+            },
+            "slug": "sports"
+        }
+    ],
+    "meta": {}
+}

@@ -1,0 +1,143 @@
+{
+    "total": 1,
+    "data": [
+        {
+            "panel": {
+                "linked_resource_key": "cms:/episodes/G2XU0QPP7",
+                "promo_description": "",
+                "slug_title": "no-man-is-an-island",
+                "channel_id": "crunchyroll",
+                "slug": "",
+                "external_id": "EPI.886841",
+                "promo_title": "",
+                "description": "Mientras All Might se lamenta por la situación con Izuku, este está de regreso en la U.A. con sus compañeros, quienes intentan cuidar de él y le dan fuerzas renovadas para enfrentarse a la batalla que se avecina. Japón por su parte pide ayuda internacional a héroes de otros países para controlar lo que está ocurriendo.",
+                "episode_metadata": {
+                    "audio_locale": "ja-JP",
+                    "availability_ends": "9998-11-30T08:00:00Z",
+                    "availability_notes": "",
+                    "availability_starts": "2023-03-25T09:30:00Z",
+                    "available_date": null,
+                    "available_offline": true,
+                    "closed_captions_available": false,
+                    "duration_ms": 1400026,
+                    "eligible_region": "CL",
+                    "episode": "138",
+                    "episode_air_date": "2023-03-25T17:30:00+09:00",
+                    "episode_number": 138,
+                    "extended_maturity_rating": {},
+                    "free_available_date": "2023-03-25T09:30:00Z",
+                    "identifier": "G6NQ5DWZ6|S6|E138",
+                    "is_clip": false,
+                    "is_dubbed": false,
+                    "is_mature": false,
+                    "is_premium_only": true,
+                    "is_subbed": true,
+                    "mature_blocked": false,
+                    "maturity_ratings": [
+                        "TV-14"
+                    ],
+                    "premium_available_date": "2023-03-25T09:30:00Z",
+                    "premium_date": null,
+                    "season_id": "GRVNC2JD0",
+                    "season_number": 6,
+                    "season_slug_title": "my-hero-academia-season-6",
+                    "season_title": "My Hero Academia",
+                    "sequence_number": 138,
+                    "series_id": "G6NQ5DWZ6",
+                    "series_slug_title": "my-hero-academia",
+                    "series_title": "My Hero Academia",
+                    "subtitle_locales": [
+                        "en-US",
+                        "es-419",
+                        "es-ES",
+                        "fr-FR",
+                        "pt-BR",
+                        "ar-SA",
+                        "it-IT",
+                        "de-DE",
+                        "ru-RU"
+                    ],
+                    "upload_date": "2023-03-25T17:30:00+09:00",
+                    "versions": [
+                        {
+                            "audio_locale": "ja-JP",
+                            "guid": "G2XU0QPP7",
+                            "is_premium_only": true,
+                            "media_guid": "GDVFVX00M",
+                            "original": true,
+                            "season_guid": "GRVNC2JD0",
+                            "variant": ""
+                        }
+                    ]
+                },
+                "title": "Conectados",
+                "type": "episode",
+                "recent_audio_locale": "ja-JP",
+                "streams_link": "/content/v2/cms/videos/GDVFVX00M/streams",
+                "images": {
+                    "thumbnail": [
+                        [
+                            {
+                                "height": 180,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 320
+                            },
+                            {
+                                "height": 338,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 600
+                            },
+                            {
+                                "height": 360,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 640
+                            },
+                            {
+                                "height": 450,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 800
+                            },
+                            {
+                                "height": 675,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1200
+                            },
+                            {
+                                "height": 810,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1440
+                            },
+                            {
+                                "height": 900,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1600
+                            },
+                            {
+                                "height": 1080,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/60b9bdda309246f9ba69abdb6f25394c.jpe",
+                                "type": "thumbnail",
+                                "width": 1920
+                            }
+                        ]
+                    ]
+                },
+                "id": "G2XU0QPP7"
+            },
+            "new": false,
+            "is_favorite": false,
+            "fully_watched": true,
+            "never_watched": false,
+            "playhead": 1401
+        }
+    ],
+    "meta": {
+        "total_before_filter": 1
+    }
+}
