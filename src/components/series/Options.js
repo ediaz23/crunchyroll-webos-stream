@@ -10,8 +10,8 @@ import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import $L from '@enact/i18n/$L'
 
-import back from '../back'
-import css from './ContentSerie.module.less'
+import back from '../../back'
+import css from './Series.module.less'
 
 
 const useChangeActivity = (setIndex, index) => {

@@ -5,7 +5,7 @@ import { Panel } from '@enact/moonstone/Panels'
 import { useRecoilValue } from 'recoil'
 
 import { currentProfileState, selectedContentState } from '../recoilConfig'
-import ContentSerie from '../components/ContentSerie'
+import Series from '../components/series/Series'
 
 
 const ContentPanel = (rest) => {
@@ -16,7 +16,7 @@ const ContentPanel = (rest) => {
 
     return (
         <Panel {...rest}>
-            {content.type === 'series' && <ContentSerie content={content} profile={profile} />}
+            {content.type === 'series' && <Series content={content} profile={profile} />}
         </Panel>
     )
 }

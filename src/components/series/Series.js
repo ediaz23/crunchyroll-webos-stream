@@ -4,12 +4,12 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 
 import Image from '@enact/moonstone/Image'
 
-import { ContentHeader } from './HomeContentBanner'
-import ContentSerieOptions from './ContentSerieOptions'
-import ContentSerieLangSelector from './ContentSerieLangSelector'
-import useGetImagePerResolution from '../hooks/getImagePerResolution'
-import api from '../api'
-import css from './ContentSerie.module.less'
+import { ContentHeader } from '../HomeContentBanner'
+import ContentSerieOptions from './Options'
+import ContentSerieLangSelector from './LangSelector'
+import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import api from '../../api'
+import css from './Series.module.less'
 
 
 const ActivityViews = ({ index, children }) => children[index]
@@ -19,7 +19,7 @@ const ActivityViews = ({ index, children }) => children[index]
  * @param {import('crunchyroll-js-api/src/types').Profile} obj.profile
  * @param {Object} content
  */
-const ContentSerie = ({ profile, content: serie, defaultEpisode, ...rest }) => {
+const Series = ({ profile, content: serie, defaultEpisode, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     //    const [seasons, setSeasons] = useState([])
     /** @type {Function} */
@@ -99,4 +99,4 @@ const ContentSerie = ({ profile, content: serie, defaultEpisode, ...rest }) => {
     )
 }
 
-export default ContentSerie
+export default Series

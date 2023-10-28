@@ -7,10 +7,10 @@ import $L from '@enact/i18n/$L'
 
 import { useSetRecoilState } from 'recoil'
 
-import { currentProfileState } from '../recoilConfig'
-import useGetLanguage from '../hooks/getLanguage'
-import api from '../api'
-import css from './ContentSerie.module.less'
+import { currentProfileState } from '../../recoilConfig'
+import useGetLanguage from '../../hooks/getLanguage'
+import api from '../../api'
+import css from './Series.module.less'
 
 
 /**
