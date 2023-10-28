@@ -1,19 +1,19 @@
 
 import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import ri from '@enact/ui/resolution'
-import VirtualListNested from '../patch/VirtualListNested'
 import Heading from '@enact/moonstone/Heading'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
 import { useSetRecoilState } from 'recoil'
 
-import { homefeedReadyState, pathState } from '../recoilConfig'
-import useGetImagePerResolution from '../hooks/getImagePerResolution'
-import Navigable from '../wrappers/Navigable'
-import css from './HomeFeedRow.module.less'
-import back from '../back'
-import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../const'
+import VirtualListNested from '../../patch/VirtualListNested'
+import { homefeedReadyState, pathState } from '../../recoilConfig'
+import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import Navigable from '../../wrappers/Navigable'
+import css from './FeedRow.module.less'
+import back from '../../back'
+import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 
 const NavigableDiv = Navigable('div', '')
 

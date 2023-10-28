@@ -9,8 +9,8 @@ import {
     currentProfileState, homeFeedState, processedFeedState,
     selectedContentState, homefeedReadyState
 } from '../recoilConfig'
-import HomeToolbar, { TOOLBAR_INDEX, HomeToolbarSpotlight } from '../components/HomeToolbar'
-import HomeFeed from '../components/HomeFeed'
+import HomeToolbar, { TOOLBAR_INDEX, HomeToolbarSpotlight } from '../components/home/Toolbar'
+import HomeFeed from '../components/home/Feed'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
 import ContactMePanel from './ContactMePanel'

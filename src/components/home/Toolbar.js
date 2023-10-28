@@ -10,8 +10,8 @@ import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import Navigable from '../wrappers/Navigable'
-import css from './HomeToolbar.module.less'
+import Navigable from '../../wrappers/Navigable'
+import css from './Toolbar.module.less'
 
 export const TOOLBAR_INDEX = {
     home: { index: 0, icon: 'home', label: $L('Home') },

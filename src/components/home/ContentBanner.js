@@ -9,8 +9,8 @@ import LabeledIcon from '@enact/moonstone/LabeledIcon'
 import PropTypes from 'prop-types'
 import $L from '@enact/i18n/$L'
 
-import useGetImagePerResolution from '../hooks/getImagePerResolution'
-import css from './HomeContentBanner.module.less'
+import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import css from './ContentBanner.module.less'
 
 
 /**

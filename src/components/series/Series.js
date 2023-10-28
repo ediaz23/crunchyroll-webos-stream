@@ -4,7 +4,7 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 
 import Image from '@enact/moonstone/Image'
 
-import { ContentHeader } from '../HomeContentBanner'
+import { ContentHeader } from '../home/ContentBanner'
 import ContentSerieOptions from './Options'
 import ContentSerieLangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'

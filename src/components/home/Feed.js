@@ -7,14 +7,14 @@ import PropTypes from 'prop-types'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { processedFeedState, selectedContentState, homeFeedState } from '../recoilConfig'
-import HomeContentBanner from './HomeContentBanner'
-import HomeFeedRow from './HomeFeedRow'
-import VirtualListNested from '../patch/VirtualListNested'
-import api from '../api'
-import { LOAD_MOCK_DATA } from '../const'
-import logger from '../logger'
-import css from './HomeFeed.module.less'
+import { processedFeedState, selectedContentState, homeFeedState } from '../../recoilConfig'
+import HomeContentBanner from './ContentBanner'
+import HomeFeedRow from './FeedRow'
+import VirtualListNested from '../../patch/VirtualListNested'
+import api from '../../api'
+import { LOAD_MOCK_DATA } from '../../const'
+import logger from '../../logger'
+import css from './Feed.module.less'
 
 
 /**
