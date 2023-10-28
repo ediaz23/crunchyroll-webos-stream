@@ -5,9 +5,9 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 import Image from '@enact/moonstone/Image'
 
 import PropTypes from 'prop-types'
-import { ContentHeader } from '../home/ContentBanner'
-import ContentSerieOptions from './Options'
-import ContentSerieLangSelector from './LangSelector'
+import SeriesOptions from './Options'
+import Seasons from './Seasons'
+import LangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 
 import api from '../../api'
@@ -18,14 +18,12 @@ const ActivityViews = ({ index, children }) => children[index]
 
 /**
  * @param {{
-    profile:import('crunchyroll-js-api/src/types').Profile
+    profile: import('crunchyroll-js-api/src/types').Profile,
     series: Object,
     defaultEpisode: Object,
  }}
  */
 const Series = ({ profile, series, defaultEpisode, ...rest }) => {
-    /** @type {[Array<Object>, Function]} */
-    //    const [seasons, setSeasons] = useState([])
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -56,9 +54,6 @@ const Series = ({ profile, series, defaultEpisode, ...rest }) => {
     }, [profile, contentShort])
 
     useEffect(() => {
-        //        api.cms.getSeasons(profile, { serieId: content.id }).then(console.log)
-        //        api.cms.getSerie(profile, { serieId: content.id }).then(console.log)
-        //            console.log(utils.stringifySorted((await api.cms.getSerie(profile, { serieId: content.id })).data[0]))
         if (series) {
             api.review.getRatings(profile, contentShort).then(({ rating: resRenting }) => {
                 setRating(parseInt(resRenting.trimEnd('s')))
@@ -75,8 +70,7 @@ const Series = ({ profile, series, defaultEpisode, ...rest }) => {
         }
     }, [series, profile, contentShort, defaultEpisode])
     /**
-     * @todo hacer los subtitulos y luego cambiar temporadas y episodios
-     *       y luego reproducir.
+     * @todo  luego reproducir.
      */
     return (
         <Row className={css.contentSerie} {...rest}>
@@ -85,22 +79,20 @@ const Series = ({ profile, series, defaultEpisode, ...rest }) => {
                     <Image className={css.poster} src={image.source} sizing='fill' />
                 }
                 <Cell className={css.modal}>
-                    <div className={css.metadata}>
-                        <ContentHeader content={series} />
-                        <ActivityViews index={currentIndex}>
-                            {episode ?
-                                <ContentSerieOptions
-                                    episode={episode}
-                                    rating={rating}
-                                    updateRating={updateRating}
-                                    setIndex={setCurrentIndex} />
-                                :
-                                <div></div>
-                            }
-                            <div>prueba</div>
-                            <ContentSerieLangSelector profile={profile} series={series} />
-                        </ActivityViews>
-                    </div>
+                    <ActivityViews index={currentIndex}>
+                        {episode ?
+                            <SeriesOptions
+                                series={series}
+                                episode={episode}
+                                rating={rating}
+                                updateRating={updateRating}
+                                setIndex={setCurrentIndex} />
+                            :
+                            <div />
+                        }
+                        <Seasons profile={profile} series={series} />
+                        <LangSelector profile={profile} series={series} />
+                    </ActivityViews>
                 </Cell>
             </Column>
         </Row>

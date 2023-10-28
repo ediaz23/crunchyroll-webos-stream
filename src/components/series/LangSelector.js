@@ -1,11 +1,13 @@
 
 import { useEffect, useState } from 'react'
+import { Row, Cell } from '@enact/ui/Layout'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import { useSetRecoilState } from 'recoil'
 
 import SelectLanguage from '../SelectLanguage'
+import { ContentHeader } from '../home/ContentBanner'
 import Field from '../Field'
 import { currentProfileState } from '../../recoilConfig'
 import { useMapLang } from '../../hooks/language'
@@ -19,7 +21,7 @@ import css from './Series.module.less'
     series: Object,
  }}
  */
-const ContentSerieLangSelector = ({ profile, series, ...rest }) => {
+const LangSelector = ({ profile, series, ...rest }) => {
     /** @type {Function} */
     const mapLang = useMapLang()
     /** @type {Function} */
@@ -47,30 +49,33 @@ const ContentSerieLangSelector = ({ profile, series, ...rest }) => {
     }, [mapLang, audio_locales, subtitle_locales])
 
     return (
-        <div className={css.langSelector} {...rest}>
-            {subtitleLangList && subtitleLangList.length > 0 && (
-                <Field title={$L('Subtitle')}>
-                    <SelectLanguage
-                        languages={subtitleLangList}
-                        save={saveSubs}
-                        value={profile.preferred_content_subtitle_language} />
-                </Field>
-            )}
-            {audioLangList && audioLangList.length > 0 && (
-                <Field title={$L('Audio')}>
-                    <SelectLanguage
-                        languages={audioLangList}
-                        save={saveAudio}
-                        value={profile.preferred_content_audio_language} />
-                </Field>
-            )}
-        </div>
+        <Row {...rest}>
+            <Cell size="49%">
+                <ContentHeader content={series} />
+                {subtitleLangList && subtitleLangList.length > 0 && (
+                    <Field title={$L('Subtitle')} className={css.firstData}>
+                        <SelectLanguage
+                            languages={subtitleLangList}
+                            save={saveSubs}
+                            value={profile.preferred_content_subtitle_language} />
+                    </Field>
+                )}
+                {audioLangList && audioLangList.length > 0 && (
+                    <Field title={$L('Audio')} className={css.firstData}>
+                        <SelectLanguage
+                            languages={audioLangList}
+                            save={saveAudio}
+                            value={profile.preferred_content_audio_language} />
+                    </Field>
+                )}
+            </Cell>
+        </Row>
     )
 }
 
-ContentSerieLangSelector.propTypes = {
+LangSelector.propTypes = {
     profile: PropTypes.object.isRequired,
     series: PropTypes.object.isRequired,
 }
 
-export default ContentSerieLangSelector
+export default LangSelector

@@ -136,7 +136,6 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
                         direction='horizontal'
                         verticalScrollbar='hidden'
                         horizontalScrollbar='hidden'
-                        noScrollByWheel
                         cbScrollTo={getScrollTo}
                     />
                 }

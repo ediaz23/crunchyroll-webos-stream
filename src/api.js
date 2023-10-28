@@ -9,6 +9,7 @@ import * as discover from './api/discover'
 import * as misc from './api/misc'
 import * as music from './api/music'
 import * as review from './api/review'
+import * as content from './api/content'
 
 
 export default {
@@ -17,6 +18,7 @@ export default {
     auth,
     cms,
     config,
+    content,
     discover,
     misc,
     music,

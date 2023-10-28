@@ -70,3 +70,25 @@ export const getSerie = async (profile, params) => {
     }
     return out
 }
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.seasonId
+ * @return {Promise}
+ */
+export const getEpisodes = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('episodes', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.cms.getEpisodes({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}

@@ -1,0 +1,203 @@
+{
+    "total": 1,
+    "data": [
+        {
+            "listing_id": "",
+            "is_premium_only": true,
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "season_title": "[LAT] JUJUTSU KAISEN 0",
+            "hd_flag": true,
+            "is_subbed": true,
+            "recent_audio_locale": "es-419",
+            "season_slug_title": "jujutsu-kaisen-0-spanish-dub",
+            "series_title": "JUJUTSU KAISEN",
+            "duration_ms": 6295423,
+            "slug_title": "jujutsu-kaisen-0-spanish-dub",
+            "audio_locale": "es-419",
+            "season_id": "GYQ4CZ7WV",
+            "eligible_region": "CL",
+            "premium_date": null,
+            "media_type": "episode",
+            "slug": "",
+            "seo_title": "",
+            "available_date": null,
+            "identifier": "GRDV0019R|M|E0",
+            "production_episode_id": "",
+            "availability_notes": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/319c0629e4e3368a7cab59b49569ed88.jpe",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "channel_id": "crunchyroll",
+            "is_clip": false,
+            "mature_blocked": false,
+            "next_episode_title": "JUJUTSU KAISEN 0 (Portuguese Dub)",
+            "episode_number": null,
+            "series_id": "GRDV0019R",
+            "closed_captions_available": false,
+            "season_number": 6,
+            "title": "JUJUTSU KAISEN 0",
+            "is_dubbed": true,
+            "episode": "",
+            "season_tags": [],
+            "seo_description": "",
+            "subtitle_locales": [
+                "es-419"
+            ],
+            "upload_date": "2022-09-21T00:00:00+09:00",
+            "id": "G14U4D24X",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G4VUQ9ZQ3",
+                    "is_premium_only": true,
+                    "media_guid": "GNJFDEGDZ",
+                    "original": true,
+                    "season_guid": "G6DQCGD78",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "G14U4D24X",
+                    "is_premium_only": true,
+                    "media_guid": "GKKF3JQ38",
+                    "original": false,
+                    "season_guid": "GYQ4CZ7WV",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GJWU2382X",
+                    "is_premium_only": true,
+                    "media_guid": "GM8FX2WX4",
+                    "original": false,
+                    "season_guid": "GY5VCDWGV",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "fr-FR",
+                    "guid": "GN7UDEGDG",
+                    "is_premium_only": true,
+                    "media_guid": "GVMF0EJ0J",
+                    "original": false,
+                    "season_guid": "GRWEC3G02",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "de-DE",
+                    "guid": "GK9U3JQ35",
+                    "is_premium_only": true,
+                    "media_guid": "G3WFX1QX0",
+                    "original": false,
+                    "season_guid": "GRGGCV0PW",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "ru-RU",
+                    "guid": "GMKUX2WX7",
+                    "is_premium_only": true,
+                    "media_guid": "GPPFK7EK4",
+                    "original": false,
+                    "season_guid": "G609CX4EW",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "it-IT",
+                    "guid": "GVWU0EJ0E",
+                    "is_premium_only": true,
+                    "media_guid": "G25F0KJ0K",
+                    "original": false,
+                    "season_guid": "GRE5CQKVQ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-ES",
+                    "guid": "G31UX1QXG",
+                    "is_premium_only": true,
+                    "media_guid": "G8MFNXENZ",
+                    "original": false,
+                    "season_guid": "G675CD0N4",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GPWUK7EKG",
+                    "is_premium_only": true,
+                    "media_guid": "GZ4FVKJV4",
+                    "original": false,
+                    "season_guid": "G69PC27V9",
+                    "variant": ""
+                }
+            ],
+            "series_slug_title": "jujutsu-kaisen",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "next_episode_id": "GJWU2382X",
+            "sequence_number": 0,
+            "availability_starts": "2022-09-21T08:05:00Z",
+            "free_available_date": "9998-11-30T08:00:00Z",
+            "extended_maturity_rating": {},
+            "streams_link": "/content/v2/cms/videos/GKKF3JQ38/streams",
+            "description": "Cuando apenas eran unos niños, Rika Orimoto murió en un accidente de tráfico justo ante los ojos de su buen amigo Yuka Okkotsu.\r\n\r\n“Es una promesa. Cuando seamos grandes, nos casaremos”.\r\n\r\nRika se convirtió en un espíritu y Yuta llegó a desear su propia muerte tras sufrir su maldición, pero el gran hechicero Satoru Gojo le dio la bienvenida a la Academia de Hechicería.\r\n\r\nAllí Yuta conoce a sus compañeros: Maki Zen’in, Toge Inumaki y Panda, y por fin encuentra la determinación que le faltaba.\r\n\r\n“¡Por fin tengo la confianza para decir que no es malo que siga viviendo!”.\r\n\r\n“Estando en la Academia de Hechicería podré romper la maldición de Rika”.\r\n\r\nMientras tanto, el malvado usuario de maldiciones Suguru Geto, quien fue expulsado de la academia de hechicería por asesinar a inocentes, aparece ante Yuta y el resto.\r\n\r\n“El próximo 24 de diciembre celebraremos el Desfile Nocturno de los Cien Demonios”.\r\n\r\nGeto aspira a crear un paraíso exclusivo para hechiceros y decide liberar miles de maldiciones en Shinjuku y Kyoto para exterminar a todos los que no son hechiceros.\r\n\r\n¿Podrá Yuta detener a Geto?\r\n\r\n¿Y qué ocurrirá con lo de romper la maldición de Rika?",
+            "episode_air_date": "2022-09-21T00:00:00+09:00",
+            "is_mature": false,
+            "premium_available_date": "2022-09-21T08:05:00Z",
+            "recent_variant": "",
+            "available_offline": true
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    }
+}
