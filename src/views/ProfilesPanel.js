@@ -9,7 +9,7 @@ import $L from '@enact/i18n/$L'
 import { useSetRecoilState } from 'recoil'
 
 import { pathState, currentProfileState, homeFeedState, homefeedReadyState } from '../recoilConfig'
-import Profile from '../components/Profile'
+import Profile from '../components/profile/Profile'
 import ContactMe from '../components/ContactMe'
 import Logout from '../components/Logout'
 import api from '../api'

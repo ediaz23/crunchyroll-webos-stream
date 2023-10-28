@@ -6,7 +6,7 @@ import Heading from '@enact/moonstone/Heading'
 import $L from '@enact/i18n/$L'
 import { useRecoilState } from 'recoil'
 
-import ProfileDetail from '../components/ProfileDetail'
+import ProfileDetail from '../components/profile/Detail'
 import ContactMe from '../components/ContactMe'
 import Logout from '../components/Logout'
 

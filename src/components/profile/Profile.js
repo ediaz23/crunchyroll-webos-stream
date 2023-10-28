@@ -6,8 +6,8 @@ import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import css from './Profile.module.less'
-import Navigable from '../wrappers/Navigable'
-import api from '../api'
+import Navigable from '../../wrappers/Navigable'
+import api from '../../api'
 
 
 /**

@@ -5,8 +5,8 @@ import CheckboxItem from '@enact/moonstone/CheckboxItem'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
-import css from './ProfileEdit.module.less'
-import SelectLanguage from './SelectLanguage'
+import css from './Edit.module.less'
+import SelectLanguage from '../SelectLanguage'
 
 
 const Field = ({ title, children }) => {

@@ -1,13 +1,13 @@
 import { Row, Cell } from '@enact/ui/Layout'
 import PropTypes from 'prop-types'
 
-import ProfileEdit from './ProfileEdit'
-import ProfileInfo from './ProfileInfo'
-import css from './ProfileDetail.module.less'
+import ProfileEdit from './Edit'
+import ProfileInfo from './Info'
+import css from './Detail.module.less'
 
 
 /**
- * @param {import('./ProfileEdit').ProfileEditProps} obj
+ * @param {import('./Edit').ProfileEditProps} obj
  */
 const ProfileDetail = ({ profile, langList, saveProfile }) => {
     return (

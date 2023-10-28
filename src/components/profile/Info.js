@@ -5,9 +5,9 @@ import $L from '@enact/i18n/$L'
 import Locale from 'ilib/lib/Locale'
 import PropTypes from 'prop-types'
 
-import css from './ProfileInfo.module.less'
-import useGetLanguage from '../hooks/getLanguage'
-import api from '../api'
+import css from './Info.module.less'
+import useGetLanguage from '../../hooks/getLanguage'
+import api from '../../api'
 
 
 const Field = ({ title, children }) => {
