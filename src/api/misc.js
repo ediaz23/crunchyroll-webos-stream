@@ -11,7 +11,7 @@ export const getAudioLangList = async () => config.i18n.audio_languages
  * Return subtitles lang list supported
  * @returns {Promise<Array<String>>}
  */
-export const getSubtitleLangList = async () => [...config.i18n.text_languages, 'off']
+export const getSubtitleLangList = async () => ['off', ...config.i18n.text_languages]
 
 
 /**

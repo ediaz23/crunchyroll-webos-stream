@@ -6,7 +6,8 @@ import { useSetRecoilState } from 'recoil'
 import { pathState } from '../recoilConfig'
 import api from '../api'
 
-const ContactMePanel = (rest) => {
+
+const ContactMePanel = ({ ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
 

@@ -4,10 +4,12 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 
 import Image from '@enact/moonstone/Image'
 
+import PropTypes from 'prop-types'
 import { ContentHeader } from '../home/ContentBanner'
 import ContentSerieOptions from './Options'
 import ContentSerieLangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+
 import api from '../../api'
 import css from './Series.module.less'
 
@@ -15,11 +17,13 @@ import css from './Series.module.less'
 const ActivityViews = ({ index, children }) => children[index]
 
 /**
- * @param obj
- * @param {import('crunchyroll-js-api/src/types').Profile} obj.profile
- * @param {Object} content
+ * @param {{
+    profile:import('crunchyroll-js-api/src/types').Profile
+    series: Object,
+    defaultEpisode: Object,
+ }}
  */
-const Series = ({ profile, content: serie, defaultEpisode, ...rest }) => {
+const Series = ({ profile, series, defaultEpisode, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     //    const [seasons, setSeasons] = useState([])
     /** @type {Function} */
@@ -34,15 +38,15 @@ const Series = ({ profile, content: serie, defaultEpisode, ...rest }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     /** @type {Object} */
     const contentShort = useMemo(() => {
-        return serie ? { contentId: serie.id, contentType: serie.type } : {}
-    }, [serie])
+        return series ? { contentId: series.id, contentType: series.type } : {}
+    }, [series])
 
     const calculateImage = useCallback((ref) => {
         if (ref) {
             const boundingRect = ref.getBoundingClientRect()
-            setImage(getImagePerResolution({ width: boundingRect.width, content: serie }))
+            setImage(getImagePerResolution({ width: boundingRect.width, content: series }))
         }
-    }, [serie, getImagePerResolution])
+    }, [series, getImagePerResolution])
 
     const updateRating = useCallback(ev => {
         const target = ev.currentTarget || ev.target
@@ -55,7 +59,7 @@ const Series = ({ profile, content: serie, defaultEpisode, ...rest }) => {
         //        api.cms.getSeasons(profile, { serieId: content.id }).then(console.log)
         //        api.cms.getSerie(profile, { serieId: content.id }).then(console.log)
         //            console.log(utils.stringifySorted((await api.cms.getSerie(profile, { serieId: content.id })).data[0]))
-        if (serie) {
+        if (series) {
             api.review.getRatings(profile, contentShort).then(({ rating: resRenting }) => {
                 setRating(parseInt(resRenting.trimEnd('s')))
             })
@@ -69,7 +73,7 @@ const Series = ({ profile, content: serie, defaultEpisode, ...rest }) => {
                 })
             }
         }
-    }, [serie, profile, contentShort, defaultEpisode])
+    }, [series, profile, contentShort, defaultEpisode])
     /**
      * @todo hacer los subtitulos y luego cambiar temporadas y episodios
      *       y luego reproducir.
@@ -82,21 +86,31 @@ const Series = ({ profile, content: serie, defaultEpisode, ...rest }) => {
                 }
                 <Cell className={css.modal}>
                     <div className={css.metadata}>
-                        <ContentHeader content={serie} />
+                        <ContentHeader content={series} />
                         <ActivityViews index={currentIndex}>
-                            <ContentSerieOptions
-                                episode={episode}
-                                rating={rating}
-                                updateRating={updateRating}
-                                setIndex={setCurrentIndex} />
+                            {episode ?
+                                <ContentSerieOptions
+                                    episode={episode}
+                                    rating={rating}
+                                    updateRating={updateRating}
+                                    setIndex={setCurrentIndex} />
+                                :
+                                <div></div>
+                            }
                             <div>prueba</div>
-                            <ContentSerieLangSelector profile={profile} serie={serie} />
+                            <ContentSerieLangSelector profile={profile} series={series} />
                         </ActivityViews>
                     </div>
                 </Cell>
             </Column>
         </Row>
     )
+}
+
+Series.propTypes = {
+    profile: PropTypes.object.isRequired,
+    series: PropTypes.object.isRequired,
+    defaultEpisode: PropTypes.object,
 }
 
 export default Series

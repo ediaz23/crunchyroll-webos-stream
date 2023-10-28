@@ -16,6 +16,7 @@ import api from '../api'
 
 
 const EditProfilePanel = ({ ...rest }) => {
+    /** @type {Function} */
     const mapLang = useMapLang()
     /** @type {import('crunchyroll-js-api/src/types').Profile, Function}*/
     const profile = useRecoilValue(currentProfileState)

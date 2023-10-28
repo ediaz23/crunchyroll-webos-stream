@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Row, Column } from '@enact/ui/Layout'
+import { Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import CheckboxItem from '@enact/moonstone/CheckboxItem'
 import $L from '@enact/i18n/$L'
@@ -10,21 +10,9 @@ import { useSetRecoilState } from 'recoil'
 import { currentProfileState } from '../../recoilConfig'
 import css from './Edit.module.less'
 import SelectLanguage from '../SelectLanguage'
+import Field from '../Field'
 import { useSaveProfile, useSaveOneProfileField } from '../../hooks/profile'
 
-
-const Field = ({ title, children }) => {
-    return (
-        <Row>
-            <Column>
-                {title &&
-                    <Heading size='small' spacing='small'>{title}:</Heading>
-                }
-                <div>{children}</div>
-            </Column>
-        </Row>
-    )
-}
 
 /**
  * @typedef LangList

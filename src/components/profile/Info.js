@@ -1,4 +1,4 @@
-import { Row, Column } from '@enact/ui/Layout'
+import { Column } from '@enact/ui/Layout'
 import Image from '@enact/moonstone/Image'
 import Heading from '@enact/moonstone/Heading'
 import $L from '@enact/i18n/$L'
@@ -6,22 +6,9 @@ import Locale from 'ilib/lib/Locale'
 import PropTypes from 'prop-types'
 
 import css from './Info.module.less'
+import Field from '../Field'
 import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
-
-
-const Field = ({ title, children }) => {
-    return (
-        <Row>
-            <Column>
-                {title &&
-                    <Heading size='small' spacing='small'>{title}:</Heading>
-                }
-                <div>{children}</div>
-            </Column>
-        </Row>
-    )
-}
 
 
 /**

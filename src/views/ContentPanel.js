@@ -8,7 +8,7 @@ import { currentProfileState, selectedContentState } from '../recoilConfig'
 import Series from '../components/series/Series'
 
 
-const ContentPanel = (rest) => {
+const ContentPanel = ({ ...rest }) => {
     /** @type {import('crunchyroll-js-api/src/types').Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {Object} */
@@ -16,7 +16,7 @@ const ContentPanel = (rest) => {
 
     return (
         <Panel {...rest}>
-            {content.type === 'series' && <Series content={content} profile={profile} />}
+            {content.type === 'series' && <Series series={content} profile={profile} />}
         </Panel>
     )
 }

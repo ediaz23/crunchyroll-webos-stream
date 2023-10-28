@@ -9,6 +9,7 @@ import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import $L from '@enact/i18n/$L'
+import PropTypes from 'prop-types'
 
 import back from '../../back'
 import css from './Series.module.less'
@@ -21,22 +22,19 @@ const useChangeActivity = (setIndex, index) => {
     }
 }
 
-
 /**
- * @param obj
- * @param {Object} obj.episode
- * @param {Number} obj.rating
- * @param {Function} obj.updateRating
- * @param {Function} obj.setIndex
+ * @param {{
+    episode: Object,
+    rating: Number,
+    updateRating: Function,
+    setIndex: Function
+ }}
  */
 const ContentSerieOptions = ({ episode, rating, updateRating, setIndex, ...rest }) => {
 
     const setFocus = useCallback(() => { Spotlight.focus('#play-serie') }, [])
     const moreEpisodes = useChangeActivity(setIndex, 1)
     const changeSubs = useChangeActivity(setIndex, 2)
-
-    if (!episode) { return (<div {...rest} />) }
-
     const season = episode.episode_metadata.season_number || 0
     const episodeNumber = episode.episode_metadata.episode_number || 0
     const subtitle = `${$L('Episode')} ${episodeNumber}: ${episode.title}`
@@ -81,6 +79,13 @@ const ContentSerieOptions = ({ episode, rating, updateRating, setIndex, ...rest 
             </Scroller>
         </div>
     )
+}
+
+ContentSerieOptions.propTypes = {
+    episode: PropTypes.object.isRequired,
+    rating: PropTypes.number.isRequired,
+    updateRating: PropTypes.func.isRequired,
+    setIndex: PropTypes.func.isRequired,
 }
 
 export default ContentSerieOptions

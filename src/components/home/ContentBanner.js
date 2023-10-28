@@ -111,6 +111,10 @@ export const ContentMetadata = ({ content }) => {
         </Row>
     )
 }
+ContentMetadata.propTypes = {
+    content: PropTypes.object.isRequired,
+}
+
 
 /**
  * Show header for content, with title
@@ -136,6 +140,9 @@ export const ContentHeader = ({ content }) => {
             )}
         </>
     )
+}
+ContentHeader.propTypes = {
+    content: PropTypes.object.isRequired,
 }
 
 

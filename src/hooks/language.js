@@ -10,7 +10,7 @@ import Country from '../patch/Country'
  * @returns {String}
  */
 const getLanguage = (code) => {
-    if (code === 'off') { return $L('None') }
+    if (code === 'off') { return $L('Disable') }
     const localeInfo = new Locale()
     /** @type {Array<String>} */
     const split = code.split('-')
