@@ -5,9 +5,9 @@ import { Header, Panel } from '@enact/moonstone/Panels'
 import $L from '@enact/i18n/$L'
 import { useSetRecoilState, useRecoilState } from 'recoil'
 
-import Login from '../components/Login'
+import Login from '../components/login/Login'
+import ContactMe from '../components/login/ContactMe'
 import Message from '../components/Message'
-import ContactMe from '../components/ContactMe'
 import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
 import api from '../api'
 

@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 
 import $L from '@enact/i18n/$L'
 
-import { pathState } from '../recoilConfig'
-import back from '../back'
+import { pathState } from '../../recoilConfig'
+import back from '../../back'
 
 
 /**

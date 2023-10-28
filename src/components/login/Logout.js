@@ -6,10 +6,10 @@ import { useSetRecoilState } from 'recoil'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
-import Alert from './Alert'
-import { pathState, initScreenState } from '../recoilConfig'
-import api from '../api'
-import back from '../back'
+import Alert from '../Alert'
+import { pathState, initScreenState } from '../../recoilConfig'
+import api from '../../api'
+import back from '../../back'
 
 
 const Logout = ({ text }) => {
