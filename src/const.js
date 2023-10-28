@@ -3,7 +3,7 @@
 export const LOAD_MOCK_DATA = __DEV__ && true
 
 /** @type {Boolean} */
-export const DEV_FAST_SELECT = __DEV__ && true
+export const DEV_FAST_SELECT = __DEV__ && false
 
 // posible values series
 /** @type {String} */

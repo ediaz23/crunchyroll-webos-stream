@@ -4,37 +4,43 @@ import PropTypes from 'prop-types'
 
 
 /**
- * @param {{languages: Array<{value: String, label: String}>}}
+ * @typedef LangTuple
+ * @type {Object}
+ * @property {String} key
+ * @property {String} children
  */
-const SelectLanguage = ({ title, profile, languages, save, name }) => {
 
-    const onSelected = useCallback(async ({ selected }) => {
-        await save(name, languages[selected])
-    }, [languages, save, name])
-
-    const selectedIndex = languages.findIndex(val => val.value === profile[name])
+/**
+ * @param {{
+    title: String,
+    languages: Array<LangTuple>,
+    save: Function,
+    value: String}}
+ */
+const SelectLanguage = ({ title, languages, save, value }) => {
+    /** @type {Array<String>} */
+    const langs = languages.map(lang => lang.key)
+    /** @type {Function} */
+    const onSelected = useCallback(({ selected }) => save(langs[selected]), [save, langs])
 
     return (
         <Dropdown title={title}
-            selected={selectedIndex}
+            selected={langs.indexOf(value)}
             width='x-large'
             onSelect={onSelected}>
-            {languages.map((language) => {
-                return { key: language.value, children: language.label }
-            })}
+            {languages}
         </Dropdown>
     )
 }
 
 SelectLanguage.propTypes = {
     title: PropTypes.string,
-    profile: PropTypes.object.isRequired,
     languages: PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
+        children: PropTypes.string.isRequired,
     })).isRequired,
     save: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
 }
 
 export default SelectLanguage

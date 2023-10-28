@@ -9,14 +9,14 @@ import css from './Detail.module.less'
 /**
  * @param {import('./Edit').ProfileEditProps} obj
  */
-const ProfileDetail = ({ profile, langList, saveProfile }) => {
+const ProfileDetail = ({ profile, langList }) => {
     return (
         <Row align='baseline space-evenly' className={css.profileDetail} size="100%">
             <Cell>
                 <ProfileInfo profile={profile} />
             </Cell>
             <Cell>
-                <ProfileEdit profile={profile} langList={langList} saveProfile={saveProfile} />
+                <ProfileEdit profile={profile} langList={langList} />
             </Cell>
         </Row>
     )
@@ -26,19 +26,18 @@ ProfileDetail.propTypes = {
     profile: PropTypes.object.isRequired,
     langList: PropTypes.shape({
         audio: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            value: PropTypes.string.isRequired,
+            key: PropTypes.string.isRequired,
+            children: PropTypes.string.isRequired,
         })).isRequired,
         content: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            value: PropTypes.string.isRequired,
+            key: PropTypes.string.isRequired,
+            children: PropTypes.string.isRequired,
         })).isRequired,
         subtitles: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            value: PropTypes.string.isRequired,
+            key: PropTypes.string.isRequired,
+            children: PropTypes.string.isRequired,
         })).isRequired,
     }).isRequired,
-    saveProfile: PropTypes.func.isRequired,
 }
 
 export default ProfileDetail

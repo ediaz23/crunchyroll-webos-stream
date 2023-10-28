@@ -1,8 +1,9 @@
 
 import $L from '@enact/i18n/$L'
 import Locale from 'ilib/lib/Locale'
-import Country from '../patch/Country'
 import languages from '@cospired/i18n-iso-languages'
+
+import Country from '../patch/Country'
 
 /**
  * @param {String} code
@@ -23,6 +24,16 @@ const getLanguage = (code) => {
     return desc
 }
 
-const useGetLanguage = () => getLanguage
+export const useGetLanguage = () => getLanguage
+
+/**
+ * @param {String} lang lang code
+ * @return {{key: String, children: String}}
+ */
+const mapLang = lang => {
+    return { key: lang, children: getLanguage(lang) }
+}
+
+export const useMapLang = () => mapLang
 
 export default useGetLanguage

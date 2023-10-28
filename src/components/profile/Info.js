@@ -6,7 +6,7 @@ import Locale from 'ilib/lib/Locale'
 import PropTypes from 'prop-types'
 
 import css from './Info.module.less'
-import useGetLanguage from '../../hooks/getLanguage'
+import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
 
 
@@ -30,6 +30,7 @@ const Field = ({ title, children }) => {
 const ProfileInfo = ({ profile, ...rest }) => {
     const locale = new Locale()
     const getLanguage = useGetLanguage()
+
     return (
         <Column className={css.profileInfo} {...rest}>
             <Heading size="large">{$L('Information')}</Heading>
