@@ -7,7 +7,8 @@ import { pathState } from '../recoilConfig'
 import api from '../api'
 
 /**
- * Show thats no an official app
+ * Show thats not an official app
+ * @todo
  */
 const WarningPanel = ({ ...rest }) => {
     /** @type {Function} */
@@ -21,7 +22,7 @@ const WarningPanel = ({ ...rest }) => {
     /** @todo */
     return (
         <Panel {...rest}>
-            <Header title="Warning" />
+            <Header title="Warning Just click" />
             <Button onClick={accept}>Click me</Button>
         </Panel>
     )
