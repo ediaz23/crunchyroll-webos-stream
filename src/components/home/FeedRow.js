@@ -12,20 +12,32 @@ import { homefeedReadyState, pathState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import Navigable from '../../wrappers/Navigable'
 import css from './FeedRow.module.less'
+import globalCss from '../Share.module.less'
 import back from '../../back'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 
 const NavigableDiv = Navigable('div', '')
 
 
-const Poster = ({ title, image, itemSize, ...rest }) => {
+const Poster = ({ item, image, itemSize, ...rest }) => {
     rest.style.width = itemSize
+    let progress = 0
+    if (item.type === 'episode' && item.episode_metadata) {
+        const duration = item.episode_metadata.duration_ms / 1000
+        progress = item.playhead / duration * 100
+    }
     return (
-        <NavigableDiv {...rest}>
-            <Image src={image.source}
-                sizing='none' style={image.size} />
+        <NavigableDiv {...rest} >
+            <Image src={image.source} sizing='none' style={image.size}>
+                {item.type === 'episode' &&
+                    <div className={globalCss.progress} style={{ bottom: '1.8rem' }}>
+                        <div style={{ width: `${progress}%` }} />
+                    </div>
+                }
+            </Image>
+            {item.type === 'episode' && <div className={css.playButton} />}
             <Heading size="small">
-                {title}
+                {item.name}
             </Heading>
         </NavigableDiv >
     )
@@ -37,11 +49,9 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     const margin = ri.scale(20)
     const image = getImagePerResolution({ height: itemHeight, width: rest.itemSize - margin, content: feedItem })
     return (
-        <Poster
-            title={feedItem.name}
+        <Poster item={feedItem}
             image={image}
-            {...rest}
-        />
+            {...rest} />
     )
 }
 

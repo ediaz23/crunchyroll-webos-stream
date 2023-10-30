@@ -13,6 +13,7 @@ import Navigable from '../../wrappers/Navigable'
 import { formatDurationMs } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './Series.module.less'
+import globalCss from '../Share.module.less'
 
 
 const NavigableDiv = Navigable('div', '')
@@ -33,12 +34,11 @@ const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...re
             <Row align='start space-between' style={{ paddingBottom: '0.5rem', paddingTop: '0.5rem' }}>
                 <Cell shrink style={{ overflow: 'hidden' }}>
                     {images[index] &&
-                        <Image src={images[index].source} sizing='fill' />
-                    }
-                    {images[index] &&
-                        <div className={css.progress}>
-                            <div style={{ width: `${episodes[index].playhead.progress}%` }} />
-                        </div>
+                        <Image src={images[index].source} sizing='fill'>
+                            <div className={globalCss.progress}>
+                                <div style={{ width: `${episodes[index].playhead.progress}%` }} />
+                            </div>
+                        </Image>
                     }
                 </Cell>
                 <Cell grow>
