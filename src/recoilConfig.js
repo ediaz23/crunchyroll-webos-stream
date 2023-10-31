@@ -50,3 +50,8 @@ export const homefeedReadyState = atom({
     key: 'homefeedReadyState',
     default: false
 })
+
+export const playContentState = atom({
+    key: 'playContentState',
+    default: null
+})

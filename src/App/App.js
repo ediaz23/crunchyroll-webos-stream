@@ -12,7 +12,7 @@ import { pathState, initScreenState } from '../recoilConfig'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InitialPanel from '../views/InitialPanel'
 import HomePanel from '../views/HomePanel'
-//import PlayerPanel from '../views/PlayerPanel'
+import PlayerPanel from '../views/PlayerPanel'
 import WarningPanel from '../views/WarningPanel'
 import LoginPanel from '../views/LoginPanel'
 import ContactMePanel from '../views/ContactMePanel'
@@ -91,6 +91,7 @@ const App = ({ ...rest }) => {
                         <Route path='edit' component={ProfileEditPanel} {...rest} />
                         <Route path='home' component={HomePanel} {...rest}>
                             <Route path='content' component={ContentPanel} {...rest} />
+                            <Route path='player' component={PlayerPanel} {...rest} />
                         </Route>
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />

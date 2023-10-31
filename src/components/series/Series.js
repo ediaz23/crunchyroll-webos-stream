@@ -10,8 +10,12 @@ import Seasons from './Seasons'
 import LangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 
+import { useSetRecoilState } from 'recoil'
+
+import { pathState, playContentState } from '../../recoilConfig'
 import api from '../../api'
 import css from './Series.module.less'
+import back from '../../back'
 
 
 const ActivityViews = ({ index, children }) => children[index]
@@ -24,6 +28,10 @@ const ActivityViews = ({ index, children }) => children[index]
  }}
  */
 const Series = ({ profile, series, defaultEpisode, ...rest }) => {
+    /** @type {Function} */
+    const setPath = useSetRecoilState(pathState)
+    /** @type {Function} */
+    const setPlayContent = useSetRecoilState(playContentState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -38,6 +46,12 @@ const Series = ({ profile, series, defaultEpisode, ...rest }) => {
     const contentShort = useMemo(() => {
         return series ? { contentId: series.id, contentType: series.type } : {}
     }, [series])
+
+    const selectEpisode = useCallback((episodeToPlay) => {
+        back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
+        setPlayContent(episodeToPlay)
+        setPath('/profiles/home/player')
+    }, [setPath, setPlayContent])
 
     const calculateImage = useCallback((ref) => {
         if (ref) {
@@ -86,11 +100,12 @@ const Series = ({ profile, series, defaultEpisode, ...rest }) => {
                                 episode={episode}
                                 rating={rating}
                                 updateRating={updateRating}
-                                setIndex={setCurrentIndex} />
+                                setIndex={setCurrentIndex}
+                                selectEpisode={selectEpisode} />
                             :
                             <div />
                         }
-                        <Seasons profile={profile} series={series} />
+                        <Seasons profile={profile} series={series} selectEpisode={selectEpisode} />
                         <LangSelector profile={profile} series={series} />
                     </ActivityViews>
                 </Cell>

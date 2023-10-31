@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import { useSetRecoilState } from 'recoil'
 
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homefeedReadyState, pathState } from '../../recoilConfig'
+import { homefeedReadyState, pathState, playContentState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import Navigable from '../../wrappers/Navigable'
 import css from './FeedRow.module.less'
@@ -68,6 +68,8 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
+    const setPlayContent = useSetRecoilState(playContentState)
+    /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
     const selectElement = useCallback((ev) => {
@@ -75,11 +77,15 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     }, [setContent, feed.items])
     /** @type {Function} */
     const doSelectElement = useCallback(content => {
-        setContent(content)
         back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
-        setPath('/profiles/home/content')
-
-    }, [setContent, setPath])
+        if (content.type === 'episode') {
+            setPlayContent(content)
+            setPath('/profiles/home/player')
+        } else {
+            setContent(content)
+            setPath('/profiles/home/content')
+        }
+    }, [setContent, setPath, setPlayContent])
     /** @type {Function} */
     const showContentDetail = useCallback((ev) => {
         /** @type {HTMLElement} */
@@ -114,7 +120,8 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
-                series: 'GRDV0019R'
+                series: 'GRDV0019R',
+                episode: 'GZ7UV13VE'
             }
             const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
                 val.id === testContent[DEV_CONTENT_TYPE])

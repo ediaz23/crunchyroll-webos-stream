@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
 import Spotlight from '@enact/spotlight'
 
@@ -33,7 +33,7 @@ const useChangeActivity = (setIndex, index) => {
     setIndex: Function
  }}
  */
-const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, ...rest }) => {
+const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, selectEpisode, ...rest }) => {
 
     const moreEpisodes = useChangeActivity(setIndex, 1)
     const changeSubs = useChangeActivity(setIndex, 2)
@@ -41,6 +41,9 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, ...res
     const episodeNumber = episode.episode_metadata.episode_number || 0
     const subtitle = `${$L('Episode')} ${episodeNumber}: ${episode.title}`
     const watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
+    const playEpisode = useCallback(() => {
+        selectEpisode(episode)
+    }, [selectEpisode, episode])
 
     useEffect(() => {
         Spotlight.focus('#play-serie')
@@ -67,7 +70,7 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, ...res
                 <Scroller direction='vertical' horizontalScrollbar='hidden'
                     verticalScrollbar='visible' className={css.scroller}>
                     <div className={css.scrollerOptionsContainer}>
-                        <Item id="play-serie">
+                        <Item id='play-serie' onClick={playEpisode}>
                             <Icon>play</Icon>
                             <span>{watch}</span>
                         </Item>
@@ -96,6 +99,7 @@ SeriesOptions.propTypes = {
     rating: PropTypes.number.isRequired,
     updateRating: PropTypes.func.isRequired,
     setIndex: PropTypes.func.isRequired,
+    selectEpisode: PropTypes.func.isRequired,
 }
 
 export default SeriesOptions

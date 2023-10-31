@@ -92,3 +92,47 @@ export const getEpisodes = async (profile, params) => {
     }
     return out
 }
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.streamUrl
+ * @return {Promise}
+ */
+export const getStreamsWithURL = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('streams-url', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.cms.getStreamsWithURL({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @return {Promise}
+ */
+export const getStreams = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('streams', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.cms.getStreams({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}

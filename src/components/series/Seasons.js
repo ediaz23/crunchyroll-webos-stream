@@ -46,9 +46,10 @@ async function calculatePlayheadProgress({ profile, episodesData }) {
  * @param {{
     profile: import('crunchyroll-js-api/src/types').Profile,
     series: Object,
+    selectEpisode: Function,
  }}
  */
-const Seasons = ({ profile, series, ...rest }) => {
+const Seasons = ({ profile, series, selectEpisode, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState([])
     /** @type {[Object, Function]} */
@@ -61,9 +62,9 @@ const Seasons = ({ profile, series, ...rest }) => {
         setSeason(seasons[parseInt(target.dataset.index)])
     }, [seasons, setSeason])
 
-    const selectEpisode = useCallback(({ target }) => {
-        console.log(episodes[parseInt(target.dataset.index)])
-    }, [episodes])
+    const playEpisode = useCallback(({ target }) => {
+        selectEpisode(episodes[parseInt(target.dataset.index)])
+    }, [episodes, selectEpisode])
 
     useEffect(() => {
         api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
@@ -96,7 +97,7 @@ const Seasons = ({ profile, series, ...rest }) => {
                 <SeasonsList seasons={seasons} selectSeason={selectSeason} />
             </Cell>
             <Cell size="49%">
-                <EpisodesList episodes={episodes} selectEpisode={selectEpisode} />
+                <EpisodesList episodes={episodes} selectEpisode={playEpisode} />
             </Cell>
         </Row>
     )
@@ -105,6 +106,7 @@ const Seasons = ({ profile, series, ...rest }) => {
 Seasons.propTypes = {
     profile: PropTypes.object.isRequired,
     series: PropTypes.object.isRequired,
+    selectEpisode: PropTypes.func.isRequired,
 }
 
 export default Seasons

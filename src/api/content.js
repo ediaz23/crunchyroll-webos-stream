@@ -25,3 +25,25 @@ export const getPlayHeads = async (profile, params) => {
     }
     return out
 }
+
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @param {Number} params.playhead
+ * @return {Promise}
+ */
+export const savePlayhead = async (profile, params) => {
+    let out = null
+    try {
+        const account = await getContentParam(profile)
+        out = await api.content.savePlayhead({ account, ...params })
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+
