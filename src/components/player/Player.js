@@ -2,8 +2,10 @@ import Hls from 'hls.js'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls, Video } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue } from 'recoil'
+import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
+import SubtitleSelect from './SubtitleSelect'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
@@ -16,7 +18,7 @@ import api from '../../api'
  * @property {String} url
  * @property {String} bif
  * @property {Array<import('./AudioList').Audio>} audios
- * @property {Array<import('./SubtitleSelect').Subtitle>} subtitles
+ * @property {Array<import('./SubtitleList').Subtitle>} subtitles
  */
 
 /**
@@ -39,7 +41,7 @@ const updatePlayHead = ({ profile, content, videoCompRef }) => {
                 }).catch(logger.error)
             }
         }
-    }, 1000 * 5) // every 15 sec
+    }, 1000 * 15) // every 15 sec
     return () => clearInterval(interval)
 }
 
@@ -79,6 +81,17 @@ const searchAudio = ({ profile, audios }) => {
 /**
  * @param {{
     profile: import('crunchyroll-js-api/src/types').Profile,
+    subtitles: Array<import('./SubtitleList').Subtitle>
+ }}
+ * @returns {import('./SubtitleList').Subtitle}
+ */
+const searchSubtitle = ({ profile, subtitles }) => {
+    return subtitles.find(e => e.locale === profile.preferred_content_subtitle_language)
+}
+
+/**
+ * @param {{
+    profile: import('crunchyroll-js-api/src/types').Profile,
     audios: Array<import('./AudioList').Audio>,
     audio: import('./AudioList').Audio,
     getLang: Function,
@@ -92,12 +105,43 @@ const searchStream = async ({ profile, audios, audio, getLang }) => {
         url: data[0].adaptive_hls[''].url,
         bif: meta.bifs,
         audios: audios,
-        subtitles: Object.values(meta.subtitles).map(subtitle => {
+        subtitles: [{ locale: 'off', }, ...Object.values(meta.subtitles)].map(subtitle => {
             return { ...subtitle, title: getLang(subtitle.locale) }
         })
     }
     return out
 }
+
+/**
+ * @todo manejar errores
+ * @param {{
+    subUrl: String,
+    videoRef: {current: HTMLVideoElement}
+ }}
+ * @returns {import('libass-wasm')}
+ */
+const createOptapus = ({ subUrl, videoRef }) => {
+    console.log('createOptapus')
+    const octopusWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url)
+    const octopuslegacyWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker-legacy.js', import.meta.url)
+    const testFont = new URL('../../../resources/default.woff2', import.meta.url)
+    const _wasm = new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url)
+    return new SubtitlesOctopus({
+        video: videoRef.current,
+        subUrl,
+        fonts: [testFont.href],
+        workerUrl: octopusWorkerUrl.href,
+        legacyWorkerUrl: octopuslegacyWorkerUrl.href,
+        onReady: () => {
+            console.log('si listo')
+        },
+        onError: (e) => {
+            console.error(e)
+        },
+        _wasm,
+    })
+}
+
 
 /**
  * @todo manejo de errores
@@ -142,6 +186,8 @@ const Player = ({ ...rest }) => {
     }), [content, getLang])
     /** @type {[import('./AudioList').Audio, Function]} */
     const [audio, setAudio] = useState(null)
+    /** @type {[import('./SubtitleList').Subtitle, Function]} */
+    const [subtitle, setSubtitle] = useState(null)
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
     /** @type {{current: HTMLVideoElement}} */
@@ -150,22 +196,39 @@ const Player = ({ ...rest }) => {
     const videoCompRef = useRef(null)
     /** @type {{current: import('hls.js').default}*/
     const hslRef = useRef(null)
+    /** @type {{current: import('libass-wasm')}*/
+    const octopusRes = useRef(null)
     /** @type {[Stream, Function]} */
     const [stream, setStream] = useState({ url: null, bif: null, audios: [], subtitles: [] })
+    /** @type {Function} */
+    const cleanOctopus = () => {
+        if (octopusRes.current) {
+            octopusRes.current.dispose()
+            octopusRes.current = null
+        }
+    }
+
 
     const selectAudio = useCallback((select) => {
         setStream({ ...stream, url: null })
         setLoading(true)
         videoRef.current.pause()
+        cleanOctopus()
         hslRef.current.destroy()
         hslRef.current = new Hls()
         setAudio(audios[select])
     }, [videoRef, hslRef, setStream, setLoading, setAudio, audios, stream])
 
+    const selectSubtitle = useCallback((select) => {
+        setSubtitle(stream.subtitles[select])
+    }, [stream, setSubtitle])
 
     useEffect(() => {
         hslRef.current = new Hls()
-        return () => hslRef.current.destroy()
+        return () => {
+            hslRef.current.destroy()
+            cleanOctopus()
+        }
     }, [])
     useEffect(() => searchVideoTag({ videoRef }), [audio, content, videoCompRef])
     useEffect(() => updatePlayHead({ profile, content, videoCompRef }), [profile, content, videoCompRef])
@@ -182,16 +245,28 @@ const Player = ({ ...rest }) => {
             hslRef.current.config.capLevelToPlayerSize = true
             /** @todo manejar errores */
             hslRef.current.on(Hls.Events.ERROR, console.error)
-            hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => setLoading(false))
+            hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
+                setSubtitle(searchSubtitle({ profile, ...stream }))
+                setLoading(false)
+            })
         }
-    }, [setLoading, stream, loading, videoRef])
+    }, [setLoading, stream, loading, videoRef, setSubtitle, profile])
 
     useEffect(() => {  // attach video to dom
         if (!loading && videoRef.current && videoCompRef.current) {
             hslRef.current.attachMedia(videoRef.current)
-            //            videoRef.current.play()
+            if (subtitle && subtitle.locale !== 'off' && videoRef.current) {
+                if (octopusRes.current) {
+                    console.log('le puso subs')
+                    octopusRes.current.setTrackByUrl(subtitle.url)
+                } else {
+                    octopusRes.current = createOptapus({ subUrl: subtitle.url, videoRef })
+                }
+            }
+            videoRef.current.play()
         }
-    }, [videoRef, videoCompRef, loading])
+    }, [videoRef, videoCompRef, loading, subtitle])
+
     return (
         <div className={rest.className}>
             <VideoPlayer {...rest}
@@ -205,8 +280,15 @@ const Player = ({ ...rest }) => {
                 }
                 <MediaControls>
                     <rightComponents>
-                        {audios.length > 0 &&
-                            <AudioSelect audios={audios} audio={audio} selectAudio={selectAudio} />
+                        {stream.subtitles.length > 1 &&
+                            <SubtitleSelect subtitles={stream.subtitles}
+                                subtitle={subtitle}
+                                selectSubtitle={selectSubtitle} />
+                        }
+                        {stream.audios.length > 0 &&
+                            <AudioSelect audios={stream.audios}
+                                audio={audio}
+                                selectAudio={selectAudio} />
                         }
                     </rightComponents>
                 </MediaControls>

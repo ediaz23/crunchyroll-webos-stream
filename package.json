@@ -59,7 +59,8 @@
         "node_modules/*",
         "build/*",
         "dist/*",
-        "service/*"
+        "service/*",
+        "libs/*"
     ],
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.1.0",
@@ -74,6 +75,7 @@
         "hls.js": "^1.4.12",
         "i18n-iso-countries": "^7.7.0",
         "ilib": "^14.18.0",
+        "libass-wasm": "^4.1.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
