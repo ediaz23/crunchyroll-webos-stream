@@ -6,6 +6,7 @@ import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
+import Rating from './Rating'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
@@ -52,7 +53,11 @@ const updatePlayHead = ({ profile, content, videoCompRef }) => {
  */
 const searchVideoTag = ({ videoRef }) => {
     const interval = setInterval(() => {
-        videoRef.current = document.querySelector('video')
+        const video = document.querySelector('video')
+        if (video !== videoRef.current) {
+            console.log('change tag')
+        }
+        videoRef.current = video
         if (videoRef.current) {
             clearInterval(interval)
         }
@@ -142,35 +147,41 @@ const createOptapus = ({ subUrl, videoRef }) => {
     })
 }
 
+/**
+ * @todo manejar los errores
+ */
+const onHlsError = (hls) => {
+    return (_event, data) => {
+        if (!data.fatal) {
+            return
+        }
+        switch (data.type) {
+            case Hls.ErrorTypes.OTHER_ERROR:
+                hls.startLoad()
+                break
+            case Hls.ErrorTypes.NETWORK_ERROR:
+                if (data.details === 'manifestLoadError') {
+                    //                    showError('Episode cannot be played because of CORS error. You must use a proxy.')
+                } else {
+                    hls.startLoad()
+                }
+                break
+            case Hls.ErrorTypes.MEDIA_ERROR:
+                logger.info('Media error: trying recovery...')
+                hls.recoverMediaError()
+                break
+            default:
+                logger.error('Media cannot be recovered: ' + data.details)
+                hls.destroy()
+                break
+        }
+    }
+}
+
 
 /**
- * @todo manejo de errores
- * @param {{stream: Stream}}
- * @returns {import('hls.js').default}
+ * @todo chagen subs and audio is not working well
  */
-/*
-const createHls = ({ stream }) => {
-    const hls = new Hls()
-    hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.fatal) {
-            switch (data.type) {
-                case Hls.ErrorTypes.NETWORK_ERROR:
-                    // Manejar errores de red
-                    break;
-                case Hls.ErrorTypes.MEDIA_ERROR:
-                    // Manejar errores de medios
-                    break;
-                default:
-                    // Manejar otros tipos de errores
-                    break;
-            }
-        }
-    })
-    return hls
-}
-*/
-
-
 const Player = ({ ...rest }) => {
     /** @type {Function} */
     const getLang = useGetLanguage()
@@ -208,7 +219,6 @@ const Player = ({ ...rest }) => {
         }
     }
 
-
     const selectAudio = useCallback((select) => {
         setStream({ ...stream, url: null })
         setLoading(true)
@@ -243,8 +253,7 @@ const Player = ({ ...rest }) => {
         if (stream.url && loading && videoRef) {
             hslRef.current.loadSource(stream.url)
             hslRef.current.config.capLevelToPlayerSize = true
-            /** @todo manejar errores */
-            hslRef.current.on(Hls.Events.ERROR, console.error)
+            hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current))
             hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
                 setSubtitle(searchSubtitle({ profile, ...stream }))
                 setLoading(false)
@@ -255,17 +264,27 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // attach video to dom
         if (!loading && videoRef.current && videoCompRef.current) {
             hslRef.current.attachMedia(videoRef.current)
-            if (subtitle && subtitle.locale !== 'off' && videoRef.current) {
-                if (octopusRes.current) {
-                    console.log('le puso subs')
-                    octopusRes.current.setTrackByUrl(subtitle.url)
-                } else {
-                    octopusRes.current = createOptapus({ subUrl: subtitle.url, videoRef })
-                }
-            }
-            videoRef.current.play()
+            // videoRef.current.play()
         }
     }, [videoRef, videoCompRef, loading, subtitle])
+
+    useEffect(() => {  // attach subs
+        if (!loading && videoRef.current) {
+            if (subtitle) {
+                if (subtitle.locale === 'off') {
+                    if (octopusRes.current) {
+                        octopusRes.current.freeTrack()
+                    }
+                } else {
+                    if (octopusRes.current) {
+                        octopusRes.current.setTrackByUrl(subtitle.url)
+                    } else {
+                        octopusRes.current = createOptapus({ subUrl: subtitle.url, videoRef })
+                    }
+                }
+            }
+        }
+    }, [loading, videoRef, subtitle])
 
     return (
         <div className={rest.className}>
@@ -279,6 +298,9 @@ const Player = ({ ...rest }) => {
                     </Video>
                 }
                 <MediaControls>
+                    <leftComponents>
+                        <Rating profile={profile} content={content} />
+                    </leftComponents>
                     <rightComponents>
                         {stream.subtitles.length > 1 &&
                             <SubtitleSelect subtitles={stream.subtitles}

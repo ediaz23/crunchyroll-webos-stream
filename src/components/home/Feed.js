@@ -26,10 +26,12 @@ const convertItem2Object = async (item) => {
     let out = null
     try {
         if (item.slug || item.resource_type === 'in_feed_banner') {
-            const res = await api.misc.expandURL(item.link)
-            let split = res.url.split('/')
-            if (split.length > 1) {
-                out = split[split.length - 2]
+            const res = await api.misc.fetchAuth(item.link)
+            if (res.url.startsWith('https://www.crunchyroll.com/')) {
+                let split = res.url.split('/')
+                if (split.length > 1) {
+                    out = split[split.length - 2]
+                }
             }
         }
     } catch (e) {

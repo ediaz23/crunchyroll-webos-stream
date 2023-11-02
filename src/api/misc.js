@@ -25,7 +25,7 @@ export const getContentLangList = async () => config.i18n.supported
  * @param {String} url
  * @return {Promise<Response>}
  */
-export const expandURL = async (url) => {
+export const fetchAuth = async (url) => {
     const token = await localStore.getAuthToken()
     return fetch(url, { headers: { 'Autorization': token } })
 }

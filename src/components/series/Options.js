@@ -5,13 +5,13 @@ import Spotlight from '@enact/spotlight'
 
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
-import Scroller from '@enact/moonstone/Scroller'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
 import back from '../../back'
 import css from './Series.module.less'
@@ -56,9 +56,14 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
                 <Heading size='small' spacing='small' className={css.firstData}>
                     {subtitle}
                 </Heading>
-                <BodyText size='small'>
-                    {episode.description}
-                </BodyText>
+                <div className={css.scrollerContainer}>
+                    <Scroller direction='vertical' horizontalScrollbar='hidden'
+                        verticalScrollbar='auto'>
+                        <BodyText size='small'>
+                            {episode.description}
+                        </BodyText>
+                    </Scroller>
+                </div>
                 <BodyText component='div' size='small'>
                     {Array.from({ length: 5 }, (_v, i) =>
                         <IconButton size="small" key={i} data-star={i}
@@ -67,9 +72,9 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
                         </IconButton>
                     )}
                 </BodyText>
-                <Scroller direction='vertical' horizontalScrollbar='hidden'
-                    verticalScrollbar='visible' className={css.scroller}>
-                    <div className={css.scrollerOptionsContainer}>
+                <div className={css.scrollerContainer}>
+                    <Scroller direction='vertical' horizontalScrollbar='hidden'
+                        verticalScrollbar='visible'>
                         <Item id='play-serie' onClick={playEpisode}>
                             <Icon>play</Icon>
                             <span>{watch}</span>
@@ -86,8 +91,8 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
                             <Icon>denselist</Icon>
                             <span>{$L('Add to my list')}</span>
                         </Item>
-                    </div>
-                </Scroller>
+                    </Scroller>
+                </div>
             </Cell>
         </Row>
     )
