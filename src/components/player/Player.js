@@ -7,10 +7,12 @@ import SubtitlesOctopus from 'libass-wasm'
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
 import Rating from './Rating'
+import ContactMe from '../login/ContactMe'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
+import emptyVideo from '../../../resources/empty.mp4'
 
 
 /**
@@ -43,25 +45,6 @@ const updatePlayHead = ({ profile, content, videoCompRef }) => {
             }
         }
     }, 1000 * 15) // every 15 sec
-    return () => clearInterval(interval)
-}
-
-
-/**
- * @param {{videoRef: {current: HTMLVideoElement}}}
- * @returns {Function}
- */
-const searchVideoTag = ({ videoRef }) => {
-    const interval = setInterval(() => {
-        const video = document.querySelector('video')
-        if (video !== videoRef.current) {
-            console.log('change tag')
-        }
-        videoRef.current = video
-        if (videoRef.current) {
-            clearInterval(interval)
-        }
-    }, 100)
     return () => clearInterval(interval)
 }
 
@@ -107,7 +90,7 @@ const searchStream = async ({ profile, audios, audio, getLang }) => {
     const { data, meta } = await api.cms.getStreams(profile, { contentId: audio.media_guid })
     /** @type {Stream} */
     const out = {
-        url: data[0].adaptive_hls[''].url,
+        url: data[0].multitrack_adaptive_hls_v2[''].url,
         bif: meta.bifs,
         audios: audios,
         subtitles: [{ locale: 'off', }, ...Object.values(meta.subtitles)].map(subtitle => {
@@ -115,6 +98,62 @@ const searchStream = async ({ profile, audios, audio, getLang }) => {
         })
     }
     return out
+}
+
+/**
+ * @param {{
+    bif: String,
+  }}
+ * @returns {Promise<Array<String>>}
+ */
+const searchPreviews = async ({ bif }) => {
+    let images = []
+    try {
+        /** @type {Response} */
+        const res = await fetch(bif)
+        const buf = await res.arrayBuffer()
+        const bifData = new Uint8Array(buf)
+        const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
+
+        let imageStartIndex = -1
+        for (let i = 0; i < bifData.length - 1; i++) {
+            if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
+                if (imageStartIndex !== -1) {
+                    const imageData = bifData.subarray(imageStartIndex, i)
+                    images.push(imageData)
+                }
+                imageStartIndex = i
+            }
+        }
+        if (imageStartIndex !== -1) {
+            const imageData = bifData.subarray(imageStartIndex)
+            images.push(imageData)
+        }
+        images = images.map(imageData => {
+            return URL.createObjectURL(new window.Blob([imageData], { type: 'image/jpeg' }))
+        })
+    } catch (e) {
+        logger.error(e)
+    }
+    return images
+}
+
+/**
+ * @param {{
+    content: Object,
+  }}
+ * @returns {String}
+ */
+const searchPoster = ({ content }) => {
+    let posterOut = null
+    if (content && content.images && content.images.thumbnail) {
+        /** @type {Array<{source: String}>} */
+        const thumbnail = content.images.thumbnail[0]
+        if (thumbnail && thumbnail.length) {
+            posterOut = thumbnail[thumbnail.length - 1].source
+        }
+    }
+    return posterOut
 }
 
 /**
@@ -149,32 +188,38 @@ const createOptapus = ({ subUrl, videoRef }) => {
 
 /**
  * @todo manejar los errores
+ * ver que hacer con rej
+ * puede tener un loop infito
  */
 const onHlsError = (hls) => {
     return (_event, data) => {
-        if (!data.fatal) {
-            return
-        }
-        switch (data.type) {
-            case Hls.ErrorTypes.OTHER_ERROR:
-                hls.startLoad()
-                break
-            case Hls.ErrorTypes.NETWORK_ERROR:
-                if (data.details === 'manifestLoadError') {
-                    //                    showError('Episode cannot be played because of CORS error. You must use a proxy.')
-                } else {
-                    hls.startLoad()
-                }
-                break
-            case Hls.ErrorTypes.MEDIA_ERROR:
-                logger.info('Media error: trying recovery...')
-                hls.recoverMediaError()
-                break
-            default:
-                logger.error('Media cannot be recovered: ' + data.details)
-                hls.destroy()
-                break
-        }
+        logger.error(data)
+        debugger
+        hls.destroy()
+        //        switch (data.type) {
+        //            case Hls.ErrorTypes.NETWORK_ERROR:
+        //                if (data.response.code === 403) {
+        //                    hls.destroy()
+        //                } else {
+        //                    if (data.details === 'manifestLoadError') {
+        //                        //                    showError('Episode cannot be played because of CORS error. You must use a proxy.')
+        //                        hls.destroy()
+        //                    } if (data.details === 'fragLoadError') {
+        //                        hls.destroy()
+        //                    } else {
+        //                        hls.startLoad()
+        //                    }
+        //                }
+        //                break
+        //            case Hls.ErrorTypes.MEDIA_ERROR:
+        //                logger.info('Media error: trying recovery...')
+        //                hls.recoverMediaError()
+        //                break
+        //            default:
+        //                logger.error('Media cannot be recovered: ' + data.details)
+        //                hls.destroy()
+        //                break
+        //        }
     }
 }
 
@@ -195,14 +240,17 @@ const Player = ({ ...rest }) => {
     const audios = useMemo(() => content.versions.map(a => {
         return { ...a, title: getLang(a.audio_locale) }
     }), [content, getLang])
+    const poster = useMemo(() => searchPoster({ content }), [content])
     /** @type {[import('./AudioList').Audio, Function]} */
     const [audio, setAudio] = useState(null)
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
     const [subtitle, setSubtitle] = useState(null)
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
-    /** @type {{current: HTMLVideoElement}} */
-    const videoRef = useRef(null)
+    /** @type {[Array<String>, Function]} */
+    const [previews, setPreviews] = useState([])
+    /** @type {[String, Function]} */
+    const [preview, setPreview] = useState(null)
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const videoCompRef = useRef(null)
     /** @type {{current: import('hls.js').default}*/
@@ -218,29 +266,39 @@ const Player = ({ ...rest }) => {
             octopusRes.current = null
         }
     }
-
     const selectAudio = useCallback((select) => {
         setStream({ ...stream, url: null })
         setLoading(true)
-        videoRef.current.pause()
+        videoCompRef.current.pause()
         cleanOctopus()
         hslRef.current.destroy()
         hslRef.current = new Hls()
         setAudio(audios[select])
-    }, [videoRef, hslRef, setStream, setLoading, setAudio, audios, stream])
+    }, [hslRef, setStream, setLoading, setAudio, audios, stream, videoCompRef])
 
     const selectSubtitle = useCallback((select) => {
         setSubtitle(stream.subtitles[select])
     }, [stream, setSubtitle])
 
+    const onScrub = useCallback(({ proportion }) => {
+        if (previews.length > 0) {
+            setPreview(previews[Math.floor(proportion * previews.length)])
+        }
+    }, [previews, setPreview])
+
     useEffect(() => {
-        hslRef.current = new Hls()
+        hslRef.current = new Hls({
+            progressive: true,
+            fetchSetup: (context, initParams) => {
+                initParams.headers.append('is-front-hls', 'true')
+                return new Request(context.url, initParams)
+            }
+        })
         return () => {
             hslRef.current.destroy()
             cleanOctopus()
         }
     }, [])
-    useEffect(() => searchVideoTag({ videoRef }), [audio, content, videoCompRef])
     useEffect(() => updatePlayHead({ profile, content, videoCompRef }), [profile, content, videoCompRef])
     useEffect(() => setAudio(searchAudio({ profile, audios })), [audios, profile])
     useEffect(() => {
@@ -250,53 +308,63 @@ const Player = ({ ...rest }) => {
     }, [profile, audios, audio, getLang])
 
     useEffect(() => {  // create hsl
-        if (stream.url && loading && videoRef) {
-            hslRef.current.loadSource(stream.url)
-            hslRef.current.config.capLevelToPlayerSize = true
-            hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current))
-            hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
-                setSubtitle(searchSubtitle({ profile, ...stream }))
+        if (stream.url && loading) {
+            /**
+             * @todo que hacer con el error
+             */
+            Promise.all([
+                new Promise((res, rej) => {
+                    hslRef.current.loadSource(stream.url)
+                    hslRef.current.config.capLevelToPlayerSize = true
+                    hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current, rej))
+                    hslRef.current.on(Hls.Events.MANIFEST_PARSED, res)
+                }),
+                setSubtitle(searchSubtitle({ profile, ...stream })),
+                searchPreviews(stream).then(setPreviews)
+            ]).then(() => {
                 setLoading(false)
-            })
+            }).catch(logger.error)
         }
-    }, [setLoading, stream, loading, videoRef, setSubtitle, profile])
+    }, [setLoading, stream, loading, setSubtitle, profile, setPreviews])
 
     useEffect(() => {  // attach video to dom
-        if (!loading && videoRef.current && videoCompRef.current) {
-            hslRef.current.attachMedia(videoRef.current)
-            // videoRef.current.play()
+        if (!loading && videoCompRef.current) {
+            const videoNode = document.querySelector('video')
+            hslRef.current.attachMedia(videoNode)
+            //            videoNode.play()
         }
-    }, [videoRef, videoCompRef, loading, subtitle])
+    }, [loading, videoCompRef])
 
-    useEffect(() => {  // attach subs
-        if (!loading && videoRef.current) {
-            if (subtitle) {
-                if (subtitle.locale === 'off') {
-                    if (octopusRes.current) {
-                        octopusRes.current.freeTrack()
-                    }
-                } else {
-                    if (octopusRes.current) {
-                        octopusRes.current.setTrackByUrl(subtitle.url)
-                    } else {
-                        octopusRes.current = createOptapus({ subUrl: subtitle.url, videoRef })
-                    }
-                }
-            }
-        }
-    }, [loading, videoRef, subtitle])
-
+    //    useEffect(() => {  // attach subs
+    //        if (!loading && videoRef.current) {
+    //            if (subtitle) {
+    //                if (subtitle.locale === 'off') {
+    //                    if (octopusRes.current) {
+    //                        octopusRes.current.freeTrack()
+    //                    }
+    //                } else {
+    //                    if (octopusRes.current) {
+    //                        octopusRes.current.setTrackByUrl(subtitle.url)
+    //                    } else {
+    //                        octopusRes.current = createOptapus({ subUrl: subtitle.url, videoRef })
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }, [loading, videoRef, subtitle])
     return (
         <div className={rest.className}>
             <VideoPlayer {...rest}
+                title={content.title}
+                poster={poster}
+                thumbnailSrc={preview}
+                onScrub={onScrub}
                 loading={loading}
                 ref={videoCompRef}
                 noAutoPlay>
-                {stream.url &&
-                    <Video id={content.id}>
-                        <source src={stream.url} />
-                    </Video>
-                }
+                <Video id={content.id}>
+                    <source src={emptyVideo} />
+                </Video>
                 <MediaControls>
                     <leftComponents>
                         <Rating profile={profile} content={content} />
@@ -312,6 +380,7 @@ const Player = ({ ...rest }) => {
                                 audio={audio}
                                 selectAudio={selectAudio} />
                         }
+                        <ContactMe origin='/profiles/home/player' />
                     </rightComponents>
                 </MediaControls>
             </VideoPlayer>

@@ -125,12 +125,8 @@ export const getStreamsWithURL = async (profile, params) => {
 export const getStreams = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('streams', params)
-        } else {
-            const account = await getContentParam(profile)
-            out = await api.cms.getStreams({ account, ...params })
-        }
+        const account = await getContentParam(profile)
+        out = await api.cms.getStreams({ account, ...params })
     } catch (error) {
         await translateError(error)
     }
