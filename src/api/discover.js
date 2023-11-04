@@ -153,9 +153,9 @@ export const getSimilar = async (profile, params) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
-export const getUpNext = async (profile, params) => {
+export const getNext = async (profile, params) => {
     let out = null
     try {
         if (LOAD_MOCK_DATA) {
@@ -163,7 +163,38 @@ export const getUpNext = async (profile, params) => {
             out = await getMockData('upNext', { contentId })
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getUpNext({ account, ...params })
+            out = await api.discover.getNext({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    if (out) {
+        out.data = out.data.map(val => {
+            const { panel } = val
+            const newVal = { ...panel, ...val }
+            delete newVal.panel
+            return newVal
+        })
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
+ */
+export const getPrev = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            const { contentId } = params
+            out = await getMockData('prev', { contentId })
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getPrev({ account, ...params })
         }
     } catch (error) {
         await translateError(error)

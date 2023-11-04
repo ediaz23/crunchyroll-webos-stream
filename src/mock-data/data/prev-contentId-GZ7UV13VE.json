@@ -1,0 +1,157 @@
+{
+    "total": 1,
+    "data": [
+        {
+            "playhead": 0,
+            "fully_watched": false,
+            "panel": {
+                "episode_metadata": {
+                    "audio_locale": "ja-JP",
+                    "availability_ends": "9998-11-30T08:00:00Z",
+                    "availability_notes": "",
+                    "availability_starts": "2023-05-30T15:30:00Z",
+                    "available_date": null,
+                    "available_offline": true,
+                    "closed_captions_available": false,
+                    "duration_ms": 1420004,
+                    "eligible_region": "CL",
+                    "episode": "9",
+                    "episode_air_date": "2023-05-30T23:00:00+09:00",
+                    "episode_number": 9,
+                    "extended_maturity_rating": {},
+                    "free_available_date": "9998-11-30T08:00:00Z",
+                    "identifier": "G9VHN9185|S1|E9",
+                    "is_clip": false,
+                    "is_dubbed": true,
+                    "is_mature": false,
+                    "is_premium_only": true,
+                    "is_subbed": true,
+                    "mature_blocked": false,
+                    "maturity_ratings": [
+                        "TV-14"
+                    ],
+                    "premium_available_date": "2023-05-30T15:30:00Z",
+                    "premium_date": null,
+                    "season_id": "GYMGC38P0",
+                    "season_number": 1,
+                    "season_slug_title": "skip-and-loafer",
+                    "season_title": "Skip and Loafer",
+                    "sequence_number": 9,
+                    "series_id": "G9VHN9185",
+                    "series_slug_title": "skip-and-loafer",
+                    "series_title": "Skip and Loafer",
+                    "subtitle_locales": [
+                        "en-US",
+                        "es-419",
+                        "es-ES",
+                        "fr-FR",
+                        "pt-BR",
+                        "ar-SA",
+                        "it-IT",
+                        "de-DE",
+                        "ru-RU"
+                    ],
+                    "upload_date": "2023-05-30T23:00:00+09:00",
+                    "versions": [
+                        {
+                            "audio_locale": "ja-JP",
+                            "guid": "G8WUN0VNG",
+                            "is_premium_only": true,
+                            "media_guid": "GQ9FGQ0GV",
+                            "original": true,
+                            "season_guid": "GYMGC38P0",
+                            "variant": ""
+                        },
+                        {
+                            "audio_locale": "pt-BR",
+                            "guid": "GJWU2EEDW",
+                            "is_premium_only": true,
+                            "media_guid": "GM8FXGGD1",
+                            "original": false,
+                            "season_guid": "GY8VCP87V",
+                            "variant": ""
+                        },
+                        {
+                            "audio_locale": "es-419",
+                            "guid": "GN7UDVV8X",
+                            "is_premium_only": true,
+                            "media_guid": "GVMF0443N",
+                            "original": false,
+                            "season_guid": "GR2PCVWNX",
+                            "variant": ""
+                        }
+                    ]
+                },
+                "promo_title": "",
+                "type": "episode",
+                "slug": "",
+                "images": {
+                    "thumbnail": [
+                        [
+                            {
+                                "height": 180,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 320
+                            },
+                            {
+                                "height": 338,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 600
+                            },
+                            {
+                                "height": 360,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 640
+                            },
+                            {
+                                "height": 450,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 800
+                            },
+                            {
+                                "height": 675,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 1200
+                            },
+                            {
+                                "height": 810,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 1440
+                            },
+                            {
+                                "height": 900,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 1600
+                            },
+                            {
+                                "height": 1080,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/c6b20c9d33856933bad01f9c638dfd13.jpe",
+                                "type": "thumbnail",
+                                "width": 1920
+                            }
+                        ]
+                    ]
+                },
+                "description": "Mitsumi va a aprovechar las vacaciones de verano para volver a su pueblo y estar con sus amigos y su familia.",
+                "promo_description": "",
+                "external_id": "EPI.895001",
+                "streams_link": "/content/v2/cms/videos/GQ9FGQ0GV/streams",
+                "id": "G8WUN0VNG",
+                "title": "Vacaciones relajadas e inicios llenos de entusiasmo",
+                "linked_resource_key": "cms:/episodes/G8WUN0VNG",
+                "channel_id": "crunchyroll",
+                "slug_title": "drowsy-and-peppy"
+            }
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    }
+}

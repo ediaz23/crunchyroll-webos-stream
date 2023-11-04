@@ -29,7 +29,6 @@ const Rating = ({ profile, content, ...rest }) => {
             api.review.removeRating(profile, shortContent)
                 .then(() => setRating(''))
         } else {
-            console.log('remove rating', { ...shortContent, rating: newRating })
             api.review.updateEpisodeRating(profile, { ...shortContent, rating: newRating })
                 .then(() => setRating(newRating))
         }

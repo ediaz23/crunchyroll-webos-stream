@@ -41,14 +41,18 @@ export const customFetch = async (url, options = {}) => {
         }
         const onSuccess = (data) => {
             const { status, statusText, content, headers } = data
-            const binaryString = atob(content)
-            const bytes = new Uint8Array(binaryString.length)
+            logger.debug(`res ${config.method} ${url} ${status}`)
+            let newBody = undefined
+            if (content) {
+                const binaryString = atob(content)
+                const bytes = new Uint8Array(binaryString.length)
 
-            for (let i = 0; i < binaryString.length; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                newBody = new window.Blob([bytes])
             }
-            logger.debug(`res okey ${status} ${url}`)
-            res(new ResponseHack(new window.Blob([bytes]), {
+            res(new ResponseHack(newBody, {
                 status,
                 statusText,
                 headers,
@@ -56,11 +60,10 @@ export const customFetch = async (url, options = {}) => {
             }))
         }
         const onFailure = (error) => {
-            logger.error('res error')
+            logger.error(`res error ${url}`)
             logger.error(error)
             rej(error)
         }
-        logger.debug(`${config.method} ${url}`)
         if (utils.isTv()) {
             webOS.service.request(serviceURL, {
                 method: 'forwardRequest',

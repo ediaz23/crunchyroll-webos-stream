@@ -1,7 +1,7 @@
 import Hls from 'hls.js'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls, Video } from '@enact/moonstone/VideoPlayer'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
@@ -13,6 +13,7 @@ import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../resources/empty.mp4'
+import back from '../../back'
 
 
 /**
@@ -30,19 +31,31 @@ import emptyVideo from '../../../resources/empty.mp4'
     content: Object,
     videoCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
  }}
- * @returns {import('./AudioList').Audio}
+ @returns {Promise}
  */
-const updatePlayHead = ({ profile, content, videoCompRef }) => {
+const updatePlayHead = async ({ profile, content, videoCompRef }) => {
+    /** @type {{paused: boolean, currentTime: number}} */
+    const state = videoCompRef.current.getMediaState()
+    return api.content.savePlayhead(profile, {
+        contentId: content.id,
+        playhead: Math.floor(state.currentTime),
+    })
+}
+
+/**
+ * @param {{
+    profile: import('crunchyroll-js-api/src/types').Profile,
+    content: Object,
+    videoCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
+ }}
+ * @returns {Function}
+ */
+const updatePlayHeadLoop = ({ profile, content, videoCompRef }) => {
     const interval = setInterval(() => {
-        if (videoCompRef.current) {
-            /** @type {{paused: boolean, currentTime: number}} */
-            const state = videoCompRef.current.getMediaState()
-            if (!state.paused) {
-                api.content.savePlayhead(profile, {
-                    contentId: content.id,
-                    playhead: Math.floor(state.currentTime),
-                }).catch(logger.error)
-            }
+        /** @type {{paused: boolean, currentTime: number}} */
+        const state = videoCompRef.current.getMediaState()
+        if (!state.paused) {
+            updatePlayHead({ profile, content, videoCompRef }).catch(logger.error)
         }
     }, 1000 * 15) // every 15 sec
     return () => clearInterval(interval)
@@ -187,39 +200,51 @@ const createOptapus = ({ subUrl, videoRef }) => {
 }
 
 /**
+ * Create hsl object
+ * @returns {import('hls.js').default}
+ */
+const createHls = () => {
+    return new Hls({
+        progressive: true,
+        fetchSetup: (context, initParams) => {
+            initParams.headers.append('is-front-hls', 'true')
+            return new Request(context.url, initParams)
+        }
+    })
+}
+
+/**
  * @todo manejar los errores
  * ver que hacer con rej
  * puede tener un loop infito
  */
 const onHlsError = (hls) => {
     return (_event, data) => {
-        logger.error(data)
-        debugger
-        hls.destroy()
-        //        switch (data.type) {
-        //            case Hls.ErrorTypes.NETWORK_ERROR:
-        //                if (data.response.code === 403) {
-        //                    hls.destroy()
-        //                } else {
-        //                    if (data.details === 'manifestLoadError') {
-        //                        //                    showError('Episode cannot be played because of CORS error. You must use a proxy.')
-        //                        hls.destroy()
-        //                    } if (data.details === 'fragLoadError') {
-        //                        hls.destroy()
-        //                    } else {
-        //                        hls.startLoad()
-        //                    }
-        //                }
-        //                break
-        //            case Hls.ErrorTypes.MEDIA_ERROR:
-        //                logger.info('Media error: trying recovery...')
-        //                hls.recoverMediaError()
-        //                break
-        //            default:
-        //                logger.error('Media cannot be recovered: ' + data.details)
-        //                hls.destroy()
-        //                break
-        //        }
+        switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+                logger.error(`hsl: NETWORK_ERROR ${data.details}`)
+                if (data.response.code === 403) {
+                    hls.destroy()
+                } else {
+                    if (data.details === 'manifestLoadError') {
+                        // showError('Episode cannot be played because of CORS error. You must use a proxy.')
+                        hls.destroy()
+                    } if (data.details === 'fragLoadError') {
+                        hls.destroy()
+                    } else {
+                        hls.startLoad()
+                    }
+                }
+                break
+            case Hls.ErrorTypes.MEDIA_ERROR:
+                logger.error('hsl: MEDIA_ERROR trying recovery...')
+                hls.recoverMediaError()
+                break
+            default:
+                logger.error(`hsl: falta ${data.details}`)
+                hls.destroy()
+                break
+        }
     }
 }
 
@@ -232,33 +257,54 @@ const Player = ({ ...rest }) => {
     const getLang = useGetLanguage()
     /** @type {import('crunchyroll-js-api/src/types').Profile}*/
     const profile = useRecoilValue(currentProfileState)
+    /** @type {[Object, Function]} */
+    const [playContent, setPlayContent] = useRecoilState(playContentState)
     /** @type {Object} */
-    const playContent = useRecoilValue(playContentState)
-    /** @type {Object} */
-    const content = useMemo(() => Object.assign({}, playContent, playContent.episode_metadata || {}), [playContent])
+    const content = useMemo(() => {
+        return Object.assign({}, playContent, playContent.episode_metadata || {})
+    }, [playContent])
     /** @type {Array<import('./AudioList').Audio} */
-    const audios = useMemo(() => content.versions.map(a => {
-        return { ...a, title: getLang(a.audio_locale) }
-    }), [content, getLang])
+    const audios = useMemo(() => {
+        return content.versions.map(a => {
+            return { ...a, title: getLang(a.audio_locale) }
+        })
+    }, [content, getLang])
     const poster = useMemo(() => searchPoster({ content }), [content])
     /** @type {[import('./AudioList').Audio, Function]} */
-    const [audio, setAudio] = useState(null)
+    const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
-    const [subtitle, setSubtitle] = useState(null)
+    const [subtitle, setSubtitle] = useState({})
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
     /** @type {[Array<String>, Function]} */
     const [previews, setPreviews] = useState([])
     /** @type {[String, Function]} */
-    const [preview, setPreview] = useState(null)
+    const [preview, setPreview] = useState({})
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const videoCompRef = useRef(null)
     /** @type {{current: import('hls.js').default}*/
     const hslRef = useRef(null)
     /** @type {{current: import('libass-wasm')}*/
     const octopusRes = useRef(null)
+    const emptyStream = useMemo(() => {
+        return { url: null, bif: null, audios: [], subtitles: [] }
+    }, [])
     /** @type {[Stream, Function]} */
-    const [stream, setStream] = useState({ url: null, bif: null, audios: [], subtitles: [] })
+    const [stream, setStream] = useState(emptyStream)
+
+    /** @type {Function} */
+    const cleanStates = useCallback(() => {
+        hslRef.current.destroy()
+        hslRef.current = createHls()
+        setAudio({})
+        setSubtitle({})
+        setLoading(true)
+        setPreviews([])
+        setPreview({})
+        setStream(emptyStream)
+    }, [setAudio, setSubtitle, setLoading, setPreviews, setPreview, hslRef,
+        setStream, emptyStream])
+
     /** @type {Function} */
     const cleanOctopus = () => {
         if (octopusRes.current) {
@@ -266,46 +312,75 @@ const Player = ({ ...rest }) => {
             octopusRes.current = null
         }
     }
-    const selectAudio = useCallback((select) => {
-        setStream({ ...stream, url: null })
-        setLoading(true)
-        videoCompRef.current.pause()
-        cleanOctopus()
-        hslRef.current.destroy()
-        hslRef.current = new Hls()
-        setAudio(audios[select])
-    }, [hslRef, setStream, setLoading, setAudio, audios, stream, videoCompRef])
 
+    /** @type {Function} */
+    const selectAudio = useCallback((select) => {
+        videoCompRef.current.pause()
+        cleanStates()
+        setAudio(audios[select])
+    }, [videoCompRef, cleanStates, setAudio, audios])
+
+    /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
         setSubtitle(stream.subtitles[select])
     }, [stream, setSubtitle])
 
+    /** @type {Function} */
     const onScrub = useCallback(({ proportion }) => {
         if (previews.length > 0) {
             setPreview(previews[Math.floor(proportion * previews.length)])
         }
     }, [previews, setPreview])
 
+    /** @type {Function} */
+    const onChangeEp = useCallback(async (changeEp) => {
+        videoCompRef.current.pause()
+        await updatePlayHead({ profile, content, videoCompRef })
+        if (changeEp && changeEp.total > 0) {
+            cleanStates()
+            setPlayContent(changeEp.data[0])
+        } else {
+            back.popHistory().doBack()
+        }
+    }, [videoCompRef, profile, content, setPlayContent, cleanStates])
+
+    /** @type {Function} */
+    const onNextEp = useCallback(async (ev) => {
+        ev.preventDefault()
+        const nextEp = await api.discover.getNext(profile, { contentId: content.id })
+        await onChangeEp(nextEp)
+    }, [profile, content, onChangeEp])
+
+    /** @type {Function} */
+    const onPrevEp = useCallback(async (ev) => {
+        ev.preventDefault()
+        const prevEp = await api.discover.getPrev(profile, { contentId: content.id })
+        await onChangeEp(prevEp)
+    }, [profile, content, onChangeEp])
+
     useEffect(() => {
-        hslRef.current = new Hls({
-            progressive: true,
-            fetchSetup: (context, initParams) => {
-                initParams.headers.append('is-front-hls', 'true')
-                return new Request(context.url, initParams)
-            }
-        })
+        hslRef.current = createHls()
         return () => {
             hslRef.current.destroy()
             cleanOctopus()
         }
     }, [])
-    useEffect(() => updatePlayHead({ profile, content, videoCompRef }), [profile, content, videoCompRef])
-    useEffect(() => setAudio(searchAudio({ profile, audios })), [audios, profile])
+
     useEffect(() => {
-        if (audio) {
+        if (videoCompRef.current) {
+            updatePlayHeadLoop({ profile, content, videoCompRef })
+        }
+    }, [profile, content, videoCompRef])
+
+    useEffect(() => {
+        setAudio(searchAudio({ profile, audios }))
+    }, [audios, profile, setAudio])
+
+    useEffect(() => {
+        if (audios.includes(audio)) {
             searchStream({ profile, audios, audio, getLang }).then(setStream)
         }
-    }, [profile, audios, audio, getLang])
+    }, [profile, audios, audio, getLang, setStream])
 
     useEffect(() => {  // create hsl
         if (stream.url && loading) {
@@ -314,6 +389,8 @@ const Player = ({ ...rest }) => {
              */
             Promise.all([
                 new Promise((res, rej) => {
+                    // for test
+                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
                     hslRef.current.loadSource(stream.url)
                     hslRef.current.config.capLevelToPlayerSize = true
                     hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current, rej))
@@ -359,6 +436,9 @@ const Player = ({ ...rest }) => {
                 poster={poster}
                 thumbnailSrc={preview}
                 onScrub={onScrub}
+                onJumpBackward={onPrevEp}
+                onJumpForward={onNextEp}
+                onEnded={onNextEp}
                 loading={loading}
                 ref={videoCompRef}
                 noAutoPlay>
