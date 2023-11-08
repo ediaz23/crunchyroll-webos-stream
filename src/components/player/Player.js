@@ -36,6 +36,7 @@ import back from '../../back'
 const updatePlayHead = async ({ profile, content, videoCompRef }) => {
     /** @type {{paused: boolean, currentTime: number}} */
     const state = videoCompRef.current.getMediaState()
+    content.playhead.playhead = Math.floor(state.currentTime)
     return api.content.savePlayhead(profile, {
         contentId: content.id,
         playhead: Math.floor(state.currentTime),
@@ -52,13 +53,34 @@ const updatePlayHead = async ({ profile, content, videoCompRef }) => {
  */
 const updatePlayHeadLoop = ({ profile, content, videoCompRef }) => {
     const interval = setInterval(() => {
-        /** @type {{paused: boolean, currentTime: number}} */
-        const state = videoCompRef.current.getMediaState()
-        if (!state.paused) {
-            updatePlayHead({ profile, content, videoCompRef }).catch(logger.error)
+        if (videoCompRef.current) {
+            /** @type {{paused: boolean, currentTime: number}} */
+            const state = videoCompRef.current.getMediaState()
+            if (!state.paused) {
+                updatePlayHead({ profile, content, videoCompRef }).catch(logger.error)
+            }
         }
     }, 1000 * 15) // every 15 sec
     return () => clearInterval(interval)
+}
+
+/**
+ * @param {{
+    profile: import('crunchyroll-js-api/src/types').Profile,
+    content: Object,
+ }}
+ * @returns {Promise}
+ */
+const searchPlayHead = async ({ profile, content }) => {
+    const { data } = await api.content.getPlayHeads(profile, { contentIds: [content.id] })
+    if (data && data.length > 0) {
+        content.playhead = data[0]
+    } else {
+        content.playhead = {
+            playhead: 0,
+            fully_watched: false,
+        }
+    }
 }
 
 /**
@@ -173,18 +195,17 @@ const searchPoster = ({ content }) => {
  * @todo manejar errores
  * @param {{
     subUrl: String,
-    videoRef: {current: HTMLVideoElement}
  }}
  * @returns {import('libass-wasm')}
  */
-const createOptapus = ({ subUrl, videoRef }) => {
+const createOptapus = ({ subUrl }) => {
     console.log('createOptapus')
     const octopusWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url)
     const octopuslegacyWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker-legacy.js', import.meta.url)
     const testFont = new URL('../../../resources/default.woff2', import.meta.url)
     const _wasm = new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url)
     return new SubtitlesOctopus({
-        video: videoRef.current,
+        video: document.querySelector('video'),
         subUrl,
         fonts: [testFont.href],
         workerUrl: octopusWorkerUrl.href,
@@ -206,6 +227,7 @@ const createOptapus = ({ subUrl, videoRef }) => {
 const createHls = () => {
     return new Hls({
         progressive: true,
+        //        autoStartLoad: false,
         fetchSetup: (context, initParams) => {
             initParams.headers.append('is-front-hls', 'true')
             return new Request(context.url, initParams)
@@ -220,6 +242,8 @@ const createHls = () => {
  */
 const onHlsError = (hls) => {
     return (_event, data) => {
+        const video = document.querySelector('video')
+        //        logger.error(data)
         switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
                 logger.error(`hsl: NETWORK_ERROR ${data.details}`)
@@ -239,6 +263,7 @@ const onHlsError = (hls) => {
             case Hls.ErrorTypes.MEDIA_ERROR:
                 logger.error('hsl: MEDIA_ERROR trying recovery...')
                 hls.recoverMediaError()
+                video.play().catch(logger.error)
                 break
             default:
                 logger.error(`hsl: falta ${data.details}`)
@@ -251,6 +276,7 @@ const onHlsError = (hls) => {
 
 /**
  * @todo chagen subs and audio is not working well
+ * @todo cambiar subs y audios
  */
 const Player = ({ ...rest }) => {
     /** @type {Function} */
@@ -358,6 +384,17 @@ const Player = ({ ...rest }) => {
         await onChangeEp(prevEp)
     }, [profile, content, onChangeEp])
 
+    const setPlayHead = useCallback(() => {
+        /**@todo corregir */
+        if (videoCompRef.current && content) {
+            //            hslRef.current.startLoad(-1)
+            //            const videoNode = document.querySelector('video')
+            //            hslRef.current.startLoad(content.playhead.playhead)
+            //            videoNode.currentTime = content.playhead.playhead
+            //            videoNode.play().catch(logger.error)
+        }
+    }, [videoCompRef, content])
+
     useEffect(() => {
         hslRef.current = createHls()
         return () => {
@@ -374,13 +411,15 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {
         setAudio(searchAudio({ profile, audios }))
-    }, [audios, profile, setAudio])
+    }, [profile, audios, setAudio])
 
     useEffect(() => {
         if (audios.includes(audio)) {
-            searchStream({ profile, audios, audio, getLang }).then(setStream)
+            searchPlayHead({ profile, content })
+                .then(() => searchStream({ profile, audios, audio, getLang }))
+                .then(setStream)
         }
-    }, [profile, audios, audio, getLang, setStream])
+    }, [profile, content, audios, audio, getLang, setStream])
 
     useEffect(() => {  // create hsl
         if (stream.url && loading) {
@@ -390,11 +429,16 @@ const Player = ({ ...rest }) => {
             Promise.all([
                 new Promise((res, rej) => {
                     // for test
-                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
+                    //                    hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
                     hslRef.current.loadSource(stream.url)
                     hslRef.current.config.capLevelToPlayerSize = true
                     hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current, rej))
-                    hslRef.current.on(Hls.Events.MANIFEST_PARSED, res)
+                    hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
+                        /**@todo quitar */
+                        //                        const videoNode = document.querySelector('video')
+                        //                        videoNode.currentTime = content.playhead.playhead
+                        res()
+                    })
                 }),
                 setSubtitle(searchSubtitle({ profile, ...stream })),
                 searchPreviews(stream).then(setPreviews)
@@ -402,33 +446,30 @@ const Player = ({ ...rest }) => {
                 setLoading(false)
             }).catch(logger.error)
         }
-    }, [setLoading, stream, loading, setSubtitle, profile, setPreviews])
+    }, [setLoading, stream, loading, setSubtitle, profile, setPreviews, setPlayHead])
 
     useEffect(() => {  // attach video to dom
         if (!loading && videoCompRef.current) {
-            const videoNode = document.querySelector('video')
-            hslRef.current.attachMedia(videoNode)
-            //            videoNode.play()
+            hslRef.current.attachMedia(document.querySelector('video'))
         }
     }, [loading, videoCompRef])
 
-    //    useEffect(() => {  // attach subs
-    //        if (!loading && videoRef.current) {
-    //            if (subtitle) {
-    //                if (subtitle.locale === 'off') {
-    //                    if (octopusRes.current) {
-    //                        octopusRes.current.freeTrack()
-    //                    }
-    //                } else {
-    //                    if (octopusRes.current) {
-    //                        octopusRes.current.setTrackByUrl(subtitle.url)
-    //                    } else {
-    //                        octopusRes.current = createOptapus({ subUrl: subtitle.url, videoRef })
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }, [loading, videoRef, subtitle])
+    useEffect(() => {  // attach subs
+        if (content && !loading && videoCompRef.current && subtitle) {
+            if (subtitle.locale === 'off') {
+                if (octopusRes.current) {
+                    octopusRes.current.freeTrack()
+                }
+            } else {
+                if (octopusRes.current) {
+                    octopusRes.current.setTrackByUrl(subtitle.url)
+                } else {
+                    octopusRes.current = createOptapus({ subUrl: subtitle.url })
+                }
+            }
+        }
+    }, [loading, videoCompRef, subtitle, content])
+
     return (
         <div className={rest.className}>
             <VideoPlayer {...rest}

@@ -9,7 +9,7 @@ import { translateError, getContentParam } from './utils'
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {Array<String>} params.contentIds
- * @return {Promise}
+ * @return {Promise<{data: Array<Object>}>}
  */
 export const getPlayHeads = async (profile, params) => {
     let out = null
