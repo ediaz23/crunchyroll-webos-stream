@@ -7,6 +7,7 @@ import SubtitlesOctopus from 'libass-wasm'
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
 import Rating from './Rating'
+import ContentInfo from './ContentInfo'
 import ContactMe from '../login/ContactMe'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
@@ -34,13 +35,15 @@ import back from '../../back'
  @returns {Promise}
  */
 const updatePlayHead = async ({ profile, content, videoCompRef }) => {
-    /** @type {{paused: boolean, currentTime: number}} */
-    const state = videoCompRef.current.getMediaState()
-    content.playhead.playhead = Math.floor(state.currentTime)
-    return api.content.savePlayhead(profile, {
-        contentId: content.id,
-        playhead: Math.floor(state.currentTime),
-    })
+    if (['episode'].includes(content.type)) {
+        /** @type {{paused: boolean, currentTime: number}} */
+        const state = videoCompRef.current.getMediaState()
+        content.playhead.playhead = Math.floor(state.currentTime)
+        return api.content.savePlayhead(profile, {
+            contentId: content.id,
+            playhead: Math.floor(state.currentTime),
+        })
+    }
 }
 
 /**
@@ -71,17 +74,49 @@ const updatePlayHeadLoop = ({ profile, content, videoCompRef }) => {
  }}
  * @returns {Promise}
  */
-const searchPlayHead = async ({ profile, content }) => {
-    const { data } = await api.content.getPlayHeads(profile, { contentIds: [content.id] })
-    if (data && data.length > 0) {
-        content.playhead = data[0]
-    } else {
-        content.playhead = {
-            playhead: 0,
-            fully_watched: false,
+const findPlayHead = async ({ profile, content }) => {
+    let playhead = {
+        playhead: 0,
+        fully_watched: false,
+    }
+    if (['episode'].includes(content.type)) {
+        const { data } = await api.content.getPlayHeads(profile, { contentIds: [content.id] })
+        if (data && data.length > 0) {
+            playhead = data[0]
         }
     }
+    return playhead
 }
+
+/**
+ * @param {{
+    content: Object,
+    getLang: Function,
+ }}
+ * @returns {Array<import('./AudioList').Audio>}
+ */
+const searchAudios = ({ content, getLang }) => {
+    /** @type {Array<import('./AudioList').Audio} */
+    let audios = []
+    if (['episode'].includes(content.type)) {
+        audios = content.versions.map(audio => {
+            return {
+                ...audio,
+                title: getLang(audio.audio_locale),
+                type: content.type
+            }
+        })
+    } else if (['musicConcert', 'musicVideo'].includes(content.type)) {
+        audios = [{
+            title: content.subTitle,
+            type: content.type,
+            media_guid: content.id,
+            audio_locale: 'none',
+        }]
+    }
+    return audios
+}
+
 
 /**
  * @param {{
@@ -90,7 +125,7 @@ const searchPlayHead = async ({ profile, content }) => {
  }}
  * @returns {import('./AudioList').Audio}
  */
-const searchAudio = ({ profile, audios }) => {
+const findAudio = ({ profile, audios }) => {
     let audio = audios.find(e => e.audio_locale === profile.preferred_content_audio_language)
     if (!audio) {
         audio = audios.find(e => e.audio_locale === 'ja-JP')
@@ -108,7 +143,7 @@ const searchAudio = ({ profile, audios }) => {
  }}
  * @returns {import('./SubtitleList').Subtitle}
  */
-const searchSubtitle = ({ profile, subtitles }) => {
+const findSubtitle = ({ profile, subtitles }) => {
     return subtitles.find(e => e.locale === profile.preferred_content_subtitle_language)
 }
 
@@ -121,11 +156,16 @@ const searchSubtitle = ({ profile, subtitles }) => {
   }}
  * @returns {Promise<Stream>}
  */
-const searchStream = async ({ profile, audios, audio, getLang }) => {
-    const { data, meta } = await api.cms.getStreams(profile, { contentId: audio.media_guid })
+const findStream = async ({ profile, audios, audio, getLang }) => {
+    let data = {}, meta = {}
+    if (['episode'].includes(audio.type)) {
+        ({ data, meta } = await api.cms.getStreams(profile, { contentId: audio.media_guid }))
+    } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
+        ({ data, meta } = await api.music.getStreams(profile, { contentId: audio.media_guid }))
+    }
     /** @type {Stream} */
     const out = {
-        url: data[0].multitrack_adaptive_hls_v2[''].url,
+        url: data[0].adaptive_hls[''].url,
         bif: meta.bifs,
         audios: audios,
         subtitles: [{ locale: 'off', }, ...Object.values(meta.subtitles)].map(subtitle => {
@@ -179,7 +219,7 @@ const searchPreviews = async ({ bif }) => {
   }}
  * @returns {String}
  */
-const searchPoster = ({ content }) => {
+const findPoster = ({ content }) => {
     let posterOut = null
     if (content && content.images && content.images.thumbnail) {
         /** @type {Array<{source: String}>} */
@@ -189,6 +229,70 @@ const searchPoster = ({ content }) => {
         }
     }
     return posterOut
+}
+
+/**
+ * @param {{
+    profile: import('crunchyroll-js-api/src/types').Profile,
+    content: Object,
+    concerts: Array<String>,
+    step: Number,
+    apiFunction: Function,
+ }}
+ * @returns {Promise<Object>}
+ */
+const getNextVideoOrConcert = async ({ profile, content, concerts, step, apiFunction }) => {
+    let out = null
+    const index = concerts.findIndex(val => val === content.id)
+    const nextIndex = index + step
+    if (index >= 0 && nextIndex >= 0 && nextIndex < concerts.length) {
+        const { data: newConcerts } = await apiFunction(profile, [concerts[nextIndex]])
+        if (newConcerts.length > 0) {
+            out = newConcerts[0]
+        }
+    }
+    return out
+}
+
+/**
+ * @param {{
+    profile: import('crunchyroll-js-api/src/types').Profile,
+    content: Object,
+    step: Number,
+ }}
+ * @returns {Promise<{total: Number, data: Array<Object>}>}
+ */
+const findNextEp = async ({ profile, content, step }) => {
+    let out = null
+    if (['episode'].includes(content.type)) {
+        if (step > 0) {
+            out = await api.discover.getNext(profile, { contentId: content.id })
+        } else {
+            out = await api.discover.getPrev(profile, { contentId: content.id })
+        }
+    } else if (['musicConcert', 'musicVideo'].includes(content.type)) {
+        const { data: artists } = await api.music.getArtists(profile, [content.artist.id])
+        if (artists.length > 0) {
+            const params = { profile, content, step }
+            if ('musicConcert' === content.type) {
+                out = await getNextVideoOrConcert({
+                    ...params,
+                    concerts: artists[0].concerts,
+                    apiFunction: api.music.getConcerts
+                })
+            } else if ('musicVideo' === content.type) {
+                out = await getNextVideoOrConcert({
+                    ...params,
+                    concerts: artists[0].videos,
+                    apiFunction: api.music.getVideos
+                })
+            }
+            if (out) {
+                out = { total: 1, data: [out] }
+            }
+        }
+    }
+    return out
 }
 
 /**
@@ -290,12 +394,8 @@ const Player = ({ ...rest }) => {
         return Object.assign({}, playContent, playContent.episode_metadata || {})
     }, [playContent])
     /** @type {Array<import('./AudioList').Audio} */
-    const audios = useMemo(() => {
-        return content.versions.map(a => {
-            return { ...a, title: getLang(a.audio_locale) }
-        })
-    }, [content, getLang])
-    const poster = useMemo(() => searchPoster({ content }), [content])
+    const audios = useMemo(() => searchAudios({ content, getLang }), [content, getLang])
+    const poster = useMemo(() => findPoster({ content }), [content])
     /** @type {[import('./AudioList').Audio, Function]} */
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
@@ -366,22 +466,20 @@ const Player = ({ ...rest }) => {
             cleanStates()
             setPlayContent(changeEp.data[0])
         } else {
-            back.popHistory().doBack()
+            back.doBack()
         }
     }, [videoCompRef, profile, content, setPlayContent, cleanStates])
 
     /** @type {Function} */
     const onNextEp = useCallback(async (ev) => {
         ev.preventDefault()
-        const nextEp = await api.discover.getNext(profile, { contentId: content.id })
-        await onChangeEp(nextEp)
+        await onChangeEp(await findNextEp({ profile, content, step: +1 }))
     }, [profile, content, onChangeEp])
 
     /** @type {Function} */
     const onPrevEp = useCallback(async (ev) => {
         ev.preventDefault()
-        const prevEp = await api.discover.getPrev(profile, { contentId: content.id })
-        await onChangeEp(prevEp)
+        await onChangeEp(await findNextEp({ profile, content, step: -1 }))
     }, [profile, content, onChangeEp])
 
     const setPlayHead = useCallback(() => {
@@ -410,13 +508,14 @@ const Player = ({ ...rest }) => {
     }, [profile, content, videoCompRef])
 
     useEffect(() => {
-        setAudio(searchAudio({ profile, audios }))
+        setAudio(findAudio({ profile, audios }))
     }, [profile, audios, setAudio])
 
     useEffect(() => {
         if (audios.includes(audio)) {
-            searchPlayHead({ profile, content })
-                .then(() => searchStream({ profile, audios, audio, getLang }))
+            findPlayHead({ profile, content })
+                .then(playhead => { content.playhead = playhead })
+                .then(() => findStream({ profile, audios, audio, getLang }))
                 .then(setStream)
         }
     }, [profile, content, audios, audio, getLang, setStream])
@@ -429,18 +528,18 @@ const Player = ({ ...rest }) => {
             Promise.all([
                 new Promise((res, rej) => {
                     // for test
-                    //                    hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
+                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
                     hslRef.current.loadSource(stream.url)
                     hslRef.current.config.capLevelToPlayerSize = true
                     hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current, rej))
                     hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
                         /**@todo quitar */
-                        //                        const videoNode = document.querySelector('video')
-                        //                        videoNode.currentTime = content.playhead.playhead
+                        // const videoNode = document.querySelector('video')
+                        // videoNode.currentTime = content.playhead.playhead
                         res()
                     })
                 }),
-                setSubtitle(searchSubtitle({ profile, ...stream })),
+                setSubtitle(findSubtitle({ profile, ...stream })),
                 searchPreviews(stream).then(setPreviews)
             ]).then(() => {
                 setLoading(false)
@@ -488,7 +587,10 @@ const Player = ({ ...rest }) => {
                 </Video>
                 <MediaControls>
                     <leftComponents>
-                        <Rating profile={profile} content={content} />
+                        <ContentInfo content={content} />
+                        {['episode'].includes(content.type) &&
+                            <Rating profile={profile} content={content} />
+                        }
                     </leftComponents>
                     <rightComponents>
                         {stream.subtitles.length > 1 &&
@@ -496,7 +598,7 @@ const Player = ({ ...rest }) => {
                                 subtitle={subtitle}
                                 selectSubtitle={selectSubtitle} />
                         }
-                        {stream.audios.length > 0 &&
+                        {stream.audios.length > 1 &&
                             <AudioSelect audios={stream.audios}
                                 audio={audio}
                                 selectAudio={selectAudio} />

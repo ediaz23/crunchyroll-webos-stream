@@ -33,7 +33,7 @@ const Logout = ({ text }) => {
     }, [setAskExit])
 
     const cancelLogout = useCallback(() => {
-        back.popHistory().doBack()
+        back.doBack()
     }, [])
 
     return (

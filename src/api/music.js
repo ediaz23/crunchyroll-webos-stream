@@ -9,7 +9,7 @@ import { translateError, getContentParam } from './utils'
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Array<String>} artistIds
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array}>}
  */
 export const getArtists = async (profile, artistIds) => {
     let out = null
@@ -30,7 +30,7 @@ export const getArtists = async (profile, artistIds) => {
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Array<String>} concertIds
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array}>}
  */
 export const getConcerts = async (profile, concertIds) => {
     let out = null
@@ -51,7 +51,7 @@ export const getConcerts = async (profile, concertIds) => {
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Array<String>} musicIds
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array}>}
  */
 export const getVideos = async (profile, musicIds) => {
     let out = null
@@ -62,6 +62,47 @@ export const getVideos = async (profile, musicIds) => {
             const account = await getContentParam(profile)
             out = await api.music.getVideo({ account, musicIds })
         }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.streamUrl
+ * @return {Promise}
+ */
+export const getStreamsWithURL = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('streams-url', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.music.getStreamsWithURL({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @return {Promise}
+ */
+export const getStreams = async (profile, params) => {
+    let out = null
+    try {
+        const account = await getContentParam(profile)
+        out = await api.music.getStreams({ account, ...params })
     } catch (error) {
         await translateError(error)
     }

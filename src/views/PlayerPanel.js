@@ -18,10 +18,7 @@ Player.propTypes = {
 
 const handleCancel = (ev) => {
     ev.stopPropagation()
-    const state = back.popHistory()
-    if (state) {
-        state.doBack()
-    }
+    back.doBack()
 }
 
 const PlayerPanel = Cancelable(

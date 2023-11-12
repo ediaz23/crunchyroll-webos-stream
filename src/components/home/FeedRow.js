@@ -14,6 +14,7 @@ import Navigable from '../../wrappers/Navigable'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
 import back from '../../back'
+import logger from '../../logger'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 
 const NavigableDiv = Navigable('div', '')
@@ -26,6 +27,7 @@ const Poster = ({ item, image, itemSize, ...rest }) => {
         const duration = item.episode_metadata.duration_ms / 1000
         progress = item.playhead / duration * 100
     }
+
     return (
         <NavigableDiv {...rest} >
             <Image src={image.source} sizing='none' style={image.size}>
@@ -78,7 +80,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     /** @type {Function} */
     const doSelectElement = useCallback(content => {
         back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
-        if (content.type === 'episode') {
+        if (['episode', 'musicConcert'].includes(content.type)) {
             setPlayContent(content)
             setPath('/profiles/home/player')
         } else {
@@ -118,10 +120,13 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     }, [setHomefeedReady])  // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
+        logger.info(new Set(feed.items.map(val => val.type)))
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
                 series: 'GRDV0019R',
-                episode: 'GZ7UV13VE'
+                episode: 'GZ7UV13VE',
+                musicArtist: 'MA899F289',
+                musicConcert: 'MC413F8154',
             }
             const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
                 val.id === testContent[DEV_CONTENT_TYPE])

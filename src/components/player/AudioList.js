@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
  * @property {String} audio_locale
  * @property {String} media_guid
  * @property {String} title
+ * @property {"episode"|"musicConcert"} type
  */
 
 /**

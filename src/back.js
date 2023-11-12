@@ -58,4 +58,5 @@ export default {
     popHistory,
     replaceHistory,
     cleanHistory,
+    doBack,
 }

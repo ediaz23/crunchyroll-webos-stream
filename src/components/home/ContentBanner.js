@@ -146,7 +146,7 @@ ContentHeader.propTypes = {
 }
 
 
-const HomeContentBanner = ({ content }) => {
+const HomeContentBanner = ({ content, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
@@ -161,7 +161,7 @@ const HomeContentBanner = ({ content }) => {
     }, [compRef, content, getImagePerResolution])
 
     return (
-        <Row className={css.homeContentBanner} >
+        <Row className={css.homeContentBanner} {...rest}>
             <Cell size="50%">
                 <ContentHeader content={content} />
                 <BodyText size='small'>

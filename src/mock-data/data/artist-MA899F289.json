@@ -1,0 +1,175 @@
+{
+    "total": 1,
+    "data": [
+        {
+            "concerts": [
+                "MC413F8154",
+                "MC64DA9803",
+                "MC6766C4D6",
+                "MC13B71354"
+            ],
+            "id": "MA899F289",
+            "isPublic": true,
+            "name": "MAN WITH A MISSION",
+            "totalConcertDurationMs": 43419000,
+            "slug": "man-with-a-mission",
+            "updatedAt": "2023-10-27T09:56:24.037Z",
+            "description": "En el año 19XX, la Tierra fue consumida por la guerra. Vivía un genio biólogo llamado Dr. Jimi (aficionado a la guitarra) que estaba a punto de concluir un experimento científico loco para crear una serie de criaturas superiores que serían llamadas MAN WITH A MISSION. A primera vista, su apariencia puede ser engañosa e incluso cómica, pero poseen una increíble capacidad cerebral y una fuerza sobrehumana. El principado de Zeon los hizo trabajar en las sombras de la historia en varios lugares del mundo. El Dr. Jimi se consumía por la culpa de que sus creaciones habían contribuido a algunos de los actos más malvados de la historia y decidió ponerles fin. Quería asegurarse de que no caerían bajo la influencia del mal nuevamente, así que los congeló en un sueño eterno. El tiempo pasó y en 2010, el calentamiento y el deterioro del planeta derritieron los ataúdes de hielo y MWAM despertó de su sueño eterno. ¿Están trabajando por la justicia en este mundo o solo representan el mal? De cualquier modo, ¡\"MAN WITH A MISSION\" ha vuelto a su misión alrededor del mundo!",
+            "images": {
+                "poster_tall": [
+                    {
+                        "height": 90,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 60
+                    },
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 120
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 240
+                    },
+                    {
+                        "height": 720,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 480
+                    },
+                    {
+                        "height": 1125,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 750
+                    },
+                    {
+                        "height": 1440,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 960
+                    },
+                    {
+                        "height": 1688,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 1125
+                    },
+                    {
+                        "height": 1800,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 1200
+                    },
+                    {
+                        "height": 2340,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/26c03ebef54e9ed304a4f6fb85419df4.png",
+                        "type": "poster_tall",
+                        "width": 1560
+                    }
+                ],
+                "poster_wide": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/e4facb394979d4c65f2df3f79ed70825.png",
+                        "type": "poster_wide",
+                        "width": 1920
+                    }
+                ]
+            },
+            "totalVideoDurationMs": 8632000,
+            "videos": [
+                "MV73046D6E",
+                "MVBA112B5D",
+                "MV876DDC4D",
+                "MV37D55D3F",
+                "MV67DB9C43",
+                "MV7DB34517",
+                "MV1DC1AC1F",
+                "MV120B620E",
+                "MV8C04828A",
+                "MV6CE9CEC3",
+                "MV4918B391",
+                "MV829D562E",
+                "MV9F218F2A",
+                "MV6569B39E",
+                "MVB5F81262",
+                "MV2A0D3CD4",
+                "MV286C2EF6",
+                "MV8276CFD4",
+                "MVA26B6BD8",
+                "MV53A1059B",
+                "MV59EE655B",
+                "MV8B0233B4",
+                "MVA5387E",
+                "MV53373EF6",
+                "MV43B185C9",
+                "MVBAA14315",
+                "MV5C58CB3D",
+                "MV2D796C8F",
+                "MV2477CAE3",
+                "MV5860C7DB",
+                "MVA4A9E87E",
+                "MV9D0A0C42",
+                "MV40D26DA9"
+            ],
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "publishDate": "2023-05-31T13:00:00Z",
+            "readyToPublish": true,
+            "type": "musicArtist"
+        }
+    ],
+    "meta": {}
+}
