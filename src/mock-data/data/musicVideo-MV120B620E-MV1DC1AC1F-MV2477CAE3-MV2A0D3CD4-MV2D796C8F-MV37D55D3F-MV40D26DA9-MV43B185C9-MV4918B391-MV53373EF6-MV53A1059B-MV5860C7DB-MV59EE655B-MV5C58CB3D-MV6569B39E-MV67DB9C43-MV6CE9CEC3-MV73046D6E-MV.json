@@ -1,0 +1,3392 @@
+{
+    "total": 31,
+    "data": [
+        {
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-04-15T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPremiumOnly": true,
+            "licensor": "Sony Music Labels Inc.",
+            "readyToPublish": true,
+            "sequenceNumber": 1,
+            "copyright": "(C) 2015 Sony Music Labels Inc.",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "createdAt": "2023-05-16T15:16:31.097Z",
+            "displayArtistNameRequired": false,
+            "maturityRatings": {},
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV9D0A0C42/streams",
+            "description": "",
+            "originalRelease": "2015-04-15T00:00:00Z",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "updatedAt": "2023-10-27T07:13:20.067Z",
+            "title": "Dive",
+            "animeIds": [],
+            "displayArtistName": "MAN WITH A MISSION",
+            "durationMs": 291000,
+            "isMature": false,
+            "isPublic": true,
+            "matureBlocked": false,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "hash": "625f1722259b65536a06bc20a307b601",
+            "id": "MV9D0A0C42",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/3fe4e0b50a8afd6e5bdb8ca64bd21637.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "slug": "dive"
+        },
+        {
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MV120B620E/streams",
+            "description": "",
+            "hash": "6e92920b72f5c36540c67323eafbcccd",
+            "id": "MV120B620E",
+            "isPublic": true,
+            "matureBlocked": false,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "createdAt": "2023-05-16T13:18:49.593Z",
+            "durationMs": 272000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/ab8e596b2e08d76aecd88f5179f9f2db.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "sequenceNumber": 1,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "copyright": "(C) 2014 Sony Music Labels Inc.",
+            "title": "When My Devil Rises",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T07:13:34.436Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "slug": "when-my-devil-rises",
+            "displayArtistNameRequired": false,
+            "isMature": false,
+            "animeIds": [],
+            "originalRelease": "2014-07-23T00:00:00Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "displayArtistName": "MAN WITH A MISSION"
+        },
+        {
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2020-06-16T00:00:00Z"
+            },
+            "createdAt": "2023-05-16T15:16:22.43Z",
+            "displayArtistNameRequired": false,
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "description": "",
+            "hash": "afc58d8cc3f729ed53a2682216dbb798",
+            "type": "musicVideo",
+            "slug": "change-the-world",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "durationMs": 301000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/3b84ba927575c40612c9ef839b1b55f3.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "readyToPublish": true,
+            "animeIds": [],
+            "displayArtistName": "MAN WITH A MISSION",
+            "id": "MV40D26DA9",
+            "isMature": false,
+            "licensor": "Sony Music Labels Inc.",
+            "maturityRatings": {},
+            "isPublic": true,
+            "originalRelease": "2020-06-26T00:00:00Z",
+            "sequenceNumber": 1,
+            "copyright": "(C) 2020 Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "publishDate": "2023-06-26T15:00:00Z",
+            "title": "Change the World",
+            "updatedAt": "2023-10-27T07:14:01.982Z",
+            "streams_link": "/content/v2/music/MV40D26DA9/streams"
+        },
+        {
+            "maturityRatings": {},
+            "publishDate": "2023-06-26T15:00:00Z",
+            "streams_link": "/content/v2/music/MVB5F81262/streams",
+            "copyright": "(C) 2018 Sony Music Labels Inc.",
+            "id": "MVB5F81262",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/c969a9f565f679c736c4d564d474d4e6.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "hash": "2e4e81e5c164361ee5f8e3a717fbde48",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T07:13:31.473Z",
+            "displayArtistNameRequired": false,
+            "isPremiumOnly": true,
+            "slug": "take-me-under",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "originalRelease": "2018-04-13T00:00:00Z",
+            "title": "Take Me Under",
+            "displayArtistName": "MAN WITH A MISSION",
+            "isMature": false,
+            "readyToPublish": true,
+            "animeIds": [],
+            "description": "",
+            "isPublic": true,
+            "licensor": "Sony Music Labels Inc.",
+            "matureBlocked": false,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2018-04-13T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "createdAt": "2023-05-16T15:15:22.054Z",
+            "durationMs": 266000,
+            "sequenceNumber": 1
+        },
+        {
+            "title": "Telescope",
+            "isMature": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/dcf4e1ac8b9c69e3b60a4a787a68525f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "sequenceNumber": 1,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "hash": "085962a6cc4adb9003d0ef252feb23c4",
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MV4918B391/streams",
+            "durationMs": 278000,
+            "isPremiumOnly": true,
+            "type": "musicVideo",
+            "description": "",
+            "maturityRatings": {},
+            "createdAt": "2023-05-16T15:15:49.793Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2020-10-30T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "originalRelease": "2020-10-29T00:00:00Z",
+            "updatedAt": "2023-09-07T03:26:59.373Z",
+            "animeIds": [],
+            "displayArtistName": "MAN WITH A MISSION",
+            "licensor": "Sony Music Labels Inc.",
+            "slug": "telescope",
+            "copyright": "(C) 2020 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "id": "MV4918B391",
+            "isPublic": true,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            }
+        },
+        {
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/48b0b12dffad34f97577d2f93377c512.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "title": "whatever you had said was everything",
+            "animeIds": [],
+            "id": "MV8B0233B4",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2014-04-04T00:00:00Z"
+            },
+            "originalRelease": "2014-04-04T00:00:00Z",
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "type": "musicVideo",
+            "displayArtistNameRequired": false,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "copyright": "(C) 2014 Sony Music Labels Inc.",
+            "hash": "77b7cb9d81dff2078f39e704714b3058",
+            "streams_link": "/content/v2/music/MV8B0233B4/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "isMature": false,
+            "slug": "whatever-you-had-said-was-everything",
+            "updatedAt": "2023-10-27T07:13:17.029Z",
+            "createdAt": "2023-05-16T15:16:40.65Z",
+            "durationMs": 298000,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "description": "",
+            "matureBlocked": false,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "sequenceNumber": 1,
+            "displayArtistName": "MAN WITH A MISSION",
+            "licensor": "Sony Music Labels Inc."
+        },
+        {
+            "displayArtistName": "MAN WITH A MISSION",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "originalRelease": "2018-08-23T00:00:00Z",
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MV829D562E/streams",
+            "copyright": "(C) 2018 Sony Music Labels Inc.",
+            "durationMs": 340000,
+            "hash": "148320ab973cdbfe2646ea75c36859fe",
+            "isPremiumOnly": true,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/0c9a7e8f91e63118f06a4aada8a547f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "maturityRatings": {},
+            "matureBlocked": false,
+            "displayArtistNameRequired": false,
+            "isPublic": true,
+            "slug": "hey-now",
+            "type": "musicVideo",
+            "createdAt": "2023-05-16T13:19:21.31Z",
+            "licensor": "Sony Music Labels Inc.",
+            "sequenceNumber": 1,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "description": "",
+            "isMature": false,
+            "title": "Hey Now",
+            "animeIds": [],
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "id": "MV829D562E",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "updatedAt": "2023-10-27T07:13:34.687Z"
+        },
+        {
+            "maturityRatings": {},
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/51212c9a80e54cabf51f35b9f85d4a3f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "slug": "remember-me",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "displayArtistName": "MAN WITH A MISSION",
+            "matureBlocked": false,
+            "sequenceNumber": 1,
+            "updatedAt": "2023-10-27T07:13:37.544Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "displayArtistNameRequired": false,
+            "durationMs": 295000,
+            "title": "Remember Me",
+            "createdAt": "2023-05-16T15:15:39.818Z",
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MV67DB9C43/streams",
+            "isPublic": true,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "hash": "f109c1a02d1ccea430c7332df3dda5a7",
+            "id": "MV67DB9C43",
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2019-03-27T00:00:00Z",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "type": "musicVideo",
+            "description": "",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "isMature": false,
+            "isPremiumOnly": true,
+            "animeIds": []
+        },
+        {
+            "displayArtistName": "MAN WITH A MISSION",
+            "id": "MVBA112B5D",
+            "isMature": false,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "durationMs": 248000,
+            "originalRelease": "2020-12-29T00:00:00Z",
+            "streams_link": "/content/v2/music/MVBA112B5D/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2020-12-30T00:00:00Z"
+            },
+            "displayArtistNameRequired": false,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/4d1d9264bcf3455416ba96989738f196.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "isPremiumOnly": true,
+            "createdAt": "2023-05-16T15:15:49.054Z",
+            "description": "",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T07:14:12.417Z",
+            "hash": "c04d5e0b72edc529cccdd1bd1a8f2231",
+            "sequenceNumber": 1,
+            "slug": "evergreen",
+            "title": "evergreen",
+            "readyToPublish": true,
+            "animeIds": [],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "copyright": "(C) 2020 Sony Music Labels Inc.",
+            "isPublic": true,
+            "maturityRatings": {},
+            "matureBlocked": false
+        },
+        {
+            "hash": "3b47034aa45440f34ad77808faaccef4",
+            "isPublic": true,
+            "copyright": "(C) 2013 Sony Music Labels Inc.",
+            "createdAt": "2023-05-16T15:20:12.703Z",
+            "displayArtistNameRequired": false,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "publishDate": "2023-06-26T15:00:00Z",
+            "updatedAt": "2023-10-27T08:52:00.524Z",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/02c70356ceb19eb8e2dceff8dd422186.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "slug": "database",
+            "type": "musicVideo",
+            "isPremiumOnly": true,
+            "title": "database",
+            "displayArtistName": "MAN WITH A MISSION feat. TAKUMA",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isMature": false,
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "sequenceNumber": 1,
+            "animeIds": [
+                "GRVNMG93Y"
+            ],
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MA2C703380",
+                        "name": "TAKUMA",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "takuma"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "description": "",
+            "matureBlocked": false,
+            "originalRelease": "2013-10-16T00:00:00Z",
+            "streams_link": "/content/v2/music/MV2477CAE3/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2013-10-15T00:00:00Z"
+            },
+            "id": "MV2477CAE3",
+            "licensor": "Sony Music Labels Inc.",
+            "durationMs": 235000
+        },
+        {
+            "streams_link": "/content/v2/music/MV8C04828A/streams",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "displayArtistNameRequired": false,
+            "id": "MV8C04828A",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T09:56:25.272Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/c7a9638aa8c9b5bae9b2b6bf92cb7f98.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-06-26T15:00:00Z",
+            "readyToPublish": true,
+            "isMature": false,
+            "originalRelease": "2018-07-19T00:00:00Z",
+            "description": "",
+            "licensor": "Sony Music Labels Inc.",
+            "title": "2045",
+            "animeIds": [],
+            "copyright": "(C) 2018 Sony Music Labels Inc.",
+            "hash": "71e8e196444e686dced620b18b872e77",
+            "sequenceNumber": 1,
+            "isPublic": true,
+            "createdAt": "2023-05-16T15:16:33.138Z",
+            "displayArtistName": "MAN WITH A MISSION",
+            "durationMs": 234000,
+            "maturityRatings": {},
+            "slug": "2045",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            }
+        },
+        {
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/7655c59c3dbec74c6cd00dfb6f0341df.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isMature": false,
+            "isPublic": true,
+            "createdAt": "2023-05-16T15:16:53.459Z",
+            "id": "MV6569B39E",
+            "description": "",
+            "type": "musicVideo",
+            "isPremiumOnly": true,
+            "displayArtistName": "MAN WITH A MISSION feat. Patrick Stump",
+            "durationMs": 206000,
+            "licensor": "Sony Music Labels Inc.",
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "streams_link": "/content/v2/music/MV6569B39E/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2019-10-23T00:00:00Z"
+            },
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "title": "86 Missed Calls",
+            "matureBlocked": false,
+            "sequenceNumber": 1,
+            "slug": "86-missed-calls",
+            "updatedAt": "2023-10-27T07:14:09.178Z",
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MA28277CC7",
+                        "name": "Patrick Stump",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "patrick-stump"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "originalRelease": "2019-10-23T00:00:00Z",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "displayArtistNameRequired": false,
+            "hash": "e424dabba4f4d78540b56c06dd486b98",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "animeIds": [],
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ]
+        },
+        {
+            "id": "MVA5387E",
+            "isMature": false,
+            "matureBlocked": false,
+            "animeIds": [
+                "GEXH3WKK0"
+            ],
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/233ba4b7b9f9548b38d3ddc4c8d721b2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "readyToPublish": true,
+            "slug": "dark-crow",
+            "updatedAt": "2023-10-27T08:55:41.488Z",
+            "displayArtistName": "MAN WITH A MISSION",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPublic": true,
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "durationMs": 277000,
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "title": "Dark Crow",
+            "streams_link": "/content/v2/music/MVA5387E/streams",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "hash": "4d5bcad2209cd0df4ece91ff415302e3",
+            "originalRelease": "2019-10-13T00:00:00Z",
+            "type": "musicVideo",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2019-09-10T00:00:00Z"
+            },
+            "createdAt": "2023-05-16T15:15:56.955Z",
+            "description": "",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "sequenceNumber": 1
+        },
+        {
+            "title": "Rock Kingdom",
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MA681C88F6",
+                        "name": "Tomoyasu Hotei",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "tomoyasu-hotei"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "hash": "6fce2fc5f10102757f33a3d2eae5cdd6",
+            "isPublic": true,
+            "licensor": "Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isMature": false,
+            "displayArtistNameRequired": false,
+            "id": "MV37D55D3F",
+            "isPremiumOnly": true,
+            "readyToPublish": true,
+            "copyright": "(C) 2020 Sony Music Labels Inc.",
+            "slug": "rock-kingdom",
+            "type": "musicVideo",
+            "description": "",
+            "durationMs": 262000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/826219b4f59a353e8b900bb85dcb7dad.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-06-26T15:00:00Z",
+            "displayArtistName": "MAN WITH A MISSION feat. HOTEI",
+            "maturityRatings": {},
+            "originalRelease": "2020-07-15T00:00:00Z",
+            "updatedAt": "2023-10-27T07:14:02.369Z",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2020-06-25T00:00:00Z"
+            },
+            "matureBlocked": false,
+            "streams_link": "/content/v2/music/MV37D55D3F/streams",
+            "animeIds": [],
+            "createdAt": "2023-05-16T15:16:26.149Z",
+            "sequenceNumber": 1
+        },
+        {
+            "publishDate": "2023-06-26T15:00:00Z",
+            "licensor": "Sony Music Labels Inc.",
+            "maturityRatings": {},
+            "originalRelease": "2017-01-11T00:00:00Z",
+            "type": "musicVideo",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "copyright": "(C) 2017 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "title": "Dead End in Tokyo",
+            "streams_link": "/content/v2/music/MV2D796C8F/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "hash": "20fffc7dbdb735562c2e2656bb563514",
+            "isMature": false,
+            "isPublic": true,
+            "sequenceNumber": 1,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "updatedAt": "2023-10-27T07:13:26.314Z",
+            "animeIds": [],
+            "durationMs": 230000,
+            "id": "MV2D796C8F",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/d58f4f906fb04eb23f24ad7851c9d34c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "displayArtistName": "MAN WITH A MISSION",
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "slug": "dead-end-in-tokyo",
+            "createdAt": "2023-05-16T15:17:44.828Z",
+            "description": ""
+        },
+        {
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "copyright": "(C) 2018 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/98cd610756b5e4bbd65cd0a1f2b02146.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "title": "Winding Road",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isMature": false,
+            "originalRelease": "2018-05-11T00:00:00Z",
+            "streams_link": "/content/v2/music/MV5860C7DB/streams",
+            "description": "",
+            "displayArtistName": "MAN WITH A MISSION",
+            "isPremiumOnly": true,
+            "type": "musicVideo",
+            "createdAt": "2023-05-16T15:16:29.785Z",
+            "readyToPublish": true,
+            "updatedAt": "2023-10-27T08:53:49.519Z",
+            "animeIds": [
+                "GY8DWQN5Y"
+            ],
+            "id": "MV5860C7DB",
+            "slug": "winding-road",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "durationMs": 230000,
+            "licensor": "Sony Music Labels Inc.",
+            "maturityRatings": {},
+            "publishDate": "2023-06-26T15:00:00Z",
+            "sequenceNumber": 1,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "hash": "8f43de8ccb75745c084a06fa641a7520",
+            "matureBlocked": false
+        },
+        {
+            "isPublic": true,
+            "sequenceNumber": 1,
+            "slug": "freak-it",
+            "streams_link": "/content/v2/music/MV43B185C9/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "isMature": false,
+            "readyToPublish": true,
+            "description": "",
+            "id": "MV43B185C9",
+            "licensor": "Sony Music Labels Inc.",
+            "type": "musicVideo",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "copyright": "(C) 2018 Sony Music Labels Inc.",
+            "createdAt": "2023-05-16T15:15:44.384Z",
+            "title": "Freak It!",
+            "displayArtistName": "MAN WITH A MISSION feat.TOKYO SKA PARADISE ORCHESTRA",
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "isPremiumOnly": true,
+            "originalRelease": "2018-02-02T00:00:00Z",
+            "durationMs": 187000,
+            "hash": "90a7c81d6afa3552964682d3a9055908",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/ea84c1fe5b180ec963f0573335925fe7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "updatedAt": "2023-10-27T07:13:34.386Z",
+            "animeIds": [],
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MA241566EE",
+                        "name": "Tokyo Ska Paradise Orchestra",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "tokyo-ska-paradise-orchestra"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "displayArtistNameRequired": false,
+            "publishDate": "2023-06-26T15:00:00Z"
+        },
+        {
+            "matureBlocked": false,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "hash": "dd4b2b92a4b536be5b6e889a93eea260",
+            "id": "MV1DC1AC1F",
+            "isPublic": true,
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "createdAt": "2023-05-16T15:17:19.25Z",
+            "sequenceNumber": 1,
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "description": "",
+            "isMature": false,
+            "displayArtistName": "MAN WITH A MISSION",
+            "durationMs": 262000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/62ea14542859fee4308fb3254c8a37cd.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "updatedAt": "2023-10-27T07:13:37.047Z",
+            "animeIds": [],
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2019-04-29T00:00:00Z",
+            "title": "FLY AGAIN 2019",
+            "streams_link": "/content/v2/music/MV1DC1AC1F/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "publishDate": "2023-06-26T15:00:00Z",
+            "slug": "fly-again-2019",
+            "isPremiumOnly": true,
+            "type": "musicVideo"
+        },
+        {
+            "animeIds": [],
+            "isPublic": true,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "type": "musicVideo",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "displayArtistNameRequired": false,
+            "createdAt": "2023-05-16T15:16:43.461Z",
+            "displayArtistName": "MAN WITH A MISSION",
+            "isMature": false,
+            "isPremiumOnly": true,
+            "updatedAt": "2023-10-27T07:13:21.77Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-10-07T00:00:00Z"
+            },
+            "publishDate": "2023-06-26T15:00:00Z",
+            "slug": "far",
+            "copyright": "(C) 2015 Sony Music Labels Inc.",
+            "sequenceNumber": 1,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "description": "",
+            "durationMs": 275000,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "id": "MV5C58CB3D",
+            "licensor": "Sony Music Labels Inc.",
+            "readyToPublish": true,
+            "hash": "8adb1b382c8e05547c65a9cfd71f076c",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/258f80658b07d42e5983d1354adac813.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "originalRelease": "2015-10-14T00:00:00Z",
+            "title": "Far",
+            "streams_link": "/content/v2/music/MV5C58CB3D/streams"
+        },
+        {
+            "originalRelease": "2014-01-29T00:00:00Z",
+            "readyToPublish": true,
+            "durationMs": 262000,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "hash": "5fe47419d45b941695b6a1968684de19",
+            "isPublic": true,
+            "animeIds": [],
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2014-01-29T00:00:00Z"
+            },
+            "slug": "higher",
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/1777de2111e53386904aa3f6e91f6768.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "description": "",
+            "displayArtistName": "MAN WITH A MISSION",
+            "type": "musicVideo",
+            "sequenceNumber": 1,
+            "streams_link": "/content/v2/music/MVBAA14315/streams",
+            "copyright": "(C) 2014 Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isMature": false,
+            "title": "higher",
+            "updatedAt": "2023-10-27T07:13:15.669Z",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "createdAt": "2023-05-16T15:22:24.851Z",
+            "id": "MVBAA14315",
+            "licensor": "Sony Music Labels Inc."
+        },
+        {
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "slug": "merry-go-round",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2021-08-22T00:00:00Z"
+            },
+            "copyright": "(C) 2021 Sony Music Labels Inc.",
+            "displayArtistName": "MAN WITH A MISSION",
+            "updatedAt": "2023-10-27T08:54:37.567Z",
+            "description": "",
+            "licensor": "Sony Music Labels Inc.",
+            "type": "musicVideo",
+            "isPremiumOnly": true,
+            "animeIds": [
+                "G6NQ5DWZ6",
+                "GYNV9DP2R"
+            ],
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "hash": "bcdc53c876605c4d2d66c02e07222ab5",
+            "maturityRatings": {},
+            "sequenceNumber": 1,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "isPublic": true,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/20949d562c1967751d8da3b329aebfaa.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-06-26T15:00:00Z",
+            "title": "Merry-Go-Round",
+            "isMature": false,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "id": "MV7DB34517",
+            "streams_link": "/content/v2/music/MV7DB34517/streams",
+            "createdAt": "2023-05-16T15:16:38.846Z",
+            "durationMs": 247000,
+            "originalRelease": "2021-08-21T00:00:00Z"
+        },
+        {
+            "displayArtistName": "MAN WITH A MISSION",
+            "isMature": false,
+            "type": "musicVideo",
+            "durationMs": 256000,
+            "updatedAt": "2023-10-27T07:13:19.243Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "copyright": "(C) 2015 Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPremiumOnly": true,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "sequenceNumber": 1,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-01-11T00:00:00Z"
+            },
+            "isPublic": true,
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "slug": "seven-deadly-sins",
+            "animeIds": [],
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "streams_link": "/content/v2/music/MV2A0D3CD4/streams",
+            "createdAt": "2023-05-16T15:18:15.723Z",
+            "id": "MV2A0D3CD4",
+            "matureBlocked": false,
+            "originalRelease": "2015-01-11T00:00:00Z",
+            "description": "",
+            "hash": "dfc555b081035438c6d94660150dfb03",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/b586362dd01d30a472e11f477dc0003d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "title": "Seven Deadly Sins"
+        },
+        {
+            "createdAt": "2023-05-16T15:17:56.05Z",
+            "displayArtistName": "MAN WITH A MISSION",
+            "licensor": "Sony Music Labels Inc.",
+            "matureBlocked": false,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "title": "Dog Days",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-06-23T00:00:00Z"
+            },
+            "durationMs": 254000,
+            "copyright": "(C) 2017 Sony Music Labels Inc.",
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "sequenceNumber": 1,
+            "slug": "dog-days",
+            "displayArtistNameRequired": false,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/97a8ba9a0f7bfccafe028e44f916d011.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "hash": "2cea37f3f92e5055857b4cdda7433582",
+            "id": "MV6CE9CEC3",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T07:13:28.06Z",
+            "animeIds": [],
+            "description": "",
+            "isPublic": true,
+            "originalRelease": "2017-06-23T00:00:00Z",
+            "isMature": false,
+            "streams_link": "/content/v2/music/MV6CE9CEC3/streams"
+        },
+        {
+            "description": "",
+            "readyToPublish": true,
+            "updatedAt": "2023-10-27T07:13:34.595Z",
+            "animeIds": [],
+            "copyright": "(C) 2018 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "isPublic": true,
+            "title": "The Anthem",
+            "type": "musicVideo",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "maturityRatings": {},
+            "sequenceNumber": 1,
+            "createdAt": "2023-05-16T15:16:37.763Z",
+            "hash": "5ab7a75d6386c0e38a050416c49a523e",
+            "isPremiumOnly": true,
+            "slug": "the-anthem",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "displayArtistName": "MAN WITH A MISSION",
+            "durationMs": 242000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/bcb1656c823e8ea9a815d9b789c2fb23.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isMature": false,
+            "matureBlocked": false,
+            "streams_link": "/content/v2/music/MV876DDC4D/streams",
+            "id": "MV876DDC4D",
+            "licensor": "Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "originalRelease": "2018-03-08T00:00:00Z"
+        },
+        {
+            "description": "",
+            "durationMs": 236000,
+            "hash": "69644997403aabd627508502d2e483dc",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/8048920bf12b9335dbffe211e57c7165.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "updatedAt": "2023-10-27T07:13:36.43Z",
+            "createdAt": "2023-05-16T15:16:41.245Z",
+            "displayArtistName": "MAN WITH A MISSION",
+            "matureBlocked": false,
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV59EE655B/streams",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "maturityRatings": {},
+            "publishDate": "2023-06-26T15:00:00Z",
+            "slug": "left-alive",
+            "displayArtistNameRequired": false,
+            "isMature": false,
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "animeIds": [],
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "sequenceNumber": 1,
+            "title": "Left Alive",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "id": "MV59EE655B",
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2019-03-06T00:00:00Z",
+            "readyToPublish": true
+        },
+        {
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "hash": "59a744ff0569df09d2bb7bc64a0fabad",
+            "licensor": "Sony Music Labels Inc.",
+            "isPremiumOnly": true,
+            "sequenceNumber": 1,
+            "streams_link": "/content/v2/music/MVA4A9E87E/streams",
+            "animeIds": [],
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "id": "MVA4A9E87E",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "durationMs": 276000,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "originalRelease": "2017-11-07T00:00:00Z",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/c6b44ace5356891154b9bb2f49733089.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "slug": "my-hero",
+            "updatedAt": "2023-10-27T07:13:30.001Z",
+            "createdAt": "2023-05-16T13:19:07.725Z",
+            "description": "",
+            "displayArtistName": "MAN WITH A MISSION",
+            "displayArtistNameRequired": false,
+            "isPublic": true,
+            "title": "My Hero",
+            "type": "musicVideo",
+            "copyright": "(C) 2017 Sony Music Labels Inc.",
+            "isMature": false,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "readyToPublish": true
+        },
+        {
+            "artist": {
+                "id": "MAABFE80EF",
+                "name": "Zebrahead",
+                "slug": "zebrahead"
+            },
+            "isMature": false,
+            "streams_link": "/content/v2/music/MV73046D6E/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MAABFE80EF",
+                        "name": "Zebrahead",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "zebrahead"
+                    },
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "durationMs": 235000,
+            "matureBlocked": false,
+            "readyToPublish": true,
+            "title": "Out of Control",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-05-11T00:00:00Z"
+            },
+            "isPublic": true,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "displayArtistName": "MAN WITH A MISSIONxzebrahead",
+            "id": "MV73046D6E",
+            "slug": "out-of-control",
+            "description": "",
+            "hash": "16de66f78a34262454820a6e4c73142e",
+            "sequenceNumber": 1,
+            "displayArtistNameRequired": false,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "maturityRatings": {},
+            "animeIds": [],
+            "copyright": "(C) 2015 Sony Music Labels Inc.",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/02139cef55a17eb414c0ab4ef76841cf.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "createdAt": "2023-05-16T15:15:31.587Z",
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2015-05-12T00:00:00Z",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T07:13:20.264Z"
+        },
+        {
+            "copyright": "(C) 2014 Sony Music Labels Inc.",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2014-02-20T00:00:00Z"
+            },
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T07:13:16.25Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/486fb98272b973c06bb7259b3a01bbdb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isMature": false,
+            "isPremiumOnly": true,
+            "readyToPublish": true,
+            "slug": "evils-fall",
+            "streams_link": "/content/v2/music/MV53373EF6/streams",
+            "animeIds": [],
+            "publishDate": "2023-06-26T15:00:00Z",
+            "sequenceNumber": 1,
+            "title": "evils fall",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "createdAt": "2023-05-16T15:22:06.931Z",
+            "description": "",
+            "durationMs": 301000,
+            "maturityRatings": {},
+            "displayArtistName": "MAN WITH A MISSION",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "licensor": "Sony Music Labels Inc.",
+            "matureBlocked": false,
+            "hash": "0d19f52a0829c5c0893f3ada38f08edf",
+            "id": "MV53373EF6",
+            "isPublic": true,
+            "originalRelease": "2014-02-20T00:00:00Z"
+        },
+        {
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/8fadd0f19a2e1cc63ec50f8f6bb2c7d7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "title": "Memories",
+            "copyright": "(C) 2016 Sony Music Labels Inc.",
+            "displayArtistName": "MAN WITH A MISSION",
+            "maturityRatings": {},
+            "description": "",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isMature": false,
+            "readyToPublish": true,
+            "slug": "memories",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2016-01-06T00:00:00Z"
+            },
+            "createdAt": "2023-05-16T13:19:53.105Z",
+            "updatedAt": "2023-10-27T07:13:22.4Z",
+            "isPremiumOnly": true,
+            "publishDate": "2023-06-26T15:00:00Z",
+            "type": "musicVideo",
+            "displayArtistNameRequired": false,
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2016-01-07T00:00:00Z",
+            "hash": "bbd5ede760e6c342889bca16c0b3153b",
+            "isPublic": true,
+            "matureBlocked": false,
+            "animeIds": [],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "durationMs": 383000,
+            "id": "MV53A1059B",
+            "sequenceNumber": 1,
+            "streams_link": "/content/v2/music/MV53A1059B/streams"
+        },
+        {
+            "readyToPublish": true,
+            "sequenceNumber": 1,
+            "type": "musicVideo",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "originalRelease": "2022-04-27T00:00:00Z",
+            "createdAt": "2023-05-16T15:16:38.195Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPremiumOnly": true,
+            "animeIds": [],
+            "description": "",
+            "displayArtistName": "MAN WITH A MISSION",
+            "hash": "fb65ea674286b9936be200b86392217f",
+            "isPublic": true,
+            "id": "MVA26B6BD8",
+            "isMature": false,
+            "copyright": "(C) 2022 Sony Music Labels Inc.",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/db090dd7761f4fa7db5e247b46dfcc1c.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "updatedAt": "2023-10-27T07:14:31.311Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2022-05-18T00:00:00Z"
+            },
+            "displayArtistNameRequired": false,
+            "maturityRatings": {},
+            "title": "More Than Words",
+            "streams_link": "/content/v2/music/MVA26B6BD8/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "durationMs": 237000,
+            "matureBlocked": false,
+            "slug": "more-than-words"
+        },
+        {
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "displayArtistName": "MAN WITH A MISSION",
+            "maturityRatings": {},
+            "streams_link": "/content/v2/music/MV9F218F2A/streams",
+            "copyright": "(C) 2015 Sony Music Labels Inc.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isMature": false,
+            "originalRelease": "2015-10-09T00:00:00Z",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "slug": "raise-your-flag",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "title": "Raise Your Flag",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-10-05T00:00:00Z"
+            },
+            "hash": "8309e6c69e634b2158bab2fe70eb8d64",
+            "id": "MV9F218F2A",
+            "readyToPublish": true,
+            "createdAt": "2023-05-16T15:16:12.284Z",
+            "isPublic": true,
+            "licensor": "Sony Music Labels Inc.",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T08:55:31.62Z",
+            "description": "",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/6cd05ca344315966f56e1f9fe9a73002.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "animeIds": [
+                "GYQ4QK446"
+            ],
+            "displayArtistNameRequired": false,
+            "durationMs": 272000,
+            "sequenceNumber": 1,
+            "matureBlocked": false
+        }
+    ],
+    "meta": {}
+}

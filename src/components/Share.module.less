@@ -1,4 +1,3 @@
-
 .progress {
     height: 0.3rem;
     width: calc(100% - 0.75rem); // minus margin
@@ -16,9 +15,17 @@
     }
 }
 
+.IconCustomColor() {
+    filter: grayscale(100%);
+    font-size: 1.3rem;
+}
+
 .IconCustomColor {
-    >div > div {
-        filter: grayscale(100%);
-        font-size: 1.3rem;
+    .IconCustomColor()
+}
+
+.IconButtonCustomColor {
+    >div>div {
+        .IconCustomColor()
     }
 }

@@ -58,11 +58,13 @@ const Seasons = ({ profile, series, selectEpisode, ...rest }) => {
     const [episodes, setEpisodes] = useState([])
 
     /** @type {Function} */
-    const selectSeason = useCallback(({ target }) => {
+    const selectSeason = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
         setSeason(seasons[parseInt(target.dataset.index)])
     }, [seasons, setSeason])
 
-    const playEpisode = useCallback(({ target }) => {
+    const playEpisode = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
         selectEpisode(episodes[parseInt(target.dataset.index)])
     }, [episodes, selectEpisode])
 

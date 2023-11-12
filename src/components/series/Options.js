@@ -30,7 +30,8 @@ const useChangeActivity = (setIndex, index) => {
     episode: Object,
     rating: Number,
     updateRating: Function,
-    setIndex: Function
+    setIndex: Function,
+    selectEpisode: Function,
  }}
  */
 const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, selectEpisode, ...rest }) => {
@@ -46,7 +47,7 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
     }, [selectEpisode, episode])
 
     useEffect(() => {
-        Spotlight.focus('#play-serie')
+        Spotlight.focus('#play')
     }, [])
 
     return (
@@ -75,7 +76,7 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
                 <div className={css.scrollerContainer}>
                     <Scroller direction='vertical' horizontalScrollbar='hidden'
                         verticalScrollbar='visible'>
-                        <Item id='play-serie' onClick={playEpisode}>
+                        <Item id='play' onClick={playEpisode}>
                             <Icon>play</Icon>
                             <span>{watch}</span>
                         </Item>

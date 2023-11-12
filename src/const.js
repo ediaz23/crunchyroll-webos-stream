@@ -1,13 +1,18 @@
 
 /** @type {Boolean} */
-export const LOAD_MOCK_DATA = __DEV__ && true
+export const LOAD_MOCK_DATA = __DEV__ && false
 
 /** @type {Boolean} */
 export const DEV_FAST_SELECT = __DEV__ && false
 
 // posible values series
 /** @type {String} */
-export const DEV_CONTENT_TYPE = 'series'
+export const DEV_CONTENT_TYPE = null
+//export const DEV_CONTENT_TYPE = 'episode'
+//export const DEV_CONTENT_TYPE = 'series'
+//export const DEV_CONTENT_TYPE = 'musicArtist'
+//export const DEV_CONTENT_TYPE = 'musicConcert'
+
 
 export const ERROR_CODES = {
     invalid_email_password: 'auth.obtain_access_token.force_password_reset',

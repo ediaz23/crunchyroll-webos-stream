@@ -99,11 +99,13 @@ const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                scrollToRef.current({ index: 0, animate: false, focus: true })
+                if (episodes.length > 0) {
+                    scrollToRef.current({ index: 0, animate: false, focus: true })
+                }
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
+    }, [episodes])
 
     return (
         <VirtualList

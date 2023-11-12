@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil'
 
 import { currentProfileState, selectedContentState } from '../recoilConfig'
 import Series from '../components/series/Series'
+import Artist from '../components/artist/Artist'
 import Alert from '../components/Alert'
 import logger from '../logger'
 import back from '../back'
@@ -25,7 +26,7 @@ const ContentPanel = ({ ...rest }) => {
     }, [])
 
     useEffect(() => {
-        if (content && !['series'].includes(content.type)) {
+        if (content && !['series', 'musicArtist'].includes(content.type)) {
             logger.error(JSON.stringify(content, null, '    '))
             setShowError(true)
         }
@@ -34,6 +35,7 @@ const ContentPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             {content.type === 'series' && <Series series={content} profile={profile} />}
+            {content.type === 'musicArtist' && <Artist artist={content} profile={profile} />}
             <Alert open={showError}
                 title={$L('Content not supported?')}
                 message={$L('Please contact to developer or create a issues')}

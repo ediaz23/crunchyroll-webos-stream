@@ -217,7 +217,8 @@ const processItemFeed = async (carousel, profile) => {
     } else if (carousel.resource_type === 'dynamic_collection') {
         res = processDynamicCollection(carousel, profile)
     } else {
-        new Error(`Feed not supported ${carousel.resource_type} - ${carousel.response_type}`)
+        logger.error(`Feed not supported ${carousel.resource_type} - ${carousel.response_type}`)
+        return Promise.reject()
     }
     return res.then(async res2 => {
         if (res2.items) {
@@ -276,6 +277,8 @@ const HomeFeed = ({ homefeed, profile }) => {
                 } else {
                     setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                 }
+            }).catch(() => {
+                setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
             })
             const { itemSize } = rest
             delete rest.itemSize

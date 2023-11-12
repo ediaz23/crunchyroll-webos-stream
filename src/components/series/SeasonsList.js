@@ -40,13 +40,13 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current) {
+            if (scrollToRef.current && seasons.length > 0) {
                 clearInterval(interval)
                 scrollToRef.current({ index: 0, animate: false, focus: true })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
+    }, [seasons])
 
     return (
         <VirtualList

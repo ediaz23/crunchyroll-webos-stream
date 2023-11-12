@@ -48,7 +48,7 @@ const Rating = ({ profile, content, ...rest }) => {
                 id='down'
                 selected={rating === 'down'}
                 onClick={doRating}
-                css={{ iconButton: css.IconCustomColor }}
+                css={{ iconButton: css.IconButtonCustomColor }}
                 {...rest}>
                 &#x1F44E;
             </IconButton>
@@ -56,7 +56,7 @@ const Rating = ({ profile, content, ...rest }) => {
                 id='up'
                 selected={rating === 'up'}
                 onClick={doRating}
-                css={{ iconButton: css.IconCustomColor }}
+                css={{ iconButton: css.IconButtonCustomColor }}
                 {...rest}>
                 &#x1F44D;
             </IconButton>
