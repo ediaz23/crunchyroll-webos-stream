@@ -28,7 +28,7 @@ const ContentInfo = ({ content }) => {
                 <PopupBaseSkin open={showSubPopup}
                     onCloseButtonClick={onHideSubPopup}
                     showCloseButton>
-                    <HomeContentBanner content={content} />
+                    <HomeContentBanner content={content} noCategory />
                 </PopupBaseSkin>
             </FloatingLayer>
             <IconButton

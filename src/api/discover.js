@@ -39,7 +39,7 @@ export const getBrowseAll = async (profile, params) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {Number} [params.contentId]
- * @return {Promise}
+ * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getCategories = async (profile, params) => {
     let out = null

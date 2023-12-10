@@ -14,6 +14,7 @@ import { translateError, getContentParam } from './utils'
 export const getPlayHeads = async (profile, params) => {
     let out = null
     try {
+        params = params || {}
         if (LOAD_MOCK_DATA) {
             out = await getMockData('play-heads', params)
         } else {

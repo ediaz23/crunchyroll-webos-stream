@@ -225,7 +225,6 @@ const processItemFeed = async (carousel, profile) => {
             res2.items = await Promise.all(
                 res2.items.map(async val => {
                     val = { ...val }
-                    const { data } = await api.discover.getCategories(profile, { contentId: val.id })
                     if (val.title) {
                         val.name = val.title
                     }
@@ -242,7 +241,6 @@ const processItemFeed = async (carousel, profile) => {
                     } else if (val.type === 'musicArtist') {
                         val.title = val.name
                     }
-                    val.categories = data.map(val2 => val2.localization.title)
                     return val
                 })
             )

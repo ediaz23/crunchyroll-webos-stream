@@ -9,6 +9,11 @@ import LabeledIcon from '@enact/moonstone/LabeledIcon'
 import PropTypes from 'prop-types'
 import $L from '@enact/i18n/$L'
 
+import { useRecoilValue } from 'recoil'
+
+import { currentProfileState } from '../../recoilConfig'
+
+import api from '../../api'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentBanner.module.less'
 
@@ -118,9 +123,9 @@ ContentMetadata.propTypes = {
 
 /**
  * Show header for content, with title
- * @param {{content: Object}}
+ * @param {{content: Object, categories: Array<String>}}
  */
-export const ContentHeader = ({ content }) => {
+export const ContentHeader = ({ content, categories }) => {
 
     return (
         <>
@@ -133,9 +138,9 @@ export const ContentHeader = ({ content }) => {
                 </Heading>
             )}
             <ContentMetadata content={content} />
-            {!!(content.categories.length) && (
+            {!!(categories.length) && (
                 <Heading size='small' spacing="small">
-                    {content.categories.join(' - ')}
+                    {categories.join(' - ')}
                 </Heading>
             )}
         </>
@@ -143,27 +148,41 @@ export const ContentHeader = ({ content }) => {
 }
 ContentHeader.propTypes = {
     content: PropTypes.object.isRequired,
+    categories: PropTypes.arrayOf(PropTypes.string)
 }
 
 
-const HomeContentBanner = ({ content, ...rest }) => {
+const HomeContentBanner = ({ content, noCategory, ...rest }) => {
+    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
+    const profile = useRecoilValue(currentProfileState)
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
+    const [categories, setCategories] = useState([])
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
 
     useEffect(() => {
         if (compRef && compRef.current) {
-            const boundingRect = compRef.current.getBoundingClientRect();
+            const boundingRect = compRef.current.getBoundingClientRect()
             setImage(getImagePerResolution({ height: boundingRect.height, width: boundingRect.width, content }))
         }
     }, [compRef, content, getImagePerResolution])
 
+    useEffect(() => {
+        if (content && !noCategory) {
+            api.discover.getCategories(profile, { contentId: content.id }).then(({ data }) => {
+                setCategories(data.map(val2 => val2.localization.title))
+            })
+        } else {
+            setCategories([])
+        }
+    }, [content, noCategory, setCategories, profile])
+
     return (
         <Row className={css.homeContentBanner} {...rest}>
             <Cell size="50%">
-                <ContentHeader content={content} />
+                <ContentHeader content={content} categories={categories} />
                 <BodyText size='small'>
                     {content.description}
                 </BodyText>
@@ -179,6 +198,11 @@ const HomeContentBanner = ({ content, ...rest }) => {
 
 HomeContentBanner.propTypes = {
     content: PropTypes.object.isRequired,
+    noCategory: PropTypes.bool
+}
+
+HomeContentBanner.defaultProps = {
+    noCategory: false
 }
 
 export default HomeContentBanner
