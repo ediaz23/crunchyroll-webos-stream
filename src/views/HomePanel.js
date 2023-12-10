@@ -12,6 +12,7 @@ import {
 } from '../recoilConfig'
 import HomeToolbar, { TOOLBAR_INDEX, HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
+import ContentGrid from '../components/grid/ContentGrid'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
 import ContactMePanel from './ContactMePanel'
@@ -105,9 +106,10 @@ const HomePanel = (props) => {
                 <Cell grow>
                     <ActivityViews index={currentActivity}>
                         <HomeFeed profile={profile} homefeed={homefeed} />
-                        <p>search</p>
-                        <p>series</p>
-                        <p>movies</p>
+                        <ContentGrid profile={profile} contentKey='simulcast' />
+                        <ContentGrid profile={profile} contentKey='search' />
+                        <ContentGrid profile={profile} contentKey='series' contentType='series' />
+                        <ContentGrid profile={profile} contentKey='movies' contentType='movie_listing' />
                         <p>music</p>
                         <p>categories</p>
                         <p>My list</p>

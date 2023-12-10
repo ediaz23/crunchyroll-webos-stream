@@ -17,12 +17,12 @@ import { translateError, getContentParam } from './utils'
  * @param {String} [params.sort] sort results
  * @param {String} [params.type] type for search, example episode
  * @param {Boolean} [params.ratings]
- * @return {Promise}
+ * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getBrowseAll = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA && !('noMock' in params)) {
             out = await getMockData('browse', params)
         } else {
             const account = await getContentParam(profile)
@@ -226,6 +226,26 @@ export const getWatchlist = async (profile, params) => {
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getWatchlist({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @returns {Promise<{data: Array<{id: String, localization: Object}>}>}
+ */
+export const getSeasonList = async (profile) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('seasons')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getSeasonList({ account })
         }
     } catch (error) {
         await translateError(error)

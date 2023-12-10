@@ -1,0 +1,428 @@
+{
+    "total": 60,
+    "data": [
+        {
+            "id": "fall-2023",
+            "localization": {
+                "title": "Otoño 2023",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2023",
+            "localization": {
+                "title": "Verano 2023",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2023",
+            "localization": {
+                "title": "Primavera 2023",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2023",
+            "localization": {
+                "title": "Invierno 2023",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2022",
+            "localization": {
+                "title": "Otoño 2022",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2022",
+            "localization": {
+                "title": "Verano 2022",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2022",
+            "localization": {
+                "title": "Primavera 2022",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2022",
+            "localization": {
+                "title": "Invierno 2022",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2021",
+            "localization": {
+                "title": "Otoño 2021",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2021",
+            "localization": {
+                "title": "Verano 2021",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2021",
+            "localization": {
+                "title": "Primavera 2021",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2021",
+            "localization": {
+                "title": "Invierno 2021",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2020",
+            "localization": {
+                "title": "Otoño 2020",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2020",
+            "localization": {
+                "title": "Verano 2020",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2020",
+            "localization": {
+                "title": "Primavera 2020",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2020",
+            "localization": {
+                "title": "Invierno 2020",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2019",
+            "localization": {
+                "title": "Otoño 2019",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2019",
+            "localization": {
+                "title": "Verano 2019",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2019",
+            "localization": {
+                "title": "Primavera 2019",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2019",
+            "localization": {
+                "title": "Invierno 2019",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2018",
+            "localization": {
+                "title": "Otoño 2018",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2018",
+            "localization": {
+                "title": "Verano 2018",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2018",
+            "localization": {
+                "title": "Primavera 2018",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2018",
+            "localization": {
+                "title": "Invierno 2018",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2017",
+            "localization": {
+                "title": "Otoño 2017",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2017",
+            "localization": {
+                "title": "Verano 2017",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2017",
+            "localization": {
+                "title": "Primavera 2017",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2017",
+            "localization": {
+                "title": "Invierno 2017",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2016",
+            "localization": {
+                "title": "Otoño 2016",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2016",
+            "localization": {
+                "title": "Verano 2016",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2016",
+            "localization": {
+                "title": "Primavera 2016",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2016",
+            "localization": {
+                "title": "Invierno 2016",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2015",
+            "localization": {
+                "title": "Otoño 2015",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2015",
+            "localization": {
+                "title": "Verano 2015",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2015",
+            "localization": {
+                "title": "Primavera 2015",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2015",
+            "localization": {
+                "title": "Invierno 2015",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2014",
+            "localization": {
+                "title": "Otoño 2014",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2014",
+            "localization": {
+                "title": "Verano 2014",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2014",
+            "localization": {
+                "title": "Primavera 2014",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2014",
+            "localization": {
+                "title": "Invierno 2014",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2013",
+            "localization": {
+                "title": "Otoño 2013",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2013",
+            "localization": {
+                "title": "Verano 2013",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2013",
+            "localization": {
+                "title": "Primavera 2013",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2013",
+            "localization": {
+                "title": "Invierno 2013",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2012",
+            "localization": {
+                "title": "Otoño 2012",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2012",
+            "localization": {
+                "title": "Verano 2012",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2012",
+            "localization": {
+                "title": "Primavera 2012",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2012",
+            "localization": {
+                "title": "Invierno 2012",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2011",
+            "localization": {
+                "title": "Otoño 2011",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2011",
+            "localization": {
+                "title": "Verano 2011",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2011",
+            "localization": {
+                "title": "Primavera 2011",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2011",
+            "localization": {
+                "title": "Invierno 2011",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2010",
+            "localization": {
+                "title": "Otoño 2010",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2010",
+            "localization": {
+                "title": "Verano 2010",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2010",
+            "localization": {
+                "title": "Primavera 2010",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2010",
+            "localization": {
+                "title": "Invierno 2010",
+                "description": ""
+            }
+        },
+        {
+            "id": "fall-2009",
+            "localization": {
+                "title": "Otoño 2009",
+                "description": ""
+            }
+        },
+        {
+            "id": "summer-2009",
+            "localization": {
+                "title": "Verano 2009",
+                "description": ""
+            }
+        },
+        {
+            "id": "spring-2009",
+            "localization": {
+                "title": "Primavera 2009",
+                "description": ""
+            }
+        },
+        {
+            "id": "winter-2009",
+            "localization": {
+                "title": "Invierno 2009",
+                "description": ""
+            }
+        }
+    ],
+    "meta": {
+        "locale": "es-419"
+    }
+}

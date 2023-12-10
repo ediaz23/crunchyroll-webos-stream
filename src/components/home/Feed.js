@@ -1,3 +1,4 @@
+
 import { useCallback } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
@@ -250,7 +251,7 @@ const processItemFeed = async (carousel, profile) => {
 }
 
 
-const HomeFeed = ({ homefeed, profile }) => {
+const HomeFeed = ({ profile, homefeed }) => {
     /** @type {Function} */
     const setHomefeed = useSetRecoilState(homeFeedState)
     /** @type {[Array<Object>, Function]} */
@@ -316,8 +317,8 @@ const HomeFeed = ({ homefeed, profile }) => {
 }
 
 HomeFeed.propTypes = {
-    profile: PropTypes.object,
-    homefeed: PropTypes.arrayOf(PropTypes.object),
+    profile: PropTypes.object.isRequired,
+    homefeed: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default HomeFeed

@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useRef } from 'react'
 
 import Spotlight, { getDirection } from '@enact/spotlight'
@@ -13,17 +14,24 @@ import classNames from 'classnames'
 import Navigable from '../../wrappers/Navigable'
 import css from './Toolbar.module.less'
 
-export const TOOLBAR_INDEX = {
-    home: { index: 0, icon: 'home', label: $L('Home') },
-    search: { index: 1, icon: 'search', label: $L('Search') },
-    series: { index: 2, icon: 'resumeplay', label: $L('Series') },
-    movies: { index: 3, icon: 'recordings', label: $L('Movies') },
-    music: { index: 4, icon: 'music', label: $L('Music') },
-    categories: { index: 5, icon: 'bulletlist', label: $L('Categories') },
-    mylist: { index: 6, icon: 'denselist', label: $L('My List') },
-    about: { index: 7, icon: 'info', label: $L('About Me?') },
-    close: { index: 8, icon: 'closex', label: $L('Close') },
-}
+
+const TOOLBAR_LIST = [
+    { key: 'home', icon: 'home', label: $L('Home') },
+    { key: 'simulcast', icon: 'resumeplay', label: $L('Simulcast') },
+    { key: 'search', icon: 'search', label: $L('Search') },
+    { key: 'series', icon: 'series', label: $L('Series') },
+    { key: 'movies', icon: 'recordings', label: $L('Movies') },
+    { key: 'musics', icon: 'music', label: $L('Music') },
+    { key: 'categories', icon: 'bulletlist', label: $L('Categories') },
+    { key: 'my_list', icon: 'denselist', label: $L('My List') },
+    { key: 'info', icon: 'info', label: $L('About Me?') },
+    { key: 'close', icon: 'closex', label: $L('Close') },
+]
+
+export const TOOLBAR_INDEX = TOOLBAR_LIST.reduce((accumulator, item, index) => {
+  accumulator[item.key] = {...item, index}
+  return accumulator
+}, {})
 
 const NavigableDiv = Navigable('div', css.iconFocus)
 

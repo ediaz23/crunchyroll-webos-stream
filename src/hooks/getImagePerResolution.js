@@ -4,23 +4,31 @@
  * @param {{
     width: Number,
     height: Number,
+    mode: 'tall'|'wide',
     content: Object,
   }}
  * @returns {{source: String, size: {width: Number, height: Number}}
  */
-const getImagePerResolution = ({ width, height, content }) => {
+const getImagePerResolution = ({ width, height, content, mode }) => {
     let out
     if (content) {
         /** @type {Array<{width: Number, height: Number, source: String}>} */
         let images = []
-        if (content.images.poster_wide) {
-            images = content.images.poster_wide
-        } else if (content.images.poster_tall) {
-            images = content.images.poster_tall
-        } else if (content.images.thumbnail) {
-            images = content.images.thumbnail
-        } else {
-            throw new Error('Image not handle')
+        if (mode === 'wide') {
+            images = content.images.poster_wide || []
+        } else if (mode === 'tall') {
+            images = content.images.poster_tall || []
+        }
+        if (images.length === 0) {
+            if (content.images.poster_wide) {
+                images = content.images.poster_wide
+            } else if (content.images.poster_tall) {
+                images = content.images.poster_tall
+            } else if (content.images.thumbnail) {
+                images = content.images.thumbnail
+            } else {
+                throw new Error('Image not handle')
+            }
         }
         images = Array.isArray(images[0]) ? images[0] : images
         let newImage = images[0]
