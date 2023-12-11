@@ -3,13 +3,16 @@ import { useEffect, useCallback, useRef } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import $L from '@enact/i18n/$L'
+import Marquee from '@enact/moonstone/Marquee'
+import VirtualList from '@enact/moonstone/VirtualList'
+
 import PropTypes from 'prop-types'
 
-import VirtualList from '@enact/moonstone/VirtualList'
-import Item from '@enact/moonstone/Item'
-
+import Navigable from '../../wrappers/Navigable'
 import css from './Series.module.less'
 
+
+const NavigableDiv = Navigable('div')
 
 /**
  * @param {{
@@ -27,14 +30,18 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
     /** @type {Function} */
     const renderItem = useCallback(({ index, itemHeight: height, ...restProps }) => {
         return (
-            <Item {...restProps} key={index} style={{ height }}>
+            <NavigableDiv {...restProps} key={index} style={{ height }}>
                 <Row>
-                    <Cell className={css.name}>{seasons[index].title}</Cell>
+                    <Cell className={css.name}>
+                        <Marquee marqueeOn="render">
+                            {seasons[index].title}
+                        </Marquee>
+                    </Cell>
                     <Cell shrink>
                         {`${seasons[index].number_of_episodes} ${$L('Episodes')}`}
                     </Cell>
                 </Row>
-            </Item>
+            </NavigableDiv>
         )
     }, [seasons])
 
