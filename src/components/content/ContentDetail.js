@@ -35,8 +35,6 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
-    /** @type {[Object, Function]} */
-    const [episode, setEpisode] = useState(null)
     /** @type {[Number, Function]} */
     const [rating, setRating] = useState(0)
     /** @type {[Number, Function]} */
@@ -46,9 +44,9 @@ const ContentDetail = ({ profile, content, ...rest }) => {
         return content ? { contentId: content.id, contentType: content.type } : {}
     }, [content])
 
-    const setContentToPlay = useCallback((episodeToPlay) => {
+    const setContentToPlay = useCallback(contentToPlay => {
         back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-        setPlayContent(episodeToPlay)
+        setPlayContent(contentToPlay)
         setPath('/profiles/home/player')
     }, [setPath, setPlayContent])
 
@@ -71,15 +69,6 @@ const ContentDetail = ({ profile, content, ...rest }) => {
             api.review.getRatings(profile, contentShort).then(({ rating: resRenting }) => {
                 setRating(parseInt(resRenting.trimEnd('s')))
             })
-            if (content.type === 'series') {
-                api.discover.getNext(profile, contentShort).then(nextEp => {
-                    if (nextEp && nextEp.total > 0) {
-                        setEpisode(nextEp.data[0])
-                    }
-                })
-            } else if (content.type === 'movie_listing') {
-                setEpisode(content)
-            }
         }
     }, [content, profile, contentShort])
 
@@ -91,17 +80,13 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                 }
                 <Cell className={css.modal}>
                     <ActivityViews index={currentIndex}>
-                        {episode ?
-                            <Options
-                                series={content}
-                                episode={episode}
-                                rating={rating}
-                                updateRating={updateRating}
-                                setIndex={setCurrentIndex}
-                                setContentToPlay={setContentToPlay} />
-                            :
-                            <div />
-                        }
+                        <Options
+                            profile={profile}
+                            content={content}
+                            rating={rating}
+                            updateRating={updateRating}
+                            setIndex={setCurrentIndex}
+                            setContentToPlay={setContentToPlay} />
                         {content.type === 'series' ?
                             <Seasons
                                 profile={profile}

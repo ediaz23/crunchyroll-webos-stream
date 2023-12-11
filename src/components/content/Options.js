@@ -1,5 +1,5 @@
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState, useMemo } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
 import Spotlight from '@enact/spotlight'
 
@@ -13,6 +13,7 @@ import PropTypes from 'prop-types'
 
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
+import api from '../../api'
 import back from '../../back'
 import css from './ContentDetail.module.less'
 
@@ -26,7 +27,8 @@ const useChangeActivity = (setIndex, index) => {
 
 /**
  * @param {{
-    series: Object,
+    profile: Object,
+    content: Object,
     episode: Object,
     rating: Number,
     updateRating: Function,
@@ -34,17 +36,52 @@ const useChangeActivity = (setIndex, index) => {
     setContentToPlay: Function,
  }}
  */
-const Options = ({ series, episode, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
+const Options = ({ profile, content, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
 
+    /** @type {[Object, Function]} */
+    const [episode, setEpisode] = useState(null)
+    /** @type {{contentId: String, contentType: String}} */
+    const contentShort = useMemo(() => {
+        return content ? { contentId: content.id, contentType: content.type } : {}
+    }, [content])
+    /** @type {{watch: String, description: String, subtitle: String}} */
+    const { watch, description, subtitle } = useMemo(() => {
+        let subtitleTmp = '', descriptionTmp = '', watchTmp = ''
+
+        if (episode) {
+            const season = episode.episode_metadata.season_number || 0
+            const episodeNumber = episode.episode_metadata.episode_number || 0
+            descriptionTmp = episode.description
+            watchTmp = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
+            subtitleTmp = `${$L('Episode')} ${episodeNumber}: ${episode.title}`
+        } else {
+            descriptionTmp = content.description
+            watchTmp = $L('Watch')
+        }
+        return { watch: watchTmp, description: descriptionTmp, subtitle: subtitleTmp }
+    }, [content, episode])
+    /** @type {Function} */
     const moreEpisodes = useChangeActivity(setIndex, 1)
+    /** @type {Function} */
     const changeSubs = useChangeActivity(setIndex, 2)
-    const season = episode.episode_metadata.season_number || 0
-    const episodeNumber = episode.episode_metadata.episode_number || 0
-    const subtitle = `${$L('Episode')} ${episodeNumber}: ${episode.title}`
-    const watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
+    /** @type {Function} */
     const playEpisode = useCallback(() => {
-        setContentToPlay(episode)
-    }, [setContentToPlay, episode])
+        if (episode) {
+            setContentToPlay(episode)
+        } else {
+            setContentToPlay(content)
+        }
+    }, [setContentToPlay, content, episode])
+
+    useEffect(() => {
+        if (content && content.type === 'series') {
+            api.discover.getNext(profile, contentShort).then(nextEp => {
+                if (nextEp && nextEp.total > 0) {
+                    setEpisode(nextEp.data[0])
+                }
+            })
+        }
+    }, [content, profile, contentShort])
 
     useEffect(() => {
         Spotlight.focus('#play')
@@ -52,22 +89,24 @@ const Options = ({ series, episode, rating, updateRating, setIndex, setContentTo
 
     return (
         <Row {...rest}>
-            <Cell size="49%">
-                <ContentHeader content={series} />
-                <Heading size='small' spacing='small' className={css.firstData}>
-                    {subtitle}
-                </Heading>
+            <Cell size='49%'>
+                <ContentHeader content={content} />
+                {subtitle &&
+                    <Heading size='small' spacing='small' className={css.firstData}>
+                        {subtitle}
+                    </Heading>
+                }
                 <div className={css.scrollerContainer}>
                     <Scroller direction='vertical' horizontalScrollbar='hidden'
                         verticalScrollbar='auto'>
                         <BodyText size='small'>
-                            {episode.description}
+                            {description}
                         </BodyText>
                     </Scroller>
                 </div>
                 <BodyText component='div' size='small'>
                     {Array.from({ length: 5 }, (_v, i) =>
-                        <IconButton size="small" key={i} data-star={i}
+                        <IconButton size='small' key={i} data-star={i}
                             onClick={updateRating}>
                             {(i < rating) ? 'star' : 'hollowstar'}
                         </IconButton>
@@ -80,10 +119,12 @@ const Options = ({ series, episode, rating, updateRating, setIndex, setContentTo
                             <Icon>play</Icon>
                             <span>{watch}</span>
                         </Item>
-                        <Item onClick={moreEpisodes}>
-                            <Icon>series</Icon>
-                            <span>{$L('Episodes and more')}</span>
-                        </Item>
+                        {content.type === 'series' &&
+                            <Item onClick={moreEpisodes}>
+                                <Icon>series</Icon>
+                                <span>{$L('Episodes and more')}</span>
+                            </Item>
+                        }
                         <Item onClick={changeSubs}>
                             <Icon>audio</Icon>
                             <span>{$L('Audio and Subtitles')}</span>
@@ -100,8 +141,8 @@ const Options = ({ series, episode, rating, updateRating, setIndex, setContentTo
 }
 
 Options.propTypes = {
-    series: PropTypes.object.isRequired,
-    episode: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired,
+    content: PropTypes.object.isRequired,
     rating: PropTypes.number.isRequired,
     updateRating: PropTypes.func.isRequired,
     setIndex: PropTypes.func.isRequired,
