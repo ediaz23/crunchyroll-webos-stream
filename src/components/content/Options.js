@@ -14,7 +14,7 @@ import PropTypes from 'prop-types'
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
 import back from '../../back'
-import css from './Series.module.less'
+import css from './ContentDetail.module.less'
 
 
 const useChangeActivity = (setIndex, index) => {
@@ -31,10 +31,10 @@ const useChangeActivity = (setIndex, index) => {
     rating: Number,
     updateRating: Function,
     setIndex: Function,
-    selectEpisode: Function,
+    setContentToPlay: Function,
  }}
  */
-const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, selectEpisode, ...rest }) => {
+const Options = ({ series, episode, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
 
     const moreEpisodes = useChangeActivity(setIndex, 1)
     const changeSubs = useChangeActivity(setIndex, 2)
@@ -43,8 +43,8 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
     const subtitle = `${$L('Episode')} ${episodeNumber}: ${episode.title}`
     const watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
     const playEpisode = useCallback(() => {
-        selectEpisode(episode)
-    }, [selectEpisode, episode])
+        setContentToPlay(episode)
+    }, [setContentToPlay, episode])
 
     useEffect(() => {
         Spotlight.focus('#play')
@@ -99,13 +99,13 @@ const SeriesOptions = ({ series, episode, rating, updateRating, setIndex, select
     )
 }
 
-SeriesOptions.propTypes = {
+Options.propTypes = {
     series: PropTypes.object.isRequired,
     episode: PropTypes.object.isRequired,
     rating: PropTypes.number.isRequired,
     updateRating: PropTypes.func.isRequired,
     setIndex: PropTypes.func.isRequired,
-    selectEpisode: PropTypes.func.isRequired,
+    setContentToPlay: PropTypes.func.isRequired,
 }
 
-export default SeriesOptions
+export default Options

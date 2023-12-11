@@ -12,7 +12,7 @@ import { pathState, playContentState } from '../../recoilConfig'
 
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
-import EpisodesList from '../series/EpisodesList'
+import EpisodesList from '../content/EpisodesList'
 import Options from './Options'
 import back from '../../back'
 import api from '../../api'

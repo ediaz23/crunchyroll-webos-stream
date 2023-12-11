@@ -6,7 +6,7 @@ import $L from '@enact/i18n/$L'
 import { useRecoilValue } from 'recoil'
 
 import { currentProfileState, selectedContentState } from '../recoilConfig'
-import Series from '../components/series/Series'
+import ContentDetail from '../components/content/ContentDetail'
 import Artist from '../components/artist/Artist'
 import Alert from '../components/Alert'
 import logger from '../logger'
@@ -26,7 +26,7 @@ const ContentPanel = ({ ...rest }) => {
     }, [])
 
     useEffect(() => {
-        if (content && !['series', 'musicArtist'].includes(content.type)) {
+        if (content && !['series', 'musicArtist', 'movie_listing'].includes(content.type)) {
             logger.error(JSON.stringify(content, null, '    '))
             setShowError(true)
         }
@@ -34,8 +34,9 @@ const ContentPanel = ({ ...rest }) => {
 
     return (
         <Panel {...rest}>
-            {content.type === 'series' && <Series series={content} profile={profile} />}
-            {content.type === 'musicArtist' && <Artist artist={content} profile={profile} />}
+            {content.type === 'series' && <ContentDetail profile={profile} content={content} />}
+            {content.type === 'movie_listing' && <ContentDetail profile={profile} content={content} />}
+            {content.type === 'musicArtist' && <Artist profile={profile} artist={content} />}
             <Alert open={showError}
                 title={$L('Content not supported?')}
                 message={$L('Please contact to developer or create a issues')}

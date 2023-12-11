@@ -9,7 +9,7 @@ import VirtualList from '@enact/moonstone/VirtualList'
 import PropTypes from 'prop-types'
 
 import Navigable from '../../wrappers/Navigable'
-import css from './Series.module.less'
+import css from './ContentDetail.module.less'
 
 
 const NavigableDiv = Navigable('div')

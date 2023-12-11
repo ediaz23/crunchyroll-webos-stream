@@ -12,7 +12,7 @@ import Image from '@enact/moonstone/Image'
 import Navigable from '../../wrappers/Navigable'
 import { formatDurationMs } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import css from './Series.module.less'
+import css from './ContentDetail.module.less'
 import globalCss from '../Share.module.less'
 
 

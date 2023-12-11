@@ -46,10 +46,10 @@ async function calculatePlayheadProgress({ profile, episodesData }) {
  * @param {{
     profile: import('crunchyroll-js-api/src/types').Profile,
     series: Object,
-    selectEpisode: Function,
+    setContentToPlay: Function,
  }}
  */
-const Seasons = ({ profile, series, selectEpisode, ...rest }) => {
+const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState([])
     /** @type {[Object, Function]} */
@@ -65,8 +65,8 @@ const Seasons = ({ profile, series, selectEpisode, ...rest }) => {
 
     const playEpisode = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        selectEpisode(episodes[parseInt(target.dataset.index)])
-    }, [episodes, selectEpisode])
+        setContentToPlay(episodes[parseInt(target.dataset.index)])
+    }, [episodes, setContentToPlay])
 
     useEffect(() => {
         api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
@@ -108,7 +108,7 @@ const Seasons = ({ profile, series, selectEpisode, ...rest }) => {
 Seasons.propTypes = {
     profile: PropTypes.object.isRequired,
     series: PropTypes.object.isRequired,
-    selectEpisode: PropTypes.func.isRequired,
+    setContentToPlay: PropTypes.func.isRequired,
 }
 
 export default Seasons

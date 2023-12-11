@@ -34,7 +34,7 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, ...re
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const content = contentList[parseInt(ev.currentTarget.dataset['index'])]
-            if (content.type === 'series') {
+            if (['series', 'movie_listing'].includes(content.type)) {
                 back.pushHistory({
                     doBack: () => {
                         setSelectedContent(null)
