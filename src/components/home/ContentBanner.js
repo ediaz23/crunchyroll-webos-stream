@@ -138,7 +138,7 @@ export const ContentHeader = ({ content, categories }) => {
                 </Heading>
             )}
             <ContentMetadata content={content} />
-            {!!(categories.length) && (
+            {categories && categories.length > 0 && (
                 <Heading size='small' spacing="small">
                     {categories.join(' - ')}
                 </Heading>
