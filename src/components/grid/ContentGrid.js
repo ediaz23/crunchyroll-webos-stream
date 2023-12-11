@@ -18,16 +18,16 @@ import css from './ContentGrid.module.less'
 const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
+    /** @type {[Number, Function]} */
+    const [delay, setDelay] = useState(-1)
     /** @type {[String, Function]} */
     const [category, setCategory] = useState('all')
     /** @type {[String, Function]} */
     const [query, setQuery] = useState('')
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(undefined)
-    /** @type {[Number, Function]} */
-    const [delay, setDelay] = useState(-1)
-    /** @type {[String, Function]} */
-    const [sort, setSort] = useState('popularity')
+    /** @type {String} */
+    const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
     /**
      * @type {{ key: String, label: String, icon: String, index: Number}}
      */
@@ -44,19 +44,18 @@ const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
             quantity: 50,
             ratings: true,
             noMock: true,
+            type: contentType,
+            contentKey,
             category: category !== 'all' ? [category] : [],
             seasonTag: season ? season.id : undefined,
-            type: contentType,
             sort,
             query,
-            contentKey,
         }
     }, [category, season, contentType, sort, query, contentKey])
 
     const onSearch = useCallback(({ value }) => {
         setQuery(value)
         setDelay(500)
-        setSort(value === '' ? 'popularity' : 'alphabetical')
     }, [setQuery, setDelay])
 
     useEffect(() => {
@@ -85,9 +84,8 @@ const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
             setQuery('')
             setCategory('all')
             setContentList([])
-            setSort('popularity')
         }
-    }, [profile, contentKey, setSeason, setDelay, setQuery, setCategory, setContentList, setSort])
+    }, [profile, contentKey, setSeason, setDelay, setQuery, setCategory, setContentList])
 
     return (
         <Row className={css.ContentGrid} {...rest}>

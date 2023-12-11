@@ -6,9 +6,12 @@ import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import ri from '@enact/ui/resolution'
 
 import PropTypes from 'prop-types'
+import { useSetRecoilState } from 'recoil'
 
-import api from '../../api'
+import { selectedContentState, pathState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import api from '../../api'
+import back from '../../back'
 
 
 /**
@@ -21,18 +24,37 @@ import useGetImagePerResolution from '../../hooks/getImagePerResolution'
  }}
  */
 const ContentGridItems = ({ profile, contentList, setContentList, options, ...rest }) => {
-
+    /** @type {Function} */
+    const setPath = useSetRecoilState(pathState)
+    /** @type {Function} */
+    const setSelectedContent = useSetRecoilState(selectedContentState)
     const itemHeight = ri.scale(390)
     const getImagePerResolution = useGetImagePerResolution()
 
+    const onSelectItem = useCallback((ev) => {
+        if (ev.currentTarget) {
+            const content = contentList[parseInt(ev.currentTarget.dataset['index'])]
+            if (content.type === 'series') {
+                back.pushHistory({
+                    doBack: () => {
+                        setSelectedContent(null)
+                        setPath('/profiles/home')
+                    }
+                })
+                setSelectedContent(content)
+                setPath('/profiles/home/content')
+            }
+        }
+    }, [contentList, setPath, setSelectedContent])
+
     /**
      * @todo falta seleccionar el contenido
+     *   falta el auto scroll
      */
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
         const contentItem = contentList[index]
         if (contentItem) {
-            //                    onClick={selectImageItem}
             const image = getImagePerResolution({
                 height: itemHeight,
                 content: contentItem,
@@ -41,9 +63,11 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, ...re
             out = (
                 <GridListImageItem
                     {...rest2}
+                    data-index={index}
                     source={image.source}
                     caption={(contentItem.title || '').replace(/\n/g, "")}
                     subCaption={(contentItem.description || '').replace(/\n/g, "")}
+                    onClick={onSelectItem}
                 />
             )
         } else {
@@ -61,7 +85,7 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, ...re
             )
         }
         return out
-    }, [profile, contentList, options, itemHeight, getImagePerResolution, setContentList])
+    }, [profile, contentList, options, itemHeight, getImagePerResolution, setContentList, onSelectItem])
 
     return (
         <VirtualGridList {...rest}

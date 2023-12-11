@@ -8,9 +8,9 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
     currentProfileState, homeFeedState, processedFeedState,
-    selectedContentState, homefeedReadyState
+    selectedContentState, homefeedReadyState, homeIndexState
 } from '../recoilConfig'
-import HomeToolbar, { TOOLBAR_INDEX, HomeToolbarSpotlight } from '../components/home/Toolbar'
+import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
 import ContentGrid from '../components/grid/ContentGrid'
 import FloatingLayerFix from '../patch/FloatingLayer'
@@ -55,7 +55,7 @@ const HomePanel = (props) => {
     /** @type {[Array<Object>, Function]} */
     const [homefeed, setHomefeed] = useRecoilState(homeFeedState)
     /** @type {[Number, Function]} */
-    const [currentActivity, setCurrentActivity] = useState(TOOLBAR_INDEX.home.index)
+    const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {Boolean} */
@@ -106,10 +106,16 @@ const HomePanel = (props) => {
                 <Cell grow>
                     <ActivityViews index={currentActivity}>
                         <HomeFeed profile={profile} homefeed={homefeed} />
-                        <ContentGrid profile={profile} contentKey='simulcast' />
-                        <ContentGrid profile={profile} contentKey='search' />
-                        <ContentGrid profile={profile} contentKey='series' contentType='series' />
-                        <ContentGrid profile={profile} contentKey='movies' contentType='movie_listing' />
+                        <ContentGrid profile={profile}
+                            contentKey='simulcast' />
+                        <ContentGrid profile={profile}
+                            contentKey='search' />
+                        <ContentGrid profile={profile}
+                            contentKey='series'
+                            contentType='series' />
+                        <ContentGrid profile={profile}
+                            contentKey='movies'
+                            contentType='movie_listing' />
                         <p>music</p>
                         <p>My list</p>
                         <ContactMePanel />
