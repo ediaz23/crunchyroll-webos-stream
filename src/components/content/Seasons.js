@@ -25,6 +25,7 @@ async function calculatePlayheadProgress({ profile, episodesData }) {
         return total
     }, {})
     for (const ep of episodesData) {
+        ep.type = 'episode'
         if (playheads[ep.id]) {
             const duration = ep.duration_ms / 1000
             ep.playhead = {
