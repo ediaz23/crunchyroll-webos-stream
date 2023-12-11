@@ -22,7 +22,6 @@ const TOOLBAR_LIST = [
     { key: 'series', icon: 'series', label: $L('Series') },
     { key: 'movies', icon: 'recordings', label: $L('Movies') },
     { key: 'musics', icon: 'music', label: $L('Music') },
-    { key: 'categories', icon: 'bulletlist', label: $L('Categories') },
     { key: 'my_list', icon: 'denselist', label: $L('My List') },
     { key: 'info', icon: 'info', label: $L('About Me?') },
     { key: 'close', icon: 'closex', label: $L('Close') },

@@ -111,7 +111,6 @@ const HomePanel = (props) => {
                         <ContentGrid profile={profile} contentKey='series' contentType='series' />
                         <ContentGrid profile={profile} contentKey='movies' contentType='movie_listing' />
                         <p>music</p>
-                        <p>categories</p>
                         <p>My list</p>
                         <ContactMePanel />
                         <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
