@@ -7,6 +7,7 @@ import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 import Options from './Options'
 import Seasons from './Seasons'
+import Movies from './Movies'
 import LangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 
@@ -93,7 +94,10 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                                 series={content}
                                 setContentToPlay={setContentToPlay} />
                             :
-                            <div />
+                            <Movies
+                                profile={profile}
+                                movieListing={content}
+                                setContentToPlay={setContentToPlay} />
                         }
                         <LangSelector
                             profile={profile}

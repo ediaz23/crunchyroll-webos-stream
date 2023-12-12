@@ -94,6 +94,28 @@ export const getEpisodes = async (profile, params) => {
 }
 
 /**
+ * Get movies for a movie_listing
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.movieListingId
+ * @return {Promise}
+ */
+export const getMovies = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('movies', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.cms.getMovies({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
  * Get episodes for a season
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
