@@ -17,7 +17,7 @@ import api from '../../api'
     episodesData: Array<Object>,
  }}
  */
-async function calculatePlayheadProgress({ profile, episodesData }) {
+export async function calculatePlayheadProgress({ profile, episodesData }) {
     const epIds = episodesData.map(e => e.id)
     const { data: data2 } = await api.content.getPlayHeads(profile, { contentIds: epIds })
     const playheads = data2.reduce((total, value) => {
@@ -25,7 +25,6 @@ async function calculatePlayheadProgress({ profile, episodesData }) {
         return total
     }, {})
     for (const ep of episodesData) {
-        ep.type = 'episode'
         if (playheads[ep.id]) {
             const duration = ep.duration_ms / 1000
             ep.playhead = {
@@ -84,6 +83,7 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
             } else {
                 const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: season.id })
                 await calculatePlayheadProgress({ profile, episodesData })
+                episodesData.forEach(ep => { ep.type = 'episode' })
                 season.episodes = episodesData
                 setEpisodes(episodesData)
             }

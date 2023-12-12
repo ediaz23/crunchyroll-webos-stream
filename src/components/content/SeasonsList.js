@@ -33,13 +33,15 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
             <NavigableDiv {...restProps} key={index} style={{ height }}>
                 <Row>
                     <Cell className={css.name}>
-                        <Marquee marqueeOn="render">
+                        <Marquee marqueeOn='render'>
                             {seasons[index].title}
                         </Marquee>
                     </Cell>
-                    <Cell shrink>
-                        {`${seasons[index].number_of_episodes} ${$L('Episodes')}`}
-                    </Cell>
+                    {seasons[index].number_of_episodes &&
+                        <Cell shrink>
+                            {`${seasons[index].number_of_episodes} ${$L('Episodes')}`}
+                        </Cell>
+                    }
                 </Row>
             </NavigableDiv>
         )

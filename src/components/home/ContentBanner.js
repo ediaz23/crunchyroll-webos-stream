@@ -136,9 +136,23 @@ ContentMetadata.propTypes = {
 
 /**
  * Show header for content, with title
- * @param {{content: Object, categories: Array<String>}}
+ * @param {{content: Object, noCategory: Boolean}}
  */
-export const ContentHeader = ({ content, categories }) => {
+export const ContentHeader = ({ content, noCategory }) => {
+    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
+    const profile = useRecoilValue(currentProfileState)
+    /** @type {[Array<String>, Function]} */
+    const [categories, setCategories] = useState([])
+
+    useEffect(() => {
+        if (content && !noCategory) {
+            api.discover.getCategories(profile, { contentId: content.id }).then(({ data }) => {
+                setCategories(data.map(val2 => val2.localization.title))
+            })
+        } else {
+            setCategories([])
+        }
+    }, [content, noCategory, setCategories, profile])
 
     return (
         <>
@@ -161,17 +175,14 @@ export const ContentHeader = ({ content, categories }) => {
 }
 ContentHeader.propTypes = {
     content: PropTypes.object.isRequired,
-    categories: PropTypes.arrayOf(PropTypes.string)
+    noCategory: PropTypes.bool,
 }
 
 
 const HomeContentBanner = ({ content, noCategory, ...rest }) => {
-    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
-    const profile = useRecoilValue(currentProfileState)
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
-    const [categories, setCategories] = useState([])
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
 
@@ -182,20 +193,10 @@ const HomeContentBanner = ({ content, noCategory, ...rest }) => {
         }
     }, [compRef, content, getImagePerResolution])
 
-    useEffect(() => {
-        if (content && !noCategory) {
-            api.discover.getCategories(profile, { contentId: content.id }).then(({ data }) => {
-                setCategories(data.map(val2 => val2.localization.title))
-            })
-        } else {
-            setCategories([])
-        }
-    }, [content, noCategory, setCategories, profile])
-
     return (
         <Row className={css.homeContentBanner} {...rest}>
             <Cell size="50%">
-                <ContentHeader content={content} categories={categories} />
+                <ContentHeader content={content} noCategory={noCategory} />
                 <BodyText size='small'>
                     {content.description}
                 </BodyText>

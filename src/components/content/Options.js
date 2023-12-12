@@ -26,10 +26,42 @@ const useChangeActivity = (setIndex, index) => {
 }
 
 /**
+ * Compute titles
+ * @param {{
+    content: Object,
+    nextContent: Object,
+ }}
+ * @returns {{watch: String, description: String, subtitle: String, moreDetail: String}}
+ */
+const computeTitles = ({ content, nextContent }) => {
+    let subtitle = '', description = content.description || '', watch = $L('Watch')
+    let moreDetail = ''
+
+    if (nextContent) {
+        if (nextContent.type === 'episode') {
+            const season = nextContent.episode_metadata.season_number || 0
+            const episodeNumber = nextContent.episode_metadata.episode_number || 0
+            description = nextContent.description
+            watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
+            subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title}`
+        } else if (nextContent.type === 'movie') {
+            description = nextContent.description
+            watch = `${$L('Watch')} ${nextContent.title}`
+            subtitle = nextContent.title
+        }
+    }
+    if (content.type === 'series') {
+        moreDetail = $L('Episodes and more')
+    } else if (content.type === 'movie_listing') {
+        moreDetail = $L('Movies and more')
+    }
+    return { watch, description, subtitle, moreDetail }
+}
+
+/**
  * @param {{
     profile: Object,
     content: Object,
-    episode: Object,
     rating: Number,
     updateRating: Function,
     setIndex: Function,
@@ -39,49 +71,37 @@ const useChangeActivity = (setIndex, index) => {
 const Options = ({ profile, content, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
 
     /** @type {[Object, Function]} */
-    const [episode, setEpisode] = useState(null)
-    /** @type {{contentId: String, contentType: String}} */
-    const contentShort = useMemo(() => {
-        return content ? { contentId: content.id, contentType: content.type } : {}
-    }, [content])
-    /** @type {{watch: String, description: String, subtitle: String}} */
-    const { watch, description, subtitle } = useMemo(() => {
-        let subtitleTmp = '', descriptionTmp = '', watchTmp = ''
-
-        if (episode) {
-            const season = episode.episode_metadata.season_number || 0
-            const episodeNumber = episode.episode_metadata.episode_number || 0
-            descriptionTmp = episode.description
-            watchTmp = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
-            subtitleTmp = `${$L('Episode')} ${episodeNumber}: ${episode.title}`
-        } else {
-            descriptionTmp = content.description
-            watchTmp = $L('Watch')
-        }
-        return { watch: watchTmp, description: descriptionTmp, subtitle: subtitleTmp }
-    }, [content, episode])
+    const [nextContent, setNextConent] = useState(null)
+    /** @type {{watch: String, description: String, subtitle: String, moreDetail: String}} */
+    const { watch, description, subtitle, moreDetail } = useMemo(() => {
+        return computeTitles({ content, nextContent })
+    }, [content, nextContent])
     /** @type {Function} */
     const moreEpisodes = useChangeActivity(setIndex, 1)
     /** @type {Function} */
     const changeSubs = useChangeActivity(setIndex, 2)
     /** @type {Function} */
-    const playEpisode = useCallback(() => {
-        if (episode) {
-            setContentToPlay(episode)
-        } else {
-            setContentToPlay(content)
-        }
-    }, [setContentToPlay, content, episode])
+    const playNextContent = useCallback(() => {
+        setContentToPlay(nextContent)
+    }, [setContentToPlay, nextContent])
 
     useEffect(() => {
-        if (content && content.type === 'series') {
-            api.discover.getNext(profile, contentShort).then(nextEp => {
-                if (nextEp && nextEp.total > 0) {
-                    setEpisode(nextEp.data[0])
+        /**
+         * @fixme if there is not a next Ep?
+         */
+        api.discover.getNext(profile, {
+            contentId: content.id,
+            contentType: content.type
+        }).then(nextEp => {
+            if (nextEp && nextEp.total > 0) {
+                if (nextEp.data[0].type === 'movie') {
+                    setNextConent({ ...nextEp.data[0], ...nextEp.data[0].panel, panel: null })
+                } else {
+                    setNextConent(nextEp.data[0])
                 }
-            })
-        }
-    }, [content, profile, contentShort])
+            }
+        })
+    }, [profile, content])
 
     useEffect(() => {
         Spotlight.focus('#play')
@@ -115,16 +135,14 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 <div className={css.scrollerContainer}>
                     <Scroller direction='vertical' horizontalScrollbar='hidden'
                         verticalScrollbar='visible'>
-                        <Item id='play' onClick={playEpisode}>
+                        <Item id='play' onClick={playNextContent}>
                             <Icon>play</Icon>
                             <span>{watch}</span>
                         </Item>
-                        {content.type === 'series' &&
-                            <Item onClick={moreEpisodes}>
-                                <Icon>series</Icon>
-                                <span>{$L('Episodes and more')}</span>
-                            </Item>
-                        }
+                        <Item onClick={moreEpisodes}>
+                            <Icon>series</Icon>
+                            <span>{moreDetail}</span>
+                        </Item>
                         <Item onClick={changeSubs}>
                             <Icon>audio</Icon>
                             <span>{$L('Audio and Subtitles')}</span>
