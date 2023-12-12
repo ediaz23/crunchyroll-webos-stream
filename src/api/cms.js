@@ -98,7 +98,7 @@ export const getEpisodes = async (profile, params) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {String} params.movieListingId
- * @return {Promise}
+ * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getMovies = async (profile, params) => {
     let out = null

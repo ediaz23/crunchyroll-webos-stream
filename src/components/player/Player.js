@@ -35,7 +35,7 @@ import back from '../../back'
  @returns {Promise}
  */
 const updatePlayHead = async ({ profile, content, videoCompRef }) => {
-    if (['episode'].includes(content.type)) {
+    if (['episode', 'movie'].includes(content.type)) {
         /** @type {{paused: boolean, currentTime: number}} */
         const state = videoCompRef.current.getMediaState()
         content.playhead.playhead = Math.floor(state.currentTime)
@@ -79,7 +79,7 @@ const findPlayHead = async ({ profile, content }) => {
         playhead: 0,
         fully_watched: false,
     }
-    if (['episode'].includes(content.type)) {
+    if (['episode', 'movie'].includes(content.type)) {
         const { data } = await api.content.getPlayHeads(profile, { contentIds: [content.id] })
         if (data && data.length > 0) {
             playhead = data[0]
@@ -98,7 +98,7 @@ const findPlayHead = async ({ profile, content }) => {
 const searchAudios = ({ content, getLang }) => {
     /** @type {Array<import('./AudioList').Audio} */
     let audios = []
-    if (['episode'].includes(content.type)) {
+    if (content.versions) {
         audios = content.versions.map(audio => {
             return {
                 ...audio,
@@ -106,9 +106,9 @@ const searchAudios = ({ content, getLang }) => {
                 type: content.type
             }
         })
-    } else if (['musicConcert', 'musicVideo'].includes(content.type)) {
+    } else {
         audios = [{
-            title: content.subTitle,
+            title: content.subTitle || content.title,
             type: content.type,
             media_guid: content.id,
             audio_locale: 'none',
@@ -158,7 +158,7 @@ const findSubtitle = ({ profile, subtitles }) => {
  */
 const findStream = async ({ profile, audios, audio, getLang }) => {
     let data = {}, meta = {}
-    if (['episode'].includes(audio.type)) {
+    if (['episode', 'movie'].includes(audio.type)) {
         ({ data, meta } = await api.cms.getStreams(profile, { contentId: audio.media_guid }))
     } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
         ({ data, meta } = await api.music.getStreams(profile, { contentId: audio.media_guid }))
@@ -270,6 +270,13 @@ const findNextEp = async ({ profile, content, step }) => {
         } else {
             out = await api.discover.getPrev(profile, { contentId: content.id })
         }
+    } else if (['movie'].includes(content.type)) {
+        const movies = await api.cms.getMovies(profile, { movieListingId: content.listing_id })
+        const movieIndex = movies.data.findIndex(item => item.id === content.id)
+        const nextIndex = movieIndex + step
+        if (0 <= nextIndex && nextIndex < movies.total) {
+            out = { total: 1, data: [movies.data[nextIndex]] }
+        }
     } else if (['musicConcert', 'musicVideo'].includes(content.type)) {
         const { data: artists } = await api.music.getArtists(profile, [content.artist.id])
         if (artists.length > 0) {
@@ -291,6 +298,9 @@ const findNextEp = async ({ profile, content, step }) => {
                 out = { total: 1, data: [out] }
             }
         }
+    }
+    if (out && out.total > 0) {
+        out.data[0].type = content.type
     }
     return out
 }
