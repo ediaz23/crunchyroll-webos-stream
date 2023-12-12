@@ -76,6 +76,16 @@ const setSerieMetadata = (metadata, meta) => {
 }
 
 /**
+ * @param {Object} metadata
+ * @param {Array} meta
+ */
+const setMovieMetadata = (metadata, meta) => {
+    if (metadata.movie_release_year !== null) {
+        meta.push(`${metadata.movie_release_year}`)
+    }
+}
+
+/**
  * Show metadata for a content
  */
 export const ContentMetadata = ({ content }) => {
@@ -88,6 +98,9 @@ export const ContentMetadata = ({ content }) => {
     } else if (content.series_metadata) {
         setTags(content.series_metadata, tags)
         setSerieMetadata(content.series_metadata, meta)
+    } else if (content.movie_listing_metadata) {
+        setTags(content.movie_listing_metadata, tags)
+        setMovieMetadata(content.movie_listing_metadata, meta)
     } else if (content.genres) {
         content.genres.forEach(val => tags.push(val.displayValue))
         if (content.publishDate) {
