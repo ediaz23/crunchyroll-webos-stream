@@ -7,12 +7,13 @@ import { Panel } from '@enact/moonstone/Panels'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
-    currentProfileState, homeFeedState, homeFeedProcessedState,
-    selectedContentState, homefeedReadyState, homeIndexState,
-    homeFeedExpirationState
+    currentProfileState, homefeedReadyState, homeIndexState,
+    homeFeedState, homeFeedProcessedState, homeFeedExpirationState,
+    musicFeedState, musicFeedProcessedState, musicFeedExpirationState
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
+import MusicFeed from '../components/music/Feed'
 import ContentGrid from '../components/grid/ContentGrid'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
@@ -32,11 +33,15 @@ const postProcessHomefeed = (feed) => {
     const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
     for (const item of feed) {
         if (item.resource_type === 'panel') {
+            // find one panel then add to panelObject
+            // only if not added before
             if (panelObject.panels.length === 0) {
                 mergedFeed.push(panelObject)
             }
             panelObject.panels.push(item)
         } else if (item.resource_type === 'in_feed_banner') {
+            // find one in_feed_banner then add to bannerObject
+            // only if not added before
             if (bannerObject.panels.length === 0) {
                 mergedFeed.push(bannerObject)
             }
@@ -53,22 +58,27 @@ const ActivityViews = ({ index, children }) => (children[index])
 const HomePanel = (props) => {
     /** @type {import('crunchyroll-js-api/src/types').Profile}*/
     const profile = useRecoilValue(currentProfileState)
-    /** @type {[Array<Object>, Function]} */
-    const [homefeed, setHomefeed] = useRecoilState(homeFeedState)
-    /** @type {[Date, Function]} */
-    const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
     /** @type {[Number, Function]} */
     const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {Boolean} */
     const homefeedReady = useRecoilValue(homefeedReadyState)
+
+    /** @type {[Array<Object>, Function]} */
+    const [homefeed, setHomefeed] = useRecoilState(homeFeedState)
+    /** @type {[Date, Function]} */
+    const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
     /** @type {Function} */
     const setHomeFeedProcessed = useSetRecoilState(homeFeedProcessedState)
-    /** @type {Function} */
-    const setSelectedContent = useSetRecoilState(selectedContentState)
+
     /** @type {[Array<Object>, Function]} */
-    //    const [musicFeed, setMusicFeed] = useState([])
+    const [musicfeed, setMusicfeed] = useRecoilState(musicFeedState)
+    /** @type {[Date, Function]} */
+    const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
+    /** @type {Function} */
+    const setMusicFeedProcessed = useSetRecoilState(musicFeedProcessedState)
+
 
     /** @type {Function} */
     const toggleShowFullToolbar = useCallback(() => {
@@ -96,22 +106,25 @@ const HomePanel = (props) => {
             api.discover.getHomeFeed(profile).then(({ data }) => {
                 /** @type {Array} */
                 const filterFeed = data.filter(item => item.response_type !== 'news_feed')
-                setSelectedContent(null)
                 setHomeFeedProcessed(new Array(filterFeed.length))
                 setHomefeed(postProcessHomefeed(filterFeed))
                 setHomeFeedExpiration(now)
             })
         }
-    }, [profile, setHomefeed, setHomeFeedProcessed, setSelectedContent, currentActivity,
-        homeFeedExpiration, setHomeFeedExpiration])
-
-    //    useEffect(() => {
-    //        if (currentActivity === 5) {  // musicFeed
-    //            api.music.getFeed(profile).then(({ data }) => {
-    //                setMusicFeed(data)
-    //            })
-    //        }
-    //    }, [profile, currentActivity])
+        if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
+            now.setHours(now.getHours() + 3)
+            api.music.getFeed(profile).then(({ data }) => {
+                /** @type {Array} */
+                const musicFilterFeed = data.filter(item => item.response_type !== 'news_feed')
+                setMusicFeedProcessed(new Array(musicFilterFeed.length))
+                setMusicfeed(postProcessHomefeed(musicFilterFeed))
+                setMusicFeedExpiration(now)
+            })
+        }
+    }, [profile, currentActivity,
+        setHomefeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
+        setMusicfeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
+    ])
 
     return (
         <Panel {...props}>
@@ -133,7 +146,7 @@ const HomePanel = (props) => {
                         <ContentGrid profile={profile}
                             contentKey='movies'
                             contentType='movie_listing' />
-                        <p>music</p>
+                        <MusicFeed profile={profile} musicfeed={musicfeed} />
                         <p>My list</p>
                         <ContactMePanel />
                         <ConfirmExitPanel onCancel={toggleShowFullToolbar} />

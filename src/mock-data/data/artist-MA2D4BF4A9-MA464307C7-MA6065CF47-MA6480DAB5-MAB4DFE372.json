@@ -1,0 +1,810 @@
+{
+    "total": 5,
+    "data": [
+        {
+            "concerts": [],
+            "createdAt": "2023-05-16T18:06:44.701Z",
+            "isPublic": true,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "readyToPublish": true,
+            "type": "musicArtist",
+            "description": "KANA-BOON es una banda de rock de cuatro integrantes formada en Osaka, Japón. Hicieron su debut profesional con \"Jousha Hissui No Kotowari Okotowari\" en 2013. Desde entonces, han sido muy aclamados en festivales de rock de gran magnitud, como SUMMER SONIC, ROCK IN JAPAN FESTIVAL, COUNTDOWN JAPAN, y muchos más. Son conocidos por interpretar numerosas canciones de anime, incluyendo \"Silhouette\", el opening de NARUTO SHIPPUDEN, \"Baton Road\", el opening de BORUTO: NARUTO NEXT GENERATIONS, y \"Fighter\", el opening de Mobile Suit Gundam: Iron Blooded Orphans. Su última canción, \"Gradation\", fue elegida como opening de Loving Yamada at Lv999!, y ha atraído a fans de anime de todo el mundo.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                },
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "id": "MA6065CF47",
+            "slug": "kana-boon",
+            "updatedAt": "2023-10-27T09:59:54.371Z",
+            "images": {
+                "poster_tall": [
+                    {
+                        "height": 90,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 60
+                    },
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 120
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 240
+                    },
+                    {
+                        "height": 720,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 480
+                    },
+                    {
+                        "height": 1125,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 750
+                    },
+                    {
+                        "height": 1440,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 960
+                    },
+                    {
+                        "height": 1688,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 1125
+                    },
+                    {
+                        "height": 1800,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 1200
+                    },
+                    {
+                        "height": 2340,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/e9b57f90775bf209b5aef8f4159df9cd.png",
+                        "type": "poster_tall",
+                        "width": 1560
+                    }
+                ],
+                "poster_wide": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/d1d8f7a034729af38ae9f6c9d13b890f.jpeg",
+                        "type": "poster_wide",
+                        "width": 1920
+                    }
+                ]
+            },
+            "name": "KANA-BOON",
+            "totalConcertDurationMs": 0,
+            "totalVideoDurationMs": 8377000,
+            "videos": [
+                "MVA5E8C36B",
+                "MVBC7A8AC2",
+                "MV38D5E1B3",
+                "MV8E761FE",
+                "MV7D365C9A",
+                "MV7FE05168",
+                "MV15ADC2DB",
+                "MV32216A0E",
+                "MV3557DEFA",
+                "MV10340D1A",
+                "MV4250EE6C",
+                "MV7A4DD1B0",
+                "MVA316C0C",
+                "MV1354596C",
+                "MV55F64BED",
+                "MV544EC9F2",
+                "MVB5139B21",
+                "MV50E43AFD",
+                "MV1DF1D57F",
+                "MV71AE4AD9",
+                "MV921138AE",
+                "MV5506A3AA",
+                "MV52761EAA",
+                "MV8CA49361",
+                "MVAC0486A",
+                "MV1564862B",
+                "MV2CCB96B8",
+                "MV91AED5B"
+            ]
+        },
+        {
+            "concerts": [
+                "MC75AC9250",
+                "MCB3E02384"
+            ],
+            "description": "Nacida el 5 de septiembre en la Prefectura de Aichi, grupo sanguíneo A.\n\nAsuka Okura, siendo una chica de preparatoria, participó en el quinto \"Animax Anison Grand Prix\" y de inmediato atrajo todas las miradas por primera vez al volverse una de las tres finalistas de entre más de 10 000 aspirantes.\n\nHizo su debut el 22 de noviembre de 2017 con su primer single, 'KOE', el cual se utilizó como ending de la segunda temporada del anime \"Fate/Apocrypha\".\n\nSu cuarto single, 'RESISTER', el opening de la segunda temporada del anime Sword Art Online: Alicization, se lanzó el 27 de febrero de 2020. El tema se descargó en más de 100 000 ocasiones y se volvió un éxito certificado con el oro.\n\nCon su irresistible voz y sus espectáculos en vivo, ASCA es una de las cantantes que más miradas atrae de todo el mundo.",
+            "id": "MAB4DFE372",
+            "slug": "asca",
+            "totalConcertDurationMs": 6523000,
+            "type": "musicArtist",
+            "createdAt": "2023-01-26T09:46:29.456Z",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                },
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "images": {
+                "poster_tall": [
+                    {
+                        "height": 90,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 60
+                    },
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 120
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 240
+                    },
+                    {
+                        "height": 720,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 480
+                    },
+                    {
+                        "height": 1125,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 750
+                    },
+                    {
+                        "height": 1440,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 960
+                    },
+                    {
+                        "height": 1688,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 1125
+                    },
+                    {
+                        "height": 1800,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 1200
+                    },
+                    {
+                        "height": 2340,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/cd3bb8e1171bc0fd8e19772f5fcba9c9.jpeg",
+                        "type": "poster_tall",
+                        "width": 1560
+                    }
+                ],
+                "poster_wide": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/6aabf4f3fa91f67117dc940a3dd30d04.jpeg",
+                        "type": "poster_wide",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-02-02T00:00:00Z",
+            "name": "ASCA",
+            "readyToPublish": true,
+            "isPublic": true,
+            "totalVideoDurationMs": 5530000,
+            "updatedAt": "2023-11-29T20:03:21.157Z",
+            "videos": [
+                "MV31F31E33",
+                "MV23C5E9C",
+                "MV5816CBE5",
+                "MVB0292D35",
+                "MV67201425",
+                "MV6302F554",
+                "MVB17BFAF1",
+                "MVB618AAC9",
+                "MV10967410",
+                "MV25427E82",
+                "MV27628C22",
+                "MVA704B246",
+                "MVA66D456",
+                "MV65B3617",
+                "MV3E0DE3FC",
+                "MV1484F4D7",
+                "MV94F6D071",
+                "MV76D3DFEE",
+                "MV411F9A5F",
+                "MV46F42EA5",
+                "MV1D00F119",
+                "MV8E43B110"
+            ]
+        },
+        {
+            "description": "Formada en 2000 como una banda de cuatro integrantes, en 2009 fallecía quien era su vocalista y líder, Masahiko Shimura, con lo que en 2011 retomaron sus actividades como un trío. Sus canciones más representativas son \"Akaneiro no yuuhi\" y \"Wakamonono subete\" . Su álbum \"MUSIC\", lanzado en 2010, incluye el éxito \"Yoake no BEAT\", que fue la canción principal tanto en la popular serie de televisión como en la película \"MOTEKI\". En 2019 celebraron su 15.º aniversario con su décimo álbum, \"F\", y lanzaban su primer álbum recopilatorio, \"FAB LIST 1 (Remastered 2019)\". También son conocidos por sus numerosas colaboraciones con animes como \"Magi\", \"Tsuritama\", \"Silver Spoon\", \"Aoharide\" y \"Space Brothers\". Su más reciente colaboración fue con \"Dr. STONE\" al poner el que sería el opening de su segunda temporada con \"Rakuen\". En marzo de 2021 lanzaban su 11.º álbum, titulado \"I Love You\".",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "images": {
+                "poster_tall": [
+                    {
+                        "height": 90,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 60
+                    },
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 120
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 240
+                    },
+                    {
+                        "height": 720,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 480
+                    },
+                    {
+                        "height": 1125,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 750
+                    },
+                    {
+                        "height": 1440,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 960
+                    },
+                    {
+                        "height": 1688,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 1125
+                    },
+                    {
+                        "height": 1800,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 1200
+                    },
+                    {
+                        "height": 2340,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/7be3598b9fafd5c9e46c424aa138b64c.png",
+                        "type": "poster_tall",
+                        "width": 1560
+                    }
+                ],
+                "poster_wide": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/507c3ea1ebad0c04ab630044b5fbdee6.png",
+                        "type": "poster_wide",
+                        "width": 1920
+                    }
+                ]
+            },
+            "totalConcertDurationMs": 9218000,
+            "totalVideoDurationMs": 4324000,
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "id": "MA2D4BF4A9",
+            "isPublic": true,
+            "type": "musicArtist",
+            "updatedAt": "2023-11-29T19:59:25.049Z",
+            "concerts": [
+                "MC403E4E6"
+            ],
+            "name": "Fujifabric",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "slug": "fujifabric",
+            "videos": [
+                "MV6650CB93",
+                "MV5276C3EB",
+                "MV71057AF1",
+                "MV4BF5DAB5",
+                "MV605EF995",
+                "MV8AAAA167",
+                "MVA9E0316E",
+                "MV4C42FFEF",
+                "MV52FC8B0F",
+                "MV3B45CF79",
+                "MV15E8434E",
+                "MV95076ED9",
+                "MV9866DFC4",
+                "MV2693B7F9"
+            ],
+            "readyToPublish": true
+        },
+        {
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "slug": "shoko-nakagawa",
+            "isPublic": true,
+            "videos": [
+                "MV292272AB",
+                "MVABC94EFC",
+                "MV4D6A7A1C",
+                "MVB8DEE894",
+                "MV5A5F4AE2",
+                "MV874EF3C5",
+                "MV169AA3EB",
+                "MV1894C2C7",
+                "MVA586A131",
+                "MV2D946949",
+                "MV8FA61150",
+                "MV29FAA2A2",
+                "MVA9EE1ED7",
+                "MVA3A8E3D4",
+                "MV468CA603",
+                "MV4450F39B",
+                "MV23641B30",
+                "MV1D252C07",
+                "MV10BCDF14",
+                "MV9BE43CFD",
+                "MV6D6A0596",
+                "MV25D7F2B2",
+                "MV7241DCC5",
+                "MV4ECB7A9A",
+                "MV4EFF343",
+                "MV237A5E34",
+                "MV534AF399",
+                "MV3C0CB90F",
+                "MV9574B9AD",
+                "MV819D937D",
+                "MVA515E990",
+                "MV156C2D32",
+                "MV69B58EAE",
+                "MV7871E969",
+                "MV2DE9B770",
+                "MV5420ABA8",
+                "MV53D086DB",
+                "MV1B624C1E",
+                "MV49452F66"
+            ],
+            "concerts": [
+                "MC67B66140",
+                "MC954E7E2A",
+                "MC51D55EA6",
+                "MC547A7654"
+            ],
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                },
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "id": "MA6480DAB5",
+            "name": "Shoko Nakagawa",
+            "totalConcertDurationMs": 35694000,
+            "description": "Shoko Nakagawa (nacida el 5 de mayo de 1985) es una artista polifacética de Tokio, Japón. Es cantante, actriz, actriz de voz, ilustradora y escritora. Conocida por sus fans como \"Shokotan\", debutó con Sony Music Japan en 2006. Ha ganado popularidad mostrando su amor por la cultura otaku (animación, manga, cosplay, etc.). Su estilo de moda distintivo se inspira en la cultura \"Kawaii\" de Harajuku y su vocabulario único la convierte en una artista singular. A pesar de su apretada agenda, siempre encuentra tiempo para sus gatos, ilustraciones, videojuegos, manga y Kung-Fu. En los últimos años, también se la conoce por cantar las canciones principales de las películas animadas de Pokémon en Japón, lo que también le ha valido una carrera como actriz de voz en el anime de Pokémon.",
+            "images": {
+                "poster_tall": [
+                    {
+                        "height": 90,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 60
+                    },
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 120
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 240
+                    },
+                    {
+                        "height": 720,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 480
+                    },
+                    {
+                        "height": 1125,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 750
+                    },
+                    {
+                        "height": 1440,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 960
+                    },
+                    {
+                        "height": 1688,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 1125
+                    },
+                    {
+                        "height": 1800,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 1200
+                    },
+                    {
+                        "height": 2340,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/888716814457ca3d8dd82a2e1e531c3f.png",
+                        "type": "poster_tall",
+                        "width": 1560
+                    }
+                ],
+                "poster_wide": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/6ee72fca9a6bb61006c37b6b46f62c1e.png",
+                        "type": "poster_wide",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-05-31T13:00:00Z",
+            "readyToPublish": true,
+            "totalVideoDurationMs": 11097000,
+            "type": "musicArtist",
+            "updatedAt": "2023-11-29T20:04:01.323Z"
+        },
+        {
+            "totalConcertDurationMs": 4649000,
+            "name": "BLUE ENCOUNT",
+            "updatedAt": "2023-10-27T07:14:00.005Z",
+            "concerts": [
+                "MC47706DAF"
+            ],
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "images": {
+                "poster_tall": [
+                    {
+                        "height": 90,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 60
+                    },
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 120
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 240
+                    },
+                    {
+                        "height": 720,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 480
+                    },
+                    {
+                        "height": 1125,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 750
+                    },
+                    {
+                        "height": 1440,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 960
+                    },
+                    {
+                        "height": 1688,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 1125
+                    },
+                    {
+                        "height": 1800,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 1200
+                    },
+                    {
+                        "height": 2340,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/c273549867e00b0c09573b97659e7cc7.png",
+                        "type": "poster_tall",
+                        "width": 1560
+                    }
+                ],
+                "poster_wide": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/7f672b9cadec3f00d40a892d67479413.png",
+                        "type": "poster_wide",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "type": "musicArtist",
+            "description": "Una banda de cuatro integrantes originaria de Kumamoto. Con un estilo apasionado y con mucho ritmo, logran conectar a un nivel muy profundo con su público. Su habilidad para conectar con el público les ha hecho muy populares como una banda de rock emotivo.\n\nLa banda hacía su gran debut con el sencillo \"TIMELESS ROOKIE\" en septiembre de 2014 y desde entonces han lanzado tres álbumes completos (\"≒\", \"THE END\", \"VECTOR\"). También han participado en una gran cantidad de series de anime.\n\nSu costumbre de brindar actuaciones repletas de energía y con mensajes muy claros hace que muchas personas sigan su trabajo.\n\nColaboraciones en anime:\n2015 [DAY×DAY] Gintama\n2016 [Survivor] Mobile Suit Gundam: Iron Blooded Orphans\n2017 [VS] Gintama Porori arc\n2018 [FREEDOM] BANANA FISH\n2019 [Polaris]- My Hero Academia",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                },
+                {
+                    "displayValue": "Alternative",
+                    "id": "alternative"
+                }
+            ],
+            "publishDate": "2023-06-26T15:00:00Z",
+            "readyToPublish": true,
+            "id": "MA464307C7",
+            "slug": "blue-encount",
+            "totalVideoDurationMs": 3700000,
+            "videos": [
+                "MV3510378E",
+                "MV59EB549A",
+                "MV2EEC640C",
+                "MV4199EABC",
+                "MVBCFC7E02",
+                "MV2BA4B60E",
+                "MV8C12CBB9",
+                "MV876628F6",
+                "MV7E9EC1DF",
+                "MV8BC95778",
+                "MV82033F4E",
+                "MVBF182BF0",
+                "MV52F21F2E",
+                "MV25F52FB8",
+                "MV25FF1672",
+                "MV3023D06E",
+                "MV21C00B6B",
+                "MV56173E37"
+            ]
+        }
+    ],
+    "meta": {}
+}

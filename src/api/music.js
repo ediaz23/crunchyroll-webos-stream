@@ -6,6 +6,26 @@ import { translateError, getContentParam } from './utils'
 
 
 /**
+ * Get feed
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @return {Promise<{total: Number, data: Array}>}
+ */
+export const getFeed = async (profile) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('musicFeed')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.music.getFeed({ account })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Array<String>} artistIds

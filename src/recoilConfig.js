@@ -49,6 +49,21 @@ export const homeFeedExpirationState = atom({
     default: null
 })
 
+export const musicFeedState = atom({
+    key: 'musicFeedState',
+    default: []
+})
+
+export const musicFeedProcessedState = atom({
+    key: 'musicFeedProcessedState',
+    default: []
+})
+
+export const musicFeedExpirationState = atom({
+    key: 'musicFeedExpirationState',
+    default: null
+})
+
 export const selectedContentState = atom({
     key: 'selectedContentState',
     default: null

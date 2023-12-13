@@ -8,14 +8,13 @@ import PropTypes from 'prop-types'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { homeFeedProcessedState, selectedContentState, homeFeedState } from '../../recoilConfig'
+import { homeFeedProcessedState, homeFeedState, selectedContentState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
 import api from '../../api'
 import { LOAD_MOCK_DATA } from '../../const'
 import logger from '../../logger'
-import css from './Feed.module.less'
 
 
 /**
@@ -23,7 +22,7 @@ import css from './Feed.module.less'
  * @param {{link: String}} item
  * @returns {Promise<Object>}
  */
-const convertItem2Object = async (item) => {
+export const convertItem2Object = async (item) => {
     let out = null
     try {
         if (item.slug || item.resource_type === 'in_feed_banner') {
@@ -87,7 +86,7 @@ const processCarousel = async (carousel, profile) => {
  * @param {Object} carousel
  * @return {Promise<Object>}
  */
-const processPanels = async (carousel) => {
+export const processPanels = async (carousel) => {
     const out = {
         id: 'panels',
         resource_type: carousel.panels[0].resource_type,
@@ -136,7 +135,7 @@ const processInFeedPanels = async (carousel, profile) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @return {Promise<Object>}
  */
-const processCuratedCollection = async (carousel, profile) => {
+export const processCuratedCollection = async (carousel, profile) => {
     let res = {}
     if ('artist' === carousel.response_type) {
         res = await api.music.getArtists(profile, carousel.ids)
@@ -258,6 +257,7 @@ const HomeFeed = ({ profile, homefeed }) => {
     const [homeFeedProcessed, setHomeFeedProcessed] = useRecoilState(homeFeedProcessedState)
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
+    /** @type {Number} */
     const itemHeigth = ri.scale(270)
 
     const renderRow = useCallback(({ index, ...rest }) => {
@@ -266,18 +266,27 @@ const HomeFeed = ({ profile, homefeed }) => {
         if (feedItem) {
             out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
         } else {
-            processItemFeed(homefeed[index], profile).then(newFeed => {
-                if (newFeed.items.length) {
+            Promise.resolve().then(() => {
+                if (feedItem === undefined) {
                     setHomeFeedProcessed(prevArray => [
                         ...prevArray.slice(0, index),
-                        newFeed,
+                        false,  // avoid double request
                         ...prevArray.slice(index + 1)
                     ])
-                } else {
-                    setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                    processItemFeed(homefeed[index], profile).then(newFeed => {
+                        if (newFeed.items.length) {
+                            setHomeFeedProcessed(prevArray => [
+                                ...prevArray.slice(0, index),
+                                newFeed,
+                                ...prevArray.slice(index + 1)
+                            ])
+                        } else {
+                            setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                        }
+                    }).catch(() => {
+                        setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                    })
                 }
-            }).catch(() => {
-                setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
             })
             const { itemSize } = rest
             delete rest.itemSize
@@ -292,13 +301,12 @@ const HomeFeed = ({ profile, homefeed }) => {
     }, [homefeed, profile, homeFeedProcessed, setHomeFeedProcessed, setSelectedContent, setHomefeed])
 
     return (
-        <Column className={css.homeFeed}>
+        <Column style={{ paddingLeft: '0.5rem' }}>
             <Cell size="50%">
                 {selectedContent && <HomeContentBanner content={selectedContent} />}
             </Cell>
             <Cell>
                 <VirtualListNested
-                    className={css.feedList}
                     dataSize={homefeed.length}
                     itemRenderer={renderRow}
                     itemSize={itemHeigth}
