@@ -1,5 +1,5 @@
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
@@ -143,16 +143,17 @@ export const ContentHeader = ({ content, noCategory }) => {
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Array<String>, Function]} */
     const [categories, setCategories] = useState([])
+    const allowedTypes = useMemo(() => ['series', 'episode', 'movie', 'movie_listing'], [])
 
     useEffect(() => {
-        if (content && !noCategory) {
+        if (content && !noCategory && allowedTypes.includes(content.type)) {
             api.discover.getCategories(profile, { contentId: content.id }).then(({ data }) => {
                 setCategories(data.map(val2 => val2.localization.title))
             })
         } else {
             setCategories([])
         }
-    }, [content, noCategory, setCategories, profile])
+    }, [content, noCategory, setCategories, profile, allowedTypes])
 
     return (
         <>

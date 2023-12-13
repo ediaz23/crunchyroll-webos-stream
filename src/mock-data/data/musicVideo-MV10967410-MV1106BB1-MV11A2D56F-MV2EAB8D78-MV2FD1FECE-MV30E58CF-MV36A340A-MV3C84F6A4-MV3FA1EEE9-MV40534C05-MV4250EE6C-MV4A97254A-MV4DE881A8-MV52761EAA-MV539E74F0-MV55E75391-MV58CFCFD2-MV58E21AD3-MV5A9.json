@@ -1,0 +1,3668 @@
+{
+    "total": 33,
+    "data": [
+        {
+            "animeIds": [
+                "GEXH3W207"
+            ],
+            "durationMs": 197000,
+            "matureBlocked": false,
+            "id": "MV7B52D6CA",
+            "readyToPublish": true,
+            "description": "",
+            "hash": "2c85b46a4145dc86de5410a711569c67",
+            "originalRelease": "2023-10-15T00:00:00Z",
+            "publishDate": "2023-12-06T19:00:00Z",
+            "artist": {
+                "id": "MA2AFBD7F6",
+                "name": "FLOW",
+                "slug": "flow"
+            },
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA2AFBD7F6",
+                        "name": "FLOW",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "flow"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-11-11T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV7B52D6CA/streams",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "createdAt": "2023-11-29T20:04:32.541Z",
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/8aff833c8ce73d89c9c43e53813cfb40.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "updatedAt": "2023-11-30T00:45:12.662Z",
+            "isMature": false,
+            "slug": "get-back",
+            "displayArtistName": "FLOW",
+            "licensor": "Sony Music Labels Inc.",
+            "sequenceNumber": 1,
+            "title": "GET BACK"
+        },
+        {
+            "animeIds": [],
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-12-06T00:00:00Z"
+            },
+            "description": "",
+            "displayArtistNameRequired": false,
+            "matureBlocked": false,
+            "createdAt": "2023-11-29T20:05:30.162Z",
+            "isPublic": true,
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2023-11-08T00:00:00Z",
+            "title": "kodoku no saibou",
+            "type": "musicVideo",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA58806BE2",
+                        "name": "Ling tosite sigure",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "ling-tosite-sigure"
+                    }
+                ]
+            },
+            "isMature": false,
+            "sequenceNumber": 1,
+            "maturityRatings": {},
+            "streams_link": "/content/v2/music/MV89845D28/streams",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "displayArtistName": "Ling tosite sigure",
+            "hash": "daacf29bf962dd28d80af7d9a0a4cdfe",
+            "isPremiumOnly": true,
+            "durationMs": 246000,
+            "readyToPublish": true,
+            "updatedAt": "2023-11-30T00:45:14.355Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "id": "MV89845D28",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/68cb75b463791f47a78b4c400fa78c60.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "slug": "kodoku-no-saibou",
+            "artist": {
+                "id": "MA58806BE2",
+                "name": "Ling tosite sigure",
+                "slug": "ling-tosite-sigure"
+            },
+            "publishDate": "2023-12-06T19:00:00Z"
+        },
+        {
+            "displayArtistName": "SennaRin",
+            "displayArtistNameRequired": false,
+            "isMature": false,
+            "createdAt": "2023-11-29T20:04:53.883Z",
+            "description": "",
+            "slug": "s9air",
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2023-11-29T00:00:00Z",
+            "readyToPublish": true,
+            "title": "S9aiR",
+            "streams_link": "/content/v2/music/MV36A340A/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MAB42EBAF3",
+                        "name": "SennaRin",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "sennarin"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-11-29T00:00:00Z"
+            },
+            "hash": "a4cc75c3843704555910db81ddebea8f",
+            "updatedAt": "2023-11-30T00:45:04.438Z",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "durationMs": 200000,
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "sequenceNumber": 1,
+            "type": "musicVideo",
+            "animeIds": [
+                "G4PH0WJ4Q"
+            ],
+            "artist": {
+                "id": "MAB42EBAF3",
+                "name": "SennaRin",
+                "slug": "sennarin"
+            },
+            "id": "MV36A340A",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/48856322bc077065b74520fffa1fac3a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-12-06T19:00:00Z"
+        },
+        {
+            "displayArtistName": "Masaki Suda x  Tokyo Ska Paradise Orchestra",
+            "licensor": "Sony Music Labels Inc.",
+            "maturityRatings": {},
+            "originalRelease": "2023-10-06T00:00:00Z",
+            "isMature": false,
+            "title": "Rurou no Katashiro",
+            "streams_link": "/content/v2/music/MV3FA1EEE9/streams",
+            "readyToPublish": true,
+            "animeIds": [
+                "G0XHWM1NK"
+            ],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA241566EE",
+                        "name": "Tokyo Ska Paradise Orchestra",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "tokyo-ska-paradise-orchestra"
+                    },
+                    {
+                        "connector": "",
+                        "id": "MAAB7A734E",
+                        "name": "Masaki Suda",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "masaki-suda"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-11-14T00:00:00Z"
+            },
+            "description": "",
+            "isPremiumOnly": true,
+            "hash": "74c0a4525c01e732ddeb8f87d3dea939",
+            "matureBlocked": false,
+            "sequenceNumber": 1,
+            "slug": "rurou-no-katashiro",
+            "type": "musicVideo",
+            "durationMs": 213000,
+            "artist": {
+                "id": "MA241566EE",
+                "name": "Tokyo Ska Paradise Orchestra",
+                "slug": "tokyo-ska-paradise-orchestra"
+            },
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "createdAt": "2023-11-29T20:04:48.139Z",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/55244047ebab5eba4335d97bf6fca35f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "id": "MV3FA1EEE9",
+            "isPublic": true,
+            "publishDate": "2023-12-06T19:00:00Z",
+            "updatedAt": "2023-11-30T00:45:04.72Z"
+        },
+        {
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MAB4DFE372",
+                        "name": "ASCA",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "asca"
+                    }
+                ]
+            },
+            "title": "Watashi ga Warau Wake ha",
+            "type": "musicVideo",
+            "artist": {
+                "id": "MAB4DFE372",
+                "name": "ASCA",
+                "slug": "asca"
+            },
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/a43497b2ac938a7893966cef530c0142.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isMature": false,
+            "publishDate": "2023-12-06T19:00:00Z",
+            "maturityRatings": {},
+            "displayArtistName": "ASCA",
+            "displayArtistNameRequired": false,
+            "hash": "55eb39b8461fd62c8fff0e95ac26687e",
+            "isPremiumOnly": true,
+            "streams_link": "/content/v2/music/MV10967410/streams",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "id": "MV10967410",
+            "isPublic": true,
+            "readyToPublish": true,
+            "description": "",
+            "licensor": "Sony Music Labels Inc.",
+            "sequenceNumber": 1,
+            "slug": "watashi-ga-warau-wake-ha",
+            "animeIds": [
+                "G79H23ZNP"
+            ],
+            "durationMs": 239000,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-11-15T00:00:00Z"
+            },
+            "matureBlocked": false,
+            "createdAt": "2023-11-29T20:04:36.281Z",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "originalRelease": "2023-10-21T00:00:00Z",
+            "updatedAt": "2023-11-30T00:44:57.634Z"
+        },
+        {
+            "hash": "78cb9b063aa160100b06a1a8d2185280",
+            "isMature": false,
+            "publishDate": "2023-11-08T19:00:00Z",
+            "streams_link": "/content/v2/music/MVB8C27A40/streams",
+            "artist": {
+                "id": "MA503A8BE6",
+                "name": "Tatsuya Kitani",
+                "slug": "tatsuya-kitani"
+            },
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "type": "musicVideo",
+            "updatedAt": "2023-11-09T19:41:55.899Z",
+            "animeIds": [
+                "GRDV0019R"
+            ],
+            "createdAt": "2023-11-02T17:48:26.821Z",
+            "readyToPublish": true,
+            "title": "Where Our Blue Is",
+            "displayArtistNameRequired": false,
+            "durationMs": 200000,
+            "genres": [
+                {
+                    "displayValue": "Alternative",
+                    "id": "alternative"
+                }
+            ],
+            "description": "",
+            "licensor": "Sony Music Labels Inc.",
+            "matureBlocked": false,
+            "slug": "where-our-blue-is",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA503A8BE6",
+                        "name": "Tatsuya Kitani",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "tatsuya-kitani"
+                    }
+                ]
+            },
+            "id": "MVB8C27A40",
+            "isPublic": true,
+            "sequenceNumber": 1,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-09-23T00:00:00Z"
+            },
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/114ec9c2b056b686bf566090bf4cd193.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "maturityRatings": {},
+            "displayArtistName": "Tatsuya Kitani",
+            "isPremiumOnly": true,
+            "originalRelease": "2023-08-22T00:00:00Z"
+        },
+        {
+            "hash": "66c5066b2cb9930a3d41d58be3d2e167",
+            "matureBlocked": false,
+            "streams_link": "/content/v2/music/MV8743E551/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA4D40ECB3",
+                        "name": "Survive Said The Prophet",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "survive-said-the-prophet"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "isMature": false,
+            "originalRelease": "2023-05-15T00:00:00Z",
+            "slug": "paradox",
+            "description": "",
+            "title": "Paradox",
+            "updatedAt": "2023-11-09T19:40:59.018Z",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/3fa47f304236baa71b7bf68b8769eb07.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-11-09T00:00:00Z"
+            },
+            "createdAt": "2023-11-02T17:46:42.243Z",
+            "durationMs": 247000,
+            "isPremiumOnly": true,
+            "sequenceNumber": 1,
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "isPublic": true,
+            "id": "MV8743E551",
+            "displayArtistName": "Survive Said The Prophet",
+            "publishDate": "2023-11-08T19:00:00Z",
+            "type": "musicVideo",
+            "animeIds": [
+                "GEXH3WKK0"
+            ],
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "licensor": "Sony Music Labels Inc.",
+            "artist": {
+                "id": "MA4D40ECB3",
+                "name": "Survive Said The Prophet",
+                "slug": "survive-said-the-prophet"
+            }
+        },
+        {
+            "title": "SPECIALZ",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "durationMs": 242000,
+            "isPublic": true,
+            "sequenceNumber": 1,
+            "description": "",
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "slug": "specialz",
+            "streams_link": "/content/v2/music/MV30E58CF/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-10-19T00:00:00Z"
+            },
+            "hash": "e0eac194b03f5df08bdf3ce17a1e013d",
+            "licensor": "Sony Music Labels Inc.",
+            "matureBlocked": false,
+            "createdAt": "2023-10-17T10:06:21.979Z",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/8979800ed68151b55c8ba7a25bb6ff27.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "originalRelease": "2023-09-01T00:00:00Z",
+            "publishDate": "2023-10-18T18:00:00Z",
+            "updatedAt": "2023-10-19T18:43:01.277Z",
+            "artist": {
+                "id": "MAB6C1EE1",
+                "name": "King Gnu",
+                "slug": "king-gnu"
+            },
+            "displayArtistName": "King Gnu",
+            "genres": [
+                {
+                    "displayValue": "Alternative",
+                    "id": "alternative"
+                }
+            ],
+            "isMature": false,
+            "id": "MV30E58CF",
+            "animeIds": [
+                "GRDV0019R"
+            ],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MAB6C1EE1",
+                        "name": "King Gnu",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "king-gnu"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "type": "musicVideo"
+        },
+        {
+            "copyright": "(C) 2021 Sony Music Labels Inc.",
+            "hash": "e98b8763c020bb7b4e278836e72a66f9",
+            "originalRelease": "2021-02-17T00:00:00Z",
+            "title": "VIVID VICE",
+            "artist": {
+                "id": "MA9EF5DB41",
+                "name": "Who-ya Extended",
+                "slug": "who-ya-extended"
+            },
+            "displayArtistNameRequired": false,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "updatedAt": "2023-10-19T18:43:32.094Z",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "isPremiumOnly": true,
+            "slug": "vivid-vice",
+            "type": "musicVideo",
+            "durationMs": 186000,
+            "licensor": "Sony Music Labels Inc.",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA9EF5DB41",
+                        "name": "Who-ya Extended",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "who-ya-extended"
+                    }
+                ]
+            },
+            "sequenceNumber": 1,
+            "description": "",
+            "id": "MV989751F",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/7a4e78af0e6223f886ff350303c26c4d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-10-18T18:00:00Z",
+            "readyToPublish": true,
+            "animeIds": [
+                "GRDV0019R"
+            ],
+            "displayArtistName": "Who-ya Extended",
+            "isMature": false,
+            "isPublic": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-10-07T00:00:00Z"
+            },
+            "createdAt": "2023-10-17T10:05:24.705Z",
+            "streams_link": "/content/v2/music/MV989751F/streams"
+        },
+        {
+            "animeIds": [
+                "GJ0H7QGQK"
+            ],
+            "createdAt": "2023-10-17T10:06:07.321Z",
+            "displayArtistName": "KANA-BOON",
+            "durationMs": 284000,
+            "isMature": false,
+            "type": "musicVideo",
+            "description": "",
+            "isPublic": true,
+            "matureBlocked": false,
+            "streams_link": "/content/v2/music/MVAC0486A/streams",
+            "artist": {
+                "id": "MA6065CF47",
+                "name": "KANA-BOON",
+                "slug": "kana-boon"
+            },
+            "id": "MVAC0486A",
+            "publishDate": "2023-10-18T18:00:00Z",
+            "licensor": "Sony Music Labels Inc.",
+            "slug": "song-of-the-dead",
+            "updatedAt": "2023-10-19T18:44:39.235Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-10-12T00:00:00Z"
+            },
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "hash": "4247ce6318477f8d3e01f8d73d7ba162",
+            "isPremiumOnly": true,
+            "title": "Song of the Dead",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA6065CF47",
+                        "name": "KANA-BOON",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "kana-boon"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "originalRelease": "2023-10-12T00:00:00Z",
+            "readyToPublish": true,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "maturityRatings": {},
+            "sequenceNumber": 1,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/5838aa87777da80b56d7c76ced8999ec.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            }
+        },
+        {
+            "isPublic": true,
+            "isMature": false,
+            "slug": "spiral",
+            "type": "musicVideo",
+            "maturityRatings": {},
+            "streams_link": "/content/v2/music/MV5A9FBC9B/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MAB0240ACC",
+                        "name": "LONGMAN",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "longman"
+                    }
+                ]
+            },
+            "createdAt": "2023-10-17T10:05:31.194Z",
+            "id": "MV5A9FBC9B",
+            "artist": {
+                "id": "MAB0240ACC",
+                "name": "LONGMAN",
+                "slug": "longman"
+            },
+            "hash": "5e00b7e752bd5e911d6ca9bd0fe446cc",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/a65290fa911e0bbf53ce4754f48a7d2a.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "displayArtistName": "LONGMAN",
+            "durationMs": 241000,
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "displayArtistNameRequired": false,
+            "licensor": "Sony Music Labels Inc.",
+            "sequenceNumber": 1,
+            "readyToPublish": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-09-20T00:00:00Z"
+            },
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "originalRelease": "2023-07-10T00:00:00Z",
+            "publishDate": "2023-10-18T18:00:00Z",
+            "title": "spiral",
+            "updatedAt": "2023-10-19T18:45:23.603Z",
+            "animeIds": [
+                "G24H1N3MP"
+            ],
+            "description": "",
+            "matureBlocked": false
+        },
+        {
+            "hash": "1991cda82448eb9a09b67d1b4f522451",
+            "updatedAt": "2023-10-18T00:54:16.13Z",
+            "streams_link": "/content/v2/music/MV4A97254A/streams",
+            "originalRelease": "2023-07-07T00:00:00Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA503A8BE6",
+                        "name": "Tatsuya Kitani",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "tatsuya-kitani"
+                    }
+                ]
+            },
+            "genres": [
+                {
+                    "displayValue": "Alternative",
+                    "id": "alternative"
+                }
+            ],
+            "id": "MV4A97254A",
+            "isPublic": true,
+            "maturityRatings": {},
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-08-30T00:00:00Z"
+            },
+            "readyToPublish": true,
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "isMature": false,
+            "slug": "where-our-blue-is",
+            "type": "musicVideo",
+            "publishDate": "2023-09-07T18:00:00Z",
+            "description": "",
+            "displayArtistName": "Tatsuya Kitani",
+            "displayArtistNameRequired": false,
+            "durationMs": 201000,
+            "licensor": "Sony Music Labels Inc.",
+            "animeIds": [
+                "GRDV0019R"
+            ],
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "title": "Where Our Blue Is",
+            "artist": {
+                "id": "MA503A8BE6",
+                "name": "Tatsuya Kitani",
+                "slug": "tatsuya-kitani"
+            },
+            "createdAt": "2023-08-30T06:06:48.844Z",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/41339788d18a24f4d11907d50f6b1659.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "sequenceNumber": 1
+        },
+        {
+            "animeIds": [
+                "G9VHN9P43"
+            ],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA67DE4CA7",
+                        "name": "Omoinotake",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "omoinotake"
+                    }
+                ]
+            },
+            "matureBlocked": false,
+            "publishDate": "2023-10-18T18:00:00Z",
+            "artist": {
+                "id": "MA67DE4CA7",
+                "name": "Omoinotake",
+                "slug": "omoinotake"
+            },
+            "durationMs": 263000,
+            "displayArtistName": "Omoinotake",
+            "originalRelease": "2023-07-01T00:00:00Z",
+            "type": "musicVideo",
+            "createdAt": "2023-10-17T10:05:34.92Z",
+            "description": "",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "hash": "1f48e5219780bbc05de5a26edf2c0e75",
+            "licensor": "Sony Music Labels Inc.",
+            "updatedAt": "2023-10-19T18:46:43.755Z",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "id": "MV4DE881A8",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/20bbaaa7f1c5960466683db35a3af563.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "streams_link": "/content/v2/music/MV4DE881A8/streams",
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "readyToPublish": true,
+            "sequenceNumber": 1,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-09-06T00:00:00Z"
+            },
+            "isMature": false,
+            "maturityRatings": {},
+            "slug": "happiness",
+            "title": "Happiness"
+        },
+        {
+            "matureBlocked": false,
+            "originalRelease": "2019-11-27T00:00:00Z",
+            "readyToPublish": true,
+            "slug": "q-vism",
+            "streams_link": "/content/v2/music/MV76662AC9/streams",
+            "isMature": false,
+            "maturityRatings": {},
+            "publishDate": "2023-10-18T18:00:00Z",
+            "title": "Q-vism",
+            "artist": {
+                "id": "MA9EF5DB41",
+                "name": "Who-ya Extended",
+                "slug": "who-ya-extended"
+            },
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA9EF5DB41",
+                        "name": "Who-ya Extended",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "who-ya-extended"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-10-07T00:00:00Z"
+            },
+            "durationMs": 182000,
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "id": "MV76662AC9",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/0c238a9136f141ae34362c81991a2817.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "sequenceNumber": 1,
+            "displayArtistName": "Who-ya Extended",
+            "hash": "f914dfc691b9a584e80ac2e548c6dc36",
+            "type": "musicVideo",
+            "updatedAt": "2023-10-19T18:48:30.326Z",
+            "animeIds": [
+                "GR75253JY"
+            ],
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "isPublic": true,
+            "createdAt": "2023-10-17T10:05:28.496Z",
+            "licensor": "Sony Music Labels Inc.",
+            "description": "",
+            "displayArtistNameRequired": false
+        },
+        {
+            "artist": {
+                "id": "MA2F45ABDB",
+                "name": "Hitsujibungaku",
+                "slug": "hitsujibungaku"
+            },
+            "displayArtistName": "Hitsujibungaku",
+            "displayArtistNameRequired": false,
+            "isPremiumOnly": true,
+            "originalRelease": "2022-01-12T00:00:00Z",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/d250be6ed2b71d9e14732d91c70726be.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "licensor": "F.C.L.S.",
+            "title": "Hikaru toki",
+            "copyright": "(C) 2022 F.C.L.S.",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "hash": "74220c501fd66c22efc55356582c5e84",
+            "id": "MVAB8C52CC",
+            "matureBlocked": false,
+            "publishDate": "2023-10-18T18:00:00Z",
+            "readyToPublish": true,
+            "type": "musicVideo",
+            "updatedAt": "2023-10-19T18:53:57.93Z",
+            "streams_link": "/content/v2/music/MVAB8C52CC/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA2F45ABDB",
+                        "name": "Hitsujibungaku",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "hitsujibungaku"
+                    }
+                ]
+            },
+            "createdAt": "2023-10-17T10:03:20.803Z",
+            "description": "",
+            "durationMs": 351000,
+            "maturityRatings": {},
+            "animeIds": [
+                "G79H230XN"
+            ],
+            "isMature": false,
+            "isPublic": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-09-06T00:00:00Z"
+            },
+            "slug": "hikaru-toki",
+            "sequenceNumber": 1
+        },
+        {
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "readyToPublish": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-10-07T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "isMature": false,
+            "title": "Icy Ivy",
+            "streams_link": "/content/v2/music/MV6B562E7E/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA9EF5DB41",
+                        "name": "Who-ya Extended",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "who-ya-extended"
+                    }
+                ]
+            },
+            "createdAt": "2023-10-17T10:01:46.419Z",
+            "description": "",
+            "displayArtistName": "Who-ya Extended",
+            "isPublic": true,
+            "slug": "icy-ivy",
+            "animeIds": [
+                "GEXH3WPXK"
+            ],
+            "artist": {
+                "id": "MA9EF5DB41",
+                "name": "Who-ya Extended",
+                "slug": "who-ya-extended"
+            },
+            "hash": "5aecdee5e92a187ac49666cbf03cb688",
+            "id": "MV6B562E7E",
+            "licensor": "Sony Music Labels Inc.",
+            "sequenceNumber": 1,
+            "type": "musicVideo",
+            "copyright": "(C) 2021 Sony Music Labels Inc.",
+            "originalRelease": "2021-08-11T00:00:00Z",
+            "matureBlocked": false,
+            "updatedAt": "2023-10-19T18:47:53.976Z",
+            "displayArtistNameRequired": false,
+            "durationMs": 199000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/5568807686cf4d87da0b4cba30b23f77.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-10-18T18:00:00Z"
+        },
+        {
+            "sequenceNumber": 1,
+            "title": "Oz.",
+            "maturityRatings": {},
+            "id": "MV58E21AD3",
+            "streams_link": "/content/v2/music/MV58E21AD3/streams",
+            "copyright": "(C) 2021 Sony Music Labels Inc.",
+            "updatedAt": "2023-09-08T17:58:01.484Z",
+            "durationMs": 200000,
+            "isPublic": true,
+            "publishDate": "2023-09-07T18:00:00Z",
+            "createdAt": "2023-08-30T05:59:15.325Z",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "hash": "c3956c1c5964556a3ec3d3f84d93302f",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/33b30971dc16d496a8afae9b0fc4d71d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isMature": false,
+            "isPremiumOnly": true,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-09-01T00:00:00Z"
+            },
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA17BBA1CA",
+                        "name": "yama",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "yama"
+                    }
+                ]
+            },
+            "displayArtistName": "yama",
+            "licensor": "Sony Music Labels Inc.",
+            "matureBlocked": false,
+            "originalRelease": "2021-10-22T00:00:00Z",
+            "readyToPublish": true,
+            "slug": "oz",
+            "artist": {
+                "id": "MA17BBA1CA",
+                "name": "yama",
+                "slug": "yama"
+            },
+            "description": "",
+            "displayArtistNameRequired": false,
+            "type": "musicVideo",
+            "animeIds": [
+                "G79H23W70"
+            ]
+        },
+        {
+            "readyToPublish": true,
+            "title": "Renai millimeter film",
+            "artist": {
+                "id": "MA52E40066",
+                "name": "halca",
+                "slug": "halca"
+            },
+            "createdAt": "2023-08-30T06:06:07.906Z",
+            "updatedAt": "2023-09-08T17:56:41.902Z",
+            "durationMs": 209000,
+            "type": "musicVideo",
+            "id": "MV539E74F0",
+            "isMature": false,
+            "sequenceNumber": 1,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-08-23T00:00:00Z"
+            },
+            "displayArtistName": "halca",
+            "streams_link": "/content/v2/music/MV539E74F0/streams",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "isPublic": true,
+            "isPremiumOnly": true,
+            "originalRelease": "2023-07-14T00:00:00Z",
+            "description": "",
+            "hash": "19b94c588e464782cb373b0c8b1b2de4",
+            "maturityRatings": {},
+            "slug": "renai-millimeter-film",
+            "animeIds": [
+                "G6QWV3976"
+            ],
+            "matureBlocked": false,
+            "licensor": "Sony Music Labels Inc.",
+            "publishDate": "2023-09-07T18:00:00Z",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA52E40066",
+                        "name": "halca",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "halca"
+                    }
+                ]
+            },
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/08cbbf122dd7689493a8f385048e4c38.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            }
+        },
+        {
+            "isPremiumOnly": true,
+            "slug": "slash",
+            "updatedAt": "2023-11-29T20:02:47.402Z",
+            "streams_link": "/content/v2/music/MV40534C05/streams",
+            "createdAt": "2023-08-30T06:05:35.957Z",
+            "hash": "ff13b8ba5960697abc75a9c001fe29e1",
+            "sequenceNumber": 1,
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "animeIds": [
+                "G79H2307W"
+            ],
+            "durationMs": 246000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/275ac1863f057ea5fa041e6d6027d17e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "readyToPublish": true,
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "id": "MV40534C05",
+            "licensor": "Sony Music Labels Inc.",
+            "publishDate": "2023-09-07T18:00:00Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-08-09T00:00:00Z"
+            },
+            "displayArtistName": "yama",
+            "title": "slash",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA17BBA1CA",
+                        "name": "yama",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "yama"
+                    }
+                ]
+            },
+            "isPublic": true,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "type": "musicVideo",
+            "artist": {
+                "id": "MA17BBA1CA",
+                "name": "yama",
+                "slug": "yama"
+            },
+            "description": "",
+            "isMature": false,
+            "originalRelease": "2023-05-22T00:00:00Z"
+        },
+        {
+            "hash": "92f0fbf0a50310c98906f146a047c356",
+            "isPublic": true,
+            "matureBlocked": false,
+            "slug": "gold",
+            "title": "GOLD",
+            "streams_link": "/content/v2/music/MV835555D8/streams",
+            "durationMs": 230000,
+            "isMature": false,
+            "readyToPublish": true,
+            "type": "musicVideo",
+            "id": "MV835555D8",
+            "licensor": "Pollyanna Records",
+            "maturityRatings": {},
+            "updatedAt": "2023-10-27T08:54:50.908Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-07-08T00:00:00Z"
+            },
+            "displayArtistNameRequired": false,
+            "animeIds": [
+                "G79H23W70"
+            ],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA20B0E21D",
+                        "name": "PEOPLE 1",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "people-1"
+                    }
+                ]
+            },
+            "artist": {
+                "id": "MA20B0E21D",
+                "name": "PEOPLE 1",
+                "slug": "people-1"
+            },
+            "createdAt": "2023-08-02T01:33:20.555Z",
+            "description": "",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/57018dfbb92d765e0bba7861160c1155.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "originalRelease": "2023-04-14T00:00:00Z",
+            "publishDate": "2023-08-03T06:00:00Z",
+            "copyright": "(C) 2023 Pollyanna Records",
+            "displayArtistName": "PEOPLE 1",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "sequenceNumber": 1
+        },
+        {
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T08:53:37.024Z",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "description": "",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "readyToPublish": true,
+            "sequenceNumber": 1,
+            "title": "Gradation",
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MA3C345AA1",
+                        "name": "Yuho Kitazawa",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "yuho-kitazawa"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA6065CF47",
+                        "name": "KANA-BOON",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "kana-boon"
+                    }
+                ]
+            },
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/0c334025bade7585b4e809f57a79d7d9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "publishDate": "2023-08-03T06:00:00Z",
+            "slug": "gradation",
+            "isPublic": true,
+            "matureBlocked": false,
+            "animeIds": [
+                "GNVHKNPQ7"
+            ],
+            "artist": {
+                "id": "MA6065CF47",
+                "name": "KANA-BOON",
+                "slug": "kana-boon"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-18T00:00:00Z"
+            },
+            "durationMs": 235000,
+            "streams_link": "/content/v2/music/MV52761EAA/streams",
+            "licensor": "Sony Music Labels Inc.",
+            "createdAt": "2023-08-02T01:31:37.743Z",
+            "displayArtistName": "KANA-BOON feat. Yuho Kitazawa",
+            "displayArtistNameRequired": false,
+            "hash": "f4de7a8cb1f0fd9135e7310188162d78",
+            "isMature": false,
+            "id": "MV52761EAA",
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "originalRelease": "2023-04-06T00:00:00Z"
+        },
+        {
+            "animeIds": [
+                "GY5P48XEY"
+            ],
+            "createdAt": "2023-08-02T01:32:05.052Z",
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2023-04-10T00:00:00Z",
+            "sequenceNumber": 1,
+            "hash": "8fa9667b46ee557c4f16a6dad7512bc0",
+            "updatedAt": "2023-10-27T08:54:47.236Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA7972F224",
+                        "name": "milet",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "milet"
+                    },
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "description": "",
+            "durationMs": 225000,
+            "isMature": false,
+            "maturityRatings": {},
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-25T00:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPublic": true,
+            "streams_link": "/content/v2/music/MV8276CFD4/streams",
+            "displayArtistName": "MAN WITH A MISSION x milet",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/f02b30743fd9f697c8cfc2d5e43cc7eb.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "title": "Kizuna No Kiseki",
+            "type": "musicVideo",
+            "isPremiumOnly": true,
+            "slug": "kizuna-no-kiseki",
+            "artist": {
+                "id": "MA7972F224",
+                "name": "milet",
+                "slug": "milet"
+            },
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "displayArtistNameRequired": false,
+            "publishDate": "2023-08-03T06:00:00Z",
+            "id": "MV8276CFD4",
+            "matureBlocked": false,
+            "readyToPublish": true
+        },
+        {
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "description": "",
+            "genres": [
+                {
+                    "displayValue": "R&B/Soul",
+                    "id": "rbsoul"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/13f60b0938ebc5d7212b6a692099f58f.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPremiumOnly": true,
+            "animeIds": [
+                "GRJ0J828Y"
+            ],
+            "licensor": "Sony Music Labels Inc.",
+            "title": "Love is Show",
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV841D4CDF/streams",
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MAB3B6D228",
+                        "name": "Reni Takagi",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "reni-takagi"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA87065701",
+                        "name": "Masayuki Suzuki",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "masayuki-suzuki"
+                    }
+                ]
+            },
+            "durationMs": 244000,
+            "publishDate": "2023-08-03T06:00:00Z",
+            "sequenceNumber": 1,
+            "isPublic": true,
+            "readyToPublish": true,
+            "copyright": "(C) 2022 Sony Music Labels Inc.",
+            "displayArtistName": "Masayuki Suzuki feat. Reni Takagi",
+            "displayArtistNameRequired": false,
+            "hash": "24e2c67bec1c1a7aaaea52068e9684e3",
+            "id": "MV841D4CDF",
+            "isMature": false,
+            "originalRelease": "2022-12-16T00:00:00Z",
+            "slug": "love-is-show",
+            "createdAt": "2023-08-02T01:30:50.331Z",
+            "artist": {
+                "id": "MA87065701",
+                "name": "Masayuki Suzuki",
+                "slug": "masayuki-suzuki"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-25T00:00:00Z"
+            },
+            "updatedAt": "2023-10-27T08:54:51.841Z"
+        },
+        {
+            "displayArtistNameRequired": false,
+            "sequenceNumber": 1,
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MABBDFDD6B",
+                        "name": "Airi Suzuki",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "airi-suzuki"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA87065701",
+                        "name": "Masayuki Suzuki",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "masayuki-suzuki"
+                    }
+                ]
+            },
+            "type": "musicVideo",
+            "publishDate": "2023-08-03T06:00:00Z",
+            "id": "MV55E75391",
+            "slug": "daddy--daddy--do-",
+            "animeIds": [
+                "GRJ0J828Y"
+            ],
+            "isPublic": true,
+            "durationMs": 190000,
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "streams_link": "/content/v2/music/MV55E75391/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-25T00:00:00Z"
+            },
+            "readyToPublish": true,
+            "displayArtistName": "Masayuki Suzuki feat. Airi Suzuki",
+            "genres": [
+                {
+                    "displayValue": "R&B/Soul",
+                    "id": "rbsoul"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/d6de667b73fe805150cc5a4921fedeee.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isMature": false,
+            "isPremiumOnly": true,
+            "originalRelease": "2020-04-15T00:00:00Z",
+            "title": "Daddy ! Daddy ! Do !",
+            "copyright": "(C) 2020 Sony Music Labels Inc.",
+            "updatedAt": "2023-10-27T08:53:43.018Z",
+            "createdAt": "2023-08-02T01:31:48.927Z",
+            "description": "",
+            "hash": "19a40c21cd769f52125965558f69d1b8",
+            "licensor": "Sony Music Labels Inc.",
+            "artist": {
+                "id": "MA87065701",
+                "name": "Masayuki Suzuki",
+                "slug": "masayuki-suzuki"
+            }
+        },
+        {
+            "artist": {
+                "id": "MA302FBC58",
+                "name": "millennium parade",
+                "slug": "millennium-parade"
+            },
+            "genres": [
+                {
+                    "displayValue": "Alternative",
+                    "id": "alternative"
+                }
+            ],
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/208a8b8a1244dd3ace8f744f6079057d.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "createdAt": "2023-08-02T01:32:11.687Z",
+            "displayArtistName": "millennium parade x Sheena Ringo",
+            "displayArtistNameRequired": false,
+            "durationMs": 257000,
+            "isPremiumOnly": true,
+            "maturityRatings": {},
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-19T00:00:00Z"
+            },
+            "isMature": false,
+            "animeIds": [
+                "GJ0H7Q5ZJ"
+            ],
+            "id": "MV3C84F6A4",
+            "publishDate": "2023-08-03T06:00:00Z",
+            "readyToPublish": true,
+            "slug": "work",
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV3C84F6A4/streams",
+            "matureBlocked": false,
+            "title": "WORK",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA302FBC58",
+                        "name": "millennium parade",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "millennium-parade"
+                    },
+                    {
+                        "connector": "",
+                        "id": "MA103F3987",
+                        "name": "Sheena Ringo",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "sheena-ringo"
+                    }
+                ]
+            },
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "description": "",
+            "hash": "9c6c3d9852d06000dfed4a5dc3835b1b",
+            "licensor": "Sony Music Labels Inc.",
+            "originalRelease": "2023-04-01T00:00:00Z",
+            "sequenceNumber": 1,
+            "updatedAt": "2023-10-27T08:52:39.404Z"
+        },
+        {
+            "slug": "wasuregataki",
+            "copyright": "(C) 2023 Sony Music Labels Inc.",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/0de82cd04674943f39d7892b5e78fcb9.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "originalRelease": "2023-04-20T00:00:00Z",
+            "sequenceNumber": 1,
+            "type": "musicVideo",
+            "updatedAt": "2023-10-27T08:55:38.48Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA24FD049",
+                        "name": "Huwie Ishizaki",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "huwie-ishizaki"
+                    }
+                ]
+            },
+            "createdAt": "2023-08-02T01:32:52.943Z",
+            "displayArtistNameRequired": false,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "description": "",
+            "maturityRatings": {},
+            "publishDate": "2023-08-03T06:00:00Z",
+            "readyToPublish": true,
+            "isMature": false,
+            "isPremiumOnly": true,
+            "streams_link": "/content/v2/music/MVA4134F6/streams",
+            "matureBlocked": false,
+            "animeIds": [
+                "GYEXQKJG6"
+            ],
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-06-30T00:00:00Z"
+            },
+            "id": "MVA4134F6",
+            "licensor": "Sony Music Labels Inc.",
+            "displayArtistName": "Huwie Ishizaki",
+            "artist": {
+                "id": "MA24FD049",
+                "name": "Huwie Ishizaki",
+                "slug": "huwie-ishizaki"
+            },
+            "durationMs": 177000,
+            "hash": "1faa382858997447a267436b20de5249",
+            "title": "Wasuregataki"
+        },
+        {
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "isPremiumOnly": true,
+            "animeIds": [
+                "GYQ4MW246"
+            ],
+            "displayArtistNameRequired": false,
+            "createdAt": "2023-05-16T18:22:11.06Z",
+            "isPublic": true,
+            "sequenceNumber": 1,
+            "hash": "525a0adf0e64dbc5deded2cee3768aab",
+            "maturityRatings": {},
+            "title": "Silhouette",
+            "streams_link": "/content/v2/music/MV4250EE6C/streams",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/951420f7bf560fdd78c2a97f7ef102a8.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "displayArtistName": "KANA-BOON",
+            "isMature": false,
+            "originalRelease": "2014-11-26T00:00:00Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2014-11-05T00:00:00Z"
+            },
+            "id": "MV4250EE6C",
+            "licensor": "Sony Music Labels Inc.",
+            "readyToPublish": true,
+            "copyright": "(C) 2014 Sony Music Labels Inc.",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA6065CF47",
+                        "name": "KANA-BOON",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "kana-boon"
+                    }
+                ]
+            },
+            "description": "",
+            "durationMs": 265000,
+            "matureBlocked": false,
+            "publishDate": "2023-05-31T13:00:00Z",
+            "updatedAt": "2023-10-27T08:52:54.529Z",
+            "artist": {
+                "id": "MA6065CF47",
+                "name": "KANA-BOON",
+                "slug": "kana-boon"
+            },
+            "type": "musicVideo",
+            "slug": "silhouette"
+        },
+        {
+            "licensor": "Sony Music Labels Inc.",
+            "displayArtistName": "COALAMODE.",
+            "isPublic": true,
+            "updatedAt": "2023-09-07T03:29:05.177Z",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MABA90FA3D",
+                        "name": "COALAMODE.",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "coalamode"
+                    }
+                ]
+            },
+            "durationMs": 294000,
+            "title": "Nanairo Symphony",
+            "hash": "f60b477f2a818ba3cba05e18e368ef28",
+            "maturityRatings": {},
+            "artist": {
+                "id": "MABA90FA3D",
+                "name": "COALAMODE.",
+                "slug": "coalamode"
+            },
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "readyToPublish": true,
+            "id": "MV58CFCFD2",
+            "isPremiumOnly": true,
+            "slug": "nanairo-symphony",
+            "animeIds": [
+                "G63V7KN9Y"
+            ],
+            "createdAt": "2023-03-07T07:22:53.681Z",
+            "description": "",
+            "displayArtistNameRequired": false,
+            "isMature": false,
+            "matureBlocked": false,
+            "publishDate": "2023-04-27T13:00:00Z",
+            "sequenceNumber": 1,
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "copyright": "(C) 2018 Ariola Japan, a division of Sony Music Labels Inc.",
+            "streams_link": "/content/v2/music/MV58CFCFD2/streams",
+            "type": "musicVideo",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/2cd6382ccc753063b1bb1e0085ec1d9e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "originalRelease": "2018-05-18T00:00:00Z"
+        },
+        {
+            "description": "",
+            "genres": [
+                {
+                    "displayValue": "Anime",
+                    "id": "anime"
+                }
+            ],
+            "publishDate": "2023-03-04T06:00:00Z",
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV2FD1FECE/streams",
+            "licensor": "Sony Music Labels Inc.",
+            "title": "Gurenge",
+            "createdAt": "2023-02-20T08:26:07.273Z",
+            "displayArtistName": "LiSA",
+            "id": "MV2FD1FECE",
+            "animeIds": [
+                "GY5P48XEY"
+            ],
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2021-04-20T00:00:00Z"
+            },
+            "maturityRatings": {},
+            "updatedAt": "2023-09-07T03:24:29.822Z",
+            "slug": "gurenge",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA179CB50D",
+                        "name": "LiSA",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "lisa"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "durationMs": 235000,
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "sequenceNumber": 1,
+            "artist": {
+                "id": "MA179CB50D",
+                "name": "LiSA",
+                "slug": "lisa"
+            },
+            "copyright": "(C) 2019 Sony Music Labels Inc.",
+            "isPublic": true,
+            "isMature": false,
+            "originalRelease": "2019-04-22T00:00:00Z",
+            "hash": "f3a388f348f4e7ba5a2226e83adb03fd",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/17eb14ea42df20b811ecfa1a36d5c6f7.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "readyToPublish": true
+        },
+        {
+            "maturityRatings": {},
+            "originalRelease": "2021-12-06T00:00:00Z",
+            "artist": {
+                "id": "MA8A56333D",
+                "name": "Aimer",
+                "slug": "aimer"
+            },
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "id": "MV2EAB8D78",
+            "isMature": false,
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "publishDate": "2023-03-04T06:00:00Z",
+            "title": "Zankyosanka",
+            "type": "musicVideo",
+            "animeIds": [
+                "GY5P48XEY"
+            ],
+            "isPublic": true,
+            "updatedAt": "2023-09-07T03:24:18.843Z",
+            "createdAt": "2023-02-23T18:18:12.913Z",
+            "displayArtistNameRequired": false,
+            "streams_link": "/content/v2/music/MV2EAB8D78/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA8A56333D",
+                        "name": "Aimer",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "aimer"
+                    }
+                ]
+            },
+            "copyright": "(C) 2021 Sony Music Labels Inc.",
+            "hash": "204ded59bfba8c40dec592078e7094d2",
+            "sequenceNumber": 1,
+            "readyToPublish": true,
+            "description": "",
+            "displayArtistName": "Aimer",
+            "durationMs": 183000,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/d2516a8c9f80dbf136bcf035c3f2e5c0.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "licensor": "Sony Music Labels Inc.",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2022-01-12T00:00:00Z"
+            },
+            "slug": "zankyosanka"
+        },
+        {
+            "licensor": "Sony Music Labels Inc.",
+            "hash": "b4c774deea2a6204108dbdda2ea65851",
+            "genres": [
+                {
+                    "displayValue": "J-Pop",
+                    "id": "j-pop"
+                }
+            ],
+            "isPublic": true,
+            "matureBlocked": false,
+            "sequenceNumber": 1,
+            "durationMs": 174000,
+            "originalRelease": "2021-01-10T00:00:00Z",
+            "slug": "paradise",
+            "title": "Paradise",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2021-01-10T00:00:00Z"
+            },
+            "isPremiumOnly": true,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA280591EB",
+                        "name": "Rude-alpha",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "rude-alpha"
+                    }
+                ]
+            },
+            "description": "",
+            "type": "musicVideo",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "readyToPublish": true,
+            "updatedAt": "2023-09-07T03:20:36.046Z",
+            "animeIds": [
+                "G5PHNM434"
+            ],
+            "artist": {
+                "id": "MA280591EB",
+                "name": "Rude-alpha",
+                "slug": "rude-alpha"
+            },
+            "copyright": "(C) 2021 SonyMusic",
+            "id": "MV1106BB1",
+            "isMature": false,
+            "streams_link": "/content/v2/music/MV1106BB1/streams",
+            "createdAt": "2023-02-20T08:23:36.671Z",
+            "displayArtistName": "Rude-alpha",
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/025ea10ccdf72873fae4a9eb2ceb4345.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "maturityRatings": {}
+        },
+        {
+            "artist": {
+                "id": "MA2AFBD7F6",
+                "name": "FLOW",
+                "slug": "flow"
+            },
+            "copyright": "(C) 2004 Sony Music Labels Inc.",
+            "durationMs": 261000,
+            "isPublic": true,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA2AFBD7F6",
+                        "name": "FLOW",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "flow"
+                    }
+                ]
+            },
+            "displayArtistNameRequired": false,
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/7dbbe24a0ff126c2b5ba974f0e269e3b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "originalRelease": "2004-04-28T00:00:00Z",
+            "createdAt": "2023-02-20T08:29:32.57Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "readyToPublish": true,
+            "animeIds": [
+                "GY9PJ5KWR",
+                "GW4HM74DK"
+            ],
+            "id": "MV8898A158",
+            "licensor": "Sony Music Labels Inc.",
+            "publishDate": "2023-03-04T06:00:00Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2015-07-01T00:00:00Z"
+            },
+            "displayArtistName": "FLOW",
+            "isMature": false,
+            "updatedAt": "2023-10-27T08:54:59.441Z",
+            "matureBlocked": false,
+            "maturityRatings": {},
+            "slug": "go",
+            "title": "GO!!!",
+            "streams_link": "/content/v2/music/MV8898A158/streams",
+            "description": "",
+            "hash": "d75b7cfd38c65d74d265bdedaac69ab9",
+            "isPremiumOnly": true,
+            "sequenceNumber": 1,
+            "type": "musicVideo"
+        },
+        {
+            "licensor": "Sony Music Labels Inc.",
+            "publishDate": "2023-06-26T15:00:00Z",
+            "title": "Centimeter",
+            "durationMs": 227000,
+            "isPremiumOnly": true,
+            "sequenceNumber": 1,
+            "type": "musicVideo",
+            "animeIds": [
+                "G6QWV3976"
+            ],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA16E847FD",
+                        "name": "the peggies",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "the-peggies"
+                    }
+                ]
+            },
+            "isPublic": true,
+            "hash": "b21fa55f131ca3cf3dd6f4abb01fa141",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/2411173a792dd2aa234a21f4af941845.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "id": "MV11A2D56F",
+            "isMature": false,
+            "updatedAt": "2023-10-27T08:51:30.248Z",
+            "copyright": "(C) 2020 Sony Music Labels Inc.",
+            "description": "",
+            "matureBlocked": false,
+            "artist": {
+                "id": "MA16E847FD",
+                "name": "the peggies",
+                "slug": "the-peggies"
+            },
+            "displayArtistNameRequired": false,
+            "originalRelease": "2020-07-18T00:00:00Z",
+            "slug": "centimeter",
+            "streams_link": "/content/v2/music/MV11A2D56F/streams",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2020-09-10T00:00:00Z"
+            },
+            "displayArtistName": "the peggies",
+            "readyToPublish": true,
+            "createdAt": "2023-05-16T13:15:45.318Z",
+            "maturityRatings": {}
+        }
+    ],
+    "meta": {}
+}

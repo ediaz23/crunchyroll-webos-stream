@@ -21,23 +21,36 @@ const NavigableDiv = Navigable('div', '')
 
 
 const Poster = ({ item, image, itemSize, ...rest }) => {
+    /** @type {Array<String>} */
+    const playableTypes = useMemo(() =>
+        ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
     let progress = 0
-    if (item.type === 'episode' && item.episode_metadata) {
-        const duration = item.episode_metadata.duration_ms / 1000
-        progress = item.playhead / duration * 100
+
+    if (playableTypes.includes(item.type)) {
+        let duration = undefined
+        if (item.type === 'episode' && item.episode_metadata) {
+            duration = item.episode_metadata.duration_ms / 1000
+        } else if (['musicConcert', 'musicVideo'].includes(item.type)) {
+            duration = item.durationMs / 1000
+        } else if (item.type === 'movie') {
+            duration = item.durationMs / 1000
+        }
+        if (duration !== undefined && item.playhead !== undefined) {
+            progress = item.playhead / duration * 100
+        }
     }
 
     return (
         <NavigableDiv {...rest} >
             <Image src={image.source} sizing='none' style={image.size}>
-                {item.type === 'episode' &&
+                {playableTypes.includes(item.type) &&
                     <div className={globalCss.progress} style={{ bottom: '1.8rem' }}>
                         <div style={{ width: `${progress}%` }} />
                     </div>
                 }
             </Image>
-            {item.type === 'episode' && <div className={css.playButton} />}
+            {playableTypes.includes(item.type) && <div className={css.playButton} />}
             <Heading size="small">
                 {item.name}
             </Heading>

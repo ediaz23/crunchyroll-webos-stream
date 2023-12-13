@@ -198,6 +198,31 @@ const processDynamicCollection = async (carousel, profile) => {
 }
 
 /**
+ * @param {Object} val
+ * @returns {Promise<Object>}
+ */
+export const postProcessFeedItem = async (val) => {
+    val = { ...val }
+    if (val.title) {
+        val.name = val.title
+    }
+    if (val.type === 'episode') {
+        val.subTitle = val.title
+        if (val.episode_metadata && val.episode_metadata.series_title) {
+            val.name = `${val.episode_metadata.series_title} - ${val.title}`
+            val.title = val.episode_metadata.series_title
+        }
+    } else if (['musicConcert', 'musicVideo'].includes(val.type)) {
+        if (val.artist && val.artist.name) {
+            val.subTitle = val.artist.name
+        }
+    } else if (val.type === 'musicArtist') {
+        val.title = val.name
+    }
+    return val
+}
+
+/**
  * Process a single item in feed
  * @param {Object} carousel
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
@@ -222,30 +247,12 @@ const processItemFeed = async (carousel, profile) => {
     }
     return res.then(async res2 => {
         if (res2.items) {
-            res2.items = await Promise.all(
-                res2.items.map(async val => {
-                    val = { ...val }
-                    if (val.title) {
-                        val.name = val.title
-                    }
-                    if (val.type === 'episode') {
-                        val.subTitle = val.title
-                        if (val.episode_metadata && val.episode_metadata.series_title) {
-                            val.name = `${val.episode_metadata.series_title} - ${val.title}`
-                            val.title = val.episode_metadata.series_title
-                        }
-                    } else if (val.type === 'musicConcert') {
-                        if (val.artist && val.artist.name) {
-                            val.subTitle = val.artist.name
-                        }
-                    } else if (val.type === 'musicArtist') {
-                        val.title = val.name
-                    }
-                    return val
-                })
-            )
+            res2.items = await Promise.all(res2.items.map(postProcessFeedItem))
         }
         return res2
+    }).catch(e => {
+        logger.error('Feed')
+        console.log(e)
     })
 }
 

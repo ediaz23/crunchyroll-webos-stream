@@ -7,7 +7,7 @@ import { Panel } from '@enact/moonstone/Panels'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
-    currentProfileState, homefeedReadyState, homeIndexState,
+    currentProfileState, homefeedReadyState, homeIndexState, selectedContentState,
     homeFeedState, homeFeedProcessedState, homeFeedExpirationState,
     musicFeedState, musicFeedProcessedState, musicFeedExpirationState
 } from '../recoilConfig'
@@ -31,6 +31,7 @@ const postProcessHomefeed = (feed) => {
     const mergedFeed = []
     const panelObject = { resource_type: 'panel', panels: [] }
     const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
+    const musicArtistObject = { resource_type: 'music_artist_banner', panels: [] }
     for (const item of feed) {
         if (item.resource_type === 'panel') {
             // find one panel then add to panelObject
@@ -40,12 +41,15 @@ const postProcessHomefeed = (feed) => {
             }
             panelObject.panels.push(item)
         } else if (item.resource_type === 'in_feed_banner') {
-            // find one in_feed_banner then add to bannerObject
-            // only if not added before
             if (bannerObject.panels.length === 0) {
                 mergedFeed.push(bannerObject)
             }
             bannerObject.panels.push(item)
+        } else if (item.resource_type === 'musicArtist') {
+            if (musicArtistObject.panels.length === 0) {
+                mergedFeed.push(musicArtistObject)
+            }
+            musicArtistObject.panels.push(item)
         } else {
             mergedFeed.push(item)
         }
@@ -64,6 +68,8 @@ const HomePanel = (props) => {
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {Boolean} */
     const homefeedReady = useRecoilValue(homefeedReadyState)
+    /** @type {Function} */
+    const setSelectedContent = useSetRecoilState(selectedContentState)
 
     /** @type {[Array<Object>, Function]} */
     const [homefeed, setHomefeed] = useRecoilState(homeFeedState)
@@ -109,6 +115,7 @@ const HomePanel = (props) => {
                 setHomeFeedProcessed(new Array(filterFeed.length))
                 setHomefeed(postProcessHomefeed(filterFeed))
                 setHomeFeedExpiration(now)
+                setSelectedContent(null)
             })
         }
         if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
@@ -119,9 +126,10 @@ const HomePanel = (props) => {
                 setMusicFeedProcessed(new Array(musicFilterFeed.length))
                 setMusicfeed(postProcessHomefeed(musicFilterFeed))
                 setMusicFeedExpiration(now)
+                setSelectedContent(null)
             })
         }
-    }, [profile, currentActivity,
+    }, [profile, currentActivity, setSelectedContent,
         setHomefeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
         setMusicfeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
     ])
