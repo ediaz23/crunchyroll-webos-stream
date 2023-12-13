@@ -7,8 +7,9 @@ import { Panel } from '@enact/moonstone/Panels'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
-    currentProfileState, homeFeedState, processedFeedState,
-    selectedContentState, homefeedReadyState, homeIndexState
+    currentProfileState, homeFeedState, homeFeedProcessedState,
+    selectedContentState, homefeedReadyState, homeIndexState,
+    homeFeedExpirationState
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
@@ -54,6 +55,8 @@ const HomePanel = (props) => {
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Array<Object>, Function]} */
     const [homefeed, setHomefeed] = useRecoilState(homeFeedState)
+    /** @type {[Date, Function]} */
+    const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
     /** @type {[Number, Function]} */
     const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)
     /** @type {[Array<Object>, Function]} */
@@ -61,9 +64,11 @@ const HomePanel = (props) => {
     /** @type {Boolean} */
     const homefeedReady = useRecoilValue(homefeedReadyState)
     /** @type {Function} */
-    const setProcessedFeed = useSetRecoilState(processedFeedState)
+    const setHomeFeedProcessed = useSetRecoilState(homeFeedProcessedState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
+    /** @type {[Array<Object>, Function]} */
+    //    const [musicFeed, setMusicFeed] = useState([])
 
     /** @type {Function} */
     const toggleShowFullToolbar = useCallback(() => {
@@ -85,16 +90,28 @@ const HomePanel = (props) => {
     }, [toggleShowFullToolbar, homefeedReady])
 
     useEffect(() => {
-        if (homefeed.length === 0) {
+        const now = new Date()
+        if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
+            now.setHours(now.getHours() + 3)
             api.discover.getHomeFeed(profile).then(({ data }) => {
                 /** @type {Array} */
                 const filterFeed = data.filter(item => item.response_type !== 'news_feed')
                 setSelectedContent(null)
-                setProcessedFeed(new Array(filterFeed.length))
+                setHomeFeedProcessed(new Array(filterFeed.length))
                 setHomefeed(postProcessHomefeed(filterFeed))
+                setHomeFeedExpiration(now)
             })
         }
-    }, [profile, homefeed, setHomefeed, setProcessedFeed, setSelectedContent])
+    }, [profile, setHomefeed, setHomeFeedProcessed, setSelectedContent, currentActivity,
+        homeFeedExpiration, setHomeFeedExpiration])
+
+    //    useEffect(() => {
+    //        if (currentActivity === 5) {  // musicFeed
+    //            api.music.getFeed(profile).then(({ data }) => {
+    //                setMusicFeed(data)
+    //            })
+    //        }
+    //    }, [profile, currentActivity])
 
     return (
         <Panel {...props}>

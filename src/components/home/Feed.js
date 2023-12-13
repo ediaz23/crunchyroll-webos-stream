@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { processedFeedState, selectedContentState, homeFeedState } from '../../recoilConfig'
+import { homeFeedProcessedState, selectedContentState, homeFeedState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
@@ -255,20 +255,20 @@ const HomeFeed = ({ profile, homefeed }) => {
     /** @type {Function} */
     const setHomefeed = useSetRecoilState(homeFeedState)
     /** @type {[Array<Object>, Function]} */
-    const [processedFeed, setProcessedFeed] = useRecoilState(processedFeedState)
+    const [homeFeedProcessed, setHomeFeedProcessed] = useRecoilState(homeFeedProcessedState)
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
     const itemHeigth = ri.scale(270)
 
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
-        const feedItem = processedFeed[index]
+        const feedItem = homeFeedProcessed[index]
         if (feedItem) {
             out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
         } else {
             processItemFeed(homefeed[index], profile).then(newFeed => {
                 if (newFeed.items.length) {
-                    setProcessedFeed(prevArray => [
+                    setHomeFeedProcessed(prevArray => [
                         ...prevArray.slice(0, index),
                         newFeed,
                         ...prevArray.slice(index + 1)
@@ -289,7 +289,7 @@ const HomeFeed = ({ profile, homefeed }) => {
             )
         }
         return out
-    }, [homefeed, profile, processedFeed, setProcessedFeed, setSelectedContent, setHomefeed])
+    }, [homefeed, profile, homeFeedProcessed, setHomeFeedProcessed, setSelectedContent, setHomefeed])
 
     return (
         <Column className={css.homeFeed}>

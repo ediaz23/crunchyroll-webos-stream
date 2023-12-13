@@ -11,6 +11,9 @@ export const homeIndexState = atom({
     default: 0
 })
 
+/**
+ * @todo quitar?
+ */
 export const searchState = atom({
     key: 'searchState',
     default: ''
@@ -36,9 +39,14 @@ export const homeFeedState = atom({
     default: []
 })
 
-export const processedFeedState = atom({
-    key: 'processedFeedState',
+export const homeFeedProcessedState = atom({
+    key: 'homeFeedProcessedState',
     default: []
+})
+
+export const homeFeedExpirationState = atom({
+    key: 'homeFeedExpirationState',
+    default: null
 })
 
 export const selectedContentState = atom({
