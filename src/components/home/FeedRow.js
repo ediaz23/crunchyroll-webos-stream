@@ -93,7 +93,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     /** @type {Function} */
     const doSelectElement = useCallback(content => {
         back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
-        if (['episode', 'musicConcert', 'movie'].includes(content.type)) {
+        if (['episode', 'musicConcert', 'movie', 'musicVideo'].includes(content.type)) {
             if (content.type === 'movie' && content.panel) {
                 setPlayContent({ ...content, ...content.panel, panel: null })
             } else {
