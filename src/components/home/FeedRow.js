@@ -11,6 +11,7 @@ import VirtualListNested from '../../patch/VirtualListNested'
 import { homefeedReadyState, pathState, playContentState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import Navigable from '../../wrappers/Navigable'
+import { formatDurationMs, getDuration } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
 import back from '../../back'
@@ -25,19 +26,12 @@ const Poster = ({ item, image, itemSize, ...rest }) => {
     const playableTypes = useMemo(() =>
         ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
-    let progress = 0
+    let progress = 0, duration = undefined
 
     if (playableTypes.includes(item.type)) {
-        let duration = undefined
-        if (item.type === 'episode' && item.episode_metadata) {
-            duration = item.episode_metadata.duration_ms / 1000
-        } else if (['musicConcert', 'musicVideo'].includes(item.type)) {
-            duration = item.durationMs / 1000
-        } else if (item.type === 'movie') {
-            duration = item.durationMs / 1000
-        }
+        duration = getDuration(item)
         if (duration !== undefined && item.playhead !== undefined) {
-            progress = item.playhead / duration * 100
+            progress = item.playhead / (duration / 100) * 100
         }
     }
 
@@ -51,6 +45,9 @@ const Poster = ({ item, image, itemSize, ...rest }) => {
                 }
             </Image>
             {playableTypes.includes(item.type) && <div className={css.playButton} />}
+            {playableTypes.includes(item.type) &&
+                <div className={css.contentTime}>{formatDurationMs(duration)}</div>
+            }
             <Heading size="small">
                 {item.name}
             </Heading>

@@ -10,7 +10,7 @@ import VirtualList from '@enact/moonstone/VirtualList'
 import Image from '@enact/moonstone/Image'
 
 import Navigable from '../../wrappers/Navigable'
-import { formatDurationMs } from '../../utils'
+import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentDetail.module.less'
 import globalCss from '../Share.module.less'
@@ -50,12 +50,12 @@ const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...re
                         </Cell>
                         <Cell grow style={{ overflow: 'hidden' }}>
                             <BodyText size='small' style={{ fontSize: '1rem' }}>
-                                {episodes[index].description}
+                                {episodes[index].description || '\u00a0\n '.repeat(50)}
                             </BodyText>
                         </Cell>
                         <Cell shrink>
                             <BodyText>
-                                {formatDurationMs(episodes[index].duration_ms)}
+                                {formatDurationMs(getDuration(episodes[index]))}
                             </BodyText>
                         </Cell>
                     </Column>

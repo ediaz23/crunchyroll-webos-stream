@@ -39,8 +39,29 @@ export const formatDurationMs = (milliseconds) => {
     return formattedTime
 }
 
+/**
+ * Search durationMs in content 
+ * @param {Object} content
+ * @returns {Number}
+ */
+export const getDuration = (content) => {
+    let duration = undefined
+
+    if (content.type === 'episode') {
+        if (content.episode_metadata) {
+            duration = content.episode_metadata.duration_ms || content.duration_ms
+        } else {
+            duration = content.duration_ms
+        }
+    } else if (['musicConcert', 'musicVideo', 'movie'].includes(content.type)) {
+        duration = content.durationMs
+    }
+    return duration
+}
+
 export default {
     isTv,
     stringifySorted,
     formatDurationMs,
+    getDuration,
 }
