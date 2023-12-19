@@ -40,7 +40,7 @@ export const formatDurationMs = (milliseconds) => {
 }
 
 /**
- * Search durationMs in content 
+ * Search durationMs in content
  * @param {Object} content
  * @returns {Number}
  */

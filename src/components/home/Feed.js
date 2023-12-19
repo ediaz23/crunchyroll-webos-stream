@@ -289,9 +289,11 @@ const HomeFeed = ({ profile, homefeed }) => {
                             ])
                         } else {
                             setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                            setHomeFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                         }
                     }).catch(() => {
                         setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                        setHomeFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                     })
                 }
             })
