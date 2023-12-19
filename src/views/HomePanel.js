@@ -13,7 +13,7 @@ import {
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
-import MusicFeed from '../components/music/Feed'
+import MusicBrowse from '../components/music/Browse'
 import ContentGrid from '../components/grid/ContentGrid'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
@@ -154,7 +154,7 @@ const HomePanel = (props) => {
                         <ContentGrid profile={profile}
                             contentKey='movies'
                             contentType='movie_listing' />
-                        <MusicFeed profile={profile} musicfeed={musicfeed} />
+                        <MusicBrowse profile={profile} musicfeed={musicfeed} />
                         <p>My list</p>
                         <ContactMePanel />
                         <ConfirmExitPanel onCancel={toggleShowFullToolbar} />

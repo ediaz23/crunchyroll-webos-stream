@@ -175,9 +175,11 @@ const MusicFeed = ({ profile, musicfeed }) => {
                             ])
                         } else {
                             setMusicfeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                            setMusicFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                         }
                     }).catch(() => {
                         setMusicfeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                        setMusicFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                     })
                 }
             })
@@ -194,7 +196,7 @@ const MusicFeed = ({ profile, musicfeed }) => {
     }, [musicfeed, profile, musicFeedProcessed, setMusicFeedProcessed, setSelectedContent, setMusicfeed])
 
     return (
-        <Column style={{ paddingLeft: '0.5rem' }}>
+        <Column>
             <Cell size="50%">
                 {selectedContent && <HomeContentBanner content={selectedContent} />}
             </Cell>

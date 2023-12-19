@@ -8,13 +8,13 @@ import PropTypes from 'prop-types'
 import { useSetRecoilState } from 'recoil'
 
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homefeedReadyState, pathState, playContentState } from '../../recoilConfig'
+import { homefeedReadyState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import { useSetContent } from '../../hooks/setContentHook'
 import Navigable from '../../wrappers/Navigable'
 import { formatDurationMs, getDuration } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
-import back from '../../back'
 import logger from '../../logger'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 
@@ -78,37 +78,19 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     /** @type {Function} */
     const setHomefeedReady = useSetRecoilState(homefeedReadyState)
     /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
-    /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
     const selectElement = useCallback((ev) => {
         setContent(feed.items[parseInt(ev.target.dataset.index)])
     }, [setContent, feed.items])
-    /** @type {Function} */
-    const doSelectElement = useCallback(content => {
-        back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
-        if (['episode', 'musicConcert', 'movie', 'musicVideo'].includes(content.type)) {
-            if (content.type === 'movie' && content.panel) {
-                setPlayContent({ ...content, ...content.panel, panel: null })
-            } else {
-                setPlayContent(content)
-            }
-            setPath('/profiles/home/player')
-        } else {
-            setContent(content)
-            setPath('/profiles/home/content')
-        }
-    }, [setContent, setPath, setPlayContent])
+    const setContentNavagate = useSetContent()
     /** @type {Function} */
     const showContentDetail = useCallback((ev) => {
         /** @type {HTMLElement} */
         const parentElement = ev.target.closest(`#${cellId}`)
         const content = feed.items[parseInt(parentElement.dataset.index)]
-        doSelectElement(content)
-    }, [cellId, doSelectElement, feed.items])
+        setContentNavagate(content)
+    }, [cellId, setContentNavagate, feed.items])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -145,10 +127,10 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
             const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
                 val.id === testContent[DEV_CONTENT_TYPE])
             if (content) {
-                doSelectElement(content)
+                setContentNavagate(content)
             }
         }
-    }, [feed.items, doSelectElement])
+    }, [feed.items, setContentNavagate])
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>

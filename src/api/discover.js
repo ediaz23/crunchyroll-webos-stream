@@ -38,6 +38,38 @@ export const getBrowseAll = async (profile, params) => {
  * Get object data
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
+ * @param {Number} [params.quantity] Number of records in a result
+ * @param {Number} [params.start] Offset to request
+ * @param {String} [params.query] Search pattern
+ * @param {Array<String>} [params.type] type for search, example episode
+ * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
+ */
+export const search = async (profile, params) => {
+    let out = null
+    try {
+        if ('type' in params) {
+            if (!Array.isArray(params.type)) {
+                params.type = [params.type]
+            }
+        }
+        if (LOAD_MOCK_DATA && !('noMock' in params)) {
+            out = await getMockData('search', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.search({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
  * @param {Number} [params.contentId]
  * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */

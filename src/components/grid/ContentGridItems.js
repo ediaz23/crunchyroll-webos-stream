@@ -1,17 +1,15 @@
 
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import ri from '@enact/ui/resolution'
 
 import PropTypes from 'prop-types'
-import { useSetRecoilState } from 'recoil'
 
-import { selectedContentState, pathState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import { useSetContent } from '../../hooks/setContentHook'
 import api from '../../api'
-import back from '../../back'
 
 
 /**
@@ -23,29 +21,19 @@ import back from '../../back'
     options: Object,
  }}
  */
-const ContentGridItems = ({ profile, contentList, setContentList, options, ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setSelectedContent = useSetRecoilState(selectedContentState)
+const ContentGridItems = ({ profile, contentList, setContentList, options, engine, ...rest }) => {
+    /** @type {[Object, Function]} */
+    const [loading, setLoading] = useState({})
     const itemHeight = ri.scale(390)
     const getImagePerResolution = useGetImagePerResolution()
+    const setContent = useSetContent()
 
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const content = contentList[parseInt(ev.currentTarget.dataset['index'])]
-            if (['series', 'movie_listing'].includes(content.type)) {
-                back.pushHistory({
-                    doBack: () => {
-                        setSelectedContent(null)
-                        setPath('/profiles/home')
-                    }
-                })
-                setSelectedContent(content)
-                setPath('/profiles/home/content')
-            }
+            setContent(content)
         }
-    }, [contentList, setPath, setSelectedContent])
+    }, [contentList, setContent])
 
     /**
      * @todo falta seleccionar el contenido
@@ -72,11 +60,26 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, ...re
             )
         } else {
             if (index % options.quantity === 0) {
-                api.discover.getBrowseAll(profile, { ...options, start: index })
-                    .then(res => setContentList(prevArray => [
-                        ...prevArray.slice(0, index),
-                        ...res.data,
-                    ]))
+                Promise.resolve().then(() => {
+                    if (loading[index] === undefined) {
+                        setLoading(prev => { prev[index] = false; return { ...prev } })
+                        if (engine === 'search') {
+                            api.discover.search(profile, { ...options, start: index })
+                                .then(res => setContentList(prevArray => [
+                                    ...prevArray.slice(0, index),
+                                    ...res.data[0].items,
+                                    ...contentList.slice(index + res.data[0].items.length)
+                                ]))
+                        } else {
+                            api.discover.getBrowseAll(profile, { ...options, start: index })
+                                .then(res => setContentList(prevArray => [
+                                    ...prevArray.slice(0, index),
+                                    ...res.data,
+                                    ...contentList.slice(index + res.data[0].items.length),
+                                ]))
+                        }
+                    }
+                })
             }
             out = (
                 <div {...rest2} >
@@ -85,7 +88,8 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, ...re
             )
         }
         return out
-    }, [profile, contentList, options, itemHeight, getImagePerResolution, setContentList, onSelectItem])
+    }, [profile, contentList, options, itemHeight, getImagePerResolution,
+        setContentList, onSelectItem, engine, loading, setLoading])
 
     return (
         <VirtualGridList {...rest}
@@ -102,6 +106,7 @@ ContentGridItems.propTypes = {
     contentList: PropTypes.arrayOf(PropTypes.object).isRequired,
     setContentList: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
+    engine: PropTypes.string.isRequired
 }
 
 export default ContentGridItems

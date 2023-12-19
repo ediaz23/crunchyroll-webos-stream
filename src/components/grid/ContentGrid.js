@@ -15,7 +15,7 @@ import api from '../../api'
 import css from './ContentGrid.module.less'
 
 
-const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
+const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
     /** @type {[Number, Function]} */
@@ -62,17 +62,34 @@ const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
         let delayDebounceFn = undefined
         if (delay >= 0) {
             delayDebounceFn = setTimeout(() => {
-                api.discover.getBrowseAll(profile, options).then(res => {
-                    if (res.total - options.quantity > 0) {
-                        setContentList([...res.data, ...new Array(res.total - options.quantity)])
+                if (engine === 'search') {
+                    if (options.query !== '') {
+                        api.discover.search(profile, options).then(res => {
+                            if (res.data[0].count - options.quantity > 0) {
+                                setContentList([
+                                    ...res.data[0].items,
+                                    ...new Array(res.data[0].count - options.quantity)
+                                ])
+                            } else {
+                                setContentList(res.data[0].items)
+                            }
+                        })
                     } else {
-                        setContentList(res.data)
+                        setContentList([])
                     }
-                })
+                } else {
+                    api.discover.getBrowseAll(profile, options).then(res => {
+                        if (res.total - options.quantity > 0) {
+                            setContentList([...res.data, ...new Array(res.total - options.quantity)])
+                        } else {
+                            setContentList(res.data)
+                        }
+                    })
+                }
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, action, contentKey, delay, options])
+    }, [profile, action, contentKey, delay, options, engine])
 
     useEffect(() => {  // initializing
         if (contentKey !== 'simulcast') {
@@ -89,16 +106,18 @@ const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
 
     return (
         <Row className={css.ContentGrid} {...rest}>
-            <Cell size="20%">
-                <Heading>
-                    {action.label}
-                </Heading>
-                <CategoryList
-                    profile={profile}
-                    category={category}
-                    setCategory={setCategory}
-                    setDelay={setDelay} />
-            </Cell>
+            {!noCategory &&
+                <Cell size="20%">
+                    <Heading>
+                        {action.label}
+                    </Heading>
+                    <CategoryList
+                        profile={profile}
+                        category={category}
+                        setCategory={setCategory}
+                        setDelay={setDelay} />
+                </Cell>
+            }
             <Cell grow>
                 <Column className={css.grid}>
                     <Cell shrink>
@@ -112,7 +131,8 @@ const ContentGrid = ({ profile, contentKey, contentType, ...rest }) => {
                             profile={profile}
                             contentList={contentList}
                             setContentList={setContentList}
-                            options={options} />
+                            options={options}
+                            engine={engine} />
                     </Cell>
                     {contentKey === 'simulcast' &&
                         <SeasonButtons
@@ -132,6 +152,12 @@ ContentGrid.propTypes = {
     profile: PropTypes.object.isRequired,
     contentKey: PropTypes.string.isRequired,
     contentType: PropTypes.string,
+    engine: PropTypes.string,
+    noCategory: PropTypes.bool
+}
+
+ContentGrid.defaultProps = {
+    engine: 'browse'
 }
 
 export default ContentGrid
