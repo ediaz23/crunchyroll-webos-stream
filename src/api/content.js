@@ -47,4 +47,57 @@ export const savePlayhead = async (profile, params) => {
     return out
 }
 
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @return {Promise}
+ */
+export const addWatchlistItem = async (profile, params) => {
+    try {
+        const account = await getContentParam(profile)
+        await api.content.addWatchlistItem({ account, ...params })
+    } catch (error) {
+        await translateError(error)
+    }
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {Array<String>} params.contentIds
+ * @return {Promise<{total: Number, data: Array<Object>}>}
+ */
+export const getWatchlistItems = async (profile, params) => {
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('watchlist-items', params)
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.content.getWatchlistItems({ account, ...params })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get object data
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @return {Promise}
+ */
+export const deleteWatchlistItem = async (profile, params) => {
+    try {
+        const account = await getContentParam(profile)
+        await api.content.deleteWatchlistItem({ account, ...params })
+    } catch (error) {
+        await translateError(error)
+    }
+}
 

@@ -1,0 +1,156 @@
+{
+    "total": 1,
+    "data": [
+        {
+            "fully_watched": false,
+            "never_watched": false,
+            "panel": {
+                "id": "G6KE4KNG6",
+                "promo_description": "",
+                "type": "episode",
+                "streams_link": "/content/v2/cms/videos/GWMF8N8GW/streams",
+                "promo_title": "",
+                "slug": "",
+                "images": {
+                    "thumbnail": [
+                        [
+                            {
+                                "height": 180,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 320
+                            },
+                            {
+                                "height": 338,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 600
+                            },
+                            {
+                                "height": 360,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 640
+                            },
+                            {
+                                "height": 450,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 800
+                            },
+                            {
+                                "height": 675,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 1200
+                            },
+                            {
+                                "height": 810,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 1440
+                            },
+                            {
+                                "height": 900,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 1600
+                            },
+                            {
+                                "height": 1080,
+                                "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/741794c3be6dd862d35d5b4c1c9cad6f.jpe",
+                                "type": "thumbnail",
+                                "width": 1920
+                            }
+                        ]
+                    ]
+                },
+                "external_id": "EPI.789682",
+                "description": "Cuando Mirio y Midoriya patrullan juntos por primera vez, el destino es caprichoso y hace que se encuentren directamente con Chisaki, de quien huye una pequeña. Pero ¿podrán ayudarla cuando ella les pide auxilio?",
+                "episode_metadata": {
+                    "audio_locale": "ja-JP",
+                    "availability_ends": "9998-11-30T08:00:00Z",
+                    "availability_notes": "",
+                    "availability_starts": "2019-11-09T09:30:00Z",
+                    "available_date": null,
+                    "available_offline": true,
+                    "closed_captions_available": false,
+                    "duration_ms": 1430152,
+                    "eligible_region": "CL",
+                    "episode": "67",
+                    "episode_air_date": "2019-11-09T17:30:00+09:00",
+                    "episode_number": 67,
+                    "extended_maturity_rating": {},
+                    "free_available_date": "2019-11-16T09:30:00Z",
+                    "identifier": "G6NQ5DWZ6|S4|E67",
+                    "is_clip": false,
+                    "is_dubbed": true,
+                    "is_mature": false,
+                    "is_premium_only": true,
+                    "is_subbed": true,
+                    "mature_blocked": false,
+                    "maturity_ratings": [
+                        "TV-14"
+                    ],
+                    "premium_available_date": "2019-11-09T09:30:00Z",
+                    "premium_date": null,
+                    "season_id": "G6J0PG50R",
+                    "season_number": 4,
+                    "season_slug_title": "my-hero-academia-season-4",
+                    "season_title": "My Hero Academia (Cuarta Temporada)",
+                    "sequence_number": 67,
+                    "series_id": "G6NQ5DWZ6",
+                    "series_slug_title": "my-hero-academia",
+                    "series_title": "My Hero Academia",
+                    "subtitle_locales": [
+                        "en-US",
+                        "es-419",
+                        "es-ES",
+                        "pt-BR"
+                    ],
+                    "upload_date": "2019-11-09T17:30:00+09:00",
+                    "versions": [
+                        {
+                            "audio_locale": "ja-JP",
+                            "guid": "G6KE4KNG6",
+                            "is_premium_only": true,
+                            "media_guid": "GWMF8N8GW",
+                            "original": true,
+                            "season_guid": "G6J0PG50R",
+                            "variant": ""
+                        },
+                        {
+                            "audio_locale": "es-419",
+                            "guid": "GZ7UVJJZG",
+                            "is_premium_only": true,
+                            "media_guid": "G5JFZWWQ0",
+                            "original": false,
+                            "season_guid": "GYGGCVDM9",
+                            "variant": ""
+                        },
+                        {
+                            "audio_locale": "pt-BR",
+                            "guid": "GX9UQ9P11",
+                            "is_premium_only": true,
+                            "media_guid": "GJKF285NN",
+                            "original": false,
+                            "season_guid": "GR09CX937",
+                            "variant": ""
+                        }
+                    ]
+                },
+                "linked_resource_key": "cms:/episodes/G6KE4KNG6",
+                "recent_variant": "",
+                "channel_id": "crunchyroll",
+                "title": "Enfrentando el destino",
+                "slug_title": "fighting-fate",
+                "recent_audio_locale": "ja-JP"
+            },
+            "playhead": 1,
+            "shortcut": false
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    }
+}

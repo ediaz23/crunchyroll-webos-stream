@@ -72,6 +72,8 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
     /** @type {[Object, Function]} */
     const [nextContent, setNextConent] = useState(null)
+    /** @type {[Object, Function]} */
+    const [isInWatchlist, setIsInWatchlist] = useState(false)
     /** @type {{watch: String, description: String, subtitle: String, moreDetail: String}} */
     const { watch, description, subtitle, moreDetail } = useMemo(() => {
         return computeTitles({ content, nextContent })
@@ -84,6 +86,17 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const playNextContent = useCallback(() => {
         setContentToPlay(nextContent)
     }, [setContentToPlay, nextContent])
+
+    /** @type {Function} */
+    const toggleWatchlist = useCallback(async () => {
+        if (isInWatchlist) {
+            api.content.deleteWatchlistItem(profile, { contentId: content.id })
+        } else {
+            api.content.addWatchlistItem(profile, { contentId: content.id })
+        }
+        setIsInWatchlist(prev => !prev)
+    }, [profile, content, isInWatchlist, setIsInWatchlist])
+
 
     useEffect(() => {
         /**
@@ -101,6 +114,11 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 }
             }
         })
+        if (['series', 'movie_listing'].includes(content.type)) {
+            api.content.getWatchlistItems(profile, { contentIds: [content.id] }).then(res => {
+                setIsInWatchlist(res.total > 0)
+            })
+        }
     }, [profile, content])
 
     useEffect(() => {
@@ -147,10 +165,12 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                             <Icon>audio</Icon>
                             <span>{$L('Audio and Subtitles')}</span>
                         </Item>
-                        <Item>
-                            <Icon>denselist</Icon>
-                            <span>{$L('Add to my list')}</span>
-                        </Item>
+                        {['series', 'movie_listing'].includes(content.type) && (
+                            <Item onClick={toggleWatchlist}>
+                                <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
+                                <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
+                            </Item>
+                        )}
                     </Scroller>
                 </div>
             </Cell>
