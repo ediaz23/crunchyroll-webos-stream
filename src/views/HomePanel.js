@@ -15,6 +15,7 @@ import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
 import MusicBrowse from '../components/music/Browse'
 import ContentGrid from '../components/grid/ContentGrid'
+import Watchlist from '../components/watchlist/Watchlist'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
 import ContactMePanel from './ContactMePanel'
@@ -129,6 +130,9 @@ const HomePanel = (props) => {
                 setSelectedContent(null)
             })
         }
+        if (currentActivity === 6) {
+            setSelectedContent(null)
+        }
     }, [profile, currentActivity, setSelectedContent,
         setHomefeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
         setMusicfeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
@@ -155,7 +159,7 @@ const HomePanel = (props) => {
                             contentKey='movies'
                             contentType='movie_listing' />
                         <MusicBrowse profile={profile} musicfeed={musicfeed} />
-                        <p>My list</p>
+                        <Watchlist profile={profile} />
                         <ContactMePanel />
                         <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
                     </ActivityViews>

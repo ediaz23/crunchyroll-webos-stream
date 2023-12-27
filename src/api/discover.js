@@ -248,7 +248,7 @@ export const getPrev = async (profile, params) => {
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array<Object>}>}
  */
 export const getWatchlist = async (profile, params) => {
     let out = null
@@ -257,10 +257,18 @@ export const getWatchlist = async (profile, params) => {
             out = await getMockData('discoverWatchlist', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getWatchlist({ account, ...params })
+            out = await api.discover.getWatchlist({ account, ...params, order: 'desc' })
         }
     } catch (error) {
         await translateError(error)
+    }
+    if (out) {
+        out.data = out.data.map(val => {
+            const { panel } = val
+            const newVal = { ...panel, ...val }
+            delete newVal.panel
+            return newVal
+        })
     }
     return out
 }

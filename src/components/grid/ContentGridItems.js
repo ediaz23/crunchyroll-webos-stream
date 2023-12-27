@@ -36,8 +36,7 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
     }, [contentList, setContent])
 
     /**
-     * @todo falta seleccionar el contenido
-     *   falta el auto scroll
+     * @todo falta el auto scroll
      */
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
