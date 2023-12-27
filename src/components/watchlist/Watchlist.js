@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useRef } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
 import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
@@ -39,6 +39,10 @@ const Watchlist = ({ profile, ...rest }) => {
     const [watchlist, setWatchlist] = useState([])
     /** @type {[Object, Function]} */
     const [loading, setLoading] = useState({})
+    /** @type {[Boolean, Function]} */
+    const [autoScroll, setAutoScroll] = useState(true)
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
     /** @type {Function} */
@@ -48,9 +52,12 @@ const Watchlist = ({ profile, ...rest }) => {
     /** @type {Number} */
     const itemHeight = ri.scale(270)
     /** @type {Number} */
-    const itemWidth = ri.scale(240)
+    const itemWidth = ri.scale(320)
     /** @type {Number} */
     const quantity = 100
+
+    /** @type {Function} */
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
 
     const onClickItem = useCallback((ev) => {
         if (ev.currentTarget) {
@@ -66,19 +73,11 @@ const Watchlist = ({ profile, ...rest }) => {
         }
     }, [watchlist, setSelectedContent])
 
-    /**
-     * @todo falta el auto scroll
-     */
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
         const contentItem = watchlist[index]
         if (contentItem) {
-            const image = getImagePerResolution({
-                wowidth: itemWidth,
-                content: contentItem,
-                mode: 'wide'
-            })
-
+            const image = getImagePerResolution({ width: itemWidth, content: contentItem, mode: 'wide' })
             out = (
                 <GridListImageItem
                     {...rest2}
@@ -116,11 +115,21 @@ const Watchlist = ({ profile, ...rest }) => {
         onClickItem, onSelectItem, loading, setLoading])
 
     useEffect(() => {
+        Promise.resolve().then(() => {
+            if (watchlist.length > 0 && autoScroll && scrollToRef.current) {
+                scrollToRef.current({ index: 0, animate: false, focus: true })
+                setAutoScroll(false)
+            }
+        })
+    }, [profile, watchlist, autoScroll])
+
+    useEffect(() => {
         api.discover.getWatchlist(profile, { quantity }).then(async res => {
             const res2 = await processResult({ profile, data: res.data })
+            setAutoScroll(true)
             setWatchlist([...res2.data, ...new Array(res.total - res.data.length)])
         })
-    }, [profile])
+    }, [profile, setAutoScroll])
 
     return (
         <Column {...rest}>
@@ -133,6 +142,7 @@ const Watchlist = ({ profile, ...rest }) => {
                     itemRenderer={renderItem}
                     itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
                     spacing={ri.scale(25)}
+                    cbScrollTo={getScrollTo}
                 />
             </Cell>
         </Column>
