@@ -24,8 +24,11 @@ import api from '../../api'
 const ContentGridItems = ({ profile, contentList, setContentList, options, engine, ...rest }) => {
     /** @type {[Object, Function]} */
     const [loading, setLoading] = useState({})
+    /** @type {Number} */
     const itemHeight = ri.scale(390)
+    /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
+    /** @type {Function} */
     const setContent = useSetContent()
 
     const onSelectItem = useCallback((ev) => {
@@ -37,6 +40,7 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
 
     /**
      * @todo falta el auto scroll
+     * @fixme el loading esta evitando que se busque de nuevo
      */
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
@@ -67,14 +71,14 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
                                 .then(res => setContentList(prevArray => [
                                     ...prevArray.slice(0, index),
                                     ...res.data[0].items,
-                                    ...contentList.slice(index + res.data[0].items.length)
+                                    ...prevArray.slice(index + res.data[0].items.length)
                                 ]))
                         } else {
                             api.discover.getBrowseAll(profile, { ...options, start: index })
                                 .then(res => setContentList(prevArray => [
                                     ...prevArray.slice(0, index),
                                     ...res.data,
-                                    ...contentList.slice(index + res.data[0].items.length),
+                                    ...prevArray.slice(index + res.data.length),
                                 ]))
                         }
                     }

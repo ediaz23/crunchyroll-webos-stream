@@ -99,7 +99,7 @@ const Watchlist = ({ profile, ...rest }) => {
                         setWatchlist(prevArray => [
                             ...prevArray.slice(0, index),
                             ...res2.data,
-                            ...watchlist.slice(index + res2.data.length)
+                            ...prevArray.slice(index + res2.data.length)
                         ])
                     }
                 })
@@ -127,9 +127,10 @@ const Watchlist = ({ profile, ...rest }) => {
         api.discover.getWatchlist(profile, { quantity }).then(async res => {
             const res2 = await processResult({ profile, data: res.data })
             setAutoScroll(true)
+            setLoading({})
             setWatchlist([...res2.data, ...new Array(res.total - res.data.length)])
         })
-    }, [profile, setAutoScroll])
+    }, [profile, setAutoScroll, setLoading, setWatchlist])
 
     return (
         <Column {...rest}>

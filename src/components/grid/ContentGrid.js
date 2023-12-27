@@ -65,25 +65,17 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
                 if (engine === 'search') {
                     if (options.query !== '') {
                         api.discover.search(profile, options).then(res => {
-                            if (res.data[0].count - options.quantity > 0) {
-                                setContentList([
-                                    ...res.data[0].items,
-                                    ...new Array(res.data[0].count - options.quantity)
-                                ])
-                            } else {
-                                setContentList(res.data[0].items)
-                            }
+                            setContentList([
+                                ...res.data[0].items,
+                                ...new Array(res.data[0].count - res.data[0].items.length)
+                            ])
                         })
                     } else {
                         setContentList([])
                     }
                 } else {
                     api.discover.getBrowseAll(profile, options).then(res => {
-                        if (res.total - options.quantity > 0) {
-                            setContentList([...res.data, ...new Array(res.total - options.quantity)])
-                        } else {
-                            setContentList(res.data)
-                        }
+                        setContentList([...res.data, ...new Array(res.total - res.data.length)])
                     })
                 }
             }, delay)
