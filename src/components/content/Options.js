@@ -87,7 +87,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
     useEffect(() => {
         /**
-         * @fixme if there is not a next Ep?
+         * @bug if there is not a next Ep?
          */
         api.discover.getNext(profile, {
             contentId: content.id,

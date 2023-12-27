@@ -17,6 +17,7 @@ import api from '../../api'
 
 
 /**
+ * @bug assume only are episdes and movies
  * @returns {Promise<{total: Number, data: Array}>}
  */
 const processResult = async ({ profile, data }) => {

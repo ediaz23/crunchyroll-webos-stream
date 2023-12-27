@@ -41,7 +41,7 @@ const processCarousel = async (carousel, profile) => {
         const resObjectIds = await Promise.all(carousel.items.map(convertItem2Object))
         objectIds = Array.from(new Set(resObjectIds.filter(item => !!item)))
     }
-    /** @fixme assume only are artis */
+    /** @bug assume only are artis */
     if (objectIds.length) {
         const { data } = await api.music.getArtists(profile, objectIds)
         out.items = data
@@ -72,7 +72,7 @@ const processInFeedPanels = async (carousel, profile) => {
         const resOjectIds = await Promise.all(carousel.panels.map(convertItem2Object))
         objectIds = Array.from(new Set(resOjectIds.filter(item => !!item)))
     }
-    /** @fixme assume only are artis */
+    /** @bug assume only are artis */
     if (objectIds.length) {
         const { data } = await api.music.getArtists(profile, objectIds)
         out.items = data
