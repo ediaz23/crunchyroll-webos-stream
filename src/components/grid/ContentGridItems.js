@@ -1,5 +1,5 @@
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
@@ -9,27 +9,29 @@ import PropTypes from 'prop-types'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContentHook'
-import api from '../../api'
 
 
 /**
  * Show grid of items
  * @param {{
-    profile: Object,
     contentList: Array<Object>,
-    setContentList: Function,
-    options: Object,
+    load: Function,
+    autoScroll: Boolean,
+    onScroll: Function,
  }}
  */
-const ContentGridItems = ({ profile, contentList, setContentList, options, engine, ...rest }) => {
-    /** @type {[Object, Function]} */
-    const [loading, setLoading] = useState({})
+const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) => {
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
     /** @type {Number} */
     const itemHeight = ri.scale(390)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {Function} */
     const setContent = useSetContent()
+
+    /** @type {Function} */
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
 
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
@@ -38,10 +40,6 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
         }
     }, [contentList, setContent])
 
-    /**
-     * @todo falta el auto scroll
-     * @fixme el loading esta evitando que se busque de nuevo
-     */
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
         const contentItem = contentList[index]
@@ -62,28 +60,7 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
                 />
             )
         } else {
-            if (index % options.quantity === 0) {
-                Promise.resolve().then(() => {
-                    if (loading[index] === undefined) {
-                        setLoading(prev => { prev[index] = false; return { ...prev } })
-                        if (engine === 'search') {
-                            api.discover.search(profile, { ...options, start: index })
-                                .then(res => setContentList(prevArray => [
-                                    ...prevArray.slice(0, index),
-                                    ...res.data[0].items,
-                                    ...prevArray.slice(index + res.data[0].items.length)
-                                ]))
-                        } else {
-                            api.discover.getBrowseAll(profile, { ...options, start: index })
-                                .then(res => setContentList(prevArray => [
-                                    ...prevArray.slice(0, index),
-                                    ...res.data,
-                                    ...prevArray.slice(index + res.data.length),
-                                ]))
-                        }
-                    }
-                })
-            }
+            Promise.resolve().then(() => load(index))
             out = (
                 <div {...rest2} >
                     <Spinner />
@@ -91,8 +68,14 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
             )
         }
         return out
-    }, [profile, contentList, options, itemHeight, getImagePerResolution,
-        setContentList, onSelectItem, engine, loading, setLoading])
+    }, [contentList, itemHeight, getImagePerResolution, onSelectItem, load])
+
+    useEffect(() => {
+        if (contentList.length > 0 && autoScroll && scrollToRef.current) {
+            scrollToRef.current({ index: 0, animate: false, focus: false })
+            onScroll()
+        }
+    }, [contentList, autoScroll, onScroll])
 
     return (
         <VirtualGridList {...rest}
@@ -100,16 +83,16 @@ const ContentGridItems = ({ profile, contentList, setContentList, options, engin
             itemRenderer={renderItem}
             itemSize={{ minHeight: itemHeight, minWidth: ri.scale(240) }}
             spacing={ri.scale(25)}
+            cbScrollTo={getScrollTo}
         />
     )
 }
 
 ContentGridItems.propTypes = {
-    profile: PropTypes.object.isRequired,
     contentList: PropTypes.arrayOf(PropTypes.object).isRequired,
-    setContentList: PropTypes.func.isRequired,
-    options: PropTypes.object.isRequired,
-    engine: PropTypes.string.isRequired
+    load: PropTypes.func.isRequired,
+    autoScroll: PropTypes.bool.isRequired,
+    onScroll: PropTypes.func.isRequired,
 }
 
 export default ContentGridItems
