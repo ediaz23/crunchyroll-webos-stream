@@ -70,9 +70,9 @@
         "@enact/spotlight": "^4.7.9",
         "@enact/ui": "^4.7.9",
         "@enact/webos": "^4.7.9",
-        "classnames": "^2.3.2",
+        "classnames": "^2.5.0",
         "crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
-        "hls.js": "^1.4.13",
+        "hls.js": "^1.4.14",
         "i18n-iso-countries": "^7.7.0",
         "ilib": "^14.19.0",
         "libass-wasm": "^4.1.0",
@@ -80,7 +80,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "recoil": "^0.7.7",
-        "web-vitals": "^3.5.0",
+        "web-vitals": "^3.5.1",
         "webostvjs": "^1.2.5"
     },
     "resolutions": {
