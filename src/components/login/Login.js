@@ -12,7 +12,7 @@ const Login = ({ email, changeEmail, password, changePassword, doLogin, ...rest 
     return (
         <Column className={css.loginForm} {...rest}>
             <Heading size="large">{$L('Login')}</Heading>
-            <Heading size="small">{$L('Use your email and password.')}</Heading>
+            <Heading size="small">{$L('Use your email and password')}</Heading>
             <Row>
                 <Input
                     type="email"

@@ -23,7 +23,8 @@
         "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
         "play": "npm run build && npm run install-tv && npm run start",
         "play-1": "npm run build && npm run install-tv-1 && npm run start-1",
-        "play-p": "npm run build-p && npm run install-tv-1 && npm run start-1"
+        "play-p": "npm run build-p && npm run install-tv-1 && npm run start-1",
+        "translate": "npx babel --config-file \"$PWD/.babelrc\" './src/**/*.js' > /dev/null"
     },
     "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
     "license": "Apache-2.0",
@@ -88,7 +89,12 @@
         "react-error-overlay": "6.0.9"
     },
     "devDependencies": {
+        "@babel/cli": "^7.23.4",
+        "@babel/core": "^7.23.6",
+        "@babel/preset-react": "^7.23.3",
         "@types/webostvjs": "^1.2.5",
+        "babel-plugin-i18next": "^1.0.9",
+        "babel-plugin-i18next-extract": "^0.9.2",
         "del": "^7.1.0",
         "eslint-config-enact-proxy": "^1.0.7",
         "gulp": "^4.0.2",

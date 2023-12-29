@@ -21,7 +21,7 @@ const ProfileInfo = ({ profile, ...rest }) => {
     return (
         <Column className={css.profileInfo} {...rest}>
             <Heading size="large">{$L('Information')}</Heading>
-            <Heading size="small">{$L('Some info about your profile.')}</Heading>
+            <Heading size="small">{$L('Some info about your profile')}</Heading>
             <Field>
                 <Image src={api.assets.getAvatarUrl(profile)}
                     alt={$L('Profile Picture')}

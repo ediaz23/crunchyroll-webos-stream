@@ -13,14 +13,14 @@ export const translateError = async (error) => {
     let newError = error
     if (error instanceof CrunchyrollError) {
         if (error.code === ERROR_CODES.invalid_email_password) {
-            newError = new CrunchyrollError($L('Please check your email and password.'), error.code)
+            newError = new CrunchyrollError($L('Please check your email and password'), error.code)
         } else if (error.code === ERROR_CODES.invalid_password) {
-            newError = new CrunchyrollError($L('Wrong password.'), error.code)
+            newError = new CrunchyrollError($L('Wrong password'), error.code)
         } else if (error.code === ERROR_CODES.invalid_refresh_token) {
-            newError = new CrunchyrollError($L('Invalid access token, try to log in again.'), error.code)
+            newError = new CrunchyrollError($L('Invalid access token, try to log in again'), error.code)
             await localStore.setNewData({ token: null })
         } else if (error.code === ERROR_CODES.invalid_auth_token) {
-            newError = new CrunchyrollError($L('Invalid access token, try to log in again.'), error.code)
+            newError = new CrunchyrollError($L('Invalid access token, try to log in again'), error.code)
             await localStore.setNewData({ token: null })
         }
         logger.error(error)

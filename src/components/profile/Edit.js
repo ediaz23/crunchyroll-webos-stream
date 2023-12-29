@@ -48,7 +48,7 @@ const ProfileEdit = ({ profile, langList, ...rest }) => {
     return (
         <Column className={css.editForm} {...rest}>
             <Heading size="large">{$L('Preferences')}</Heading>
-            <Heading size="small">{$L('Set your language, video preferences.')}</Heading>
+            <Heading size="small">{$L('Set your language, video preferences')}</Heading>
             <Field title={$L('Content Language')}>
                 <SelectLanguage
                     languages={langList.content}

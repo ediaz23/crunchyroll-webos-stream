@@ -43,7 +43,7 @@ const LoginPanel = ({ ...rest }) => {
                 setMessage(error.message)
             }
         } else {
-            setMessage($L('Please enter a valid email and password.'))
+            setMessage($L('Please enter a valid email and password'))
         }
     }, [setMessage, email, password, makeLogin])
     const changeEmail = useCallback(({ value }) => {

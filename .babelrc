@@ -1,0 +1,11 @@
+// .babelrc
+{
+    "presets": [
+        "@babel/preset-react",
+        "@babel/preset-env"
+    ],
+    "plugins": [
+        ["i18next-extract", {"tFunctionNames": ["$L"]}]
+    ]
+}
+
