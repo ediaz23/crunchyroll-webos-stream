@@ -1,4 +1,5 @@
-import Hls from 'hls.js'
+
+import dashjs from 'dashjs'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls, Video } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
@@ -165,13 +166,22 @@ const findStream = async ({ profile, audios, audio, getLang }) => {
     }
     /** @type {Stream} */
     const out = {
-        url: data[0].adaptive_hls[''].url,
+        url: '',
         bif: meta.bifs,
         audios: audios,
         subtitles: [{ locale: 'off', }, ...Object.values(meta.subtitles)].map(subtitle => {
             return { ...subtitle, title: getLang(subtitle.locale) }
         })
     }
+    /**
+     * @fixme if there is not adaptive_dash or drm_adaptive_dash
+     */
+    if (data[0].adaptive_dash) {
+        out.url = data[0].adaptive_dash[''].url
+    } else if (data[0].drm_adaptive_dash) {  // licence ?
+        out.url = data[0].drm_adaptive_dash[''].url
+    }
+
     return out
 }
 
@@ -335,60 +345,6 @@ const createOptapus = ({ subUrl }) => {
 }
 
 /**
- * Create hsl object
- * @returns {import('hls.js').default}
- */
-const createHls = () => {
-    return new Hls({
-        progressive: true,
-        //        autoStartLoad: false,
-        fetchSetup: (context, initParams) => {
-            initParams.headers.append('is-front-hls', 'true')
-            return new Request(context.url, initParams)
-        }
-    })
-}
-
-/**
- * @todo manejar los errores
- * ver que hacer con rej
- * puede tener un loop infito
- */
-const onHlsError = (hls) => {
-    return (_event, data) => {
-        const video = document.querySelector('video')
-        //        logger.error(data)
-        switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-                logger.error(`hsl: NETWORK_ERROR ${data.details}`)
-                if (data.response.code === 403) {
-                    hls.destroy()
-                } else {
-                    if (data.details === 'manifestLoadError') {
-                        // showError('Episode cannot be played because of CORS error. You must use a proxy.')
-                        hls.destroy()
-                    } if (data.details === 'fragLoadError') {
-                        hls.destroy()
-                    } else {
-                        hls.startLoad()
-                    }
-                }
-                break
-            case Hls.ErrorTypes.MEDIA_ERROR:
-                logger.error('hsl: MEDIA_ERROR trying recovery...')
-                hls.recoverMediaError()
-                video.play().catch(logger.error)
-                break
-            default:
-                logger.error(`hsl: falta ${data.details}`)
-                hls.destroy()
-                break
-        }
-    }
-}
-
-
-/**
  * @todo chagen subs and audio is not working well
  * @todo cambiar subs y audios
  */
@@ -418,8 +374,8 @@ const Player = ({ ...rest }) => {
     const [preview, setPreview] = useState({})
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const videoCompRef = useRef(null)
-    /** @type {{current: import('hls.js').default}*/
-    const hslRef = useRef(null)
+    /** @type {{current: import('dashjs').MediaPlayerClass}*/
+    const playerRef = useRef(null)
     /** @type {{current: import('libass-wasm')}*/
     const octopusRes = useRef(null)
     const emptyStream = useMemo(() => {
@@ -429,32 +385,10 @@ const Player = ({ ...rest }) => {
     const [stream, setStream] = useState(emptyStream)
 
     /** @type {Function} */
-    const cleanStates = useCallback(() => {
-        hslRef.current.destroy()
-        hslRef.current = createHls()
-        setAudio({})
-        setSubtitle({})
-        setLoading(true)
-        setPreviews([])
-        setPreview({})
-        setStream(emptyStream)
-    }, [setAudio, setSubtitle, setLoading, setPreviews, setPreview, hslRef,
-        setStream, emptyStream])
-
-    /** @type {Function} */
-    const cleanOctopus = () => {
-        if (octopusRes.current) {
-            octopusRes.current.dispose()
-            octopusRes.current = null
-        }
-    }
-
-    /** @type {Function} */
     const selectAudio = useCallback((select) => {
         videoCompRef.current.pause()
-        cleanStates()
         setAudio(audios[select])
-    }, [videoCompRef, cleanStates, setAudio, audios])
+    }, [videoCompRef, setAudio, audios])
 
     /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
@@ -473,12 +407,11 @@ const Player = ({ ...rest }) => {
         videoCompRef.current.pause()
         await updatePlayHead({ profile, content, videoCompRef })
         if (changeEp && changeEp.total > 0) {
-            cleanStates()
             setPlayContent(changeEp.data[0])
         } else {
             back.doBack()
         }
-    }, [videoCompRef, profile, content, setPlayContent, cleanStates])
+    }, [videoCompRef, profile, content, setPlayContent])
 
     /** @type {Function} */
     const onNextEp = useCallback(async (ev) => {
@@ -503,25 +436,32 @@ const Player = ({ ...rest }) => {
         }
     }, [videoCompRef, content])
 
+
     useEffect(() => {
-        hslRef.current = createHls()
+
         return () => {
-            hslRef.current.destroy()
-            cleanOctopus()
+            if (playerRef.current) {
+                playerRef.current.reset()
+                playerRef.current = null
+            }
+            if (octopusRes.current) {
+                octopusRes.current.dispose()
+                octopusRes.current = null
+            }
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(() => {  // loop playHead
         if (videoCompRef.current) {
-            updatePlayHeadLoop({ profile, content, videoCompRef })
+            return updatePlayHeadLoop({ profile, content, videoCompRef })
         }
     }, [profile, content, videoCompRef])
 
-    useEffect(() => {
+    useEffect(() => {  // find audios, it's needed to find stream url
         setAudio(findAudio({ profile, audios }))
     }, [profile, audios, setAudio])
 
-    useEffect(() => {
+    useEffect(() => {  // find stream url
         if (audios.includes(audio)) {
             findPlayHead({ profile, content })
                 .then(playhead => { content.playhead = playhead })
@@ -531,23 +471,20 @@ const Player = ({ ...rest }) => {
     }, [profile, content, audios, audio, getLang, setStream])
 
     useEffect(() => {  // create hsl
-        if (stream.url && loading) {
+        if (stream.url) {
             /**
-             * @todo que hacer con el error
+             * @todo set playhead, onError ?
              */
             Promise.all([
-                new Promise((res, rej) => {
-                    // for test
-                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
-                    hslRef.current.loadSource(stream.url)
-                    hslRef.current.config.capLevelToPlayerSize = true
-                    hslRef.current.on(Hls.Events.ERROR, onHlsError(hslRef.current, rej))
-                    hslRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
-                        /**@todo quitar */
-                        // const videoNode = document.querySelector('video')
-                        // videoNode.currentTime = content.playhead.playhead
-                        res()
-                    })
+                new Promise((res) => {
+                    playerRef.current = dashjs.MediaPlayer().create()
+                    playerRef.current.initialize()
+                    playerRef.current.setAutoPlay(false)
+                    playerRef.current.attachView(document.querySelector('video'))
+                    //                    playerRef.current.attachSource(stream.url)
+                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8') // hsl
+                    playerRef.current.attachSource('https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd')  // dash
+                    res()
                 }),
                 setSubtitle(findSubtitle({ profile, ...stream })),
                 searchPreviews(stream).then(setPreviews)
@@ -555,16 +492,15 @@ const Player = ({ ...rest }) => {
                 setLoading(false)
             }).catch(logger.error)
         }
-    }, [setLoading, stream, loading, setSubtitle, profile, setPreviews, setPlayHead])
-
-    useEffect(() => {  // attach video to dom
-        if (!loading && videoCompRef.current) {
-            hslRef.current.attachMedia(document.querySelector('video'))
+        return () => {
+            if (stream.url && playerRef.current) {
+                playerRef.current.reset()
+            }
         }
-    }, [loading, videoCompRef])
+    }, [setLoading, stream, setSubtitle, profile, setPreviews, setPlayHead])
 
     useEffect(() => {  // attach subs
-        if (content && !loading && videoCompRef.current && subtitle) {
+        if (subtitle.locale) {
             if (subtitle.locale === 'off') {
                 if (octopusRes.current) {
                     octopusRes.current.freeTrack()
@@ -577,7 +513,7 @@ const Player = ({ ...rest }) => {
                 }
             }
         }
-    }, [loading, videoCompRef, subtitle, content])
+    }, [subtitle.locale, subtitle.url])
 
     return (
         <div className={rest.className}>
