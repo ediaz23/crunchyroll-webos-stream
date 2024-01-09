@@ -22,7 +22,6 @@ import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
 import useCustomFetch from '../hooks/customFetch'
 import api from '../api'
-//import logger from '../logger'
 import utils from '../utils'
 import back from '../back'
 import './attachErrorHandler'
@@ -82,8 +81,7 @@ const App = ({ ...rest }) => {
     return (
         <ErrorBoundary>
             <div {...rest}>
-                <RoutablePanels {...rest} path={path} noCloseButton
-                    onApplicationClose={closeApp}>
+                <RoutablePanels {...rest} path={path} onApplicationClose={closeApp}>
                     <Route path='init' component={InitialPanel} {...rest} />
                     <Route path='warning' component={WarningPanel} {...rest} />
                     <Route path='login' component={LoginPanel} {...rest} />
