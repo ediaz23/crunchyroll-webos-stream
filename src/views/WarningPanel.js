@@ -18,7 +18,7 @@ const WarningPanel = ({ ...rest }) => {
 
     const accept = useCallback(async () => {
         await api.config.setInstalled()
-        setPath('/login')
+        setPath('/contact')
     }, [setPath])
 
     useEffect(() => {

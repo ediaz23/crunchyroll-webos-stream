@@ -73,6 +73,7 @@ const App = ({ ...rest }) => {
         const initDB = async () => {
             await api.config.init()
             api.config.setCustomFetch(customFetch)
+            await api.config.setDeviceInformation()
             setDBInit(true)
         }
         initDB()
