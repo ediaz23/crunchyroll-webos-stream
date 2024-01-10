@@ -8,7 +8,7 @@ import { Panels, Routable, Route } from '@enact/moonstone/Panels'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { pathState, initScreenState } from '../recoilConfig'
+import { pathState, initScreenState, contactBtnState } from '../recoilConfig'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InitialPanel from '../views/InitialPanel'
 import HomePanel from '../views/HomePanel'
@@ -38,6 +38,8 @@ const App = ({ ...rest }) => {
     const [path, setPath] = useRecoilState(pathState)
     /** @type {Function} */
     const setInitScreenState = useSetRecoilState(initScreenState)
+    /** @type {Function} */
+    const setContactBtn = useSetRecoilState(contactBtnState)
 
     const closeApp = useCallback(() => {
         if (utils.isTv()) {
@@ -52,6 +54,7 @@ const App = ({ ...rest }) => {
                 initPath = '/warning'
             } else if ((new Date()) > await api.config.getNextContactDate()) {
                 initPath = '/contact'
+                setContactBtn(true)
             } else {
                 initPath = '/login'
             }
@@ -61,7 +64,7 @@ const App = ({ ...rest }) => {
         if (dbInit) {
             loadData()
         }
-    }, [dbInit, setPath, setInitScreenState])
+    }, [dbInit, setPath, setInitScreenState, setContactBtn])
 
     useEffect(() => {
         if (dbInit) {

@@ -9,8 +9,6 @@ import utils from '../utils'
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
 
-const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
-
 /**
  * @typedef ApiStorageSub
  * @type {Object}

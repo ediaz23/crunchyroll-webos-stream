@@ -78,3 +78,8 @@ export const playContentState = atom({
     key: 'playContentState',
     default: null
 })
+
+export const contactBtnState = atom({
+    key: 'contactBtnState',
+    default: false
+})

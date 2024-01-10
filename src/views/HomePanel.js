@@ -160,7 +160,7 @@ const HomePanel = (props) => {
                             contentType='movie_listing' />
                         <MusicBrowse profile={profile} musicfeed={musicfeed} />
                         <Watchlist profile={profile} />
-                        <ContactMePanel />
+                        <ContactMePanel noAcceptBtn />
                         <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
                     </ActivityViews>
                 </Cell>

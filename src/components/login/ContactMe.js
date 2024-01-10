@@ -1,3 +1,4 @@
+
 import { useCallback } from 'react'
 import IconButton from '@enact/moonstone/IconButton'
 import { useSetRecoilState } from 'recoil'
@@ -5,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import $L from '@enact/i18n/$L'
 
-import { pathState } from '../../recoilConfig'
+import { pathState, contactBtnState } from '../../recoilConfig'
 import back from '../../back'
 
 
@@ -16,12 +17,15 @@ const ContactMe = ({ origin }) => {
 
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
+    /** @type {Function} */
+    const setContactBtn = useSetRecoilState(contactBtnState)
 
     const contactMe = useCallback(() => {
         const newOrigin = origin.startsWith('/') ? origin : `/${origin}`
         back.pushHistory({ doBack: () => { setPath(newOrigin) } })
+        setContactBtn(false)
         setPath('/contact')
-    }, [setPath, origin])
+    }, [setPath, origin, setContactBtn])
 
 
     return (
