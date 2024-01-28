@@ -14,15 +14,32 @@ import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
+import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
+import useCustomFetch from '../../hooks/customFetch'
+import { getUserAgent } from 'crunchyroll-js-api/src/const'
 
+
+/**
+ * @typedef StreamSession
+ * @type {Object}
+ * @property {Number} renewSeconds
+ * @property {Number} noNetworkRetryIntervalSeconds
+ * @property {Number} noNetworkTimeoutSeconds
+ * @property {Number} maximumPauseSeconds
+ * @property {Number} endOfVideoUnloadSeconds
+ * @property {Number} sessionExpirationSeconds
+ * @property {Boolean} usesStreamLimits
+ */
 
 /**
  * @typedef Stream
  * @type {Object}
  * @property {String} url
  * @property {String} bif
+ * @property {String} token
+ * @property {StreamSession} session
  * @property {Array<import('./AudioList').Audio>} audios
  * @property {Array<import('./SubtitleList').Subtitle>} subtitles
  */
@@ -149,6 +166,7 @@ const findSubtitle = ({ profile, subtitles }) => {
 }
 
 /**
+ * @fixmi not audio.guid meiji gekken
  * @param {{
     profile: import('crunchyroll-js-api/src/types').Profile,
     audios: Array<import('./AudioList').Audio>,
@@ -158,28 +176,23 @@ const findSubtitle = ({ profile, subtitles }) => {
  * @returns {Promise<Stream>}
  */
 const findStream = async ({ profile, audios, audio, getLang }) => {
-    let data = {}, meta = {}
+    let data = {}
     if (['episode', 'movie'].includes(audio.type)) {
-        ({ data, meta } = await api.cms.getStreams(profile, { contentId: audio.media_guid }))
+        data = await api.drm.getStreams(profile, { episodeId: audio.guid })
     } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
-        ({ data, meta } = await api.music.getStreams(profile, { contentId: audio.media_guid }))
+        data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
     }
+    console.log(data)
     /** @type {Stream} */
     const out = {
-        url: '',
-        bif: meta.bifs,
+        url: data.url,
+        bif: data.bifs,
         audios: audios,
-        subtitles: [{ locale: 'off', }, ...Object.values(meta.subtitles)].map(subtitle => {
-            return { ...subtitle, title: getLang(subtitle.locale) }
+        session: data.session,
+        token: data.token,
+        subtitles: [{ language: 'off', }, ...Object.values(data.subtitles)].map(subtitle => {
+            return { ...subtitle, locale: subtitle.language, title: getLang(subtitle.language) }
         })
-    }
-    /**
-     * @fixme if there is not adaptive_dash or drm_adaptive_dash
-     */
-    if (data[0].adaptive_dash) {
-        out.url = data[0].adaptive_dash[''].url
-    } else if (data[0].drm_adaptive_dash) {  // licence ?
-        out.url = data[0].drm_adaptive_dash[''].url
     }
 
     return out
@@ -188,14 +201,15 @@ const findStream = async ({ profile, audios, audio, getLang }) => {
 /**
  * @param {{
     bif: String,
+    customFetch: Function
   }}
  * @returns {Promise<Array<String>>}
  */
-const searchPreviews = async ({ bif }) => {
+const searchPreviews = async ({ bif, customFetch }) => {
     let images = []
     try {
         /** @type {Response} */
-        const res = await fetch(bif)
+        const res = await customFetch(bif)
         const buf = await res.arrayBuffer()
         const bifData = new Uint8Array(buf)
         const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
@@ -344,11 +358,28 @@ const createOptapus = ({ subUrl }) => {
     })
 }
 
+const SERVER_CERTIFICATE = 'CrsCCAMSEKDc0WAwLAQT1SB2ogyBJEwYv4Tx7gUi' +
+    'jgIwggEKAoIBAQC8Xc/GTRwZDtlnBThq8V382D1oJAM0F/YgCQtNDLz7vTWJ+QskNGi5Dd2qzO4s48Cnx5BLv' +
+    'L4H0xCRSw2Ed6ekHSdrRUwyoYOE+M/t1oIbccwlTQ7o+BpV1X6TB7fxFyx1jsBtRsBWphU65w121zqmSiwzZz' +
+    'J4xsXVQCJpQnNI61gzHO42XZOMuxytMm0F6puNHTTqhyY3Z290YqvSDdOB+UY5QJuXJgjhvOUD9+oaLlvT+vw' +
+    'mV2/NJWxKqHBKdL9JqvOnNiQUF0hDI7Wf8Wb63RYSXKE27Ky31hKgx1wuq7TTWkA+kHnJTUrTEfQxfPR4dJTq' +
+    'uE+IDLAi5yeVVxzbAgMBAAE6DGNhc3RsYWJzLmNvbUABEoADMmGXpXg/0qxUuwokpsqVIHZrJfu62ar+BF8UV' +
+    'UKdK5oYQoiTZd9OzK3kr29kqGGk3lSgM0/p499p/FUL8oHHzgsJ7Hajdsyzn0Vs3+VysAgaJAkXZ+k+N6Ka0W' +
+    'BiZlCtcunVJDiHQbz1sF9GvcePUUi2fM/h7hyskG5ZLAyJMzTvgnV3D8/I5Y6mCFBPb/+/Ri+9bEvquPF3Ff9' +
+    'ip3yEHu9mcQeEYCeGe9zR/27eI5MATX39gYtCnn7dDXVxo4/rCYK0A4VemC3HRai2X3pSGcsKY7+6we7h4Iyc' +
+    'jqtuGtYg8AbaigovcoURAZcr1d/G0rpREjLdVLG0Gjqk63Gx688W5gh3TKemsK3R1jV0dOfj3e6uV/kTpsNRL' +
+    '9KsD0v7ysBQVdUXEbJotcFz71tI5qc3jwr6GjYIPA3VzusD17PN6AGQniMwxJV12z/EgnUopcFB13osydpD2A' +
+    'aDsgWo5RWJcNf+fzCgtUQx/0Au9+xVm5LQBdv8Ja4f2oiHN3dw'
+
+const CRUNCHYROLL_SAL_S1E1_PSSH = "AAAAoXBzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAAIEIARIQmYVDQW4gNdatYCGbY/l5jRoIY2FzdGxhYnMiWGV5SmhjM05sZEVsa0lqb2lZelJqTlRnNE1UUmpORFEwTWpGaVpqRmlObUprTXpka01USm1NVFppWmpjaUxDSjJZWEpwWVc1MFNXUWlPaUpoZG10bGVTSjkyB2RlZmF1bHQ="
+
 /**
  * @todo chagen subs and audio is not working well
  * @todo cambiar subs y audios
  */
 const Player = ({ ...rest }) => {
+    /** @type {Function} */
+    const customFetch = useCustomFetch()
     /** @type {Function} */
     const getLang = useGetLanguage()
     /** @type {import('crunchyroll-js-api/src/types').Profile}*/
@@ -451,11 +482,13 @@ const Player = ({ ...rest }) => {
         }
     }, [])
 
+    /*
     useEffect(() => {  // loop playHead
         if (videoCompRef.current) {
             return updatePlayHeadLoop({ profile, content, videoCompRef })
         }
     }, [profile, content, videoCompRef])
+    */
 
     useEffect(() => {  // find audios, it's needed to find stream url
         setAudio(findAudio({ profile, audios }))
@@ -470,24 +503,81 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, audios, audio, getLang, setStream])
 
-    useEffect(() => {  // create hsl
+    useEffect(() => {  // create dash
         if (stream.url) {
             /**
              * @todo set playhead, onError ?
              */
             Promise.all([
-                new Promise((res) => {
-                    playerRef.current = dashjs.MediaPlayer().create()
-                    playerRef.current.initialize()
-                    playerRef.current.setAutoPlay(false)
-                    playerRef.current.attachView(document.querySelector('video'))
-                    //                    playerRef.current.attachSource(stream.url)
-                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8') // hsl
-                    playerRef.current.attachSource('https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd')  // dash
-                    res()
+                new Promise((res, rej) => {
+                    getContentParam(profile).then(account => {
+                        playerRef.current = dashjs.MediaPlayer().create()
+
+                        playerRef.current.extend('RequestModifier', function() {
+                            return {
+                                modifyRequest: (req) => {
+                                    /** @type {Request} */
+                                    const request = req
+                                    request.headers['Authorization'] = account.token
+                                    return customFetch(request.url, request)
+                                },
+                            }
+                        })
+                        playerRef.current.initialize()
+                        playerRef.current.setAutoPlay(false)
+                        playerRef.current.attachView(document.querySelector('video'))
+                        // Configuración para Widevine DRM
+                        const widevineConfig = {
+                            'com.widevine.alpha': {
+                                serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
+                                httpRequestHeaders: {
+                                    Authorization: account.token,
+                                    'X-Cr-Content-Id': audio.guid,
+                                    'X-Cr-Video-Token': stream.token,
+                                },
+                                serverCertificate: SERVER_CERTIFICATE,
+                                audioRobustness: 'SW_SECURE_CRYPTO',
+                                videoRobustness: 'SW_SECURE_CRYPTO',
+                                withCredentials: false,
+                                sessionType: 'temporary',
+
+                                //                                pssh: CRUNCHYROLL_SAL_S1E1_PSSH,
+                            },
+                        }
+                        playerRef.current.setProtectionData(widevineConfig)
+                        playerRef.current.registerLicenseRequestFilter(async (req) => {
+                            try {
+                                debugger
+                                /** @type {Request} */
+                                const request = { ...req }
+                                request.headers = { ...req.headers }
+                                request.headers['Content-Type'] = 'application/octet-stream'
+                                request.headers['Origin'] = 'https://static.crunchyroll.com'
+                                request.headers['Referer'] = 'https://static.crunchyroll.com/'
+                                //                          request.headers['User-Agent'] = getUserAgent()
+                                request.headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                                request.headers['Content-Length'] = req.data.byteLength
+                                console.log(request.headers)
+                                const res2 = await customFetch(request.url, {
+                                    method: request.method,
+                                    headers: request.headers,
+                                    body: request.data,
+                                })
+                                console.log(res2)
+                            } catch (e) {
+                                console.log(e)
+                                debugger
+                            }
+                            return req
+                        })
+                        playerRef.current.attachSource(stream.url)
+                        // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8') // hsl
+                        // playerRef.current.attachSource('https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd')  // dash
+                        res()
+                    }).catch(rej)
                 }),
                 setSubtitle(findSubtitle({ profile, ...stream })),
-                searchPreviews(stream).then(setPreviews)
+                searchPreviews({ ...stream, customFetch }).then(setPreviews)
             ]).then(() => {
                 setLoading(false)
             }).catch(logger.error)
@@ -497,8 +587,9 @@ const Player = ({ ...rest }) => {
                 playerRef.current.reset()
             }
         }
-    }, [setLoading, stream, setSubtitle, profile, setPreviews, setPlayHead])
+    }, [setLoading, stream, setSubtitle, profile, setPreviews, setPlayHead, customFetch])
 
+    /*
     useEffect(() => {  // attach subs
         if (subtitle.locale) {
             if (subtitle.locale === 'off') {
@@ -514,6 +605,7 @@ const Player = ({ ...rest }) => {
             }
         }
     }, [subtitle.locale, subtitle.url])
+    */
 
     return (
         <div className={rest.className}>

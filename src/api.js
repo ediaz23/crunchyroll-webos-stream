@@ -10,6 +10,7 @@ import * as misc from './api/misc'
 import * as music from './api/music'
 import * as review from './api/review'
 import * as content from './api/content'
+import * as drm from './api/drm'
 
 
 export default {
@@ -20,6 +21,7 @@ export default {
     config,
     content,
     discover,
+    drm,
     misc,
     music,
     review,

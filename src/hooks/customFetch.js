@@ -35,9 +35,24 @@ class ResponseHack extends Response {
  */
 export const customFetch = async (url, options = {}) => {
     return new Promise((res, rej) => {
-        const config = { ...options }
-        if (config.body && config.body instanceof URLSearchParams) {
-            config.body = config.body.toString()
+        let config
+        if (url instanceof Request) {
+            config = {
+                method: url.method || 'get',
+                body: url.body,
+                headers: url.headers,
+            }
+            url = url.url
+        } else {
+            config = { ...options }
+        }
+        if (config.body) {
+            if (config.body instanceof URLSearchParams) {
+                config.body = config.body.toString()
+            } else if (config.body instanceof Uint8Array) {
+                const uint8ArrayToString = [...config.body].map(byte => String.fromCharCode(byte)).join('')
+                config.body = btoa(uint8ArrayToString);
+            }
         }
         const onSuccess = (data) => {
             const { status, statusText, content, headers } = data
@@ -72,7 +87,7 @@ export const customFetch = async (url, options = {}) => {
                 onFailure
             })
         } else {
-            window.fetchBak('http://localhost:8052/webos2', {
+            window.fetch('http://localhost:8052/webos2', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,33 +97,6 @@ export const customFetch = async (url, options = {}) => {
         }
     })
 }
-
-/**
- * Function to bypass cors issues
- * @param {String} url
- * @param {RequestInit} [options]
- * @returns {Promise<Response>}
- */
-const replaceFetch = async (url, options = {}) => {
-    if (url instanceof Request) {
-        if (url.headers.get('is-front-hls') === 'true') {
-            url.headers.delete('is-front-hls')
-            const { method, body, headers } = url
-            return customFetch(url.url, {
-                method: method || 'get',
-                body,
-                headers
-            })
-        }
-    }
-    return window.fetchBak(url, options)
-}
-
-if (!window.fetchBak) {
-    window.fetchBak = window.fetch
-    window.fetch = replaceFetch
-}
-
 
 const useCustomFetch = () => customFetch
 
