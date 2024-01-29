@@ -3,6 +3,7 @@ import { localStore, CrunchyrollError } from 'crunchyroll-js-api'
 import $L from '@enact/i18n/$L'
 import { ERROR_CODES } from '../const'
 import logger from '../logger'
+import { customFetch } from '../hooks/customFetch'
 
 
 /**
@@ -43,3 +44,15 @@ export const getContentParam = async (profile) => {
         audioLanguage: profile.preferred_content_audio_language,
     }
 }
+
+
+/**
+ * Make a fetch request and create a bold url to get response
+ * this is to avoid cors
+ */
+export const fetchProxy = async (url, options = {}) => {
+    const res = await customFetch(url, options)
+    const blob = new Blob([await res.blob()], { type: res.headers.get('Content-Type') || 'application/octet-stream' })
+    return URL.createObjectURL(blob)
+}
+

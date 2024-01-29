@@ -49,8 +49,9 @@ export const customFetch = async (url, options = {}) => {
         if (config.body) {
             if (config.body instanceof URLSearchParams) {
                 config.body = config.body.toString()
-            } else if (config.body instanceof Uint8Array) {
-                const uint8ArrayToString = [...config.body].map(byte => String.fromCharCode(byte)).join('')
+            } else if (config.body instanceof Uint8Array || config.body instanceof ArrayBuffer) {
+                const uint8Array = config.body instanceof Uint8Array ? config.body : new Uint8Array(config.body)
+                const uint8ArrayToString = [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
                 config.body = btoa(uint8ArrayToString);
             }
         }
