@@ -32,7 +32,7 @@ export const getObjects = async (profile, params) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {String} params.serieId
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getSeasons = async (profile, params) => {
     let out = null
@@ -76,7 +76,7 @@ export const getSerie = async (profile, params) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {String} params.seasonId
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getEpisodes = async (profile, params) => {
     let out = null

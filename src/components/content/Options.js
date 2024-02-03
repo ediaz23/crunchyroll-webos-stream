@@ -12,6 +12,7 @@ import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import Scroller from '../../patch/Scroller'
+import { calculatePlayheadProgress } from './Seasons'
 import { ContentHeader } from '../home/ContentBanner'
 import api from '../../api'
 import back from '../../back'
@@ -39,8 +40,14 @@ const computeTitles = ({ content, nextContent }) => {
 
     if (nextContent) {
         if (nextContent.type === 'episode') {
-            const season = nextContent.episode_metadata.season_number || 0
-            const episodeNumber = nextContent.episode_metadata.episode_number || 0
+            let season = 1, episodeNumber = 1
+            if (nextContent.episode_metadata) {
+                season = nextContent.episode_metadata.season_number || 1
+                episodeNumber = nextContent.episode_metadata.episode_number || 1
+            } else {
+                season = nextContent.season_number
+                episodeNumber = nextContent.episode_number
+            }
             description = nextContent.description
             watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
             subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title}`
@@ -99,18 +106,30 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
 
     useEffect(() => {
-        /**
-         * @bug if there is not a next Ep?
-         */
         api.discover.getNext(profile, {
             contentId: content.id,
             contentType: content.type
-        }).then(nextEp => {
+        }).then(async nextEp => {
             if (nextEp && nextEp.total > 0) {
                 if (nextEp.data[0].type === 'movie') {
                     setNextConent({ ...nextEp.data[0], ...nextEp.data[0].panel, panel: null })
                 } else {
                     setNextConent(nextEp.data[0])
+                }
+            } else {
+                if (content.type === 'series') {
+                    const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
+                    const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
+                    const tmpEpisode = episodesData[0]
+                    await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
+                    tmpEpisode.type = 'episode'
+                    setNextConent(tmpEpisode)
+                } else if (content.type === 'movie_listing') {
+                    const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: content.id })
+                    const tmpMovie = moviesData[0]
+                    await calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
+                    tmpMovie.type = 'movie'
+                    setNextConent({ ...tmpMovie, ...(tmpMovie.panel || {}), panel: null })
                 }
             }
         })
@@ -153,10 +172,12 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 <div className={css.scrollerContainer}>
                     <Scroller direction='vertical' horizontalScrollbar='hidden'
                         verticalScrollbar='visible'>
-                        <Item id='play' onClick={playNextContent}>
-                            <Icon>play</Icon>
-                            <span>{watch}</span>
-                        </Item>
+                        {nextContent &&
+                            <Item id='play' onClick={playNextContent}>
+                                <Icon>play</Icon>
+                                <span>{watch}</span>
+                            </Item>
+                        }
                         <Item onClick={moreEpisodes}>
                             <Icon>series</Icon>
                             <span>{moreDetail}</span>
