@@ -64,17 +64,17 @@
         "libs/*"
     ],
     "dependencies": {
-        "@cospired/i18n-iso-languages": "^4.1.0",
+        "@cospired/i18n-iso-languages": "^4.2.0",
         "@enact/core": "^4.7.9",
         "@enact/i18n": "^4.7.9",
-        "@enact/moonstone": "^4.5.4",
+        "@enact/moonstone": "^4.5.5",
         "@enact/spotlight": "^4.7.9",
         "@enact/ui": "^4.7.9",
         "@enact/webos": "^4.7.9",
         "classnames": "^2.5.1",
         "crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
         "dashjs": "^4.7.3",
-        "i18n-iso-countries": "^7.7.0",
+        "i18n-iso-countries": "^7.9.0",
         "ilib": "^14.19.0",
         "libass-wasm": "^4.1.0",
         "prop-types": "^15.8.1",
@@ -82,7 +82,7 @@
         "react-dom": "^18.2.0",
         "recoil": "^0.7.7",
         "uuid": "^9.0.1",
-        "web-vitals": "^3.5.1",
+        "web-vitals": "^3.5.2",
         "webostvjs": "^1.2.5"
     },
     "resolutions": {
@@ -90,8 +90,8 @@
         "react-error-overlay": "6.0.9"
     },
     "devDependencies": {
-        "@babel/cli": "^7.23.4",
-        "@babel/core": "^7.23.7",
+        "@babel/cli": "^7.23.9",
+        "@babel/core": "^7.23.9",
         "@babel/preset-react": "^7.23.3",
         "@types/webostvjs": "^1.2.5",
         "babel-plugin-i18next": "^1.0.9",
