@@ -108,6 +108,16 @@ Control back event.
 window.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': 461 }))
 ```
 
+## Create a Dash file
+
+```
+x264 --output intermediate_2400k.264 --fps 24 --preset slow --bitrate 2400 --vbv-maxrate 4800 --vbv-bufsize 9600 --min-keyint 48 --keyint 48 --scenecut 0 --no-scenecut --pass 1 --video-filter "resize:width=1280,height=720" inputvideo.mkv
+
+MP4Box -add intermediate.264 -fps 24 output_2400k.mp4
+
+MP4Box -dash 4000 -frag 4000 -rap -segment-name segment_ output_2400k.mp4
+```
+
 
 ## ⚖ License
 
