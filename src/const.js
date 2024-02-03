@@ -21,4 +21,6 @@ export const ERROR_CODES = {
     invalid_auth_token: 'accounts.get_profile.invalid_auth_token',
 }
 
+export const PLAY_TEST = false
+
 export default {}
