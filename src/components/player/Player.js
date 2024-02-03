@@ -193,7 +193,7 @@ const findStream = async ({ profile, audios, audio, getLang }) => {
             return { ...subtitle, locale: subtitle.language, title: getLang(subtitle.language) }
         })
     }
-
+    console.log(out)
     return out
 }
 
@@ -440,7 +440,7 @@ const Player = ({ ...rest }) => {
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
     const playerRef = useRef(null)
     /** @type {{current: import('libass-wasm')}*/
-    const octopusRes = useRef(null)
+    const octopusRef = useRef(null)
     const emptyStream = useMemo(() => {
         return { url: null, bif: null, audios: [], subtitles: [] }
     }, [])
@@ -500,20 +500,6 @@ const Player = ({ ...rest }) => {
     }, [videoCompRef, content])
 
 
-    useEffect(() => {
-
-        return () => {
-            if (playerRef.current) {
-                playerRef.current.reset()
-                playerRef.current = null
-            }
-            if (octopusRes.current) {
-                octopusRes.current.dispose()
-                octopusRes.current = null
-            }
-        }
-    }, [])
-
     /*
     useEffect(() => {  // loop playHead
         if (videoCompRef.current) {
@@ -535,7 +521,7 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, audios, audio, getLang, setStream])
 
-    useEffect(() => {  // create dash
+    useEffect(() => {  // create dash player
         if (stream.url) {
             /**
              * @todo onError ?
@@ -576,26 +562,45 @@ const Player = ({ ...rest }) => {
                 setLoading(false)
             }).catch(logger.error)
         }
+        return () => {
+            if (stream.token) {
+                api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
+            }
+            if (playerRef.current) {
+                playerRef.current.destroy()
+                playerRef.current = null
+            }
+        }
     }, [setLoading, stream, setSubtitle, profile, setPreviews, setPlayHead, customFetch, audio])
 
-
     useEffect(() => {  // attach subs
+        /*
         if (subtitle.locale) {
             if (subtitle.locale === 'off') {
-                if (octopusRes.current) {
-                    octopusRes.current.freeTrack()
+                if (octopusRef.current) {
+                    octopusRef.current.freeTrack()
                 }
             } else {
                 fetchProxy(subtitle.url).then(subUrl => {
-                    if (octopusRes.current) {
-                        octopusRes.current.setTrackByUrl(subUrl)
+                    if (octopusRef.current) {
+                        octopusRef.current.setTrackByUrl(subUrl)
                     } else {
-                        octopusRes.current = createOptapus({ subUrl })
+                        octopusRef.current = createOptapus({ subUrl })
                     }
                 })
             }
         }
+        */
     }, [subtitle.locale, subtitle.url])
+
+    useEffect(() => {  // clean subtitles octopus
+        return () => {
+            if (octopusRef.current) {
+                octopusRef.current.dispose()
+                octopusRef.current = null
+            }
+        }
+    }, [])
 
     return (
         <div className={rest.className}>

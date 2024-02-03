@@ -10,7 +10,7 @@ import { translateError, getContentParam } from './utils'
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {Object} params
  * @param {String} params.episodeId
- * * @param {String} [params.type] only null or music
+ * @param {String} [params.type] only null or music
  * @return {Promise}
  */
 export const getStreams = async (profile, params) => {
@@ -23,3 +23,22 @@ export const getStreams = async (profile, params) => {
     }
     return out
 }
+
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.episodeId
+ * @param {String} params.token
+ * @return {Promise}
+ */
+export const deleteToken = async (profile, params) => {
+    try {
+        const account = await getContentParam(profile)
+        await api.drm.deleteToken({ account, ...params })
+    } catch (error) {
+        await translateError(error)
+    }
+}
+
