@@ -5,6 +5,9 @@ export const LOAD_MOCK_DATA = __DEV__ && false
 /** @type {Boolean} */
 export const DEV_FAST_SELECT = __DEV__ && false
 
+/** @type {Boolean} */
+export const _PLAY_TEST_ = __DEV__ && false
+
 // posible values series
 /** @type {String} */
 export const DEV_CONTENT_TYPE = null
@@ -20,7 +23,5 @@ export const ERROR_CODES = {
     invalid_refresh_token: 'auth.obtain_access_token.oauth2_error',
     invalid_auth_token: 'accounts.get_profile.invalid_auth_token',
 }
-
-export const PLAY_TEST = false
 
 export default {}

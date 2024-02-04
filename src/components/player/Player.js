@@ -1,7 +1,7 @@
 
 import dashjs from 'dashjs'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
-import VideoPlayer, { MediaControls, Video } from '@enact/moonstone/VideoPlayer'
+import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import SubtitlesOctopus from 'libass-wasm'
 
@@ -17,6 +17,7 @@ import api from '../../api'
 import { getContentParam, fetchProxy } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
+import { _PLAY_TEST_ } from '../../const'
 import useCustomFetch from '../../hooks/customFetch'
 
 
@@ -193,7 +194,6 @@ const findStream = async ({ profile, audios, audio, getLang }) => {
             return { ...subtitle, locale: subtitle.language, title: getLang(subtitle.language) }
         })
     }
-    console.log(out)
     return out
 }
 
@@ -441,6 +441,7 @@ const Player = ({ ...rest }) => {
     const playerRef = useRef(null)
     /** @type {{current: import('libass-wasm')}*/
     const octopusRef = useRef(null)
+    /** @type {Stream} */
     const emptyStream = useMemo(() => {
         return { url: null, bif: null, audios: [], subtitles: [] }
     }, [])
@@ -448,10 +449,25 @@ const Player = ({ ...rest }) => {
     const [stream, setStream] = useState(emptyStream)
 
     /** @type {Function} */
+    const cleanPlayer = useCallback(() => {
+        if (playerRef.current) {
+            playerRef.current.pause()
+        }
+        if (octopusRef.current) {
+            octopusRef.current.dispose()
+            octopusRef.current = null
+        }
+        if (playerRef.current) {
+            playerRef.current.destroy()
+            playerRef.current = null
+        }
+    }, [])
+
+    /** @type {Function} */
     const selectAudio = useCallback((select) => {
-        videoCompRef.current.pause()
         setAudio(audios[select])
-    }, [videoCompRef, setAudio, audios])
+        setLoading(true)
+    }, [setAudio, audios, cleanPlayer, setLoading])
 
     /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
@@ -467,14 +483,13 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const onChangeEp = useCallback(async (changeEp) => {
-        videoCompRef.current.pause()
         await updatePlayHead({ profile, content, videoCompRef })
         if (changeEp && changeEp.total > 0) {
             setPlayContent(changeEp.data[0])
         } else {
             back.doBack()
         }
-    }, [videoCompRef, profile, content, setPlayContent])
+    }, [videoCompRef, profile, content, setPlayContent, cleanPlayer])
 
     /** @type {Function} */
     const onNextEp = useCallback(async (ev) => {
@@ -488,25 +503,12 @@ const Player = ({ ...rest }) => {
         await onChangeEp(await findNextEp({ profile, content, step: -1 }))
     }, [profile, content, onChangeEp])
 
-    const setPlayHead = useCallback(() => {
-        /**@todo corregir */
-        if (videoCompRef.current && content) {
-            //            hslRef.current.startLoad(-1)
-            //            const videoNode = document.querySelector('video')
-            //            hslRef.current.startLoad(content.playhead.playhead)
-            //            videoNode.currentTime = content.playhead.playhead
-            //            videoNode.play().catch(logger.error)
-        }
-    }, [videoCompRef, content])
 
-
-    /*
     useEffect(() => {  // loop playHead
         if (videoCompRef.current) {
             return updatePlayHeadLoop({ profile, content, videoCompRef })
         }
     }, [profile, content, videoCompRef])
-    */
 
     useEffect(() => {  // find audios, it's needed to find stream url
         setAudio(findAudio({ profile, audios }))
@@ -514,10 +516,26 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // find stream url
         if (audios.includes(audio)) {
-            findPlayHead({ profile, content })
-                .then(playhead => { content.playhead = playhead })
-                .then(() => findStream({ profile, audios, audio, getLang }))
-                .then(setStream)
+            if (_PLAY_TEST_) {
+                findPlayHead({ profile, content })
+                    .then(playhead => { content.playhead = playhead })
+                    .then(() => {
+                        setStream({
+                            url: 'http://localhost:8052/kimi.mpd',
+                            bif: 'http://localhost:8052/kimi.bif',
+                            subtitles: [{
+                                locale: 'es-419',
+                                url: 'http://localhost:8052/kimi.ass'
+                            }],
+                            audios: []
+                        })
+                    })
+            } else {
+                findPlayHead({ profile, content })
+                    .then(playhead => { content.playhead = playhead })
+                    .then(() => findStream({ profile, audios, audio, getLang }))
+                    .then(setStream)
+            }
         }
     }, [profile, content, audios, audio, getLang, setStream])
 
@@ -529,31 +547,31 @@ const Player = ({ ...rest }) => {
             Promise.all([
                 new Promise((res) => {
                     playerRef.current = dashjs.MediaPlayer().create()
-                    playerRef.current.extend('RequestModifier', function() {
-                        return { modifyRequest: modifierRequest(profile) }
-                    })
+                    if (!_PLAY_TEST_) {
+                        playerRef.current.extend('RequestModifier', function() {
+                            return { modifyRequest: modifierRequest(profile) }
+                        })
+                        const widevineConfig = {  // Configuración para Widevine DRM
+                            'com.widevine.alpha': {
+                                serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
+                                httpRequestHeaders: {
+                                    'X-Cr-Content-Id': audio.guid,
+                                    'X-Cr-Video-Token': stream.token,
+                                },
+                                serverCertificate: api.config.SERVER_CERTIFICATE,
+                                audioRobustness: 'SW_SECURE_CRYPTO',
+                                videoRobustness: 'SW_SECURE_CRYPTO',
+                                sessionType: 'temporary',
+                            },
+                        }
+                        playerRef.current.setProtectionData(widevineConfig)
+                        playerRef.current.registerLicenseRequestFilter(requestLicense(profile))
+                        playerRef.current.registerLicenseResponseFilter(decodeLicense)
+                    }
                     playerRef.current.initialize()
                     playerRef.current.setAutoPlay(false)
                     playerRef.current.attachView(document.querySelector('video'))
-                    const widevineConfig = {  // Configuración para Widevine DRM
-                        'com.widevine.alpha': {
-                            serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
-                            httpRequestHeaders: {
-                                'X-Cr-Content-Id': audio.guid,
-                                'X-Cr-Video-Token': stream.token,
-                            },
-                            serverCertificate: api.config.SERVER_CERTIFICATE,
-                            audioRobustness: 'SW_SECURE_CRYPTO',
-                            videoRobustness: 'SW_SECURE_CRYPTO',
-                            sessionType: 'temporary',
-                        },
-                    }
-                    playerRef.current.setProtectionData(widevineConfig)
-                    playerRef.current.registerLicenseRequestFilter(requestLicense(profile))
-                    playerRef.current.registerLicenseResponseFilter(decodeLicense)
                     playerRef.current.attachSource(stream.url)
-                    // hslRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8') // hsl
-                    // playerRef.current.attachSource('https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd')  // dash
                     res()
                 }),
                 setSubtitle(findSubtitle({ profile, ...stream })),
@@ -563,18 +581,15 @@ const Player = ({ ...rest }) => {
             }).catch(logger.error)
         }
         return () => {
-            if (stream.token) {
-                api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
-            }
-            if (playerRef.current) {
-                playerRef.current.destroy()
-                playerRef.current = null
+            if (!_PLAY_TEST_) {
+                if (stream.token) {
+                    api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
+                }
             }
         }
-    }, [setLoading, stream, setSubtitle, profile, setPreviews, setPlayHead, customFetch, audio])
+    }, [setLoading, stream, setSubtitle, profile, setPreviews, customFetch, audio, cleanPlayer])
 
     useEffect(() => {  // attach subs
-        /*
         if (subtitle.locale) {
             if (subtitle.locale === 'off') {
                 if (octopusRef.current) {
@@ -590,17 +605,36 @@ const Player = ({ ...rest }) => {
                 })
             }
         }
-        */
     }, [subtitle.locale, subtitle.url])
 
+    useEffect(() => {
+        if (!loading && content && playerRef.current) {
+            playerRef.current.seek(content.playhead.playhead)
+            playerRef.current.play()
+        }
+    }, [loading, content, playerRef])
+
     useEffect(() => {  // clean subtitles octopus
-        return () => {
-            if (octopusRef.current) {
-                octopusRef.current.dispose()
-                octopusRef.current = null
+        const onBack = (inEvent) => {
+            let keycode
+            if (window.event) {
+                keycode = inEvent.keyCode;
+            } else if (inEvent.which) {
+                keycode = inEvent.which;
+            }
+            if (keycode === 461) {
+                cleanPlayer()
             }
         }
-    }, [])
+        window.addEventListener('keydown', onBack)
+        return () => {
+            window.removeEventListener('keydown', onBack)
+        }
+    }, [cleanPlayer])
+
+    useEffect(() => {
+        return cleanPlayer
+    }, [cleanPlayer])
 
     return (
         <div className={rest.className}>
@@ -615,9 +649,9 @@ const Player = ({ ...rest }) => {
                 loading={loading}
                 ref={videoCompRef}
                 noAutoPlay>
-                <Video id={content.id}>
+                <video id={content.id}>
                     <source src={emptyVideo} />
-                </Video>
+                </video>
                 <MediaControls>
                     <leftComponents>
                         <ContentInfo content={content} />
