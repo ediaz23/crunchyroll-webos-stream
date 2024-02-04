@@ -42,3 +42,23 @@ export const deleteToken = async (profile, params) => {
     }
 }
 
+
+/**
+ * Get episodes for a season
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Object} params
+ * @param {String} params.episodeId
+ * @param {String} params.token
+ * @param {Number} params.playhead
+ * @return {Promise}
+ */
+export const keepAlive = async (profile, params) => {
+    let out = null
+    try {
+        const account = await getContentParam(profile)
+        out = await api.drm.keepAlive({ account, ...params })
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}

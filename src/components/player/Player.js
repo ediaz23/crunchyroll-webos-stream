@@ -439,10 +439,12 @@ const Player = ({ ...rest }) => {
     const octopusRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
-        return { url: null, bif: null, token: null, session: {}, audios: [], subtitles: [] }
+        return { url: null, bif: null, token: null, session: null, audios: [], subtitles: [] }
     }, [])
     /** @type {[Stream, Function]} */
     const [stream, setStream] = useState(emptyStream)
+    /** @type {[StreamSession, Function]} */
+    const [session, setSession] = useState(null)
 
     /** @type {Function} */
     const beforeChangeVideo = useCallback(() => {
@@ -467,7 +469,6 @@ const Player = ({ ...rest }) => {
             playerRef.current = null
         }
     }, [])
-
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -541,6 +542,24 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, audios, audio, getLang, setStream])
 
+    useEffect(() => { setSession(stream.session) }, [stream, setSession])
+
+    useEffect(() => {  // renew session keep alive
+        let sessionTimeout = null
+        if (session) {
+            sessionTimeout = setTimeout(() => {
+                /** @type {{paused: boolean, currentTime: number}} */
+                const state = videoCompRef.current.getMediaState()
+                api.drm.keepAlive(profile, {
+                    episodeId: audio.guid,
+                    token: stream.token,
+                    playhead: state.currentTime,
+                }).then(setSession)
+            }, session.renewSeconds * 1000 - 50)
+        }
+        return () => clearTimeout(sessionTimeout)
+    }, [profile, audio, stream, session, setSession])
+
     useEffect(() => {  // create dash player
         if (stream.url) {
             Promise.all([
@@ -593,6 +612,32 @@ const Player = ({ ...rest }) => {
         }
     }, [setLoading, stream, setSubtitle, profile, setPreviews, customFetch, audio])
 
+    useEffect(() => {  // if pass maximumPauseSeconds then go back.
+        let pauseTimeout = null
+        const onPause = () => {
+            if (session) {
+                pauseTimeout = setTimeout(() => {
+                    beforeDestroy()
+                    back.doBack()
+                }, session.maximumPauseSeconds * 1000)
+            }
+        }
+        const onPlay = () => {
+            clearTimeout(pauseTimeout)
+        }
+        if (playerRef.current) {
+            playerRef.current.on('playbackPaused', onPause)
+            playerRef.current.on('playbackPlaying', onPlay)
+        }
+        return () => {
+            if (playerRef.current) {
+                playerRef.current.off('playbackPaused', onPause)
+                playerRef.current.off('playbackPlaying', onPlay)
+            }
+            clearTimeout(pauseTimeout)
+        }
+    }, [session, loading, beforeDestroy])
+
     useEffect(() => {  // attach subs
         if (!loading && subtitle && subtitle.locale) {
             if (subtitle.locale === 'off') {
@@ -616,7 +661,7 @@ const Player = ({ ...rest }) => {
         }
     }, [subtitle, loading])
 
-    useEffect(() => {
+    useEffect(() => {  // re-init video
         if (!loading && playerRef.current && content) {
             playerRef.current.seek(content.playhead.playhead)
             playerRef.current.play()
