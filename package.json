@@ -24,7 +24,7 @@
         "play": "npm run build && npm run install-tv && npm run start",
         "play-1": "npm run build && npm run install-tv-1 && npm run start-1",
         "play-p": "npm run build-p && npm run install-tv-1 && npm run start-1",
-        "translate": "npx babel --config-file \"$PWD/.babelrc\" './src/**/*.js' > /dev/null"
+        "translate": "npx i18next-scanner --config ./i18next-scanner.config.react.js"
     },
     "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
     "license": "Apache-2.0",
@@ -45,7 +45,8 @@
         "resolveFallback": {
             "fs": false,
             "path": false,
-            "node-fetch": false
+            "node-fetch": false,
+            "form-data": false
         },
         "packagerOptions": {
             "ignore": [
@@ -90,16 +91,12 @@
         "react-error-overlay": "6.0.9"
     },
     "devDependencies": {
-        "@babel/cli": "^7.23.9",
-        "@babel/core": "^7.23.9",
-        "@babel/preset-react": "^7.23.3",
         "@types/webostvjs": "^1.2.5",
-        "babel-plugin-i18next": "^1.0.9",
-        "babel-plugin-i18next-extract": "^0.10.0",
         "del": "^7.1.0",
         "eslint-config-enact-proxy": "^1.0.7",
         "gulp": "^4.0.2",
         "gulp-shell": "^0.8.0",
+        "i18next-scanner": "^4.4.0",
         "react-error-overlay": "^6.0.11"
     }
 }
