@@ -142,6 +142,13 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
     useEffect(() => {
         Spotlight.focus('#play')
+        const interval = setInterval(() => {
+            if (document.querySelector('#play')) {
+                Spotlight.focus('#play')
+                clearInterval(interval)
+            }
+        }, 100)
+        return () => clearInterval(interval)
     }, [])
 
     return (
