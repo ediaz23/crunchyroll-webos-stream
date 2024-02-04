@@ -492,7 +492,7 @@ const Player = ({ ...rest }) => {
         await updatePlayHead({ profile, content, videoCompRef })
         if (changeEp && changeEp.total > 0) {
             beforeChangeVideo()
-            setPlayContent(changeEp.data[0])
+            setTimeout(() => setPlayContent({ ...changeEp.data[0] }), 100)
         } else {
             beforeDestroy()
             back.doBack()
@@ -617,14 +617,14 @@ const Player = ({ ...rest }) => {
     }, [subtitle, loading])
 
     useEffect(() => {
-        if (!loading && content && playerRef.current) {
+        if (!loading && playerRef.current && content) {
             playerRef.current.seek(content.playhead.playhead)
             playerRef.current.play()
         }
     }, [loading, content, playerRef])
 
     useEffect(() => {  // loop playHead
-        if (!loading && videoCompRef.current) {
+        if (!loading && videoCompRef.current && content) {
             return updatePlayHeadLoop({ profile, content, videoCompRef })
         }
     }, [profile, content, videoCompRef, loading])
