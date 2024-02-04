@@ -405,11 +405,9 @@ const modifierRequest = (profile) => {
     }
 }
 
-
-/**
- * @todo chagen subs and audio is not working well
- */
 const Player = ({ ...rest }) => {
+    /** @type {[Boolean, Function]} */
+    const [loading, setLoading] = useState(true)
     /** @type {Function} */
     const customFetch = useCustomFetch()
     /** @type {Function} */
@@ -428,9 +426,7 @@ const Player = ({ ...rest }) => {
     /** @type {[import('./AudioList').Audio, Function]} */
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
-    const [subtitle, setSubtitle] = useState({})
-    /** @type {[Boolean, Function]} */
-    const [loading, setLoading] = useState(true)
+    const [subtitle, setSubtitle] = useState(null)
     /** @type {[Array<String>, Function]} */
     const [previews, setPreviews] = useState([])
     /** @type {[String, Function]} */
@@ -443,13 +439,22 @@ const Player = ({ ...rest }) => {
     const octopusRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
-        return { url: null, bif: null, audios: [], subtitles: [] }
+        return { url: null, bif: null, token: null, session: {}, audios: [], subtitles: [] }
     }, [])
     /** @type {[Stream, Function]} */
     const [stream, setStream] = useState(emptyStream)
 
     /** @type {Function} */
-    const cleanPlayer = useCallback(() => {
+    const beforeChangeVideo = useCallback(() => {
+        if (playerRef.current) {
+            playerRef.current.pause()
+        }
+        setLoading(true)
+        setStream(emptyStream)
+    }, [setLoading, setStream, emptyStream])
+
+    /** @type {Function} */
+    const beforeDestroy = useCallback(() => {
         if (playerRef.current) {
             playerRef.current.pause()
         }
@@ -463,11 +468,12 @@ const Player = ({ ...rest }) => {
         }
     }, [])
 
+
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
+        beforeChangeVideo()
         setAudio(audios[select])
-        setLoading(true)
-    }, [setAudio, audios, cleanPlayer, setLoading])
+    }, [setAudio, audios, beforeChangeVideo])
 
     /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
@@ -485,11 +491,13 @@ const Player = ({ ...rest }) => {
     const onChangeEp = useCallback(async (changeEp) => {
         await updatePlayHead({ profile, content, videoCompRef })
         if (changeEp && changeEp.total > 0) {
+            beforeChangeVideo()
             setPlayContent(changeEp.data[0])
         } else {
+            beforeDestroy()
             back.doBack()
         }
-    }, [videoCompRef, profile, content, setPlayContent, cleanPlayer])
+    }, [videoCompRef, profile, content, setPlayContent, beforeDestroy, beforeChangeVideo])
 
     /** @type {Function} */
     const onNextEp = useCallback(async (ev) => {
@@ -503,12 +511,6 @@ const Player = ({ ...rest }) => {
         await onChangeEp(await findNextEp({ profile, content, step: -1 }))
     }, [profile, content, onChangeEp])
 
-
-    useEffect(() => {  // loop playHead
-        if (videoCompRef.current) {
-            return updatePlayHeadLoop({ profile, content, videoCompRef })
-        }
-    }, [profile, content, videoCompRef])
 
     useEffect(() => {  // find audios, it's needed to find stream url
         setAudio(findAudio({ profile, audios }))
@@ -541,16 +543,21 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // create dash player
         if (stream.url) {
-            /**
-             * @todo onError ?
-             */
             Promise.all([
                 new Promise((res) => {
-                    playerRef.current = dashjs.MediaPlayer().create()
+                    if (!playerRef.current) {
+                        playerRef.current = dashjs.MediaPlayer().create()
+                        if (!_PLAY_TEST_) {
+                            playerRef.current.extend('RequestModifier', function() {
+                                return { modifyRequest: modifierRequest(profile) }
+                            })
+                        }
+                    }
+                    playerRef.current.initialize()
+                    playerRef.current.setAutoPlay(false)
+                    playerRef.current.attachSource(stream.url)
+                    playerRef.current.attachView(document.querySelector('video'))
                     if (!_PLAY_TEST_) {
-                        playerRef.current.extend('RequestModifier', function() {
-                            return { modifyRequest: modifierRequest(profile) }
-                        })
                         const widevineConfig = {  // Configuración para Widevine DRM
                             'com.widevine.alpha': {
                                 serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
@@ -568,10 +575,6 @@ const Player = ({ ...rest }) => {
                         playerRef.current.registerLicenseRequestFilter(requestLicense(profile))
                         playerRef.current.registerLicenseResponseFilter(decodeLicense)
                     }
-                    playerRef.current.initialize()
-                    playerRef.current.setAutoPlay(false)
-                    playerRef.current.attachView(document.querySelector('video'))
-                    playerRef.current.attachSource(stream.url)
                     res()
                 }),
                 setSubtitle(findSubtitle({ profile, ...stream })),
@@ -581,16 +584,17 @@ const Player = ({ ...rest }) => {
             }).catch(logger.error)
         }
         return () => {
-            if (!_PLAY_TEST_) {
-                if (stream.token) {
-                    api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
-                }
+            if (stream.token) {
+                api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
+            }
+            if (playerRef.current) {
+                playerRef.current.reset()
             }
         }
-    }, [setLoading, stream, setSubtitle, profile, setPreviews, customFetch, audio, cleanPlayer])
+    }, [setLoading, stream, setSubtitle, profile, setPreviews, customFetch, audio])
 
     useEffect(() => {  // attach subs
-        if (subtitle.locale) {
+        if (!loading && subtitle && subtitle.locale) {
             if (subtitle.locale === 'off') {
                 if (octopusRef.current) {
                     octopusRef.current.freeTrack()
@@ -605,7 +609,12 @@ const Player = ({ ...rest }) => {
                 })
             }
         }
-    }, [subtitle.locale, subtitle.url])
+        return () => {
+            if (octopusRef.current) {
+                octopusRef.current.freeTrack()
+            }
+        }
+    }, [subtitle, loading])
 
     useEffect(() => {
         if (!loading && content && playerRef.current) {
@@ -613,6 +622,12 @@ const Player = ({ ...rest }) => {
             playerRef.current.play()
         }
     }, [loading, content, playerRef])
+
+    useEffect(() => {  // loop playHead
+        if (!loading && videoCompRef.current) {
+            return updatePlayHeadLoop({ profile, content, videoCompRef })
+        }
+    }, [profile, content, videoCompRef, loading])
 
     useEffect(() => {  // clean subtitles octopus
         const onBack = (inEvent) => {
@@ -623,18 +638,14 @@ const Player = ({ ...rest }) => {
                 keycode = inEvent.which;
             }
             if (keycode === 461) {
-                cleanPlayer()
+                beforeDestroy()
             }
         }
         window.addEventListener('keydown', onBack)
         return () => {
             window.removeEventListener('keydown', onBack)
         }
-    }, [cleanPlayer])
-
-    useEffect(() => {
-        return cleanPlayer
-    }, [cleanPlayer])
+    }, [beforeDestroy])
 
     return (
         <div className={rest.className}>
