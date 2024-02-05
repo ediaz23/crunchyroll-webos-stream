@@ -78,7 +78,12 @@ export const customFetch = async (url, options = {}) => {
         const onFailure = (error) => {
             logger.error(`res error ${url}`)
             logger.error(error)
-            rej(error)
+            if (error.error) {
+                rej(new Error(error.error))
+            } else {
+                rej(error)
+            }
+
         }
         if (utils.isTv()) {
             webOS.service.request(serviceURL, {
