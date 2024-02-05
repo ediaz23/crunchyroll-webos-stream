@@ -20,9 +20,9 @@ class ResponseHack extends Response {
         } else {
             this.originUrl = ''
         }
-    }
-    get url() {
-        return this.originUrl
+        Object.defineProperty(this, 'url', {
+            get: () => { return this.originUrl },
+        })
     }
 }
 
@@ -56,7 +56,7 @@ export const customFetch = async (url, options = {}) => {
             }
         }
         const onSuccess = (data) => {
-            const { status, statusText, content, headers } = data
+            const { status, statusText, content, headers, resUrl } = data
             logger.debug(`res ${config.method} ${url} ${status}`)
             let newBody = undefined
             if (content) {
@@ -72,7 +72,7 @@ export const customFetch = async (url, options = {}) => {
                 status,
                 statusText,
                 headers,
-                url,
+                url: resUrl || url,
             }))
         }
         const onFailure = (error) => {
