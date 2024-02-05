@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
+import Heading from '@enact/ui/Heading'
 import Spotlight from '@enact/spotlight'
 
 import { Header, Panel } from '@enact/moonstone/Panels'
-import Heading from '@enact/moonstone/Heading'
 
 import $L from '@enact/i18n/$L'
 import { useSetRecoilState } from 'recoil'
@@ -82,7 +82,7 @@ const ProfilesPanel = ({ ...rest }) => {
                 <Logout />
             </Header>
             <Row align='center center' style={rowStyle}>
-                <Heading size='large'>
+                <Heading size='title'>
                     {$L('Who is watching?')}
                 </Heading>
             </Row>

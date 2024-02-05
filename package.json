@@ -22,7 +22,7 @@
         "start": "ares-launch com.crunchyroll.stream.app",
         "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
         "play": "npm run build && npm run install-tv && npm run start",
-        "play-1": "npm run build && npm run install-tv-1 && npm run start-1",
+        "play-1": "npm run build-dev && npm run install-tv-1 && npm run start-1",
         "play-p": "npm run build-p && npm run install-tv-1 && npm run start-1",
         "translate": "npx i18next-scanner --config ./i18next-scanner.config.react.js"
     },
