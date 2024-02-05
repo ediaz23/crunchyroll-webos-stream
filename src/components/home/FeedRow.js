@@ -48,9 +48,11 @@ const Poster = ({ item, image, itemSize, ...rest }) => {
             {playableTypes.includes(item.type) &&
                 <div className={css.contentTime}>{formatDurationMs(duration)}</div>
             }
+            {/*
             <Heading size="small">
                 {item.name}
             </Heading>
+            */}
         </NavigableDiv >
     )
 }
@@ -134,7 +136,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>
-            <Heading size="title" spacing="small" componentRef={compRef}>
+            <Heading size="title" spacing="small" componentRef={compRef} marqueeOn='hover'>
                 {feed.title}
             </Heading>
             <div style={{ height: `${itemHeight}px` }}>
