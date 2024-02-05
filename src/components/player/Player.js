@@ -445,20 +445,24 @@ const Player = ({ ...rest }) => {
     const [stream, setStream] = useState(emptyStream)
     /** @type {[StreamSession, Function]} */
     const [session, setSession] = useState(null)
+    /** @type {{current: Number}*/
+    const plauseTimeoutRef = useRef(null)
 
     /** @type {Function} */
     const beforeChangeVideo = useCallback(() => {
-        if (playerRef.current) {
-            playerRef.current.pause()
+        if (videoCompRef.current) {
+            videoCompRef.current.pause()
         }
         setLoading(true)
         setStream(emptyStream)
+        clearTimeout(plauseTimeoutRef.current)
+        plauseTimeoutRef.current = null
     }, [setLoading, setStream, emptyStream])
 
     /** @type {Function} */
     const beforeDestroy = useCallback(() => {
-        if (playerRef.current) {
-            playerRef.current.pause()
+        if (videoCompRef.current) {
+            videoCompRef.current.pause()
         }
         if (octopusRef.current) {
             octopusRef.current.dispose()
@@ -468,6 +472,8 @@ const Player = ({ ...rest }) => {
             playerRef.current.destroy()
             playerRef.current = null
         }
+        clearTimeout(plauseTimeoutRef.current)
+        plauseTimeoutRef.current = null
     }, [])
 
     /** @type {Function} */
@@ -512,6 +518,21 @@ const Player = ({ ...rest }) => {
         await onChangeEp(await findNextEp({ profile, content, step: -1 }))
     }, [profile, content, onChangeEp])
 
+    /** @type {Function} */
+    const onPause = useCallback(() => {
+        if (session) {
+            plauseTimeoutRef.current = setTimeout(() => {
+                beforeDestroy()
+                back.doBack()
+            }, session.maximumPauseSeconds * 1000)
+        }
+    }, [session, beforeDestroy])
+
+    /** @type {Function} */
+    const onPlay = useCallback(() => {
+        clearTimeout(plauseTimeoutRef.current)
+        plauseTimeoutRef.current = null
+    }, [])
 
     useEffect(() => {  // find audios, it's needed to find stream url
         setAudio(findAudio({ profile, audios }))
@@ -574,7 +595,7 @@ const Player = ({ ...rest }) => {
                     }
                     playerRef.current.initialize()
                     playerRef.current.setAutoPlay(false)
-                    playerRef.current.attachSource(stream.url)
+                    playerRef.current.attachSource(stream.url + '#t=' + content.playhead.playhead)
                     playerRef.current.attachView(document.querySelector('video'))
                     if (!_PLAY_TEST_) {
                         const widevineConfig = {  // Configuración para Widevine DRM
@@ -610,49 +631,28 @@ const Player = ({ ...rest }) => {
                 playerRef.current.reset()
             }
         }
-    }, [setLoading, stream, setSubtitle, profile, setPreviews, customFetch, audio])
-
-    useEffect(() => {  // if pass maximumPauseSeconds then go back.
-        let pauseTimeout = null
-        const onPause = () => {
-            if (session) {
-                pauseTimeout = setTimeout(() => {
-                    beforeDestroy()
-                    back.doBack()
-                }, session.maximumPauseSeconds * 1000)
-            }
-        }
-        const onPlay = () => {
-            clearTimeout(pauseTimeout)
-        }
-        if (playerRef.current) {
-            playerRef.current.on('playbackPaused', onPause)
-            playerRef.current.on('playbackPlaying', onPlay)
-        }
-        return () => {
-            if (playerRef.current) {
-                playerRef.current.off('playbackPaused', onPause)
-                playerRef.current.off('playbackPlaying', onPlay)
-            }
-            clearTimeout(pauseTimeout)
-        }
-    }, [session, loading, beforeDestroy])
+    }, [setLoading, content, stream, setSubtitle, profile, setPreviews, customFetch, audio])
 
     useEffect(() => {  // attach subs
-        if (!loading && subtitle && subtitle.locale) {
-            if (subtitle.locale === 'off') {
-                if (octopusRef.current) {
-                    octopusRef.current.freeTrack()
-                }
-            } else {
-                fetchProxy(subtitle.url).then(subUrl => {
+        if (!loading) {
+            let prom = Promise.resolve()
+            playerRef.current.pause()
+            if (subtitle && subtitle.locale) {
+                if (subtitle.locale === 'off') {
                     if (octopusRef.current) {
-                        octopusRef.current.setTrackByUrl(subUrl)
-                    } else {
-                        octopusRef.current = createOptapus({ subUrl })
+                        octopusRef.current.freeTrack()
                     }
-                })
+                } else {
+                    prom = fetchProxy(subtitle.url).then(subUrl => {
+                        if (octopusRef.current) {
+                            octopusRef.current.setTrackByUrl(subUrl)
+                        } else {
+                            octopusRef.current = createOptapus({ subUrl })
+                        }
+                    })
+                }
             }
+            prom.then(() => playerRef.current.play())
         }
         return () => {
             if (octopusRef.current) {
@@ -660,13 +660,6 @@ const Player = ({ ...rest }) => {
             }
         }
     }, [subtitle, loading])
-
-    useEffect(() => {  // re-init video
-        if (!loading && playerRef.current && content) {
-            playerRef.current.seek(content.playhead.playhead)
-            playerRef.current.play()
-        }
-    }, [loading, content, playerRef])
 
     useEffect(() => {  // loop playHead
         if (!loading && videoCompRef.current && content) {
@@ -702,6 +695,8 @@ const Player = ({ ...rest }) => {
                 onJumpBackward={onPrevEp}
                 onJumpForward={onNextEp}
                 onEnded={onNextEp}
+                onPause={onPause}
+                onPlay={onPlay}
                 loading={loading}
                 ref={videoCompRef}
                 noAutoPlay>
