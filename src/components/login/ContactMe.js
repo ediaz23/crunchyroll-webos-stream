@@ -4,8 +4,7 @@ import IconButton from '@enact/moonstone/IconButton'
 import { useSetRecoilState } from 'recoil'
 import PropTypes from 'prop-types'
 
-import $L from '@enact/i18n/$L'
-
+import { $L } from '../../hooks/language'
 import { pathState, contactBtnState } from '../../recoilConfig'
 import back from '../../back'
 

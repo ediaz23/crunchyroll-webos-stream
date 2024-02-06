@@ -1,10 +1,11 @@
+
 import { useEffect, useCallback } from 'react'
 import { useSetRecoilState } from 'recoil'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panel } from '@enact/moonstone/Panels'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../hooks/language'
 import Alert from '../components/Alert'
 import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
 import back from '../back'

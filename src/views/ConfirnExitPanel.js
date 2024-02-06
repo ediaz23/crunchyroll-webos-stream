@@ -1,8 +1,9 @@
+
 import { useCallback, } from 'react'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { Panel } from '@enact/moonstone/Panels'
-import $L from '@enact/i18n/$L'
 
+import { $L } from '../hooks/language'
 import Alert from '../components/Alert'
 import { pathState, initScreenState } from '../recoilConfig'
 import back from '../back'

@@ -2,10 +2,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import Item from '@enact/moonstone/Item'
 import classNames from 'classnames'
-
 import PropTypes from 'prop-types'
-import $L from '@enact/i18n/$L'
 
+import { $L } from '../../hooks/language'
 import Scroller from '../../patch/Scroller'
 import api from '../../api'
 import css from './ContentGrid.module.less'

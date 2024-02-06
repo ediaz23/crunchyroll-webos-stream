@@ -1,9 +1,9 @@
+
 import { useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
 import { Panel, Header } from '@enact/moonstone/Panels'
 import Heading from '@enact/moonstone/Heading'
 
-import $L from '@enact/i18n/$L'
 import { useRecoilValue } from 'recoil'
 
 import ProfileDetail from '../components/profile/Detail'
@@ -11,7 +11,7 @@ import ContactMe from '../components/login/ContactMe'
 import Logout from '../components/login/Logout'
 
 import { currentProfileState } from '../recoilConfig'
-import { useMapLang } from '../hooks/language'
+import { useMapLang, $L } from '../hooks/language'
 import api from '../api'
 
 

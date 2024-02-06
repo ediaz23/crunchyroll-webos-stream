@@ -1,10 +1,11 @@
+
 import { useCallback, useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
 import { Header, Panel } from '@enact/moonstone/Panels'
 
-import $L from '@enact/i18n/$L'
 import { useSetRecoilState, useRecoilState } from 'recoil'
 
+import { $L } from '../hooks/language'
 import Login from '../components/login/Login'
 import ContactMe from '../components/login/ContactMe'
 import Message from '../components/Message'

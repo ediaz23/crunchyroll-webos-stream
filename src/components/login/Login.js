@@ -1,10 +1,11 @@
+
 import { Row, Column } from '@enact/ui/Layout'
 import Input from '@enact/moonstone/Input'
 import Button from '@enact/moonstone/Button'
 import Heading from '@enact/moonstone/Heading'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import css from './Login.module.less'
 
 

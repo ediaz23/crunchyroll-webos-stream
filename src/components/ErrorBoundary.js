@@ -1,5 +1,7 @@
+
 import { Component } from 'react'
-import $L from '@enact/i18n/$L'
+
+import { $L } from '../hooks/language'
 import ErrorPanel from '../views/ErrorPanel'
 import logger from '../logger'
 

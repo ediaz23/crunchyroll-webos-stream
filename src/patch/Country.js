@@ -1,12 +1,13 @@
 
-import ilib from 'ilib'
-import Utils from 'ilib/lib/Utils'
-import Country from 'ilib/lib/Country'
+//import ilib from 'ilib'
+//import Utils from 'ilib/lib/Utils'
+//import Country from 'ilib/lib/Country'
 
 
 /**
  * Patch Country class, for region419 returing wrong data
  */
+/*
 export default class extends Country {
     constructor(options) {
 
@@ -47,4 +48,4 @@ export default class extends Country {
         super(options)
     }
 }
-
+*/

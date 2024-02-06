@@ -2,15 +2,14 @@
 import { useEffect, useCallback, useState, useMemo } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
 import Spotlight from '@enact/spotlight'
-
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import Scroller from '../../patch/Scroller'
 import { calculatePlayheadProgress } from './Seasons'
 import { ContentHeader } from '../home/ContentBanner'

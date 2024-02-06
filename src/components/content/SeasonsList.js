@@ -2,12 +2,12 @@
 import { useEffect, useCallback, useRef } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
-import $L from '@enact/i18n/$L'
 import Marquee from '@enact/moonstone/Marquee'
 import VirtualList from '@enact/moonstone/VirtualList'
 
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import Navigable from '../../wrappers/Navigable'
 import css from './ContentDetail.module.less'
 

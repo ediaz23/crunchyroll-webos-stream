@@ -7,10 +7,10 @@ import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDeco
 import { Column } from '@enact/ui/Layout'
 import Icon from '@enact/moonstone/Icon'
 import Marquee from '@enact/moonstone/Marquee'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import { $L } from '../../hooks/language'
 import Navigable from '../../wrappers/Navigable'
 import css from './Toolbar.module.less'
 

@@ -5,14 +5,11 @@ import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
 import LabeledIcon from '@enact/moonstone/LabeledIcon'
-
 import PropTypes from 'prop-types'
-import $L from '@enact/i18n/$L'
-
 import { useRecoilValue } from 'recoil'
 
+import { $L } from '../../hooks/language'
 import { currentProfileState } from '../../recoilConfig'
-
 import api from '../../api'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentBanner.module.less'

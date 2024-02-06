@@ -4,8 +4,8 @@ import IconButton from '@enact/moonstone/IconButton'
 import { PopupBase } from '@enact/moonstone/Popup'
 import FloatingLayer from '@enact/ui/FloatingLayer'
 import Skinnable from '@enact/moonstone/Skinnable'
-import $L from '@enact/i18n/$L'
 
+import { $L } from '../../hooks/language'
 import HomeContentBanner from '../home/ContentBanner'
 
 

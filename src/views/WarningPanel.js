@@ -5,10 +5,10 @@ import Button from '@enact/moonstone/Button'
 import { Panel, Header } from '@enact/moonstone/Panels'
 import BodyText from '@enact/moonstone/BodyText'
 import Spotlight from '@enact/spotlight'
-import $L from '@enact/i18n/$L'
 
 import { useSetRecoilState } from 'recoil'
 
+import { $L } from '../hooks/language'
 import { pathState, contactBtnState } from '../recoilConfig'
 import api from '../api'
 

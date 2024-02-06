@@ -2,10 +2,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Cell, Row} from '@enact/ui/Layout'
 import Button from '@enact/moonstone/Button'
-
 import PropTypes from 'prop-types'
-import $L from '@enact/i18n/$L'
 
+import { $L } from '../../hooks/language'
 import api from '../../api'
 
 

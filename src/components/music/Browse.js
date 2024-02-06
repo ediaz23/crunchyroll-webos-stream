@@ -3,8 +3,8 @@ import { useState, useCallback } from 'react'
 import { Column, Cell, Row } from '@enact/ui/Layout'
 import SelectableItem from '@enact/moonstone/SelectableItem'
 import PropTypes from 'prop-types'
-import $L from '@enact/i18n/$L'
 
+import { $L } from '../../hooks/language'
 import MusicFeed from './Feed'
 import ContentGrid from '../grid/ContentGrid'
 

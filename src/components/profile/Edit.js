@@ -1,12 +1,12 @@
+
 import { useCallback } from 'react'
 import { Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import CheckboxItem from '@enact/moonstone/CheckboxItem'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
-
 import { useSetRecoilState } from 'recoil'
 
+import { $L } from '../../hooks/language'
 import { currentProfileState } from '../../recoilConfig'
 import css from './Edit.module.less'
 import SelectLanguage from '../SelectLanguage'

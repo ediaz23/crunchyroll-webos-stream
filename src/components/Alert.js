@@ -8,9 +8,9 @@ import FloatingLayer from '@enact/ui/FloatingLayer'
 import Skinnable from '@enact/moonstone/Skinnable'
 import Heading from '@enact/moonstone/Heading'
 import Button from '@enact/moonstone/Button'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../hooks/language'
 import css from './Alert.module.less'
 
 

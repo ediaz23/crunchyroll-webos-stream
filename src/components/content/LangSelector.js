@@ -1,7 +1,6 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { Row, Cell } from '@enact/ui/Layout'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import { useSetRecoilState } from 'recoil'
@@ -10,7 +9,7 @@ import SelectLanguage from '../SelectLanguage'
 import { ContentHeader } from '../home/ContentBanner'
 import Field from '../Field'
 import { currentProfileState } from '../../recoilConfig'
-import { useMapLang } from '../../hooks/language'
+import { useMapLang, $L } from '../../hooks/language'
 import { useSaveOneProfileField } from '../../hooks/profile'
 import css from './ContentDetail.module.less'
 

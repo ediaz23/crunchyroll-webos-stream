@@ -3,11 +3,11 @@ import { useCallback } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
+import { $L } from '../../hooks/language'
 import { musicFeedProcessedState, musicFeedState, selectedContentState, } from '../../recoilConfig'
 import HomeContentBanner from '../home/ContentBanner'
 import HomeFeedRow from '../home/FeedRow'

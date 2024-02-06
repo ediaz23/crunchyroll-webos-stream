@@ -3,10 +3,9 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import Input from '@enact/moonstone/Input'
-
 import PropTypes from 'prop-types'
-import $L from '@enact/i18n/$L'
 
+import { $L } from '../../hooks/language'
 import SeasonButtons from './SeasonButtons'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'

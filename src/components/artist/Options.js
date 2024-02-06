@@ -4,9 +4,9 @@ import ri from '@enact/ui/resolution'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import VirtualList from '@enact/moonstone/VirtualList'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
 

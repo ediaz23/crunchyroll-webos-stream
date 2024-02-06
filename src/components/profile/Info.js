@@ -1,13 +1,13 @@
+
 import { Column } from '@enact/ui/Layout'
 import Image from '@enact/moonstone/Image'
 import Heading from '@enact/moonstone/Heading'
-import $L from '@enact/i18n/$L'
-import Locale from 'ilib/lib/Locale'
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import css from './Info.module.less'
 import Field from '../Field'
-import { useGetLanguage } from '../../hooks/language'
+import { useGetLanguage, getLocalInfo } from '../../hooks/language'
 import api from '../../api'
 
 
@@ -15,7 +15,7 @@ import api from '../../api'
  * @param {{profile: import('crunchyroll-js-api/src/types').Profile}}
  */
 const ProfileInfo = ({ profile, ...rest }) => {
-    const locale = new Locale()
+    const locale = getLocalInfo()
     const getLanguage = useGetLanguage()
 
     return (
@@ -34,7 +34,7 @@ const ProfileInfo = ({ profile, ...rest }) => {
                 {profile.email}
             </Field>
             <Field title={$L('App Language')}>
-                {getLanguage(locale.getSpec())}
+                {getLanguage(locale.spec)}
             </Field>
         </Column >
     )

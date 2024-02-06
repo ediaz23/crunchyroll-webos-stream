@@ -76,6 +76,8 @@
         "crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
         "dashjs": "^4.7.3",
         "i18n-iso-countries": "^7.9.0",
+        "i18n-iso-m49": "^1.0.0",
+        "i18next": "^23.8.2",
         "ilib": "^14.19.0",
         "libass-wasm": "^4.1.0",
         "prop-types": "^15.8.1",

@@ -1,11 +1,11 @@
+
 import { useCallback, useState } from 'react'
 import IconButton from '@enact/moonstone/IconButton'
 import Button from '@enact/moonstone/Button'
 import { useSetRecoilState } from 'recoil'
-
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import Alert from '../Alert'
 import { pathState, initScreenState } from '../../recoilConfig'
 import api from '../../api'

@@ -1,13 +1,12 @@
+
 import { useCallback, useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
 import Heading from '@enact/ui/Heading'
 import Spotlight from '@enact/spotlight'
-
 import { Header, Panel } from '@enact/moonstone/Panels'
-
-import $L from '@enact/i18n/$L'
 import { useSetRecoilState } from 'recoil'
 
+import { $L } from '../hooks/language'
 import { pathState, currentProfileState, homeFeedState, homefeedReadyState } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'

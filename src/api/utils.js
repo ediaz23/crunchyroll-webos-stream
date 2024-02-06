@@ -1,6 +1,6 @@
 
 import { localStore, CrunchyrollError } from 'crunchyroll-js-api'
-import $L from '@enact/i18n/$L'
+import { $L } from '../hooks/language'
 import { ERROR_CODES } from '../const'
 import logger from '../logger'
 import { customFetch } from '../hooks/customFetch'

@@ -1,10 +1,10 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { Panel } from '@enact/moonstone/Panels'
-import $L from '@enact/i18n/$L'
 
 import { useRecoilValue } from 'recoil'
 
+import { $L } from '../hooks/language'
 import { currentProfileState, selectedContentState } from '../recoilConfig'
 import ContentDetail from '../components/content/ContentDetail'
 import Artist from '../components/artist/Artist'

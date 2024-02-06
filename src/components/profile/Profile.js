@@ -1,10 +1,11 @@
+
 import { Row, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import IconButton from '@enact/moonstone/IconButton'
 import Image from '@enact/moonstone/Image'
-import $L from '@enact/i18n/$L'
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import css from './Profile.module.less'
 import Navigable from '../../wrappers/Navigable'
 import api from '../../api'
