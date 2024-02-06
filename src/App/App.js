@@ -1,7 +1,6 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import languages from '@cospired/i18n-iso-languages'
-import LocaleInfo from 'ilib/lib/LocaleInfo'
 import I18nDecorator from '@enact/i18n/I18nDecorator'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
@@ -21,6 +20,7 @@ import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
 import useCustomFetch from '../hooks/customFetch'
+import { getLocalInfo } from '../hooks/language'
 import api from '../api'
 import utils from '../utils'
 import back from '../back'
@@ -107,7 +107,7 @@ const App = ({ ...rest }) => {
 const AppLocal = I18nDecorator({
     resources: [{
         resource: options => new Promise(res => {
-            const localeInfo = new LocaleInfo(options.locale).getLocale()
+            const localeInfo = getLocalInfo(options.locale)
             import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
                 .then(val => options.onLoad(val)).then(res).catch(res)
         }),

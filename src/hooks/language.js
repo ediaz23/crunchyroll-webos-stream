@@ -36,4 +36,18 @@ const mapLang = lang => {
 
 export const useMapLang = () => mapLang
 
+/**
+ * @param {String} locale
+ * @return {{language: String, region: String, spec: String}}
+ */
+export const getLocalInfo = (locale) => {
+    const [language, region] = locale.split('-')
+    return {
+        language,
+        region,
+        spec: locale
+    }
+}
+
+
 export default useGetLanguage
