@@ -67,7 +67,6 @@
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.2.0",
         "@enact/core": "^4.7.9",
-        "@enact/i18n": "^4.7.9",
         "@enact/moonstone": "^4.5.5",
         "@enact/spotlight": "^4.7.9",
         "@enact/ui": "^4.7.9",
@@ -78,7 +77,6 @@
         "i18n-iso-countries": "^7.9.0",
         "i18n-iso-m49": "^1.0.0",
         "i18next": "^23.8.2",
-        "ilib": "^14.19.0",
         "libass-wasm": "^4.1.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
