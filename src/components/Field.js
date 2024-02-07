@@ -24,7 +24,10 @@ const Field = ({ title, children, ...rest }) => {
 
 Field.propTypes = {
     title: PropTypes.string,
-    children: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.string,
+    ]).isRequired,
 }
 
 export default Field
