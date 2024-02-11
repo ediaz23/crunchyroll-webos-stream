@@ -1,5 +1,5 @@
 
-import dashjs from 'dashjs'
+import Hls from 'hls.js'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
@@ -17,7 +17,7 @@ import api from '../../api'
 import { getContentParam, fetchProxy } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
-import { _PLAY_TEST_ } from '../../const'
+import { _PLAY_TEST_, _PLAYER_TYPE_ } from '../../const'
 import useCustomFetch from '../../hooks/customFetch'
 
 
@@ -405,6 +405,47 @@ const modifierRequest = (profile) => {
     }
 }
 
+/**
+ * @param {{current: import('dashjs').MediaPlayerClass}} playerRef
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('./AudioList').Audio} audio
+ * @param {Stream} stream
+ * @param {Object} content
+ */
+const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
+    const dashjs = (await import('dashjs')).default
+    if (!playerRef.current) {
+        playerRef.current = dashjs.MediaPlayer().create()
+        if (!_PLAY_TEST_) {
+            playerRef.current.extend('RequestModifier', function() {
+                return { modifyRequest: modifierRequest(profile) }
+            })
+        }
+    }
+    playerRef.current.initialize()
+    playerRef.current.setAutoPlay(false)
+    playerRef.current.attachSource(stream.url + '#t=' + content.playhead.playhead)
+    playerRef.current.attachView(document.querySelector('video'))
+    if (!_PLAY_TEST_) {
+        const widevineConfig = {  // Configuración para Widevine DRM
+            'com.widevine.alpha': {
+                serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
+                httpRequestHeaders: {
+                    'X-Cr-Content-Id': audio.guid,
+                    'X-Cr-Video-Token': stream.token,
+                },
+                serverCertificate: api.config.SERVER_CERTIFICATE,
+                audioRobustness: 'SW_SECURE_CRYPTO',
+                videoRobustness: 'SW_SECURE_CRYPTO',
+                sessionType: 'temporary',
+            },
+        }
+        playerRef.current.setProtectionData(widevineConfig)
+        playerRef.current.registerLicenseRequestFilter(requestLicense(profile))
+        playerRef.current.registerLicenseResponseFilter(decodeLicense)
+    }
+}
+
 const Player = ({ ...rest }) => {
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
@@ -434,6 +475,7 @@ const Player = ({ ...rest }) => {
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const videoCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
+    /** @type {{current: import('hls.js').default}*/
     const playerRef = useRef(null)
     /** @type {{current: import('libass-wasm')}*/
     const octopusRef = useRef(null)
@@ -585,37 +627,9 @@ const Player = ({ ...rest }) => {
         if (stream.url) {
             Promise.all([
                 new Promise((res) => {
-                    if (!playerRef.current) {
-                        playerRef.current = dashjs.MediaPlayer().create()
-                        if (!_PLAY_TEST_) {
-                            playerRef.current.extend('RequestModifier', function() {
-                                return { modifyRequest: modifierRequest(profile) }
-                            })
-                        }
+                    if (_PLAYER_TYPE_ === 'dash') {
+                        createDashPlayer(playerRef, profile, audio, stream, content).then(res)
                     }
-                    playerRef.current.initialize()
-                    playerRef.current.setAutoPlay(false)
-                    playerRef.current.attachSource(stream.url + '#t=' + content.playhead.playhead)
-                    playerRef.current.attachView(document.querySelector('video'))
-                    if (!_PLAY_TEST_) {
-                        const widevineConfig = {  // Configuración para Widevine DRM
-                            'com.widevine.alpha': {
-                                serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
-                                httpRequestHeaders: {
-                                    'X-Cr-Content-Id': audio.guid,
-                                    'X-Cr-Video-Token': stream.token,
-                                },
-                                serverCertificate: api.config.SERVER_CERTIFICATE,
-                                audioRobustness: 'SW_SECURE_CRYPTO',
-                                videoRobustness: 'SW_SECURE_CRYPTO',
-                                sessionType: 'temporary',
-                            },
-                        }
-                        playerRef.current.setProtectionData(widevineConfig)
-                        playerRef.current.registerLicenseRequestFilter(requestLicense(profile))
-                        playerRef.current.registerLicenseResponseFilter(decodeLicense)
-                    }
-                    res()
                 }),
                 setSubtitle(findSubtitle({ profile, ...stream })),
                 searchPreviews({ ...stream, customFetch }).then(setPreviews)
@@ -627,8 +641,10 @@ const Player = ({ ...rest }) => {
             if (stream.token) {
                 api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
             }
-            if (playerRef.current) {
-                playerRef.current.reset()
+            if (_PLAYER_TYPE_ === 'dash') {
+                if (playerRef.current) {
+                    playerRef.current.reset()
+                }
             }
         }
     }, [setLoading, content, stream, setSubtitle, profile, setPreviews, customFetch, audio])
@@ -636,7 +652,12 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // attach subs
         if (!loading) {
             let prom = Promise.resolve()
-            playerRef.current.pause()
+            if (_PLAYER_TYPE_ === 'dash') {
+                playerRef.current.pause()
+            } else if (_PLAYER_TYPE_ === 'hls') {
+                playerRef.current.media.pause()
+            }
+            /*
             if (subtitle && subtitle.locale) {
                 if (subtitle.locale === 'off') {
                     if (octopusRef.current) {
@@ -652,7 +673,14 @@ const Player = ({ ...rest }) => {
                     })
                 }
             }
-            prom.then(() => playerRef.current.play())
+            */
+            prom.then(() => {
+                if (_PLAYER_TYPE_ === 'dash') {
+                    playerRef.current.play()
+                } else if (_PLAYER_TYPE_ === 'hls') {
+                    playerRef.current.media.play()
+                }
+            })
         }
         return () => {
             if (octopusRef.current) {
