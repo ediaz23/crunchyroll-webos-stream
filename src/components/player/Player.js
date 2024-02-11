@@ -478,6 +478,46 @@ const onHlsError = (player, Hls) => {
 }
 
 /**
+ * @param {import('hls.js')} Hls
+ * @param {Function} reqFunc
+ * @return {Class}
+ */
+const getHlsLoader = (Hls, reqFunc) => {
+    let manifestUrl, levelUrl
+    return class extends Hls.DefaultConfig.loader {
+        load(context, config, callbacks) {
+            let originUrl
+            if (context.type === 'manifest') {
+                // ignore
+            } else if (context.type === 'level') {
+                originUrl = manifestUrl
+            } else {
+                originUrl = levelUrl
+            }
+            const req = { url: context.url, headers: {} }
+            if (req.url.startsWith('blob')) {
+                /** @type {Array<String>} */
+                const originUrlSplit = originUrl.split('/')
+                originUrlSplit.pop()
+                const blobParsedUrl = new URL(req.url)
+                const realUrl = new URL(blobParsedUrl.pathname)
+                originUrlSplit.push(realUrl.pathname.substring(1))
+                req.url = originUrlSplit.join('/')
+            }
+            if (context.type === 'manifest') {
+                manifestUrl = req.url
+            } else if (context.type === 'level') {
+                levelUrl = req.url
+            }
+            reqFunc(req).then(() => {
+                context.url = req.url
+                super.load(context, config, callbacks)
+            })
+        }
+    }
+}
+
+/**
  * @param {{current: import('hls.js').default}} playerRef
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {import('./AudioList').Audio} audio
@@ -487,48 +527,27 @@ const onHlsError = (player, Hls) => {
 const createHlsPlayer = async (playerRef, profile, audio, stream, content) => {
     const Hls = (await import('hls.js')).default
     const reqFunc = modifierDashRequest(profile)
-    let manifestUrl, levelUrl
 
     if (!playerRef.current) {
-        const config = {
-            progressive: true,
-            loader: class CustomLoader extends Hls.DefaultConfig.loader {
-                load(context, config, callbacks) {
-                    let originUrl
-                    if (context.type === 'manifest') {
-                        // ignore
-                    } else if (context.type === 'level') {
-                        originUrl = manifestUrl
-                    } else {
-                        originUrl = levelUrl
-                    }
-                    const req = { url: context.url, headers: {} }
-                    if (req.url.startsWith('blob')) {
-                        /** @type {Array<String>} */
-                        const originUrlSplit = originUrl.split('/')
-                        originUrlSplit.pop()
-                        const blobParsedUrl = new URL(req.url)
-                        const realUrl = new URL(blobParsedUrl.pathname)
-                        originUrlSplit.push(realUrl.pathname.substring(1))
-                        req.url = originUrlSplit.join('/')
-                    }
-                    if (context.type === 'manifest') {
-                        manifestUrl = req.url
-                    } else if (context.type === 'level') {
-                        levelUrl = req.url
-                    }
-                    reqFunc(req).then(() => {
-                        context.url = req.url
-                        super.load(context, config, callbacks)
-                    })
+        const config = { progressive: true }
+        if (!_PLAY_TEST_) {
+            config.loader = getHlsLoader(Hls, reqFunc)
+            config.drmSystems = {
+                'com.widevine.alpha': {
+                    licenseUrl: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
+                    serverCertificateUrl: `data:application/octet-stream;base64,${api.config.SERVER_CERTIFICATE}`,
                 }
-            },
+            }
+            config.drmSystemOptions = {
+                audioRobustness: 'SW_SECURE_CRYPTO',
+                videoRobustness: 'SW_SECURE_CRYPTO',
+                sessionType: 'temporary',
+            }
         }
         playerRef.current = new Hls(config)
     }
 
     return new Promise((res, rej) => {
-        //        playerRef.current.loadSource(stream.url + '#t=' + content.playhead.playhead)
         playerRef.current.config.capLevelToPlayerSize = true
         playerRef.current.on(Hls.Events.ERROR, onHlsError(playerRef.current, Hls, rej))
         playerRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -536,8 +555,7 @@ const createHlsPlayer = async (playerRef, profile, audio, stream, content) => {
             playerRef.current.attachMedia(document.querySelector('video'))
             res()
         })
-        //        stream.url + '#t=' + content.playhead.playhead
-        playerRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
+        playerRef.current.loadSource(stream.url + '#t=' + content.playhead.playhead)
     })
 }
 
@@ -682,7 +700,9 @@ const Player = ({ ...rest }) => {
                     .then(playhead => { content.playhead = playhead })
                     .then(() => {
                         setStream({
-                            url: 'http://localhost:8052/kimi.mpd',
+                            url: _PLAYER_TYPE_ === 'dash' ?
+                                'http://localhost:8052/kimi.mpd' :
+                                'http://localhost:8052/hls/kimi.m3u8',
                             bif: 'http://localhost:8052/kimi.bif',
                             subtitles: [{
                                 locale: 'es-419',

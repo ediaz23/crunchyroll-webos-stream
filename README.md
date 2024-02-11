@@ -122,6 +122,11 @@ MP4Box -dash 4000 -frag 4000 -rap -segment-name kimi_z_audio_segment_ kimi.mp4#a
 Copy all video.mpd and only Adaptation from audio.mpd
 ```
 
+## Create a m3u8 file
+
+```
+ffmpeg -i kimi.mp4 -threads 16 -c:v libx264 -c:a aac -b:v 1M -b:a 128k -flags +cgop -g 30 -hls_time 4 -hls_playlist_type vod -hls_segment_filename 'output_%03d.ts' -sn -f hls kimi.m3u8
+```
 
 ## ⚖ License
 
