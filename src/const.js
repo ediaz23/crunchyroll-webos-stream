@@ -9,7 +9,7 @@ export const DEV_FAST_SELECT = __DEV__ && false
 export const _PLAY_TEST_ = __DEV__ && false
 
 /** @type {'dash' | 'hls' | 'none'} */
-export const _PLAYER_TYPE_ = 'dash'
+export const _PLAYER_TYPE_ = 'hls'
 
 // posible values series
 /** @type {String} */

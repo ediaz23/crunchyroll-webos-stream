@@ -1,5 +1,4 @@
 
-import Hls from 'hls.js'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
@@ -392,7 +391,7 @@ const requestLicense = (profile) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @return {Function}
  */
-const modifierRequest = (profile) => {
+const modifierDashRequest = (profile) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
         const account = await getContentParam(profile)
@@ -413,12 +412,12 @@ const modifierRequest = (profile) => {
  * @param {Object} content
  */
 const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
-    const dashjs = (await import('dashjs')).default
     if (!playerRef.current) {
+        const dashjs = (await import('dashjs')).default
         playerRef.current = dashjs.MediaPlayer().create()
         if (!_PLAY_TEST_) {
             playerRef.current.extend('RequestModifier', function() {
-                return { modifyRequest: modifierRequest(profile) }
+                return { modifyRequest: modifierDashRequest(profile) }
             })
         }
     }
@@ -444,6 +443,102 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
         playerRef.current.registerLicenseRequestFilter(requestLicense(profile))
         playerRef.current.registerLicenseResponseFilter(decodeLicense)
     }
+}
+
+/**
+ * @param {import('hls.js').default} player
+ * @param {import('hls.js')} Hls
+ */
+const onHlsError = (player, Hls) => {
+    return (_event, data) => {
+        switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+                logger.error(`hsl: NETWORK_ERROR ${data.details}`)
+                if (data.response.code === 403) {
+                    player.destroy()
+                } else {
+                    if (['manifestLoadError', 'fragLoadError', 'levelLoadError'].includes(data.details)) {
+                        player.destroy()
+                    } else {
+                        setTimeout(() => player.startLoad(), 2000)
+                    }
+                }
+                break
+            case Hls.ErrorTypes.MEDIA_ERROR:
+                logger.error('hsl: MEDIA_ERROR trying recovery...')
+                player.recoverMediaError()
+                player.media.play().catch(logger.error)
+                break
+            default:
+                logger.error(`hsl: falta ${data.details}`)
+                player.destroy()
+                break
+        }
+    }
+}
+
+/**
+ * @param {{current: import('hls.js').default}} playerRef
+ * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('./AudioList').Audio} audio
+ * @param {Stream} stream
+ * @param {Object} content
+ */
+const createHlsPlayer = async (playerRef, profile, audio, stream, content) => {
+    const Hls = (await import('hls.js')).default
+    const reqFunc = modifierDashRequest(profile)
+    let manifestUrl, levelUrl
+
+    if (!playerRef.current) {
+        const config = {
+            progressive: true,
+            loader: class CustomLoader extends Hls.DefaultConfig.loader {
+                load(context, config, callbacks) {
+                    let originUrl
+                    if (context.type === 'manifest') {
+                        // ignore
+                    } else if (context.type === 'level') {
+                        originUrl = manifestUrl
+                    } else {
+                        originUrl = levelUrl
+                    }
+                    const req = { url: context.url, headers: {} }
+                    if (req.url.startsWith('blob')) {
+                        /** @type {Array<String>} */
+                        const originUrlSplit = originUrl.split('/')
+                        originUrlSplit.pop()
+                        const blobParsedUrl = new URL(req.url)
+                        const realUrl = new URL(blobParsedUrl.pathname)
+                        originUrlSplit.push(realUrl.pathname.substring(1))
+                        req.url = originUrlSplit.join('/')
+                    }
+                    if (context.type === 'manifest') {
+                        manifestUrl = req.url
+                    } else if (context.type === 'level') {
+                        levelUrl = req.url
+                    }
+                    reqFunc(req).then(() => {
+                        context.url = req.url
+                        super.load(context, config, callbacks)
+                    })
+                }
+            },
+        }
+        playerRef.current = new Hls(config)
+    }
+
+    return new Promise((res, rej) => {
+        //        playerRef.current.loadSource(stream.url + '#t=' + content.playhead.playhead)
+        playerRef.current.config.capLevelToPlayerSize = true
+        playerRef.current.on(Hls.Events.ERROR, onHlsError(playerRef.current, Hls, rej))
+        playerRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
+            /** @todo check double event listener */
+            playerRef.current.attachMedia(document.querySelector('video'))
+            res()
+        })
+        //        stream.url + '#t=' + content.playhead.playhead
+        playerRef.current.loadSource('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')
+    })
 }
 
 const Player = ({ ...rest }) => {
@@ -629,6 +724,8 @@ const Player = ({ ...rest }) => {
                 new Promise((res) => {
                     if (_PLAYER_TYPE_ === 'dash') {
                         createDashPlayer(playerRef, profile, audio, stream, content).then(res)
+                    } else if (_PLAYER_TYPE_ === 'hls') {
+                        createHlsPlayer(playerRef, profile, audio, stream, content).then(res)
                     }
                 }),
                 setSubtitle(findSubtitle({ profile, ...stream })),
