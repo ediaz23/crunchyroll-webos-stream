@@ -471,7 +471,7 @@ const onHlsError = (player, Hls) => {
             case Hls.ErrorTypes.MEDIA_ERROR:
                 logger.error('hsl: MEDIA_ERROR trying recovery...')
                 player.recoverMediaError()
-//                player.media.play().catch(logger.error)
+                //                player.media.play().catch(logger.error)
                 break
             default:
                 logger.error(`hsl: falta ${data.details}`)
@@ -750,7 +750,14 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, audios, audio, getLang, setStream])
 
-    useEffect(() => { setSession(stream.session) }, [stream, setSession])
+    useEffect(() => {
+        setSession(stream.session)
+        return () => {
+            if (stream.token) {
+                api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
+            }
+        }
+    }, [stream, setSession])
 
     useEffect(() => {  // renew session keep alive
         let sessionTimeout = null
@@ -785,9 +792,6 @@ const Player = ({ ...rest }) => {
             }).catch(logger.error)
         }
         return () => {
-            if (stream.token) {
-                api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
-            }
             if (_PLAYER_TYPE_ === 'dash') {
                 if (playerRef.current) {
                     playerRef.current.reset()
@@ -825,7 +829,7 @@ const Player = ({ ...rest }) => {
                 if (_PLAYER_TYPE_ === 'dash') {
                     playerRef.current.play()
                 } else if (_PLAYER_TYPE_ === 'hls') {
-//                    playerRef.current.media.play()
+                    //                    playerRef.current.media.play()
                 }
             })
         }
