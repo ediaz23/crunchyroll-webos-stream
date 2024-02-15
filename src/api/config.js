@@ -73,6 +73,9 @@ export const setNextContactDate = async () => {
     await localStore.setNewData({ nextDonation: nextDate })
 }
 
+/** @returns {import('crunchyroll-js-api/src/types').Device} */
+export const getDevice = () => storage.device
+
 export const setDeviceInformation = async () => {
     if (!storage.device) {
         /** @type {import('crunchyroll-js-api/src/types').Device} */

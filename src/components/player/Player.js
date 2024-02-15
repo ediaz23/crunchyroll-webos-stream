@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
+import dashjs from 'dashjs'
 import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
@@ -16,7 +17,7 @@ import api from '../../api'
 import { getContentParam, fetchProxy } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
-import { _PLAY_TEST_, _PLAYER_TYPE_ } from '../../const'
+import { _PLAY_TEST_ } from '../../const'
 import useCustomFetch from '../../hooks/customFetch'
 
 
@@ -175,16 +176,12 @@ const findSubtitle = ({ profile, subtitles }) => {
  * @returns {Promise<Stream>}
  */
 const findStream = async ({ profile, audios, audio, getLang }) => {
-    let data = {}, browser
-    if (_PLAYER_TYPE_ === 'dash') {
-        browser = 'chrome'
-    } else if (_PLAYER_TYPE_ === 'hls') {
-        browser = 'safari'
-    }
+    let data = {}
+
     if (['episode', 'movie'].includes(audio.type)) {
-        data = await api.drm.getStreams(profile, { episodeId: audio.guid, browser })
+        data = await api.drm.getStreams(profile, { episodeId: audio.guid })
     } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
-        data = await api.drm.getStreams(profile, { episodeId: audio.guid, browser, type: 'music' })
+        data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
     }
     /** @type {Stream} */
     const out = {
@@ -364,14 +361,15 @@ const createOptapus = ({ subUrl }) => {
  * @return {}
  */
 const decodeLicense = (res) => {
-    const uint8Array = new Uint8Array(res.data)
-    const textDecoder = new TextDecoder('utf-8')
-    const jsonString = textDecoder.decode(uint8Array)
-    const jsonObject = JSON.parse(jsonString)
-    const rawLicenseBase64 = jsonObject.license
-    const binaryString = atob(rawLicenseBase64)
-    const newUint8Array = Uint8Array.from(binaryString, char => char.charCodeAt(0))
-    res.data = newUint8Array.buffer
+    if (res.url.endsWith('widevine')) {
+        const uint8Array = new Uint8Array(res.data)
+        const textDecoder = new TextDecoder('utf-8')
+        const jsonString = textDecoder.decode(uint8Array)
+        const jsonObject = JSON.parse(jsonString)
+        const binaryString = atob(jsonObject.license)
+        const newUint8Array = Uint8Array.from(binaryString, char => char.charCodeAt(0))
+        res.data = newUint8Array.buffer
+    }
 }
 
 /**
@@ -384,10 +382,12 @@ const requestDashLicense = (profile) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
         const account = await getContentParam(profile)
-        /** @type {import('dashjs').LicenseRequest} */
-        const request = req
-        request.headers['Content-Type'] = 'application/octet-stream'
-        request.headers['Authorization'] = account.token
+        if (req.url.endsWith('widevine')) {
+            req.headers['Content-Type'] = 'application/octet-stream'
+        } else if (req.url.endsWith('playReady')) {
+            req.headers['Content-Type'] = 'text/xml'
+        }
+        req.headers['Authorization'] = account.token
     }
 }
 
@@ -417,7 +417,6 @@ const modifierDashRequest = (profile) => {
  */
 const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
     if (!playerRef.current) {
-        const dashjs = (await import('dashjs')).default
         playerRef.current = dashjs.MediaPlayer().create()
         if (!_PLAY_TEST_) {
             playerRef.current.extend('RequestModifier', function() {
@@ -430,8 +429,9 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
     playerRef.current.attachSource(stream.url + '#t=' + content.playhead.playhead)
     playerRef.current.attachView(document.querySelector('video'))
     if (!_PLAY_TEST_) {
-        const widevineConfig = {  // Configuración para Widevine DRM
+        const drmConfig = {
             'com.widevine.alpha': {
+                priority: 1,
                 serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
                 httpRequestHeaders: {
                     'X-Cr-Content-Id': audio.guid,
@@ -442,152 +442,34 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
                 videoRobustness: 'SW_SECURE_CRYPTO',
                 sessionType: 'temporary',
             },
+            'com.microsoft.playready': {
+                priority: 2,
+                serverURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/playReady',
+                httpRequestHeaders: {
+                    SOAPAction: '"http://schemas.microsoft.com/DRM/2007/03/protocols/AcquireLicense"',
+                    'X-Cr-Content-Id': audio.guid,
+                    'X-Cr-Video-Token': stream.token,
+                },
+                serverCertificate: api.config.SERVER_CERTIFICATE,
+                audioRobustness: 'SW_SECURE_CRYPTO',
+                videoRobustness: 'SW_SECURE_CRYPTO',
+                sessionType: 'temporary',
+            },
+            'com.apple.fairplay': {
+                priority: 3,
+                certificateURL: 'https://lic.drmtoday.com/license-server-fairplay/cert/',
+                licenseURL: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/fairPlay',
+                audioRobustness: 'SW_SECURE_CRYPTO',
+                videoRobustness: 'SW_SECURE_CRYPTO',
+                sessionType: 'temporary',
+            },
         }
-        playerRef.current.setProtectionData(widevineConfig)
+        playerRef.current.setProtectionData(drmConfig)
         playerRef.current.registerLicenseRequestFilter(requestDashLicense(profile))
         playerRef.current.registerLicenseResponseFilter(decodeLicense)
     }
 }
 
-/**
- * @param {import('hls.js').default} player
- * @param {import('hls.js')} Hls
- */
-const onHlsError = (player, Hls) => {
-    return (_event, data) => {
-        switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-                logger.error(`hsl: NETWORK_ERROR ${data.details}`)
-                if (data.response.code === 403) {
-                    player.destroy()
-                } else {
-                    if (['manifestLoadError', 'fragLoadError', 'levelLoadError'].includes(data.details)) {
-                        player.destroy()
-                    } else {
-                        setTimeout(() => player.startLoad(), 2000)
-                    }
-                }
-                break
-            case Hls.ErrorTypes.MEDIA_ERROR:
-                logger.error('hsl: MEDIA_ERROR trying recovery...')
-                player.recoverMediaError()
-                //                player.media.play().catch(logger.error)
-                break
-            default:
-                logger.error(`hsl: falta ${data.details}`)
-                player.destroy()
-                break
-        }
-    }
-}
-
-/**
- * @param {import('hls.js')} Hls
- * @param {Function} reqFunc
- * @return {Class}
- */
-const getHlsLoader = (Hls, reqFunc) => {
-    let manifestUrl, levelUrl
-    return class extends Hls.DefaultConfig.loader {
-        load(context, config, callbacks) {
-            let originUrl
-            if (context.type === 'manifest') {
-                // ignore
-            } else if (context.type === 'level') {
-                originUrl = manifestUrl
-            } else {
-                originUrl = levelUrl
-            }
-            const req = { url: context.url, headers: {} }
-            if (req.url.startsWith('blob')) {
-                /** @type {Array<String>} */
-                const originUrlSplit = originUrl.split('/')
-                originUrlSplit.pop()
-                const blobParsedUrl = new URL(req.url)
-                const realUrl = new URL(blobParsedUrl.pathname)
-                originUrlSplit.push(realUrl.pathname.substring(1))
-                req.url = originUrlSplit.join('/')
-            }
-            if (context.type === 'manifest') {
-                manifestUrl = req.url
-            } else if (context.type === 'level') {
-                levelUrl = req.url
-            }
-            reqFunc(req).then(() => {
-                context.url = req.url
-                super.load(context, config, callbacks)
-            })
-        }
-    }
-}
-
-/**
- * @fixme future cors error
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
- * @return {Function}
- */
-const requestHlsLicense = (profile) => {
-    return async (xhr) => {
-        /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
-        const account = await getContentParam(profile)
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.setRequestHeader('Authorization', account.token)
-        xhr.withCredentials = true;
-    }
-}
-
-/**
- * @param {{current: import('hls.js').default}} playerRef
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
- * @param {import('./AudioList').Audio} audio
- * @param {Stream} stream
- * @param {Object} content
- */
-const createHlsPlayer = async (playerRef, profile, audio, stream, content) => {
-    const Hls = (await import('hls.js')).default
-
-    return new Promise((res, rej) => {
-        if (!playerRef.current) {
-            let config = { progressive: true, autoStartLoad: true }
-            if (!_PLAY_TEST_) {
-                Object.assign(config, {
-                    loader: getHlsLoader(Hls, modifierDashRequest(profile)),
-                    drmSystems: {
-                        'com.widevine.alpha': {
-                            licenseUrl: 'https://cr-license-proxy.prd.crunchyrollsvc.com/v1/license/widevine',
-                            serverCertificateUrl: `data:application/octet-stream;base64,${api.config.SERVER_CERTIFICATE}`,
-                        }
-                    },
-                    drmSystemOptions: {
-                        audioRobustness: 'SW_SECURE_CRYPTO',
-                        videoRobustness: 'SW_SECURE_CRYPTO',
-                        sessionTypes: ['temporary'],
-                        sessionType: 'temporary',
-                    },
-                    licenseXhrSetup: requestHlsLicense(profile),
-                    licenseResponseCallback: (xhr) => {
-                        const licenseRes = { data: xhr.response }
-                        decodeLicense(licenseRes)
-                        return licenseRes.data
-                    },
-                    emeEnabled: true
-                })
-            }
-            playerRef.current = new Hls(config)
-            playerRef.current.config.capLevelToPlayerSize = true
-            playerRef.current.on(Hls.Events.ERROR, onHlsError(playerRef.current, Hls, rej))
-            playerRef.current.on(Hls.Events.MANIFEST_PARSED, () => {
-                /** @todo check double event listener */
-                playerRef.current.attachMedia(document.querySelector('video'))
-            })
-            playerRef.current.on(Hls.Events.MEDIA_ATTACHED, () => {
-                playerRef.current.startLoad(content.playhead.playhead)
-                res()
-            })
-        }
-        playerRef.current.loadSource(stream.url)
-    })
-}
 
 const Player = ({ ...rest }) => {
     /** @type {[Boolean, Function]} */
@@ -725,14 +607,12 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // find stream url
         if (audios.includes(audio)) {
-            if (_PLAY_TEST_) {
+            if (_PLAY_TEST_) {  // test stream
                 findPlayHead({ profile, content })
                     .then(playhead => { content.playhead = playhead })
                     .then(() => {
                         setStream({
-                            url: _PLAYER_TYPE_ === 'dash' ?
-                                'http://localhost:8052/kimi.mpd' :
-                                'http://localhost:8052/hls/kimi.m3u8',
+                            url: 'http://localhost:8052/kimi.mpd',
                             bif: 'http://localhost:8052/kimi.bif',
                             subtitles: [{
                                 locale: 'es-419',
@@ -757,7 +637,7 @@ const Player = ({ ...rest }) => {
                 api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
             }
         }
-    }, [stream, setSession])
+    }, [profile, audio, stream, setSession])
 
     useEffect(() => {  // renew session keep alive
         let sessionTimeout = null
@@ -778,13 +658,7 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // create dash player
         if (stream.url) {
             Promise.all([
-                new Promise((res) => {
-                    if (_PLAYER_TYPE_ === 'dash') {
-                        createDashPlayer(playerRef, profile, audio, stream, content).then(res)
-                    } else if (_PLAYER_TYPE_ === 'hls') {
-                        createHlsPlayer(playerRef, profile, audio, stream, content).then(res)
-                    }
-                }),
+                createDashPlayer(playerRef, profile, audio, stream, content),
                 setSubtitle(findSubtitle({ profile, ...stream })),
                 searchPreviews({ ...stream, customFetch }).then(setPreviews)
             ]).then(() => {
@@ -792,10 +666,8 @@ const Player = ({ ...rest }) => {
             }).catch(logger.error)
         }
         return () => {
-            if (_PLAYER_TYPE_ === 'dash') {
-                if (playerRef.current) {
-                    playerRef.current.reset()
-                }
+            if (playerRef.current) {
+                playerRef.current.reset()
             }
         }
     }, [setLoading, content, stream, setSubtitle, profile, setPreviews, customFetch, audio])
@@ -803,11 +675,7 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // attach subs
         if (!loading) {
             let prom = Promise.resolve()
-            if (_PLAYER_TYPE_ === 'dash') {
-                playerRef.current.pause()
-            } else if (_PLAYER_TYPE_ === 'hls') {
-                playerRef.current.media.pause()
-            }
+            //            playerRef.current.pause()
             /*
             if (subtitle && subtitle.locale) {
                 if (subtitle.locale === 'off') {
@@ -826,11 +694,7 @@ const Player = ({ ...rest }) => {
             }
             */
             prom.then(() => {
-                if (_PLAYER_TYPE_ === 'dash') {
-                    playerRef.current.play()
-                } else if (_PLAYER_TYPE_ === 'hls') {
-                    //                    playerRef.current.media.play()
-                }
+                //                playerRef.current.play()
             })
         }
         return () => {

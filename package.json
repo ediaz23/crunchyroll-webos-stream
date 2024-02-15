@@ -74,7 +74,6 @@
         "classnames": "^2.5.1",
         "crunchyroll-js-api": "git+https://github.com/ediaz23/crunchyroll-js-api.git",
         "dashjs": "^4.7.3",
-        "hls.js": "^1.5.4",
         "i18n-iso-countries": "^7.9.0",
         "i18n-iso-m49": "^1.0.0",
         "i18next": "^23.8.2",

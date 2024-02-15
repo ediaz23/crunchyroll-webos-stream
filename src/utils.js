@@ -59,9 +59,36 @@ export const getDuration = (content) => {
     return duration
 }
 
+/**
+ * Test drm system support
+ * @return {Promise}
+ */
+export const supportDRM = async () => {
+    const config = [{
+        initDataTypes: ['cenc'],
+        audioCapabilities: [{
+            contentType: 'audio/mp4;codecs="mp4a.40.2"'
+        }],
+        videoCapabilities: [{
+            contentType: 'video/mp4;codecs="avc1.42E01E"'
+        }]
+    }]
+    for await (const key of ['com.microsoft.playready', 'com.widevine.alpha', 'com.apple.fps']) {
+        try {
+            await window.navigator.requestMediaKeySystemAccess(key, config)
+            console.log(key, 'supported')
+        } catch (e) {
+            console.log(key, 'not supported')
+            console.log(e)
+        }
+    }
+
+}
+
 export default {
     isTv,
     stringifySorted,
     formatDurationMs,
     getDuration,
+    supportDRM
 }
