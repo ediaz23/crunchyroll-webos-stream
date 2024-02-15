@@ -21,6 +21,8 @@ import { _PLAY_TEST_ } from '../../const'
 import useCustomFetch from '../../hooks/customFetch'
 
 
+const URL_OBJECTS = {}
+
 /**
  * @typedef StreamSession
  * @type {Object}
@@ -403,8 +405,22 @@ const modifierDashRequest = (profile) => {
         const request = req
         request.headers = { ...req.headers }
         request.headers['Authorization'] = account.token
+        const urlBak = request.url
         req.url = await fetchProxy(request.url, request)
+        URL_OBJECTS[urlBak] = req.url
         return req
+    }
+}
+
+
+/**
+ * Free url object after being loaded
+ * @param {{request: {url: string}}}
+ */
+const freeUrlObjects = ({ request }) => {
+    if (URL_OBJECTS[request.url]) {
+        URL.revokeObjectURL(URL_OBJECTS[request.url])
+        delete URL_OBJECTS[request.url]
     }
 }
 
@@ -467,6 +483,8 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
         playerRef.current.setProtectionData(drmConfig)
         playerRef.current.registerLicenseRequestFilter(requestDashLicense(profile))
         playerRef.current.registerLicenseResponseFilter(decodeLicense)
+        playerRef.current.on(dashjs.MediaPlayer.events.MANIFEST_LOADING_FINISHED, freeUrlObjects)
+        playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, freeUrlObjects)
     }
 }
 
@@ -603,6 +621,11 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // find audios, it's needed to find stream url
         setAudio(findAudio({ profile, audios }))
+        return () => {
+            for (const url of Object.keys(URL_OBJECTS)) {
+                freeUrlObjects({ request: { url } })
+            }
+        }
     }, [profile, audios, setAudio])
 
     useEffect(() => {  // find stream url
@@ -656,18 +679,24 @@ const Player = ({ ...rest }) => {
     }, [profile, audio, stream, session, setSession])
 
     useEffect(() => {  // create dash player
+        /** @type {Array<String>} */
+        let previewsBak = null
         if (stream.url) {
-            Promise.all([
-                createDashPlayer(playerRef, profile, audio, stream, content),
-                setSubtitle(findSubtitle({ profile, ...stream })),
-                searchPreviews({ ...stream, customFetch }).then(setPreviews)
-            ]).then(() => {
+            const load = async () => {
+                await createDashPlayer(playerRef, profile, audio, stream, content)
+                setSubtitle(findSubtitle({ profile, ...stream }))
+                previewsBak = await searchPreviews({ ...stream, customFetch })
+                setPreviews(previewsBak)
                 setLoading(false)
-            }).catch(logger.error)
+            }
+            load().catch(console.error)
         }
         return () => {
             if (playerRef.current) {
                 playerRef.current.reset()
+            }
+            if (previewsBak) {
+                previewsBak.forEach(image => URL.revokeObjectURL(image))
             }
         }
     }, [setLoading, content, stream, setSubtitle, profile, setPreviews, customFetch, audio])
