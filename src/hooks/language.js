@@ -66,14 +66,18 @@ function parseLocale(str) {
  */
 export const getLocale = () => {
     let out
-    if (typeof (window.PalmSystem.locales) !== 'undefined' &&
-        typeof (window.PalmSystem.locales.UI) !== 'undefined' &&
-        window.PalmSystem.locales.UI.length > 0) {
-        out = parseLocale(window.PalmSystem.locales.UI)
-    } else if (typeof (window.PalmSystem.locale) !== 'undefined') {
-        out = parseLocale(window.PalmSystem.locale)
-    } else if (typeof (window.webOSSystem.locale) !== 'undefined') {
-        out = parseLocale(window.webOSSystem.locale)
+    if (window.PalmSystem) {
+        if (typeof (window.PalmSystem.locales) !== 'undefined' &&
+            typeof (window.PalmSystem.locales.UI) !== 'undefined' &&
+            window.PalmSystem.locales.UI.length > 0) {
+            out = parseLocale(window.PalmSystem.locales.UI)
+        } else if (typeof (window.PalmSystem.locale) !== 'undefined') {
+            out = parseLocale(window.PalmSystem.locale)
+        } else if (typeof (window.webOSSystem.locale) !== 'undefined') {
+            out = parseLocale(window.webOSSystem.locale)
+        } else {
+            out = window.navigator.language || window.navigator.userLanguage || 'en-US'
+        }
     } else {
         out = window.navigator.language || window.navigator.userLanguage || 'en-US'
     }
