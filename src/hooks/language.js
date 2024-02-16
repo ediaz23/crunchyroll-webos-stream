@@ -14,71 +14,71 @@ import i18nImporter from './i18nImporter.js'
  */
 export const $L = i18n.t
 
+
 /**
+ * @param {String} srt
+ * @returns {String}
+ */
 function parseLocale(str) {
     if (!str) return str;
 
     // take care of the libc style locale with a dot + script at the end
-    var dot = str.indexOf('.')
+    const dot = str.indexOf('.')
     if (dot > -1) {
-        str = str.substring(0, dot);
+        str = str.substring(0, dot)
     }
 
     // handle the posix default locale
-    if (str === "C") return "en-US";
+    if (str === 'C') return 'en-US';
 
-    var parts = str.replace(/_/g, '-').split(/-/g);
-    var localeParts = [];
+    const parts = str.replace(/_/g, '-').split(/-/g)
+    const localeParts = []
 
     if (parts.length > 0) {
         if (parts[0].length === 2 || parts[0].length === 3) {
             // language
-            localeParts.push(parts[0].toLowerCase());
+            localeParts.push(parts[0].toLowerCase())
 
             if (parts.length > 1) {
                 if (parts[1].length === 4) {
                     // script
-                    localeParts.push(parts[1][0].toUpperCase() + parts[1].substring(1).toLowerCase());
-                } else if (parts[1].length === 2 || parts[1].length == 3) {
+                    localeParts.push(parts[1][0].toUpperCase() + parts[1].substring(1).toLowerCase())
+                } else if (parts[1].length === 2 || parts[1].length === 3) {
                     // region
-                    localeParts.push(parts[1].toUpperCase());
+                    localeParts.push(parts[1].toUpperCase())
                 }
-
                 if (parts.length > 2) {
-                    if (parts[2].length === 2 || parts[2].length == 3) {
+                    if (parts[2].length === 2 || parts[2].length === 3) {
                         // region
-                        localeParts.push(parts[2].toUpperCase());
+                        localeParts.push(parts[2].toUpperCase())
                     }
                 }
             }
         }
     }
 
-    return localeParts.join('-');
+    return localeParts.join('-')
 }
-
-    case 'webos-webapp':
-    case 'webos':
-        // webOS
-        if (typeof(PalmSystem.locales) !== 'undefined' &&
-            typeof(PalmSystem.locales.UI) != 'undefined' &&
-            PalmSystem.locales.UI.length > 0) {
-            ilib.locale = parseLocale(PalmSystem.locales.UI);
-        } else if (typeof(PalmSystem.locale) !== 'undefined') {
-            ilib.locale = parseLocale(PalmSystem.locale);
-        } else if (typeof(webOSSystem.locale) !== 'undefined') {
-            ilib.locale = parseLocale(webOSSystem.locale);
-        } else {
-            ilib.locale = undefined;
-        }
-        break;
- */
 
 /**
  * Return current localae
  * @return {String}
  */
-export const getLocale = () => window.navigator.language || window.navigator.userLanguage || 'en'
+export const getLocale = () => {
+    let out
+    if (typeof (window.PalmSystem.locales) !== 'undefined' &&
+        typeof (window.PalmSystem.locales.UI) !== 'undefined' &&
+        window.PalmSystem.locales.UI.length > 0) {
+        out = parseLocale(window.PalmSystem.locales.UI)
+    } else if (typeof (window.PalmSystem.locale) !== 'undefined') {
+        out = parseLocale(window.PalmSystem.locale)
+    } else if (typeof (window.webOSSystem.locale) !== 'undefined') {
+        out = parseLocale(window.webOSSystem.locale)
+    } else {
+        out = window.navigator.language || window.navigator.userLanguage || 'en-US'
+    }
+    return out
+}
 
 /**
  * Returno info about locale
