@@ -1,8 +1,21 @@
 
+import fs from 'fs'
 import gulp from 'gulp'
 import { deleteAsync } from 'del'
 import { exec } from 'child_process'
 
+
+gulp.task('clean-ilib', (cb) => {
+    const fakeData = { files: [] }
+    const filename = './node_modules/ilib/locale/ilibmanifest.json'
+    fs.writeFile(filename, JSON.stringify(fakeData, null, '    '), 'utf8', (err) => {
+        if (err) {
+            cb(err)
+        } else {
+            cb()
+        }
+    })
+})
 
 gulp.task('clean', () =>
     deleteAsync('bin/**', { force: true })
