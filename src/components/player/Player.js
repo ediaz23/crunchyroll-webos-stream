@@ -17,7 +17,7 @@ import api from '../../api'
 import { getContentParam, fetchProxy } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
-import { _PLAY_TEST_ } from '../../const'
+import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import useCustomFetch from '../../hooks/customFetch'
 
 
@@ -635,11 +635,11 @@ const Player = ({ ...rest }) => {
                     .then(playhead => { content.playhead = playhead })
                     .then(() => {
                         setStream({
-                            url: 'http://localhost:8052/kimi.mpd',
-                            bif: 'http://localhost:8052/kimi.bif',
+                            url: `${_LOCALHOST_SERVER_}/kimi.mpd`,
+                            bif: `${_LOCALHOST_SERVER_}/kimi.bif`,
                             subtitles: [{
                                 locale: 'es-419',
-                                url: 'http://localhost:8052/kimi.ass'
+                                url: `${_LOCALHOST_SERVER_}/kimi.ass`
                             }],
                             audios: []
                         })

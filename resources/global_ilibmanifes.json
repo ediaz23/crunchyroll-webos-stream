@@ -1,0 +1,16 @@
+{
+    "files": [
+        "localeinfo.json",
+        "dateformats.json",
+        "unitfmt.json",
+        "en/localeinfo.json",
+        "en/dateformats.json",
+        "en/unitfmt.json",
+        "es/localeinfo.json",
+        "es/dateformats.json",
+        "es/unitfmt.json",
+        "es/419/localeinfo.json",
+        "es/419/dateformats.json",
+        "es/419/unitfmt.json"
+    ]
+}

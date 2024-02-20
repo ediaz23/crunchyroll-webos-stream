@@ -6,15 +6,16 @@ import { exec } from 'child_process'
 
 
 gulp.task('clean-ilib', (cb) => {
-    const fakeData = { files: [] }
-    const filename = './node_modules/ilib/locale/ilibmanifest.json'
-    fs.writeFile(filename, JSON.stringify(fakeData, null, '    '), 'utf8', (err) => {
-        if (err) {
-            cb(err)
-        } else {
-            cb()
-        }
-    })
+    try {
+        const fakeManifest = './resources/global_ilibmanifes.json'
+        const realManifest = './node_modules/ilib/locale/ilibmanifest.json'
+        const content = fs.readFileSync(fakeManifest, 'utf8')
+        fs.writeFileSync(realManifest, content, 'utf8')
+        cb()
+    } catch (err) {
+        cb(err)
+    }
+
 })
 
 gulp.task('clean', () =>
@@ -63,6 +64,14 @@ gulp.task('buildService-p', cb => {
 })
 
 gulp.task('app', cb => {
+    exec('ares-package --no-minify dist/ ./service/dist -o bin/', (err, stdout, stderr) => {
+        console.log(stdout)
+        console.log(stderr)
+        cb(err)
+    })
+})
+
+gulp.task('app-p', cb => {
     exec('ares-package dist/ ./service/dist -o bin/', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
@@ -75,6 +84,6 @@ gulp.task('cleanService', () => deleteAsync('service/dist/**', { force: true }))
 gulp.task('build', gulp.series('clean', 'pack', 'app'));
 gulp.task('build-service', gulp.series('installService', 'buildService'))
 gulp.task('build-dev', gulp.series('clean', 'pack', 'installService', 'buildService', 'app', 'cleanService'));
-gulp.task('build-p', gulp.series('clean', 'pack-p', 'installService', 'buildService-p', 'app', 'cleanService'));
+gulp.task('build-p', gulp.series('clean', 'pack-p', 'installService', 'buildService-p', 'app-p', 'cleanService'));
 
 export default gulp

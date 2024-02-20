@@ -7,7 +7,10 @@ import { Header, Panel } from '@enact/moonstone/Panels'
 import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
-import { pathState, currentProfileState, homeFeedState, homefeedReadyState } from '../recoilConfig'
+import {
+    pathState, currentProfileState, homeFeedState, homefeedReadyState,
+    selectedContentState
+} from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
 import Logout from '../components/login/Logout'
@@ -27,6 +30,8 @@ const ProfilesPanel = ({ ...rest }) => {
     const setHomeFeed = useSetRecoilState(homeFeedState)
     /** @type {Function} */
     const setHomefeedReady = useSetRecoilState(homefeedReadyState)
+    /** @type {Function} */
+    const setSelectedContent = useSetRecoilState(selectedContentState)
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -41,9 +46,10 @@ const ProfilesPanel = ({ ...rest }) => {
         setHomefeedReady(false)
         setHomeFeed([])
         setCurrentProfile(profile)
+        setSelectedContent(null)
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
-    }, [setCurrentProfile, setPath, setHomeFeed, setHomefeedReady])
+    }, [setCurrentProfile, setPath, setHomeFeed, setHomefeedReady, setSelectedContent])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {

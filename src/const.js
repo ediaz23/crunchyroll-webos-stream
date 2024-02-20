@@ -8,6 +8,8 @@ export const DEV_FAST_SELECT = __DEV__ && false
 /** @type {Boolean} */
 export const _PLAY_TEST_ = __DEV__ && false
 
+export const _LOCALHOST_SERVER_ = 'http://192.168.0.27:8052'
+
 // posible values series
 /** @type {String} */
 export const DEV_CONTENT_TYPE = null

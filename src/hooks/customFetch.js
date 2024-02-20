@@ -2,6 +2,7 @@
 import 'webostvjs'
 import utils from '../utils'
 import logger from '../logger'
+import { _LOCALHOST_SERVER_ } from '../const'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -85,6 +86,7 @@ export const customFetch = async (url, options = {}) => {
             }
 
         }
+
         if (utils.isTv()) {
             webOS.service.request(serviceURL, {
                 method: 'forwardRequest',
@@ -93,7 +95,7 @@ export const customFetch = async (url, options = {}) => {
                 onFailure
             })
         } else {
-            window.fetch('http://localhost:8052/webos2', {
+            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
