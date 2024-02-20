@@ -2,6 +2,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
+import LocaleInfo from 'ilib/lib/LocaleInfo'
+import I18nDecorator from '@enact/i18n/I18nDecorator'
+import regions from 'i18n-iso-m49'
+import countries from 'i18n-iso-countries'
+import languages from '@cospired/i18n-iso-languages'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
@@ -18,7 +23,6 @@ import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
 import useCustomFetch from '../hooks/customFetch'
-import { I18nDecorator } from '../hooks/language'
 import api from '../api'
 import utils from '../utils'
 import back from '../back'
@@ -102,7 +106,18 @@ const App = ({ ...rest }) => {
     )
 }
 
-const AppLocal = I18nDecorator(App)
+const AppLocal = I18nDecorator({
+    resources: [{
+        resource: async options => {
+            const localeInfo = new LocaleInfo(options.locale).getLocale()
+            const { default: countryData } = await import(`i18n-iso-countries/langs/${localeInfo.language}.json`)
+            const { default: regionData } = await import(`i18n-iso-m49/langs/${localeInfo.language}.json`)
+            const { default: langData } = await import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
+            regions.registerLocale(countries, countryData, regionData)
+            languages.registerLocale(langData)
+        },
+    }]
+}, App)
 
 const AppTheme = MoonstoneDecorator(AppLocal)
 

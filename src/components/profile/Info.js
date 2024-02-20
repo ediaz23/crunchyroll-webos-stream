@@ -3,11 +3,12 @@ import { Column } from '@enact/ui/Layout'
 import Image from '@enact/moonstone/Image'
 import Heading from '@enact/moonstone/Heading'
 import PropTypes from 'prop-types'
+import Locale from 'ilib/lib/Locale'
 
 import { $L } from '../../hooks/language'
 import css from './Info.module.less'
 import Field from '../Field'
-import { useGetLanguage, getLocalInfo } from '../../hooks/language'
+import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
 
 
@@ -15,7 +16,7 @@ import api from '../../api'
  * @param {{profile: import('crunchyroll-js-api/src/types').Profile}}
  */
 const ProfileInfo = ({ profile, ...rest }) => {
-    const locale = getLocalInfo()
+    const locale = new Locale()
     const getLanguage = useGetLanguage()
 
     return (
