@@ -311,7 +311,7 @@ const HomeFeed = ({ profile, homefeed }) => {
     return (
         <Column style={{ paddingLeft: '0.5rem' }}>
             <Cell size="50%">
-                {selectedContent && <HomeContentBanner content={selectedContent} />}
+                {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
             </Cell>
             <Cell>
                 <VirtualListNested

@@ -36,7 +36,7 @@ const Poster = ({ item, image, itemSize, ...rest }) => {
     }
 
     return (
-        <NavigableDiv {...rest} >
+        <NavigableDiv {...rest}>
             <Image src={image.source} sizing='none' style={image.size}>
                 {playableTypes.includes(item.type) &&
                     <div className={globalCss.progress} style={{ bottom: '1.8rem' }}>
@@ -48,11 +48,9 @@ const Poster = ({ item, image, itemSize, ...rest }) => {
             {playableTypes.includes(item.type) &&
                 <div className={css.contentTime}>{formatDurationMs(duration)}</div>
             }
-            {/*
-            <Heading size="small">
+            <Heading size="small" marqueeOn='hover' >
                 {item.name}
             </Heading>
-            */}
         </NavigableDiv >
     )
 }
