@@ -6,7 +6,7 @@
     "scripts": {
         "serve": "enact serve",
         "pack": "enact pack",
-        "pack-p": "enact pack -p",
+        "pack-p": "NODE_ENV=production enact pack -p",
         "watch": "enact pack --watch",
         "clean": "enact clean",
         "lint": "enact lint .",

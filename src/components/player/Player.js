@@ -704,8 +704,7 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // attach subs
         if (!loading) {
             let prom = Promise.resolve()
-            //            playerRef.current.pause()
-            /*
+            playerRef.current.pause()
             if (subtitle && subtitle.locale) {
                 if (subtitle.locale === 'off') {
                     if (octopusRef.current) {
@@ -721,9 +720,8 @@ const Player = ({ ...rest }) => {
                     })
                 }
             }
-            */
             prom.then(() => {
-                //                playerRef.current.play()
+                playerRef.current.play()
             })
         }
         return () => {

@@ -8,8 +8,9 @@ import { stringifySorted } from '../utils'
  * @param {String} name
  */
 async function setData(data, name) {
-    data[name] = true  // hack to avoid unused warning
-    data[name] = { ...await import(`./data/${name}`) }  // comment line to build production
+    if (process.env.NODE_ENV !== 'production') {
+        data[name] = { ...await import(`./data/${name}`) }
+    }
 }
 
 /**

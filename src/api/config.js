@@ -52,7 +52,7 @@ export const setInstalled = async () => {
     const nextDate = new Date()
 
     nextDate.setDate(today.getDate() + 3)
-    await localStore.setNewData({ installed: today, nextDonation: nextDate })
+    await localStore.setNewData({ installed: today, nextDonation: nextDate.toISOString() })
 }
 
 /**
@@ -70,7 +70,7 @@ export const setNextContactDate = async () => {
     const today = new Date()
     const nextDate = new Date()
     nextDate.setMonth(today.getMonth() + 3)  // mounth is 0-based
-    await localStore.setNewData({ nextDonation: nextDate })
+    await localStore.setNewData({ nextDonation: nextDate.toISOString() })
 }
 
 /** @returns {import('crunchyroll-js-api/src/types').Device} */

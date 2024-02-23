@@ -22,7 +22,7 @@ const WarningPanel = ({ ...rest }) => {
     const accept = useCallback(async () => {
         await api.config.setInstalled()
         setContactBtn(true)
-        setPath('/contact')
+        setPath('/login')
     }, [setPath, setContactBtn])
 
     useEffect(() => {
