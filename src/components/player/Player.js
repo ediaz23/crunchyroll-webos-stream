@@ -3,7 +3,6 @@ import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import dashjs from 'dashjs'
-import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -38,7 +37,8 @@ const URL_OBJECTS = {}
 /**
  * @typedef Stream
  * @type {Object}
- * @property {String} url
+ * @property {String} id
+ * @property {Array<{url: String, locale: String}>} urls
  * @property {String} bif
  * @property {String} token
  * @property {StreamSession} session
@@ -174,20 +174,27 @@ const findSubtitle = ({ profile, subtitles }) => {
     audios: Array<import('./AudioList').Audio>,
     audio: import('./AudioList').Audio,
     getLang: Function,
+    content: Object,
   }}
  * @returns {Promise<Stream>}
  */
-const findStream = async ({ profile, audios, audio, getLang }) => {
-    let data = {}
+const findStream = async ({ profile, audios, audio, getLang, content }) => {
+    let data = {}, urls = []
 
     if (['episode', 'movie'].includes(audio.type)) {
         data = await api.drm.getStreams(profile, { episodeId: audio.guid })
     } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
         data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
     }
+    if (data.hardSubs) {
+        urls = Object.keys(data.hardSubs).map(locale => {
+            return { locale, url: data.hardSubs[locale].url }
+        })
+    }
     /** @type {Stream} */
     const out = {
-        url: data.url,
+        id: content.id,
+        urls: [{ locale: 'off', url: data.url }, ...urls],
         bif: data.bifs,
         audios: audios,
         session: data.session,
@@ -331,34 +338,6 @@ const findNextEp = async ({ profile, content, step }) => {
 }
 
 /**
- * @todo manejar errores
- * @param {{
-    subUrl: String,
- }}
- * @returns {import('libass-wasm')}
- */
-const createOptapus = ({ subUrl }) => {
-    const octopusWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url)
-    const octopuslegacyWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker-legacy.js', import.meta.url)
-    const testFont = new URL('../../../resources/default.woff2', import.meta.url)
-    const _wasm = new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url)
-    return new SubtitlesOctopus({
-        video: document.querySelector('video'),
-        subUrl,
-        fonts: [testFont.href],
-        workerUrl: octopusWorkerUrl.href,
-        legacyWorkerUrl: octopuslegacyWorkerUrl.href,
-        onReady: () => {
-            logger.info('Optapus ready')
-        },
-        onError: (e) => {
-            logger.error(e)
-        },
-        _wasm,
-    })
-}
-
-/**
  * @param {import('dashjs').LicenseResponse} res
  * @return {}
  */
@@ -425,13 +404,26 @@ const freeUrlObjects = ({ request }) => {
 }
 
 /**
+ * Clean all url object
+ */
+const freeAllUrlObjects = () => {
+    for (const url of Object.keys(URL_OBJECTS)) {
+        freeUrlObjects({ request: { url } })
+    }
+}
+
+
+
+/**
  * @param {{current: import('dashjs').MediaPlayerClass}} playerRef
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {import('./AudioList').Audio} audio
  * @param {Stream} stream
  * @param {Object} content
+ * @param {import('./SubtitleList').Subtitle} subtitle
  */
-const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
+const createDashPlayer = async (playerRef, profile, audio, stream, content, subtitle) => {
+    let url = null
     if (!playerRef.current) {
         playerRef.current = dashjs.MediaPlayer().create()
         if (!_PLAY_TEST_) {
@@ -440,9 +432,16 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content) => {
             })
         }
     }
+    url = stream.urls.find(val => val.locale === subtitle.locale)
+    if (!url) {
+        url = stream.urls.find(val => val.locale === 'off')
+    }
+    if (url) {
+        url = url.url
+    }
     playerRef.current.initialize()
     playerRef.current.setAutoPlay(false)
-    playerRef.current.attachSource(stream.url + '#t=' + content.playhead.playhead)
+    playerRef.current.attachSource(url + '#t=' + content.playhead.playhead)
     playerRef.current.attachView(document.querySelector('video'))
     if (!_PLAY_TEST_) {
         const drmConfig = {
@@ -505,7 +504,9 @@ const Player = ({ ...rest }) => {
         return Object.assign({}, playContent, playContent.episode_metadata || {})
     }, [playContent])
     /** @type {Array<import('./AudioList').Audio} */
-    const audios = useMemo(() => searchAudios({ content, getLang }), [content, getLang])
+    const audios = useMemo(() => {
+        return searchAudios({ content, getLang })
+    }, [content, getLang])
     const poster = useMemo(() => findPoster({ content }), [content])
     /** @type {[import('./AudioList').Audio, Function]} */
     const [audio, setAudio] = useState({})
@@ -518,13 +519,13 @@ const Player = ({ ...rest }) => {
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const videoCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
-    /** @type {{current: import('hls.js').default}*/
     const playerRef = useRef(null)
-    /** @type {{current: import('libass-wasm')}*/
-    const octopusRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
-        return { url: null, bif: null, token: null, session: null, audios: [], subtitles: [] }
+        return {
+            id: null, urls: null, bif: null, token: null, session: null, audios: [],
+            subtitles: []
+        }
     }, [])
     /** @type {[Stream, Function]} */
     const [stream, setStream] = useState(emptyStream)
@@ -534,38 +535,15 @@ const Player = ({ ...rest }) => {
     const plauseTimeoutRef = useRef(null)
 
     /** @type {Function} */
-    const beforeChangeVideo = useCallback(() => {
-        if (videoCompRef.current) {
-            videoCompRef.current.pause()
-        }
-        setLoading(true)
+    const changeAudio = useCallback((audioP) => {
         setStream(emptyStream)
-        clearTimeout(plauseTimeoutRef.current)
-        plauseTimeoutRef.current = null
-    }, [setLoading, setStream, emptyStream])
-
-    /** @type {Function} */
-    const beforeDestroy = useCallback(() => {
-        if (videoCompRef.current) {
-            videoCompRef.current.pause()
-        }
-        if (octopusRef.current) {
-            octopusRef.current.dispose()
-            octopusRef.current = null
-        }
-        if (playerRef.current) {
-            playerRef.current.destroy()
-            playerRef.current = null
-        }
-        clearTimeout(plauseTimeoutRef.current)
-        plauseTimeoutRef.current = null
-    }, [])
+        setAudio(audioP)
+    }, [setAudio, setStream, emptyStream])
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
-        beforeChangeVideo()
-        setAudio(audios[select])
-    }, [setAudio, audios, beforeChangeVideo])
+        changeAudio(audios[select])
+    }, [changeAudio, audios])
 
     /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
@@ -583,13 +561,12 @@ const Player = ({ ...rest }) => {
     const onChangeEp = useCallback(async (changeEp) => {
         await updatePlayHead({ profile, content, videoCompRef })
         if (changeEp && changeEp.total > 0) {
-            beforeChangeVideo()
-            setTimeout(() => setPlayContent({ ...changeEp.data[0] }), 100)
+            changeAudio({})
+            setPlayContent({ ...changeEp.data[0] })
         } else {
-            beforeDestroy()
             back.doBack()
         }
-    }, [videoCompRef, profile, content, setPlayContent, beforeDestroy, beforeChangeVideo])
+    }, [videoCompRef, profile, content, setPlayContent, changeAudio])
 
     /** @type {Function} */
     const onNextEp = useCallback(async (ev) => {
@@ -607,11 +584,10 @@ const Player = ({ ...rest }) => {
     const onPause = useCallback(() => {
         if (session) {
             plauseTimeoutRef.current = setTimeout(() => {
-                beforeDestroy()
                 back.doBack()
             }, session.maximumPauseSeconds * 1000)
         }
-    }, [session, beforeDestroy])
+    }, [session])
 
     /** @type {Function} */
     const onPlay = useCallback(() => {
@@ -620,51 +596,45 @@ const Player = ({ ...rest }) => {
     }, [])
 
     useEffect(() => {  // find audios, it's needed to find stream url
-        setAudio(findAudio({ profile, audios }))
-        return () => {
-            for (const url of Object.keys(URL_OBJECTS)) {
-                freeUrlObjects({ request: { url } })
-            }
-        }
-    }, [profile, audios, setAudio])
+        changeAudio(findAudio({ profile, audios }))
+    }, [profile, audios, changeAudio])
 
     useEffect(() => {  // find stream url
+        /** @type {Stream} */
+        let localStream = emptyStream
         if (audios.includes(audio)) {
-            if (_PLAY_TEST_) {  // test stream
-                findPlayHead({ profile, content })
-                    .then(playhead => { content.playhead = playhead })
-                    .then(() => {
-                        setStream({
-                            url: `${_LOCALHOST_SERVER_}/kimi.mpd`,
-                            bif: `${_LOCALHOST_SERVER_}/kimi.bif`,
-                            subtitles: [{
-                                locale: 'es-419',
-                                url: `${_LOCALHOST_SERVER_}/kimi.ass`
-                            }],
-                            audios: []
-                        })
-                    })
-            } else {
-                findPlayHead({ profile, content })
-                    .then(playhead => { content.playhead = playhead })
-                    .then(() => findStream({ profile, audios, audio, getLang }))
-                    .then(setStream)
+            const load = async () => {
+                content.playhead = await findPlayHead({ profile, content })
+                if (_PLAY_TEST_) {  // test stream
+                    localStream = {
+                        url: `${_LOCALHOST_SERVER_}/kimi.mpd`,
+                        bif: `${_LOCALHOST_SERVER_}/kimi.bif`,
+                        subtitles: [{
+                            locale: 'es-419',
+                            url: `${_LOCALHOST_SERVER_}/kimi.ass`
+                        }],
+                        audios: []
+                    }
+                } else {
+                    localStream = await findStream({ profile, audios, audio, getLang, content })
+                }
+                setStream(localStream)
+                setSession(localStream.session)
             }
+            load().catch(console.error)
         }
-    }, [profile, content, audios, audio, getLang, setStream])
-
-    useEffect(() => {
-        setSession(stream.session)
         return () => {
-            if (stream.token) {
-                api.drm.deleteToken(profile, { episodeId: audio.guid, token: stream.token })
+            if (localStream.token) {
+                api.drm.deleteToken(profile, { episodeId: audio.guid, token: localStream.token })
             }
+            setStream(emptyStream)
+            setSession(null)
         }
-    }, [profile, audio, stream, setSession])
+    }, [profile, content, audios, audio, getLang, setStream, emptyStream])
 
     useEffect(() => {  // renew session keep alive
         let sessionTimeout = null
-        if (session) {
+        if (session && stream.token) {
             sessionTimeout = setTimeout(() => {
                 /** @type {{paused: boolean, currentTime: number}} */
                 const state = videoCompRef.current.getMediaState()
@@ -681,79 +651,53 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // create dash player
         /** @type {Array<String>} */
         let previewsBak = null
-        if (stream.url) {
+        if (stream.urls) {
             const load = async () => {
-                await createDashPlayer(playerRef, profile, audio, stream, content)
                 setSubtitle(findSubtitle({ profile, ...stream }))
                 previewsBak = await searchPreviews({ ...stream, customFetch })
                 setPreviews(previewsBak)
+            }
+            load().catch(console.error)
+        }
+        return () => {
+            if (previewsBak) {
+                previewsBak.forEach(image => URL.revokeObjectURL(image))
+                previewsBak = null
+                setPreviews([])
+            }
+            setSubtitle(null)
+        }
+    }, [profile, stream, setSubtitle, setPreviews, customFetch])
+
+    useEffect(() => {  // attach subs
+        if (stream.urls && subtitle && stream.id === content.id) {
+            const load = async () => {
+                await createDashPlayer(playerRef, profile, audio, stream, content, subtitle)
                 setLoading(false)
+                playerRef.current.play()
             }
             load().catch(console.error)
         }
         return () => {
             if (playerRef.current) {
-                playerRef.current.reset()
+                playerRef.current.pause()
+                playerRef.current.destroy()
+                playerRef.current = null
             }
-            if (previewsBak) {
-                previewsBak.forEach(image => URL.revokeObjectURL(image))
+            freeAllUrlObjects()
+            if (plauseTimeoutRef.current) {
+                clearTimeout(plauseTimeoutRef.current)
+                plauseTimeoutRef.current = null
             }
+            setLoading(true)
         }
-    }, [setLoading, content, stream, setSubtitle, profile, setPreviews, customFetch, audio])
-
-    useEffect(() => {  // attach subs
-        if (!loading) {
-            let prom = Promise.resolve()
-            playerRef.current.pause()
-            if (subtitle && subtitle.locale) {
-                if (subtitle.locale === 'off') {
-                    if (octopusRef.current) {
-                        octopusRef.current.freeTrack()
-                    }
-                } else {
-                    prom = fetchProxy(subtitle.url).then(subUrl => {
-                        if (octopusRef.current) {
-                            octopusRef.current.setTrackByUrl(subUrl)
-                        } else {
-                            octopusRef.current = createOptapus({ subUrl })
-                        }
-                    })
-                }
-            }
-            prom.then(() => {
-                playerRef.current.play()
-            })
-        }
-        return () => {
-            if (octopusRef.current) {
-                octopusRef.current.freeTrack()
-            }
-        }
-    }, [subtitle, loading])
+    }, [profile, content, stream, audio, subtitle, setLoading])
 
     useEffect(() => {  // loop playHead
         if (!loading && videoCompRef.current && content) {
             return updatePlayHeadLoop({ profile, content, videoCompRef })
         }
     }, [profile, content, videoCompRef, loading])
-
-    useEffect(() => {  // clean subtitles octopus
-        const onBack = (inEvent) => {
-            let keycode
-            if (window.event) {
-                keycode = inEvent.keyCode;
-            } else if (inEvent.which) {
-                keycode = inEvent.which;
-            }
-            if (keycode === 461) {
-                beforeDestroy()
-            }
-        }
-        window.addEventListener('keydown', onBack)
-        return () => {
-            window.removeEventListener('keydown', onBack)
-        }
-    }, [beforeDestroy])
 
     return (
         <div className={rest.className}>
