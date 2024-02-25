@@ -87,7 +87,7 @@ const App = ({ ...rest }) => {
     return (
         <ErrorBoundary>
             <div {...rest}>
-                <RoutablePanels {...rest} path={path} onApplicationClose={closeApp}>
+                <RoutablePanels {...rest} path={path} onApplicationClose={closeApp} noCloseButton>
                     <Route path='init' component={InitialPanel} {...rest} />
                     <Route path='warning' component={WarningPanel} {...rest} />
                     <Route path='login' component={LoginPanel} {...rest} />
@@ -110,11 +110,20 @@ const AppLocal = I18nDecorator({
     resources: [{
         resource: async options => {
             const localeInfo = new LocaleInfo(options.locale).getLocale()
-            const { default: countryData } = await import(`i18n-iso-countries/langs/${localeInfo.language}.json`)
-            const { default: regionData } = await import(`i18n-iso-m49/langs/${localeInfo.language}.json`)
-            const { default: langData } = await import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
-            regions.registerLocale(countries, countryData, regionData)
-            languages.registerLocale(langData)
+
+            if (utils.isTv() && !__DEV__) {
+                const countryData = await utils.loadLibData(`i18n-iso-countries/langs/${localeInfo.language}.json`)
+                const regionData = await utils.loadLibData(`i18n-iso-m49/langs/${localeInfo.language}.json`)
+                const langData = await utils.loadLibData(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
+                regions.registerLocale(countries, countryData, regionData)
+                languages.registerLocale(langData)
+            } else {
+                const { default: countryData } = await import(`i18n-iso-countries/langs/${localeInfo.language}.json`)
+                const { default: regionData } = await import(`i18n-iso-m49/langs/${localeInfo.language}.json`)
+                const { default: langData } = await import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
+                regions.registerLocale(countries, countryData, regionData)
+                languages.registerLocale(langData)
+            }
         },
     }]
 }, App)

@@ -1,4 +1,9 @@
 
+import 'webostvjs'
+
+/** @type {{webOS: import('webostvjs').WebOS}} */
+const { webOS } = window
+
 /**
  * Rreturn if is a tv device
  * @returns {Boolean}
@@ -82,13 +87,51 @@ export const supportDRM = async () => {
             console.log(e)
         }
     }
-
 }
+
+/**
+ * Load data from local folder
+ * @param {String} file
+ * @return {Promise<Object>}
+ */
+export const loadData = async (file) => {
+    return new Promise((res, rej) => {
+        const path = webOS.fetchAppRootPath()
+        const xhr = new window.XMLHttpRequest()
+        xhr.open('GET', `${path}${file}`, true)
+        xhr.onload = () => {
+            if (xhr.status === 0 || xhr.readyState === 4) {
+                if (xhr.status === 200 || xhr.status === 0) {
+                    res(JSON.parse(xhr.responseText))
+                } else {
+                    rej(xhr)
+                }
+            } else {
+                rej(xhr)
+            }
+        }
+        xhr.onerror = rej
+        xhr.send()
+    })
+}
+
+
+/**
+ * Load data from node_module
+ * @param {String} file
+ * @return {Promise<Object>}
+ */
+export const loadLibData = async (file) => {
+    return loadData(`node_modules/${file}`)
+}
+
 
 export default {
     isTv,
     stringifySorted,
     formatDurationMs,
     getDuration,
-    supportDRM
+    supportDRM,
+    loadData,
+    loadLibData,
 }

@@ -1,5 +1,6 @@
 
 import fs from 'fs'
+import path from 'path'
 import gulp from 'gulp'
 import { deleteAsync } from 'del'
 import { exec } from 'child_process'
@@ -15,7 +16,35 @@ gulp.task('clean-ilib', (cb) => {
     } catch (err) {
         cb(err)
     }
+})
 
+gulp.task('copy-in18', (cb) => {
+    try {
+        const libs = ['i18n-iso-countries', 'i18n-iso-m49', '@cospired/i18n-iso-languages']
+        const manifest = './resources/ilibmanifest.json'
+        /** @type {{files: Array<String>}} */
+        const content = JSON.parse(fs.readFileSync(manifest, 'utf8'))
+        for (const file of content.files) {
+            const lang = file.split('/')[0]
+            for (const lib of libs) {
+                const jsonPath = `node_modules/${lib}/langs/${lang}.json`
+                if (fs.existsSync(jsonPath)) {
+                    const targetJsonPath = `./dist/${jsonPath}`
+                    const targetDir = path.dirname(targetJsonPath)
+
+                    if (!fs.existsSync(targetDir)) {
+                        fs.mkdirSync(targetDir, { recursive: true })
+                    }
+                    fs.copyFileSync(jsonPath, targetJsonPath)
+                } else {
+                    console.error('lang not found -> ' + jsonPath)
+                }
+            }
+        }
+        cb()
+    } catch (err) {
+        cb(err)
+    }
 })
 
 gulp.task('clean', () =>
@@ -84,6 +113,6 @@ gulp.task('cleanService', () => deleteAsync('service/dist/**', { force: true }))
 gulp.task('build', gulp.series('clean', 'pack', 'app'));
 gulp.task('build-service', gulp.series('installService', 'buildService'))
 gulp.task('build-dev', gulp.series('clean', 'pack', 'installService', 'buildService', 'app', 'cleanService'));
-gulp.task('build-p', gulp.series('clean', 'pack-p', 'installService', 'buildService-p', 'app-p', 'cleanService'));
+gulp.task('build-p', gulp.series('clean', 'pack-p', 'copy-in18', 'installService', 'buildService-p', 'app-p', 'cleanService'));
 
 export default gulp

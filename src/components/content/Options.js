@@ -167,7 +167,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                         </BodyText>
                     </Scroller>
                 </div>
-                <BodyText component='div' size='small'>
+                <BodyText component='div' size='small' style={{ marginBottom: '1em', marginTop: '1em' }}>
                     {Array.from({ length: 5 }, (_v, i) =>
                         <IconButton size='small' key={i} data-star={i}
                             onClick={updateRating}>
