@@ -24,13 +24,15 @@ const Rating = ({ profile, content, ...rest }) => {
     const doRating = useCallback(ev => {
         /** @type {{target: HTMLElement}} */
         const { target } = ev
-        const newRating = target.parentElement.getAttribute('id')
+        const newRating = target.parentElement.dataset.rating
         if (rating === newRating) {
             api.review.removeRating(profile, shortContent)
                 .then(() => setRating(''))
+                .catch(console.error)
         } else {
             api.review.updateEpisodeRating(profile, { ...shortContent, rating: newRating })
                 .then(() => setRating(newRating))
+                .catch(console.error)
         }
     }, [profile, shortContent, setRating, rating])
 
@@ -39,13 +41,13 @@ const Rating = ({ profile, content, ...rest }) => {
             if (data && data.rating) {
                 setRating(data.rating)
             }
-        })
+        }).catch(console.error)
     }, [profile, shortContent, setRating])
 
     return (
         <>
             <IconButton backgroundOpacity="lightTranslucent"
-                id='down'
+                data-rating='down'
                 selected={rating === 'down'}
                 onClick={doRating}
                 css={{ iconButton: css.IconButtonCustomColor }}
@@ -53,7 +55,7 @@ const Rating = ({ profile, content, ...rest }) => {
                 &#x1F44E;
             </IconButton>
             <IconButton backgroundOpacity="lightTranslucent"
-                id='up'
+                data-rating='up'
                 selected={rating === 'up'}
                 onClick={doRating}
                 css={{ iconButton: css.IconButtonCustomColor }}
