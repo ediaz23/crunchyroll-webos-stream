@@ -55,7 +55,8 @@ const ProfilesPanel = ({ ...rest }) => {
         setMusicFeedExpiration(null)
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
-    }, [setCurrentProfile, setPath, setHomeFeed, setHomefeedReady, setSelectedContent])
+    }, [setCurrentProfile, setPath, setHomeFeed, setHomefeedReady, setSelectedContent,
+        setMusicFeedExpiration, setHomeFeedExpiration])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {
