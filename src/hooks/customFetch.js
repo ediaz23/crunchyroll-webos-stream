@@ -9,8 +9,7 @@ const { webOS } = window
 
 const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const CONCURRENT_REQ_LIMIT = 8
-/** @type {Array<Array<int>>} */
-const concurrentReqList = Array.from({ length: CONCURRENT_REQ_LIMIT }, () => [])
+let currentReqIndex = CONCURRENT_REQ_LIMIT
 
 /**
  * Hack class to set url property
@@ -89,21 +88,13 @@ export const customFetch = async (url, options = {}) => {
 
         }
         if (utils.isTv()) {
-            let currentReq = 0
-
-            for (let index = 1; index < CONCURRENT_REQ_LIMIT; ++index) {
-                if (concurrentReqList[index].length < concurrentReqList[currentReq].length) {
-                    currentReq = index
-                }
-            }
-            concurrentReqList[currentReq].push(concurrentReqList[currentReq].length)
+            const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
 
             webOS.service.request(serviceURL, {
                 method: `forwardRequest${currentReq}`,
                 parameters: { url, ...config },
                 onSuccess,
                 onFailure,
-                onComplete: () => { concurrentReqList[currentReq].pop() }
             })
         } else {
             window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
