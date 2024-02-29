@@ -47,11 +47,9 @@ const computeTitles = ({ content, nextContent }) => {
                 season = nextContent.season_number
                 episodeNumber = nextContent.episode_number
             }
-            description = nextContent.description
             watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
             subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title}`
         } else if (nextContent.type === 'movie') {
-            description = nextContent.description
             watch = `${$L('Watch')} ${nextContent.title}`
             subtitle = nextContent.title
         }
