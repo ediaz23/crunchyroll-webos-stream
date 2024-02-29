@@ -52,7 +52,10 @@ export const setInstalled = async () => {
     const nextDate = new Date()
 
     nextDate.setDate(today.getDate() + 3)
-    await localStore.setNewData({ installed: today, nextDonation: nextDate.toISOString() })
+    await localStore.setNewData({
+        installed: today.toISOString(),
+        nextDonation: nextDate.toISOString(),
+    })
 }
 
 /**

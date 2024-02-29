@@ -15,7 +15,6 @@ import Navigable from '../../wrappers/Navigable'
 import { formatDurationMs, getDuration } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
-import logger from '../../logger'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 
 const NavigableDiv = Navigable('div', '')
@@ -116,7 +115,6 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     }, [setHomefeedReady])  // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        logger.info(new Set(feed.items.map(val => val.type)))
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
                 series: 'GRDV0019R',
