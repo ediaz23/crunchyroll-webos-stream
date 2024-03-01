@@ -67,8 +67,8 @@ const HomePanel = (props) => {
     const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
-    /** @type {Boolean} */
-    const homefeedReady = useRecoilValue(homefeedReadyState)
+    /** @type {[Boolean, Function]} */
+    const [homefeedReady, setHomefeedReady] = useRecoilState(homefeedReadyState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
 
@@ -137,6 +137,12 @@ const HomePanel = (props) => {
         setHomefeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
         setMusicfeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
     ])
+
+    useEffect(() => {
+        return () => {
+            setHomefeedReady(false)
+        }
+    }, [setHomefeedReady])
 
     return (
         <Panel {...props}>
