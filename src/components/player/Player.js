@@ -165,7 +165,11 @@ const findAudio = ({ profile, audios }) => {
  * @returns {import('./SubtitleList').Subtitle}
  */
 const findSubtitle = ({ profile, subtitles }) => {
-    return subtitles.find(e => e.locale === profile.preferred_content_subtitle_language)
+    let sub = subtitles.find(e => e.locale === profile.preferred_content_subtitle_language)
+    if (!sub) {
+        sub = subtitles[0]
+    }
+    return sub
 }
 
 /**
