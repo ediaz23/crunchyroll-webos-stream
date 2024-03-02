@@ -26,7 +26,7 @@ const CategoryList = ({ profile, category, setCategory, setDelay, ...rest }) => 
     const selectCategory = useCallback((ev) => {
         if (ev.target && ev.target.id) {
             setCategory(ev.target.id)
-            setDelay(500)
+            setDelay(1000)
         }
     }, [setCategory, setDelay])
 
