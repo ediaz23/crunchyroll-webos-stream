@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
+import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { useSetRecoilState } from 'recoil'
@@ -38,6 +39,8 @@ const Artist = ({ profile, artist, ...rest }) => {
     const [videos, setVideos] = useState([])
     /** @type {[String, Function]} */
     const [selectContent, setSelectContent] = useState('')
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
 
     const selectVideo = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
@@ -58,6 +61,7 @@ const Artist = ({ profile, artist, ...rest }) => {
             item.playhead = { progress: 0 }
         }
         setVideos(data)
+        setLoading(false)
     }, [setVideos])
 
     useEffect(() => {
@@ -69,6 +73,7 @@ const Artist = ({ profile, artist, ...rest }) => {
     }, [artist])
 
     useEffect(() => {
+        setLoading(true)
         if (selectContent === 'videos') {
             api.music.getVideos(profile, artist.videos).then(preProcessVideos)
         } else if (selectContent === 'concerts') {
@@ -98,7 +103,13 @@ const Artist = ({ profile, artist, ...rest }) => {
                             <Options artist={artist} selectContent={setSelectContent} />
                         </Cell>
                         <Cell size="49%">
-                            <EpisodesList episodes={videos} selectEpisode={selectVideo} />
+                            {loading ?
+                                <Column align='center center'>
+                                    <Spinner />
+                                </Column>
+                                :
+                                <EpisodesList episodes={videos} selectEpisode={selectVideo} />
+                            }
                         </Cell>
                     </Row>
                 </Cell>

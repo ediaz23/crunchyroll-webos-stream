@@ -1,27 +1,28 @@
 
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import Item from '@enact/moonstone/Item'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 
-import { $L } from '../../hooks/language'
+import { useRecoilValue } from 'recoil'
+
+import { categoriesState } from '../../recoilConfig'
+
 import Scroller from '../../patch/Scroller'
-import api from '../../api'
 import css from './ContentGrid.module.less'
 
 
 /**
  * Show Category list
  * @param {{
-    profile: Object,
     category: String,
     setCategory: Function,
     setDelay: Function,
  }}
  */
-const CategoryList = ({ profile, category, setCategory, setDelay, ...rest }) => {
-    /** @type {[Array<{id: String, localization: Object}>, Function]} */
-    const [categories, setCategories] = useState([])
+const CategoryList = ({ category, setCategory, setDelay, ...rest }) => {
+    /** @type {Array<{id: String, localization: Object}>} */
+    const categories = useRecoilValue(categoriesState)
 
     const selectCategory = useCallback((ev) => {
         if (ev.target && ev.target.id) {
@@ -29,15 +30,6 @@ const CategoryList = ({ profile, category, setCategory, setDelay, ...rest }) => 
             setDelay(1000)
         }
     }, [setCategory, setDelay])
-
-    useEffect(() => {  // search categories
-        api.discover.getCategories(profile).then(({ data: categs }) => {
-            setCategories([
-                { id: 'all', localization: { title: $L('All') } },
-                ...categs
-            ])
-        })
-    }, [profile])
 
     return (
         <div className={css.scrollerContainer} {...rest}>
@@ -58,7 +50,6 @@ const CategoryList = ({ profile, category, setCategory, setDelay, ...rest }) => 
 }
 
 CategoryList.propTypes = {
-    profile: PropTypes.object.isRequired,
     category: PropTypes.string.isRequired,
     setCategory: PropTypes.func.isRequired,
     setDelay: PropTypes.func.isRequired,

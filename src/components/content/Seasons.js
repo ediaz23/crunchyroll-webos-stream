@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
-import { Row, Cell } from '@enact/ui/Layout'
+import { Row, Cell, Column } from '@enact/ui/Layout'
+import Spinner from '@enact/moonstone/Spinner'
 
 import PropTypes from 'prop-types'
 
@@ -56,6 +57,8 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
     const [season, setSeason] = useState({})
     /** @type {[Array<Object>, Function]} */
     const [episodes, setEpisodes] = useState([])
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
 
     /** @type {Function} */
     const selectSeason = useCallback(ev => {
@@ -69,11 +72,12 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
     }, [episodes, setContentToPlay])
 
     useEffect(() => {
+        setLoading(true)
         api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
             data.forEach(e => { e.episodes = [] })
             setSeason(data[0])
             setSeasons(data)
-        })
+        }).then(() => setLoading(false))
     }, [profile, series, setSeason])
 
     useEffect(() => {
@@ -95,13 +99,25 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
 
     return (
         <Row align='start space-between' {...rest}>
-            <Cell size="49%">
-                <ContentHeader content={series} />
-                <SeasonsList seasons={seasons} selectSeason={selectSeason} />
-            </Cell>
-            <Cell size="49%">
-                <EpisodesList episodes={episodes} selectEpisode={playEpisode} />
-            </Cell>
+            {loading ?
+                <Column align='center center' style={{ width: '100%' }}>
+                    <Spinner />
+                </Column>
+                :
+                <>
+                    <Cell size="49%">
+                        <ContentHeader content={series} />
+                        <SeasonsList seasons={seasons} selectSeason={selectSeason} />
+                    </Cell>
+                    <Cell size="49%">
+                        {episodes.length ?
+                            <EpisodesList episodes={episodes} selectEpisode={playEpisode} />
+                            :
+                            <Spinner />
+                        }
+                    </Cell>
+                </>
+            }
         </Row>
     )
 }

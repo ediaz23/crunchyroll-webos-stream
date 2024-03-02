@@ -1,7 +1,8 @@
 
 import { useCallback, useEffect, useState } from 'react'
-import { Row } from '@enact/ui/Layout'
+import { Row, Column } from '@enact/ui/Layout'
 import { Header, Panel } from '@enact/moonstone/Panels'
+import Spinner from '@enact/moonstone/Spinner'
 
 import { useSetRecoilState, useRecoilState } from 'recoil'
 
@@ -26,6 +27,8 @@ const LoginPanel = ({ ...rest }) => {
     const setInitScreenState = useSetRecoilState(initScreenState)
     /** @type {[Boolean, Function]}  */
     const [autoLogin, setAutoLogin] = useRecoilState(autoLoginState)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
 
     const makeLogin = useCallback(async () => {
         await api.auth.login()
@@ -64,6 +67,7 @@ const LoginPanel = ({ ...rest }) => {
                     setEmail(credentials.username)
                     setPassword(credentials.password)
                 }
+                setLoading(false)
             }
             if (autoLogin && await api.auth.getSession()) {
                 try {
@@ -76,21 +80,25 @@ const LoginPanel = ({ ...rest }) => {
             }
         }
         loadData()
-    }, [setEmail, setPassword, makeLogin, autoLogin])
-
-    const rowStyle = { marginTop: '1rem' }
+    }, [setEmail, setPassword, makeLogin, autoLogin, setLoading])
 
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
                 <ContactMe origin='login' />
             </Header>
-            <Row align='center center' style={rowStyle}>
-                <Login {...{ email, changeEmail, password, changePassword, doLogin, message }} />
-            </Row>
-            <Row align='center center' style={rowStyle}>
-                {message && <Message type='error' message={message} />}
-            </Row>
+            <Column align='center center'>
+                <Row align='center center'>
+                    {loading ?
+                        <Spinner />
+                        :
+                        <Login {...{ email, changeEmail, password, changePassword, doLogin, message }} />
+                    }
+                </Row>
+                <Row align='center center' style={{ marginTop: '1rem' }}>
+                    <Message type={message ? 'error' : 'empty'} message={message} />
+                </Row>
+            </Column>
         </Panel>
     )
 }

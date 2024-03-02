@@ -1,12 +1,13 @@
 
 import { useEffect, useCallback, useState, useMemo } from 'react'
-import { Row, Cell } from '@enact/ui/Layout'
+import { Row, Cell, Column } from '@enact/ui/Layout'
 import Spotlight from '@enact/spotlight'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
+import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
@@ -78,6 +79,8 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const [nextContent, setNextConent] = useState(null)
     /** @type {[Object, Function]} */
     const [isInWatchlist, setIsInWatchlist] = useState(false)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
     /** @type {{watch: String, description: String, subtitle: String, moreDetail: String}} */
     const { watch, description, subtitle, moreDetail } = useMemo(() => {
         return computeTitles({ content, nextContent })
@@ -103,102 +106,117 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
 
     useEffect(() => {
-        api.discover.getNext(profile, {
-            contentId: content.id,
-            contentType: content.type
-        }).then(async nextEp => {
-            if (nextEp && nextEp.total > 0) {
-                if (nextEp.data[0].type === 'movie') {
-                    setNextConent({ ...nextEp.data[0], ...nextEp.data[0].panel, panel: null })
+        const proms = []
+        proms.push(
+            api.discover.getNext(profile, {
+                contentId: content.id,
+                contentType: content.type
+            }).then(async nextEp => {
+                if (nextEp && nextEp.total > 0) {
+                    if (nextEp.data[0].type === 'movie') {
+                        setNextConent({ ...nextEp.data[0], ...nextEp.data[0].panel, panel: null })
+                    } else {
+                        setNextConent(nextEp.data[0])
+                    }
                 } else {
-                    setNextConent(nextEp.data[0])
+                    if (content.type === 'series') {
+                        const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
+                        const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
+                        const tmpEpisode = episodesData[0]
+                        await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
+                        tmpEpisode.type = 'episode'
+                        setNextConent(tmpEpisode)
+                    } else if (content.type === 'movie_listing') {
+                        const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: content.id })
+                        const tmpMovie = moviesData[0]
+                        await calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
+                        tmpMovie.type = 'movie'
+                        setNextConent({ ...tmpMovie, ...(tmpMovie.panel || {}), panel: null })
+                    }
                 }
-            } else {
-                if (content.type === 'series') {
-                    const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
-                    const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
-                    const tmpEpisode = episodesData[0]
-                    await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
-                    tmpEpisode.type = 'episode'
-                    setNextConent(tmpEpisode)
-                } else if (content.type === 'movie_listing') {
-                    const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: content.id })
-                    const tmpMovie = moviesData[0]
-                    await calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
-                    tmpMovie.type = 'movie'
-                    setNextConent({ ...tmpMovie, ...(tmpMovie.panel || {}), panel: null })
-                }
-            }
-        })
-        if (['series', 'movie_listing'].includes(content.type)) {
-            api.content.getWatchlistItems(profile, { contentIds: [content.id] }).then(res => {
-                setIsInWatchlist(res.total > 0)
             })
+        )
+        if (['series', 'movie_listing'].includes(content.type)) {
+            proms.push(
+                api.content.getWatchlistItems(profile, { contentIds: [content.id] }).then(res => {
+                    setIsInWatchlist(res.total > 0)
+                })
+            )
         }
-    }, [profile, content])
+        setLoading(true)
+        Promise.all(proms).then(() => setLoading(false))
+    }, [profile, content, setLoading])
 
     useEffect(() => {
-        Spotlight.focus('#play')
-        const interval = setInterval(() => {
-            if (document.querySelector('#play')) {
-                Spotlight.focus('#play')
-                clearInterval(interval)
-            }
-        }, 100)
+        let interval = null
+        if (!loading) {
+            interval = setInterval(() => {
+                if (document.querySelector('#play')) {
+                    Spotlight.focus('#play')
+                    clearInterval(interval)
+                }
+            }, 100)
+        }
         return () => clearInterval(interval)
-    }, [])
+    }, [loading])
 
     return (
         <Row {...rest}>
-            <Cell size='49%'>
-                <ContentHeader content={content} />
-                {subtitle &&
-                    <Heading size='small' spacing='small' className={css.firstData}>
-                        {subtitle}
-                    </Heading>
-                }
-                <div className={css.scrollerContainer}>
-                    <Scroller direction='vertical' horizontalScrollbar='hidden'
-                        verticalScrollbar='auto'>
-                        <BodyText size='small'>
-                            {description}
-                        </BodyText>
-                    </Scroller>
-                </div>
-                <BodyText component='div' size='small' style={{ marginBottom: '1em', marginTop: '1em' }}>
-                    {Array.from({ length: 5 }, (_v, i) =>
-                        <IconButton size='small' key={i} data-star={i}
-                            onClick={updateRating}>
-                            {(i < rating) ? 'star' : 'hollowstar'}
-                        </IconButton>
-                    )}
-                </BodyText>
-                <div className={css.scrollerContainer}>
-                    <Scroller direction='vertical' horizontalScrollbar='hidden'
-                        verticalScrollbar='visible'>
-                        {nextContent &&
-                            <Item id='play' onClick={playNextContent}>
-                                <Icon>play</Icon>
-                                <span>{watch}</span>
-                            </Item>
-                        }
-                        <Item onClick={moreEpisodes}>
-                            <Icon>series</Icon>
-                            <span>{moreDetail}</span>
-                        </Item>
-                        <Item onClick={changeSubs}>
-                            <Icon>audio</Icon>
-                            <span>{$L('Audio and Subtitles')}</span>
-                        </Item>
-                        {['series', 'movie_listing'].includes(content.type) && (
-                            <Item onClick={toggleWatchlist}>
-                                <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
-                                <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
-                            </Item>
+            {loading ?
+                <Column align='center center' style={{ height: 'auto', width: '100%' }}>
+                    <Spinner />
+                </Column>
+                :
+                <Cell size='49%'>
+                    <ContentHeader content={content} />
+                    {subtitle &&
+                        <Heading size='small' spacing='small' className={css.firstData}>
+                            {subtitle}
+                        </Heading>
+                    }
+                    <div className={css.scrollerContainer}>
+                        <Scroller direction='vertical' horizontalScrollbar='hidden'
+                            verticalScrollbar='auto'>
+                            <BodyText size='small'>
+                                {description}
+                            </BodyText>
+                        </Scroller>
+                    </div>
+                    <BodyText component='div' size='small' style={{ marginBottom: '1em', marginTop: '1em' }}>
+                        {Array.from({ length: 5 }, (_v, i) =>
+                            <IconButton size='small' key={i} data-star={i}
+                                onClick={updateRating}>
+                                {(i < rating) ? 'star' : 'hollowstar'}
+                            </IconButton>
                         )}
-                    </Scroller>
-                </div>
-            </Cell>
+                    </BodyText>
+                    <div className={css.scrollerContainer}>
+                        <Scroller direction='vertical' horizontalScrollbar='hidden'
+                            verticalScrollbar='visible'>
+                            {nextContent &&
+                                <Item id='play' onClick={playNextContent}>
+                                    <Icon>play</Icon>
+                                    <span>{watch}</span>
+                                </Item>
+                            }
+                            <Item onClick={moreEpisodes}>
+                                <Icon>series</Icon>
+                                <span>{moreDetail}</span>
+                            </Item>
+                            <Item onClick={changeSubs}>
+                                <Icon>audio</Icon>
+                                <span>{$L('Audio and Subtitles')}</span>
+                            </Item>
+                            {['series', 'movie_listing'].includes(content.type) && (
+                                <Item onClick={toggleWatchlist}>
+                                    <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
+                                    <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
+                                </Item>
+                            )}
+                        </Scroller>
+                    </div>
+                </Cell>
+            }
         </Row>
     )
 }

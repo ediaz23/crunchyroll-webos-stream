@@ -1,15 +1,17 @@
 
 import { useEffect, useState, useCallback } from 'react'
-import { Row, Cell } from '@enact/ui/Layout'
+import { Row, Cell, Column } from '@enact/ui/Layout'
 import Transition from '@enact/ui/Transition'
 import { Panel } from '@enact/moonstone/Panels'
+import Spinner from '@enact/moonstone/Spinner'
 
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
     currentProfileState, homefeedReadyState, homeIndexState, selectedContentState,
     homeFeedState, homeFeedProcessedState, homeFeedExpirationState,
-    musicFeedState, musicFeedProcessedState, musicFeedExpirationState
+    musicFeedState, musicFeedProcessedState, musicFeedExpirationState,
+    categoriesState,
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
@@ -20,6 +22,7 @@ import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
 import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
+import { $L } from '../hooks/language'
 
 
 /**
@@ -85,7 +88,10 @@ const HomePanel = (props) => {
     const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
     /** @type {Function} */
     const setMusicFeedProcessed = useSetRecoilState(musicFeedProcessedState)
-
+    /** @type {Function} */
+    const setCategories = useSetRecoilState(categoriesState)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
 
     /** @type {Function} */
     const toggleShowFullToolbar = useCallback(() => {
@@ -107,33 +113,37 @@ const HomePanel = (props) => {
     }, [toggleShowFullToolbar, homefeedReady])
 
     useEffect(() => {
-        const now = new Date()
-        if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
-            now.setHours(now.getHours() + 3)
-            api.discover.getHomeFeed(profile).then(({ data }) => {
+        const loadFeed = async () => {
+            const now = new Date()
+            if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
+                const { data: categs } = await api.discover.getCategories(profile)
+                setCategories([{ id: 'all', localization: { title: $L('All') } }, ...categs])
+                const { data } = await api.discover.getHomeFeed(profile)
                 /** @type {Array} */
                 const filterFeed = data.filter(item => item.response_type !== 'news_feed')
                 setHomeFeedProcessed(new Array(filterFeed.length))
                 setHomefeed(postProcessHomefeed(filterFeed))
+                now.setHours(now.getHours() + 3)
                 setHomeFeedExpiration(now)
                 setSelectedContent(null)
-            })
-        }
-        if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
-            now.setHours(now.getHours() + 3)
-            api.music.getFeed(profile).then(({ data }) => {
+            }
+            if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
+                const { data } = await api.music.getFeed(profile)
                 /** @type {Array} */
                 const musicFilterFeed = data.filter(item => item.response_type !== 'news_feed')
                 setMusicFeedProcessed(new Array(musicFilterFeed.length))
                 setMusicfeed(postProcessHomefeed(musicFilterFeed))
+                now.setHours(now.getHours() + 3)
                 setMusicFeedExpiration(now)
                 setSelectedContent(null)
-            })
+            }
+            if (currentActivity === 6) {
+                setSelectedContent(null)
+            }
         }
-        if (currentActivity === 6) {
-            setSelectedContent(null)
-        }
-    }, [profile, currentActivity, setSelectedContent,
+        setLoading(true)
+        loadFeed().then(() => setLoading(false))
+    }, [profile, currentActivity, setSelectedContent, setCategories,
         setHomefeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
         setMusicfeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
     ])
@@ -152,23 +162,29 @@ const HomePanel = (props) => {
                         onFocus={showToolbar} hideText />
                 </Cell>
                 <Cell grow>
-                    <ActivityViews index={currentActivity}>
-                        <HomeFeed profile={profile} homefeed={homefeed} />
-                        <ContentGrid profile={profile}
-                            contentKey='simulcast' />
-                        <ContentGrid profile={profile}
-                            contentKey='search' />
-                        <ContentGrid profile={profile}
-                            contentKey='series'
-                            contentType='series' />
-                        <ContentGrid profile={profile}
-                            contentKey='movies'
-                            contentType='movie_listing' />
-                        <MusicBrowse profile={profile} musicfeed={musicfeed} />
-                        <Watchlist profile={profile} />
-                        <ContactMePanel noAcceptBtn />
-                        <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
-                    </ActivityViews>
+                    {loading ?
+                        <Column align='center center'>
+                            <Spinner />
+                        </Column>
+                        :
+                        <ActivityViews index={currentActivity}>
+                            <HomeFeed profile={profile} homefeed={homefeed} />
+                            <ContentGrid profile={profile}
+                                contentKey='simulcast' />
+                            <ContentGrid profile={profile}
+                                contentKey='search' />
+                            <ContentGrid profile={profile}
+                                contentKey='series'
+                                contentType='series' />
+                            <ContentGrid profile={profile}
+                                contentKey='movies'
+                                contentType='movie_listing' />
+                            <MusicBrowse profile={profile} musicfeed={musicfeed} />
+                            <Watchlist profile={profile} />
+                            <ContactMePanel noAcceptBtn />
+                            <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
+                        </ActivityViews>
+                    }
                 </Cell>
             </Row>
             <Transition visible={showFullToolbar} type='slide' direction='right'>

@@ -1,6 +1,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
+import Spinner from '@enact/moonstone/Spinner'
 
 import Image from '@enact/moonstone/Image'
 
@@ -40,6 +41,8 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     const [rating, setRating] = useState(0)
     /** @type {[Number, Function]} */
     const [currentIndex, setCurrentIndex] = useState(0)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
     /** @type {{contentId: String, contentType: String}} */
     const contentShort = useMemo(() => {
         return content ? { contentId: content.id, contentType: content.type } : {}
@@ -66,11 +69,14 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     }, [profile, contentShort])
 
     useEffect(() => {
-        if (content) {
-            api.review.getRatings(profile, contentShort).then(({ rating: resRenting }) => {
+        const load = async () => {
+            if (content) {
+                const { rating: resRenting } = await api.review.getRatings(profile, contentShort)
                 setRating(parseInt(resRenting.trimEnd('s')))
-            })
+            }
         }
+        setLoading(true)
+        load().then(() => setLoading(false))
     }, [content, profile, contentShort])
 
     return (
@@ -80,29 +86,35 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                     <Image className={css.poster} src={image.source} sizing='fill' />
                 }
                 <Cell className={css.modal}>
-                    <ActivityViews index={currentIndex}>
-                        <Options
-                            profile={profile}
-                            content={content}
-                            rating={rating}
-                            updateRating={updateRating}
-                            setIndex={setCurrentIndex}
-                            setContentToPlay={setContentToPlay} />
-                        {content.type === 'series' ?
-                            <Seasons
+                    {loading ?
+                        <Column align='center center'>
+                            <Spinner style={{ height: 'auto' }} />
+                        </Column>
+                        :
+                        <ActivityViews index={currentIndex}>
+                            <Options
                                 profile={profile}
-                                series={content}
+                                content={content}
+                                rating={rating}
+                                updateRating={updateRating}
+                                setIndex={setCurrentIndex}
                                 setContentToPlay={setContentToPlay} />
-                            :
-                            <Movies
+                            {content.type === 'series' ?
+                                <Seasons
+                                    profile={profile}
+                                    series={content}
+                                    setContentToPlay={setContentToPlay} />
+                                :
+                                <Movies
+                                    profile={profile}
+                                    movieListing={content}
+                                    setContentToPlay={setContentToPlay} />
+                            }
+                            <LangSelector
                                 profile={profile}
-                                movieListing={content}
-                                setContentToPlay={setContentToPlay} />
-                        }
-                        <LangSelector
-                            profile={profile}
-                            content={content} />
-                    </ActivityViews>
+                                content={content} />
+                        </ActivityViews>
+                    }
                 </Cell>
             </Column>
         </Row>

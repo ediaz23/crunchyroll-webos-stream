@@ -38,9 +38,11 @@ const Watchlist = ({ profile, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [watchlist, setWatchlist] = useState([])
     /** @type {[Object, Function]} */
-    const [loading, setLoading] = useState({})
+    const [loadingItem, setLoadingItem] = useState({})
     /** @type {[Boolean, Function]} */
     const [autoScroll, setAutoScroll] = useState(true)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {[Object, Function]} */
@@ -92,8 +94,8 @@ const Watchlist = ({ profile, ...rest }) => {
         } else {
             if (index % quantity === 0) {
                 Promise.resolve().then(async () => {
-                    if (loading[index] === undefined) {
-                        setLoading(prev => { prev[index] = false; return { ...prev } })
+                    if (loadingItem[index] === undefined) {
+                        setLoadingItem(prev => { prev[index] = false; return { ...prev } })
                         const res = await api.discover.getWatchlist(profile, { quantity, start: index })
                         const res2 = await processResult({ profile, data: res.data })
                         setWatchlist(prevArray => [
@@ -112,40 +114,51 @@ const Watchlist = ({ profile, ...rest }) => {
         }
         return out
     }, [profile, watchlist, itemWidth, getImagePerResolution, setWatchlist,
-        onClickItem, onSelectItem, loading, setLoading])
+        onClickItem, onSelectItem, loadingItem, setLoadingItem])
 
     useEffect(() => {
-        Promise.resolve().then(() => {
-            if (watchlist.length > 0 && autoScroll && scrollToRef.current) {
-                scrollToRef.current({ index: 0, animate: false, focus: true })
-                setAutoScroll(false)
-            }
-        })
-    }, [profile, watchlist, autoScroll])
+        if (!loading) {
+            Promise.resolve().then(() => {
+                if (watchlist.length > 0 && autoScroll && scrollToRef.current) {
+                    scrollToRef.current({ index: 0, animate: false, focus: true })
+                    setAutoScroll(false)
+                }
+            })
+        }
+    }, [profile, watchlist, autoScroll, loading])
 
     useEffect(() => {
+        setLoading(true)
         api.discover.getWatchlist(profile, { quantity }).then(async res => {
             const res2 = await processResult({ profile, data: res.data })
             setAutoScroll(true)
-            setLoading({})
+            setLoadingItem({})
             setWatchlist([...res2.data, ...new Array(res.total - res.data.length)])
-        })
-    }, [profile, setAutoScroll, setLoading, setWatchlist])
+        }).then(() => setLoading(false))
+    }, [profile, setAutoScroll, setLoadingItem, setWatchlist, setLoading])
 
     return (
         <Column {...rest}>
-            <Cell size="50%">
-                {selectedContent && <HomeContentBanner content={selectedContent} />}
-            </Cell>
-            <Cell grow>
-                <VirtualGridList {...rest}
-                    dataSize={watchlist.length}
-                    itemRenderer={renderItem}
-                    itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                    spacing={ri.scale(25)}
-                    cbScrollTo={getScrollTo}
-                />
-            </Cell>
+            {loading ?
+                <Column align='center center'>
+                    <Spinner />
+                </Column>
+                :
+                <>
+                    <Cell size="50%">
+                        {selectedContent && <HomeContentBanner content={selectedContent} />}
+                    </Cell>
+                    <Cell grow>
+                        <VirtualGridList {...rest}
+                            dataSize={watchlist.length}
+                            itemRenderer={renderItem}
+                            itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+                            spacing={ri.scale(25)}
+                            cbScrollTo={getScrollTo}
+                        />
+                    </Cell>
+                </>
+            }
         </Column>
     )
 }

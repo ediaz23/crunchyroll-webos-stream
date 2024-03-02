@@ -3,6 +3,7 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import Input from '@enact/moonstone/Input'
+import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
@@ -28,7 +29,7 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
     /** @type {[Object, Function]} */
-    const [loading, setLoading] = useState({})
+    const [loadingItem, setLoadingItem] = useState({})
     /** @type {[Object, Function]} */
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
@@ -39,6 +40,8 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
     const [query, setQuery] = useState('')
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(undefined)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
     /**
@@ -75,8 +78,8 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
 
     const onLoad = useCallback(async (index) => {
         if (index % options.quantity === 0) {
-            if (loading[index] === undefined) {
-                setLoading(prev => { prev[index] = false; return { ...prev } })
+            if (loadingItem[index] === undefined) {
+                setLoadingItem(prev => { prev[index] = false; return { ...prev } })
                 if (engine === 'search') {
                     const res = await api.discover.search(profile, { ...options, start: index })
                     setContentList(prevArray => [
@@ -94,18 +97,19 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
                 }
             }
         }
-    }, [engine, loading, options, profile])
+    }, [engine, loadingItem, options, profile])
 
     const changeContentList = useCallback((newList) => {
-        setLoading({})
+        setLoadingItem({})
         setAutoScroll(true)
         setContentList(newList)
-    }, [setLoading, setAutoScroll, setContentList])
+    }, [setLoadingItem, setAutoScroll, setContentList])
 
     useEffect(() => {
         let delayDebounceFn = undefined
         if (delay >= 0) {
             delayDebounceFn = setTimeout(() => {
+                setLoading(true)
                 if (engine === 'search') {
                     if (options.query !== '') {
                         api.discover.search(profile, options).then(res => {
@@ -113,19 +117,22 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
                                 ...res.data[0].items,
                                 ...new Array(res.data[0].count - res.data[0].items.length)
                             ])
+                            setLoading(false)
                         })
                     } else {
                         changeContentList([])
+                        setLoading(false)
                     }
                 } else {
                     api.discover.getBrowseAll(profile, options).then(res => {
                         changeContentList([...res.data, ...new Array(res.total - res.data.length)])
+                        setLoading(false)
                     })
                 }
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, action, contentKey, delay, options, engine, changeContentList])
+    }, [profile, action, contentKey, delay, options, engine, changeContentList, setLoading])
 
     useEffect(() => {  // initializing
         if (contentKey !== 'simulcast') {
@@ -137,7 +144,7 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
             setQuery('')
             setCategory('all')
             setContentList([])
-            setLoading({})
+            setLoadingItem({})
             setAutoScroll(true)
         }
     }, [profile, contentKey])
@@ -150,7 +157,6 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
                         {action.label}
                     </Heading>
                     <CategoryList
-                        profile={profile}
                         category={category}
                         setCategory={setCategory}
                         setDelay={setDelay} />
@@ -164,12 +170,18 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
                             onChange={onSearch}
                             iconAfter="search" />
                     </Cell>
-                    <Cell grow>
-                        <ContentGridItems
-                            contentList={contentList}
-                            load={onLoad}
-                            autoScroll={autoScroll}
-                            onScroll={onScroll} />
+                    <Cell grow >
+                        {loading ?
+                            <Column align='center center'>
+                                <Spinner />
+                            </Column>
+                            :
+                            <ContentGridItems
+                                contentList={contentList}
+                                load={onLoad}
+                                autoScroll={autoScroll}
+                                onScroll={onScroll} />
+                        }
                     </Cell>
                     {contentKey === 'simulcast' &&
                         <SeasonButtons

@@ -1,15 +1,17 @@
 
 import { useCallback, useEffect, useState } from 'react'
-import { Row } from '@enact/ui/Layout'
+import { Row, Column } from '@enact/ui/Layout'
 import Heading from '@enact/ui/Heading'
 import Spotlight from '@enact/spotlight'
 import { Header, Panel } from '@enact/moonstone/Panels'
+import Spinner from '@enact/moonstone/Spinner'
 import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
 import {
     pathState, currentProfileState, homeFeedState, homefeedReadyState,
-    selectedContentState, homeFeedExpirationState, musicFeedExpirationState
+    selectedContentState, homeFeedExpirationState, musicFeedExpirationState,
+    homeIndexState
 } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
@@ -36,6 +38,8 @@ const ProfilesPanel = ({ ...rest }) => {
     const setHomeFeedExpiration = useSetRecoilState(homeFeedExpirationState)
     /** @type {Function} */
     const setMusicFeedExpiration = useSetRecoilState(musicFeedExpirationState)
+    /** @type {Function} */
+    const setCurrentActivity = useSetRecoilState(homeIndexState)
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -53,10 +57,11 @@ const ProfilesPanel = ({ ...rest }) => {
         setSelectedContent(null)
         setHomeFeedExpiration(null)
         setMusicFeedExpiration(null)
+        setCurrentActivity(0)
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
     }, [setCurrentProfile, setPath, setHomeFeed, setHomefeedReady, setSelectedContent,
-        setMusicFeedExpiration, setHomeFeedExpiration])
+        setMusicFeedExpiration, setHomeFeedExpiration, setCurrentActivity])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {
@@ -93,22 +98,30 @@ const ProfilesPanel = ({ ...rest }) => {
                 <ContactMe origin='profiles' />
                 <Logout />
             </Header>
-            <Row align='center center' style={rowStyle}>
-                <Heading size='title'>
-                    {$L('Who is watching?')}
-                </Heading>
-            </Row>
-            <Row align='center center' style={rowStyle}>
-                {profiles.map((profile, i) =>
-                    <Profile profile={profile} key={i}
-                        onSelectProfile={onSelectProfile}
-                        onEditProfile={onEditProfile}
-                        compRef={setFocus} />
-                )}
-            </Row>
-            <Row align='center center' style={rowStyle}>
-                <Logout text={$L('Logout')} />
-            </Row>
+            <Column align='center center'>
+                {profiles.length ?
+                    <>
+                        <Row align='center center'>
+                            <Heading size='title'>
+                                {$L('Who is watching?')}
+                            </Heading>
+                        </Row>
+                        <Row align='center center' style={rowStyle}>
+                            {profiles.map((profile, i) =>
+                                <Profile profile={profile} key={i}
+                                    onSelectProfile={onSelectProfile}
+                                    onEditProfile={onEditProfile}
+                                    compRef={setFocus} />
+                            )}
+                        </Row>
+                        <Row align='center center' style={rowStyle}>
+                            <Logout text={$L('Logout')} />
+                        </Row>
+                    </>
+                    :
+                    <Spinner />
+                }
+            </Column>
         </Panel>
     )
 }

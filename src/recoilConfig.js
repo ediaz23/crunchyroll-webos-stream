@@ -83,3 +83,8 @@ export const contactBtnState = atom({
     key: 'contactBtnState',
     default: false
 })
+
+export const categoriesState = atom({
+    key: 'categoriesState',
+    default: []
+})
