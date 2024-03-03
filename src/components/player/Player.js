@@ -2,7 +2,8 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
-import dashjs from 'dashjs'
+//import dashjs from 'dashjs'
+import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -20,7 +21,18 @@ import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import useCustomFetch from '../../hooks/customFetch'
 
 
+/**
+ * Object to store URL objects to clean later
+ * @type {Object.<String, String>}
+ */
 const URL_OBJECTS = {}
+/**
+ * Sometimes when destroy the player throw error because some
+ * requests are still wating, so i have to wait all request to
+ * finish to destroy it.
+ * @type {Array<String>}
+ */
+const REQ_LIST = []
 
 /**
  * @typedef StreamSession
@@ -389,9 +401,24 @@ const modifierDashRequest = (profile) => {
         request.headers = { ...req.headers }
         request.headers['Authorization'] = account.token
         const urlBak = request.url
-        req.url = await fetchProxy(request.url, request)
-        URL_OBJECTS[urlBak] = req.url
+        const reqId = REQ_LIST.length  // check variable comment
+        const prom = fetchProxy(urlBak, request)
+        REQ_LIST.push(prom)
+        req.url = await prom
+        URL_OBJECTS[urlBak] = req.url  // check variable comment
+        REQ_LIST[reqId] = undefined
         return req
+    }
+}
+
+/**
+ * Wait to all promise of modifierDashRequest finish
+ * @returns {Promise}
+ */
+const waitAllReqFinish = async (reset) => {
+    await Promise.all(REQ_LIST)
+    if (reset) {
+        REQ_LIST.length = 0
     }
 }
 
@@ -434,6 +461,21 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
             playerRef.current.extend('RequestModifier', function() {
                 return { modifyRequest: modifierDashRequest(profile) }
             })
+            /*
+            playerRef.current.updateSettings({
+                streaming: {
+                    buffer: {
+                        // https://reference.dashif.org/dash.js/nightly/samples/buffer/initial-buffer.html
+                        initialBufferLevel: 20,
+                        // https://reference.dashif.org/dash.js/nightly/samples/buffer/buffer-target.html
+                        bufferTimeAtTopQuality: 30,
+                        bufferTimeAtTopQualityLongForm: 60,
+                        stableBufferTime: 15,
+                        longFormContentDurationThreshold: 600,
+                    }
+                }
+            })
+            */
         }
     }
     url = stream.urls.find(val => val.locale === subtitle.locale)
@@ -600,7 +642,9 @@ const Player = ({ ...rest }) => {
     }, [])
 
     useEffect(() => {  // find audios, it's needed to find stream url
-        changeAudio(findAudio({ profile, audios }))
+        waitAllReqFinish().then(() => {
+            changeAudio(findAudio({ profile, audios }))
+        })
     }, [profile, audios, changeAudio])
 
     useEffect(() => {  // find stream url
@@ -683,9 +727,14 @@ const Player = ({ ...rest }) => {
             load().catch(console.error)
         }
         return () => {
+            setLoading(true)
             if (playerRef.current) {
                 playerRef.current.pause()
-                playerRef.current.destroy()
+                const oldPlayer = playerRef.current
+                waitAllReqFinish(true).then(() => {
+                    oldPlayer.destroy()
+                    freeAllUrlObjects()
+                })
                 playerRef.current = null
             }
             freeAllUrlObjects()
@@ -693,7 +742,6 @@ const Player = ({ ...rest }) => {
                 clearTimeout(plauseTimeoutRef.current)
                 plauseTimeoutRef.current = null
             }
-            setLoading(true)
         }
     }, [profile, content, stream, audio, subtitle, setLoading])
 

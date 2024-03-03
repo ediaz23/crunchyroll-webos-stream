@@ -52,7 +52,6 @@ export const getContentParam = async (profile) => {
  */
 export const fetchProxy = async (url, options = {}) => {
     const res = await customFetch(url, options)
-    const blob = new Blob([await res.blob()], { type: res.headers.get('Content-Type') || 'application/octet-stream' })
+    const blob = await res.blob()
     return URL.createObjectURL(blob)
 }
-

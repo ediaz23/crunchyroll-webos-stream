@@ -59,7 +59,7 @@ export const customFetch = async (url, options = {}) => {
         }
         const onSuccess = (data) => {
             const { status, statusText, content, headers, resUrl } = data
-            logger.debug(`res ${config.method} ${url} ${status}`)
+            logger.debug(`req ${config.method || 'get'} ${url} ${status} len=${content && content.length || 0}`)
             let newBody = undefined
             if (content) {
                 const binaryString = atob(content)
@@ -78,7 +78,7 @@ export const customFetch = async (url, options = {}) => {
             }))
         }
         const onFailure = (error) => {
-            logger.error(`res error ${url}`)
+            logger.error(`req ${config.method || 'get'} ${url}`)
             logger.error(error)
             if (error.error) {
                 rej(new Error(error.error))
