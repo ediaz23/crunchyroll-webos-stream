@@ -562,6 +562,8 @@ const Player = ({ ...rest }) => {
     const [previews, setPreviews] = useState([])
     /** @type {[String, Function]} */
     const [preview, setPreview] = useState({})
+    /** @type {[Event, Function]} */
+    const [endEvent, setEndEvent] = useState(null)
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const videoCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
@@ -626,6 +628,8 @@ const Player = ({ ...rest }) => {
         await onChangeEp(await findNextEp({ profile, content, step: -1 }))
     }, [profile, content, onChangeEp])
 
+    const onEndVideo = useCallback((ev) => setEndEvent(ev), [setEndEvent])
+
     /** @type {Function} */
     const onPause = useCallback(() => {
         if (session) {
@@ -644,8 +648,9 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // find audios, it's needed to find stream url
         waitAllReqFinish().then(() => {
             changeAudio(findAudio({ profile, audios }))
+            setEndEvent(null)
         })
-    }, [profile, audios, changeAudio])
+    }, [profile, audios, changeAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
         /** @type {Stream} */
@@ -751,6 +756,17 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, videoCompRef, loading])
 
+    useEffect(() => {
+        let timeout = null
+        if (endEvent) {
+            timeout = setTimeout(() => {
+                onNextEp(endEvent)
+                setEndEvent(null)
+            }, 4000)
+        }
+        return () => clearTimeout(timeout)
+    }, [endEvent, onNextEp, audios])
+
     return (
         <div className={rest.className}>
             <VideoPlayer {...rest}
@@ -760,7 +776,7 @@ const Player = ({ ...rest }) => {
                 onScrub={onScrub}
                 onJumpBackward={onPrevEp}
                 onJumpForward={onNextEp}
-                onEnded={onNextEp}
+                onEnded={onEndVideo}
                 onPause={onPause}
                 onPlay={onPlay}
                 loading={loading}
