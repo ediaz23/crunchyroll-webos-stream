@@ -2,8 +2,8 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
-//import dashjs from 'dashjs'
-import dashjs from 'dashjs/dist/dash.all.debug'
+import dashjs from 'dashjs'
+//import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -530,6 +530,7 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
         playerRef.current.registerLicenseResponseFilter(decodeLicense)
         playerRef.current.on(dashjs.MediaPlayer.events.MANIFEST_LOADING_FINISHED, freeUrlObjects)
         playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, freeUrlObjects)
+        playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_ABANDONED, freeUrlObjects)
     }
 }
 

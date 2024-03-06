@@ -63,10 +63,10 @@ export const customFetch = async (url, options = {}) => {
             let newBody = undefined
             if (content) {
                 const binaryString = atob(content)
-                const bytes = new Uint8Array(binaryString.length)
-
+                const buffer = new ArrayBuffer(binaryString.length)
+                const bytes = new Uint8Array(buffer)
                 for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
+                    bytes[i] = binaryString.charCodeAt(i) & 0xff
                 }
                 newBody = new window.Blob([bytes])
             }

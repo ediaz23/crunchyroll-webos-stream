@@ -53,5 +53,6 @@ export const getContentParam = async (profile) => {
 export const fetchProxy = async (url, options = {}) => {
     const res = await customFetch(url, options)
     const blob = await res.blob()
-    return URL.createObjectURL(blob)
+    const newUrl = URL.createObjectURL(blob)
+    return newUrl
 }
