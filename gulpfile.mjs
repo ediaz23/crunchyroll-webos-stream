@@ -69,7 +69,7 @@ gulp.task('pack-p', cb =>
 )
 
 gulp.task('installService', cb => {
-    exec('npm install --prefix=./service', (err, stdout, stderr) => {
+    exec('NODE_ENV=development npm install --prefix=./service', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
         cb(err)
