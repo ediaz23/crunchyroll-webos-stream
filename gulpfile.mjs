@@ -112,7 +112,7 @@ gulp.task('cleanService', () => deleteAsync('service/dist/**', { force: true }))
 
 gulp.task('build', gulp.series('clean', 'pack', 'app'));
 gulp.task('build-service', gulp.series('installService', 'buildService'))
-gulp.task('build-dev', gulp.series('clean', 'pack', 'installService', 'buildService', 'app', 'cleanService'));
+gulp.task('build-dev', gulp.series('clean', 'pack', 'copy-in18', 'installService', 'buildService', 'app', 'cleanService'));
 gulp.task('build-p', gulp.series('clean', 'pack-p', 'copy-in18', 'installService', 'buildService-p', 'app-p', 'cleanService'));
 
 export default gulp

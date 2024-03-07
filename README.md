@@ -25,7 +25,7 @@ software is not the responsibility of the project contributors or maintainers.
 
 ## How to run on local? (Linux)
 
-1) Install git, node and npm. I use node version v14.20.0 and npm version 6.14.17 (google it), example:
+1) Install git, node and npm. I use node version v16.17.0 and npm version 8.15.0 (google it), example:
 
 ```bash
 sudo apt install git
@@ -33,7 +33,9 @@ sudo apt install nodejs
 sudo apt install npm
 ```
 
-2) Install enact client (version 5.1.3):
+>Note: Node 16 or greater required.
+
+2) Install enact client (version 6.1.1):
 
 ```bash
 npm install -g @enact/cli

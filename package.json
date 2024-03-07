@@ -4,9 +4,10 @@
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
-        "serve": "enact serve",
-        "pack": "enact pack",
-        "pack-p": "NODE_ENV=production enact pack -p",
+        "serve": "NODE_ENV=development REACT_APP_SERVING=true enact serve",
+        "serve-p": "NODE_ENV=production REACT_APP_SERVING=true enact serve",
+        "pack": "NODE_ENV=development REACT_APP_SERVING=false enact pack",
+        "pack-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p",
         "watch": "enact pack --watch",
         "clean": "enact clean",
         "lint": "enact lint .",
@@ -14,16 +15,16 @@
         "test": "enact test",
         "test-watch": "enact test --watch",
         "build": "gulp build",
-        "build-dev": "gulp build-dev",
-        "build-p": "gulp build-p",
+        "build-dev": "NODE_ENV=development gulp build-dev",
+        "build-p": "NODE_ENV=production gulp build-p",
         "build-service": "gulp build-service",
         "install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.0_all.ipk",
         "install-tv-1": "ares-install -d tv1 bin/com.crunchyroll.stream.app_1.0.0_all.ipk",
         "start": "ares-launch com.crunchyroll.stream.app",
         "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
         "play": "npm run build && npm run install-tv && npm run start",
-        "play-1": "npm run build-dev && npm run install-tv-1 && npm run start-1",
-        "play-p": "npm run build-p && npm run install-tv-1 && npm run start-1",
+        "play-1": "NODE_ENV=development npm run build-dev && npm run install-tv-1 && npm run start-1",
+        "play-p": "NODE_ENV=production npm run build-p && npm run install-tv-1 && npm run start-1",
         "translate": "npx i18next-scanner --config ./i18next-scanner.config.react.js",
         "postinstall": "gulp clean-ilib"
     },
@@ -55,8 +56,11 @@
             ]
         }
     },
+    "engines": {
+        "node": ">=16.13.0"
+    },
     "eslintConfig": {
-        "extends": "enact-proxy"
+        "extends": "enact-proxy/strict"
     },
     "eslintIgnore": [
         "node_modules/*",
@@ -74,7 +78,7 @@
         "@enact/ui": "^4.8.0",
         "@enact/webos": "^4.8.0",
         "classnames": "^2.5.1",
-        "crunchyroll-js-api": "^1.2.3",
+        "crunchyroll-js-api": "^1.2.4",
         "dashjs": "^4.7.4",
         "i18n-iso-countries": "^7.10.1",
         "i18n-iso-m49": "^1.0.0",

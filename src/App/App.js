@@ -111,16 +111,16 @@ const AppLocal = I18nDecorator({
         resource: async options => {
             const localeInfo = new LocaleInfo(options.locale).getLocale()
 
-            if (utils.isTv() && !__DEV__) {
-                const countryData = await utils.loadLibData(`i18n-iso-countries/langs/${localeInfo.language}.json`)
-                const regionData = await utils.loadLibData(`i18n-iso-m49/langs/${localeInfo.language}.json`)
-                const langData = await utils.loadLibData(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
-                regions.registerLocale(countries, countryData, regionData)
-                languages.registerLocale(langData)
-            } else {
+            if (process.env.REACT_APP_SERVING === 'true') {
                 const { default: countryData } = await import(`i18n-iso-countries/langs/${localeInfo.language}.json`)
                 const { default: regionData } = await import(`i18n-iso-m49/langs/${localeInfo.language}.json`)
                 const { default: langData } = await import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
+                regions.registerLocale(countries, countryData, regionData)
+                languages.registerLocale(langData)
+            } else {
+                const countryData = await utils.loadLibData(`i18n-iso-countries/langs/${localeInfo.language}.json`)
+                const regionData = await utils.loadLibData(`i18n-iso-m49/langs/${localeInfo.language}.json`)
+                const langData = await utils.loadLibData(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`)
                 regions.registerLocale(countries, countryData, regionData)
                 languages.registerLocale(langData)
             }

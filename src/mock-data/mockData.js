@@ -5,10 +5,12 @@ import { stringifySorted } from '../utils'
 /**
  * Set mock data in data object
  * The key is comment this function to build in production
+ * @param {Object} data
  * @param {String} name
  */
-async function setData(data, name) {
-    if (process.env.NODE_ENV !== 'production') {
+let setData = async () => { }
+if (process.env.REACT_APP_SERVING === 'true') {
+    setData = async (data, name) => {
         data[name] = { ...await import(`./data/${name}`) }
     }
 }
