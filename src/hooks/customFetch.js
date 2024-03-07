@@ -52,9 +52,7 @@ export const customFetch = async (url, options = {}) => {
             if (config.body instanceof URLSearchParams) {
                 config.body = config.body.toString()
             } else if (config.body instanceof Uint8Array || config.body instanceof ArrayBuffer) {
-                const uint8Array = config.body instanceof Uint8Array ? config.body : new Uint8Array(config.body)
-                const uint8ArrayToString = [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
-                config.body = btoa(uint8ArrayToString);
+                config.body = utils.arrayToBase64(config.body)
             }
         }
         const onSuccess = (data) => {
@@ -62,12 +60,7 @@ export const customFetch = async (url, options = {}) => {
             logger.debug(`req ${config.method || 'get'} ${url} ${status} len=${content && content.length || 0}`)
             let newBody = undefined
             if (content) {
-                const binaryString = atob(content)
-                const buffer = new ArrayBuffer(binaryString.length)
-                const bytes = new Uint8Array(buffer)
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i) & 0xff
-                }
+                const bytes = utils.base64toArray(content)
                 newBody = new window.Blob([bytes])
             }
             res(new ResponseHack(newBody, {

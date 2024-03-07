@@ -125,6 +125,31 @@ export const loadLibData = async (file) => {
     return loadData(`node_modules/${file}`)
 }
 
+/**
+ * @param {Uint8Array|ArrayBuffer} body
+ * @returns {String}
+ */
+export const arrayToBase64 = (body) => {
+    const uint8Array = body instanceof Uint8Array ? body : new Uint8Array(body)
+    const uint8ArrayToString = [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
+    return btoa(uint8ArrayToString)
+}
+
+
+/**
+ * @param {String} content
+ * @returns {Uint8Array}
+ */
+export const base64toArray = (content) => {
+    const binaryString = atob(content)
+    const buffer = new ArrayBuffer(binaryString.length)
+    const bytes = new Uint8Array(buffer)
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i) & 0xff
+    }
+    return bytes
+}
+
 
 export default {
     isTv,
@@ -134,4 +159,6 @@ export default {
     supportDRM,
     loadData,
     loadLibData,
+    arrayToBase64,
+    base64toArray,
 }
