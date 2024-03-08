@@ -457,26 +457,24 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
     let url = null
     if (!playerRef.current) {
         playerRef.current = dashjs.MediaPlayer().create()
-        if (!_PLAY_TEST_) {
-            playerRef.current.extend('RequestModifier', function() {
-                return { modifyRequest: modifierDashRequest(profile) }
-            })
-            /*
-            playerRef.current.updateSettings({
-                streaming: {
-                    buffer: {
-                        // https://reference.dashif.org/dash.js/nightly/samples/buffer/initial-buffer.html
-                        initialBufferLevel: 20,
-                        // https://reference.dashif.org/dash.js/nightly/samples/buffer/buffer-target.html
-                        bufferTimeAtTopQuality: 30,
-                        bufferTimeAtTopQualityLongForm: 60,
-                        stableBufferTime: 15,
-                        longFormContentDurationThreshold: 600,
-                    }
+        playerRef.current.extend('RequestModifier', function() {
+            return { modifyRequest: modifierDashRequest(profile) }
+        })
+        /*
+        playerRef.current.updateSettings({
+            streaming: {
+                buffer: {
+                    // https://reference.dashif.org/dash.js/nightly/samples/buffer/initial-buffer.html
+                    initialBufferLevel: 20,
+                    // https://reference.dashif.org/dash.js/nightly/samples/buffer/buffer-target.html
+                    bufferTimeAtTopQuality: 30,
+                    bufferTimeAtTopQualityLongForm: 60,
+                    stableBufferTime: 15,
+                    longFormContentDurationThreshold: 600,
                 }
-            })
-            */
-        }
+            }
+        })
+        */
     }
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
@@ -528,10 +526,21 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
         playerRef.current.setProtectionData(drmConfig)
         playerRef.current.registerLicenseRequestFilter(requestDashLicense(profile))
         playerRef.current.registerLicenseResponseFilter(decodeLicense)
-        playerRef.current.on(dashjs.MediaPlayer.events.MANIFEST_LOADING_FINISHED, freeUrlObjects)
-        playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, freeUrlObjects)
-        playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_ABANDONED, freeUrlObjects)
     }
+    playerRef.current.on(dashjs.MediaPlayer.events.MANIFEST_LOADING_FINISHED, freeUrlObjects)
+    playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, freeUrlObjects)
+    playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_ABANDONED, freeUrlObjects)
+
+    playerRef.current.on(dashjs.MediaPlayer.events.ERROR, (e) => {
+        console.error('Generic error', e, new Error('test'))
+    })
+    playerRef.current.on(dashjs.MediaPlayer.events.KEY_ERROR, (e) => {
+        console.error('KEY_ERROR', e, new Error('test'))
+    })
+    playerRef.current.on(dashjs.MediaPlayer.events.PLAYBACK_ERROR, (e) => {
+        console.error('PLAYBACK_ERROR', e, new Error('test'))
+    })
+
 }
 
 
@@ -661,7 +670,8 @@ const Player = ({ ...rest }) => {
                 content.playhead = await findPlayHead({ profile, content })
                 if (_PLAY_TEST_) {  // test stream
                     localStream = {
-                        url: `${_LOCALHOST_SERVER_}/kimi.mpd`,
+                        id: content.id,
+                        urls: [{ url: `${_LOCALHOST_SERVER_}/kimi.mpd`, locale: 'es-419' }],
                         bif: `${_LOCALHOST_SERVER_}/kimi.bif`,
                         subtitles: [{
                             locale: 'es-419',
@@ -752,20 +762,24 @@ const Player = ({ ...rest }) => {
     }, [profile, content, stream, audio, subtitle, setLoading])
 
     useEffect(() => {  // loop playHead
-        if (!loading && videoCompRef.current && content) {
-            return updatePlayHeadLoop({ profile, content, videoCompRef })
+        if (!_PLAY_TEST_) {
+            if (!loading && videoCompRef.current && content) {
+                return updatePlayHeadLoop({ profile, content, videoCompRef })
+            }
         }
     }, [profile, content, videoCompRef, loading])
 
     useEffect(() => {
-        let timeout = null
-        if (endEvent) {
-            timeout = setTimeout(() => {
-                onNextEp(endEvent)
-                setEndEvent(null)
-            }, 4000)
+        if (!_PLAY_TEST_) {
+            let timeout = null
+            if (endEvent) {
+                timeout = setTimeout(() => {
+                    onNextEp(endEvent)
+                    setEndEvent(null)
+                }, 4000)
+            }
+            return () => clearTimeout(timeout)
         }
-        return () => clearTimeout(timeout)
     }, [endEvent, onNextEp, audios])
 
     return (
