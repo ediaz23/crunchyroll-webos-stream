@@ -28,6 +28,62 @@ class ResponseHack extends Response {
     }
 }
 
+/**
+ * set up request to be done
+ * @param {String | Request} url
+ * @param {RequestInit} [options]
+ * @return {RequestInit}
+ */
+export const setUpRequest = (url, options = {}) => {
+    let config
+    if (url instanceof Request) {
+        config = {
+            url: url.url,
+            method: url.method || 'get',
+            body: url.body,
+            headers: url.headers,
+        }
+    } else {
+        config = { url, ...options }
+    }
+    if (config.body) {
+        if (config.body instanceof URLSearchParams) {
+            config.body = config.body.toString()
+        } else if (config.body instanceof Uint8Array || config.body instanceof ArrayBuffer) {
+            config.body = utils.arrayToBase64(config.body)
+        }
+    }
+    return config
+}
+
+/**
+ * Does request throught service or fetch
+ * @param {Object} obj
+ * @param {RquestInit} obj.config
+ * @param {Function} obj.onSuccess
+ * @param {Function} obj.onFailure
+ */
+export const makeRequest = ({ config, onSuccess, onFailure }) => {
+    if (utils.isTv()) {
+        const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
+
+        webOS.service.request(serviceURL, {
+            method: `forwardRequest${currentReq}`,
+            parameters: config,
+            onSuccess,
+            onFailure,
+        })
+    } else {
+        window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(config),
+        }).then(res2 => res2.json()).then(onSuccess).catch(onFailure)
+    }
+}
+
 
 /**
  * Function to bypass cors issues
@@ -38,71 +94,35 @@ class ResponseHack extends Response {
  */
 export const customFetch = async (url, options = {}, direct = false) => {
     return new Promise((res, rej) => {
-        let config
-        if (url instanceof Request) {
-            config = {
-                method: url.method || 'get',
-                body: url.body,
-                headers: url.headers,
-            }
-            url = url.url
-        } else {
-            config = { ...options }
-        }
-        if (config.body) {
-            if (config.body instanceof URLSearchParams) {
-                config.body = config.body.toString()
-            } else if (config.body instanceof Uint8Array || config.body instanceof ArrayBuffer) {
-                config.body = utils.arrayToBase64(config.body)
-            }
-        }
+        const config = setUpRequest(url, options)
         const onSuccess = (data) => {
             const { status, statusText, content, headers, resUrl } = data
-            logger.debug(`req ${config.method || 'get'} ${url} ${status} len=${content && content.length || 0}`)
-            let newBody = undefined
-            if (content) {
-                const bytes = utils.base64toArray(content)
-                newBody = new window.Blob([bytes])
-            }
+            logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
             if (direct) {
-                res(newBody)
+                res(content)
             } else {
+                let newBody = undefined
+                if (content) {
+                    newBody = utils.base64toArray(content)
+                }
                 res(new ResponseHack(newBody, {
                     status,
                     statusText,
                     headers,
-                    url: resUrl || url,
+                    url: resUrl || config.url,
                 }))
             }
         }
         const onFailure = (error) => {
-            logger.error(`req ${config.method || 'get'} ${url}`)
+            logger.error(`req ${config.method || 'get'} ${config.url}`)
             logger.error(error)
             if (error.error) {
                 rej(new Error(error.error))
             } else {
                 rej(error)
             }
-
         }
-        if (utils.isTv()) {
-            const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
-
-            webOS.service.request(serviceURL, {
-                method: `forwardRequest${currentReq}`,
-                parameters: { url, ...config },
-                onSuccess,
-                onFailure,
-            })
-        } else {
-            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ url, ...config }),
-            }).then(res2 => res2.json()).then(onSuccess).catch(onFailure)
-        }
+        makeRequest({ config, onFailure, onSuccess })
     })
 }
 
