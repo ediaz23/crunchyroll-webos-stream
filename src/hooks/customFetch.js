@@ -33,9 +33,10 @@ class ResponseHack extends Response {
  * Function to bypass cors issues
  * @param {String} url
  * @param {RequestInit} [options]
+ * * @param {Boolean} [direct]
  * @returns {Promise<Response>}
  */
-export const customFetch = async (url, options = {}) => {
+export const customFetch = async (url, options = {}, direct = false) => {
     return new Promise((res, rej) => {
         let config
         if (url instanceof Request) {
@@ -63,12 +64,16 @@ export const customFetch = async (url, options = {}) => {
                 const bytes = utils.base64toArray(content)
                 newBody = new window.Blob([bytes])
             }
-            res(new ResponseHack(newBody, {
-                status,
-                statusText,
-                headers,
-                url: resUrl || url,
-            }))
+            if (direct) {
+                res(newBody)
+            } else {
+                res(new ResponseHack(newBody, {
+                    status,
+                    statusText,
+                    headers,
+                    url: resUrl || url,
+                }))
+            }
         }
         const onFailure = (error) => {
             logger.error(`req ${config.method || 'get'} ${url}`)

@@ -14,7 +14,7 @@ import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
-import { getContentParam, fetchProxy } from '../../api/utils'
+import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
@@ -232,10 +232,8 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
 const searchPreviews = async ({ bif, customFetch }) => {
     let images = []
     try {
-        /** @type {Response} */
-        const res = await customFetch(bif)
-        const buf = await res.arrayBuffer()
-        const bifData = new Uint8Array(buf)
+        /** @type {Uint8Array} */
+        const bifData = await await customFetch(bif, {}, true)
         const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
 
         let imageStartIndex = -1
@@ -390,9 +388,10 @@ const requestDashLicense = (profile) => {
 
 /**
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {Function} customFetch
  * @return {Function}
  */
-const modifierDashRequest = (profile) => {
+const modifierDashRequest = (profile, customFetch) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
         const account = await getContentParam(profile)
@@ -402,9 +401,11 @@ const modifierDashRequest = (profile) => {
         request.headers['Authorization'] = account.token
         const urlBak = request.url
         const reqId = REQ_LIST.length  // check variable comment
-        const prom = fetchProxy(urlBak, request)
+        const prom = customFetch(urlBak, request, true)
         REQ_LIST.push(prom)
-        req.url = await prom
+        /** @type {Uint8Array} */
+        const data = await prom
+        req.url = URL.createObjectURL(new window.Blob([data]))
         URL_OBJECTS[urlBak] = req.url  // check variable comment
         REQ_LIST[reqId] = undefined
         return req
@@ -452,13 +453,14 @@ const freeAllUrlObjects = () => {
  * @param {Stream} stream
  * @param {Object} content
  * @param {import('./SubtitleList').Subtitle} subtitle
+ * @param {Function} customFetch
  */
-const createDashPlayer = async (playerRef, profile, audio, stream, content, subtitle) => {
+const createDashPlayer = async (playerRef, profile, audio, stream, content, subtitle, customFetch) => {
     let url = null
     if (!playerRef.current) {
         playerRef.current = dashjs.MediaPlayer().create()
         playerRef.current.extend('RequestModifier', function() {
-            return { modifyRequest: modifierDashRequest(profile) }
+            return { modifyRequest: modifierDashRequest(profile, customFetch) }
         })
         /*
         playerRef.current.updateSettings({
@@ -736,7 +738,7 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // attach subs
         if (stream.urls && subtitle && stream.id === content.id) {
             const load = async () => {
-                await createDashPlayer(playerRef, profile, audio, stream, content, subtitle)
+                await createDashPlayer(playerRef, profile, audio, stream, content, subtitle, customFetch)
                 setLoading(false)
                 playerRef.current.play()
             }
@@ -759,7 +761,7 @@ const Player = ({ ...rest }) => {
                 plauseTimeoutRef.current = null
             }
         }
-    }, [profile, content, stream, audio, subtitle, setLoading])
+    }, [profile, content, stream, audio, subtitle, setLoading, customFetch])
 
     useEffect(() => {  // loop playHead
         if (!_PLAY_TEST_) {
