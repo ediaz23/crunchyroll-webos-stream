@@ -483,7 +483,8 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
     }
     playerRef.current.initialize()
     playerRef.current.setAutoPlay(false)
-    playerRef.current.attachSource(url + '#t=' + content.playhead.playhead)
+    const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
+    playerRef.current.attachSource(url + '#t=' + Math.max(startSec, 0))
     playerRef.current.attachView(document.querySelector('video'))
     if (!_PLAY_TEST_) {
         const drmConfig = {
