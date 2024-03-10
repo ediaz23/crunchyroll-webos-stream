@@ -2,8 +2,8 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
-//import dashjs from 'dashjs'
-import dashjs from 'dashjs/dist/dash.all.debug'
+import dashjs from 'dashjs'
+//import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -22,11 +22,6 @@ import * as fetchUtils from '../../hooks/customFetch'
 import utils from '../../utils'
 
 
-/**
- * Object to store URL objects to clean later
- * @type {Object.<String, Object>}
- */
-const URL_OBJECTS = {}
 /**
  * Sometimes when destroy the player throw error because some
  * requests are still wating, so i have to wait all request to
@@ -224,7 +219,35 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
 }
 
 /**
- * @todo improve memory usage 
+ * Download file per chunkSize
+ * @param {String} url
+ * @param {Number} chunkSize
+ * @returns {Promise<Uint8Array>}
+ */
+const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
+    const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
+    let result = null
+    if (headResponse.ok) {
+        const totalSize = parseInt(headResponse.headers.get('Content-Length'))
+        if (isNaN(totalSize) || !totalSize) {
+            throw new Error('Bif size not working')
+        }
+        result = new Uint8Array(totalSize)
+        for (let start = 0; start < totalSize; start += chunkSize) {
+            const end = Math.min(start + chunkSize - 1, totalSize - 1)
+            const response = await fetchUtils.customFetch(url, {
+                headers: { Range: `bytes=${start}-${end}` }
+            }, true)
+            const chunkArray = utils.base64toArray(response)
+            result.set(chunkArray, start)
+        }
+    }
+
+    return result
+}
+
+/**
+ * @todo improve memory usage
  * @param {{ bif: String }} obj
  * @returns {Promise<{data: Uint8Array, chunks: Array<{start: int, end: int}>}>}
  */
@@ -233,10 +256,8 @@ const searchPreviews = async ({ bif }) => {
     const out = { data: null, chunks: [] }
 
     try {
-        /** @type {String} */
-        const base64 = await fetchUtils.customFetch(bif, {}, true)
         /** @type {Uint8Array} */
-        const bifData = utils.base64toArray(base64)
+        const bifData = await downloadBifFile(bif)
         const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
 
         out.data = bifData
@@ -403,15 +424,8 @@ const modifierDashRequest = (profile) => {
         REQ_LIST.push(prom)
         /** @type {String} */
         const base64 = await prom
-        //        req.url = `data:application/octet-stream;base64,${base64}`
-        const data = utils.base64toArray(base64)
-        req.url = URL.createObjectURL(new window.Blob([data]))
-        URL_OBJECTS[urlBak] = req.url  // check variable comment
+        req.url = `data:application/octet-stream;base64,${base64}`
         REQ_LIST[reqId] = undefined
-
-        //        req.headers = { ...req.headers }
-        //        req.headers['Authorization'] = account.token
-        //        URL_OBJECTS[req.url] = req
         return req
     }
 }
@@ -425,142 +439,6 @@ const waitAllReqFinish = async (reset) => {
     if (reset) {
         REQ_LIST.length = 0
     }
-}
-
-
-/**
- * Free url object after being loaded
- * @param {{request: {url: string}}}
- */
-const freeUrlObjects = ({ request }) => {
-    if (URL_OBJECTS[request.url]) {
-        URL.revokeObjectURL(URL_OBJECTS[request.url])
-        delete URL_OBJECTS[request.url]
-    }
-}
-
-/**
- * Clean all url object
- */
-const freeAllUrlObjects = () => {
-    for (const url of Object.keys(URL_OBJECTS)) {
-        freeUrlObjects({ request: { url } })
-    }
-}
-
-/**
- * @param {XMLHttpRequest} xhr
- * @param {{url: str}}
- */
-function modifyRequestHeader(xhr, { url }) {
-    const requestInit = { method: 'get', headers: {} }
-    const protectedFields = ['readyState', 'status', 'statusText', 'responseURL',
-        'response', 'responseText']
-    if (URL_OBJECTS[url].range) {
-        requestInit.headers['Range'] = 'bytes=' + URL_OBJECTS[url].range
-    }
-    xhr = new Proxy(xhr, {
-        get: function(target, property) {
-            if (protectedFields.includes(property)) {
-                return target[`_${property}`]
-            }
-            const realValue = target[property]
-            if (typeof realValue === 'function') {
-                return function() {
-                    if (property === 'setRequestHeader') {
-                        requestInit.headers[arguments[0]] = arguments[1]
-                    }
-                    return realValue.apply(target, arguments)
-                }
-            } else {
-                return realValue
-            }
-        },
-        set: function(target, property, value) {
-            if (protectedFields.includes(property)) {
-                target[`_${property}`] = value
-            } else {
-                target[property] = value
-            }
-            return true
-        }
-    })
-    xhr.send = function() {
-        return new Promise(res => {
-            /** @type {Function} */
-            let onabortBak = xhr.onabort
-            let timeout = null
-
-            if (xhr.timeout) {
-                timeout = setTimeout(() => {
-                    onabortBak = null
-                    xhr.readyState = window.XMLHttpRequest.DONE
-                    xhr.status = 0
-                    res()
-                    xhr.ontimeout()
-                }, xhr.timeout)
-            }
-
-            xhr.onabort = () => {
-                const onabortBak2 = onabortBak
-                onabortBak = null
-                clearTimeout(timeout)
-                res()
-                onabortBak2.apply(xhr)
-            }
-            const config = fetchUtils.setUpRequest(url, requestInit)
-            const onSuccess = (data) => {
-                clearTimeout(timeout)
-                const { status, statusText, content, headers, resUrl } = data
-                logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
-                res()
-                if (onabortBak) {
-                    xhr.readyState = window.XMLHttpRequest.DONE
-                    xhr.status = status
-                    xhr.statusText = statusText
-                    xhr.responseURL = resUrl
-                    Object.keys(headers).forEach(key => {
-                        xhr.setRequestHeader(key, headers[key])
-                    })
-                    if (content) {
-                        /** @type {Uint8Array} */
-                        const dataArray = utils.base64toArray(content)
-                        if (xhr.responseType === 'arraybuffer') {  // document
-                            xhr.response = dataArray.buffer
-                        } else if (['document', 'json', 'text', ''].includes(xhr.responseType)) {
-                            const text = new TextDecoder('utf-8').decode(dataArray)
-                            xhr.response = text
-                            xhr.responseText = text
-                            if (xhr.responseType === 'json') {
-                                xhr.response = JSON.parse(text)
-                            }
-                        }
-                    }
-                    xhr.requestEndDate = new Date()
-                    xhr.onload()
-                }
-            }
-            const onFailure = (error) => {
-                clearTimeout(timeout)
-                logger.error(`req ${config.method || 'get'} ${config.url}`)
-                logger.error(error)
-                res()
-                if (onabortBak) {
-                    xhr.readyState = window.XMLHttpRequest.DONE
-                    xhr.status = 0;
-                    if (error.error) {
-                        xhr.statusText = xhr.responseText = `${error.error}`
-                    } else {
-                        xhr.statusText = xhr.responseText = `${error}`
-                    }
-                    xhr.requestEndDate = new Date()
-                    xhr.onerror()
-                }
-            }
-            fetchUtils.makeRequest({ config, onSuccess, onFailure })
-        })
-    }
-    return xhr
 }
 
 /**
@@ -578,7 +456,6 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
         playerRef.current.extend('RequestModifier', function() {
             return {
                 modifyRequest: modifierDashRequest(profile),
-                //                modifyRequestHeader: modifyRequestHeader,
             }
         })
         /*
@@ -648,20 +525,6 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
         playerRef.current.registerLicenseRequestFilter(requestDashLicense(profile))
         playerRef.current.registerLicenseResponseFilter(decodeLicense)
     }
-    playerRef.current.on(dashjs.MediaPlayer.events.MANIFEST_LOADING_FINISHED, freeUrlObjects)
-    playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, freeUrlObjects)
-    playerRef.current.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_ABANDONED, freeUrlObjects)
-
-    playerRef.current.on(dashjs.MediaPlayer.events.ERROR, (e) => {
-        console.error('Generic error', e, new Error('test'))
-    })
-    playerRef.current.on(dashjs.MediaPlayer.events.KEY_ERROR, (e) => {
-        console.error('KEY_ERROR', e, new Error('test'))
-    })
-    playerRef.current.on(dashjs.MediaPlayer.events.PLAYBACK_ERROR, (e) => {
-        console.error('PLAYBACK_ERROR', e, new Error('test'))
-    })
-
 }
 
 
@@ -837,7 +700,7 @@ const Player = ({ ...rest }) => {
         if (stream.urls) {
             const load = async () => {
                 setSubtitle(findSubtitle({ profile, ...stream }))
-                //                setPreviews(await searchPreviews({ ...stream }))
+                setPreviews(await searchPreviews({ ...stream }))
             }
             load().catch(console.error)
         }
@@ -863,11 +726,9 @@ const Player = ({ ...rest }) => {
                 const oldPlayer = playerRef.current
                 waitAllReqFinish(true).then(() => {
                     oldPlayer.destroy()
-                    freeAllUrlObjects()
                 })
                 playerRef.current = null
             }
-            freeAllUrlObjects()
             if (plauseTimeoutRef.current) {
                 clearTimeout(plauseTimeoutRef.current)
                 plauseTimeoutRef.current = null
