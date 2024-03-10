@@ -2,8 +2,8 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import { useRecoilValue, useRecoilState } from 'recoil'
-import dashjs from 'dashjs'
-//import dashjs from 'dashjs/dist/dash.all.debug'
+//import dashjs from 'dashjs'
+import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -18,12 +18,13 @@ import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
-import useCustomFetch from '../../hooks/customFetch'
+import * as fetchUtils from '../../hooks/customFetch'
+import utils from '../../utils'
 
 
 /**
  * Object to store URL objects to clean later
- * @type {Object.<String, String>}
+ * @type {Object.<String, Object>}
  */
 const URL_OBJECTS = {}
 /**
@@ -223,40 +224,38 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
 }
 
 /**
- * @param {{
-    bif: String,
-    customFetch: Function
-  }}
- * @returns {Promise<Array<String>>}
+ * @todo improve memory usage 
+ * @param {{ bif: String }} obj
+ * @returns {Promise<{data: Uint8Array, chunks: Array<{start: int, end: int}>}>}
  */
-const searchPreviews = async ({ bif, customFetch }) => {
-    let images = []
+const searchPreviews = async ({ bif }) => {
+    /** @type {{data: Uint8Array, chunks: Array<{start: int, end: int}>}} */
+    const out = { data: null, chunks: [] }
+
     try {
+        /** @type {String} */
+        const base64 = await fetchUtils.customFetch(bif, {}, true)
         /** @type {Uint8Array} */
-        const bifData = await await customFetch(bif, {}, true)
+        const bifData = utils.base64toArray(base64)
         const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
 
+        out.data = bifData
         let imageStartIndex = -1
         for (let i = 0; i < bifData.length - 1; i++) {
             if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
                 if (imageStartIndex !== -1) {
-                    const imageData = bifData.subarray(imageStartIndex, i)
-                    images.push(imageData)
+                    out.chunks.push({ start: imageStartIndex, end: i })
                 }
                 imageStartIndex = i
             }
         }
         if (imageStartIndex !== -1) {
-            const imageData = bifData.subarray(imageStartIndex)
-            images.push(imageData)
+            out.chunks.push({ start: imageStartIndex })
         }
-        images = images.map(imageData => {
-            return URL.createObjectURL(new window.Blob([imageData], { type: 'image/jpeg' }))
-        })
     } catch (e) {
         logger.error(e)
     }
-    return images
+    return out
 }
 
 /**
@@ -388,10 +387,9 @@ const requestDashLicense = (profile) => {
 
 /**
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
- * @param {Function} customFetch
  * @return {Function}
  */
-const modifierDashRequest = (profile, customFetch) => {
+const modifierDashRequest = (profile) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
         const account = await getContentParam(profile)
@@ -401,13 +399,19 @@ const modifierDashRequest = (profile, customFetch) => {
         request.headers['Authorization'] = account.token
         const urlBak = request.url
         const reqId = REQ_LIST.length  // check variable comment
-        const prom = customFetch(urlBak, request, true)
+        const prom = fetchUtils.customFetch(urlBak, request, true)
         REQ_LIST.push(prom)
-        /** @type {Uint8Array} */
-        const data = await prom
+        /** @type {String} */
+        const base64 = await prom
+        //        req.url = `data:application/octet-stream;base64,${base64}`
+        const data = utils.base64toArray(base64)
         req.url = URL.createObjectURL(new window.Blob([data]))
         URL_OBJECTS[urlBak] = req.url  // check variable comment
         REQ_LIST[reqId] = undefined
+
+        //        req.headers = { ...req.headers }
+        //        req.headers['Authorization'] = account.token
+        //        URL_OBJECTS[req.url] = req
         return req
     }
 }
@@ -444,7 +448,120 @@ const freeAllUrlObjects = () => {
     }
 }
 
+/**
+ * @param {XMLHttpRequest} xhr
+ * @param {{url: str}}
+ */
+function modifyRequestHeader(xhr, { url }) {
+    const requestInit = { method: 'get', headers: {} }
+    const protectedFields = ['readyState', 'status', 'statusText', 'responseURL',
+        'response', 'responseText']
+    if (URL_OBJECTS[url].range) {
+        requestInit.headers['Range'] = 'bytes=' + URL_OBJECTS[url].range
+    }
+    xhr = new Proxy(xhr, {
+        get: function(target, property) {
+            if (protectedFields.includes(property)) {
+                return target[`_${property}`]
+            }
+            const realValue = target[property]
+            if (typeof realValue === 'function') {
+                return function() {
+                    if (property === 'setRequestHeader') {
+                        requestInit.headers[arguments[0]] = arguments[1]
+                    }
+                    return realValue.apply(target, arguments)
+                }
+            } else {
+                return realValue
+            }
+        },
+        set: function(target, property, value) {
+            if (protectedFields.includes(property)) {
+                target[`_${property}`] = value
+            } else {
+                target[property] = value
+            }
+            return true
+        }
+    })
+    xhr.send = function() {
+        return new Promise(res => {
+            /** @type {Function} */
+            let onabortBak = xhr.onabort
+            let timeout = null
 
+            if (xhr.timeout) {
+                timeout = setTimeout(() => {
+                    onabortBak = null
+                    xhr.readyState = window.XMLHttpRequest.DONE
+                    xhr.status = 0
+                    res()
+                    xhr.ontimeout()
+                }, xhr.timeout)
+            }
+
+            xhr.onabort = () => {
+                const onabortBak2 = onabortBak
+                onabortBak = null
+                clearTimeout(timeout)
+                res()
+                onabortBak2.apply(xhr)
+            }
+            const config = fetchUtils.setUpRequest(url, requestInit)
+            const onSuccess = (data) => {
+                clearTimeout(timeout)
+                const { status, statusText, content, headers, resUrl } = data
+                logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
+                res()
+                if (onabortBak) {
+                    xhr.readyState = window.XMLHttpRequest.DONE
+                    xhr.status = status
+                    xhr.statusText = statusText
+                    xhr.responseURL = resUrl
+                    Object.keys(headers).forEach(key => {
+                        xhr.setRequestHeader(key, headers[key])
+                    })
+                    if (content) {
+                        /** @type {Uint8Array} */
+                        const dataArray = utils.base64toArray(content)
+                        if (xhr.responseType === 'arraybuffer') {  // document
+                            xhr.response = dataArray.buffer
+                        } else if (['document', 'json', 'text', ''].includes(xhr.responseType)) {
+                            const text = new TextDecoder('utf-8').decode(dataArray)
+                            xhr.response = text
+                            xhr.responseText = text
+                            if (xhr.responseType === 'json') {
+                                xhr.response = JSON.parse(text)
+                            }
+                        }
+                    }
+                    xhr.requestEndDate = new Date()
+                    xhr.onload()
+                }
+            }
+            const onFailure = (error) => {
+                clearTimeout(timeout)
+                logger.error(`req ${config.method || 'get'} ${config.url}`)
+                logger.error(error)
+                res()
+                if (onabortBak) {
+                    xhr.readyState = window.XMLHttpRequest.DONE
+                    xhr.status = 0;
+                    if (error.error) {
+                        xhr.statusText = xhr.responseText = `${error.error}`
+                    } else {
+                        xhr.statusText = xhr.responseText = `${error}`
+                    }
+                    xhr.requestEndDate = new Date()
+                    xhr.onerror()
+                }
+            }
+            fetchUtils.makeRequest({ config, onSuccess, onFailure })
+        })
+    }
+    return xhr
+}
 
 /**
  * @param {{current: import('dashjs').MediaPlayerClass}} playerRef
@@ -453,14 +570,16 @@ const freeAllUrlObjects = () => {
  * @param {Stream} stream
  * @param {Object} content
  * @param {import('./SubtitleList').Subtitle} subtitle
- * @param {Function} customFetch
  */
-const createDashPlayer = async (playerRef, profile, audio, stream, content, subtitle, customFetch) => {
+const createDashPlayer = async (playerRef, profile, audio, stream, content, subtitle) => {
     let url = null
     if (!playerRef.current) {
         playerRef.current = dashjs.MediaPlayer().create()
         playerRef.current.extend('RequestModifier', function() {
-            return { modifyRequest: modifierDashRequest(profile, customFetch) }
+            return {
+                modifyRequest: modifierDashRequest(profile),
+                //                modifyRequestHeader: modifyRequestHeader,
+            }
         })
         /*
         playerRef.current.updateSettings({
@@ -550,8 +669,6 @@ const Player = ({ ...rest }) => {
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
-    const customFetch = useCustomFetch()
-    /** @type {Function} */
     const getLang = useGetLanguage()
     /** @type {import('crunchyroll-js-api/src/types').Profile}*/
     const profile = useRecoilValue(currentProfileState)
@@ -570,8 +687,8 @@ const Player = ({ ...rest }) => {
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
     const [subtitle, setSubtitle] = useState(null)
-    /** @type {[Array<String>, Function]} */
-    const [previews, setPreviews] = useState([])
+    /** @type {[{data: Uint8Array, chunks: Array<{start: int, end: int}>}, Function]} */
+    const [previews, setPreviews] = useState({ chunks: [], data: null })
     /** @type {[String, Function]} */
     const [preview, setPreview] = useState({})
     /** @type {[Event, Function]} */
@@ -612,8 +729,10 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const onScrub = useCallback(({ proportion }) => {
-        if (previews.length > 0) {
-            setPreview(previews[Math.floor(proportion * previews.length)])
+        if (previews.chunks.length > 0) {
+            const chunk = previews.chunks[Math.floor(proportion * previews.chunks.length)]
+            const imgData = previews.data.subarray(chunk.start, chunk.end)
+            setPreview(`data:image/jpeg;base64,${utils.arrayToBase64(imgData)}`)
         }
     }, [previews, setPreview])
 
@@ -715,30 +834,23 @@ const Player = ({ ...rest }) => {
     }, [profile, audio, stream, session, setSession])
 
     useEffect(() => {  // create dash player
-        /** @type {Array<String>} */
-        let previewsBak = null
         if (stream.urls) {
             const load = async () => {
                 setSubtitle(findSubtitle({ profile, ...stream }))
-                previewsBak = await searchPreviews({ ...stream, customFetch })
-                setPreviews(previewsBak)
+                //                setPreviews(await searchPreviews({ ...stream }))
             }
             load().catch(console.error)
         }
         return () => {
-            if (previewsBak) {
-                previewsBak.forEach(image => URL.revokeObjectURL(image))
-                previewsBak = null
-                setPreviews([])
-            }
+            setPreviews({ chunks: [], data: null })
             setSubtitle(null)
         }
-    }, [profile, stream, setSubtitle, setPreviews, customFetch])
+    }, [profile, stream, setSubtitle, setPreviews])
 
     useEffect(() => {  // attach subs
         if (stream.urls && subtitle && stream.id === content.id) {
             const load = async () => {
-                await createDashPlayer(playerRef, profile, audio, stream, content, subtitle, customFetch)
+                await createDashPlayer(playerRef, profile, audio, stream, content, subtitle)
                 setLoading(false)
                 playerRef.current.play()
             }
@@ -761,7 +873,7 @@ const Player = ({ ...rest }) => {
                 plauseTimeoutRef.current = null
             }
         }
-    }, [profile, content, stream, audio, subtitle, setLoading, customFetch])
+    }, [profile, content, stream, audio, subtitle, setLoading])
 
     useEffect(() => {  // loop playHead
         if (!_PLAY_TEST_) {
