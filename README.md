@@ -112,7 +112,7 @@ window.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': 461 }))
 
 ## Create a Dash file
 
-```
+```bash
 x264 --output intermediate_2400k.264 --fps 24 --preset slow --bitrate 2400 --vbv-maxrate 4800 --vbv-bufsize 9600 --min-keyint 48 --keyint 48 --scenecut 0 --no-scenecut --pass 1 --video-filter "resize:width=1280,height=720" inputvideo.mkv
 
 MP4Box -add intermediate.264 -fps 24 output_2400k.mp4
@@ -126,8 +126,20 @@ Copy all video.mpd and only Adaptation from audio.mpd
 
 ## Create a m3u8 file
 
-```
+```bash
 ffmpeg -i kimi.mp4 -threads 16 -c:v libx264 -c:a aac -b:v 1M -b:a 128k -flags +cgop -g 30 -hls_time 4 -hls_playlist_type vod -hls_segment_filename 'output_%03d.ts' -sn -f hls kimi.m3u8
+```
+
+## Extrac image from bif file
+
+```bash
+ffmpeg -i archivo.bif imagen-%04d.png
+```
+
+## Create bif file from video
+
+```bash
+ffmpeg -i video.mp4 -threads 16 -vf "fps=8/60,scale=320:179" -vsync 0 -f image2 imagen-%04d.jpg
 ```
 
 ## ⚖ License
