@@ -462,9 +462,9 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
         playerRef.current.updateSettings({
             streaming: {
                 buffer: {
-                    // https://reference.dashif.org/dash.js/nightly/samples/buffer/initial-buffer.html
+                    // https://reference.dashif.org/dash.js/v4.7.4/samples/buffer/initial-buffer.html
                     initialBufferLevel: 20,
-                    // https://reference.dashif.org/dash.js/nightly/samples/buffer/buffer-target.html
+                    // https://reference.dashif.org/dash.js/v4.7.4/samples/buffer/buffer-target.html
                     bufferTimeAtTopQuality: 30,
                     bufferTimeAtTopQualityLongForm: 60,
                     stableBufferTime: 15,
