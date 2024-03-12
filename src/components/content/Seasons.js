@@ -93,6 +93,7 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
             }
         }
         if (season.id) {
+            setEpisodes([])
             loadData()
         }
     }, [profile, season])

@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import Transition from '@enact/ui/Transition'
 import { Panel } from '@enact/moonstone/Panels'
@@ -93,6 +93,19 @@ const HomePanel = (props) => {
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
 
+    /** @type {Array<{key: String, icon: String, label: String}>} */
+    const toolbarList = useMemo(() => [
+        { key: 'home', icon: 'home', label: $L('Home') },
+        { key: 'simulcast', icon: 'resumeplay', label: $L('Simulcast') },
+        { key: 'search', icon: 'search', label: $L('Search') },
+        { key: 'series', icon: 'series', label: $L('Series') },
+        { key: 'movies', icon: 'recordings', label: $L('Movies') },
+        { key: 'musics', icon: 'music', label: $L('Music') },
+        { key: 'my_list', icon: 'denselist', label: $L('My List') },
+        { key: 'info', icon: 'info', label: $L('About Me?') },
+        { key: 'close', icon: 'closex', label: $L('Close') },
+    ], [])
+
     /** @type {Function} */
     const toggleShowFullToolbar = useCallback(() => {
         setShowFullToolbar(val => !val)
@@ -158,8 +171,11 @@ const HomePanel = (props) => {
         <Panel {...props}>
             <Row style={{ height: '100%' }}>
                 <Cell shrink>
-                    <HomeToolbar currentIndex={currentActivity}
-                        onFocus={showToolbar} hideText />
+                    <HomeToolbar toolbarList={toolbarList}
+                        currentIndex={currentActivity}
+                        onClick={setActivity}
+                        onFocus={showToolbar}
+                        hideText />
                 </Cell>
                 <Cell grow>
                     {loading ?
@@ -170,15 +186,19 @@ const HomePanel = (props) => {
                         <ActivityViews index={currentActivity}>
                             <HomeFeed profile={profile} homefeed={homefeed} />
                             <ContentGrid profile={profile}
-                                contentKey='simulcast' />
+                                contentKey='simulcast'
+                                title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='search' />
+                                contentKey='search'
+                                title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
                                 contentKey='series'
-                                contentType='series' />
+                                contentType='series'
+                                title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
                                 contentKey='movies'
-                                contentType='movie_listing' />
+                                contentType='movie_listing'
+                                title={toolbarList[currentActivity].label} />
                             <MusicBrowse profile={profile} musicfeed={musicfeed} />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
@@ -193,7 +213,8 @@ const HomePanel = (props) => {
                         background: 'linear-gradient(to right, #000000 20%, rgba(0, 0, 0, 0))',
                         paddingLeft: '2rem',
                     }}>
-                    <HomeToolbarSpotlight currentIndex={currentActivity}
+                    <HomeToolbarSpotlight toolbarList={toolbarList}
+                        currentIndex={currentActivity}
                         onClick={setActivity}
                         onLeave={toggleShowFullToolbar}
                         autoFocus />

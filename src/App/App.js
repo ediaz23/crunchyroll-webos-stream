@@ -85,7 +85,7 @@ const App = ({ ...rest }) => {
     }, [setDBInit, customFetch])
 
     return (
-        <ErrorBoundary>
+        <ErrorBoundary {...rest}>
             <div {...rest}>
                 <RoutablePanels {...rest} path={path} onApplicationClose={closeApp} noCloseButton>
                     <Route path='init' component={InitialPanel} {...rest} />

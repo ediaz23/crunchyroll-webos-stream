@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useMemo } from 'react'
 
 import Spotlight, { getDirection } from '@enact/spotlight'
 import { getTargetByDirectionFromElement } from '@enact/spotlight/src/target'
@@ -10,27 +10,9 @@ import Marquee from '@enact/moonstone/Marquee'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { $L } from '../../hooks/language'
 import Navigable from '../../wrappers/Navigable'
 import css from './Toolbar.module.less'
 
-
-const TOOLBAR_LIST = [
-    { key: 'home', icon: 'home', label: $L('Home') },
-    { key: 'simulcast', icon: 'resumeplay', label: $L('Simulcast') },
-    { key: 'search', icon: 'search', label: $L('Search') },
-    { key: 'series', icon: 'series', label: $L('Series') },
-    { key: 'movies', icon: 'recordings', label: $L('Movies') },
-    { key: 'musics', icon: 'music', label: $L('Music') },
-    { key: 'my_list', icon: 'denselist', label: $L('My List') },
-    { key: 'info', icon: 'info', label: $L('About Me?') },
-    { key: 'close', icon: 'closex', label: $L('Close') },
-]
-
-export const TOOLBAR_INDEX = TOOLBAR_LIST.reduce((accumulator, item, index) => {
-  accumulator[item.key] = {...item, index}
-  return accumulator
-}, {})
 
 const NavigableDiv = Navigable('div', css.iconFocus)
 
@@ -57,7 +39,12 @@ const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
     )
 }
 
-const HomeToolbar = ({ currentIndex, hideText, autoFocus, onClick, onBlur, onFocus, onLeave, ...rest }) => {
+const HomeToolbar = ({ toolbarList, currentIndex, hideText, autoFocus, onClick, onBlur, onFocus, onLeave, ...rest }) => {
+
+    const toolbarIndex = useMemo(() => toolbarList.reduce((accumulator, item, index) => {
+        accumulator[item.key] = { ...item, index }
+        return accumulator
+    }, {}), [toolbarList])
 
     const onKeyDown = useCallback((ev) => {
         if (onLeave) {
@@ -76,7 +63,7 @@ const HomeToolbar = ({ currentIndex, hideText, autoFocus, onClick, onBlur, onFoc
 
     return (
         <Column className={css.homeToolbar} align='baseline center' {...rest}>
-            {Object.values(TOOLBAR_INDEX).map(iconData => {
+            {Object.values(toolbarIndex).map(iconData => {
                 return (
                     <IconText icon={iconData.icon}
                         key={iconData.index}
@@ -97,6 +84,11 @@ const HomeToolbar = ({ currentIndex, hideText, autoFocus, onClick, onBlur, onFoc
 }
 
 HomeToolbar.propTypes = {
+    toolbarList: PropTypes.arrayOf(PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        icon: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+    })).isRequired,
     currentIndex: PropTypes.number.isRequired,
     hideText: PropTypes.bool,
     autoFocus: PropTypes.bool,

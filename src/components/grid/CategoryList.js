@@ -38,7 +38,7 @@ const CategoryList = ({ category, setCategory, setDelay, ...rest }) => {
                 {categories.map(categ => {
                     return (
                         <Item id={categ.id} key={categ.id}
-                            onFocus={selectCategory}
+                            onClick={selectCategory}
                             css={{ item: classNames('', { [css.iconActive]: category === categ.id }) }}>
                             <span>{categ.localization.title}</span>
                         </Item>

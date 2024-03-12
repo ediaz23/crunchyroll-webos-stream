@@ -49,6 +49,7 @@ const MusicBrowse = ({ profile, musicfeed }) => {
                         profile={profile}
                         contentKey='music'
                         contentType='music'
+                        title={$L('Music')}
                         engine='search'
                         noCategory />
                 }

@@ -4,13 +4,14 @@
     padding-left: 0.5rem;
     height: 100%;
 
-    .scrollerContainer {
-        height: 90%;
+    >div {
+        width: 100%;
     }
 
-    .grid>div:not(:first-child):not(:last-child) {
+    .scrollerContainer {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
+        height: calc(100% - 1rem);
     }
 
     .iconActive {
@@ -28,4 +29,5 @@
             }
         }
     }
+
 }

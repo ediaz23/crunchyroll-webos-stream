@@ -310,7 +310,7 @@ const HomeFeed = ({ profile, homefeed }) => {
 
     return (
         <Column style={{ paddingLeft: '0.5rem' }}>
-            <Cell size="50%">
+            <Cell size="47%">
                 {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
             </Cell>
             <Cell>

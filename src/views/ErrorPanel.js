@@ -1,7 +1,6 @@
 
 import { useEffect, useCallback } from 'react'
 import { useSetRecoilState } from 'recoil'
-import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panel } from '@enact/moonstone/Panels'
 import PropTypes from 'prop-types'
 
@@ -46,4 +45,4 @@ ErrorPanel.propTypes = {
     closeErrorPanel: PropTypes.func.isRequired,
 }
 
-export default MoonstoneDecorator(ErrorPanel)
+export default ErrorPanel

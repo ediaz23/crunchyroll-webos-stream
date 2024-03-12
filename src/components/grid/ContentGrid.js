@@ -10,7 +10,6 @@ import { $L } from '../../hooks/language'
 import SeasonButtons from './SeasonButtons'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'
-import { TOOLBAR_INDEX } from '../home/Toolbar'
 import api from '../../api'
 import css from './ContentGrid.module.less'
 
@@ -19,13 +18,14 @@ import css from './ContentGrid.module.less'
  * @todo keep search after navegate?
  * All content grid and search
  * @param {Object} obj
- * @param {Object} profile current profile
+ * @param {Object} obj.profile current profile
  * @param {String} obj.contentKey key to identify and reload view
+ * @param {String} obj.title title for view
  * @param {String} obj.contentType type of content to show, series, movies, etc
  * @param {String} obj.engine Engine to search, can be search or browse
  * @param {Boolean} obj.noCategory Not show category
  */
-const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...rest }) => {
+const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCategory, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
     /** @type {[Object, Function]} */
@@ -44,16 +44,6 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
     const [loading, setLoading] = useState(true)
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
-    /**
-     * @type {{ key: String, label: String, icon: String, index: Number}}
-     */
-    const action = useMemo(() => {
-        const actionTmp = { ...TOOLBAR_INDEX[contentKey] }
-        if (season) {
-            actionTmp.label = `${actionTmp.label} ${season.localization.title}`
-        }
-        return actionTmp
-    }, [season, contentKey])
 
     const options = useMemo(() => {
         return {
@@ -132,7 +122,7 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, action, contentKey, delay, options, engine, changeContentList, setLoading])
+    }, [profile, contentKey, delay, options, engine, changeContentList, setLoading])
 
     useEffect(() => {  // initializing
         if (contentKey !== 'simulcast') {
@@ -151,55 +141,67 @@ const ContentGrid = ({ profile, contentKey, contentType, engine, noCategory, ...
 
     return (
         <Row className={css.ContentGrid} {...rest}>
-            {!noCategory &&
-                <Cell size="20%">
-                    <Heading>
-                        {action.label}
-                    </Heading>
-                    <CategoryList
-                        category={category}
-                        setCategory={setCategory}
-                        setDelay={setDelay} />
-                </Cell>
-            }
-            <Cell grow>
-                <Column className={css.grid}>
-                    <Cell shrink>
-                        <Input placeholder={$L('Search')}
-                            value={query}
-                            onChange={onSearch}
-                            iconAfter="search" />
-                    </Cell>
-                    <Cell grow >
-                        {loading ?
-                            <Column align='center center'>
-                                <Spinner />
-                            </Column>
-                            :
-                            <ContentGridItems
-                                contentList={contentList}
-                                load={onLoad}
-                                autoScroll={autoScroll}
-                                onScroll={onScroll} />
+            <Column>
+                <Cell shrink>
+                    <Row>
+                        <Cell shrink>
+                            <Heading>
+                                {title} {season && season.localization.title}
+                            </Heading>
+                        </Cell>
+                        <Cell shrink>
+                            <Input placeholder={$L('Search')}
+                                value={query}
+                                onChange={onSearch}
+                                iconAfter="search" />
+                        </Cell>
+                        {contentKey === 'simulcast' &&
+                            <Cell shrink>
+                                <SeasonButtons
+                                    profile={profile}
+                                    contentKey={contentKey}
+                                    season={season}
+                                    setSeason={setSeason}
+                                    setDelay={setDelay} />
+                            </Cell>
                         }
-                    </Cell>
-                    {contentKey === 'simulcast' &&
-                        <SeasonButtons
-                            profile={profile}
-                            contentKey={contentKey}
-                            season={season}
-                            setSeason={setSeason}
-                            setDelay={setDelay} />
-                    }
-                </Column>
-            </Cell>
+                    </Row>
+                </Cell>
+                <Cell grow>
+                    <Row className={css.scrollerContainer}>
+                        {!noCategory &&
+                            <Cell size="20%">
+                                <CategoryList
+                                    category={category}
+                                    setCategory={setCategory}
+                                    setDelay={setDelay} />
+                            </Cell>
+                        }
+                        <Cell grow >
+                            {loading ?
+                                <Column align='center center'>
+                                    <Spinner />
+                                </Column>
+                                :
+                                <ContentGridItems
+                                    contentList={contentList}
+                                    load={onLoad}
+                                    autoScroll={autoScroll}
+                                    onScroll={onScroll} />
+                            }
+                        </Cell>
+                    </Row>
+                </Cell>
+            </Column>
         </Row>
+
     )
 }
 
 ContentGrid.propTypes = {
     profile: PropTypes.object.isRequired,
     contentKey: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     contentType: PropTypes.string,
     engine: PropTypes.string,
     noCategory: PropTypes.bool

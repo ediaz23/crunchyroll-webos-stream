@@ -57,7 +57,7 @@ class ErrorBoundary extends Component {
                     errorMessage = `${this.state.error}`
                 }
             }
-            return <ErrorPanel message={errorMessage} closeErrorPanel={this.closeErrorPanel} />
+            return <ErrorPanel message={errorMessage} closeErrorPanel={this.closeErrorPanel} {...this.props} />
         }
 
 

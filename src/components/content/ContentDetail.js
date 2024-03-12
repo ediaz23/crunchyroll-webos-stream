@@ -49,10 +49,13 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     }, [content])
 
     const setContentToPlay = useCallback(contentToPlay => {
+        if (currentIndex !== 0) {
+            back.popHistory()
+        }
         back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
         setPlayContent(contentToPlay)
         setPath('/profiles/home/player')
-    }, [setPath, setPlayContent])
+    }, [setPath, setPlayContent, currentIndex])
 
     const calculateImage = useCallback((ref) => {
         if (ref) {
