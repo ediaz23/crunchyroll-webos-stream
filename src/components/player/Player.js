@@ -367,6 +367,9 @@ const findNextEp = async ({ profile, content, step }) => {
     }
     if (out && out.total > 0) {
         out.data[0].type = content.type
+        if (['episode', 'movie'].includes(content.type)) {
+            await api.content.savePlayhead(profile, { contentId: out.data[0].id, playhead: 0 })
+        }
     }
     return out
 }
@@ -458,21 +461,20 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
                 modifyRequest: modifierDashRequest(profile),
             }
         })
-        /*
+
         playerRef.current.updateSettings({
             streaming: {
                 buffer: {
                     // https://reference.dashif.org/dash.js/v4.7.4/samples/buffer/initial-buffer.html
-                    initialBufferLevel: 20,
+                    //                    initialBufferLevel: 20,
                     // https://reference.dashif.org/dash.js/v4.7.4/samples/buffer/buffer-target.html
-                    bufferTimeAtTopQuality: 30,
-                    bufferTimeAtTopQualityLongForm: 60,
-                    stableBufferTime: 15,
-                    longFormContentDurationThreshold: 600,
+                    bufferTimeAtTopQuality: 20,
+                    bufferTimeAtTopQualityLongForm: 40,
+                    //                    stableBufferTime: 15,
+                    //                    longFormContentDurationThreshold: 600,
                 }
             }
         })
-        */
     }
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
@@ -612,16 +614,18 @@ const Player = ({ ...rest }) => {
     }, [videoCompRef, profile, content, setPlayContent, changeAudio])
 
     /** @type {Function} */
-    const onNextEp = useCallback(async (ev) => {
+    const onNextEp = useCallback((ev) => {
         ev.preventDefault()
-        await onChangeEp(await findNextEp({ profile, content, step: +1 }))
-    }, [profile, content, onChangeEp])
+        setLoading(true)
+        findNextEp({ profile, content, step: +1 }).then(onChangeEp)
+    }, [profile, content, onChangeEp, setLoading])
 
     /** @type {Function} */
-    const onPrevEp = useCallback(async (ev) => {
+    const onPrevEp = useCallback((ev) => {
         ev.preventDefault()
-        await onChangeEp(await findNextEp({ profile, content, step: -1 }))
-    }, [profile, content, onChangeEp])
+        setLoading(true)
+        findNextEp({ profile, content, step: -1 }).then(onChangeEp)
+    }, [profile, content, onChangeEp, setLoading])
 
     const onEndVideo = useCallback((ev) => setEndEvent(ev), [setEndEvent])
 
