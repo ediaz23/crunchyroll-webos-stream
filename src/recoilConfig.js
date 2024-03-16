@@ -1,6 +1,24 @@
 
 import { atom } from 'recoil'
 
+
+const localStorageEffect = atomKey => ({ setSelf, onSet }) => {
+    const key = `crunchy_${atomKey}`
+    const savedValue = window.localStorage.getItem(key)
+    if (savedValue != null) {
+        setSelf(JSON.parse(savedValue))
+    }
+
+    onSet((newValue, _, isReset) => {
+        if (isReset) {
+            window.localStorage.removeItem(key)
+        } else {
+            window.localStorage.setItem(key, JSON.stringify(newValue))
+        }
+    })
+}
+
+
 export const pathState = atom({
     key: 'pathSate',
     default: '/init'
@@ -36,27 +54,31 @@ export const autoLoginState = atom({
 
 export const homeFeedState = atom({
     key: 'homeFeedState',
-    default: []
+    default: [],
+    effects: [localStorageEffect('homeFeedState')]
 })
 
 export const homeFeedProcessedState = atom({
     key: 'homeFeedProcessedState',
-    default: []
+    default: [],
+    effects: [localStorageEffect('homeFeedProcessedState')]
 })
 
 export const homeFeedExpirationState = atom({
     key: 'homeFeedExpirationState',
-    default: null
+    default: null,
 })
 
 export const musicFeedState = atom({
     key: 'musicFeedState',
-    default: []
+    default: [],
+    effects: [localStorageEffect('musicFeedState')]
 })
 
 export const musicFeedProcessedState = atom({
     key: 'musicFeedProcessedState',
-    default: []
+    default: [],
+    effects: [localStorageEffect('musicFeedProcessedState')]
 })
 
 export const musicFeedExpirationState = atom({
@@ -86,5 +108,6 @@ export const contactBtnState = atom({
 
 export const categoriesState = atom({
     key: 'categoriesState',
-    default: []
+    default: [],
+    effects: [localStorageEffect('categoriesState')]
 })
