@@ -80,6 +80,7 @@
         "classnames": "^2.5.1",
         "crunchyroll-js-api": "^1.2.4",
         "dashjs": "^4.7.4",
+        "fake-xml-http-request": "^2.1.2",
         "i18n-iso-countries": "^7.10.1",
         "i18n-iso-m49": "^1.0.0",
         "ilib": "^14.19.0",
