@@ -99,7 +99,7 @@ export const customFetch = async (url, options = {}, direct = false) => {
             const { status, statusText, content, headers, resUrl } = data
             logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
             if (direct) {
-                if (200 <= status && 200 < 300) {
+                if (200 <= status && status < 300) {
                     res(content)
                 } else {
                     rej({ status, statusText, headers })
