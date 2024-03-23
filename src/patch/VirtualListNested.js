@@ -166,6 +166,13 @@ class VirtualListBase extends VirtualListSuperBase {
                     ev.stopPropagation();
                 } else if (!isLeaving && Spotlight.move(direction)) {
                     throw new Error('onKeyDownPatch 1')
+                } else if (isLeaving && directions.up && row === 0) {
+                    const newCandidate = getTargetByDirectionFromElement(direction, target.parentElement)
+                    if (newCandidate) {
+                        ev.preventDefault()
+                        ev.stopPropagation()
+                        Spotlight.focus(newCandidate)
+                    }
                 }
             }
         }

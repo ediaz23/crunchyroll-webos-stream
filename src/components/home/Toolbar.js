@@ -46,20 +46,37 @@ const HomeToolbar = ({ toolbarList, currentIndex, hideText, autoFocus, onClick, 
         return accumulator
     }, {}), [toolbarList])
 
+    const moveFocus = useCallback((target, direction) => {
+        let candidate = getTargetByDirectionFromElement(direction, target)
+        if (candidate && candidate.id === 'content-banner') {
+            const newCandidate = getTargetByDirectionFromElement('down', candidate)
+            candidate = newCandidate ? newCandidate : candidate
+        }
+        if (candidate) {
+            onLeave()
+            Spotlight.focus(candidate)
+        }
+    }, [onLeave])
+
     const onKeyDown = useCallback((ev) => {
         if (onLeave) {
             const { keyCode, target } = ev
             const direction = getDirection(keyCode)
-            if (direction && ['right', 'left'].includes(direction)) {
-                ev.stopPropagation()
-                if (direction === 'right') {
-                    const candidate = getTargetByDirectionFromElement(direction, target)
-                    onLeave()
-                    Spotlight.focus(candidate)
+            if (direction) {
+                if (['right', 'left'].includes(direction)) {
+                    ev.stopPropagation()
+                    if (direction === 'right') {
+                        moveFocus(target, direction)
+                    }
+                } else if (direction === 'up') {
+                    if (target?.dataset?.index === '0') {
+                        ev.stopPropagation()
+                        moveFocus(target, direction)
+                    }
                 }
             }
         }
-    }, [onLeave])
+    }, [onLeave, moveFocus])
 
     return (
         <Column className={css.homeToolbar} align='baseline center' {...rest}>

@@ -194,7 +194,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                 </Cell>
             </Column>
         </Row>
-
     )
 }
 

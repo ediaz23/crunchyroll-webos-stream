@@ -13,6 +13,7 @@ import { currentProfileState } from '../../recoilConfig'
 import api from '../../api'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentBanner.module.less'
+import Navigable from '../../wrappers/Navigable'
 
 
 /**
@@ -176,6 +177,8 @@ ContentHeader.propTypes = {
     noCategory: PropTypes.bool,
 }
 
+const RowNavigable = Navigable(Row, css.active)
+
 
 const HomeContentBanner = ({ content, noCategory, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
@@ -192,7 +195,7 @@ const HomeContentBanner = ({ content, noCategory, ...rest }) => {
     }, [compRef, content, getImagePerResolution])
 
     return (
-        <Row className={css.homeContentBanner} {...rest}>
+        <RowNavigable id='content-banner' className={css.homeContentBanner} {...rest}>
             <Cell size="50%">
                 <ContentHeader content={content} noCategory={noCategory} />
                 <BodyText size='small'>
@@ -204,7 +207,7 @@ const HomeContentBanner = ({ content, noCategory, ...rest }) => {
                     <Image className={css.poster} src={image.source} sizing='fill' />
                 }
             </Cell>
-        </Row>
+        </RowNavigable>
     )
 }
 
