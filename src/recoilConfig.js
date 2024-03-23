@@ -58,12 +58,6 @@ export const homeFeedState = atom({
     effects: [localStorageEffect('homeFeedState')]
 })
 
-export const homeFeedProcessedState = atom({
-    key: 'homeFeedProcessedState',
-    default: [],
-    effects: [localStorageEffect('homeFeedProcessedState')]
-})
-
 export const homeFeedExpirationState = atom({
     key: 'homeFeedExpirationState',
     default: null,
@@ -73,12 +67,6 @@ export const musicFeedState = atom({
     key: 'musicFeedState',
     default: [],
     effects: [localStorageEffect('musicFeedState')]
-})
-
-export const musicFeedProcessedState = atom({
-    key: 'musicFeedProcessedState',
-    default: [],
-    effects: [localStorageEffect('musicFeedProcessedState')]
 })
 
 export const musicFeedExpirationState = atom({

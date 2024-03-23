@@ -12,7 +12,7 @@ import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
 
 
-const MusicBrowse = ({ profile, contentKey, title, contentType, musicfeed, ...rest }) => {
+const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMusicFeed, ...rest }) => {
 
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
@@ -124,7 +124,8 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicfeed, ...re
                 {!loading && query === '' &&
                     <MusicFeed
                         profile={profile}
-                        musicfeed={musicfeed} />
+                        musicFeed={musicFeed}
+                        setMusicFeed={setMusicFeed} />
                 }
                 {!loading && query !== '' &&
                     <ContentGridItems
@@ -142,7 +143,8 @@ MusicBrowse.propTypes = {
     profile: PropTypes.object.isRequired,
     contentKey: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    musicfeed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    musicFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setMusicFeed: PropTypes.func.isRequired,
     contentType: PropTypes.string,
 }
 

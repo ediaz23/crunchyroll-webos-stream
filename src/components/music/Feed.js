@@ -5,10 +5,10 @@ import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 import { $L } from '../../hooks/language'
-import { musicFeedProcessedState, musicFeedState, selectedContentState, } from '../../recoilConfig'
+import { selectedContentState, } from '../../recoilConfig'
 import HomeContentBanner from '../home/ContentBanner'
 import HomeFeedRow from '../home/FeedRow'
 import { convertItem2Object, processCuratedCollection, postProcessFeedItem } from '../home/Feed'
@@ -81,18 +81,6 @@ const processInFeedPanels = async (carousel, profile) => {
 /**
  * Process InFeedPanels item
  * @param {Object} carousel
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
- * @return {Promise<Object>}
- */
-const processMusicCuratedCollection = async (carousel, profile) => {
-    carousel.ids = carousel.collection_items.map(item => item.id)
-    const out = await processCuratedCollection(carousel, profile)
-    return out
-}
-
-/**
- * Process InFeedPanels item
- * @param {Object} carousel
  * @return {Promise<Object>}
  */
 const processMusicArtistBanner = async (carousel) => {
@@ -121,7 +109,7 @@ const processItemFeed = async (carousel, profile) => {
     } else if (carousel.resource_type === 'in_feed_banner') {
         res = processInFeedPanels(carousel, profile)
     } else if (carousel.resource_type === 'curated_collection') {
-        res = processMusicCuratedCollection(carousel, profile)
+        res = processCuratedCollection(carousel, profile)
     } else if (carousel.resource_type === 'music_artist_banner') {
         res = processMusicArtistBanner(carousel, profile)
     } else {
@@ -140,11 +128,7 @@ const processItemFeed = async (carousel, profile) => {
 }
 
 
-const MusicFeed = ({ profile, musicfeed }) => {
-    /** @type {Function} */
-    const setMusicfeed = useSetRecoilState(musicFeedState)
-    /** @type {[Array<Object>, Function]} */
-    const [musicFeedProcessed, setMusicFeedProcessed] = useRecoilState(musicFeedProcessedState)
+const MusicFeed = ({ profile, musicFeed, setMusicFeed }) => {
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
     /** @type {Number} */
@@ -152,31 +136,29 @@ const MusicFeed = ({ profile, musicfeed }) => {
 
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
-        const feedItem = musicFeedProcessed[index]
-        if (feedItem) {
+        const feedItem = musicFeed[index]
+        if (feedItem.processed) {
             out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
         } else {
             Promise.resolve().then(() => {
-                if (feedItem === undefined) {
-                    setMusicFeedProcessed(prevArray => [
+                if (feedItem.processed === undefined) {
+                    setMusicFeed(prevArray => [
                         ...prevArray.slice(0, index),
-                        false,  // avoid double request
+                        { ...feedItem, processed: false },  // avoid double request
                         ...prevArray.slice(index + 1)
                     ])
-                    processItemFeed(musicfeed[index], profile).then(newFeed => {
+                    processItemFeed(musicFeed[index], profile).then(newFeed => {
                         if (newFeed.items.length) {
-                            setMusicFeedProcessed(prevArray => [
+                            setMusicFeed(prevArray => [
                                 ...prevArray.slice(0, index),
-                                newFeed,
+                                { ...newFeed, processed: true },
                                 ...prevArray.slice(index + 1)
                             ])
                         } else {
-                            setMusicfeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
-                            setMusicFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                            setMusicFeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                         }
                     }).catch(() => {
-                        setMusicfeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
-                        setMusicFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                        setMusicFeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                     })
                 }
             })
@@ -190,7 +172,7 @@ const MusicFeed = ({ profile, musicfeed }) => {
             )
         }
         return out
-    }, [musicfeed, profile, musicFeedProcessed, setMusicFeedProcessed, setSelectedContent, setMusicfeed])
+    }, [musicFeed, profile, setSelectedContent, setMusicFeed])
 
     return (
         <Column>
@@ -199,7 +181,7 @@ const MusicFeed = ({ profile, musicfeed }) => {
             </Cell>
             <Cell>
                 <VirtualListNested
-                    dataSize={musicfeed.length}
+                    dataSize={musicFeed.length}
                     itemRenderer={renderRow}
                     itemSize={itemHeigth}
                     childProps={{
@@ -218,7 +200,8 @@ const MusicFeed = ({ profile, musicfeed }) => {
 
 MusicFeed.propTypes = {
     profile: PropTypes.object.isRequired,
-    musicfeed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    musicFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setMusicFeed: PropTypes.func.isRequired,
 }
 
 export default MusicFeed

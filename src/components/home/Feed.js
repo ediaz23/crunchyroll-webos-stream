@@ -4,10 +4,10 @@ import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 import { $L } from '../../hooks/language'
-import { homeFeedProcessedState, homeFeedState, selectedContentState } from '../../recoilConfig'
+import { selectedContentState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
@@ -62,7 +62,7 @@ const processCarousel = async (carousel, profile) => {
         resource_type: carousel.resource_type,
         response_type: carousel.response_type,
         title: $L('Watch Now'),
-        items: []
+        items: [],
     }
     /** @type {Array<String>} */
     let objectIds
@@ -90,7 +90,7 @@ export const processPanels = async (carousel) => {
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
         title: $L('May Like'),
-        items: carousel.panels.map(removePanelField)
+        items: carousel.panels.map(removePanelField),
     }
 
     return out
@@ -108,7 +108,7 @@ const processInFeedPanels = async (carousel, profile) => {
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
         title: $L('Why Not?'),
-        items: []
+        items: [],
     }
     /** @type {Array<String>} */
     let objectIds
@@ -253,11 +253,7 @@ const processItemFeed = async (carousel, profile) => {
 }
 
 
-const HomeFeed = ({ profile, homefeed }) => {
-    /** @type {Function} */
-    const setHomefeed = useSetRecoilState(homeFeedState)
-    /** @type {[Array<Object>, Function]} */
-    const [homeFeedProcessed, setHomeFeedProcessed] = useRecoilState(homeFeedProcessedState)
+const HomeFeed = ({ profile, homeFeed, setHomeFeed }) => {
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
     /** @type {Number} */
@@ -265,31 +261,29 @@ const HomeFeed = ({ profile, homefeed }) => {
 
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
-        const feedItem = homeFeedProcessed[index]
-        if (feedItem) {
+        const feedItem = homeFeed[index]
+        if (feedItem.processed) {
             out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
         } else {
             Promise.resolve().then(() => {
-                if (feedItem === undefined) {
-                    setHomeFeedProcessed(prevArray => [
+                if (feedItem.processed === undefined) {
+                    setHomeFeed(prevArray => [
                         ...prevArray.slice(0, index),
-                        false,  // avoid double request
+                        { ...feedItem, processed: false },  // avoid double request
                         ...prevArray.slice(index + 1)
                     ])
-                    processItemFeed(homefeed[index], profile).then(newFeed => {
+                    processItemFeed(homeFeed[index], profile).then(newFeed => {
                         if (newFeed.items.length) {
-                            setHomeFeedProcessed(prevArray => [
+                            setHomeFeed(prevArray => [
                                 ...prevArray.slice(0, index),
-                                newFeed,
+                                { ...newFeed, processed: true },
                                 ...prevArray.slice(index + 1)
                             ])
                         } else {
-                            setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
-                            setHomeFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                            setHomeFeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                         }
                     }).catch(() => {
-                        setHomefeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
-                        setHomeFeedProcessed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                        setHomeFeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
                     })
                 }
             })
@@ -303,7 +297,7 @@ const HomeFeed = ({ profile, homefeed }) => {
             )
         }
         return out
-    }, [homefeed, profile, homeFeedProcessed, setHomeFeedProcessed, setSelectedContent, setHomefeed])
+    }, [homeFeed, profile, setSelectedContent, setHomeFeed])
 
     return (
         <Column style={{ paddingLeft: '0.5rem' }}>
@@ -312,7 +306,7 @@ const HomeFeed = ({ profile, homefeed }) => {
             </Cell>
             <Cell>
                 <VirtualListNested
-                    dataSize={homefeed.length}
+                    dataSize={homeFeed.length}
                     itemRenderer={renderRow}
                     itemSize={itemHeigth}
                     childProps={{
@@ -331,7 +325,8 @@ const HomeFeed = ({ profile, homefeed }) => {
 
 HomeFeed.propTypes = {
     profile: PropTypes.object.isRequired,
-    homefeed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    homeFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setHomeFeed: PropTypes.func.isRequired,
 }
 
 export default HomeFeed

@@ -9,8 +9,8 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
     currentProfileState, homefeedReadyState, homeIndexState, selectedContentState,
-    homeFeedState, homeFeedProcessedState, homeFeedExpirationState,
-    musicFeedState, musicFeedProcessedState, musicFeedExpirationState,
+    homeFeedState, homeFeedExpirationState,
+    musicFeedState, musicFeedExpirationState,
     categoriesState,
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
@@ -97,6 +97,9 @@ const postProcessHomefeed = (feed) => {
                     title: item.title,
                     ids: item.ids,
                 })
+                if (item.collection_items) {
+                    newItem.ids = item.collection_items.map(i => i.id)
+                }
             } else if (item.resource_type === 'dynamic_collection') {
                 Object.assign(newItem, {
                     title: item.title,
@@ -130,15 +133,11 @@ const HomePanel = (props) => {
     const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
     /** @type {[Date, Function]} */
     const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
-    /** @type {Function} */
-    const setHomeFeedProcessed = useSetRecoilState(homeFeedProcessedState)
 
     /** @type {[Array<Object>, Function]} */
     const [musicFeed, setMusicFeed] = useRecoilState(musicFeedState)
     /** @type {[Date, Function]} */
     const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
-    /** @type {Function} */
-    const setMusicFeedProcessed = useSetRecoilState(musicFeedProcessedState)
     /** @type {Function} */
     const setCategories = useSetRecoilState(categoriesState)
     /** @type {[Boolean, Function]}  */
@@ -186,20 +185,14 @@ const HomePanel = (props) => {
                     ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
                 ])
                 const { data } = await api.discover.getHomeFeed(profile)
-                /** @type {Array} */
-                const filterFeed = data.filter(item => item.response_type !== 'news_feed')
-                setHomeFeedProcessed(new Array(filterFeed.length))
-                setHomeFeed(postProcessHomefeed(filterFeed))
+                setHomeFeed(postProcessHomefeed(data.filter(item => item.response_type !== 'news_feed')))
                 now.setHours(now.getHours() + 3)
                 setHomeFeedExpiration(now)
                 setSelectedContent(null)
             }
             if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
                 const { data } = await api.music.getFeed(profile)
-                /** @type {Array} */
-                const musicFilterFeed = data.filter(item => item.response_type !== 'news_feed')
-                setMusicFeedProcessed(new Array(musicFilterFeed.length))
-                setMusicFeed(postProcessHomefeed(musicFilterFeed))
+                setMusicFeed(postProcessHomefeed(data.filter(item => item.response_type !== 'news_feed')))
                 now.setHours(now.getHours() + 3)
                 setMusicFeedExpiration(now)
                 setSelectedContent(null)
@@ -211,8 +204,8 @@ const HomePanel = (props) => {
         setLoading(true)
         loadFeed().then(() => setLoading(false))
     }, [profile, currentActivity, setSelectedContent, setCategories,
-        setHomeFeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
-        setMusicFeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
+        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration,
+        setMusicFeed, musicFeedExpiration, setMusicFeedExpiration,
     ])
 
     useEffect(() => {
@@ -238,7 +231,9 @@ const HomePanel = (props) => {
                         </Column>
                         :
                         <ActivityViews index={currentActivity}>
-                            <HomeFeed profile={profile} homefeed={homeFeed} />
+                            <HomeFeed profile={profile}
+                                homeFeed={homeFeed}
+                                setHomeFeed={setHomeFeed} />
                             <ContentGrid profile={profile}
                                 contentKey='simulcast'
                                 title={toolbarList[currentActivity].label} />
@@ -256,7 +251,8 @@ const HomePanel = (props) => {
                             <MusicBrowse profile={profile}
                                 contentKey='music'
                                 title={toolbarList[currentActivity].label}
-                                musicfeed={musicFeed} />
+                                musicFeed={musicFeed}
+                                setMusicFeed={setMusicFeed} />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
                             <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
