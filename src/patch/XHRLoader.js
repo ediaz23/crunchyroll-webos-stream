@@ -10,34 +10,32 @@ import utils from '../utils'
  */
 class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
     _setResponseBody(body) {
-        if (body === '') {
-            super._setResponseBody(body)
+        if (this.async) {
+            this._readyStateChange(FakeXMLHttpRequest.LOADING)
+        }
+        const data = utils.base64toArray(body)
+        this.responseText = ''
+
+        if (this.responseType === 'arraybuffer') {
+            this.response = data.buffer
+        } else if (this.responseType === 'blob') {
+            this.response = new window.Blob([data.buffer])
         } else {
-            const data = utils.base64toArray(body)
-            this.responseText = ''
-
-            if (this.responseType === 'arraybuffer') {
-                this.response = data.buffer
-            } else if (this.responseType === 'blob') {
-                this.response = new window.Blob([data.buffer])
+            const decoder = new window.TextDecoder()
+            this.responseText = decoder.decode(data)
+            if (this.responseType === 'json') {
+                this.response = JSON.parse(this.responseText)
+            } else if (this.responseType === 'document') {
+                const parser = new window.DOMParser()
+                this.response = parser.parseFromString(this.responseText, 'text/xml')
             } else {
-                const decoder = new window.TextDecoder()
-                this.responseText = decoder.decode(data)
-                if (this.responseType === 'json') {
-                    this.response = JSON.parse(this.responseText)
-                } else if (this.responseType === 'document') {
-                    const parser = new window.DOMParser()
-                    this.response = parser.parseFromString(this.responseText, 'text/xml')
-                } else {
-                    this.response = this.responseText
-                }
+                this.response = this.responseText
             }
-
-            if (this.async) {
-                this._readyStateChange(FakeXMLHttpRequest.DONE)
-            } else {
-                this.readyState = FakeXMLHttpRequest.DONE
-            }
+        }
+        if (this.async) {
+            this._readyStateChange(FakeXMLHttpRequest.DONE)
+        } else {
+            this.readyState = FakeXMLHttpRequest.DONE
         }
     }
 }

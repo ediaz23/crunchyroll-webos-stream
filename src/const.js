@@ -8,7 +8,7 @@ export const DEV_FAST_SELECT = __DEV__ && false
 /** @type {Boolean} */
 export const _PLAY_TEST_ = __DEV__ && false
 
-export const _LOCALHOST_SERVER_ = 'http://192.168.0.27:8052'
+export const _LOCALHOST_SERVER_ = 'http://127.0.0.1:8052'
 
 // posible values series
 /** @type {String} */
