@@ -15,7 +15,7 @@ import {
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
-import MusicBrowse from '../components/music/Browse'
+import MusicFeed from '../components/music/Feed'
 import ContentGrid from '../components/grid/ContentGrid'
 import Watchlist from '../components/watchlist/Watchlist'
 import FloatingLayerFix from '../patch/FloatingLayer'
@@ -101,6 +101,7 @@ const HomePanel = (props) => {
         { key: 'series', icon: 'series', label: $L('Series') },
         { key: 'movies', icon: 'recordings', label: $L('Movies') },
         { key: 'musics', icon: 'music', label: $L('Music') },
+        { key: 'search_music', icon: 'audio', label: $L('Search Music') },
         { key: 'my_list', icon: 'denselist', label: $L('My List') },
         { key: 'info', icon: 'info', label: $L('About Me?') },
         { key: 'close', icon: 'closex', label: $L('Close') },
@@ -199,7 +200,14 @@ const HomePanel = (props) => {
                                 contentKey='movies'
                                 contentType='movie_listing'
                                 title={toolbarList[currentActivity].label} />
-                            <MusicBrowse profile={profile} musicfeed={musicfeed} />
+                            <MusicFeed profile={profile}
+                                musicfeed={musicfeed} />
+                            <ContentGrid profile={profile}
+                                contentKey='music'
+                                contentType='music'
+                                title={toolbarList[currentActivity].label}
+                                engine='search'
+                                noCategory />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
                             <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
