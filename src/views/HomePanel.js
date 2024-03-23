@@ -36,26 +36,77 @@ const postProcessHomefeed = (feed) => {
     const panelObject = { resource_type: 'panel', panels: [] }
     const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
     const musicArtistObject = { resource_type: 'music_artist_banner', panels: [] }
-    for (const item of feed) {
+    for (let item of feed) {
         if (item.resource_type === 'panel') {
             // find one panel then add to panelObject
             // only if not added before
             if (panelObject.panels.length === 0) {
                 mergedFeed.push(panelObject)
             }
-            panelObject.panels.push(item)
+            let newItem = { panel: item.panel }
+            if (panelObject.panels.length === 0) {
+                Object.assign(newItem, {
+                    resource_type: item.resource_type,
+                    response_type: item.response_type,
+                })
+            }
+            panelObject.panels.push(newItem)
         } else if (item.resource_type === 'in_feed_banner') {
             if (bannerObject.panels.length === 0) {
                 mergedFeed.push(bannerObject)
             }
-            bannerObject.panels.push(item)
+            let newItem = {
+                resource_type: item.resource_type,
+                link: item.link,
+            }
+            if (bannerObject.panels.length === 0) {
+                Object.assign(newItem, {
+                    id: item.id,
+                    response_type: item.response_type,
+                })
+            }
+            bannerObject.panels.push(newItem)
         } else if (item.resource_type === 'musicArtist') {
             if (musicArtistObject.panels.length === 0) {
                 mergedFeed.push(musicArtistObject)
             }
-            musicArtistObject.panels.push(item)
+            let newItem = { object: item.object }
+            if (musicArtistObject.panels.length === 0) {
+                Object.assign(newItem, {
+                    id: item.id,
+                    resource_type: item.resource_type,
+                    response_type: item.response_type,
+                })
+            }
+            musicArtistObject.panels.push(newItem)
         } else {
-            mergedFeed.push(item)
+            let newItem = {
+                id: item.id,
+                resource_type: item.resource_type,
+                response_type: item.response_type,
+            }
+            if (item.resource_type === 'hero_carousel') {
+                newItem.items = item.items.map(i => {
+                    return {
+                        slug: i.slug,
+                        link: i.link,
+                    }
+                })
+            } else if (item.resource_type === 'curated_collection') {
+                Object.assign(newItem, {
+                    title: item.title,
+                    ids: item.ids,
+                })
+            } else if (item.resource_type === 'dynamic_collection') {
+                Object.assign(newItem, {
+                    title: item.title,
+                    source_media_id: item.source_media_id,
+                    query_params: item.query_params,
+                })
+            } else {
+                Object.assign(newItem, item)
+            }
+            mergedFeed.push(newItem)
         }
     }
     return mergedFeed
@@ -71,19 +122,19 @@ const HomePanel = (props) => {
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {[Boolean, Function]} */
-    const [homefeedReady, setHomefeedReady] = useRecoilState(homefeedReadyState)
+    const [homeFeedReady, setHomeFeedReady] = useRecoilState(homefeedReadyState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
 
     /** @type {[Array<Object>, Function]} */
-    const [homefeed, setHomefeed] = useRecoilState(homeFeedState)
+    const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
     /** @type {[Date, Function]} */
     const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
     /** @type {Function} */
     const setHomeFeedProcessed = useSetRecoilState(homeFeedProcessedState)
 
     /** @type {[Array<Object>, Function]} */
-    const [musicfeed, setMusicfeed] = useRecoilState(musicFeedState)
+    const [musicFeed, setMusicFeed] = useRecoilState(musicFeedState)
     /** @type {[Date, Function]} */
     const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
     /** @type {Function} */
@@ -119,23 +170,26 @@ const HomePanel = (props) => {
 
     /** @type {Function} */
     const showToolbar = useCallback((ev) => {
-        if (homefeedReady) {
+        if (homeFeedReady) {
             ev.target.blur()
             toggleShowFullToolbar()
         }
-    }, [toggleShowFullToolbar, homefeedReady])
+    }, [toggleShowFullToolbar, homeFeedReady])
 
     useEffect(() => {
         const loadFeed = async () => {
             const now = new Date()
             if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
                 const { data: categs } = await api.discover.getCategories(profile)
-                setCategories([{ id: 'all', localization: { title: $L('All') } }, ...categs])
+                setCategories([
+                    { id: 'all', title: $L('All') },
+                    ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
+                ])
                 const { data } = await api.discover.getHomeFeed(profile)
                 /** @type {Array} */
                 const filterFeed = data.filter(item => item.response_type !== 'news_feed')
                 setHomeFeedProcessed(new Array(filterFeed.length))
-                setHomefeed(postProcessHomefeed(filterFeed))
+                setHomeFeed(postProcessHomefeed(filterFeed))
                 now.setHours(now.getHours() + 3)
                 setHomeFeedExpiration(now)
                 setSelectedContent(null)
@@ -145,7 +199,7 @@ const HomePanel = (props) => {
                 /** @type {Array} */
                 const musicFilterFeed = data.filter(item => item.response_type !== 'news_feed')
                 setMusicFeedProcessed(new Array(musicFilterFeed.length))
-                setMusicfeed(postProcessHomefeed(musicFilterFeed))
+                setMusicFeed(postProcessHomefeed(musicFilterFeed))
                 now.setHours(now.getHours() + 3)
                 setMusicFeedExpiration(now)
                 setSelectedContent(null)
@@ -157,15 +211,15 @@ const HomePanel = (props) => {
         setLoading(true)
         loadFeed().then(() => setLoading(false))
     }, [profile, currentActivity, setSelectedContent, setCategories,
-        setHomefeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
-        setMusicfeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
+        setHomeFeed, setHomeFeedProcessed, homeFeedExpiration, setHomeFeedExpiration,
+        setMusicFeed, setMusicFeedProcessed, musicFeedExpiration, setMusicFeedExpiration,
     ])
 
     useEffect(() => {
         return () => {
-            setHomefeedReady(false)
+            setHomeFeedReady(false)
         }
-    }, [setHomefeedReady])
+    }, [setHomeFeedReady])
 
     return (
         <Panel {...props}>
@@ -184,7 +238,7 @@ const HomePanel = (props) => {
                         </Column>
                         :
                         <ActivityViews index={currentActivity}>
-                            <HomeFeed profile={profile} homefeed={homefeed} />
+                            <HomeFeed profile={profile} homefeed={homeFeed} />
                             <ContentGrid profile={profile}
                                 contentKey='simulcast'
                                 title={toolbarList[currentActivity].label} />
@@ -202,7 +256,7 @@ const HomePanel = (props) => {
                             <MusicBrowse profile={profile}
                                 contentKey='music'
                                 title={toolbarList[currentActivity].label}
-                                musicfeed={musicfeed} />
+                                musicfeed={musicFeed} />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
                             <ConfirmExitPanel onCancel={toggleShowFullToolbar} />

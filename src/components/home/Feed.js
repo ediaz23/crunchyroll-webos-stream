@@ -61,7 +61,6 @@ const processCarousel = async (carousel, profile) => {
         id: carousel.id,
         resource_type: carousel.resource_type,
         response_type: carousel.response_type,
-        display_type: carousel.display_type,
         title: $L('Watch Now'),
         items: []
     }
@@ -90,7 +89,6 @@ export const processPanels = async (carousel) => {
         id: 'panels',
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
-        display_type: carousel.panels[0].display_type,
         title: $L('May Like'),
         items: carousel.panels.map(removePanelField)
     }
@@ -109,7 +107,6 @@ const processInFeedPanels = async (carousel, profile) => {
         id: 'in_feed_panels',
         resource_type: carousel.panels[0].resource_type,
         response_type: carousel.panels[0].response_type,
-        display_type: carousel.panels[0].display_type,
         title: $L('Why Not?'),
         items: []
     }

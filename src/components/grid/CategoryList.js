@@ -21,7 +21,7 @@ import css from './ContentGrid.module.less'
  }}
  */
 const CategoryList = ({ category, setCategory, setDelay, ...rest }) => {
-    /** @type {Array<{id: String, localization: Object}>} */
+    /** @type {Array<{id: String, title: String}>} */
     const categories = useRecoilValue(categoriesState)
 
     const selectCategory = useCallback((ev) => {
@@ -40,7 +40,7 @@ const CategoryList = ({ category, setCategory, setDelay, ...rest }) => {
                         <Item id={categ.id} key={categ.id}
                             onClick={selectCategory}
                             css={{ item: classNames('', { [css.iconActive]: category === categ.id }) }}>
-                            <span>{categ.localization.title}</span>
+                            <span>{categ.title}</span>
                         </Item>
                     )
                 })}
