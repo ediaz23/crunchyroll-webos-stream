@@ -126,13 +126,21 @@ export const loadLibData = async (file) => {
 }
 
 /**
+ * @param {Uint8Array} uint8Array
+ * @returns {String}
+ */
+export const uint8ArrayToString = (uint8Array) => {
+    return [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
+}
+
+/**
  * @param {Uint8Array|ArrayBuffer} body
  * @returns {String}
  */
 export const arrayToBase64 = (body) => {
     const uint8Array = body instanceof Uint8Array ? body : new Uint8Array(body)
-    const uint8ArrayToString = [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
-    return btoa(uint8ArrayToString)
+    const str = uint8ArrayToString(uint8Array)
+    return btoa(str)
 }
 
 
@@ -161,4 +169,5 @@ export default {
     loadLibData,
     arrayToBase64,
     base64toArray,
+    uint8ArrayToString,
 }

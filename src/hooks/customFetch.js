@@ -57,13 +57,53 @@ export const setUpRequest = (url, options = {}) => {
 }
 
 /**
+ * fake progress event
+ * @param {Function} [onProgress]
+ * @returns {Function}
+ */
+export const makeFetchProgress = (onProgress) => {
+    /**
+     * @param {Response} res
+     * @returns {Promise}
+     */
+    return async (res) => {
+        if (onProgress) {
+            const reader = res.body.getReader()
+            const total = parseInt(res.headers.get('content-length'))
+
+            let loaded = 0
+            let loading = true
+            let chunks = []
+
+            while (loading) {
+                const { done, value } = await reader.read()
+                if (done) {
+                    loading = false
+                    onProgress({ loaded, total })
+                } else {
+                    loaded += value.length
+                    chunks.push(value)
+                    onProgress({ loaded, total })
+                }
+            }
+            res = {
+                json: async () => JSON.parse(chunks.map(utils.uint8ArrayToString).join(''))
+            }
+        }
+        return res.json()
+    }
+
+}
+
+/**
  * Does request throught service or fetch
  * @param {Object} obj
  * @param {RquestInit} obj.config
  * @param {Function} obj.onSuccess
  * @param {Function} obj.onFailure
+ * @param {Function} [obj.onProgress]
  */
-export const makeRequest = ({ config, onSuccess, onFailure }) => {
+export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
     if (utils.isTv()) {
         const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
 
@@ -74,13 +114,14 @@ export const makeRequest = ({ config, onSuccess, onFailure }) => {
             onFailure,
         })
     } else {
+        const fetchProgress = makeFetchProgress(onProgress)
         window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(config),
-        }).then(res2 => res2.json()).then(onSuccess).catch(onFailure)
+        }).then(fetchProgress).then(onSuccess).catch(onFailure)
     }
 }
 

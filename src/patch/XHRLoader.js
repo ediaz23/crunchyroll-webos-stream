@@ -10,9 +10,6 @@ import utils from '../utils'
  */
 class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
     _setResponseBody(body) {
-        if (this.async) {
-            this._readyStateChange(FakeXMLHttpRequest.LOADING)
-        }
         const data = utils.base64toArray(body)
         this.responseText = ''
 
@@ -37,6 +34,13 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
         } else {
             this.readyState = FakeXMLHttpRequest.DONE
         }
+    }
+
+    _onProgress({ loaded, total }) {
+        if (this.async) {
+            this._readyStateChange(FakeXMLHttpRequest.LOADING)
+        }
+        this._progress(true, loaded, total)
     }
 }
 
@@ -77,7 +81,7 @@ function onSend(xhr) {
             xhr.ontimeout?.({})
         }, xhr.timeout)
     }
-    fetchUtils.makeRequest({ config, onSuccess, onFailure })
+    fetchUtils.makeRequest({ config, onSuccess, onFailure, onProgress: xhr._onProgress.bind(xhr) })
 }
 
 /**
