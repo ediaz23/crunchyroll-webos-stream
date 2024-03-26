@@ -1,5 +1,6 @@
 
 import 'webostvjs'
+import { v4 as uuidv4 } from 'uuid'
 import utils from '../utils'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
@@ -92,13 +93,47 @@ export const makeFetchProgress = (onProgress) => {
         }
         return res.json()
     }
+}
 
+/**
+ * make face progress for a services
+ * @param {Object} obj
+ * @param {RequestInit} obj.config
+ * @param {Function} obj.onSuccess
+ * @param {Function} [obj.onProgress]
+ */
+export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
+    let chunks = []
+    /**
+     * @param {Response} res
+     * @param {Object} sub
+     */
+    return (res, sub) => {
+        if (res.id === config.id) {
+            const { loaded, total, status, content } = res
+            if (200 <= status && status < 300) {
+                chunks.push(utils.base64toArray(content))
+                onProgress({ loaded, total })
+                if (loaded === total) {
+                    const resTmp = new window.Response(new window.Blob(chunks))
+                    resTmp.arrayBuffer().then(arr => {
+                        res.content = arr
+                        sub.cancel()
+                        onSuccess(res)
+                    })
+                }
+            } else {
+                sub.cancel()
+                onSuccess(res)
+            }
+        }
+    }
 }
 
 /**
  * Does request throught service or fetch
  * @param {Object} obj
- * @param {RquestInit} obj.config
+ * @param {RequestInit} obj.config
  * @param {Function} obj.onSuccess
  * @param {Function} obj.onFailure
  * @param {Function} [obj.onProgress]
@@ -107,12 +142,24 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
     if (utils.isTv()) {
         const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
 
-        webOS.service.request(serviceURL, {
-            method: `forwardRequest${currentReq}`,
-            parameters: config,
-            onSuccess,
-            onFailure,
-        })
+        if (onProgress) {
+            const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess })
+            config.id = uuidv4()
+            const sub = webOS.service.request(serviceURL, {
+                method: `forwardRequest${currentReq}`,
+                parameters: config,
+                onSuccess: (res) => serviceProgress(res, sub),
+                onFailure: (err) => { sub.cancel(); onFailure(err) },
+                subscribe: true,
+            })
+        } else {
+            webOS.service.request(serviceURL, {
+                method: `forwardRequest${currentReq}`,
+                parameters: config,
+                onSuccess,
+                onFailure,
+            })
+        }
     } else {
         const fetchProgress = makeFetchProgress(onProgress)
         window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
@@ -124,7 +171,6 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
         }).then(fetchProgress).then(onSuccess).catch(onFailure)
     }
 }
-
 
 /**
  * Function to bypass cors issues

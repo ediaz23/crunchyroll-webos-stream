@@ -2,24 +2,25 @@
 import * as fetchUtils from '../hooks/customFetch'
 import { default as FakeXMLHttpRequestBase } from 'fake-xml-http-request'
 import logger from '../logger'
-import utils from '../utils'
 
 
 /**
  * Fix other type of response
  */
 class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
+    /**
+     * @param {ArrayBuffer} body
+     */
     _setResponseBody(body) {
-        const data = utils.base64toArray(body)
         this.responseText = ''
 
         if (this.responseType === 'arraybuffer') {
-            this.response = data.buffer
+            this.response = body
         } else if (this.responseType === 'blob') {
-            this.response = new window.Blob([data.buffer])
+            this.response = new window.Blob([body])
         } else {
             const decoder = new window.TextDecoder()
-            this.responseText = decoder.decode(data)
+            this.responseText = decoder.decode(body)
             if (this.responseType === 'json') {
                 this.response = JSON.parse(this.responseText)
             } else if (this.responseType === 'document') {
