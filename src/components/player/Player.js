@@ -1,9 +1,10 @@
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
+import { $L } from '../../hooks/language'
 import { useRecoilValue, useRecoilState } from 'recoil'
-//import dashjs from 'dashjs'
-import dashjs from 'dashjs/dist/dash.all.debug'
+import dashjs from 'dashjs'
+//import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -437,6 +438,7 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
             }
         })
 
+        /*
         playerRef.current.updateSettings({
             streaming: {
                 buffer: {
@@ -450,6 +452,7 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
                 }
             }
         })
+        */
     }
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
@@ -505,6 +508,30 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
     }
 }
 
+/**
+ * Compute title for playing content
+ * @param {Object} content
+ * @returns {String}
+ */
+const computeTitle = (content) => {
+    let title = ''
+    if (content) {
+        title = content.title
+        if (content.type === 'episode') {
+            let epNumber = null
+            if (content.episode_metadata) {
+                epNumber = content.episode_metadata.episode_number
+            } else {
+                epNumber = content.episode_number
+            }
+            if (epNumber) {
+                title = `${$L('E')} ${epNumber} - ${title}`
+            }
+        }
+    }
+    return title
+}
+
 
 const Player = ({ ...rest }) => {
     /** @type {[Boolean, Function]} */
@@ -545,6 +572,7 @@ const Player = ({ ...rest }) => {
             subtitles: []
         }
     }, [])
+    const title = useMemo(() => computeTitle(content), [content])
     /** @type {[Stream, Function]} */
     const [stream, setStream] = useState(emptyStream)
     /** @type {[StreamSession, Function]} */
@@ -671,7 +699,15 @@ const Player = ({ ...rest }) => {
                     token: stream.token,
                     playhead: state.currentTime,
                 }).then(setSession)
-            }, session.renewSeconds * 1000 - 50)
+                    .catch(e => {  // if fail retry in 1 second
+                        logger.error('Error keep alive stream')
+                        logger.error(e)
+                        setSession(lastSession => {
+                            return { ...lastSession, renewSeconds: 11 }
+                        })
+                    })
+
+            }, (session.renewSeconds - 10) * 1000)
         }
         return () => clearTimeout(sessionTimeout)
     }, [profile, audio, stream, session, setSession])
@@ -737,7 +773,7 @@ const Player = ({ ...rest }) => {
     return (
         <div className={rest.className}>
             <VideoPlayer {...rest}
-                title={content.title}
+                title={title}
                 poster={poster}
                 thumbnailSrc={preview}
                 onScrub={onScrub}

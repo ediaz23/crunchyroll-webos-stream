@@ -49,9 +49,9 @@ const computeTitles = ({ content, nextContent }) => {
                 episodeNumber = nextContent.episode_number
             }
             watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
-            subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title}`
+            subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title || ''}`
         } else if (nextContent.type === 'movie') {
-            watch = `${$L('Watch')} ${nextContent.title}`
+            watch = `${$L('Watch')} ${nextContent.title || ''}`
             subtitle = nextContent.title
         }
     }
