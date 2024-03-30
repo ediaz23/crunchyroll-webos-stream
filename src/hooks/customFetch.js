@@ -74,6 +74,7 @@ export const makeFetchProgress = (onProgress) => {
 
             let loaded = 0
             let loading = true
+            /** @type {Array<Uint8Array>} */
             let chunks = []
 
             while (loading) {
@@ -87,9 +88,10 @@ export const makeFetchProgress = (onProgress) => {
                     onProgress({ loaded, total })
                 }
             }
-            res = {
-                json: async () => JSON.parse(chunks.map(utils.uint8ArrayToString).join(''))
-            }
+            const resTmp = new window.Response(new window.Blob(chunks))
+            const { status, statusText, content, headers, resUrl } = await resTmp.json()
+            const buffContent = utils.base64toArray(content)
+            return { status, statusText, content: buffContent.buffer, headers, resUrl }
         }
         return res.json()
     }
@@ -103,6 +105,7 @@ export const makeFetchProgress = (onProgress) => {
  * @param {Function} [obj.onProgress]
  */
 export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
+    /** @type {Array<Uint8Array>} */
     let chunks = []
     /**
      * @param {Response} res

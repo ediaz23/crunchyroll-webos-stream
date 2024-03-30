@@ -243,29 +243,32 @@ const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
 /**
  * @todo improve memory usage
  * @param {{ bif: String }} obj
- * @returns {Promise<{data: Uint8Array, chunks: Array<{start: int, end: int}>}>}
+ * @returns {Promise<{chunks: Array<{start: int, end: int, url: string}>}>}
  */
 const searchPreviews = async ({ bif }) => {
-    /** @type {{data: Uint8Array, chunks: Array<{start: int, end: int}>}} */
-    const out = { data: null, chunks: [] }
+    /** @type {{chunks: Array<{start: int, end: int, url: string}>}} */
+    const out = { chunks: [] }
 
     try {
         /** @type {Uint8Array} */
         const bifData = await downloadBifFile(bif)
         const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
 
-        out.data = bifData
         let imageStartIndex = -1
         for (let i = 0; i < bifData.length - 1; i++) {
             if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
                 if (imageStartIndex !== -1) {
-                    out.chunks.push({ start: imageStartIndex, end: i })
+                    const chunk = bifData.slice(imageStartIndex, i)
+                    const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
+                    out.chunks.push({ start: imageStartIndex, end: i, url })
                 }
                 imageStartIndex = i
             }
         }
         if (imageStartIndex !== -1) {
-            out.chunks.push({ start: imageStartIndex })
+            const chunk = bifData.slice(imageStartIndex)
+            const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
+            out.chunks.push({ start: imageStartIndex, url })
         }
     } catch (e) {
         logger.error(e)
@@ -555,8 +558,8 @@ const Player = ({ ...rest }) => {
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
     const [subtitle, setSubtitle] = useState(null)
-    /** @type {[{data: Uint8Array, chunks: Array<{start: int, end: int}>}, Function]} */
-    const [previews, setPreviews] = useState({ chunks: [], data: null })
+    /** @type {[{chunks: Array<{start: int, end: int, url: String}>}, Function]} */
+    const [previews, setPreviews] = useState({ chunks: [] })
     /** @type {[String, Function]} */
     const [preview, setPreview] = useState({})
     /** @type {[Event, Function]} */
@@ -601,8 +604,7 @@ const Player = ({ ...rest }) => {
         if (previews.chunks.length > 0 && proportion && !isNaN(proportion)) {
             const chunk = previews.chunks[Math.floor(proportion * previews.chunks.length)]
             if (chunk) {
-                const imgData = previews.data.subarray(chunk.start, chunk.end)
-                setPreview(`data:image/jpeg;base64,${utils.arrayToBase64(imgData)}`)
+                setPreview(chunk.url)
             }
         }
     }, [previews, setPreview])
@@ -721,7 +723,10 @@ const Player = ({ ...rest }) => {
             load().catch(console.error)
         }
         return () => {
-            setPreviews({ chunks: [], data: null })
+            setPreviews(lastPreview => {
+                lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
+                return { chunks: [], data: null }
+            })
             setSubtitle(null)
         }
     }, [profile, stream, setSubtitle, setPreviews])
