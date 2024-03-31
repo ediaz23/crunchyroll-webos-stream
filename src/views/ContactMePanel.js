@@ -19,7 +19,7 @@ import ethImg from '../../resources/img/eth.png'
 import emailImg from '../../resources/img/email.png'
 import coffeeImg from '../../resources/img/coffee.png'
 import githubImg from '../../resources/img/github.png'
-//import perfilImg from '../../resources/img/perfil.jpeg'
+import perfilImg from '../../resources/img/profile.jpg'
 
 
 const ImageInfo = (props) => (
@@ -95,13 +95,11 @@ const ContactMePanel = ({ noAcceptBtn, ...rest }) => {
  the latest shows.`)}
                     </ExpandableItem>
                 </Cell>
-                {/*
                 <Cell style={{ height: '100%' }}>
                     <ImageInfo
                         image={{ src: perfilImg }}
                         title={{ children: $L('Avatar') }} />
                 </Cell>
-                */}
                 <Cell >
                     <ExpandableItem
                         style={{

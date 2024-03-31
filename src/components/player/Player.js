@@ -1,7 +1,6 @@
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
-import { $L } from '../../hooks/language'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import dashjs from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
@@ -528,7 +527,7 @@ const computeTitle = (content) => {
                 epNumber = content.episode_number
             }
             if (epNumber) {
-                title = `${$L('E')} ${epNumber} - ${title}`
+                title = `${epNumber} - ${title}`
             }
         }
     }
