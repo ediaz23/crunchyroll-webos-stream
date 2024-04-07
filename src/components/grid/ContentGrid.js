@@ -60,8 +60,8 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
     }, [category, season, contentType, sort, query, contentKey])
 
     const onSearch = useCallback(({ value }) => {
+        setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
-        setDelay(1000)
     }, [setQuery, setDelay])
 
     const onScroll = useCallback(() => setAutoScroll(false), [])

@@ -439,22 +439,6 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
                 modifyRequest: modifierDashRequest(profile),
             }
         })
-
-        /*
-        playerRef.current.updateSettings({
-            streaming: {
-                buffer: {
-                    // https://reference.dashif.org/dash.js/v4.7.4/samples/buffer/initial-buffer.html
-                    // initialBufferLevel: 20,
-                    // https://reference.dashif.org/dash.js/v4.7.4/samples/buffer/buffer-target.html
-                    bufferTimeAtTopQuality: 20,
-                    bufferTimeAtTopQualityLongForm: 40,
-                    // stableBufferTime: 15,
-                    // longFormContentDurationThreshold: 600,
-                }
-            }
-        })
-        */
     }
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
@@ -516,9 +500,10 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
  * @returns {String}
  */
 const computeTitle = (content) => {
-    let title = ''
+    /** @type {Array<String>} */
+    const title = []
     if (content) {
-        title = content.title
+        title.push(content.title)
         if (content.type === 'episode') {
             let epNumber = null
             if (content.episode_metadata) {
@@ -527,11 +512,16 @@ const computeTitle = (content) => {
                 epNumber = content.episode_number
             }
             if (epNumber) {
-                title = `${epNumber} - ${title}`
+                title.push('-')
+                title.push(epNumber)
             }
         }
+        if (content.subTitle) {
+            title.push('-')
+            title.push(content.subTitle)
+        }
     }
-    return title
+    return title.filter(e => e).join(' ')
 }
 
 
@@ -579,8 +569,8 @@ const Player = ({ ...rest }) => {
     const [stream, setStream] = useState(emptyStream)
     /** @type {[StreamSession, Function]} */
     const [session, setSession] = useState(null)
-    /** @type {{current: Number}*/
-    const plauseTimeoutRef = useRef(null)
+    /** @type {[Boolean, Function]} */
+    const [isPaused, setIsPaused] = useState(null)
 
     /** @type {Function} */
     const changeAudio = useCallback((audioP) => {
@@ -633,21 +623,15 @@ const Player = ({ ...rest }) => {
         findNextEp({ profile, content, step: -1 }).then(onChangeEp)
     }, [profile, content, onChangeEp, setLoading])
 
+    /** @type {Function} */
     const onEndVideo = useCallback((ev) => setEndEvent(ev), [setEndEvent])
 
     /** @type {Function} */
-    const onPause = useCallback(() => {
-        if (session) {
-            plauseTimeoutRef.current = setTimeout(() => {
-                back.doBack()
-            }, session.maximumPauseSeconds * 1000)
+    const onPlayPause = useCallback(() => {
+        if (videoCompRef.current) {
+            const { paused } = videoCompRef.current.getMediaState()
+            setIsPaused(!paused)
         }
-    }, [session])
-
-    /** @type {Function} */
-    const onPlay = useCallback(() => {
-        clearTimeout(plauseTimeoutRef.current)
-        plauseTimeoutRef.current = null
     }, [])
 
     useEffect(() => {  // find audios, it's needed to find stream url
@@ -735,6 +719,7 @@ const Player = ({ ...rest }) => {
             const load = async () => {
                 await createDashPlayer(playerRef, profile, audio, stream, content, subtitle)
                 setLoading(false)
+                setIsPaused(false)
                 playerRef.current.play()
             }
             load().catch(console.error)
@@ -746,12 +731,16 @@ const Player = ({ ...rest }) => {
                 playerRef.current.destroy()
                 playerRef.current = null
             }
-            if (plauseTimeoutRef.current) {
-                clearTimeout(plauseTimeoutRef.current)
-                plauseTimeoutRef.current = null
-            }
         }
     }, [profile, content, stream, audio, subtitle, setLoading])
+
+    useEffect(() => {  // plause / play
+        let timeout = null
+        if (session && isPaused) {
+            timeout = setTimeout(() => { back.doBack() }, session.maximumPauseSeconds * 1000)
+        }
+        return () => { clearTimeout(timeout) }
+    }, [session, isPaused])
 
     useEffect(() => {  // loop playHead
         if (!_PLAY_TEST_) {
@@ -784,8 +773,8 @@ const Player = ({ ...rest }) => {
                 onJumpBackward={onPrevEp}
                 onJumpForward={onNextEp}
                 onEnded={onEndVideo}
-                onPause={onPause}
-                onPlay={onPlay}
+                onPause={onPlayPause}
+                onPlay={onPlayPause}
                 loading={loading}
                 ref={videoCompRef}
                 noAutoPlay>

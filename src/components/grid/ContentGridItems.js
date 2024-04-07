@@ -72,7 +72,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
 
     useEffect(() => {
         if (contentList.length > 0 && autoScroll && scrollToRef.current) {
-            scrollToRef.current({ index: 0, animate: false, focus: false })
+            scrollToRef.current({ index: 0, animate: false, focus: true })
             onScroll()
         }
     }, [contentList, autoScroll, onScroll])

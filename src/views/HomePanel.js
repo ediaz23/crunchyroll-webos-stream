@@ -171,9 +171,9 @@ const HomePanel = (props) => {
     const showToolbar = useCallback((ev) => {
         if (homeFeedReady) {
             ev.target.blur()
-            toggleShowFullToolbar()
+            setShowFullToolbar(true)
         }
-    }, [toggleShowFullToolbar, homeFeedReady])
+    }, [setShowFullToolbar, homeFeedReady])
 
     useEffect(() => {
         const loadFeed = async () => {
@@ -264,7 +264,7 @@ const HomePanel = (props) => {
                 <FloatingLayerFix open={showFullToolbar} onDismiss={toggleShowFullToolbar}
                     style={{
                         background: 'linear-gradient(to right, #000000 20%, rgba(0, 0, 0, 0))',
-                        paddingLeft: '2rem',
+                        paddingLeft: '0.6rem',
                     }}>
                     <HomeToolbarSpotlight toolbarList={toolbarList}
                         currentIndex={currentActivity}
