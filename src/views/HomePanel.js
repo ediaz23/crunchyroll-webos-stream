@@ -8,7 +8,7 @@ import Spinner from '@enact/moonstone/Spinner'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
-    currentProfileState, homefeedReadyState, homeIndexState, selectedContentState,
+    currentProfileState, homeViewReadyState, homeIndexState, selectedContentState,
     homeFeedState, homeFeedExpirationState,
     musicFeedState, musicFeedExpirationState,
     categoriesState,
@@ -125,7 +125,7 @@ const HomePanel = (props) => {
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {[Boolean, Function]} */
-    const [homeFeedReady, setHomeFeedReady] = useRecoilState(homefeedReadyState)
+    const [homeViewReady, setHomeViewReady] = useRecoilState(homeViewReadyState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
 
@@ -169,11 +169,11 @@ const HomePanel = (props) => {
 
     /** @type {Function} */
     const showToolbar = useCallback((ev) => {
-        if (homeFeedReady) {
+        if (homeViewReady) {
             ev.target.blur()
             setShowFullToolbar(true)
         }
-    }, [setShowFullToolbar, homeFeedReady])
+    }, [setShowFullToolbar, homeViewReady])
 
     useEffect(() => {
         const loadFeed = async () => {
@@ -210,9 +210,9 @@ const HomePanel = (props) => {
 
     useEffect(() => {
         return () => {
-            setHomeFeedReady(false)
+            setHomeViewReady(false)
         }
-    }, [setHomeFeedReady])
+    }, [setHomeViewReady])
 
     return (
         <Panel {...props}>

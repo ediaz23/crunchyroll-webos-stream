@@ -6,6 +6,9 @@ import Input from '@enact/moonstone/Input'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
+import { useSetRecoilState } from 'recoil'
+
+import { homeViewReadyState } from '../../recoilConfig'
 import { $L } from '../../hooks/language'
 import SeasonButtons from './SeasonButtons'
 import CategoryList from './CategoryList'
@@ -26,6 +29,8 @@ import css from './ContentGrid.module.less'
  * @param {Boolean} obj.noCategory Not show category
  */
 const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCategory, ...rest }) => {
+    /** @type {Function} */
+    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
     /** @type {[Object, Function]} */
@@ -108,21 +113,24 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                                 ...new Array(res.data[0].count - res.data[0].items.length)
                             ])
                             setLoading(false)
+                            setHomeViewReady(true)
                         })
                     } else {
                         changeContentList([])
                         setLoading(false)
+                        setHomeViewReady(true)
                     }
                 } else {
                     api.discover.getBrowseAll(profile, options).then(res => {
                         changeContentList([...res.data, ...new Array(res.total - res.data.length)])
                         setLoading(false)
+                        setHomeViewReady(true)
                     })
                 }
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, contentKey, delay, options, engine, changeContentList, setLoading])
+    }, [profile, contentKey, delay, options, engine, changeContentList, setLoading, setHomeViewReady])
 
     useEffect(() => {  // initializing
         if (contentKey !== 'simulcast') {

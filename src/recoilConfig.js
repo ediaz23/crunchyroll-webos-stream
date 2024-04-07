@@ -79,8 +79,8 @@ export const selectedContentState = atom({
     default: null
 })
 
-export const homefeedReadyState = atom({
-    key: 'homefeedReadyState',
+export const homeViewReadyState = atom({
+    key: 'homeViewReadyState',
     default: false
 })
 

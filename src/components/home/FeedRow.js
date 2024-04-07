@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import { useSetRecoilState } from 'recoil'
 
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homefeedReadyState } from '../../recoilConfig'
+import { homeViewReadyState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContentHook'
 import Navigable from '../../wrappers/Navigable'
@@ -75,7 +75,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Function} */
-    const setHomefeedReady = useSetRecoilState(homefeedReadyState)
+    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
@@ -107,12 +107,12 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
                 if (scrollToRef.current) {
                     clearInterval(interval)
                     scrollToRef.current({ index: 0, animate: false, focus: true })
-                    setHomefeedReady(true)
+                    setHomeViewReady(true)
                 }
             }, 100)
             return () => clearInterval(interval)
         }
-    }, [setHomefeedReady])  // eslint-disable-line react-hooks/exhaustive-deps
+    }, [setHomeViewReady])  // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {

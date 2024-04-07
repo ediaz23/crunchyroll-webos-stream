@@ -6,6 +6,9 @@ import Input from '@enact/moonstone/Input'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
+import { useSetRecoilState } from 'recoil'
+
+import { homeViewReadyState } from '../../recoilConfig'
 import { $L } from '../../hooks/language'
 import MusicFeed from './Feed'
 import ContentGridItems from '../grid/ContentGridItems'
@@ -13,7 +16,8 @@ import api from '../../api'
 
 
 const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMusicFeed, ...rest }) => {
-
+    /** @type {Function} */
+    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
     /** @type {[Object, Function]} */
@@ -76,15 +80,17 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
                             ...new Array(res.data[0].count - res.data[0].items.length)
                         ])
                         setLoading(false)
+                        setHomeViewReady(true)
                     })
                 } else {
                     changeContentList([])
                     setLoading(false)
+                    setHomeViewReady(true)
                 }
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, contentKey, delay, options, changeContentList, setLoading])
+    }, [profile, contentKey, delay, options, changeContentList, setLoading, setHomeViewReady])
 
     useEffect(() => {  // initializing
         if (contentKey !== 'simulcast') {
