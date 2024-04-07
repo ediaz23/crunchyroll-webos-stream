@@ -571,6 +571,8 @@ const Player = ({ ...rest }) => {
     const [session, setSession] = useState(null)
     /** @type {[Boolean, Function]} */
     const [isPaused, setIsPaused] = useState(null)
+    /** @type {[Number, Function]} */
+    const [jumpBy, setJumpBy] = useState(5)
 
     /** @type {Function} */
     const changeAudio = useCallback((audioP) => {
@@ -673,7 +675,7 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, audios, audio, getLang, setStream, emptyStream])
 
-    useEffect(() => {  // renew session keep alive
+    useEffect(() => {  // renew session keep alive stream
         let sessionTimeout = null
         if (session && stream.token) {
             sessionTimeout = setTimeout(() => {
@@ -734,7 +736,7 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, stream, audio, subtitle, setLoading])
 
-    useEffect(() => {  // plause / play
+    useEffect(() => {  // plause / play watch
         let timeout = null
         if (session && isPaused) {
             timeout = setTimeout(() => { back.doBack() }, session.maximumPauseSeconds * 1000)
@@ -750,7 +752,7 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, videoCompRef, loading])
 
-    useEffect(() => {
+    useEffect(() => {  // play next video
         if (!_PLAY_TEST_) {
             let timeout = null
             if (endEvent) {
@@ -762,6 +764,28 @@ const Player = ({ ...rest }) => {
             return () => clearTimeout(timeout)
         }
     }, [endEvent, onNextEp, audios])
+
+    useEffect(() => {  // incremental seek
+        /** @type {Function} */
+        const increaseSeek = () => { setJumpBy(Math.min(jumpBy << 1, 30)) }
+        let timeout = null
+        if (jumpBy <= 5) {
+            // nothing
+        } else if (jumpBy <= 10) {
+            timeout = setTimeout(() => { setJumpBy(5) }, 2 * 1000)
+        } else {
+            timeout = setTimeout(() => { setJumpBy(5) }, 5 * 1000)
+        }
+        if (playerRef.current) {
+            playerRef.current.on('playbackSeeking', increaseSeek)
+        }
+        return () => {
+            if (playerRef.current) {
+                playerRef.current.off('playbackSeeking', increaseSeek)
+            }
+            clearTimeout(timeout)
+        }
+    }, [loading, setJumpBy, jumpBy])
 
     return (
         <div className={rest.className}>
@@ -775,6 +799,7 @@ const Player = ({ ...rest }) => {
                 onEnded={onEndVideo}
                 onPause={onPlayPause}
                 onPlay={onPlayPause}
+                jumpBy={jumpBy}
                 loading={loading}
                 ref={videoCompRef}
                 noAutoPlay>
