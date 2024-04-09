@@ -42,14 +42,19 @@ const computeTitles = ({ content, nextContent }) => {
         if (nextContent.type === 'episode') {
             let season = 1, episodeNumber = 1
             if (nextContent.episode_metadata) {
-                season = nextContent.episode_metadata.season_number || 1
-                episodeNumber = nextContent.episode_metadata.episode_number || 1
+                season = nextContent.episode_metadata.season_number
+                episodeNumber = nextContent.episode_metadata.episode_number
             } else {
                 season = nextContent.season_number
                 episodeNumber = nextContent.episode_number
             }
-            watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
-            subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title || ''}`
+            if (episodeNumber !== null && episodeNumber !== undefined) {
+                watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
+                subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title || ''}`
+            } else {
+                watch = `${$L('Watch')} ${$L('Season')} ${season}: ${nextContent.title || ''}`
+                subtitle = nextContent.title || ''
+            }
         } else if (nextContent.type === 'movie') {
             watch = `${$L('Watch')} ${nextContent.title || ''}`
             subtitle = nextContent.title
