@@ -113,13 +113,13 @@ window.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': 461 }))
 ## Create a Dash file
 
 ```bash
-x264 --output intermediate_2400k.264 --fps 24 --preset slow --bitrate 2400 --vbv-maxrate 4800 --vbv-bufsize 9600 --min-keyint 48 --keyint 48 --scenecut 0 --no-scenecut --pass 1 --video-filter "resize:width=1280,height=720" inputvideo.mkv
+x264 --output intermediate.264 --fps 24 --preset slow --bitrate 2400 --vbv-maxrate 4800 --vbv-bufsize 9600 --min-keyint 48 --keyint 48 --scenecut 0 --no-scenecut --pass 1 --video-filter "resize:width=1280,height=720" inputvideo.mkv
 
 MP4Box -add intermediate.264 -fps 24 output_2400k.mp4
 
-MP4Box -dash 4000 -frag 4000 -rap -segment-name kimi_z_video_segment_ kimi_output_2400k.mp4
+MP4Box -dash 4000 -frag 4000 -rap -segment-name kimi_z_video_segment_ output_2400k.mp4
 
-MP4Box -dash 4000 -frag 4000 -rap -segment-name kimi_z_audio_segment_ kimi.mp4#audio
+MP4Box -dash 4000 -frag 4000 -rap -segment-name kimi_z_audio_segment_ output_2400k.mp4#audio
 
 Copy all video.mpd and only Adaptation from audio.mpd
 ```

@@ -22,6 +22,9 @@ export const translateError = async (error) => {
         } else if (error.code === ERROR_CODES.invalid_auth_token) {
             newError = new CrunchyrollError($L('Invalid access token, try to log in again'), error.code)
             await localStore.setNewData({ token: null })
+        } else if (error.code === ERROR_CODES.invalid_client) {
+            newError = new CrunchyrollError($L('Old app version, please check updates'), error.code)
+            await localStore.setNewData({ token: null })
         }
         logger.error(error)
     }

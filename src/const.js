@@ -8,6 +8,7 @@ export const DEV_FAST_SELECT = __DEV__ && false
 /** @type {Boolean} */
 export const _PLAY_TEST_ = __DEV__ && false
 
+/** @type {String} */
 export const _LOCALHOST_SERVER_ = 'http://127.0.0.1:8052'
 
 // posible values series
@@ -24,6 +25,7 @@ export const ERROR_CODES = {
     invalid_password: 'auth.obtain_access_token.invalid_credentials',
     invalid_refresh_token: 'auth.obtain_access_token.oauth2_error',
     invalid_auth_token: 'accounts.get_profile.invalid_auth_token',
+    invalid_client: 'auth.obtain_access_token.client_inactive',
 }
 
 export default {}

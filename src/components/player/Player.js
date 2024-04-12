@@ -1,6 +1,8 @@
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
+import Button from '@enact/moonstone/Button'
+import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import dashjs from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
@@ -21,6 +23,7 @@ import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import * as fetchUtils from '../../hooks/customFetch'
 import utils from '../../utils'
 import XHRLoader from '../../patch/XHRLoader'
+import { $L } from '../../hooks/language'
 
 
 /**
@@ -45,6 +48,21 @@ import XHRLoader from '../../patch/XHRLoader'
  * @property {StreamSession} session
  * @property {Array<import('./AudioList').Audio>} audios
  * @property {Array<import('./SubtitleList').Subtitle>} subtitles
+ * @property {import('crunchyroll-js-api/src/types').Profile} profile
+ * @property {String} skipUrl
+ */
+
+/**
+ * @typedef SkiptEvent
+ * @type {Object}
+ * @property {String} approverId
+ * @property {String} distributionNumber
+ * @property {Number} end
+ * @property {String} seriesId
+ * @property {Number} start
+ * @property {String} title
+ * @property {String} type
+ * @property {Function} process
  */
 
 /**
@@ -145,9 +163,9 @@ const searchAudios = ({ content, getLang }) => {
     profile: import('crunchyroll-js-api/src/types').Profile,
     audios: Array<import('./AudioList').Audio>
  }}
- * @returns {import('./AudioList').Audio}
+ * @returns {Promise<import('./AudioList').Audio>}
  */
-const findAudio = ({ profile, audios }) => {
+const findAudio = async ({ profile, audios }) => {
     let audio = audios.find(e => e.audio_locale === profile.preferred_content_audio_language)
     if (!audio) {
         audio = audios.find(e => e.audio_locale === 'ja-JP')
@@ -163,9 +181,9 @@ const findAudio = ({ profile, audios }) => {
     profile: import('crunchyroll-js-api/src/types').Profile,
     subtitles: Array<import('./SubtitleList').Subtitle>
  }}
- * @returns {import('./SubtitleList').Subtitle}
+ * @returns {Promise<import('./SubtitleList').Subtitle>}
  */
-const findSubtitle = ({ profile, subtitles }) => {
+const findSubtitle = async ({ profile, subtitles }) => {
     let sub = subtitles.find(e => e.locale === profile.preferred_content_subtitle_language)
     if (!sub) {
         sub = subtitles[0]
@@ -184,29 +202,48 @@ const findSubtitle = ({ profile, subtitles }) => {
  * @returns {Promise<Stream>}
  */
 const findStream = async ({ profile, audios, audio, getLang, content }) => {
-    let data = {}, urls = []
-
-    if (['episode', 'movie'].includes(audio.type)) {
-        data = await api.drm.getStreams(profile, { episodeId: audio.guid })
-    } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
-        data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
-    }
-    if (data.hardSubs) {
-        urls = Object.keys(data.hardSubs).map(locale => {
-            return { locale, url: data.hardSubs[locale].url }
-        })
-    }
     /** @type {Stream} */
-    const out = {
-        id: content.id,
-        urls: [{ locale: 'off', url: data.url }, ...urls],
-        bif: data.bifs,
-        audios: audios,
-        session: data.session,
-        token: data.token,
-        subtitles: [{ language: 'off', }, ...Object.values(data.subtitles)].map(subtitle => {
-            return { ...subtitle, locale: subtitle.language, title: getLang(subtitle.language) }
-        })
+    let out = null, data = {}, urls = []
+    if (_PLAY_TEST_) {  // test stream
+        content.playhead = 0
+        out = {
+            id: content.id,
+            urls: [{ url: `${_LOCALHOST_SERVER_}/frieren-26.mpd`, locale: 'es-419' }],
+            bif: `${_LOCALHOST_SERVER_}/frieren-26.bif`,
+            audios: [],
+            subtitles: [{
+                locale: 'es-419',
+                url: `${_LOCALHOST_SERVER_}/frieren-26.ass`
+            }],
+            profile,
+            skipUrl: `${_LOCALHOST_SERVER_}/frieren-26.json`
+
+        }
+    } else {
+        if (['episode', 'movie'].includes(audio.type)) {
+            data = await api.drm.getStreams(profile, { episodeId: audio.guid })
+        } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
+            data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
+        }
+        if (data.hardSubs) {
+            urls = Object.keys(data.hardSubs).map(locale => {
+                return { locale, url: data.hardSubs[locale].url }
+            })
+        }
+        content.playhead = await findPlayHead({ profile, content })
+        out = {
+            id: content.id,
+            urls: [{ locale: 'off', url: data.url }, ...urls],
+            bif: data.bifs,
+            audios: audios,
+            subtitles: [{ language: 'off', }, ...Object.values(data.subtitles)].map(subtitle => {
+                return { ...subtitle, locale: subtitle.language, title: getLang(subtitle.language) }
+            }),
+            profile,
+            skipUrl: `https://static.crunchyroll.com/skip-events/production/${audio.guid}.json`,
+            session: data.session,
+            token: data.token,
+        }
     }
     return out
 }
@@ -244,7 +281,7 @@ const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
  * @param {{ bif: String }} obj
  * @returns {Promise<{chunks: Array<{start: int, end: int, url: string}>}>}
  */
-const searchPreviews = async ({ bif }) => {
+const findPreviews = async ({ bif }) => {
     /** @type {{chunks: Array<{start: int, end: int, url: string}>}} */
     const out = { chunks: [] }
 
@@ -422,24 +459,24 @@ const modifierDashRequest = (profile) => {
 }
 
 /**
- * @param {{current: import('dashjs').MediaPlayerClass}} playerRef
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @param {import('./AudioList').Audio} audio
  * @param {Stream} stream
  * @param {Object} content
  * @param {import('./SubtitleList').Subtitle} subtitle
+ * @returns {Promise<import('dashjs').MediaPlayerClass>}
  */
-const createDashPlayer = async (playerRef, profile, audio, stream, content, subtitle) => {
+const createDashPlayer = async (audio, stream, content, subtitle) => {
     let url = null
-    if (!playerRef.current) {
-        playerRef.current = dashjs.MediaPlayer().create()
-        playerRef.current.extend('XHRLoader', XHRLoader)
-        playerRef.current.extend('RequestModifier', function() {
-            return {
-                modifyRequest: modifierDashRequest(profile),
-            }
-        })
-    }
+    const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
+    /** @type {import('dashjs').MediaPlayerClass}*/
+    const dashPlayer = dashjs.MediaPlayer().create()
+
+    dashPlayer.extend('XHRLoader', XHRLoader)
+    dashPlayer.extend('RequestModifier', function() {
+        return {
+            modifyRequest: modifierDashRequest(stream.profile),
+        }
+    })
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
         url = stream.urls.find(val => val.locale === 'off')
@@ -447,11 +484,10 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
     if (url) {
         url = url.url
     }
-    playerRef.current.initialize()
-    playerRef.current.setAutoPlay(false)
-    const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
-    playerRef.current.attachSource(url + '#t=' + Math.max(startSec, 0))
-    playerRef.current.attachView(document.querySelector('video'))
+    dashPlayer.initialize()
+    dashPlayer.setAutoPlay(false)
+    dashPlayer.attachSource(url + '#t=' + Math.max(startSec, 0))
+    dashPlayer.attachView(document.querySelector('video'))
     if (!_PLAY_TEST_) {
         const drmConfig = {
             'com.widevine.alpha': {
@@ -488,10 +524,11 @@ const createDashPlayer = async (playerRef, profile, audio, stream, content, subt
                 sessionType: 'temporary',
             },
         }
-        playerRef.current.setProtectionData(drmConfig)
-        playerRef.current.registerLicenseRequestFilter(requestDashLicense(profile))
-        playerRef.current.registerLicenseResponseFilter(decodeLicense)
+        dashPlayer.setProtectionData(drmConfig)
+        dashPlayer.registerLicenseRequestFilter(requestDashLicense(stream.profile))
+        dashPlayer.registerLicenseResponseFilter(decodeLicense)
     }
+    return dashPlayer
 }
 
 /**
@@ -524,6 +561,36 @@ const computeTitle = (content) => {
     return title.filter(e => e).join(' ')
 }
 
+/**
+ * @param {Stream} stream
+ * @returns {Promise<{intro: SkiptEvent, credits: SkiptEvent, preview: SkiptEvent, recap: SkiptEvent}>}
+ */
+const findSkipEvents = async (stream) => {
+    /** @type {{intro: SkiptEvent, credits: SkiptEvent, preview: SkiptEvent, recap: SkiptEvent}} */
+    let out = null
+    try {
+        const res = await fetchUtils.customFetch(stream.skipUrl)
+        if (200 <= res.status && res.status < 300) {
+            out = await res.json()
+            if (out.recap) {
+                out.recap.title = $L('Skip Recap')
+            }
+            if (out.intro) {
+                out.intro.title = $L('Skip Intro')
+            }
+            if (out.credits) {
+                out.credits.title = $L('Skip Credits')
+            }
+            if (out.preview) {
+                out.preview.title = $L('Skip Preview')
+            }
+        }
+    } catch (e) {
+        logger.error(e)
+    }
+    return out
+}
+
 
 const Player = ({ ...rest }) => {
     /** @type {[Boolean, Function]} */
@@ -550,7 +617,7 @@ const Player = ({ ...rest }) => {
     /** @type {[{chunks: Array<{start: int, end: int, url: String}>}, Function]} */
     const [previews, setPreviews] = useState({ chunks: [] })
     /** @type {[String, Function]} */
-    const [preview, setPreview] = useState({})
+    const [preview, setPreview] = useState(null)
     /** @type {[Event, Function]} */
     const [endEvent, setEndEvent] = useState(null)
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
@@ -561,9 +628,10 @@ const Player = ({ ...rest }) => {
     const emptyStream = useMemo(() => {
         return {
             id: null, urls: null, bif: null, token: null, session: null, audios: [],
-            subtitles: []
+            subtitles: [], profile: null, skipUrl: null,
         }
     }, [])
+    /** @type {String} */
     const title = useMemo(() => computeTitle(content), [content])
     /** @type {[Stream, Function]} */
     const [stream, setStream] = useState(emptyStream)
@@ -573,17 +641,15 @@ const Player = ({ ...rest }) => {
     const [isPaused, setIsPaused] = useState(null)
     /** @type {[Number, Function]} */
     const [jumpBy, setJumpBy] = useState(5)
-
-    /** @type {Function} */
-    const changeAudio = useCallback((audioP) => {
-        setStream(emptyStream)
-        setAudio(audioP)
-    }, [setAudio, setStream, emptyStream])
+    /** @type {[{intro: SkiptEvent, credits: SkiptEvent, preview: SkiptEvent, recap: SkiptEvent}, Function]} */
+    const [skipEvents, setSkipEvents] = useState(null)
+    /** @type {[SkiptEvent, Function]} */
+    const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
-        changeAudio(audios[select])
-    }, [changeAudio, audios])
+        setAudio(audios[select])
+    }, [setAudio, audios])
 
     /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
@@ -596,6 +662,8 @@ const Player = ({ ...rest }) => {
             const chunk = previews.chunks[Math.floor(proportion * previews.chunks.length)]
             if (chunk) {
                 setPreview(chunk.url)
+            } else {
+                setPreview(null)
             }
         }
     }, [previews, setPreview])
@@ -604,12 +672,12 @@ const Player = ({ ...rest }) => {
     const onChangeEp = useCallback(async (changeEp) => {
         await updatePlayHead({ profile, content, videoCompRef })
         if (changeEp && changeEp.total > 0) {
-            changeAudio({})
+            setAudio({})
             setPlayContent({ ...changeEp.data[0] })
         } else {
             back.doBack()
         }
-    }, [videoCompRef, profile, content, setPlayContent, changeAudio])
+    }, [videoCompRef, profile, content, setPlayContent, setAudio])
 
     /** @type {Function} */
     const onNextEp = useCallback((ev) => {
@@ -636,44 +704,84 @@ const Player = ({ ...rest }) => {
         }
     }, [])
 
+    /** @type {Function} */
+    const onSkipEvent = useCallback(() => {
+        playerRef.current.seek(currentSkipEvent.end - 2)
+    }, [currentSkipEvent])
+
+    /** @type {Function} set skip button bottom */
+    const onMediaControlShow = useCallback(({ available }) => {
+        const skipDoc = document.querySelector('#skip-button')
+        if (available) {
+            const ctrlButton = document.querySelector('#media-controls').parentElement
+            const posicionElementoB = ctrlButton.getBoundingClientRect().top
+            skipDoc.style.bottom = `${window.innerHeight - posicionElementoB + 15}px`
+        } else {
+            skipDoc.style.bottom = '2.5rem'
+        }
+    }, [])
+
     useEffect(() => {  // find audios, it's needed to find stream url
-        changeAudio(findAudio({ profile, audios }))
-        setEndEvent(null)
-    }, [profile, audios, changeAudio, setEndEvent])
+        findAudio({ profile, audios }).then(setAudio).catch(console.error)
+    }, [profile, audios, setAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
-        /** @type {Stream} */
-        let localStream = emptyStream
         if (audios.includes(audio)) {
-            const load = async () => {
-                content.playhead = await findPlayHead({ profile, content })
-                if (_PLAY_TEST_) {  // test stream
-                    localStream = {
-                        id: content.id,
-                        urls: [{ url: `${_LOCALHOST_SERVER_}/kimi.mpd`, locale: 'es-419' }],
-                        bif: `${_LOCALHOST_SERVER_}/kimi.bif`,
-                        subtitles: [{
-                            locale: 'es-419',
-                            url: `${_LOCALHOST_SERVER_}/kimi.ass`
-                        }],
-                        audios: []
-                    }
-                } else {
-                    localStream = await findStream({ profile, audios, audio, getLang, content })
-                }
-                setStream(localStream)
-                setSession(localStream.session)
-            }
-            load().catch(console.error)
+            findStream({ profile, audios, audio, getLang, content }).then(setStream).catch(console.error)
         }
         return () => {
-            if (localStream.token) {
-                api.drm.deleteToken(profile, { episodeId: audio.guid, token: localStream.token })
-            }
-            setStream(emptyStream)
-            setSession(null)
+            setStream(lastStream => {
+                if (lastStream.token) {
+                    api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
+                }
+                return emptyStream
+            })
         }
     }, [profile, content, audios, audio, getLang, setStream, emptyStream])
+
+    useEffect(() => {  // find subtitles preview and skip events
+        if (stream.urls) {
+            findSubtitle(stream).then(setSubtitle).catch(console.error)
+            findPreviews(stream).then(setPreviews).catch(console.error)
+            findSkipEvents(stream).then(setSkipEvents).catch(console.error)
+        }
+        return () => {
+            setPreviews(lastPreview => {
+                lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
+                return { chunks: [], data: null }
+            })
+            setSubtitle(null)
+            setSkipEvents(null)
+        }
+    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents])
+
+    useEffect(() => {  // attach subs
+        if (stream.urls && subtitle && stream.id === content.id) {
+            createDashPlayer(audio, stream, content, subtitle)
+                .then(player => {
+                    setLoading(false)
+                    setIsPaused(false)
+                    playerRef.current = player
+                    playerRef.current.play()
+                }).catch(console.error)
+        }
+        return () => {
+            setLoading(true)
+            if (playerRef.current) {
+                playerRef.current.pause()
+                playerRef.current.destroy()
+                playerRef.current = null
+            }
+        }
+    }, [profile, content, stream, audio, subtitle, setLoading])
+
+    useEffect(() => {  // set stream session
+        if (stream === emptyStream) {
+            setSession(null)
+        } else {
+            setSession(stream.session)
+        }
+    }, [stream, emptyStream])
 
     useEffect(() => {  // renew session keep alive stream
         let sessionTimeout = null
@@ -681,7 +789,7 @@ const Player = ({ ...rest }) => {
             sessionTimeout = setTimeout(() => {
                 /** @type {{paused: boolean, currentTime: number}} */
                 const state = videoCompRef.current.getMediaState()
-                api.drm.keepAlive(profile, {
+                api.drm.keepAlive(stream.profile, {
                     episodeId: audio.guid,
                     token: stream.token,
                     playhead: state.currentTime,
@@ -698,43 +806,6 @@ const Player = ({ ...rest }) => {
         }
         return () => clearTimeout(sessionTimeout)
     }, [profile, audio, stream, session, setSession])
-
-    useEffect(() => {  // create dash player
-        if (stream.urls) {
-            const load = async () => {
-                setSubtitle(findSubtitle({ profile, ...stream }))
-                setPreviews(await searchPreviews({ ...stream }))
-            }
-            load().catch(console.error)
-        }
-        return () => {
-            setPreviews(lastPreview => {
-                lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
-                return { chunks: [], data: null }
-            })
-            setSubtitle(null)
-        }
-    }, [profile, stream, setSubtitle, setPreviews])
-
-    useEffect(() => {  // attach subs
-        if (stream.urls && subtitle && stream.id === content.id) {
-            const load = async () => {
-                await createDashPlayer(playerRef, profile, audio, stream, content, subtitle)
-                setLoading(false)
-                setIsPaused(false)
-                playerRef.current.play()
-            }
-            load().catch(console.error)
-        }
-        return () => {
-            setLoading(true)
-            if (playerRef.current) {
-                playerRef.current.pause()
-                playerRef.current.destroy()
-                playerRef.current = null
-            }
-        }
-    }, [profile, content, stream, audio, subtitle, setLoading])
 
     useEffect(() => {  // plause / play watch
         let timeout = null
@@ -753,16 +824,16 @@ const Player = ({ ...rest }) => {
     }, [profile, content, videoCompRef, loading])
 
     useEffect(() => {  // play next video
-        if (!_PLAY_TEST_) {
-            let timeout = null
-            if (endEvent) {
-                timeout = setTimeout(() => {
+        let timeout = null
+        if (endEvent) {
+            timeout = setTimeout(() => {
+                setEndEvent(null)
+                if (!_PLAY_TEST_) {
                     onNextEp(endEvent)
-                    setEndEvent(null)
-                }, 4000)
-            }
-            return () => clearTimeout(timeout)
+                }
+            }, 1000 * 3)
         }
+        return () => clearTimeout(timeout)
     }, [endEvent, onNextEp, audios])
 
     useEffect(() => {  // incremental seek
@@ -787,6 +858,44 @@ const Player = ({ ...rest }) => {
         }
     }, [loading, setJumpBy, jumpBy])
 
+    useEffect(() => {  // skip events
+        /** @type {Function} */
+        const processFn = update => {
+            ['recap', 'intro', 'credits', 'preview'].forEach(type => {
+                if (skipEvents[type] && skipEvents[type].start <= update.time && update.time <= skipEvents[type].end) {
+                    setCurrentSkipEvent(skipEvents[type])
+                }
+            })
+        }
+        if (playerRef.current && skipEvents) {
+            playerRef.current.on('playbackTimeUpdated', processFn)
+        }
+        return () => {
+            if (playerRef.current) {
+                playerRef.current.off('playbackTimeUpdated', processFn)
+            }
+            setCurrentSkipEvent(null)
+        }
+    }, [loading, skipEvents])
+
+    useEffect(() => {  // watch current skip event
+        /** @type {Function} */
+        const processFn = update => {
+            if (!(currentSkipEvent.start <= update.time && update.time <= currentSkipEvent.end)) {
+                setCurrentSkipEvent(null)
+            }
+        }
+        if (playerRef.current && currentSkipEvent) {
+            playerRef.current.on('playbackTimeUpdated', processFn)
+            Spotlight.focus('#skip-button')
+        }
+        return () => {
+            if (playerRef.current) {
+                playerRef.current.off('playbackTimeUpdated', processFn)
+            }
+        }
+    }, [loading, currentSkipEvent])
+
     return (
         <div className={rest.className}>
             <VideoPlayer {...rest}
@@ -802,11 +911,12 @@ const Player = ({ ...rest }) => {
                 jumpBy={jumpBy}
                 loading={loading}
                 ref={videoCompRef}
+                onControlsAvailable={onMediaControlShow}
                 noAutoPlay>
                 <video id={content.id}>
                     <source src={emptyVideo} />
                 </video>
-                <MediaControls>
+                <MediaControls id="media-controls">
                     <leftComponents>
                         <ContentInfo content={content} />
                         {['episode'].includes(content.type) &&
@@ -828,6 +938,15 @@ const Player = ({ ...rest }) => {
                     </rightComponents>
                 </MediaControls>
             </VideoPlayer>
+            <Button id="skip-button" onClick={onSkipEvent}
+                style={{
+                    position: 'absolute',
+                    right: '2.5rem',
+                    bottom: '2.5rem',
+                    display: currentSkipEvent ? 'inline-block' : 'none',
+                }}>
+                {currentSkipEvent && currentSkipEvent.title}
+            </Button>
         </div>
     )
 }
