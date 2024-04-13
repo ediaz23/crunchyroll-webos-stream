@@ -707,6 +707,7 @@ const Player = ({ ...rest }) => {
     /** @type {Function} */
     const onSkipEvent = useCallback(() => {
         playerRef.current.seek(currentSkipEvent.end - 2)
+        setCurrentSkipEvent(null)
     }, [currentSkipEvent])
 
     /** @type {Function} set skip button bottom */
@@ -859,11 +860,16 @@ const Player = ({ ...rest }) => {
     }, [loading, setJumpBy, jumpBy])
 
     useEffect(() => {  // skip events
+        let timeout = null
         /** @type {Function} */
         const processFn = update => {
             ['recap', 'intro', 'credits', 'preview'].forEach(type => {
-                if (skipEvents[type] && skipEvents[type].start <= update.time && update.time <= skipEvents[type].end) {
-                    setCurrentSkipEvent(skipEvents[type])
+                if (skipEvents[type]) {
+                    if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 5)) {
+                        setCurrentSkipEvent(skipEvents[type])
+                        Spotlight.focus('#skip-button')
+                        timeout = setTimeout(() => setCurrentSkipEvent(null), 1000 * 5)
+                    }
                 }
             })
         }
@@ -875,26 +881,9 @@ const Player = ({ ...rest }) => {
                 playerRef.current.off('playbackTimeUpdated', processFn)
             }
             setCurrentSkipEvent(null)
+            clearTimeout(timeout)
         }
     }, [loading, skipEvents])
-
-    useEffect(() => {  // watch current skip event
-        /** @type {Function} */
-        const processFn = update => {
-            if (!(currentSkipEvent.start <= update.time && update.time <= currentSkipEvent.end)) {
-                setCurrentSkipEvent(null)
-            }
-        }
-        if (playerRef.current && currentSkipEvent) {
-            playerRef.current.on('playbackTimeUpdated', processFn)
-            Spotlight.focus('#skip-button')
-        }
-        return () => {
-            if (playerRef.current) {
-                playerRef.current.off('playbackTimeUpdated', processFn)
-            }
-        }
-    }, [loading, currentSkipEvent])
 
     return (
         <div className={rest.className}>
