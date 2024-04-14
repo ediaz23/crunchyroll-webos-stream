@@ -1,6 +1,6 @@
 {
     "name": "com.crunchyroll.webos.stream",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
@@ -18,8 +18,8 @@
         "build-dev": "NODE_ENV=development gulp build-dev",
         "build-p": "NODE_ENV=production gulp build-p",
         "build-service": "gulp build-service",
-        "install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.1_all.ipk",
-        "install-tv-1": "ares-install -d tv1 bin/com.crunchyroll.stream.app_1.0.1_all.ipk",
+        "install-tv": "ares-install bin/com.crunchyroll.stream.app_1.0.2_all.ipk",
+        "install-tv-1": "ares-install -d tv1 bin/com.crunchyroll.stream.app_1.0.2_all.ipk",
         "start": "ares-launch com.crunchyroll.stream.app",
         "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
         "play": "npm run build && npm run install-tv && npm run start",
