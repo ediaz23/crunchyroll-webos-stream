@@ -69,6 +69,78 @@ const computeTitles = ({ content, nextContent }) => {
 }
 
 /**
+ * get next episode
+ * @param {Object} profile
+ * @param {Object} content
+ * @returns {Promise<Object>}
+ */
+export const getNextEpidose = async (profile, content) => {
+    const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
+    const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
+    const tmpEpisode = episodesData[0]
+    tmpEpisode.type = 'episode'
+    return tmpEpisode
+}
+
+/**
+ * get next movie
+ * @param {Object} profile
+ * @param {Object} content
+ * @returns {Promise<Object>}
+ */
+export const getNextMovie = async (profile, content) => {
+    const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: content.id })
+    const tmpMovie = moviesData[0]
+    tmpMovie.type = 'movie'
+    return { ...tmpMovie, ...(tmpMovie.panel || {}), panel: null }
+}
+
+/**
+ * get next content
+ * @param {Object} profile
+ * @param {Object} content
+ * @returns {Promise<Object>}
+ */
+export const getNextContent = async (profile, content) => {
+    return new Promise(resolve => {
+        const nextProm = api.discover.getNext(profile, {
+            contentId: content.id,
+            contentType: content.type
+        }).then(nextEp => {
+            if (nextEp && nextEp.total > 0) {
+                if (nextEp.data[0].type === 'movie') {
+                    nextEp = { ...nextEp.data[0], ...nextEp.data[0].panel, panel: null }
+                } else {
+                    nextEp = nextEp.data[0]
+                }
+            } else {
+                nextEp = null
+            }
+            return nextEp
+        })
+        /** @type {Promise} */
+        let getNextProm = Promise.resolve(null)
+        if (content.type === 'series') {
+            getNextProm = getNextEpidose(profile, content)
+        } else if (content.type === 'movie_listing') {
+            getNextProm = getNextMovie(profile, content)
+        }
+        nextProm.then(nextEp => {
+            if (nextEp) {
+                resolve(nextEp)
+            } else {
+                getNextProm.then(async tmpEpisode => {
+                    if (tmpEpisode) {
+                        await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
+                    }
+                    resolve(tmpEpisode)
+                })
+            }
+        })
+    })
+}
+
+/**
  * @param {{
     profile: Object,
     content: Object,
@@ -100,7 +172,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     }, [setContentToPlay, nextContent])
 
     /** @type {Function} */
-    const toggleWatchlist = useCallback(async () => {
+    const toggleWatchlist = useCallback(() => {
         if (isInWatchlist) {
             api.content.deleteWatchlistItem(profile, { contentId: content.id })
         } else {
@@ -111,36 +183,10 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
 
     useEffect(() => {
-        const proms = []
-        proms.push(
-            api.discover.getNext(profile, {
-                contentId: content.id,
-                contentType: content.type
-            }).then(async nextEp => {
-                if (nextEp && nextEp.total > 0) {
-                    if (nextEp.data[0].type === 'movie') {
-                        setNextConent({ ...nextEp.data[0], ...nextEp.data[0].panel, panel: null })
-                    } else {
-                        setNextConent(nextEp.data[0])
-                    }
-                } else {
-                    if (content.type === 'series') {
-                        const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
-                        const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
-                        const tmpEpisode = episodesData[0]
-                        await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
-                        tmpEpisode.type = 'episode'
-                        setNextConent(tmpEpisode)
-                    } else if (content.type === 'movie_listing') {
-                        const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: content.id })
-                        const tmpMovie = moviesData[0]
-                        await calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
-                        tmpMovie.type = 'movie'
-                        setNextConent({ ...tmpMovie, ...(tmpMovie.panel || {}), panel: null })
-                    }
-                }
-            })
-        )
+        /** @type {Promise} */
+        const nextEpProm = getNextContent(profile, content)
+        /** @type {Array<Promise>} */
+        const proms = [nextEpProm]
         if (['series', 'movie_listing'].includes(content.type)) {
             proms.push(
                 api.content.getWatchlistItems(profile, { contentIds: [content.id] }).then(res => {
@@ -148,6 +194,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 })
             )
         }
+        nextEpProm.then(setNextConent)
         setLoading(true)
         Promise.all(proms).then(() => setLoading(false))
     }, [profile, content, setLoading])
