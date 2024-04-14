@@ -69,14 +69,14 @@ import { $L } from '../../hooks/language'
  * @param {{
     profile: import('crunchyroll-js-api/src/types').Profile,
     content: Object,
-    videoCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
+    playerCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
  }}
  @returns {Promise}
  */
-const updatePlayHead = async ({ profile, content, videoCompRef }) => {
+const updatePlayHead = async ({ profile, content, playerCompRef }) => {
     if (['episode', 'movie'].includes(content.type)) {
         /** @type {{paused: boolean, currentTime: number}} */
-        const state = videoCompRef.current.getMediaState()
+        const state = playerCompRef.current.getMediaState()
         content.playhead.playhead = Math.floor(state.currentTime)
         return api.content.savePlayhead(profile, {
             contentId: content.id,
@@ -89,17 +89,17 @@ const updatePlayHead = async ({ profile, content, videoCompRef }) => {
  * @param {{
     profile: import('crunchyroll-js-api/src/types').Profile,
     content: Object,
-    videoCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
+    playerCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
  }}
  * @returns {Function}
  */
-const updatePlayHeadLoop = ({ profile, content, videoCompRef }) => {
+const updatePlayHeadLoop = ({ profile, content, playerCompRef }) => {
     const interval = setInterval(() => {
-        if (videoCompRef.current) {
+        if (playerCompRef.current) {
             /** @type {{paused: boolean, currentTime: number}} */
-            const state = videoCompRef.current.getMediaState()
+            const state = playerCompRef.current.getMediaState()
             if (!state.paused) {
-                updatePlayHead({ profile, content, videoCompRef }).catch(logger.error)
+                updatePlayHead({ profile, content, playerCompRef }).catch(logger.error)
             }
         }
     }, 1000 * 15) // every 15 sec
@@ -628,7 +628,7 @@ const Player = ({ ...rest }) => {
     /** @type {[Event, Function]} */
     const [endEvent, setEndEvent] = useState(null)
     /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
-    const videoCompRef = useRef(null)
+    const playerCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
     const playerRef = useRef(null)
     /** @type {Stream} */
@@ -677,14 +677,14 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const onChangeEp = useCallback(async (changeEp) => {
-        await updatePlayHead({ profile, content, videoCompRef })
+        await updatePlayHead({ profile, content, playerCompRef })
         if (changeEp && changeEp.total > 0) {
             setAudio({})
             setPlayContent({ ...changeEp.data[0] })
         } else {
             back.doBack()
         }
-    }, [videoCompRef, profile, content, setPlayContent, setAudio])
+    }, [playerCompRef, profile, content, setPlayContent, setAudio])
 
     /** @type {Function} */
     const onNextEp = useCallback((ev) => {
@@ -705,17 +705,35 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const onPlayPause = useCallback(() => {
-        if (videoCompRef.current) {
-            const { paused } = videoCompRef.current.getMediaState()
+        if (playerCompRef.current) {
+            const { paused } = playerCompRef.current.getMediaState()
             setIsPaused(!paused)
         }
     }, [])
 
     /** @type {Function} */
+    const onSkipBtnNavigate = useCallback(() => {
+        if (!Spotlight.focus(rest.spotlightId + '_mediaControls')) {
+            playerCompRef.current.showControls()
+        }
+    }, [rest.spotlightId])
+
+    /** @type {Function} */
+    const resetCurrentSkipEvent = useCallback(oldValue => {
+        if (oldValue) {
+            if (!Spotlight.focus(rest.spotlightId + '_mediaControls')) {
+                const ctrlButton = document.querySelector('#media-controls').parentElement
+                Spotlight.focus(ctrlButton.parentElement.nextElementSibling)
+            }
+        }
+        return null
+    }, [rest.spotlightId])
+
+    /** @type {Function} */
     const onSkipEvent = useCallback(() => {
         playerRef.current.seek(currentSkipEvent.end - 5)
-        setCurrentSkipEvent(null)
-    }, [currentSkipEvent])
+        setCurrentSkipEvent(resetCurrentSkipEvent)
+    }, [currentSkipEvent, resetCurrentSkipEvent])
 
     /** @type {Function} set skip button bottom */
     const onMediaControlShow = useCallback(({ available }) => {
@@ -796,7 +814,7 @@ const Player = ({ ...rest }) => {
         if (session && stream.token) {
             sessionTimeout = setTimeout(() => {
                 /** @type {{paused: boolean, currentTime: number}} */
-                const state = videoCompRef.current.getMediaState()
+                const state = playerCompRef.current.getMediaState()
                 api.drm.keepAlive(stream.profile, {
                     episodeId: audio.guid,
                     token: stream.token,
@@ -825,11 +843,11 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // loop playHead
         if (!_PLAY_TEST_) {
-            if (!loading && videoCompRef.current && content) {
-                return updatePlayHeadLoop({ profile, content, videoCompRef })
+            if (!loading && playerCompRef.current && content) {
+                return updatePlayHeadLoop({ profile, content, playerCompRef })
             }
         }
-    }, [profile, content, videoCompRef, loading])
+    }, [profile, content, playerCompRef, loading])
 
     useEffect(() => {  // play next video
         let timeout = null
@@ -870,13 +888,26 @@ const Player = ({ ...rest }) => {
         /** @type {Array<String>} */
         let availableEvents = []
         let timeout = null
+        let timeloop = null
         /** @type {Function} */
         const processFn = update => {
             for (const type of availableEvents) {
                 if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 10)) {
-                    setCurrentSkipEvent(skipEvents[type])
-                    Spotlight.focus('#skip-button')
-                    timeout = setTimeout(() => setCurrentSkipEvent(null), 1000 * 10)
+                    setCurrentSkipEvent(oldValue => {
+                        if (oldValue !== skipEvents[type]) {
+                            playerCompRef.current.hideControls()
+                            clearInterval(timeloop)
+                            timeloop = setInterval(() => {
+                                if (Spotlight.focus('#skip-button')) {
+                                    clearInterval(timeloop)
+                                }
+                            }, 100)
+                            clearTimeout(timeout)
+                            timeout = setTimeout(() => setCurrentSkipEvent(resetCurrentSkipEvent), 1000 * 10)
+                        }
+                        return skipEvents[type]
+                    })
+
                 }
             }
         }
@@ -888,10 +919,11 @@ const Player = ({ ...rest }) => {
             if (playerRef.current) {
                 playerRef.current.off('playbackTimeUpdated', processFn)
             }
-            setCurrentSkipEvent(null)
             clearTimeout(timeout)
+            clearInterval(timeloop)
+            setCurrentSkipEvent(resetCurrentSkipEvent)
         }
-    }, [loading, skipEvents])
+    }, [loading, skipEvents, resetCurrentSkipEvent])
 
     return (
         <div className={rest.className}>
@@ -907,7 +939,7 @@ const Player = ({ ...rest }) => {
                 onPlay={onPlayPause}
                 jumpBy={jumpBy}
                 loading={loading}
-                ref={videoCompRef}
+                ref={playerCompRef}
                 onControlsAvailable={onMediaControlShow}
                 noAutoPlay>
                 <video id={content.id}>
@@ -935,13 +967,19 @@ const Player = ({ ...rest }) => {
                     </rightComponents>
                 </MediaControls>
             </VideoPlayer>
-            <Button id="skip-button" onClick={onSkipEvent}
+            <Button id="skip-button"
                 style={{
                     position: 'absolute',
                     right: '2.5rem',
                     bottom: '2.5rem',
                     display: currentSkipEvent ? 'inline-block' : 'none',
-                }}>
+                }}
+                onClick={onSkipEvent}
+                spotlightDisabled={!currentSkipEvent}
+                onSpotlightDown={onSkipBtnNavigate}
+                onSpotlightLeft={onSkipBtnNavigate}
+                onSpotlightRight={onSkipBtnNavigate}
+                onSpotlightUp={onSkipBtnNavigate}>
                 {currentSkipEvent && currentSkipEvent.title}
             </Button>
         </div>
