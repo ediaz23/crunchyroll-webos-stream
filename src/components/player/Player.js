@@ -111,7 +111,7 @@ const updatePlayHeadLoop = ({ profile, content, videoCompRef }) => {
     profile: import('crunchyroll-js-api/src/types').Profile,
     content: Object,
  }}
- * @returns {Promise}
+ * @returns {Promise<{playhead: Number, fully_watched: Boolean}>}
  */
 const findPlayHead = async ({ profile, content }) => {
     let playhead = {
@@ -205,7 +205,7 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
     /** @type {Stream} */
     let out = null, data = {}, urls = []
     if (_PLAY_TEST_) {  // test stream
-        content.playhead = 0
+        content.playhead = { playhead: 12 }
         out = {
             id: content.id,
             urls: [{ url: `${_LOCALHOST_SERVER_}/frieren-26.mpd`, locale: 'es-419' }],
@@ -477,6 +477,13 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
             modifyRequest: modifierDashRequest(stream.profile),
         }
     })
+    dashPlayer.updateSettings({
+        streaming: {
+            buffer: {
+                bufferTimeAtTopQualityLongForm: 120,
+            }
+        }
+    })
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
         url = stream.urls.find(val => val.locale === 'off')
@@ -706,7 +713,7 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const onSkipEvent = useCallback(() => {
-        playerRef.current.seek(currentSkipEvent.end - 2)
+        playerRef.current.seek(currentSkipEvent.end - 5)
         setCurrentSkipEvent(null)
     }, [currentSkipEvent])
 
@@ -860,20 +867,21 @@ const Player = ({ ...rest }) => {
     }, [loading, setJumpBy, jumpBy])
 
     useEffect(() => {  // skip events
+        /** @type {Array<String>} */
+        let availableEvents = []
         let timeout = null
         /** @type {Function} */
         const processFn = update => {
-            ['recap', 'intro', 'credits', 'preview'].forEach(type => {
-                if (skipEvents[type]) {
-                    if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 5)) {
-                        setCurrentSkipEvent(skipEvents[type])
-                        Spotlight.focus('#skip-button')
-                        timeout = setTimeout(() => setCurrentSkipEvent(null), 1000 * 5)
-                    }
+            for (const type of availableEvents) {
+                if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 10)) {
+                    setCurrentSkipEvent(skipEvents[type])
+                    Spotlight.focus('#skip-button')
+                    timeout = setTimeout(() => setCurrentSkipEvent(null), 1000 * 10)
                 }
-            })
+            }
         }
-        if (playerRef.current && skipEvents) {
+        if (!loading && skipEvents && playerRef.current) {
+            availableEvents = ['recap', 'intro', 'credits', 'preview'].filter(type => skipEvents[type])
             playerRef.current.on('playbackTimeUpdated', processFn)
         }
         return () => {
