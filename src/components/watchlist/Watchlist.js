@@ -7,9 +7,9 @@ import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import ri from '@enact/ui/resolution'
 
 import PropTypes from 'prop-types'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { selectedContentState, } from '../../recoilConfig'
+import { selectedContentState, homeViewReadyState } from '../../recoilConfig'
 import HomeContentBanner from '../home/ContentBanner'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContentHook'
@@ -35,6 +35,8 @@ const processResult = async ({ profile, data }) => {
 
 
 const Watchlist = ({ profile, ...rest }) => {
+    /** @type {Function} */
+    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [watchlist, setWatchlist] = useState([])
     /** @type {[Object, Function]} */
@@ -135,7 +137,8 @@ const Watchlist = ({ profile, ...rest }) => {
             setLoadingItem({})
             setWatchlist([...res2.data, ...new Array(res.total - res.data.length)])
         }).then(() => setLoading(false))
-    }, [profile, setAutoScroll, setLoadingItem, setWatchlist, setLoading])
+            .then(() => setHomeViewReady(true))
+    }, [profile, setAutoScroll, setLoadingItem, setWatchlist, setLoading, setHomeViewReady])
 
     return (
         <Column {...rest}>
