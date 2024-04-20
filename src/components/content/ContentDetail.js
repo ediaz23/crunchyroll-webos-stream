@@ -89,11 +89,12 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                     <Image className={css.poster} src={image.source} sizing='fill' />
                 }
                 <Cell className={css.modal}>
-                    {loading ?
+                    {loading &&
                         <Column align='center center'>
                             <Spinner style={{ height: 'auto' }} />
                         </Column>
-                        :
+                    }
+                    {!loading &&
                         <ActivityViews index={currentIndex}>
                             <Options
                                 profile={profile}

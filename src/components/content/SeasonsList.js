@@ -15,8 +15,35 @@ import css from './ContentDetail.module.less'
 const NavigableDiv = Navigable('div')
 
 /**
+ * Render an item
  * @param {{
-    episodes: Array<Object>,
+    index: Number,
+    itemHeight: Number,
+    seasons: Array<Object>,
+ }}
+ */
+const renderItem = ({ index, itemHeight: height, seasons, ...rest }) => {
+    return (
+        <NavigableDiv {...rest} key={index} style={{ height }}>
+            <Row>
+                <Cell className={css.name}>
+                    <Marquee marqueeOn='render'>
+                        {seasons[index].title}
+                    </Marquee>
+                </Cell>
+                {seasons[index].number_of_episodes &&
+                    <Cell shrink>
+                        {`${seasons[index].number_of_episodes} ${$L('Episodes')}`}
+                    </Cell>
+                }
+            </Row>
+        </NavigableDiv>
+    )
+}
+
+/**
+ * @param {{
+    seasons: Array<Object>,
     selectEpisode: Function,
  }}
  */
@@ -26,26 +53,6 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     const itemHeight = ri.scale(70)
-
-    /** @type {Function} */
-    const renderItem = useCallback(({ index, itemHeight: height, ...restProps }) => {
-        return (
-            <NavigableDiv {...restProps} key={index} style={{ height }}>
-                <Row>
-                    <Cell className={css.name}>
-                        <Marquee marqueeOn='render'>
-                            {seasons[index].title}
-                        </Marquee>
-                    </Cell>
-                    {seasons[index].number_of_episodes &&
-                        <Cell shrink>
-                            {`${seasons[index].number_of_episodes} ${$L('Episodes')}`}
-                        </Cell>
-                    }
-                </Row>
-            </NavigableDiv>
-        )
-    }, [seasons])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -70,6 +77,7 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
             childProps={{
                 onFocus: selectSeason,
                 itemHeight,
+                seasons,
             }}
         />
     )

@@ -214,11 +214,12 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 
     return (
         <Row {...rest}>
-            {loading ?
+            {loading &&
                 <Column align='center center' style={{ height: 'auto', width: '100%' }}>
                     <Spinner />
                 </Column>
-                :
+            }
+            {!loading &&
                 <Cell size='49%'>
                     <ContentHeader content={content} />
                     {subtitle &&

@@ -92,32 +92,43 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
                 setEpisodes(episodesData)
             }
         }
+        let timeout = null
         if (season.id) {
             setEpisodes([])
-            loadData()
+            timeout = setTimeout(loadData, 1000)
         }
+        return () => clearTimeout(timeout)
     }, [profile, season])
 
     return (
         <Row align='start space-between' {...rest}>
-            {loading ?
+            {loading &&
                 <Column align='center center' style={{ width: '100%' }}>
                     <Spinner />
                 </Column>
-                :
-                <>
+            }
+            {!loading &&
+                <Row style={{ width: '100%' }}>
                     <Cell size="49%">
-                        <ContentHeader content={series} />
-                        <SeasonsList seasons={seasons} selectSeason={selectSeason} />
+                        <Column>
+                            <Cell shrink>
+                                <ContentHeader content={series} />
+                            </Cell>
+                            <Cell>
+                                <SeasonsList seasons={seasons} selectSeason={selectSeason} />
+                            </Cell>
+                        </Column>
                     </Cell>
                     <Cell size="49%">
                         {episodes.length ?
                             <EpisodesList episodes={episodes} selectEpisode={playEpisode} />
                             :
-                            <Spinner />
+                            <Column align='center center' style={{ height: '100%', width: '100%' }}>
+                                <Spinner />
+                            </Column>
                         }
                     </Cell>
-                </>
+                </Row>
             }
         </Row>
     )
