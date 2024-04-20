@@ -7,6 +7,7 @@ import Skinnable from '@enact/moonstone/Skinnable'
 
 import { $L } from '../../hooks/language'
 import HomeContentBanner from '../home/ContentBanner'
+import back from '../../back'
 
 
 const PopupBaseSkin = Skinnable({ defaultSkin: 'dark' }, PopupBase)
@@ -14,11 +15,20 @@ const PopupBaseSkin = Skinnable({ defaultSkin: 'dark' }, PopupBase)
 const ContentInfo = ({ content }) => {
     /** @type {[Boolean, Function]} */
     const [showSubPopup, setShowSubPopup] = useState(false)
-    const onHideSubPopup = useCallback(() => {
-        setShowSubPopup(false)
-    }, [setShowSubPopup])
+
+    /** @type {Function} */
+    const onHideSubPopup = useCallback(() => { back.doBack() }, [])
+
+    /** @type {Function} */
     const onShowSubPopup = useCallback(() => {
-        setShowSubPopup(oldVar => !oldVar)
+        setShowSubPopup(oldVar => {
+            if (oldVar) {
+                back.doBack()
+            } else {
+                back.pushHistory({ doBack: () => { setShowSubPopup(false) } })
+            }
+            return !oldVar
+        })
     }, [setShowSubPopup])
 
     return (
