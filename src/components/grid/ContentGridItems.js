@@ -60,7 +60,9 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
                 />
             )
         } else {
-            Promise.resolve().then(() => load(index))
+            if (load) {
+                Promise.resolve().then(() => load(index))
+            }
             out = (
                 <div {...rest2} >
                     <Spinner />
@@ -90,9 +92,9 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
 
 ContentGridItems.propTypes = {
     contentList: PropTypes.arrayOf(PropTypes.object).isRequired,
-    load: PropTypes.func.isRequired,
     autoScroll: PropTypes.bool.isRequired,
     onScroll: PropTypes.func.isRequired,
+    load: PropTypes.func,
 }
 
 export default ContentGridItems

@@ -17,6 +17,7 @@ import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
 import MusicBrowse from '../components/music/Browse'
 import ContentGrid from '../components/grid/ContentGrid'
+import Simulcast from '../components/simulcast/Simulcast'
 import Watchlist from '../components/watchlist/Watchlist'
 import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
@@ -225,17 +226,17 @@ const HomePanel = (props) => {
                         hideText />
                 </Cell>
                 <Cell grow>
-                    {loading ?
+                    {loading &&
                         <Column align='center center'>
                             <Spinner />
                         </Column>
-                        :
+                    }
+                    {!loading &&
                         <ActivityViews index={currentActivity}>
                             <HomeFeed profile={profile}
                                 homeFeed={homeFeed}
                                 setHomeFeed={setHomeFeed} />
-                            <ContentGrid profile={profile}
-                                contentKey='simulcast'
+                            <Simulcast profile={profile}
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
                                 contentKey='search'

@@ -10,7 +10,6 @@ import { useSetRecoilState } from 'recoil'
 
 import { homeViewReadyState } from '../../recoilConfig'
 import { $L } from '../../hooks/language'
-import SeasonButtons from './SeasonButtons'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'
 import api from '../../api'
@@ -27,8 +26,9 @@ import css from './ContentGrid.module.less'
  * @param {String} obj.contentType type of content to show, series, movies, etc
  * @param {String} obj.engine Engine to search, can be search or browse
  * @param {Boolean} obj.noCategory Not show category
+ * @param {Boolean} obj.noSearch Not show input
  */
-const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCategory, ...rest }) => {
+const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCategory, noSearch, ...rest }) => {
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
@@ -122,7 +122,9 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                     }
                 } else {
                     api.discover.getBrowseAll(profile, options).then(res => {
-                        changeContentList([...res.data, ...new Array(res.total - res.data.length)])
+                        console.log(res)
+                        const tmpList = [...res.data, ...new Array(res.total - res.data.length)]
+                        changeContentList(tmpList)
                         setLoading(false)
                         setHomeViewReady(true)
                     })
@@ -133,9 +135,7 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
     }, [profile, contentKey, delay, options, engine, changeContentList, setLoading, setHomeViewReady])
 
     useEffect(() => {  // initializing
-        if (contentKey !== 'simulcast') {
-            setDelay(0)
-        }
+        setDelay(0)
         return () => {
             setDelay(-1)
             setSeason(undefined)
@@ -157,20 +157,12 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                                 {title} {season && season.localization.title}
                             </Heading>
                         </Cell>
-                        <Cell shrink>
-                            <Input placeholder={$L('Search')}
-                                value={query}
-                                onChange={onSearch}
-                                iconAfter="search" />
-                        </Cell>
-                        {contentKey === 'simulcast' &&
+                        {!noSearch &&
                             <Cell shrink>
-                                <SeasonButtons
-                                    profile={profile}
-                                    contentKey={contentKey}
-                                    season={season}
-                                    setSeason={setSeason}
-                                    setDelay={setDelay} />
+                                <Input placeholder={$L('Search')}
+                                    value={query}
+                                    onChange={onSearch}
+                                    iconAfter="search" />
                             </Cell>
                         }
                     </Row>
@@ -186,11 +178,12 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                             </Cell>
                         }
                         <Cell grow >
-                            {loading ?
+                            {loading &&
                                 <Column align='center center'>
                                     <Spinner />
                                 </Column>
-                                :
+                            }
+                            {!loading &&
                                 <ContentGridItems
                                     contentList={contentList}
                                     load={onLoad}

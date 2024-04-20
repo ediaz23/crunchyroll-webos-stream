@@ -142,12 +142,13 @@ const Watchlist = ({ profile, ...rest }) => {
 
     return (
         <Column {...rest}>
-            {loading ?
+            {loading &&
                 <Column align='center center'>
                     <Spinner />
                 </Column>
-                :
-                <>
+            }
+            {!loading &&
+                <Column>
                     <Cell size="50%">
                         {selectedContent && <HomeContentBanner content={selectedContent} />}
                     </Cell>
@@ -160,7 +161,7 @@ const Watchlist = ({ profile, ...rest }) => {
                             cbScrollTo={getScrollTo}
                         />
                     </Cell>
-                </>
+                </Column>
             }
         </Column>
     )
