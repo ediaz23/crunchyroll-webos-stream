@@ -21,10 +21,7 @@ const Rating = ({ profile, content, ...rest }) => {
         return { contentId: content.id, contentType: content.type }
     }, [content])
     /** @type {Function} */
-    const doRating = useCallback(ev => {
-        /** @type {{target: HTMLElement}} */
-        const { target } = ev
-        const newRating = target.parentElement.dataset.rating
+    const doRating = useCallback(newRating => {
         if (rating === newRating) {
             api.review.removeRating(profile, shortContent)
                 .then(() => setRating(''))
@@ -35,6 +32,12 @@ const Rating = ({ profile, content, ...rest }) => {
                 .catch(console.error)
         }
     }, [profile, shortContent, setRating, rating])
+
+    /** @type {Function} */
+    const rateUp = useCallback(() => doRating('up'), [doRating])
+
+    /** @type {Function} */
+    const rateDown = useCallback(() => doRating('down'), [doRating])
 
     useEffect(() => {
         api.review.getRatings(profile, shortContent).then(data => {
@@ -47,17 +50,15 @@ const Rating = ({ profile, content, ...rest }) => {
     return (
         <>
             <IconButton backgroundOpacity="lightTranslucent"
-                data-rating='down'
                 selected={rating === 'down'}
-                onClick={doRating}
+                onClick={rateDown}
                 css={{ iconButton: css.IconButtonCustomColor }}
                 {...rest}>
                 &#x1F44E;
             </IconButton>
             <IconButton backgroundOpacity="lightTranslucent"
-                data-rating='up'
                 selected={rating === 'up'}
-                onClick={doRating}
+                onClick={rateUp}
                 css={{ iconButton: css.IconButtonCustomColor }}
                 {...rest}>
                 &#x1F44D;
