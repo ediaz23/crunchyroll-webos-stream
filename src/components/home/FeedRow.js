@@ -20,7 +20,7 @@ import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 const NavigableDiv = Navigable('div', '')
 
 
-const Poster = ({ item, image, itemSize, ...rest }) => {
+export const Poster = ({ item, image, itemSize, ...rest }) => {
     /** @type {Array<String>} */
     const playableTypes = useMemo(() =>
         ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
@@ -71,6 +71,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     const compRef = useRef(null)
     /** @type {[Number, Function]} */
     const [itemHeight, setItemHeight] = useState(0)
+    /** @type {Number} */
     const itemWidth = ri.scale(320)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
@@ -80,16 +81,18 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
     const selectElement = useCallback((ev) => {
-        setContent(feed.items[parseInt(ev.target.dataset.index)])
-    }, [setContent, feed.items])
+        setContent(feed.id === 'fake_item' ? null : feed.items[parseInt(ev.target.dataset.index)])
+    }, [setContent, feed])
     const setContentNavagate = useSetContent()
     /** @type {Function} */
     const showContentDetail = useCallback((ev) => {
         /** @type {HTMLElement} */
         const parentElement = ev.target.closest(`#${cellId}`)
         const content = feed.items[parseInt(parentElement.dataset.index)]
-        setContentNavagate(content)
-    }, [cellId, setContentNavagate, feed.items])
+        if (feed.id !== 'fake_item') {
+            setContentNavagate(content)
+        }
+    }, [cellId, setContentNavagate, feed])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -106,7 +109,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
             const interval = setInterval(() => {
                 if (scrollToRef.current) {
                     clearInterval(interval)
-                    scrollToRef.current({ index: 0, animate: false, focus: true })
+//                    scrollToRef.current({ index: 0, animate: false, focus: true })
                     setHomeViewReady(true)
                 }
             }, 100)

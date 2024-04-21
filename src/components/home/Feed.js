@@ -1,5 +1,5 @@
 
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useMemo } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
@@ -14,6 +14,7 @@ import VirtualListNested from '../../patch/VirtualListNested'
 import api from '../../api'
 import { LOAD_MOCK_DATA } from '../../const'
 import logger from '../../logger'
+import kidImg from '../../../resources/img/child.jpg'
 
 
 /**
@@ -252,39 +253,74 @@ const processItemFeed = async (carousel, profile) => {
     })
 }
 
+/**
+ * Return fake item
+ * @returns {Object}
+ */
+const getFakeFeedItem = () => {
+    return {
+        "id": "fake_item",
+        "title": $L('Keep Watching'),
+        "items": [
+            {
+                "images": {
+                    "poster_wide": [
+                        [
+                            {
+                                "height": 180,
+                                "source": kidImg,
+                                "type": "poster_wide",
+                                "width": 300
+                            }
+                        ]
+                    ]
+                },
+                "id": "none",
+                "type": "none",
+                "title": $L('Keep Watching'),
+                "name": $L('Keep Watching')
+            }
+        ],
+        "processed": true
+    }
+}
 
 const HomeFeed = ({ profile, homeFeed, setHomeFeed }) => {
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
+    /** @type {Function} */
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
     /** @type {Number} */
     const itemHeigth = ri.scale(270)
-
+    /** @type {Object} */
+    const fakeItem = useMemo(getFakeFeedItem, [])
+    /** @type {Function} */
+    const setHomeFeedFn = useCallback((index, feedItem) => {
+        setHomeFeed(prevArray => [
+            ...prevArray.slice(0, index),
+            feedItem,
+            ...prevArray.slice(index + 1)
+        ])
+    }, [setHomeFeed])
+    /** @type {Function} */
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
         const feedItem = homeFeed[index]
         if (feedItem.processed) {
-            out = (<HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />)
+            out = <HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />
         } else {
             Promise.resolve().then(() => {
                 if (feedItem.processed === undefined) {
-                    setHomeFeed(prevArray => [
-                        ...prevArray.slice(0, index),
-                        { ...feedItem, processed: false },  // avoid double request
-                        ...prevArray.slice(index + 1)
-                    ])
+                    setHomeFeedFn(index, { ...feedItem, processed: false })  // avoid double request
                     processItemFeed(homeFeed[index], profile).then(newFeed => {
                         if (newFeed.items.length) {
-                            setHomeFeed(prevArray => [
-                                ...prevArray.slice(0, index),
-                                { ...newFeed, processed: true },
-                                ...prevArray.slice(index + 1)
-                            ])
+                            setHomeFeedFn(index, { ...newFeed, processed: true })
                         } else {
-                            setHomeFeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
+                            setHomeFeedFn(index, fakeItem)
                         }
-                    }).catch(() => {
-                        setHomeFeed(prevArray => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)])
-                    })
+                    }).catch(() => setHomeFeedFn(index, fakeItem))
                 }
             })
             const { itemSize } = rest
@@ -297,7 +333,19 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed }) => {
             )
         }
         return out
-    }, [homeFeed, profile, setSelectedContent, setHomeFeed])
+    }, [homeFeed, profile, setSelectedContent, setHomeFeedFn, fakeItem])
+
+    /*
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (scrollToRef.current) {
+                clearInterval(interval)
+                scrollToRef.current({ index: 5, animate: false, focus: false })
+            }
+        }, 100)
+        return () => clearInterval(interval)
+    }, [])
+    */
 
     return (
         <Column style={{ paddingLeft: '0.5rem' }}>
@@ -317,6 +365,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed }) => {
                     direction='vertical'
                     verticalScrollbar='hidden'
                     horizontalScrollbar='hidden'
+                    cbScrollTo={getScrollTo}
                 />
             </Cell>
         </Column>
