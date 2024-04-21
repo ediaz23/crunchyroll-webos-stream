@@ -10,7 +10,7 @@ import { translateError, getContentParam } from './utils'
  * @param {Object} params
  * @param {Array<String>} params.objectIds
  * @param {Boolean} [params.ratings]
- * @return {Promise}
+ * @return {Promise<{total: Number, data: Array}>}
  */
 export const getObjects = async (profile, params) => {
     let out = null

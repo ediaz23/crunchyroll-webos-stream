@@ -66,9 +66,11 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     )
 }
 
-const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, index, ...rest }) => {
+const HomeFeedRow = ({ feed, itemSize, cellId, setContent,
+    rowIndex, homeFeedPosition, setHomeFeedPosition,
+    style, className, ...rest }) => {
     /** @type {{current: HTMLElement}} */
-    const compRef = useRef(null)
+    const compRef = useRef({ current: null })
     /** @type {[Number, Function]} */
     const [itemHeight, setItemHeight] = useState(0)
     /** @type {Number} */
@@ -81,41 +83,48 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, style, className, ind
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
     const selectElement = useCallback((ev) => {
-        setContent(feed.id === 'fake_item' ? null : feed.items[parseInt(ev.target.dataset.index)])
+        if (feed.id !== 'fake_item') {
+            setContent(feed.items[parseInt(ev.target.dataset.index)])
+        } else {
+            setContent(null)
+        }
     }, [setContent, feed])
+    /** @type {Function} */
     const setContentNavagate = useSetContent()
     /** @type {Function} */
     const showContentDetail = useCallback((ev) => {
         /** @type {HTMLElement} */
         const parentElement = ev.target.closest(`#${cellId}`)
-        const content = feed.items[parseInt(parentElement.dataset.index)]
+        const columnIndex = parseInt(parentElement.dataset.index)
+        const content = feed.items[columnIndex]
         if (feed.id !== 'fake_item') {
+            setHomeFeedPosition({ rowIndex, columnIndex })
             setContentNavagate(content)
         }
-    }, [cellId, setContentNavagate, feed])
+    }, [cellId, setContentNavagate, feed, setHomeFeedPosition, rowIndex])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
 
     useEffect(() => {
-        if (compRef && compRef.current) {
+        if (compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect()
             setItemHeight(itemSize - boundingRect.height * 2)
         }
-    }, [compRef, itemSize])
+    }, [itemSize, setItemHeight])
 
     useEffect(() => {
-        if (index === 0) {
-            const interval = setInterval(() => {
-                if (scrollToRef.current) {
-                    clearInterval(interval)
-//                    scrollToRef.current({ index: 0, animate: false, focus: true })
+        const interval = setInterval(() => {
+            if (scrollToRef.current) {
+                clearInterval(interval)
+                if (rowIndex === homeFeedPosition.rowIndex) {
+                    scrollToRef.current({ index: homeFeedPosition.columnIndex, animate: false, focus: true })
                     setHomeViewReady(true)
                 }
-            }, 100)
-            return () => clearInterval(interval)
-        }
-    }, [setHomeViewReady])  // eslint-disable-line react-hooks/exhaustive-deps
+            }
+        }, 100)
+        return () => clearInterval(interval)
+    }, [rowIndex, homeFeedPosition, setHomeViewReady])
 
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
@@ -168,6 +177,12 @@ HomeFeedRow.propTypes = {
     itemSize: PropTypes.number.isRequired,
     cellId: PropTypes.string.isRequired,
     setContent: PropTypes.func.isRequired,
+    rowIndex: PropTypes.number.isRequired,
+    homeFeedPosition: PropTypes.shape({
+        rowIndex: PropTypes.number.isRequired,
+        columnIndex: PropTypes.number.isRequired,
+    }).isRequired,
+    setHomeFeedPosition: PropTypes.func.isRequired,
 }
 
 export default HomeFeedRow

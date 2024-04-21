@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useRecoilState } from 'recoil'
 
 import { $L } from '../../hooks/language'
-import { selectedContentState } from '../../recoilConfig'
+import { selectedContentState, homeFeedPositionState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
@@ -57,7 +57,7 @@ const removePanelField = (panel) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @returns {Promise<Object>}
  */
-const processCarousel = async (carousel, profile) => {
+const processCarousel = async (carousel, profile, type) => {
     const out = {
         id: carousel.id,
         resource_type: carousel.resource_type,
@@ -68,14 +68,21 @@ const processCarousel = async (carousel, profile) => {
     /** @type {Array<String>} */
     let objectIds
     if (LOAD_MOCK_DATA) {
-        objectIds = 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE'.split('-')
+        if (type === 'music') {
+            objectIds = 'MA6065CF47-MAB4DFE372-MA2D4BF4A9-MA6480DAB5-MA464307C7'.split('-')
+        } else {
+            objectIds = 'G50UZ1N4G-GEXH3W49E-GK9U3D2VV-GRDV0019R-GZ7UV13VE'.split('-')
+        }
     } else {
         const resObjectIds = await Promise.all(carousel.items.map(convertItem2Object))
         objectIds = Array.from(new Set(resObjectIds.filter(item => !!item)))
     }
     if (objectIds.length) {
-        const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
-        out.items = data
+        if (type === 'music') {
+            out.items = (await api.music.getArtists(profile, objectIds)).data
+        } else {
+            out.items = (await api.cms.getObjects(profile, { objectIds, ratings: true })).data
+        }
     }
     return out
 }
@@ -103,7 +110,7 @@ export const processPanels = async (carousel) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @return {Promise<Object>}
  */
-const processInFeedPanels = async (carousel, profile) => {
+const processInFeedPanels = async (carousel, profile, type) => {
     const out = {
         id: 'in_feed_panels',
         resource_type: carousel.panels[0].resource_type,
@@ -114,17 +121,41 @@ const processInFeedPanels = async (carousel, profile) => {
     /** @type {Array<String>} */
     let objectIds
     if (LOAD_MOCK_DATA) {
-        objectIds = 'G4PH0WEKE-GNVHKNPQ7-GY8DWQN5Y'.split('-')
+        if (type === 'music') {
+            objectIds = 'MA7AFECB5F-MA179CB50D-MA29ED68B'.split('-')
+        } else {
+            objectIds = 'G4PH0WEKE-GNVHKNPQ7-GY8DWQN5Y'.split('-')
+        }
     } else {
         const resOjectIds = await Promise.all(carousel.panels.map(convertItem2Object))
         objectIds = Array.from(new Set(resOjectIds.filter(item => !!item)))
     }
     if (objectIds.length) {
-        const { data } = await api.cms.getObjects(profile, { objectIds, ratings: true })
-        out.items = data
+        if (type === 'music') {
+            out.items = (await api.music.getArtists(profile, objectIds)).data
+        } else {
+            out.items = (await api.cms.getObjects(profile, { objectIds, ratings: true })).data
+        }
     }
     return out
 }
+
+/**
+ * Process InFeedPanels item
+ * @param {Object} carousel
+ * @return {Promise<Object>}
+ */
+const processMusicArtistBanner = async (carousel) => {
+    const out = {
+        id: 'music_artist_banner',
+        resource_type: carousel.panels[0].resource_type,
+        response_type: carousel.panels[0].response_type,
+        title: $L('Artits'),
+        items: carousel.panels.map(item => item.object)
+    }
+    return out
+}
+
 
 /**
  * Process InFeedPanels item
@@ -225,19 +256,21 @@ export const postProcessFeedItem = async (val) => {
  * @param {import('crunchyroll-js-api/src/types').Profile} profile
  * @return {Promise<Object>}
  */
-const processItemFeed = async (carousel, profile) => {
+const processItemFeed = async (carousel, profile, type) => {
     carousel = { ...carousel }
     let res = Promise.resolve(carousel)
     if (carousel.resource_type === 'hero_carousel') {
-        res = processCarousel(carousel, profile)
+        res = processCarousel(carousel, profile, type)
     } else if (carousel.resource_type === 'panel') {
-        res = processPanels(carousel)
+        res = processPanels(carousel, profile, type)
     } else if (carousel.resource_type === 'in_feed_banner') {
-        res = processInFeedPanels(carousel, profile)
+        res = processInFeedPanels(carousel, profile, type)
     } else if (carousel.resource_type === 'curated_collection') {
-        res = processCuratedCollection(carousel, profile)
+        res = processCuratedCollection(carousel, profile, type)
     } else if (carousel.resource_type === 'dynamic_collection') {
-        res = processDynamicCollection(carousel, profile)
+        res = processDynamicCollection(carousel, profile, type)
+    } else if (carousel.resource_type === 'music_artist_banner') {
+        res = processMusicArtistBanner(carousel, profile, type)
     } else {
         logger.error(`Feed not supported ${carousel.resource_type} - ${carousel.response_type}`)
         return Promise.reject()
@@ -257,7 +290,7 @@ const processItemFeed = async (carousel, profile) => {
  * Return fake item
  * @returns {Object}
  */
-const getFakeFeedItem = () => {
+export const getFakeFeedItem = () => {
     return {
         "id": "fake_item",
         "title": $L('Keep Watching'),
@@ -285,42 +318,44 @@ const getFakeFeedItem = () => {
     }
 }
 
-const HomeFeed = ({ profile, homeFeed, setHomeFeed }) => {
+const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
+    /** @type {[{rowIndex: Number, columnIndex: Number,}, Function]} */
+    const [homeFeedPosition, setHomeFeedPosition] = useRecoilState(homeFeedPositionState)
     /** @type {Number} */
     const itemHeigth = ri.scale(270)
     /** @type {Object} */
     const fakeItem = useMemo(getFakeFeedItem, [])
     /** @type {Function} */
-    const setHomeFeedFn = useCallback((index, feedItem) => {
-        setHomeFeed(prevArray => [
-            ...prevArray.slice(0, index),
-            feedItem,
-            ...prevArray.slice(index + 1)
-        ])
-    }, [setHomeFeed])
-    /** @type {Function} */
     const renderRow = useCallback(({ index, ...rest }) => {
         let out
         const feedItem = homeFeed[index]
         if (feedItem.processed) {
-            out = <HomeFeedRow feed={feedItem} index={index} setContent={setSelectedContent} {...rest} />
+            out = (
+                <HomeFeedRow
+                    feed={feedItem}
+                    rowIndex={index}
+                    setContent={setSelectedContent}
+                    homeFeedPosition={homeFeedPosition}
+                    setHomeFeedPosition={setHomeFeedPosition}
+                    {...rest} />
+            )
         } else {
             Promise.resolve().then(() => {
                 if (feedItem.processed === undefined) {
-                    setHomeFeedFn(index, { ...feedItem, processed: false })  // avoid double request
-                    processItemFeed(homeFeed[index], profile).then(newFeed => {
+                    setHomeFeed(index, { ...feedItem, processed: false })  // avoid double request
+                    processItemFeed(homeFeed[index], profile, type).then(newFeed => {
                         if (newFeed.items.length) {
-                            setHomeFeedFn(index, { ...newFeed, processed: true })
+                            setHomeFeed(index, { ...newFeed, processed: true })
                         } else {
-                            setHomeFeedFn(index, fakeItem)
+                            setHomeFeed(index, fakeItem)
                         }
-                    }).catch(() => setHomeFeedFn(index, fakeItem))
+                    }).catch(() => setHomeFeed(index, fakeItem))
                 }
             })
             const { itemSize } = rest
@@ -333,22 +368,21 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed }) => {
             )
         }
         return out
-    }, [homeFeed, profile, setSelectedContent, setHomeFeedFn, fakeItem])
+    }, [homeFeed, profile, type, setSelectedContent, setHomeFeed,
+        fakeItem, homeFeedPosition, setHomeFeedPosition])
 
-    /*
     useEffect(() => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                scrollToRef.current({ index: 5, animate: false, focus: false })
+                scrollToRef.current({ index: homeFeedPosition.rowIndex, animate: false, focus: false })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
-    */
+    }, [homeFeedPosition.rowIndex])
 
     return (
-        <Column style={{ paddingLeft: '0.5rem' }}>
+        <Column style={{ paddingLeft: '0.5rem' }} {...rest2}>
             <Cell size="47%">
                 {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
             </Cell>
@@ -376,6 +410,11 @@ HomeFeed.propTypes = {
     profile: PropTypes.object.isRequired,
     homeFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
     setHomeFeed: PropTypes.func.isRequired,
+    type: PropTypes.oneOf(['home', 'music']).isRequired,
+}
+
+HomeFeed.defaultProps = {
+    type: 'home'
 }
 
 export default HomeFeed

@@ -15,7 +15,11 @@ export function useSetContent() {
     const setSelectedContent = useSetRecoilState(selectedContentState)
 
     return (content) => {
-        back.pushHistory({ doBack: () => { setPath('/profiles/home') } })
+        back.pushHistory({
+            doBack: () => {
+                setPath('/profiles/home')
+            }
+        })
         if (['episode', 'musicConcert', 'movie', 'musicVideo'].includes(content.type)) {
             if (content.type === 'movie' && content.panel) {
                 setPlayContent({ ...content, ...content.panel, panel: null })

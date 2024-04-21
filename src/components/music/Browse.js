@@ -10,7 +10,7 @@ import { useSetRecoilState } from 'recoil'
 
 import { homeViewReadyState } from '../../recoilConfig'
 import { $L } from '../../hooks/language'
-import MusicFeed from './Feed'
+import HomeFeed from '../home/Feed'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
 
@@ -121,17 +121,18 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
                     </Cell>
                 </Row>
             </Cell>
-            <Cell grow style={{paddingTop: '0.5rem', paddingBottom: '0.5rem'}}>
+            <Cell grow style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
                 {loading &&
                     <Column align='center center'>
                         <Spinner />
                     </Column>
                 }
                 {!loading && query === '' &&
-                    <MusicFeed
+                    <HomeFeed
                         profile={profile}
-                        musicFeed={musicFeed}
-                        setMusicFeed={setMusicFeed} />
+                        homeFeed={musicFeed}
+                        setHomeFeed={setMusicFeed}
+                        type='music' />
                 }
                 {!loading && query !== '' &&
                     <ContentGridItems

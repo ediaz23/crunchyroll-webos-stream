@@ -328,7 +328,7 @@ class ScrollableBase extends ScrollableSuperBase {
                 callSuper = true
             }
         } else {
-            callSuper = true
+            callSuper = false
         }
         if (callSuper) {
             this.superOnFocus(ev)
