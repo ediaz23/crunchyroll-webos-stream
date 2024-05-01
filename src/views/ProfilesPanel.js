@@ -103,7 +103,7 @@ const ProfilesPanel = ({ ...rest }) => {
                     <>
                         <Row align='center center'>
                             <Heading size='title'>
-                                {$L('Who is watching?')}
+                                {$L('Who will go on an adventure?')}
                             </Heading>
                         </Row>
                         <Row align='center center' style={rowStyle}>

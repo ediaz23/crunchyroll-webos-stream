@@ -122,7 +122,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                     }
                 } else {
                     api.discover.getBrowseAll(profile, options).then(res => {
-                        console.log(res)
                         const tmpList = [...res.data, ...new Array(res.total - res.data.length)]
                         changeContentList(tmpList)
                         setLoading(false)

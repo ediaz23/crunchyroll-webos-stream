@@ -44,7 +44,7 @@ const Profile = ({ profile, onSelectProfile, onEditProfile, compRef, ...rest }) 
     return (
         <Column className={css.profile} {...rest}>
             <ProfileData profile={profile} onClick={onSelectProfile} compRef={compRef} />
-            <Row className={css.logoutButton} align="center center">
+            <Row className={css.editButton} align="center center">
                 <IconButton data-profile-id={profile.id}
                     onClick={onEditProfile}>
                     edit

@@ -42,6 +42,7 @@
     "Information": "Información",
     "Invalid access token, try to log in again": "Token de acceso no válido, intente iniciar sesión nuevamente",
     "Issues or suggestion?": "¿Problemas o sugerencias?",
+    "Keep Watching": "",
     "Login": "Iniciar Sesión",
     "Logout": "Cerrar Sesión",
     "May Like": "Te Puede Gustar",
@@ -87,7 +88,7 @@
     "Watch": "Ver",
     "Watch Now": "Ver Ahora",
     "We appreciate your support for our project! If you would like to make a donation, we offer several options to choose from. Your contributions help us continue to develop. Thank you for your generosity!": "¡Agradecemos tu apoyo a nuestro proyecto! Si deseas realizar una donación, ofrecemos varias opciones para que elijas. Tus contribuciones nos ayudan a seguir desarrollando. ¡Gracias por tu generosidad!",
-    "Who is watching?": "¿Quien esta viendo?",
+    "Who will go on an adventure?": "¿Quién se irá de aventura?",
     "Why Not?": "Por qué no?",
     "Wrong password": "Contraseña incorrecta"
 }
