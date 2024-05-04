@@ -4,7 +4,7 @@ import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 import { $L } from '../../hooks/language'
 import { homePositionState } from '../../recoilConfig'
@@ -325,8 +325,8 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
-    /** @type {[{rowIndex: Number, columnIndex: Number,}, Function]} */
-    const [homePosition, setHomePosition] = useRecoilState(homePositionState)
+    /** @type {{rowIndex: Number, columnIndex: Number}} */
+    const homePosition = useRecoilValue(homePositionState)
     /** @type {Number} */
     const itemHeigth = ri.scale(270)
     /** @type {Object} */
@@ -341,8 +341,6 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
                     feed={feedItem}
                     rowIndex={index}
                     setContent={setSelectedContent}
-                    homeFeedPosition={homePosition}
-                    setHomeFeedPosition={setHomePosition}
                     {...rest} />
             )
         } else {
@@ -368,8 +366,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
             )
         }
         return out
-    }, [homeFeed, profile, type, setSelectedContent, setHomeFeed,
-        fakeItem, homePosition, setHomePosition])
+    }, [homeFeed, profile, type, setSelectedContent, setHomeFeed, fakeItem])
 
     useEffect(() => {
         const interval = setInterval(() => {

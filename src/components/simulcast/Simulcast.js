@@ -36,8 +36,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
-    /** @type {[Object, Function]} */
-    const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(undefined)
     /** @type {[Boolean, Function]}  */
@@ -64,9 +62,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     /** @type {Function} */
     const onSelectOrder = useCallback(({ selected }) => { setOrder(order[selected].key) }, [order, setOrder])
-
-    /** @type {Function} */
-    const onScroll = useCallback(() => setAutoScroll(false), [])
 
     /** @type {Function} */
     const prevSeason = useCallback(() => { setSeason(seasons[season.index + 1]) }, [season, seasons])
@@ -96,15 +91,13 @@ const Simulcast = ({ profile, title, ...rest }) => {
             seasonsList.forEach((item, index) => { item.index = index })
             setSeasons(seasonsList)
             setSeason(seasonsList[0])
-            setAutoScroll(true)
         })
         return () => {
             setSeasons([])
             setSeason(undefined)
             setContentList([])
-            setAutoScroll(true)
         }
-    }, [profile, setSeason, setAutoScroll])
+    }, [profile, setSeason])
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -148,9 +141,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
                             }
                             {!loading &&
                                 <ContentGridItems
-                                    contentList={contentList}
-                                    autoScroll={autoScroll}
-                                    onScroll={onScroll} />
+                                    contentList={contentList} />
                             }
                         </Cell>
                     </Row>

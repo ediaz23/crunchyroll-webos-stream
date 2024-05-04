@@ -8,14 +8,14 @@ import Spinner from '@enact/moonstone/Spinner'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
-    currentProfileState, homeViewReadyState, homeIndexState, selectedContentState,
+    currentProfileState, selectedContentState, categoriesState,
+    homeViewReadyState, homeIndexState, homePositionState,
     homeFeedState, homeFeedExpirationState,
     musicFeedState, musicFeedExpirationState,
-    categoriesState, homeFeedPositionState,
 } from '../recoilConfig'
 import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
-import MusicBrowse from '../components/music/Browse'
+import MusicBrowse from '../components/music/Music'
 import ContentGrid from '../components/grid/ContentGrid'
 import Simulcast from '../components/simulcast/Simulcast'
 import Watchlist from '../components/watchlist/Watchlist'
@@ -144,13 +144,17 @@ const HomePanel = (props) => {
     const [homeViewReady, setHomeViewReady] = useRecoilState(homeViewReadyState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
+    /** @type {Function} */
+    const setCategories = useSetRecoilState(categoriesState)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
+    /** @type {Function} */
+    const setHomePosition = useSetRecoilState(homePositionState)
 
     /** @type {[Array<Object>, Function]} */
     const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
     /** @type {[Date, Function]} */
     const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
-    /** @type {Function} */
-    const setHomeFeedPosition = useSetRecoilState(homeFeedPositionState)
     /** @type {Function} */
     const setHomeFeedFn = useSetFeed(setHomeFeed)
 
@@ -160,10 +164,6 @@ const HomePanel = (props) => {
     const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
     /** @type {Function} */
     const setMusicFeedFn = useSetFeed(setMusicFeed)
-    /** @type {Function} */
-    const setCategories = useSetRecoilState(categoriesState)
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
 
     /** @type {Array<{key: String, icon: String, label: String}>} */
     const toolbarList = useMemo(() => [
@@ -189,11 +189,10 @@ const HomePanel = (props) => {
         const tmpIndex = parseInt(ev.currentTarget.dataset.index)
         setCurrentActivity(tmpIndex)
         if (tmpIndex !== currentActivity) {
-            if (tmpIndex === 0 || tmpIndex === 5) {
-                setHomeFeedPosition({ rowIndex: 0, columnIndex: 0 })
-            }
+            setHomePosition({ rowIndex: 0, columnIndex: 0 })
+            setSelectedContent(null)
         }
-    }, [setCurrentActivity, setShowFullToolbar, setHomeFeedPosition, currentActivity])
+    }, [setCurrentActivity, setShowFullToolbar, setHomePosition, currentActivity, setSelectedContent])
 
     /** @type {Function} */
     const showToolbar = useCallback((ev) => {
@@ -216,25 +215,18 @@ const HomePanel = (props) => {
                 setHomeFeed(postProcessHomefeed(data.filter(item => item.response_type !== 'news_feed')))
                 now.setHours(now.getHours() + 3)
                 setHomeFeedExpiration(now)
-                setSelectedContent(null)
-                setHomeFeedPosition({ rowIndex: 0, columnIndex: 0 })
             }
             if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
                 const { data } = await api.music.getFeed(profile)
                 setMusicFeed(postProcessHomefeed(data.filter(item => item.response_type !== 'news_feed')))
                 now.setHours(now.getHours() + 3)
                 setMusicFeedExpiration(now)
-                setSelectedContent(null)
-                setHomeFeedPosition({ rowIndex: 0, columnIndex: 0 })
-            }
-            if (currentActivity === 6) {
-                setSelectedContent(null)
             }
         }
         setLoading(true)
         loadFeed().then(() => setLoading(false))
     }, [profile, currentActivity, setSelectedContent, setCategories,
-        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration, setHomeFeedPosition,
+        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration, setHomePosition,
         setMusicFeed, musicFeedExpiration, setMusicFeedExpiration,
     ])
 

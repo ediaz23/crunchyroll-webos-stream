@@ -34,8 +34,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
-    /** @type {[Object, Function]} */
-    const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
     /** @type {[String, Function]} */
@@ -51,7 +49,7 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
 
     const options = useMemo(() => {
         return {
-            quantity: 50,
+            quantity: 20,
             ratings: true,
             noMock: true,
             type: contentType,
@@ -67,8 +65,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
         setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
     }, [setQuery, setDelay])
-
-    const onScroll = useCallback(() => setAutoScroll(false), [])
 
     const mergeContentList = useMergeContentList(setContentList, options.quantity)
 
@@ -88,11 +84,10 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
     }, [engine, options, profile, contentList, mergeContentList])
 
     const changeContentList = useCallback((newList) => {
-        setAutoScroll(true)
         setContentList(newList)
         setLoading(false)
         setHomeViewReady(true)
-    }, [setAutoScroll, setContentList, setHomeViewReady, setLoading])
+    }, [setContentList, setHomeViewReady, setLoading])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -131,7 +126,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
             setQuery('')
             setCategory('all')
             setContentList([])
-            setAutoScroll(true)
         }
     }, [profile, contentKey])
 
@@ -174,9 +168,7 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                             {!loading &&
                                 <ContentGridItems
                                     contentList={contentList}
-                                    load={onLoad}
-                                    autoScroll={autoScroll}
-                                    onScroll={onScroll} />
+                                    load={onLoad} />
                             }
                         </Cell>
                     </Row>

@@ -29,11 +29,10 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
     const [loading, setLoading] = useState(true)
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
-    const onScroll = useMemo(() => () => { }, [])
 
     const options = useMemo(() => {
         return {
-            quantity: 50,
+            quantity: 20,
             ratings: true,
             noMock: true,
             type: contentType,
@@ -129,8 +128,7 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}
-                        autoScroll={false}
-                        onScroll={onScroll} />
+                        autoScroll={false} />
                 }
             </Cell>
         </Column>

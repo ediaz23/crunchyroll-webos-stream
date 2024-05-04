@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
 import Spinner from '@enact/moonstone/Spinner'
 
@@ -36,14 +36,12 @@ const Watchlist = ({ profile, ...rest }) => {
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
-    /** @type {[Boolean, Function]} */
-    const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
-    /** @type {Number} */
-    const quantity = 100
+    /** @type {{quantity: Number}} */
+    const options = useMemo(() => { return { quantity: 20 } }, [])
 
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
@@ -52,37 +50,37 @@ const Watchlist = ({ profile, ...rest }) => {
         }
     }, [contentList, setSelectedContent])
 
-    const onScroll = useCallback(() => setAutoScroll(false), [])
-
-    const mergeContentList = useMergeContentList(setContentList, quantity)
+    const mergeContentList = useMergeContentList(setContentList, options.quantity)
 
     const onLoad = useCallback((index) => {
         if (contentList[index] === undefined) {
             mergeContentList(false, index)
-            api.discover.getWatchlist(profile, { quantity, start: index }).then(res =>
+            api.discover.getWatchlist(profile, { ...options, start: index }).then(res =>
                 processResult({ profile, data: res.data }).then(res2 => {
                     mergeContentList(res2.data, index)
                 })
             )
 
         }
-    }, [profile, contentList, mergeContentList])
+    }, [profile, contentList, mergeContentList, options])
 
     const changeContentList = useCallback((newList) => {
         setContentList(newList)
         setLoading(false)
         setHomeViewReady(true)
-        setAutoScroll(true)
-    }, [setContentList, setLoading, setHomeViewReady, setAutoScroll])
+    }, [setContentList, setLoading, setHomeViewReady])
 
     useEffect(() => {
         setLoading(true)
-        api.discover.getWatchlist(profile, { quantity }).then(res =>
+        api.discover.getWatchlist(profile, options).then(res =>
             processResult({ profile, data: res.data }).then(res2 => {
                 changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
             })
         )
-    }, [profile, setLoading, changeContentList])
+        return () => {
+            setContentList([])
+        }
+    }, [profile, setLoading, changeContentList, options])
 
     return (
         <Column {...rest}>
@@ -100,8 +98,6 @@ const Watchlist = ({ profile, ...rest }) => {
                         <ContentGridItems
                             contentList={contentList}
                             load={onLoad}
-                            autoScroll={autoScroll}
-                            onScroll={onScroll}
                             onFocus={onSelectItem}
                             mode='wide' />
                     </Cell>

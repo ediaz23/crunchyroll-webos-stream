@@ -5,10 +5,10 @@ import Heading from '@enact/moonstone/Heading'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homeViewReadyState } from '../../recoilConfig'
+import { homeViewReadyState, homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
 import Navigable from '../../wrappers/Navigable'
@@ -66,9 +66,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
     )
 }
 
-const HomeFeedRow = ({ feed, itemSize, cellId, setContent,
-    rowIndex, homeFeedPosition, setHomeFeedPosition,
-    style, className, ...rest }) => {
+const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, className, ...rest }) => {
     /** @type {{current: HTMLElement}} */
     const compRef = useRef({ current: null })
     /** @type {[Number, Function]} */
@@ -79,6 +77,8 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent,
     const scrollToRef = useRef(null)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
+    /** @type {{rowIndex: Number, columnIndex: Number}} */
+    const homePosition = useRecoilValue(homePositionState)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
@@ -98,10 +98,9 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent,
         const columnIndex = parseInt(parentElement.dataset.index)
         const content = feed.items[columnIndex]
         if (feed.id !== 'fake_item') {
-            setHomeFeedPosition({ rowIndex, columnIndex })
-            setContentNavagate(content)
+            setContentNavagate({ content, rowIndex, columnIndex })
         }
-    }, [cellId, setContentNavagate, feed, setHomeFeedPosition, rowIndex])
+    }, [cellId, setContentNavagate, feed, rowIndex])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -117,14 +116,14 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent,
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                if (rowIndex === homeFeedPosition.rowIndex) {
-                    scrollToRef.current({ index: homeFeedPosition.columnIndex, animate: false, focus: true })
+                if (rowIndex === homePosition.rowIndex) {
+                    scrollToRef.current({ index: homePosition.columnIndex, animate: false, focus: true })
                     setHomeViewReady(true)
                 }
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [rowIndex, homeFeedPosition, setHomeViewReady])
+    }, [rowIndex, homePosition, setHomeViewReady])
 
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
@@ -178,11 +177,6 @@ HomeFeedRow.propTypes = {
     cellId: PropTypes.string.isRequired,
     setContent: PropTypes.func.isRequired,
     rowIndex: PropTypes.number.isRequired,
-    homeFeedPosition: PropTypes.shape({
-        rowIndex: PropTypes.number.isRequired,
-        columnIndex: PropTypes.number.isRequired,
-    }).isRequired,
-    setHomeFeedPosition: PropTypes.func.isRequired,
 }
 
 export default HomeFeedRow

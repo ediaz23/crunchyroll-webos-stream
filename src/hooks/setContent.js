@@ -1,7 +1,7 @@
 
 import { useSetRecoilState } from 'recoil'
 
-import { pathState, playContentState, selectedContentState } from '../recoilConfig'
+import { pathState, playContentState, selectedContentState, homePositionState } from '../recoilConfig'
 
 import back from '../back'
 
@@ -13,8 +13,17 @@ export function useSetContent() {
     const setPlayContent = useSetRecoilState(playContentState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
+    /** @type {Function} */
+    const setHomePosition = useSetRecoilState(homePositionState)
 
-    return (content) => {
+    /**
+     * @param {{
+        content: Object,
+        rowIndex: Number,
+        columnIndex: Number,
+     }}
+     */
+    return ({ content, rowIndex, columnIndex }) => {
         back.pushHistory({
             doBack: () => {
                 setPath('/profiles/home')
@@ -31,5 +40,6 @@ export function useSetContent() {
             setSelectedContent(content)
             setPath('/profiles/home/content')
         }
+        setHomePosition({ rowIndex, columnIndex })
     }
 }

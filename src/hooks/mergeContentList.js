@@ -11,7 +11,7 @@ export const useMergeContentList = (setContentList, quantity) => {
     const mergeContentList = useCallback((items, index) => {
         setContentList(prevArray => {
             if (!Array.isArray(items)) {
-                const size = Math.min(quantity * (index + 1) - prevArray.length, quantity)
+                const size = Math.min(prevArray.length - index, quantity)
                 items = Array.from({ length: size }, () => items)
             }
             return [
