@@ -13,6 +13,7 @@ import { $L } from '../../hooks/language'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'
 import api from '../../api'
+import useMergeContentList from '../../hooks/mergeContentList'
 import css from './ContentGrid.module.less'
 
 
@@ -33,8 +34,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
-    /** @type {[Object, Function]} */
-    const [loadingItem, setLoadingItem] = useState({})
     /** @type {[Object, Function]} */
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
@@ -71,34 +70,29 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
 
     const onScroll = useCallback(() => setAutoScroll(false), [])
 
-    const onLoad = useCallback(async (index) => {
+    const mergeContentList = useMergeContentList(setContentList, options.quantity)
+
+    const onLoad = useCallback((index) => {
         if (index % options.quantity === 0) {
-            if (loadingItem[index] === undefined) {
-                setLoadingItem(prev => { prev[index] = false; return { ...prev } })
+            if (contentList[index] === undefined) {
+                mergeContentList(false, index)
                 if (engine === 'search') {
-                    const res = await api.discover.search(profile, { ...options, start: index })
-                    setContentList(prevArray => [
-                        ...prevArray.slice(0, index),
-                        ...res.data[0].items,
-                        ...prevArray.slice(index + res.data[0].items.length)
-                    ])
+                    api.discover.search(profile, { ...options, start: index })
+                        .then(res => mergeContentList(res.data[0].items, index))
                 } else {
-                    const res = await api.discover.getBrowseAll(profile, { ...options, start: index })
-                    setContentList(prevArray => [
-                        ...prevArray.slice(0, index),
-                        ...res.data,
-                        ...prevArray.slice(index + res.data.length),
-                    ])
+                    api.discover.getBrowseAll(profile, { ...options, start: index })
+                        .then(res => mergeContentList(res.data, index))
                 }
             }
         }
-    }, [engine, loadingItem, options, profile])
+    }, [engine, options, profile, contentList, mergeContentList])
 
     const changeContentList = useCallback((newList) => {
-        setLoadingItem({})
         setAutoScroll(true)
         setContentList(newList)
-    }, [setLoadingItem, setAutoScroll, setContentList])
+        setLoading(false)
+        setHomeViewReady(true)
+    }, [setAutoScroll, setContentList, setHomeViewReady, setLoading])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -112,26 +106,22 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
                                 ...res.data[0].items,
                                 ...new Array(res.data[0].count - res.data[0].items.length)
                             ])
-                            setLoading(false)
-                            setHomeViewReady(true)
                         })
                     } else {
                         changeContentList([])
-                        setLoading(false)
-                        setHomeViewReady(true)
                     }
                 } else {
                     api.discover.getBrowseAll(profile, options).then(res => {
-                        const tmpList = [...res.data, ...new Array(res.total - res.data.length)]
-                        changeContentList(tmpList)
-                        setLoading(false)
-                        setHomeViewReady(true)
+                        changeContentList([
+                            ...res.data,
+                            ...new Array(res.total - res.data.length)
+                        ])
                     })
                 }
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, contentKey, delay, options, engine, changeContentList, setLoading, setHomeViewReady])
+    }, [profile, contentKey, delay, options, engine, changeContentList, setLoading])
 
     useEffect(() => {  // initializing
         setDelay(0)
@@ -141,7 +131,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
             setQuery('')
             setCategory('all')
             setContentList([])
-            setLoadingItem({})
             setAutoScroll(true)
         }
     }, [profile, contentKey])

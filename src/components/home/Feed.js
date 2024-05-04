@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useRef, useMemo } from 'react'
+import { useCallback, useEffect, useRef, useMemo, useState } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import Spinner from '@enact/moonstone/Spinner'
@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useRecoilState } from 'recoil'
 
 import { $L } from '../../hooks/language'
-import { selectedContentState, homeFeedPositionState } from '../../recoilConfig'
+import { homeFeedPositionState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
@@ -324,7 +324,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */
-    const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
+    const [selectedContent, setSelectedContent] = useState(null)
     /** @type {[{rowIndex: Number, columnIndex: Number,}, Function]} */
     const [homeFeedPosition, setHomeFeedPosition] = useRecoilState(homeFeedPositionState)
     /** @type {Number} */

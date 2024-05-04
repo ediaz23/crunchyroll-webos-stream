@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useMemo } from 'react'
 import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
@@ -8,7 +8,7 @@ import ri from '@enact/ui/resolution'
 import PropTypes from 'prop-types'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { useSetContent } from '../../hooks/setContentHook'
+import { useSetContent } from '../../hooks/setContent'
 
 
 /**
@@ -18,13 +18,17 @@ import { useSetContent } from '../../hooks/setContentHook'
     load: Function,
     autoScroll: Boolean,
     onScroll: Function,
+    onFocus: Function,
+    mode: String,
  }}
  */
-const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) => {
+const ContentGridItems = ({ contentList, load, autoScroll, onScroll, onFocus, mode, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
-    /** @type {Number} */
-    const itemHeight = ri.scale(390)
+    /** @type {[Number, Number]} */
+    const [itemHeight, itemWidth] = useMemo(() => {
+        return mode === 'tall' ? [ri.scale(390), ri.scale(240)] : [ri.scale(270), ri.scale(320)]
+    }, [mode])
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {Function} */
@@ -47,7 +51,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
             const image = getImagePerResolution({
                 height: itemHeight,
                 content: contentItem,
-                mode: 'tall'
+                mode
             })
             out = (
                 <GridListImageItem
@@ -57,6 +61,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
                     caption={(contentItem.title || '').replace(/\n/g, "")}
                     subCaption={(contentItem.description || '').replace(/\n/g, "")}
                     onClick={onSelectItem}
+                    onFocus={onFocus}
                 />
             )
         } else {
@@ -70,7 +75,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
             )
         }
         return out
-    }, [contentList, itemHeight, getImagePerResolution, onSelectItem, load])
+    }, [contentList, itemHeight, getImagePerResolution, onSelectItem, onFocus, load, mode])
 
     useEffect(() => {
         if (contentList.length > 0 && autoScroll && scrollToRef.current) {
@@ -83,7 +88,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
         <VirtualGridList {...rest}
             dataSize={contentList.length}
             itemRenderer={renderItem}
-            itemSize={{ minHeight: itemHeight, minWidth: ri.scale(240) }}
+            itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
             spacing={ri.scale(25)}
             cbScrollTo={getScrollTo}
         />
@@ -91,10 +96,16 @@ const ContentGridItems = ({ contentList, load, autoScroll, onScroll, ...rest }) 
 }
 
 ContentGridItems.propTypes = {
-    contentList: PropTypes.arrayOf(PropTypes.object).isRequired,
+    contentList: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])).isRequired,
     autoScroll: PropTypes.bool.isRequired,
     onScroll: PropTypes.func.isRequired,
+    mode: PropTypes.oneOf(['tall', 'wide']).isRequired,
     load: PropTypes.func,
+    onFocus: PropTypes.func,
+}
+
+ContentGridItems.defaultProps = {
+    mode: 'tall'
 }
 
 export default ContentGridItems

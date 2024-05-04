@@ -13,6 +13,7 @@ import { $L } from '../../hooks/language'
 import HomeFeed from '../home/Feed'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
+import useMergeContentList from '../../hooks/mergeContentList'
 
 
 const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMusicFeed, ...rest }) => {
@@ -20,8 +21,6 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState([])
-    /** @type {[Object, Function]} */
-    const [loadingItem, setLoadingItem] = useState({})
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
     /** @type {[String, Function]} */
@@ -45,28 +44,27 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
     }, [contentType, sort, query, contentKey])
 
     const onSearch = useCallback(({ value }) => {
+        setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
-        setDelay(1000)
     }, [setQuery, setDelay])
 
-    const onLoad = useCallback(async (index) => {
+    const mergeContentList = useMergeContentList(setContentList, options.quantity)
+
+    const onLoad = useCallback((index) => {
         if (index % options.quantity === 0) {
-            if (loadingItem[index] === undefined) {
-                setLoadingItem(prev => { prev[index] = false; return { ...prev } })
-                const res = await api.discover.search(profile, { ...options, start: index })
-                setContentList(prevArray => [
-                    ...prevArray.slice(0, index),
-                    ...res.data[0].items,
-                    ...prevArray.slice(index + res.data[0].items.length)
-                ])
+            if (contentList[index] === undefined) {
+                mergeContentList(false, index)
+                api.discover.search(profile, { ...options, start: index })
+                    .then(res => mergeContentList(res.data[0].items, index))
             }
         }
-    }, [loadingItem, options, profile])
+    }, [options, profile, contentList, mergeContentList])
 
     const changeContentList = useCallback((newList) => {
-        setLoadingItem({})
         setContentList(newList)
-    }, [setLoadingItem, setContentList])
+        setLoading(false)
+        setHomeViewReady(true)
+    }, [setContentList, setLoading, setHomeViewReady])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -79,30 +77,23 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
                             ...res.data[0].items,
                             ...new Array(res.data[0].count - res.data[0].items.length)
                         ])
-                        setLoading(false)
-                        setHomeViewReady(true)
                     })
                 } else {
                     changeContentList([])
-                    setLoading(false)
-                    setHomeViewReady(true)
                 }
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, contentKey, delay, options, changeContentList, setLoading, setHomeViewReady])
+    }, [profile, contentKey, delay, options, changeContentList, setLoading])
 
     useEffect(() => {  // initializing
-        if (contentKey !== 'simulcast') {
-            setDelay(0)
-        }
+        setDelay(0)
         return () => {
             setDelay(-1)
             setQuery('')
             setContentList([])
-            setLoadingItem({})
         }
-    }, [profile, contentKey])
+    }, [profile])
 
     return (
         <Column style={{ width: '100%' }} {...rest}>

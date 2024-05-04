@@ -1,19 +1,16 @@
 
-import { useCallback, useState, useEffect, useRef } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
 import Spinner from '@enact/moonstone/Spinner'
-import { VirtualGridList } from '@enact/moonstone/VirtualList'
-import GridListImageItem from '@enact/moonstone/GridListImageItem'
-import ri from '@enact/ui/resolution'
 
 import PropTypes from 'prop-types'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 
-import { selectedContentState, homeViewReadyState } from '../../recoilConfig'
+import { homeViewReadyState } from '../../recoilConfig'
 import HomeContentBanner from '../home/ContentBanner'
-import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { useSetContent } from '../../hooks/setContentHook'
+import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
+import useMergeContentList from '../../hooks/mergeContentList'
 
 
 /**
@@ -38,107 +35,54 @@ const Watchlist = ({ profile, ...rest }) => {
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
-    const [watchlist, setWatchlist] = useState([])
-    /** @type {[Object, Function]} */
-    const [loadingItem, setLoadingItem] = useState({})
+    const [contentList, setContentList] = useState([])
     /** @type {[Boolean, Function]} */
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
-    /** @type {{current: Function}} */
-    const scrollToRef = useRef(null)
     /** @type {[Object, Function]} */
-    const [selectedContent, setSelectedContent] = useRecoilState(selectedContentState)
-    /** @type {Function} */
-    const setContent = useSetContent()
-    /** @type {Function} */
-    const getImagePerResolution = useGetImagePerResolution()
-    /** @type {Number} */
-    const itemHeight = ri.scale(270)
-    /** @type {Number} */
-    const itemWidth = ri.scale(320)
+    const [selectedContent, setSelectedContent] = useState(null)
     /** @type {Number} */
     const quantity = 100
 
-    /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
-
-    const onClickItem = useCallback((ev) => {
-        if (ev.currentTarget) {
-            const content = watchlist[parseInt(ev.currentTarget.dataset['index'])]
-            setContent(content)
-        }
-    }, [watchlist, setContent])
-
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
-            const content = watchlist[parseInt(ev.currentTarget.dataset['index'])]
+            const content = contentList[parseInt(ev.currentTarget.dataset['index'])]
             setSelectedContent(content)
         }
-    }, [watchlist, setSelectedContent])
+    }, [contentList, setSelectedContent])
 
-    const renderItem = useCallback(({ index, ...rest2 }) => {
-        let out
-        const contentItem = watchlist[index]
-        if (contentItem) {
-            const image = getImagePerResolution({ width: itemWidth, content: contentItem, mode: 'wide' })
-            out = (
-                <GridListImageItem
-                    {...rest2}
-                    data-index={index}
-                    source={image.source}
-                    caption={(contentItem.title || '').replace(/\n/g, "")}
-                    subCaption={(contentItem.description || '').replace(/\n/g, "")}
-                    onClick={onClickItem}
-                    onFocus={onSelectItem}
-                />
-            )
-        } else {
-            if (index % quantity === 0) {
-                Promise.resolve().then(async () => {
-                    if (loadingItem[index] === undefined) {
-                        setLoadingItem(prev => { prev[index] = false; return { ...prev } })
-                        const res = await api.discover.getWatchlist(profile, { quantity, start: index })
-                        const res2 = await processResult({ profile, data: res.data })
-                        setWatchlist(prevArray => [
-                            ...prevArray.slice(0, index),
-                            ...res2.data,
-                            ...prevArray.slice(index + res2.data.length)
-                        ])
-                    }
+    const onScroll = useCallback(() => setAutoScroll(false), [])
+
+    const mergeContentList = useMergeContentList(setContentList, quantity)
+
+    const onLoad = useCallback((index) => {
+        if (contentList[index] === undefined) {
+            mergeContentList(false, index)
+            api.discover.getWatchlist(profile, { quantity, start: index }).then(res =>
+                processResult({ profile, data: res.data }).then(res2 => {
+                    mergeContentList(res2.data, index)
                 })
-            }
-            out = (
-                <div {...rest2} >
-                    <Spinner />
-                </div>
             )
-        }
-        return out
-    }, [profile, watchlist, itemWidth, getImagePerResolution, setWatchlist,
-        onClickItem, onSelectItem, loadingItem, setLoadingItem])
 
-    useEffect(() => {
-        if (!loading) {
-            Promise.resolve().then(() => {
-                if (watchlist.length > 0 && autoScroll && scrollToRef.current) {
-                    scrollToRef.current({ index: 0, animate: false, focus: true })
-                    setAutoScroll(false)
-                }
-            })
         }
-    }, [profile, watchlist, autoScroll, loading])
+    }, [profile, contentList, mergeContentList])
+
+    const changeContentList = useCallback((newList) => {
+        setContentList(newList)
+        setLoading(false)
+        setHomeViewReady(true)
+        setAutoScroll(true)
+    }, [setContentList, setLoading, setHomeViewReady, setAutoScroll])
 
     useEffect(() => {
         setLoading(true)
-        api.discover.getWatchlist(profile, { quantity }).then(async res => {
-            const res2 = await processResult({ profile, data: res.data })
-            setAutoScroll(true)
-            setLoadingItem({})
-            setWatchlist([...res2.data, ...new Array(res.total - res.data.length)])
-        }).then(() => setLoading(false))
-            .then(() => setHomeViewReady(true))
-    }, [profile, setAutoScroll, setLoadingItem, setWatchlist, setLoading, setHomeViewReady])
+        api.discover.getWatchlist(profile, { quantity }).then(res =>
+            processResult({ profile, data: res.data }).then(res2 => {
+                changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
+            })
+        )
+    }, [profile, setLoading, changeContentList])
 
     return (
         <Column {...rest}>
@@ -153,13 +97,13 @@ const Watchlist = ({ profile, ...rest }) => {
                         {selectedContent && <HomeContentBanner content={selectedContent} />}
                     </Cell>
                     <Cell grow>
-                        <VirtualGridList {...rest}
-                            dataSize={watchlist.length}
-                            itemRenderer={renderItem}
-                            itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                            spacing={ri.scale(25)}
-                            cbScrollTo={getScrollTo}
-                        />
+                        <ContentGridItems
+                            contentList={contentList}
+                            load={onLoad}
+                            autoScroll={autoScroll}
+                            onScroll={onScroll}
+                            onFocus={onSelectItem}
+                            mode='wide' />
                     </Cell>
                 </Column>
             }
