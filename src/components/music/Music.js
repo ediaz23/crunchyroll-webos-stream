@@ -6,33 +6,45 @@ import Input from '@enact/moonstone/Input'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState } from 'recoil'
-
-import { homeViewReadyState } from '../../recoilConfig'
 import { $L } from '../../hooks/language'
 import HomeFeed from '../home/Feed'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
-import useMergeContentList from '../../hooks/mergeContentList'
+import withContentList from '../../hooks/contentList'
 
 
-const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMusicFeed, ...rest }) => {
-    /** @type {Function} */
-    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {[Array<Object>, Function]} */
-    const [contentList, setContentList] = useState([])
+/**
+ * @todo keep search after navegate?
+ * All content grid and search
+ * @param {Object} obj
+ * @param {Object} obj.profile current profile
+ * @param {String} obj.contentKey key to identify and reload view
+ * @param {String} obj.title title for view
+ * @param {String} obj.contentType type of content to show, series, movies, etc
+ * @param {Array<Object>} obj.musicFeed Music feed array
+ * @param {Function} obj.setMusicFeed setState for musicFeed
+ * @param {Array<Object>} obj.contentList List of content to show
+ * @param {Boolean} obj.loading loading state
+ * @param {Function} obj.setLoading setState function for loading
+ * @param {Function} obj.changeContentList set content list array
+ * @param {Function} obj.mergeContentList merge content list array
+ * @param {Function} obj.quantity quantity to search
+ */
+const MusicBrowse = ({
+    profile, contentKey, title, contentType,
+    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
+    musicFeed, setMusicFeed,
+    ...rest }) => {
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
     /** @type {[String, Function]} */
     const [query, setQuery] = useState('')
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
 
     const options = useMemo(() => {
         return {
-            quantity: 20,
+            quantity,
             ratings: true,
             noMock: true,
             type: contentType,
@@ -40,14 +52,12 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
             sort,
             query,
         }
-    }, [contentType, sort, query, contentKey])
+    }, [contentType, sort, query, contentKey, quantity])
 
     const onSearch = useCallback(({ value }) => {
         setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
     }, [setQuery, setDelay])
-
-    const mergeContentList = useMergeContentList(setContentList, options.quantity)
 
     const onLoad = useCallback((index) => {
         if (index % options.quantity === 0) {
@@ -58,12 +68,6 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
             }
         }
     }, [options, profile, contentList, mergeContentList])
-
-    const changeContentList = useCallback((newList) => {
-        setContentList(newList)
-        setLoading(false)
-        setHomeViewReady(true)
-    }, [setContentList, setLoading, setHomeViewReady])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -83,14 +87,13 @@ const MusicBrowse = ({ profile, contentKey, title, contentType, musicFeed, setMu
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, contentKey, delay, options, changeContentList, setLoading])
+    }, [profile, changeContentList, options, setLoading, contentKey, delay])
 
     useEffect(() => {  // initializing
         setDelay(0)
         return () => {
             setDelay(-1)
             setQuery('')
-            setContentList([])
         }
     }, [profile])
 
@@ -148,4 +151,4 @@ MusicBrowse.defaultProps = {
     contentType: 'music'
 }
 
-export default MusicBrowse
+export default withContentList(MusicBrowse)

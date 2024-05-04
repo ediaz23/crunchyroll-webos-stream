@@ -4,13 +4,11 @@ import { Cell, Column } from '@enact/ui/Layout'
 import Spinner from '@enact/moonstone/Spinner'
 
 import PropTypes from 'prop-types'
-import { useSetRecoilState } from 'recoil'
 
-import { homeViewReadyState } from '../../recoilConfig'
 import HomeContentBanner from '../home/ContentBanner'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
-import useMergeContentList from '../../hooks/mergeContentList'
+import withContentList from '../../hooks/contentList'
 
 
 /**
@@ -30,18 +28,26 @@ const processResult = async ({ profile, data }) => {
     return api.cms.getObjects(profile, { objectIds: contentIds, ratings: true })
 }
 
-
-const Watchlist = ({ profile, ...rest }) => {
-    /** @type {Function} */
-    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {[Array<Object>, Function]} */
-    const [contentList, setContentList] = useState([])
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
+/**
+ * @todo keep search after navegate?
+ * All content grid and search
+ * @param {Object} obj
+ * @param {Object} obj.profile current profile
+ * @param {Array<Object>} obj.contentList List of content to show
+ * @param {Boolean} obj.loading loading state
+ * @param {Function} obj.setLoading setState function for loading
+ * @param {Function} obj.changeContentList set content list array
+ * @param {Function} obj.mergeContentList merge content list array
+ * @param {Function} obj.quantity quantity to search
+ */
+const Watchlist = ({
+    profile,
+    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
+    ...rest }) => {
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
     /** @type {{quantity: Number}} */
-    const options = useMemo(() => { return { quantity: 20 } }, [])
+    const options = useMemo(() => { return { quantity } }, [quantity])
 
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
@@ -49,8 +55,6 @@ const Watchlist = ({ profile, ...rest }) => {
             setSelectedContent(content)
         }
     }, [contentList, setSelectedContent])
-
-    const mergeContentList = useMergeContentList(setContentList, options.quantity)
 
     const onLoad = useCallback((index) => {
         if (contentList[index] === undefined) {
@@ -64,12 +68,6 @@ const Watchlist = ({ profile, ...rest }) => {
         }
     }, [profile, contentList, mergeContentList, options])
 
-    const changeContentList = useCallback((newList) => {
-        setContentList(newList)
-        setLoading(false)
-        setHomeViewReady(true)
-    }, [setContentList, setLoading, setHomeViewReady])
-
     useEffect(() => {
         setLoading(true)
         api.discover.getWatchlist(profile, options).then(res =>
@@ -77,10 +75,7 @@ const Watchlist = ({ profile, ...rest }) => {
                 changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
             })
         )
-        return () => {
-            setContentList([])
-        }
-    }, [profile, setLoading, changeContentList, options])
+    }, [profile, changeContentList, options, setLoading])
 
     return (
         <Column {...rest}>
@@ -111,4 +106,4 @@ Watchlist.propTypes = {
     profile: PropTypes.object.isRequired,
 }
 
-export default Watchlist
+export default withContentList(Watchlist)

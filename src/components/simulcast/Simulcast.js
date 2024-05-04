@@ -7,13 +7,11 @@ import LabeledItem from '@enact/moonstone/LabeledItem'
 import Dropdown from '@enact/moonstone/Dropdown'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState } from 'recoil'
-
 import { $L } from '../../hooks/language'
-import { homeViewReadyState } from '../../recoilConfig'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
 import css from '../grid/ContentGrid.module.less'
+import withContentList from '../../hooks/contentList'
 
 
 /**
@@ -27,19 +25,23 @@ import css from '../grid/ContentGrid.module.less'
 
 /**
  * @todo keep search after navegate?
+ * All content grid and search
  * @param {Object} obj
  * @param {Object} obj.profile current profile
  * @param {String} obj.title title for view
+ * @param {Array<Object>} obj.contentList List of content to show
+ * @param {Boolean} obj.loading loading state
+ * @param {Function} obj.setLoading setState function for loading
+ * @param {Function} obj.changeContentList set content list array
+ * @param {Function} obj.mergeContentList merge content list array
+ * @param {Function} obj.quantity quantity to search
  */
-const Simulcast = ({ profile, title, ...rest }) => {
-    /** @type {Function} */
-    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {[Array<Object>, Function]} */
-    const [contentList, setContentList] = useState([])
+const Simulcast = ({
+    profile, title,
+    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
+    ...rest }) => {
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(undefined)
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
     /** @type {[Array<Season>, Function]} */
     const [seasons, setSeasons] = useState(undefined)
     /** @type {Array<{key: String, value: String}>} */
@@ -59,32 +61,50 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const orderStr = useMemo(() => order.map(i => i.value), [order])
     /** @type {[String, Function]}  */
     const [sort, setOrder] = useState('newly_added')
+    /** @type {Object} */
+    const options = useMemo(() => {
+        return {
+            quantity,
+            ratings: true,
+            noMock: true,
+            seasonTag: season && season.id,
+            sort,
+        }
+    }, [season, sort, quantity])
 
     /** @type {Function} */
-    const onSelectOrder = useCallback(({ selected }) => { setOrder(order[selected].key) }, [order, setOrder])
+    const onSelectOrder = useCallback(({ selected }) => {
+        setOrder(order[selected].key)
+    }, [order, setOrder])
 
     /** @type {Function} */
-    const prevSeason = useCallback(() => { setSeason(seasons[season.index + 1]) }, [season, seasons])
+    const prevSeason = useCallback(() => {
+        setSeason(seasons[season.index + 1])
+    }, [season, seasons])
 
     /** @type {Function} */
-    const nextSeason = useCallback(() => { setSeason(seasons[season.index - 1]) }, [season, seasons])
+    const nextSeason = useCallback(() => {
+        setSeason(seasons[season.index - 1])
+    }, [season, seasons])
+
+    const onLoad = useCallback((index) => {
+        if (contentList[index] === undefined) {
+            mergeContentList(false, index)
+            api.discover.getBrowseAll(profile, { ...options, start: index }).then(res =>
+                mergeContentList(res.data, index)
+            )
+
+        }
+    }, [profile, contentList, mergeContentList, options])
 
     useEffect(() => {
         setLoading(true)
         if (season && season.id) {
-            api.discover.getBrowseAll(profile, {
-                quantity: 500,
-                ratings: true,
-                noMock: true,
-                seasonTag: season.id,
-                sort,
-            }).then(res => {
-                setContentList(res.data)
-                setLoading(false)
-                setHomeViewReady(true)
+            api.discover.getBrowseAll(profile, options).then(res => {
+                changeContentList([...res.data, ...new Array(res.total - res.data.length)])
             })
         }
-    }, [profile, setLoading, setHomeViewReady, season, setContentList, sort])
+    }, [profile, changeContentList, options, setLoading, season])
 
     useEffect(() => {  // initial request
         api.discover.getSeasonList(profile).then(({ data: seasonsList }) => {
@@ -95,7 +115,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
         return () => {
             setSeasons([])
             setSeason(undefined)
-            setContentList([])
         }
     }, [profile, setSeason])
 
@@ -141,7 +160,8 @@ const Simulcast = ({ profile, title, ...rest }) => {
                             }
                             {!loading &&
                                 <ContentGridItems
-                                    contentList={contentList} />
+                                    contentList={contentList}
+                                    load={onLoad} />
                             }
                         </Cell>
                     </Row>
@@ -156,4 +176,4 @@ Simulcast.propTypes = {
     title: PropTypes.string.isRequired,
 }
 
-export default Simulcast
+export default withContentList(Simulcast)

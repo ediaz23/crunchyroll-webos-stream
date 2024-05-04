@@ -6,14 +6,11 @@ import Input from '@enact/moonstone/Input'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState } from 'recoil'
-
-import { homeViewReadyState } from '../../recoilConfig'
 import { $L } from '../../hooks/language'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'
 import api from '../../api'
-import useMergeContentList from '../../hooks/mergeContentList'
+import withContentList from '../../hooks/contentList'
 import css from './ContentGrid.module.less'
 
 
@@ -28,12 +25,19 @@ import css from './ContentGrid.module.less'
  * @param {String} obj.engine Engine to search, can be search or browse
  * @param {Boolean} obj.noCategory Not show category
  * @param {Boolean} obj.noSearch Not show input
+ * @param {Array<Object>} obj.contentList List of content to show
+ * @param {Boolean} obj.loading loading state
+ * @param {Function} obj.setLoading setState function for loading
+ * @param {Function} obj.changeContentList set content list array
+ * @param {Function} obj.mergeContentList merge content list array
+ * @param {Function} obj.quantity quantity to search
  */
-const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCategory, noSearch, ...rest }) => {
-    /** @type {Function} */
-    const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {[Array<Object>, Function]} */
-    const [contentList, setContentList] = useState([])
+const ContentGrid = ({
+    profile, contentKey, title, contentType,
+    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
+    engine, noCategory, noSearch,
+    ...rest }) => {
+
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
     /** @type {[String, Function]} */
@@ -42,14 +46,13 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
     const [query, setQuery] = useState('')
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(undefined)
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
+
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
 
     const options = useMemo(() => {
         return {
-            quantity: 20,
+            quantity,
             ratings: true,
             noMock: true,
             type: contentType,
@@ -59,14 +62,12 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
             sort,
             query,
         }
-    }, [category, season, contentType, sort, query, contentKey])
+    }, [category, season, contentType, sort, query, contentKey, quantity])
 
     const onSearch = useCallback(({ value }) => {
         setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
     }, [setQuery, setDelay])
-
-    const mergeContentList = useMergeContentList(setContentList, options.quantity)
 
     const onLoad = useCallback((index) => {
         if (index % options.quantity === 0) {
@@ -82,12 +83,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
             }
         }
     }, [engine, options, profile, contentList, mergeContentList])
-
-    const changeContentList = useCallback((newList) => {
-        setContentList(newList)
-        setLoading(false)
-        setHomeViewReady(true)
-    }, [setContentList, setHomeViewReady, setLoading])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -116,7 +111,7 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, contentKey, delay, options, engine, changeContentList, setLoading])
+    }, [profile, changeContentList, options, setLoading, contentKey, delay, engine])
 
     useEffect(() => {  // initializing
         setDelay(0)
@@ -125,7 +120,6 @@ const ContentGrid = ({ profile, contentKey, title, contentType, engine, noCatego
             setSeason(undefined)
             setQuery('')
             setCategory('all')
-            setContentList([])
         }
     }, [profile, contentKey])
 
@@ -191,4 +185,6 @@ ContentGrid.defaultProps = {
     engine: 'browse'
 }
 
-export default ContentGrid
+const ContentGridList = withContentList(ContentGrid)
+
+export default ContentGridList
