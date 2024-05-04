@@ -63,8 +63,8 @@ export const homeFeedExpirationState = atom({
     default: null,
 })
 
-export const homeFeedPositionState = atom({
-    key: 'homeFeedPositionState',
+export const homePositionState = atom({
+    key: 'homePositionState',
     default: { rowIndex: 0, columnIndex: 0 },
 })
 

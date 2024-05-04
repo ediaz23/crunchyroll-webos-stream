@@ -9,9 +9,10 @@ import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
 import {
-    pathState, currentProfileState, homeFeedState, homeViewReadyState,
-    selectedContentState, homeFeedExpirationState, musicFeedExpirationState,
-    homeIndexState
+    pathState, currentProfileState, selectedContentState,
+    homeIndexState, homePositionState, homeViewReadyState,
+    homeFeedState, homeFeedExpirationState,
+    musicFeedExpirationState,
 } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
@@ -40,6 +41,8 @@ const ProfilesPanel = ({ ...rest }) => {
     const setMusicFeedExpiration = useSetRecoilState(musicFeedExpirationState)
     /** @type {Function} */
     const setCurrentActivity = useSetRecoilState(homeIndexState)
+    /** @type {Function} */
+    const setHomePositionState = useSetRecoilState(homePositionState)
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -58,10 +61,12 @@ const ProfilesPanel = ({ ...rest }) => {
         setHomeFeedExpiration(null)
         setMusicFeedExpiration(null)
         setCurrentActivity(0)
+        setHomePositionState({ rowIndex: 0, columnIndex: 0 })
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
-    }, [setCurrentProfile, setPath, setHomeFeed, setHomeViewReady, setSelectedContent,
-        setMusicFeedExpiration, setHomeFeedExpiration, setCurrentActivity])
+    }, [setCurrentProfile, setPath, setSelectedContent, setCurrentActivity, setHomePositionState,
+        setHomeFeed, setHomeViewReady,
+        setMusicFeedExpiration, setHomeFeedExpiration])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {

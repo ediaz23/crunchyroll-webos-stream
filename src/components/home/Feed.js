@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useRecoilState } from 'recoil'
 
 import { $L } from '../../hooks/language'
-import { homeFeedPositionState } from '../../recoilConfig'
+import { homePositionState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
@@ -326,7 +326,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
     /** @type {[{rowIndex: Number, columnIndex: Number,}, Function]} */
-    const [homeFeedPosition, setHomeFeedPosition] = useRecoilState(homeFeedPositionState)
+    const [homePosition, setHomePosition] = useRecoilState(homePositionState)
     /** @type {Number} */
     const itemHeigth = ri.scale(270)
     /** @type {Object} */
@@ -341,8 +341,8 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
                     feed={feedItem}
                     rowIndex={index}
                     setContent={setSelectedContent}
-                    homeFeedPosition={homeFeedPosition}
-                    setHomeFeedPosition={setHomeFeedPosition}
+                    homeFeedPosition={homePosition}
+                    setHomeFeedPosition={setHomePosition}
                     {...rest} />
             )
         } else {
@@ -369,17 +369,17 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
         }
         return out
     }, [homeFeed, profile, type, setSelectedContent, setHomeFeed,
-        fakeItem, homeFeedPosition, setHomeFeedPosition])
+        fakeItem, homePosition, setHomePosition])
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                scrollToRef.current({ index: homeFeedPosition.rowIndex, animate: false, focus: false })
+                scrollToRef.current({ index: homePosition.rowIndex, animate: false, focus: false })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [homeFeedPosition.rowIndex])
+    }, [homePosition.rowIndex])
 
     return (
         <Column style={{ paddingLeft: '0.5rem' }} {...rest2}>
