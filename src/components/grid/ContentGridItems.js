@@ -15,16 +15,15 @@ import { useSetContent } from '../../hooks/setContent'
 
 /**
  * Show grid of items
- * @param {{
-    contentList: Array<Object>,
-    load: Function,
-    autoScroll: Boolean,
-    onScroll: Function,
-    onFocus: Function,
-    mode: String,
- }}
+ * @param {Object} obj
+ * @param {Array<Object>} obj.contentList
+ * @param {Function} [obj.load]
+ * @param {Boolean} obj.autoScroll
+ * @param {Function} [obj.onFocus]
+ * @param {'tall'|'wide'} obj.mode
+ * @param {Function} obj.onLeave
  */
-const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, ...rest }) => {
+const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, onLeave, ...rest }) => {
     /** @type {{rowIndex: Number, columnIndex: Number}} */
     const homePosition = useRecoilValue(homePositionState)
     /** @type {{current: Function}} */
@@ -45,8 +44,9 @@ const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, ...res
         if (ev.currentTarget) {
             const index = parseInt(ev.currentTarget.dataset['index'])
             setContentNavagate({ content: contentList[index], rowIndex: index })
+            onLeave()
         }
-    }, [contentList, setContentNavagate])
+    }, [contentList, setContentNavagate, onLeave])
 
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
@@ -110,6 +110,7 @@ ContentGridItems.propTypes = {
     contentList: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])).isRequired,
     autoScroll: PropTypes.bool.isRequired,
     mode: PropTypes.oneOf(['tall', 'wide']).isRequired,
+    onLeave: PropTypes.func.isRequired,
     load: PropTypes.func,
     onFocus: PropTypes.func,
 }

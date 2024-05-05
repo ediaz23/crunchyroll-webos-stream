@@ -24,26 +24,27 @@ import withContentList from '../../hooks/contentList'
 
 
 /**
- * @todo keep search after navegate?
- * All content grid and search
+ * Simulcast view
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
+ * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  * @param {String} obj.title title for view
- * @param {Array<Object>} obj.contentList List of content to show
- * @param {Boolean} obj.loading loading state
- * @param {Function} obj.setLoading setState function for loading
- * @param {Function} obj.changeContentList set content list array
- * @param {Function} obj.mergeContentList merge content list array
- * @param {Function} obj.quantity quantity to search
  */
-const Simulcast = ({
-    profile, title,
-    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
-    ...rest }) => {
+const Simulcast = ({ profile, viewProps, title, ...rest }) => {
+
+    const { contentList, quantity, autoScroll, delay,
+        mergeContentList, changeContentList, onLeave, onFilter,
+        contentListBak, optionBak,
+        loading, setLoading,
+    } = viewProps
+
     /** @type {[import('./SeasonButtons').Season, Function]} */
-    const [season, setSeason] = useState(undefined)
+    const [season, setSeason] = useState(optionBak.season || undefined)
     /** @type {[Array<Season>, Function]} */
-    const [seasons, setSeasons] = useState(undefined)
+    const [seasons, setSeasons] = useState(optionBak.seasons || undefined)
+    /** @type {[String, Function]}  */
+    const [sort, setOrder] = useState(optionBak.sort || 'newly_added')
+
     /** @type {Array<{key: String, value: String}>} */
     const order = useMemo(() => {
         return [{
@@ -59,9 +60,7 @@ const Simulcast = ({
     }, [])
     /** @type {Array<String>} */
     const orderStr = useMemo(() => order.map(i => i.value), [order])
-    /** @type {[String, Function]}  */
-    const [sort, setOrder] = useState('newly_added')
-    /** @type {Object} */
+    /** @type {import('../grid/ContentGrid').SearchOptions} */
     const options = useMemo(() => {
         return {
             quantity,
@@ -75,18 +74,22 @@ const Simulcast = ({
     /** @type {Function} */
     const onSelectOrder = useCallback(({ selected }) => {
         setOrder(order[selected].key)
-    }, [order, setOrder])
+        onFilter({ delay: 0 })
+    }, [order, setOrder, onFilter])
 
     /** @type {Function} */
     const prevSeason = useCallback(() => {
         setSeason(seasons[season.index + 1])
-    }, [season, seasons])
+        onFilter({ delay: 0 })
+    }, [season, seasons, onFilter])
 
     /** @type {Function} */
     const nextSeason = useCallback(() => {
         setSeason(seasons[season.index - 1])
-    }, [season, seasons])
+        onFilter({ delay: 0 })
+    }, [season, seasons, onFilter])
 
+    /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (contentList[index] === undefined) {
             mergeContentList(false, index)
@@ -97,26 +100,39 @@ const Simulcast = ({
         }
     }, [profile, contentList, mergeContentList, options])
 
+    /** @type {Function} */
+    const onLeaveView = useCallback(() => {
+        onLeave({ season, seasons, sort })
+    }, [onLeave, season, seasons, sort])
+
     useEffect(() => {
-        setLoading(true)
-        if (season && season.id) {
-            api.discover.getBrowseAll(profile, options).then(res => {
-                changeContentList([...res.data, ...new Array(res.total - res.data.length)])
+        if (delay >= 0) {
+            setLoading(true)
+            if (season && season.id) {
+                api.discover.getBrowseAll(profile, options).then(res => {
+                    changeContentList([...res.data, ...new Array(res.total - res.data.length)])
+                })
+            }
+        }
+    }, [profile, changeContentList, options, setLoading, season, delay])
+
+    useEffect(() => {
+        if (delay >= 0) {
+            api.discover.getSeasonList(profile).then(({ data: seasonsList }) => {
+                seasonsList.forEach((item, index) => { item.index = index })
+                setSeasons(seasonsList)
+                setSeason(seasonsList[0])
             })
         }
-    }, [profile, changeContentList, options, setLoading, season])
+    }, [profile, setSeason, delay])
 
-    useEffect(() => {  // initial request
-        api.discover.getSeasonList(profile).then(({ data: seasonsList }) => {
-            seasonsList.forEach((item, index) => { item.index = index })
-            setSeasons(seasonsList)
-            setSeason(seasonsList[0])
-        })
-        return () => {
-            setSeasons([])
-            setSeason(undefined)
+    useEffect(() => {  // iinitializing
+        if (contentListBak) {
+            changeContentList(contentListBak)
+        } else {
+            onFilter({ delay: 0, scroll: true })
         }
-    }, [profile, setSeason])
+    }, [profile, contentListBak, changeContentList, onFilter])
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -161,7 +177,9 @@ const Simulcast = ({
                             {!loading &&
                                 <ContentGridItems
                                     contentList={contentList}
-                                    load={onLoad} />
+                                    load={onLoad}
+                                    onLeave={onLeaveView}
+                                    autoScroll={autoScroll} />
                             }
                         </Cell>
                     </Row>
@@ -173,6 +191,7 @@ const Simulcast = ({
 
 Simulcast.propTypes = {
     profile: PropTypes.object.isRequired,
+    viewProps: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
 }
 

@@ -14,34 +14,31 @@ import withContentList from '../../hooks/contentList'
 
 
 /**
- * @todo keep search after navegate?
- * All content grid and search
+ * Music view
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {String} obj.contentKey key to identify and reload view
+ * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  * @param {String} obj.title title for view
+ * @param {String} obj.contentKey key to identify and reload view
  * @param {String} obj.contentType type of content to show, series, movies, etc
  * @param {Array<Object>} obj.musicFeed Music feed array
  * @param {Function} obj.setMusicFeed setState for musicFeed
- * @param {Array<Object>} obj.contentList List of content to show
- * @param {Boolean} obj.loading loading state
- * @param {Function} obj.setLoading setState function for loading
- * @param {Function} obj.changeContentList set content list array
- * @param {Function} obj.mergeContentList merge content list array
- * @param {Function} obj.quantity quantity to search
  */
-const MusicBrowse = ({
-    profile, contentKey, title, contentType,
-    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
-    musicFeed, setMusicFeed,
-    ...rest }) => {
-    /** @type {[Number, Function]} */
-    const [delay, setDelay] = useState(-1)
+const MusicBrowse = ({ profile, viewProps, title,
+    contentKey, contentType,
+    musicFeed, setMusicFeed, ...rest }) => {
+
+    const { contentList, quantity, autoScroll, delay,
+        mergeContentList, changeContentList, onLeave, onFilter,
+        contentListBak, optionBak,
+        loading, setLoading,
+    } = viewProps
+
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState(optionBak.query || '')
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
-
+    /** @type {import('../grid/ContentGrid').SearchOptions} */
     const options = useMemo(() => {
         return {
             quantity,
@@ -54,20 +51,30 @@ const MusicBrowse = ({
         }
     }, [contentType, sort, query, contentKey, quantity])
 
+    /** @type {Function} */
     const onSearch = useCallback(({ value }) => {
-        setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
-    }, [setQuery, setDelay])
+        onFilter({ delay: 3 * 1000 })  // 3 seconds
+    }, [setQuery, onFilter])
 
+    /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (index % options.quantity === 0) {
             if (contentList[index] === undefined) {
                 mergeContentList(false, index)
-                api.discover.search(profile, { ...options, start: index })
-                    .then(res => mergeContentList(res.data[0].items, index))
+                api.discover.search(profile, { ...options, start: index }).then(res => {
+                    if (res.total) {
+                        mergeContentList(res.data[0].items, index)
+                    }
+                })
             }
         }
     }, [options, profile, contentList, mergeContentList])
+
+    /** @type {Function} */
+    const onLeaveView = useCallback(() => {
+        onLeave({ query })
+    }, [onLeave, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -76,10 +83,14 @@ const MusicBrowse = ({
                 setLoading(true)
                 if (options.query !== '') {
                     api.discover.search(profile, options).then(res => {
-                        changeContentList([
-                            ...res.data[0].items,
-                            ...new Array(res.data[0].count - res.data[0].items.length)
-                        ])
+                        if (res.total) {
+                            changeContentList([
+                                ...res.data[0].items,
+                                ...new Array(res.data[0].count - res.data[0].items.length)
+                            ])
+                        } else {
+                            changeContentList([])
+                        }
                     })
                 } else {
                     changeContentList([])
@@ -90,12 +101,12 @@ const MusicBrowse = ({
     }, [profile, changeContentList, options, setLoading, contentKey, delay])
 
     useEffect(() => {  // initializing
-        setDelay(0)
-        return () => {
-            setDelay(-1)
-            setQuery('')
+        if (contentListBak) {
+            changeContentList(contentListBak)
+        } else {
+            onFilter({ delay: 0, scroll: true })
         }
-    }, [profile])
+    }, [profile, contentListBak, changeContentList, onFilter, contentKey])
 
     return (
         <Column style={{ width: '100%' }} {...rest}>
@@ -131,7 +142,8 @@ const MusicBrowse = ({
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}
-                        autoScroll={false} />
+                        onLeave={onLeaveView}
+                        autoScroll={autoScroll} />
                 }
             </Cell>
         </Column>

@@ -68,6 +68,11 @@ export const homePositionState = atom({
     default: { rowIndex: 0, columnIndex: 0 },
 })
 
+export const homeBackupState = atom({
+    key: 'homeBackupState',
+    default: null,
+})
+
 export const musicFeedState = atom({
     key: 'musicFeedState',
     default: [],

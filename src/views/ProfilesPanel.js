@@ -42,7 +42,7 @@ const ProfilesPanel = ({ ...rest }) => {
     /** @type {Function} */
     const setCurrentActivity = useSetRecoilState(homeIndexState)
     /** @type {Function} */
-    const setHomePositionState = useSetRecoilState(homePositionState)
+    const setHomePosition = useSetRecoilState(homePositionState)
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -61,10 +61,10 @@ const ProfilesPanel = ({ ...rest }) => {
         setHomeFeedExpiration(null)
         setMusicFeedExpiration(null)
         setCurrentActivity(0)
-        setHomePositionState({ rowIndex: 0, columnIndex: 0 })
+        setHomePosition({ rowIndex: 0, columnIndex: 0 })
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/home')
-    }, [setCurrentProfile, setPath, setSelectedContent, setCurrentActivity, setHomePositionState,
+    }, [setCurrentProfile, setPath, setSelectedContent, setCurrentActivity, setHomePosition,
         setHomeFeed, setHomeViewReady,
         setMusicFeedExpiration, setHomeFeedExpiration])
 

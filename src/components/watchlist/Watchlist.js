@@ -29,26 +29,28 @@ const processResult = async ({ profile, data }) => {
 }
 
 /**
- * @todo keep search after navegate?
- * All content grid and search
+ * Watch list view
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {Array<Object>} obj.contentList List of content to show
- * @param {Boolean} obj.loading loading state
- * @param {Function} obj.setLoading setState function for loading
- * @param {Function} obj.changeContentList set content list array
- * @param {Function} obj.mergeContentList merge content list array
- * @param {Function} obj.quantity quantity to search
+ * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  */
-const Watchlist = ({
-    profile,
-    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
-    ...rest }) => {
+const Watchlist = ({ profile, viewProps, ...rest }) => {
+
+    const { contentList, quantity, autoScroll, delay,
+        mergeContentList, changeContentList, onLeave, onFilter,
+        contentListBak,
+        loading, setLoading,
+    } = viewProps
+
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
-    /** @type {{quantity: Number}} */
-    const options = useMemo(() => { return { quantity } }, [quantity])
 
+    /** @type {import('../grid/ContentGrid').SearchOptions} */
+    const options = useMemo(() => {
+        return { quantity }
+    }, [quantity])
+
+    /** @type {Function} */
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const content = contentList[parseInt(ev.currentTarget.dataset['index'])]
@@ -56,6 +58,7 @@ const Watchlist = ({
         }
     }, [contentList, setSelectedContent])
 
+    /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (contentList[index] === undefined) {
             mergeContentList(false, index)
@@ -68,14 +71,29 @@ const Watchlist = ({
         }
     }, [profile, contentList, mergeContentList, options])
 
+    /** @type {Function} */
+    const onLeaveView = useCallback(() => {
+        onLeave(null)
+    }, [onLeave])
+
     useEffect(() => {
-        setLoading(true)
-        api.discover.getWatchlist(profile, options).then(res =>
-            processResult({ profile, data: res.data }).then(res2 => {
-                changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
-            })
-        )
-    }, [profile, changeContentList, options, setLoading])
+        if (delay >= 0) {
+            setLoading(true)
+            api.discover.getWatchlist(profile, options).then(res =>
+                processResult({ profile, data: res.data }).then(res2 => {
+                    changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
+                })
+            )
+        }
+    }, [profile, changeContentList, options, setLoading, delay])
+
+    useEffect(() => {  // initializing
+        if (contentListBak) {
+            changeContentList(contentListBak)
+        } else {
+            onFilter({ delay: 0, scroll: true })
+        }
+    }, [profile, contentListBak, changeContentList, onFilter])
 
     return (
         <Column {...rest}>
@@ -91,8 +109,10 @@ const Watchlist = ({
                     </Cell>
                     <Cell grow>
                         <ContentGridItems
-                            contentList={contentList}
+                            contentList={viewProps.contentList}
                             load={onLoad}
+                            onLeave={onLeaveView}
+                            autoScroll={autoScroll}
                             onFocus={onSelectItem}
                             mode='wide' />
                     </Cell>
@@ -104,6 +124,7 @@ const Watchlist = ({
 
 Watchlist.propTypes = {
     profile: PropTypes.object.isRequired,
+    viewProps: PropTypes.object.isRequired,
 }
 
 export default withContentList(Watchlist)

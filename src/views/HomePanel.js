@@ -9,7 +9,7 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
     currentProfileState, selectedContentState, categoriesState,
-    homeViewReadyState, homeIndexState, homePositionState,
+    homeViewReadyState, homeIndexState, homePositionState, homeBackupState,
     homeFeedState, homeFeedExpirationState,
     musicFeedState, musicFeedExpirationState,
 } from '../recoilConfig'
@@ -150,6 +150,8 @@ const HomePanel = (props) => {
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
+    /** @type {Function} */
+    const setHomeBackup = useSetRecoilState(homeBackupState)
 
     /** @type {[Array<Object>, Function]} */
     const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
@@ -191,8 +193,10 @@ const HomePanel = (props) => {
         if (tmpIndex !== currentActivity) {
             setHomePosition({ rowIndex: 0, columnIndex: 0 })
             setSelectedContent(null)
+            setHomeBackup(null)
         }
-    }, [setCurrentActivity, setShowFullToolbar, setHomePosition, currentActivity, setSelectedContent])
+    }, [setCurrentActivity, setShowFullToolbar, setHomePosition, currentActivity,
+        setSelectedContent, setHomeBackup])
 
     /** @type {Function} */
     const showToolbar = useCallback((ev) => {

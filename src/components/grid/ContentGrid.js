@@ -15,41 +15,48 @@ import css from './ContentGrid.module.less'
 
 
 /**
- * @todo keep search after navegate?
+ * @typedef SearchOptions
+ * @type {Object}
+ * @property {Number} quantity
+ * @property {Boolean} ratings
+ * @property {Boolean} noMock
+ * @property {String} type
+ * @property {String} contentKey
+ * @property {String} category
+ * @property {String} seasonTag
+ * @property {String} sort
+ * @property {String} query
+ */
+
+/**
  * All content grid and search
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {String} obj.contentKey key to identify and reload view
+ * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  * @param {String} obj.title title for view
+ * @param {String} obj.contentKey key to identify and reload view
  * @param {String} obj.contentType type of content to show, series, movies, etc
  * @param {String} obj.engine Engine to search, can be search or browse
  * @param {Boolean} obj.noCategory Not show category
  * @param {Boolean} obj.noSearch Not show input
- * @param {Array<Object>} obj.contentList List of content to show
- * @param {Boolean} obj.loading loading state
- * @param {Function} obj.setLoading setState function for loading
- * @param {Function} obj.changeContentList set content list array
- * @param {Function} obj.mergeContentList merge content list array
- * @param {Function} obj.quantity quantity to search
  */
-const ContentGrid = ({
-    profile, contentKey, title, contentType,
-    contentList, loading, setLoading, changeContentList, mergeContentList, quantity,
-    engine, noCategory, noSearch,
-    ...rest }) => {
+const ContentGrid = ({ profile, viewProps, title,
+    contentKey, contentType, engine, noCategory, noSearch, ...rest }) => {
 
-    /** @type {[Number, Function]} */
-    const [delay, setDelay] = useState(-1)
+    const { contentList, quantity, autoScroll, delay,
+        mergeContentList, changeContentList, onLeave, onFilter,
+        contentListBak, optionBak,
+        loading, setLoading,
+    } = viewProps
+
     /** @type {[String, Function]} */
-    const [category, setCategory] = useState('all')
+    const [category, setCategory] = useState(optionBak.category || 'all')
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState('')
-    /** @type {[import('./SeasonButtons').Season, Function]} */
-    const [season, setSeason] = useState(undefined)
+    const [query, setQuery] = useState(optionBak.query || '')
 
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
-
+    /** @type {SearchOptions} */
     const options = useMemo(() => {
         return {
             quantity,
@@ -58,24 +65,28 @@ const ContentGrid = ({
             type: contentType,
             contentKey,
             category: category !== 'all' ? [category] : [],
-            seasonTag: season ? season.id : undefined,
             sort,
             query,
         }
-    }, [category, season, contentType, sort, query, contentKey, quantity])
+    }, [category, contentType, sort, query, contentKey, quantity])
 
+    /** @type {Function} */
     const onSearch = useCallback(({ value }) => {
-        setDelay(2 * 1000)  // 2 seconds
         setQuery(value)
-    }, [setQuery, setDelay])
+        onFilter({ delay: 3 * 1000 })  // 3 seconds
+    }, [setQuery, onFilter])
 
+    /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (index % options.quantity === 0) {
             if (contentList[index] === undefined) {
                 mergeContentList(false, index)
                 if (engine === 'search') {
-                    api.discover.search(profile, { ...options, start: index })
-                        .then(res => mergeContentList(res.data[0].items, index))
+                    api.discover.search(profile, { ...options, start: index }).then(res => {
+                        if (res.total) {
+                            mergeContentList(res.data[0].items, index)
+                        }
+                    })
                 } else {
                     api.discover.getBrowseAll(profile, { ...options, start: index })
                         .then(res => mergeContentList(res.data, index))
@@ -83,6 +94,11 @@ const ContentGrid = ({
             }
         }
     }, [engine, options, profile, contentList, mergeContentList])
+
+    /** @type {Function} */
+    const onLeaveView = useCallback(() => {
+        onLeave({ category, query })
+    }, [onLeave, category, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -92,10 +108,14 @@ const ContentGrid = ({
                 if (engine === 'search') {
                     if (options.query !== '') {
                         api.discover.search(profile, options).then(res => {
-                            changeContentList([
-                                ...res.data[0].items,
-                                ...new Array(res.data[0].count - res.data[0].items.length)
-                            ])
+                            if (res.total) {
+                                changeContentList([
+                                    ...res.data[0].items,
+                                    ...new Array(res.data[0].count - res.data[0].items.length)
+                                ])
+                            } else {
+                                changeContentList([])
+                            }
                         })
                     } else {
                         changeContentList([])
@@ -114,14 +134,12 @@ const ContentGrid = ({
     }, [profile, changeContentList, options, setLoading, contentKey, delay, engine])
 
     useEffect(() => {  // initializing
-        setDelay(0)
-        return () => {
-            setDelay(-1)
-            setSeason(undefined)
-            setQuery('')
-            setCategory('all')
+        if (contentListBak) {
+            changeContentList(contentListBak)
+        } else {
+            onFilter({ delay: 0, scroll: true })
         }
-    }, [profile, contentKey])
+    }, [profile, contentListBak, changeContentList, onFilter, contentKey])
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -130,7 +148,7 @@ const ContentGrid = ({
                     <Row>
                         <Cell shrink>
                             <Heading>
-                                {title} {season && season.localization.title}
+                                {title}
                             </Heading>
                         </Cell>
                         {!noSearch &&
@@ -150,7 +168,7 @@ const ContentGrid = ({
                                 <CategoryList
                                     category={category}
                                     setCategory={setCategory}
-                                    setDelay={setDelay} />
+                                    setDelay={onFilter} />
                             </Cell>
                         }
                         <Cell grow >
@@ -162,7 +180,9 @@ const ContentGrid = ({
                             {!loading &&
                                 <ContentGridItems
                                     contentList={contentList}
-                                    load={onLoad} />
+                                    load={onLoad}
+                                    onLeave={onLeaveView}
+                                    autoScroll={autoScroll} />
                             }
                         </Cell>
                     </Row>
@@ -174,8 +194,9 @@ const ContentGrid = ({
 
 ContentGrid.propTypes = {
     profile: PropTypes.object.isRequired,
-    contentKey: PropTypes.string.isRequired,
+    viewProps: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
+    contentKey: PropTypes.string.isRequired,
     contentType: PropTypes.string,
     engine: PropTypes.string,
     noCategory: PropTypes.bool
