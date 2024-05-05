@@ -54,7 +54,7 @@ const removePanelField = (panel) => {
 /**
  * Process Carousel item
  * @param {Object} carousel
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @returns {Promise<Object>}
  */
 const processCarousel = async (carousel, profile, type) => {
@@ -107,7 +107,7 @@ export const processPanels = async (carousel) => {
 /**
  * Process InFeedPanels item
  * @param {Object} carousel
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Object>}
  */
 const processInFeedPanels = async (carousel, profile, type) => {
@@ -160,7 +160,7 @@ const processMusicArtistBanner = async (carousel) => {
 /**
  * Process InFeedPanels item
  * @param {Object} carousel
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Object>}
  */
 export const processCuratedCollection = async (carousel, profile) => {
@@ -180,7 +180,7 @@ export const processCuratedCollection = async (carousel, profile) => {
 /**
  * Process InFeedPanels item
  * @param {Object} carousel
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Object>}
  */
 const processDynamicCollection = async (carousel, profile) => {
@@ -253,7 +253,7 @@ export const postProcessFeedItem = async (val) => {
 /**
  * Process a single item in feed
  * @param {Object} carousel
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Object>}
  */
 const processItemFeed = async (carousel, profile, type) => {

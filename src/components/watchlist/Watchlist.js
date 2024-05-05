@@ -32,7 +32,7 @@ const processResult = async ({ profile, data }) => {
  * @todo keep search after navegate?
  * All content grid and search
  * @param {Object} obj
- * @param {Object} obj.profile current profile
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {Array<Object>} obj.contentList List of content to show
  * @param {Boolean} obj.loading loading state
  * @param {Function} obj.setLoading setState function for loading

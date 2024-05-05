@@ -18,7 +18,7 @@ import css from './ContentGrid.module.less'
  * @todo keep search after navegate?
  * All content grid and search
  * @param {Object} obj
- * @param {Object} obj.profile current profile
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.contentKey key to identify and reload view
  * @param {String} obj.title title for view
  * @param {String} obj.contentType type of content to show, series, movies, etc

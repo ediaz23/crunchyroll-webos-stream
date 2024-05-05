@@ -33,7 +33,7 @@ export const translateError = async (error) => {
 
 /**
  * Return basic params to query api
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @returns {Promise<import('crunchyroll-js-api/src/types').AccountAuth>}
  */
 export const getContentParam = async (profile) => {

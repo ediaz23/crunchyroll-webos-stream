@@ -27,7 +27,7 @@ import withContentList from '../../hooks/contentList'
  * @todo keep search after navegate?
  * All content grid and search
  * @param {Object} obj
- * @param {Object} obj.profile current profile
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.title title for view
  * @param {Array<Object>} obj.contentList List of content to show
  * @param {Boolean} obj.loading loading state

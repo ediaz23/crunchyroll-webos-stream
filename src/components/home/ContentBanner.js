@@ -137,7 +137,7 @@ ContentMetadata.propTypes = {
  * @param {{content: Object, noCategory: Boolean}}
  */
 export const ContentHeader = ({ content, noCategory }) => {
-    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
+    /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Array<String>, Function]} */
     const [categories, setCategories] = useState([])

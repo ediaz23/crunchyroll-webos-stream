@@ -15,7 +15,7 @@ const storage = localStore.storage
 
 /**
  * Set credentials
- * @param {import('crunchyroll-js-api/src/types').Credential} credential
+ * @param {import('crunchyroll-js-api').Types.Credential} credential
  * @returns {Promise}
  */
 export const setCredentials = async (credential) => {

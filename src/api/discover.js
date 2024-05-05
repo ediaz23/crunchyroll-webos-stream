@@ -7,7 +7,7 @@ import { translateError, getContentParam } from './utils'
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.quantity] Number of records in a result
  * @param {Number} [params.start] Offset to request
@@ -36,7 +36,7 @@ export const getBrowseAll = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.quantity] Number of records in a result
  * @param {Number} [params.start] Offset to request
@@ -68,7 +68,7 @@ export const search = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.contentId]
  * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
@@ -90,7 +90,7 @@ export const getCategories = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Boolean} [params.ratings]
@@ -113,7 +113,7 @@ export const getHistory = async (profile, params) => {
 
 /**
  * Get index data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise}
  */
 export const getHomeFeed = async (profile) => {
@@ -133,7 +133,7 @@ export const getHomeFeed = async (profile) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
@@ -157,7 +157,7 @@ export const getRecomendation = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @param {Number} [params.quantity]
@@ -182,7 +182,7 @@ export const getSimilar = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
@@ -213,7 +213,7 @@ export const getNext = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
@@ -244,7 +244,7 @@ export const getPrev = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
@@ -275,7 +275,7 @@ export const getWatchlist = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @returns {Promise<{data: Array<{id: String, localization: Object}>}>}
  */
 export const getSeasonList = async (profile) => {

@@ -76,12 +76,12 @@ export const setNextContactDate = async () => {
     await localStore.setNewData({ nextDonation: nextDate.toISOString() })
 }
 
-/** @returns {import('crunchyroll-js-api/src/types').Device} */
+/** @returns {import('crunchyroll-js-api').Types.Device} */
 export const getDevice = () => storage.device
 
 export const setDeviceInformation = async () => {
     if (!storage.device) {
-        /** @type {import('crunchyroll-js-api/src/types').Device} */
+        /** @type {import('crunchyroll-js-api').Types.Device} */
         const device = {
             id: uuidv4(),
             name: 'Smart TV Nano',

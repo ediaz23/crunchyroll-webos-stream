@@ -14,7 +14,7 @@ import back from '../back'
 
 
 const ContentPanel = ({ ...rest }) => {
-    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
+    /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {Object} */
     const content = useRecoilValue(selectedContentState)

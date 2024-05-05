@@ -43,7 +43,7 @@ export const getProfiles = async () => {
 
 /**
  * Update a profile
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @returns {Promise}
  */
 export const updateProfile = async (profile) => {

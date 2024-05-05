@@ -6,7 +6,7 @@ import { translateError, getContentParam } from './utils'
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Array<String>} params.contentIds
  * @return {Promise<{data: Array<Object>}>}
@@ -30,7 +30,7 @@ export const getPlayHeads = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @param {Number} params.playhead
@@ -49,7 +49,7 @@ export const savePlayhead = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @return {Promise}
@@ -65,7 +65,7 @@ export const addWatchlistItem = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Array<String>} params.contentIds
  * @return {Promise<{total: Number, data: Array<Object>}>}
@@ -87,7 +87,7 @@ export const getWatchlistItems = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @return {Promise}

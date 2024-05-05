@@ -6,7 +6,7 @@ import { translateError, getContentParam } from './utils'
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Array<String>} params.objectIds
  * @param {Boolean} [params.ratings]
@@ -29,7 +29,7 @@ export const getObjects = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.serieId
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
@@ -51,7 +51,7 @@ export const getSeasons = async (profile, params) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.serieId
  * @return {Promise}
@@ -73,7 +73,7 @@ export const getSerie = async (profile, params) => {
 
 /**
  * Get episodes for a season
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.seasonId
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
@@ -95,7 +95,7 @@ export const getEpisodes = async (profile, params) => {
 
 /**
  * Get movies for a movie_listing
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.movieListingId
  * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
@@ -117,7 +117,7 @@ export const getMovies = async (profile, params) => {
 
 /**
  * Get episodes for a season
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.streamUrl
  * @return {Promise}
@@ -139,7 +139,7 @@ export const getStreamsWithURL = async (profile, params) => {
 
 /**
  * Get episodes for a season
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @return {Promise}

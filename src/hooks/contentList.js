@@ -17,6 +17,7 @@ export const withContentList = (WrappedComponent) => {
         const [contentList, setContentList] = useState([])
         /** @type {[Boolean, Function]}  */
         const [loading, setLoading] = useState(true)
+        /** @type {Number} */
         const quantity = 20
 
         /** @type {Function} */
@@ -26,6 +27,7 @@ export const withContentList = (WrappedComponent) => {
             setHomeViewReady(true)
         }, [setContentList, setHomeViewReady, setLoading])
 
+        /** @type {Function} */
         const mergeContentList = useMergeContentList(setContentList, quantity)
 
         useEffect(() => {

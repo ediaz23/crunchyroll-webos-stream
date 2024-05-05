@@ -48,7 +48,7 @@ import { $L } from '../../hooks/language'
  * @property {StreamSession} session
  * @property {Array<import('./AudioList').Audio>} audios
  * @property {Array<import('./SubtitleList').Subtitle>} subtitles
- * @property {import('crunchyroll-js-api/src/types').Profile} profile
+ * @property {import('crunchyroll-js-api').Types.Profile} profile
  * @property {String} skipUrl
  */
 
@@ -425,13 +425,13 @@ const decodeLicense = (res) => {
 
 /**
  * @fixme future cors error
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Function}
  */
 const requestDashLicense = (profile) => {
     /** @param {import('dashjs').LicenseRequest} req */
     return async (req) => {
-        /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
+        /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
         const account = await getContentParam(profile)
         if (req.url.endsWith('widevine')) {
             req.headers['Content-Type'] = 'application/octet-stream'
@@ -443,12 +443,12 @@ const requestDashLicense = (profile) => {
 }
 
 /**
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Function}
  */
 const modifierDashRequest = (profile) => {
     return async (req) => {
-        /** @type {import('crunchyroll-js-api/src/types').AccountAuth} */
+        /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
         const account = await getContentParam(profile)
         /** @type {Request} */
         const request = req
@@ -604,7 +604,7 @@ const Player = ({ ...rest }) => {
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
     const getLang = useGetLanguage()
-    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
+    /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Object, Function]} */
     const [playContent, setPlayContent] = useRecoilState(playContentState)

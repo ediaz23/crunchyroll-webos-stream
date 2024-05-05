@@ -7,7 +7,7 @@ import { translateError, getContentParam } from './utils'
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @param {String} params.contentType
@@ -29,7 +29,7 @@ export const getRatings = async (profile, params) => {
 }
 
 /**
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @param {String} params.rating
@@ -49,7 +49,7 @@ export const updateRating = async (profile, params) => {
 
 
 /**
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @param {String} params.rating
@@ -68,7 +68,7 @@ export const updateEpisodeRating = async (profile, params) => {
 }
 
 /**
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @param {String} params.contentType

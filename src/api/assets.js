@@ -20,7 +20,7 @@ export const getAvatarList = async () => {
 
 /**
  * Return avatar url
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @returns {String}
  */
 export const getAvatarUrl = profile => `${config.configApp.url_static}/assets/avatar/170x170/${profile.avatar}`

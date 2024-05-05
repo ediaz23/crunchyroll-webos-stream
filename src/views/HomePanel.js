@@ -29,7 +29,7 @@ import { $L } from '../hooks/language'
 /**
  * Process the feed
  * @param {Array<{resource_type: String}>} feed
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Array<Object>>}
  */
 const postProcessHomefeed = (feed) => {
@@ -134,7 +134,7 @@ const useSetFeed = (setHomeFeed) => {
 const ActivityViews = ({ index, children }) => (children[index])
 
 const HomePanel = (props) => {
-    /** @type {import('crunchyroll-js-api/src/types').Profile}*/
+    /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Number, Function]} */
     const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)

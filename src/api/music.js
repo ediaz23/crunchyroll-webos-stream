@@ -7,7 +7,7 @@ import { translateError, getContentParam } from './utils'
 
 /**
  * Get feed
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<{total: Number, data: Array}>}
  */
 export const getFeed = async (profile) => {
@@ -27,7 +27,7 @@ export const getFeed = async (profile) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Array<String>} artistIds
  * @return {Promise<{total: Number, data: Array}>}
  */
@@ -48,7 +48,7 @@ export const getArtists = async (profile, artistIds) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Array<String>} concertIds
  * @return {Promise<{total: Number, data: Array}>}
  */
@@ -69,7 +69,7 @@ export const getConcerts = async (profile, concertIds) => {
 
 /**
  * Get object data
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Array<String>} musicIds
  * @return {Promise<{total: Number, data: Array}>}
  */
@@ -91,7 +91,7 @@ export const getVideos = async (profile, musicIds) => {
 
 /**
  * Get episodes for a season
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.streamUrl
  * @return {Promise}
@@ -113,7 +113,7 @@ export const getStreamsWithURL = async (profile, params) => {
 
 /**
  * Get episodes for a season
- * @param {import('crunchyroll-js-api/src/types').Profile} profile
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
  * @return {Promise}

@@ -33,7 +33,7 @@ const ProfileData = Navigable(ProfileDataBase, css.profileFocus)
 
 /**
  * @param {Object} obj
- * @param {import('crunchyroll-js-api/src/types').Profile} obj.profile
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Function} obj.onSelectProfile
  * @param {Function} obj.onEditProfile
  * @param {Function} obj.compRef

@@ -25,7 +25,7 @@ import { useSaveProfile, useSaveOneProfileField } from '../../hooks/profile'
 /**
  * @typedef ProfileEditProps
  * @type {Object}
- * @property {import('crunchyroll-js-api/src/types').Profile} profile
+ * @property {import('crunchyroll-js-api').Types.Profile} profile
  * @property {LangList} langList
  * @property {Function} saveProfile
  */
