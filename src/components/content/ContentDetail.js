@@ -24,7 +24,7 @@ const ActivityViews = ({ index, children }) => children[index]
 
 /**
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     content: Object,
  }}
  */

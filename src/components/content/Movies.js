@@ -13,7 +13,7 @@ import api from '../../api'
 
 /**
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     movieListing: Object,
     setContentToPlay: Function,
  }}

@@ -34,14 +34,13 @@ export const translateError = async (error) => {
 /**
  * Return basic params to query api
  * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @returns {Promise<import('crunchyroll-js-api/src/types').AccountAuth>}
+ * @returns {Promise<import('crunchyroll-js-api').Types.AccountAuth>}
  */
 export const getContentParam = async (profile) => {
-    const token = await localStore.getAuthToken()
-    const accountId = (await localStore.getToken()).accountId
+    const token = await localStore.getToken()
     return {
-        token,
-        accountId,
+        token: `${token.tokenType} ${token.accessToken}`,
+        accountId: token.accountId,
         locale: profile.preferred_communication_language,
         audioLanguage: profile.preferred_content_audio_language,
     }

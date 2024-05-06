@@ -8,8 +8,9 @@ import { translateError } from '../api/utils'
  * @type {Object}
  * @property {Date} installed
  * @property {Date} nextDonation
- * @typedef {ApiStorageSub & import('crunchyroll-js-api/src/localStore').Storage} ApiStorage
+ * @typedef {ApiStorageSub & import('crunchyroll-js-api').Types.Storage} ApiStorage
  */
+
 /** @type {ApiStorage} */
 const storage = localStore.storage
 
@@ -24,19 +25,19 @@ export const setCredentials = async (credential) => {
 
 /**
  * Return saved credentials
- * @returns {Promise<import('crunchyroll-js-api/src/types').Credential>}
+ * @returns {Promise<import('crunchyroll-js-api').Types.Credential>}
  */
 export const getCredentials = async () => storage.credential
 
 /**
  * Return current session
- * @returns {Promise<import('crunchyroll-js-api/src/types').TokenObj>}
+ * @returns {Promise<import('crunchyroll-js-api').Types.TokenObj>}
  */
 export const getSession = async () => storage.token
 
 /**
  * Send a login request
- * @returns {Promise<import('crunchyroll-js-api/src/types').TokenObj>}
+ * @returns {Promise<import('crunchyroll-js-api').Types.TokenObj>}
  */
 export const login = async () => {
     let token = null

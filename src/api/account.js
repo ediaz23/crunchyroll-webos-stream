@@ -8,7 +8,7 @@ import { translateError } from '../api/utils'
 
 /**
  * Return account info
- * @returns {Promise<import('crunchyroll-js-api/src/types').AccountObj>}
+ * @returns {Promise<import('crunchyroll-js-api').Types.AccountObj>}
  */
 export const getAccount = async () => {
     let account = null
@@ -22,7 +22,7 @@ export const getAccount = async () => {
 
 /**
  * Return profile
- * @returns {Promise<Array<import('crunchyroll-js-api/src/types').Profile>>}
+ * @returns {Promise<Array<import('crunchyroll-js-api').Types.Profile>>}
  */
 export const getProfiles = async () => {
     let profile = []

@@ -13,7 +13,7 @@ import api from '../../api'
 
 
 /**
- * @param {{profile: import('crunchyroll-js-api/src/types').Profile}}
+ * @param {{profile: import('crunchyroll-js-api').Types.Profile}}
  */
 const ProfileInfo = ({ profile, ...rest }) => {
     const locale = new Locale()

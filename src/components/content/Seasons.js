@@ -14,7 +14,7 @@ import api from '../../api'
 /**
  * Caculate playhead progress
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     episodesData: Array<Object>,
  }}
  */
@@ -45,7 +45,7 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
 
 /**
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     series: Object,
     setContentToPlay: Function,
  }}

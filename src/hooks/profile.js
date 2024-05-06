@@ -3,7 +3,7 @@ import api from '../api'
 
 /**
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     setProfile: Function}}
  */
 export const useSaveProfile = ({ profile, setProfile }) => {
@@ -15,7 +15,7 @@ export const useSaveProfile = ({ profile, setProfile }) => {
 
 /**
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     setProfile: Function,
     field: String}}
  */

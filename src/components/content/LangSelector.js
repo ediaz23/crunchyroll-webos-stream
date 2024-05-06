@@ -16,7 +16,7 @@ import css from './ContentDetail.module.less'
 
 /**
  * @param {{
-    profile:import('crunchyroll-js-api/src/types').Profile
+    profile:import('crunchyroll-js-api').Types.Profile
     content: Object,
  }}
  */

@@ -22,7 +22,7 @@ import css from './Artist.module.less'
 
 /**
  * @param {{
-    profile: import('crunchyroll-js-api/src/types').Profile,
+    profile: import('crunchyroll-js-api').Types.Profile,
     artist: Object,
  }}
  */

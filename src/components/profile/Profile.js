@@ -12,7 +12,7 @@ import api from '../../api'
 
 
 /**
- * @param {{profile: import('crunchyroll-js-api/src/types').Profile, rest: Object}}
+ * @param {{profile: import('crunchyroll-js-api').Types.Profile, rest: Object}}
  */
 const ProfileDataBase = ({ profile, compRef, ...rest }) => {
     return (

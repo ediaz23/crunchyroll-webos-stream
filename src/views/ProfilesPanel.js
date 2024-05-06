@@ -27,7 +27,7 @@ const ProfilesPanel = ({ ...rest }) => {
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
     const setCurrentProfile = useSetRecoilState(currentProfileState)
-    /** @type {[Array<import('crunchyroll-js-api/src/types').Profile>, Function]}  */
+    /** @type {[Array<import('crunchyroll-js-api').Types.Profile>, Function]}  */
     const [profiles, setProfiles] = useState([])
     /** @type {Function} */
     const setHomeFeed = useSetRecoilState(homeFeedState)
