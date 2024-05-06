@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Row } from '@enact/ui/Layout'
 import { Panel, Header } from '@enact/moonstone/Panels'
 import Heading from '@enact/moonstone/Heading'
+import Spinner from '@enact/moonstone/Spinner'
 
 import { useRecoilValue } from 'recoil'
 
@@ -27,15 +28,17 @@ const EditProfilePanel = ({ ...rest }) => {
     /** @type {[Array<{children: String, key: String}>, Function]} */
     const [contentLangList, setContentLangList] = useState([])
     const langList = { audio: audioLangList, subtitles: subtitleLangList, content: contentLangList }
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const loadData = async () => {
-            setAudioLangList((await api.misc.getAudioLangList()).map(mapLang))
-            setSubtitleLangList((await api.misc.getSubtitleLangList()).map(mapLang))
-            setContentLangList((await api.misc.getContentLangList()).map(mapLang))
-        }
-        loadData()
-    }, [mapLang])
+        setLoading(true)
+        Promise.all([
+            api.misc.getAudioLangList().then(res => res.map(mapLang)).then(setAudioLangList),
+            api.misc.getSubtitleLangList().then(res => res.map(mapLang)).then(setSubtitleLangList),
+            api.misc.getContentLangList().then(res => res.map(mapLang)).then(setContentLangList)
+        ]).then(() => setLoading(false))
+    }, [mapLang, setLoading])
 
     return (
         <Panel {...rest}>
@@ -48,7 +51,15 @@ const EditProfilePanel = ({ ...rest }) => {
                     {$L('Profile')}
                 </Heading>
             </Row>
-            <ProfileDetail {...{ profile, langList }} />
+            {loading ?
+                <Row align='center center'>
+                    <Spinner />
+                </Row>
+                :
+                <ProfileDetail
+                    profile={profile}
+                    langList={langList} />
+            }
         </Panel>
     )
 }

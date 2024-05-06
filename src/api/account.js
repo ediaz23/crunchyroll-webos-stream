@@ -5,7 +5,6 @@ import { LOAD_MOCK_DATA } from '../const'
 import { getMockData } from '../mock-data/mockData'
 import { translateError } from '../api/utils'
 
-
 /**
  * Return account info
  * @returns {Promise<import('crunchyroll-js-api').Types.AccountObj>}
@@ -22,18 +21,22 @@ export const getAccount = async () => {
 
 /**
  * Return profile
- * @returns {Promise<Array<import('crunchyroll-js-api').Types.Profile>>}
+ * @returns {Promise<import('crunchyroll-js-api').Types.ProfileResponse>}
  */
 export const getProfiles = async () => {
-    let profile = []
+    /** @type {import('crunchyroll-js-api').Types.ProfileResponse} */
+    let profile
     try {
         if (LOAD_MOCK_DATA) {
-            profile = [await getMockData('profile')]
-        } else {
-            const tmpProfile = await api.account.getProfile({ token: await localStore.getAuthToken() })
-            if (tmpProfile) {  // hack to allow multi-profile
-                profile = [{ id: 0, ...tmpProfile }]
+            profile = {
+                max_profiles: 1,
+                tier_max_profiles: 1,
+                profiles: [await getMockData('profile')]
             }
+            const account = await getAccount()
+            profile.profiles[0].profile_id = account.accountId
+        } else {
+            profile = await api.account.getMultiProfiles({ token: await localStore.getAuthToken() })
         }
     } catch (error) {
         await translateError(error)

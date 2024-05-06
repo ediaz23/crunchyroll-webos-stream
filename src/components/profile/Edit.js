@@ -30,6 +30,7 @@ import { useSaveProfile, useSaveOneProfileField } from '../../hooks/profile'
  * @property {Function} saveProfile
  */
 /**
+ * @todo editar multi perfil
  * @param {ProfileEditProps} obj
  */
 const ProfileEdit = ({ profile, langList, ...rest }) => {
@@ -39,10 +40,11 @@ const ProfileEdit = ({ profile, langList, ...rest }) => {
     const saveLang = useSaveOneProfileField({ profile, setProfile, field: 'preferred_communication_language' })
     const saveAudio = useSaveOneProfileField({ profile, setProfile, field: 'preferred_content_audio_language' })
     const saveSubs = useSaveOneProfileField({ profile, setProfile, field: 'preferred_content_subtitle_language' })
+    const defaultLang = 'en-US'
 
 
     const onToggleAdult = useCallback(async ({ selected }) => {
-        await saveProfile({ 'maturity_rating': selected ? 'M3' : 'M2' })
+        await saveProfile({ maturity_rating: selected ? 'M3' : 'M2' })
     }, [saveProfile])
 
     return (
@@ -53,19 +55,19 @@ const ProfileEdit = ({ profile, langList, ...rest }) => {
                 <SelectLanguage
                     languages={langList.content}
                     save={saveLang}
-                    value={profile.preferred_communication_language} />
+                    value={profile.preferred_communication_language || defaultLang} />
             </Field>
             <Field title={$L('Audio Language')}>
                 <SelectLanguage
                     languages={langList.audio}
                     save={saveAudio}
-                    value={profile.preferred_content_audio_language} />
+                    value={profile.preferred_content_audio_language || defaultLang} />
             </Field>
             <Field title={$L('Subtitles Language')}>
                 <SelectLanguage
                     languages={langList.subtitles}
                     save={saveSubs}
-                    value={profile.preferred_content_subtitle_language} />
+                    value={profile.preferred_content_subtitle_language || defaultLang} />
             </Field>
             <Field >
                 <CheckboxItem defaultSelected={profile.maturity_rating === 'M3'}

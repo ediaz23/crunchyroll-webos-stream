@@ -28,12 +28,17 @@ const ProfileInfo = ({ profile, ...rest }) => {
                     alt={$L('Profile Picture')}
                     style={{ height: '7.5rem', width: '7.5rem' }} />
             </Field>
+            <Field title={$L('Name')}>
+                {profile.profile_name}
+            </Field>
             <Field title={$L('Username')}>
                 {profile.username}
             </Field>
-            <Field title={$L('Email')}>
-                {profile.email}
-            </Field>
+            {profile.email &&
+                <Field title={$L('Email')}>
+                    {profile.email}
+                </Field>
+            }
             <Field title={$L('App Language')}>
                 {getLanguage(locale.spec)}
             </Field>

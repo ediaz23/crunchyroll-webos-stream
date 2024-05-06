@@ -16,10 +16,10 @@ import api from '../../api'
  */
 const ProfileDataBase = ({ profile, compRef, ...rest }) => {
     return (
-        <Row {...rest} data-profile-id={profile.id} ref={compRef}>
+        <Row {...rest} data-profile-id={profile.profile_id} ref={compRef}>
             <Column >
                 <Heading size="medium" style={{ marginBottom: '1rem' }}>
-                    {profile.username}
+                    {profile.profile_name}
                 </Heading>
                 <Image src={api.assets.getAvatarUrl(profile)}
                     alt={$L('Profile Picture')}
@@ -45,7 +45,7 @@ const Profile = ({ profile, onSelectProfile, onEditProfile, compRef, ...rest }) 
         <Column className={css.profile} {...rest}>
             <ProfileData profile={profile} onClick={onSelectProfile} compRef={compRef} />
             <Row className={css.editButton} align="center center">
-                <IconButton data-profile-id={profile.id}
+                <IconButton data-profile-id={profile.profile_id}
                     onClick={onEditProfile}>
                     edit
                 </IconButton>

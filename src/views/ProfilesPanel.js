@@ -27,8 +27,8 @@ const ProfilesPanel = ({ ...rest }) => {
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
     const setCurrentProfile = useSetRecoilState(currentProfileState)
-    /** @type {[Array<import('crunchyroll-js-api').Types.Profile>, Function]}  */
-    const [profiles, setProfiles] = useState([])
+    /** @type {[import('crunchyroll-js-api').Types.ProfileResponse, Function]}  */
+    const [multiProfile, setMultiProfile] = useState(null)
     /** @type {Function} */
     const setHomeFeed = useSetRecoilState(homeFeedState)
     /** @type {Function} */
@@ -49,21 +49,23 @@ const ProfilesPanel = ({ ...rest }) => {
         /** @type {HTMLElement} */
         const parentElement = event.target.closest('[data-profile-id]')
         const profileId = parentElement.getAttribute('data-profile-id')
-        return profiles.find(p => p.id === parseInt(profileId))
-    }, [profiles])
+        return multiProfile.profiles.find(p => p.profile_id === profileId)
+    }, [multiProfile])
 
     /** @type {Function} */
     const doSelectProfile = useCallback(profile => {
-        setHomeViewReady(false)
-        setHomeFeed([])
-        setCurrentProfile(profile)
-        setSelectedContent(null)
-        setHomeFeedExpiration(null)
-        setMusicFeedExpiration(null)
-        setCurrentActivity(0)
-        setHomePosition({ rowIndex: 0, columnIndex: 0 })
-        back.pushHistory({ doBack: () => { setPath('/profiles') } })
-        setPath('/profiles/home')
+        api.auth.switchProfile(profile.profile_id).then(() => {
+            setHomeViewReady(false)
+            setHomeFeed([])
+            setCurrentProfile(profile)
+            setSelectedContent(null)
+            setHomeFeedExpiration(null)
+            setMusicFeedExpiration(null)
+            setCurrentActivity(0)
+            setHomePosition({ rowIndex: 0, columnIndex: 0 })
+            back.pushHistory({ doBack: () => { setPath('/profiles') } })
+            setPath('/profiles/home')
+        })
     }, [setCurrentProfile, setPath, setSelectedContent, setCurrentActivity, setHomePosition,
         setHomeFeed, setHomeViewReady,
         setMusicFeedExpiration, setHomeFeedExpiration])
@@ -82,19 +84,21 @@ const ProfilesPanel = ({ ...rest }) => {
 
     /** @type {Function} */
     const setFocus = useCallback(node => {
-        if (node && node.dataset.profileId === '0') {
-            node.focus()
-            Spotlight.focus(node)
+        if (node && multiProfile && multiProfile.profiles.length) {
+            if (node.dataset.profileId === multiProfile.profiles[0].profile_id) {
+                node.focus()
+                Spotlight.focus(node)
+            }
         }
-    }, [])
+    }, [multiProfile])
 
     useEffect(() => {
-        if (DEV_FAST_SELECT && profiles && profiles.length) {
-            doSelectProfile(profiles[0])
+        if (DEV_FAST_SELECT && multiProfile && multiProfile.profiles.length) {
+            doSelectProfile(multiProfile.profiles[0])
         }
-    }, [profiles, doSelectProfile])
+    }, [multiProfile, doSelectProfile])
 
-    useEffect(() => { api.account.getProfiles().then(setProfiles) }, [])
+    useEffect(() => { api.account.getProfiles().then(setMultiProfile) }, [])
 
     const rowStyle = { marginTop: '1rem' }
     return (
@@ -104,7 +108,7 @@ const ProfilesPanel = ({ ...rest }) => {
                 <Logout />
             </Header>
             <Column align='center center'>
-                {profiles.length ?
+                {multiProfile && multiProfile.profiles.length ?
                     <>
                         <Row align='center center'>
                             <Heading size='title'>
@@ -112,7 +116,7 @@ const ProfilesPanel = ({ ...rest }) => {
                             </Heading>
                         </Row>
                         <Row align='center center' style={rowStyle}>
-                            {profiles.map((profile, i) =>
+                            {multiProfile.profiles.map((profile, i) =>
                                 <Profile profile={profile} key={i}
                                     onSelectProfile={onSelectProfile}
                                     onEditProfile={onEditProfile}

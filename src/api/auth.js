@@ -60,3 +60,16 @@ export const logout = async () => {
         await translateError(error)
     }
 }
+
+/**
+ * switch Profile
+ * @param {String} profileId
+ * @returns {Promise}
+ */
+export const switchProfile = async (profileId) => {
+    try {
+        await localStore.switchProfile(profileId)
+    } catch (error) {
+        await translateError(error)
+    }
+}
