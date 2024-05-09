@@ -43,6 +43,8 @@ const ProfilesPanel = ({ ...rest }) => {
     const setCurrentActivity = useSetRecoilState(homeIndexState)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(false)
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -54,7 +56,9 @@ const ProfilesPanel = ({ ...rest }) => {
 
     /** @type {Function} */
     const doSelectProfile = useCallback(profile => {
+        setLoading(true)
         api.auth.switchProfile(profile.profile_id).then(() => {
+            setLoading(false)
             setHomeViewReady(false)
             setHomeFeed([])
             setCurrentProfile(profile)
@@ -68,7 +72,7 @@ const ProfilesPanel = ({ ...rest }) => {
         })
     }, [setCurrentProfile, setPath, setSelectedContent, setCurrentActivity, setHomePosition,
         setHomeFeed, setHomeViewReady,
-        setMusicFeedExpiration, setHomeFeedExpiration])
+        setMusicFeedExpiration, setHomeFeedExpiration, setLoading])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {
@@ -108,7 +112,7 @@ const ProfilesPanel = ({ ...rest }) => {
                 <Logout />
             </Header>
             <Column align='center center'>
-                {multiProfile && multiProfile.profiles.length ?
+                {!loading && multiProfile && multiProfile.profiles.length ?
                     <>
                         <Row align='center center'>
                             <Heading size='title'>
