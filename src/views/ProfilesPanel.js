@@ -87,11 +87,11 @@ const ProfilesPanel = ({ ...rest }) => {
     }, [getProfileFromEvent, setCurrentProfile, setPath])
 
     /** @type {Function} */
-    const setFocus = useCallback(node => {
-        if (node && multiProfile && multiProfile.profiles.length) {
-            if (node.dataset.profileId === multiProfile.profiles[0].profile_id) {
-                node.focus()
-                Spotlight.focus(node)
+    const setFocus = useCallback(ev => {
+        if (ev && ev.node && multiProfile && multiProfile.profiles.length) {
+            if (ev.node.dataset.profileId === multiProfile.profiles[0].profile_id) {
+                ev.node.focus()
+                Spotlight.focus(ev.node)
             }
         }
     }, [multiProfile])

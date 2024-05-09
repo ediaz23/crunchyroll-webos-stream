@@ -11,25 +11,7 @@ import Navigable from '../../wrappers/Navigable'
 import api from '../../api'
 
 
-/**
- * @param {{profile: import('crunchyroll-js-api').Types.Profile, rest: Object}}
- */
-const ProfileDataBase = ({ profile, compRef, ...rest }) => {
-    return (
-        <Row {...rest} data-profile-id={profile.profile_id} ref={compRef}>
-            <Column >
-                <Heading size="medium" style={{ marginBottom: '1rem' }}>
-                    {profile.profile_name}
-                </Heading>
-                <Image src={api.assets.getAvatarUrl(profile)}
-                    alt={$L('Profile Picture')}
-                    style={{ height: '10rem', width: '10rem' }} />
-            </Column>
-        </Row>
-    )
-}
-
-const ProfileData = Navigable(ProfileDataBase, css.profileFocus)
+const ImageNavigable = Navigable(Image, css.profileFocus)
 
 /**
  * @param {Object} obj
@@ -43,7 +25,20 @@ const Profile = ({ profile, onSelectProfile, onEditProfile, compRef, ...rest }) 
 
     return (
         <Column className={css.profile} {...rest}>
-            <ProfileData profile={profile} onClick={onSelectProfile} compRef={compRef} />
+            <Row align="center center">
+                <Column align="center center">
+                    <ImageNavigable
+                        data-profile-id={profile.profile_id}
+                        className={css.profileImg}
+                        src={api.assets.getAvatarUrl(profile)}
+                        alt={$L('Profile Picture')}
+                        onClick={onSelectProfile}
+                        ref={compRef} />
+                    <Heading size="medium">
+                        {profile.profile_name}
+                    </Heading>
+                </Column>
+            </Row>
             <Row className={css.editButton} align="center center">
                 <IconButton data-profile-id={profile.profile_id}
                     onClick={onEditProfile}>
