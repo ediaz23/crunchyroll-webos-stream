@@ -690,6 +690,7 @@ const Player = ({ ...rest }) => {
     const onNextEp = useCallback((ev) => {
         ev.preventDefault()
         setLoading(true)
+        playerRef.current.pause()
         findNextEp({ profile, content, step: +1 }).then(onChangeEp)
     }, [profile, content, onChangeEp, setLoading])
 
@@ -697,6 +698,7 @@ const Player = ({ ...rest }) => {
     const onPrevEp = useCallback((ev) => {
         ev.preventDefault()
         setLoading(true)
+        playerRef.current.pause()
         findNextEp({ profile, content, step: -1 }).then(onChangeEp)
     }, [profile, content, onChangeEp, setLoading])
 
@@ -744,6 +746,9 @@ const Player = ({ ...rest }) => {
             skipDoc.style.bottom = `${window.innerHeight - posicionElementoB + 15}px`
         } else {
             skipDoc.style.bottom = '2.5rem'
+            if (skipDoc.style.display === 'inline-block') {
+                setTimeout(() => Spotlight.focus('#skip-button'), 100)
+            }
         }
     }, [])
 
@@ -836,7 +841,9 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // plause / play watch
         let timeout = null
         if (session && isPaused) {
-            timeout = setTimeout(() => { back.doBack() }, session.maximumPauseSeconds * 1000)
+            timeout = setTimeout(() => {
+                back.doBack()
+            }, session.maximumPauseSeconds * 1000)
         }
         return () => { clearTimeout(timeout) }
     }, [session, isPaused])
@@ -857,7 +864,7 @@ const Player = ({ ...rest }) => {
                 if (!_PLAY_TEST_) {
                     onNextEp(endEvent)
                 }
-            }, 1000 * 3)
+            }, 1000 * 2)
         }
         return () => clearTimeout(timeout)
     }, [endEvent, onNextEp, audios])
@@ -892,7 +899,8 @@ const Player = ({ ...rest }) => {
         /** @type {Function} */
         const processFn = update => {
             for (const type of availableEvents) {
-                if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 10)) {
+                if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 15)
+                    && update.time > 0) {
                     setCurrentSkipEvent(oldValue => {
                         if (oldValue !== skipEvents[type]) {
                             playerCompRef.current.hideControls()
@@ -903,7 +911,7 @@ const Player = ({ ...rest }) => {
                                 }
                             }, 100)
                             clearTimeout(timeout)
-                            timeout = setTimeout(() => setCurrentSkipEvent(resetCurrentSkipEvent), 1000 * 10)
+                            timeout = setTimeout(() => setCurrentSkipEvent(resetCurrentSkipEvent), 1000 * 15)
                         }
                         return skipEvents[type]
                     })
