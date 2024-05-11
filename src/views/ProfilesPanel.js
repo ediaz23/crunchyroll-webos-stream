@@ -5,6 +5,8 @@ import Heading from '@enact/ui/Heading'
 import Spotlight from '@enact/spotlight'
 import { Header, Panel } from '@enact/moonstone/Panels'
 import Spinner from '@enact/moonstone/Spinner'
+import Button from '@enact/moonstone/Button'
+import Icon from '@enact/moonstone/Icon'
 import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
@@ -87,6 +89,19 @@ const ProfilesPanel = ({ ...rest }) => {
     }, [getProfileFromEvent, setCurrentProfile, setPath])
 
     /** @type {Function} */
+    const onCreateProfile = useCallback(() => {
+        const mainProfile = multiProfile.profiles.find(p => p.is_primary)
+        setCurrentProfile({
+            ...mainProfile,
+            is_primary: false,
+            profile_id: null,
+            profile_name: ''
+        })
+        back.pushHistory({ doBack: () => { setPath('/profiles') } })
+        setPath('/profiles/edit')
+    }, [multiProfile, setCurrentProfile, setPath])
+
+    /** @type {Function} */
     const setFocus = useCallback(ev => {
         if (ev && ev.node && multiProfile && multiProfile.profiles.length) {
             if (ev.node.dataset.profileId === multiProfile.profiles[0].profile_id) {
@@ -102,16 +117,17 @@ const ProfilesPanel = ({ ...rest }) => {
         }
     }, [multiProfile, doSelectProfile])
 
-    useEffect(() => { api.account.getProfiles().then(setMultiProfile) }, [])
+    useEffect(() => {
+        api.account.getProfiles().then(setMultiProfile)
+    }, [])
 
-    const rowStyle = { marginTop: '1rem' }
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
                 <ContactMe origin='profiles' />
                 <Logout />
             </Header>
-            <Column align='center center'>
+            <Column align='center'>
                 {!loading && multiProfile && multiProfile.profiles.length ?
                     <>
                         <Row align='center center'>
@@ -119,7 +135,7 @@ const ProfilesPanel = ({ ...rest }) => {
                                 {$L('Who will go on an adventure?')}
                             </Heading>
                         </Row>
-                        <Row align='center center' style={rowStyle}>
+                        <Row align='center center' style={{ marginTop: '1rem' }}>
                             {multiProfile.profiles.map((profile, i) =>
                                 <Profile profile={profile} key={i}
                                     onSelectProfile={onSelectProfile}
@@ -127,9 +143,16 @@ const ProfilesPanel = ({ ...rest }) => {
                                     compRef={setFocus} />
                             )}
                         </Row>
-                        <Row align='center center' style={rowStyle}>
-                            <Logout text={$L('Logout')} />
-                        </Row>
+                        {multiProfile.profiles.length < multiProfile.max_profiles &&
+                            <Row align='center center' style={{ marginTop: '3rem' }}>
+                                <Button onClick={onCreateProfile}>
+                                    <Icon style={{ marginRight: '0.5rem' }}>
+                                        plus
+                                    </Icon>
+                                    {$L('Add')}
+                                </Button>
+                            </Row>
+                        }
                     </>
                     :
                     <Spinner />
@@ -140,4 +163,3 @@ const ProfilesPanel = ({ ...rest }) => {
 }
 
 export default ProfilesPanel
-

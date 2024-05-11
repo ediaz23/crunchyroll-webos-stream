@@ -17,7 +17,9 @@ const ContentInfo = ({ content }) => {
     const [showSubPopup, setShowSubPopup] = useState(false)
 
     /** @type {Function} */
-    const onHideSubPopup = useCallback(() => { back.doBack() }, [])
+    const onHideSubPopup = useCallback(() => {
+        back.doBack()
+    }, [])
 
     /** @type {Function} */
     const onShowSubPopup = useCallback(() => {

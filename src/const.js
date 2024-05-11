@@ -26,6 +26,7 @@ export const ERROR_CODES = {
     invalid_refresh_token: 'auth.obtain_access_token.oauth2_error',
     invalid_auth_token: 'accounts.get_profile.invalid_auth_token',
     invalid_client: 'auth.obtain_access_token.client_inactive',
+    create_profile_error: 'accounts.create_multi_profile.data_validation_error',
 }
 
 export default {}

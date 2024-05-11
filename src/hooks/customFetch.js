@@ -179,7 +179,7 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
  * Function to bypass cors issues
  * @param {String} url
  * @param {RequestInit} [options]
- * * @param {Boolean} [direct]
+ * * @param {Boolean} [direct] turn on return response as raw content
  * @returns {Promise<Response>}
  */
 export const customFetch = async (url, options = {}, direct = false) => {

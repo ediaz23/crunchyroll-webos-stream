@@ -1,17 +1,7 @@
 
-import { localStore } from 'crunchyroll-js-api'
-import { customFetch } from '../hooks/customFetch'
-
-
-/**
- * Expand a sort url
- * @param {String} url
- * @return {Promise<Response>}
- */
-export const fetchAuth = async (url) => {
-    const token = await localStore.getAuthToken()
-    return customFetch(url, { headers: { Autorization: token } })
-}
+import { fetchAuth } from './utils'
+import { LOAD_MOCK_DATA } from '../const'
+import { getMockData } from '../mock-data/mockData'
 
 
 /**
@@ -19,8 +9,14 @@ export const fetchAuth = async (url) => {
  * @returns {Promise<Array<String>>}
  */
 export const getAudioLangList = async () => {
-    const res = await fetchAuth('https://static.crunchyroll.com/config/i18n/v3/audio_languages.json')
-    const data = await res.json()
+    let data
+    if (LOAD_MOCK_DATA) {
+        data = await getMockData('audios')
+        delete data.default
+    } else {
+        const res = await fetchAuth('https://static.crunchyroll.com/config/i18n/v3/audio_languages.json')
+        data = await res.json()
+    }
     return ["ja-JP", ...Object.keys(data)]
 }
 
@@ -30,8 +26,14 @@ export const getAudioLangList = async () => {
  * @returns {Promise<Array<String>>}
  */
 export const getSubtitleLangList = async () => {
-    const res = await fetchAuth('https://static.crunchyroll.com/config/i18n/v3/timed_text_languages.json')
-    const data = await res.json()
+    let data
+    if (LOAD_MOCK_DATA) {
+        data = await getMockData('languages')
+        delete data.default
+    } else {
+        const res = await fetchAuth('https://static.crunchyroll.com/config/i18n/v3/timed_text_languages.json')
+        data = await res.json()
+    }
     return ['off', ...Object.keys(data)]
 }
 

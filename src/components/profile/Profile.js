@@ -30,7 +30,7 @@ const Profile = ({ profile, onSelectProfile, onEditProfile, compRef, ...rest }) 
                     <ImageNavigable
                         data-profile-id={profile.profile_id}
                         className={css.profileImg}
-                        src={api.assets.getAvatarUrl(profile)}
+                        src={api.assets.getAvatarUrl(profile.avatar)}
                         alt={$L('Profile Picture')}
                         onClick={onSelectProfile}
                         ref={compRef} />

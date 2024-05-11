@@ -29,8 +29,8 @@ export const getProfiles = async () => {
     try {
         if (LOAD_MOCK_DATA) {
             profile = {
-                max_profiles: 1,
-                tier_max_profiles: 1,
+                max_profiles: 2,
+                tier_max_profiles: 2,
                 profiles: [await getMockData('profile')]
             }
             const account = await getAccount()
@@ -55,4 +55,23 @@ export const updateProfile = async (profile) => {
     } catch (error) {
         await translateError(error)
     }
+}
+
+/**
+ * get usernames
+ * @returns {Promise<Array<String>>}
+ */
+export const getUsernames = async () => {
+    /** @type {{usernames: Array<String>}} */
+    let resUsernames
+    try {
+        if (LOAD_MOCK_DATA) {
+            resUsernames = await getMockData('usernames')
+        } else {
+            resUsernames = await api.account.getUsernames({ token: await localStore.getAuthToken() })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return resUsernames.usernames
 }

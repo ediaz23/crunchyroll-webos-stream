@@ -1,4 +1,6 @@
 {
+    "profile_name": "Midoriya",
+    "username": "deku23",
     "avatar": "16-the-god-of-high-school-jin-mori.png",
     "cr_beta_opt_in": true,
     "crleg_email_verified": true,
@@ -15,5 +17,7 @@
     "preferred_communication_language": "es-419",
     "preferred_content_audio_language": "ja-JP",
     "preferred_content_subtitle_language": "es-419",
-    "qa_user": false
+    "qa_user": false,
+    "email": "some@host.com",
+    "is_primary": true
 }
