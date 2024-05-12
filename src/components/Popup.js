@@ -3,6 +3,7 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import Popup, { PopupBase } from '@enact/moonstone/Popup'
 import Skinnable from '@enact/moonstone/Skinnable'
 import Heading from '@enact/moonstone/Heading'
+import Spotlight from '@enact/spotlight'
 
 import PropTypes from 'prop-types'
 
@@ -11,7 +12,7 @@ import back from '../back'
 
 export const PopupBaseSkin = Skinnable({ defaultSkin: 'dark' }, PopupBase)
 
-const PopupMessage = ({ type, show, children, setShowPopup: callBack }) => {
+const PopupMessage = ({ type, show, children, setShowPopup: callBack, onClose }) => {
     /** @type {[Boolean, Function]} */
     const [showPopup, setShowPopup] = useState(false)
     /** @type {Object} */
@@ -30,7 +31,11 @@ const PopupMessage = ({ type, show, children, setShowPopup: callBack }) => {
     /** @type {Function} */
     const onHideSubPopup = useCallback(() => {
         back.doBack()
-    }, [])
+        if (onClose) {
+            onClose()
+        }
+        setTimeout(() => Spotlight.focus(), 100)
+    }, [onClose])
 
     const togglePopup = useCallback((newVal) => {
         setShowPopup(oldVar => {
@@ -83,10 +88,7 @@ PopupMessage.propTypes = {
     ]),
     type: PropTypes.oneOf(['info', 'error', 'warn']),
     setShowPopup: PropTypes.func,
+    onClose: PropTypes.func,
 }
-
-//PopupMessage.defaultProps = {
-//    noExpand: false,
-//}
 
 export default PopupMessage

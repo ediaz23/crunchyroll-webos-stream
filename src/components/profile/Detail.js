@@ -1,6 +1,9 @@
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { Row, Column } from '@enact/ui/Layout'
+import FloatingLayer from '@enact/ui/FloatingLayer'
+import ri from '@enact/ui/resolution'
+import Spotlight from '@enact/spotlight'
 import Heading from '@enact/moonstone/Heading'
 import Dropdown from '@enact/moonstone/Dropdown'
 import Input from '@enact/moonstone/Input'
@@ -10,6 +13,8 @@ import Button from '@enact/moonstone/Button'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import Spinner from '@enact/moonstone/Spinner'
+import { VirtualGridList } from '@enact/moonstone/VirtualList'
+import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import PropTypes from 'prop-types'
 import Locale from 'ilib/lib/Locale'
 
@@ -17,6 +22,7 @@ import { $L } from '../../hooks/language'
 import Field from '../Field'
 import SelectLanguage from '../SelectLanguage'
 import Alert from '../Alert'
+import PopupMessage from '../Popup'
 import css from './Detail.module.less'
 import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
@@ -42,18 +48,32 @@ const useSaveProfileField = ({ setProfile, field }) => {
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Function} obj.setProfile
  * @param {Array<String>} obj.usernames
+ * @param {Function} obj.onShowSelectAvatar
  */
-const ProfileInfo = ({ profile, setProfile, usernames }) => {
+const ProfileInfo = ({ profile, setProfile, usernames, onShowSelectAvatar }) => {
+    /** @type {[Boolean, Function]} */
+    const [inputInvalid, setInputInvalid] = useState(false)
     /** @type {Function} */
     const saveName = useSaveProfileField({ setProfile, field: 'profile_name' })
     /** @type {Function} */
     const saveUsername = useSaveProfileField({ setProfile, field: 'username' })
     /** @type {Function} */
-    const onChangeName = useCallback(({ value }) => saveName(value), [saveName])
+    const onChangeName = useCallback(({ value }) => {
+        setInputInvalid(false)
+        saveName(value)
+    }, [saveName, setInputInvalid])
     /** @type {Function} */
     const onSelectUsername = useCallback(({ selected }) => {
         saveUsername(usernames[selected])
     }, [usernames, saveUsername])
+    /** @type {Function} */
+    const onInvalid = useCallback(() => {
+        setInputInvalid(true)
+    }, [setInputInvalid])
+
+    useEffect(() => {
+        setTimeout(() => Spotlight.focus(), 100)
+    }, [])
 
     return (
         <Column className={css.formColumn}>
@@ -63,7 +83,7 @@ const ProfileInfo = ({ profile, setProfile, usernames }) => {
                 <Image className={css.image}
                     src={api.assets.getAvatarUrl(profile.avatar)}
                     alt={$L('Profile Picture')} />
-                <IconButton className={css.button}>
+                <IconButton className={css.button} onClick={onShowSelectAvatar}>
                     edit
                 </IconButton>
             </Field>
@@ -71,9 +91,13 @@ const ProfileInfo = ({ profile, setProfile, usernames }) => {
                 <Input value={profile.profile_name}
                     className={css.input}
                     onChange={onChangeName}
+                    onInvalid={onInvalid}
+                    invalid={inputInvalid}
+                    invalidMessage={$L('Only accepts numbers and letters, at least 2 characters')}
                     pattern="[a-zA-Z0-9]{2,50}"
                     size='small'
-                    required />
+                    required
+                />
             </Field>
             <Field className={profile.profile_id ? css.textField : ''} title={$L('Username')}>
                 {profile.profile_id ?
@@ -150,8 +174,9 @@ const ProfileLang = ({ profile, setProfile, audioLangs, subtitleLangs, contentLa
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Function} obj.onShowDeleteProfile
+ * @param {Function} obj.onSave
  */
-const ProfileAction = ({ profile, onShowDeleteProfile }) => {
+const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
     /** @type {Function} */
     const getLanguage = useGetLanguage()
     /** @type {String} */
@@ -176,7 +201,7 @@ const ProfileAction = ({ profile, onShowDeleteProfile }) => {
             </Field>
             <Row className={css.actions} align='center center' size="100%">
                 <Column className={css.buttonContainer} size="100%">
-                    <Button>
+                    <Button onClick={onSave}>
                         <Icon className={css.buttonIcon}>
                             checkselection
                         </Icon>
@@ -203,33 +228,187 @@ const ProfileAction = ({ profile, onShowDeleteProfile }) => {
 }
 
 /**
+ * @todo @fixme error con la navegacion y el foco
+ * @param {Object} obj
+ * @param {Boolean} obj.open
+ * @param {Array<import('crunchyroll-js-api').Types.AssesItem>} obj.avatars
+ * @param {Function} obj.setProfile
+ */
+const AvatarGrid = ({ open, avatars, setProfile }) => {
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
+    /** @type {[Array<String>, Function]} */
+    const [albums, setAlbums] = useState([])
+    /** @type {[Number, Function]} */
+    const [albumSelected, setAlbumSelected] = useState(-1)
+    /** @type {[Array<{url: String, title: String, subTitle: String, id: String}>, Function]} */
+    const [avatarsList, setAvatarsList] = useState([])
+
+    /** @type {Function} */
+    const saveAvatar = useSaveProfileField({ setProfile, field: 'avatar' })
+
+    /** @type {Function} */
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
+
+    /** @type {Function} */
+    const onSelectItem = useCallback((ev) => {
+        if (ev.currentTarget) {
+            const index = parseInt(ev.currentTarget.dataset['index'])
+            saveAvatar(avatarsList[index].id)
+            back.doBack()
+        }
+    }, [avatarsList, saveAvatar])
+
+    /** @type {Function} */
+    const onSelectAlbum = useCallback(({ selected }) => {
+        setAlbumSelected(selected)
+    }, [setAlbumSelected])
+
+    /** @type {Function} */
+    const renderItem = useCallback(({ index, ...rest2 }) => {
+        const contentItem = avatarsList[index]
+        return (
+            <GridListImageItem
+                {...rest2}
+                data-index={index}
+                source={contentItem.url}
+                caption={contentItem.title || ''}
+                subCaption={contentItem.subTitle || ''}
+                onClick={onSelectItem}
+            />
+        )
+    }, [avatarsList, onSelectItem])
+
+    useEffect(() => {
+        setAlbums(avatars.map(item => item.title))
+        setAlbumSelected(0)
+    }, [avatars, setAlbums, setAlbumSelected])
+
+    useEffect(() => {
+        if (albumSelected >= 0) {
+            setAvatarsList(avatars[albumSelected].assets.map(item => {
+                return {
+                    id: item.id,
+                    url: api.assets.getAvatarUrl(item.id),
+                    title: avatars[albumSelected].title,
+                    subTitle: item.title,
+                }
+            }))
+        }
+    }, [avatars, albumSelected, setAvatarsList])
+
+    useEffect(() => {
+        if (avatars.length && scrollToRef.current) {
+            scrollToRef.current({ index: 0, animate: false, focus: true })
+        }
+    }, [avatars])
+
+    useEffect(() => {
+        setTimeout(() => Spotlight.focus(), 100)
+    }, [])
+
+    return (
+        <FloatingLayer open={open} noAutoDismiss
+            style={{ backgroundColor: '#000000', padding: '1.6rem' }}>
+            <Column>
+                <Dropdown title={$L('Albums')}
+                    selected={albumSelected}
+                    width='x-large'
+                    onSelect={onSelectAlbum}
+                    style={{ marginBottom: '1rem' }}>
+                    {albums}
+                </Dropdown>
+                <VirtualGridList
+                    className={css.avatarList}
+                    dataSize={avatarsList.length}
+                    itemRenderer={renderItem}
+                    itemSize={{ minHeight: ri.scale(200), minWidth: ri.scale(200) }}
+                    spacing={ri.scale(25)}
+                    cbScrollTo={getScrollTo}
+                />
+            </Column>
+        </FloatingLayer>
+    )
+}
+
+/**
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.oldProfile
+ * @returns {Promise}
+ */
+const saveProfile = async ({ profile, oldProfile }) => {
+    const fields = [
+        'profile_name', 'username', 'avatar', 'wallpaper',
+        'maturity_rating',
+        'preferred_communication_language',
+        'preferred_content_audio_language',
+        'preferred_content_subtitle_language']
+    let body = {}
+    if (oldProfile.profile_id) {
+        for (const field of fields) {
+            if (profile[field] !== oldProfile[field]) {
+                body[field] = profile[field]
+            }
+        }
+    } else {
+        for (const field of fields) {
+            body[field] = profile[field]
+        }
+    }
+    if (Object.keys(body).length) {
+        if (oldProfile.profile_id) {
+            await api.account.updateProfile(oldProfile.profile_id, body)
+        } else {
+            await api.account.createProfile(body)
+        }
+    }
+}
+
+/**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Array<import('../SelectLanguage').LangTuple>} obj.audioLangs
  * @param {Array<import('../SelectLanguage').LangTuple>} obj.subtitleLangs
  * @param {Array<import('../SelectLanguage').LangTuple>} obj.contentLangs
  * @param {Array<String>} obj.usernames
+ * @param {Array<import('crunchyroll-js-api').Types.AssesItem>} obj.avatars
  */
-const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, contentLangs, usernames }) => {
+const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, contentLangs, usernames, avatars }) => {
+    /** @type {{current: HTMLFormElement}} */
+    const formRef = useRef(null)
     /** @type {[import('crunchyroll-js-api').Types.Profile, Function]} */
     const [profile, setProfile] = useState(profileBase)
+    /** @type {[String, Function]}  */
+    const [message, setMessage] = useState('')
     /** @type {[Boolean, Function]} */
     const [askDelete, setAskDelete] = useState(false)
+    /** @type {[Boolean, Function]} */
+    const [selectAvatar, setSelectAvatar] = useState(false)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(false)
 
     /** @type {Function} */
-    const deleteProfile = useCallback(() => {
-        back.doBack()
-        setLoading(true)
-        /**
-         * @todo borrar y regresar
-         */
-    }, [setLoading])
+    const onClosePopup = useCallback(() => setMessage(''), [setMessage])
+
+    const onShowSelectAvatar = useCallback(() => {
+        back.pushHistory({
+            doBack: () => {
+                setSelectAvatar(false)
+                setTimeout(() => Spotlight.focus(), 100)
+            }
+        })
+        setSelectAvatar(true)
+    }, [setSelectAvatar])
 
     /** @type {Function} */
     const onShowDeleteProfile = useCallback(() => {
-        back.pushHistory({ doBack: () => { setAskDelete(false) } })
+        back.pushHistory({
+            doBack: () => {
+                setAskDelete(false)
+                setTimeout(() => Spotlight.focus(), 100)
+            }
+        })
         setAskDelete(true)
     }, [setAskDelete])
 
@@ -238,17 +417,37 @@ const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, conten
         back.doBack()
     }, [])
 
-    // avatars
+    /** @type {Function} */
+    const deleteProfile = useCallback(() => {
+        back.doBack()
+        setLoading(true)
+        api.account.deleteProfile(profile.profile_id)
+            .then(() => back.doBack())
+            .catch(err => setMessage(err.message))
+            .finally(() => setLoading(false))
+    }, [profile, setLoading, setMessage])
+
+    /** @type {Function} */
+    const onSave = useCallback(() => {
+        if (formRef.current.checkValidity()) {
+            setLoading(true)
+            saveProfile({ profile, oldProfile: profileBase })
+                .then(() => back.doBack())
+                .catch(err => setMessage(err.message))
+                .finally(() => setLoading(false))
+        }
+    }, [profile, setLoading, setMessage, profileBase])
 
     return (
-        <form id="profileForm" className={css.profileDetail}>
+        <form id="profileForm" className={css.profileDetail} ref={formRef}>
             <Row align='baseline space-evenly' className={css.formContent}>
                 {!loading ?
                     <>
                         <ProfileInfo
                             profile={profile}
                             usernames={usernames}
-                            setProfile={setProfile} />
+                            setProfile={setProfile}
+                            onShowSelectAvatar={onShowSelectAvatar} />
                         <ProfileLang
                             profile={profile}
                             setProfile={setProfile}
@@ -257,12 +456,20 @@ const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, conten
                             subtitleLangs={subtitleLangs} />
                         <ProfileAction
                             profile={profile}
-                            onShowDeleteProfile={onShowDeleteProfile} />
+                            onShowDeleteProfile={onShowDeleteProfile}
+                            onSave={onSave} />
                     </>
                     :
                     <Spinner />
                 }
             </Row>
+            <AvatarGrid
+                open={selectAvatar}
+                avatars={avatars}
+                setProfile={setProfile} />
+            <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
+                {message}
+            </PopupMessage>
             <Alert open={askDelete}
                 title={$L('Delete Profile')}
                 message={$L('Are you sure you want to delete this profile?')}

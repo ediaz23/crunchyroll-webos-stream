@@ -55,7 +55,7 @@ export const translateError = async (error) => {
             if (error.context && Array.isArray(error.context)) {
                 extra = error.context.filter(e => e.field).map(e => e.field).join(', ')
                 if (extra) {
-                    extra += ' '
+                    extra = ' ' + $L('Check out') + ': ' + extra
                 }
             }
             newError = new CrunchyrollError($L('Error creating profile.') + extra, error.code)

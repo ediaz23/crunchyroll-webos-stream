@@ -45,17 +45,51 @@ export const getProfiles = async () => {
 }
 
 /**
- * Update a profile
+ * create a profile
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @returns {Promise}
  */
-export const updateProfile = async (profile) => {
+export const createProfile = async (profile) => {
+    let res
     try {
-        await api.account.updateProfile({ token: await localStore.getAuthToken(), data: profile })
+        const token = await localStore.getAuthToken()
+        res = await api.account.createMultiProfile({ token, data: profile })
+    } catch (error) {
+        await translateError(error)
+    }
+    return res
+}
+
+/**
+ * Update a profile
+ * @param {String} profileId
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @returns {Promise}
+ */
+export const updateProfile = async (profileId, profile) => {
+    try {
+        const token = await localStore.getAuthToken()
+        await api.account.updateMultiProfile({ profileId, token, data: profile })
     } catch (error) {
         await translateError(error)
     }
 }
+
+/**
+ * Update a profile
+ * @param {String} profileId
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @returns {Promise}
+ */
+export const deleteProfile = async (profileId) => {
+    try {
+        const token = await localStore.getAuthToken()
+        await api.account.deleteMultiProfile({ profileId, token })
+    } catch (error) {
+        await translateError(error)
+    }
+}
+
 
 /**
  * get usernames

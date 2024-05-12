@@ -14,6 +14,16 @@ import { $L } from '../hooks/language'
 import css from './Alert.module.less'
 
 
+/**
+ * @todo @fixme error con la navegacion y el foco
+ * @param {Object} obj
+ * @param {Boolean} obj.open
+ * @param {String} obj.title
+ * @param {String} obj.message
+ * @param {Function} obj.onCancel
+ * @param {Function} obj.onAccept
+ * @param {Function} obj.forwardedRef
+ */
 export const AlertBase = ({ open, title, message, onCancel, onAccept, forwardedRef, ...rest }) => {
 
     /** @type {{current: HTMLElement}} */
@@ -40,12 +50,14 @@ export const AlertBase = ({ open, title, message, onCancel, onAccept, forwardedR
                     <Button onClick={onAccept}>{$L('Accept')}</Button>
                 </Row>
             </Column>
-        </FloatingLayer >
+        </FloatingLayer>
     )
 }
 
 export const AlertSpot = SpotlightContainerDecorator(AlertBase)
+
 export const AlertSkin = Skinnable({ defaultSkin: 'light' }, AlertSpot)
+
 const Alert = forwardRef((props, ref) => (<AlertSkin {...props} forwardedRef={ref} />))
 
 Alert.propTypes = {

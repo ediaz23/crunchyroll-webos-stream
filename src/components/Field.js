@@ -25,6 +25,7 @@ const Field = ({ title, children, ...rest }) => {
 Field.propTypes = {
     title: PropTypes.string,
     children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.object),
         PropTypes.object,
         PropTypes.string,
     ]).isRequired,
