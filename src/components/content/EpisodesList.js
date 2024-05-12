@@ -9,14 +9,14 @@ import BodyText from '@enact/moonstone/BodyText'
 import VirtualList from '@enact/moonstone/VirtualList'
 import Image from '@enact/moonstone/Image'
 
-import Navigable from '../../wrappers/Navigable'
+import withNavigable from '../../hooks/navigable'
 import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentDetail.module.less'
 import globalCss from '../Share.module.less'
 
 
-const NavigableDiv = Navigable('div', '')
+const NavigableDiv = withNavigable('div', '')
 
 /**
  * Render an item

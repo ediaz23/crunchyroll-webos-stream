@@ -11,13 +11,13 @@ import VirtualListNested from '../../patch/VirtualListNested'
 import { homeViewReadyState, homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
-import Navigable from '../../wrappers/Navigable'
+import withNavigable from '../../hooks/navigable'
 import { formatDurationMs, getDuration } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 
-const NavigableDiv = Navigable('div', '')
+const NavigableDiv = withNavigable('div', '')
 
 
 export const Poster = ({ item, image, itemSize, ...rest }) => {

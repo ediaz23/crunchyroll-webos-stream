@@ -7,11 +7,11 @@ import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
 import css from './Profile.module.less'
-import Navigable from '../../wrappers/Navigable'
+import withNavigable from '../../hooks/navigable'
 import api from '../../api'
 
 
-const ImageNavigable = Navigable(Image, css.profileFocus)
+const ImageNavigable = withNavigable(Image, css.profileFocus)
 
 /**
  * @param {Object} obj

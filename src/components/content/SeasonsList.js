@@ -8,11 +8,11 @@ import VirtualList from '@enact/moonstone/VirtualList'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
-import Navigable from '../../wrappers/Navigable'
+import withNavigable from '../../hooks/navigable'
 import css from './ContentDetail.module.less'
 
 
-const NavigableDiv = Navigable('div')
+const NavigableDiv = withNavigable('div')
 
 /**
  * Render an item

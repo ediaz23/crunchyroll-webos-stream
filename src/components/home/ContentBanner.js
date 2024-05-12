@@ -13,7 +13,7 @@ import { currentProfileState } from '../../recoilConfig'
 import api from '../../api'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentBanner.module.less'
-import Navigable from '../../wrappers/Navigable'
+import withNavigable from '../../hooks/navigable'
 
 
 /**
@@ -177,7 +177,7 @@ ContentHeader.propTypes = {
     noCategory: PropTypes.bool,
 }
 
-const RowNavigable = Navigable(Row, css.active)
+const RowNavigable = withNavigable(Row, css.active)
 
 
 const HomeContentBanner = ({ content, noCategory, ...rest }) => {

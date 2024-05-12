@@ -10,11 +10,11 @@ import Marquee from '@enact/moonstone/Marquee'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import Navigable from '../../wrappers/Navigable'
+import withNavigable from '../../hooks/navigable'
 import css from './Toolbar.module.less'
 
 
-const NavigableDiv = Navigable('div', css.iconFocus)
+const NavigableDiv = withNavigable('div', css.iconFocus)
 
 const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
 
