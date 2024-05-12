@@ -1,48 +1,22 @@
 
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import IconButton from '@enact/moonstone/IconButton'
-import { PopupBase } from '@enact/moonstone/Popup'
-import FloatingLayer from '@enact/ui/FloatingLayer'
-import Skinnable from '@enact/moonstone/Skinnable'
 
 import { $L } from '../../hooks/language'
 import HomeContentBanner from '../home/ContentBanner'
-import back from '../../back'
+import PopupMessage from '../Popup'
 
 
-const PopupBaseSkin = Skinnable({ defaultSkin: 'dark' }, PopupBase)
 
 const ContentInfo = ({ content }) => {
-    /** @type {[Boolean, Function]} */
-    const [showSubPopup, setShowSubPopup] = useState(false)
-
-    /** @type {Function} */
-    const onHideSubPopup = useCallback(() => {
-        back.doBack()
-    }, [])
-
-    /** @type {Function} */
-    const onShowSubPopup = useCallback(() => {
-        setShowSubPopup(oldVar => {
-            if (oldVar) {
-                back.doBack()
-            } else {
-                back.pushHistory({ doBack: () => { setShowSubPopup(false) } })
-            }
-            return !oldVar
-        })
-    }, [setShowSubPopup])
+    /** @type {[Function, Function]} */
+    const [onShowSubPopup, setOnShowSubPopup] = useState(undefined)
 
     return (
         <>
-            <FloatingLayer open={showSubPopup}
-                onDismiss={onHideSubPopup}>
-                <PopupBaseSkin open={showSubPopup}
-                    onCloseButtonClick={onHideSubPopup}
-                    showCloseButton>
-                    <HomeContentBanner content={content} noCategory />
-                </PopupBaseSkin>
-            </FloatingLayer>
+            <PopupMessage setShowPopup={setOnShowSubPopup}>
+                <HomeContentBanner content={content} noCategory spotlightDisabled />
+            </PopupMessage>
             <IconButton
                 backgroundOpacity="lightTranslucent"
                 onClick={onShowSubPopup}

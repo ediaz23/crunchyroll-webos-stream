@@ -9,7 +9,7 @@ import { useSetRecoilState, useRecoilState } from 'recoil'
 import { $L } from '../hooks/language'
 import Login from '../components/login/Login'
 import ContactMe from '../components/login/ContactMe'
-import Message from '../components/Message'
+import PopupMessage from '../components/Popup'
 import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
 import api from '../api'
 
@@ -41,10 +41,13 @@ const LoginPanel = ({ ...rest }) => {
     const doLogin = useCallback(async () => {
         if (email && password) {
             try {
+                setLoading(true)
                 await api.auth.setCredentials({ username: email, password })
                 await makeLogin()
             } catch (error) {
                 setMessage(error.message)
+            } finally {
+                setLoading(false)
             }
         } else {
             setMessage($L('Please enter a valid email and password'))
@@ -95,10 +98,10 @@ const LoginPanel = ({ ...rest }) => {
                         <Login {...{ email, changeEmail, password, changePassword, doLogin, message }} />
                     }
                 </Row>
-                <Row align='center center' style={{ marginTop: '1rem' }}>
-                    <Message type={message ? 'error' : 'empty'} message={message} />
-                </Row>
             </Column>
+            <PopupMessage show={!!message} type='error'>
+                {message}
+            </PopupMessage>
         </Panel>
     )
 }
