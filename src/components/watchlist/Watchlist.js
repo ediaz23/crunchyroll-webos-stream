@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import HomeContentBanner from '../home/ContentBanner'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
-import withContentList from '../../hooks/contentList'
+import useContentList from '../../hooks/contentList'
 
 
 /**
@@ -32,15 +32,14 @@ const processResult = async ({ profile, data }) => {
  * Watch list view
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  */
-const Watchlist = ({ profile, viewProps, ...rest }) => {
+const Watchlist = ({ profile, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak,
         loading, setLoading,
-    } = viewProps
+    } = useContentList()
 
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
@@ -109,7 +108,7 @@ const Watchlist = ({ profile, viewProps, ...rest }) => {
                     </Cell>
                     <Cell grow>
                         <ContentGridItems
-                            contentList={viewProps.contentList}
+                            contentList={contentList}
                             load={onLoad}
                             onLeave={onLeaveView}
                             autoScroll={autoScroll}
@@ -124,7 +123,6 @@ const Watchlist = ({ profile, viewProps, ...rest }) => {
 
 Watchlist.propTypes = {
     profile: PropTypes.object.isRequired,
-    viewProps: PropTypes.object.isRequired,
 }
 
-export default withContentList(Watchlist)
+export default Watchlist

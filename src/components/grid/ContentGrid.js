@@ -10,7 +10,7 @@ import { $L } from '../../hooks/language'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'
 import api from '../../api'
-import withContentList from '../../hooks/contentList'
+import useContentList from '../../hooks/contentList'
 import css from './ContentGrid.module.less'
 
 
@@ -32,7 +32,6 @@ import css from './ContentGrid.module.less'
  * All content grid and search
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  * @param {String} obj.title title for view
  * @param {String} obj.contentKey key to identify and reload view
  * @param {String} obj.contentType type of content to show, series, movies, etc
@@ -40,14 +39,13 @@ import css from './ContentGrid.module.less'
  * @param {Boolean} obj.noCategory Not show category
  * @param {Boolean} obj.noSearch Not show input
  */
-const ContentGrid = ({ profile, viewProps, title,
-    contentKey, contentType, engine, noCategory, noSearch, ...rest }) => {
+const ContentGrid = ({ profile, title, contentKey, contentType, engine, noCategory, noSearch, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
         loading, setLoading,
-    } = viewProps
+    } = useContentList()
 
     /** @type {[String, Function]} */
     const [category, setCategory] = useState(optionBak.category || 'all')
@@ -194,7 +192,6 @@ const ContentGrid = ({ profile, viewProps, title,
 
 ContentGrid.propTypes = {
     profile: PropTypes.object.isRequired,
-    viewProps: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     contentKey: PropTypes.string.isRequired,
     contentType: PropTypes.string,
@@ -206,6 +203,4 @@ ContentGrid.defaultProps = {
     engine: 'browse'
 }
 
-const ContentGridList = withContentList(ContentGrid)
-
-export default ContentGridList
+export default ContentGrid

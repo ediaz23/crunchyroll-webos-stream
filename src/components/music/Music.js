@@ -10,29 +10,26 @@ import { $L } from '../../hooks/language'
 import HomeFeed from '../home/Feed'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
-import withContentList from '../../hooks/contentList'
+import useContentList from '../../hooks/contentList'
 
 
 /**
  * Music view
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  * @param {String} obj.title title for view
  * @param {String} obj.contentKey key to identify and reload view
  * @param {String} obj.contentType type of content to show, series, movies, etc
  * @param {Array<Object>} obj.musicFeed Music feed array
  * @param {Function} obj.setMusicFeed setState for musicFeed
  */
-const MusicBrowse = ({ profile, viewProps, title,
-    contentKey, contentType,
-    musicFeed, setMusicFeed, ...rest }) => {
+const MusicBrowse = ({ profile, title, contentKey, contentType, musicFeed, setMusicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
         loading, setLoading,
-    } = viewProps
+    } = useContentList()
 
     /** @type {[String, Function]} */
     const [query, setQuery] = useState(optionBak.query || '')
@@ -163,4 +160,4 @@ MusicBrowse.defaultProps = {
     contentType: 'music'
 }
 
-export default withContentList(MusicBrowse)
+export default MusicBrowse

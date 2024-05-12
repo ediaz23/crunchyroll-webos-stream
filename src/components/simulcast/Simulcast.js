@@ -11,7 +11,7 @@ import { $L } from '../../hooks/language'
 import ContentGridItems from '../grid/ContentGridItems'
 import api from '../../api'
 import css from '../grid/ContentGrid.module.less'
-import withContentList from '../../hooks/contentList'
+import useContentList from '../../hooks/contentList'
 
 
 /**
@@ -27,16 +27,15 @@ import withContentList from '../../hooks/contentList'
  * Simulcast view
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {import('../../hooks/contentList').ListViewProps} obj.viewProps base view props
  * @param {String} obj.title title for view
  */
-const Simulcast = ({ profile, viewProps, title, ...rest }) => {
+const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
         loading, setLoading,
-    } = viewProps
+    } = useContentList()
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(optionBak.season || undefined)
@@ -191,8 +190,7 @@ const Simulcast = ({ profile, viewProps, title, ...rest }) => {
 
 Simulcast.propTypes = {
     profile: PropTypes.object.isRequired,
-    viewProps: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
 }
 
-export default withContentList(Simulcast)
+export default Simulcast
