@@ -78,7 +78,7 @@
         "@enact/ui": "^4.8.0",
         "@enact/webos": "^4.8.0",
         "classnames": "^2.5.1",
-        "crunchyroll-js-api": "^1.2.8",
+        "crunchyroll-js-api": "^1.2.9",
         "dashjs": "^4.7.4",
         "fake-xml-http-request": "^2.1.2",
         "i18n-iso-countries": "^7.11.1",
