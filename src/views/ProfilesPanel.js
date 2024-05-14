@@ -83,10 +83,14 @@ const ProfilesPanel = ({ ...rest }) => {
 
     /** @type {Function} */
     const onEditProfile = useCallback(event => {
-        setCurrentProfile(getProfileFromEvent(event))
+        const mainProfile = multiProfile.profiles.find(p => p.is_primary)
+        setCurrentProfile({
+            ...getProfileFromEvent(event),
+            email: mainProfile.email,
+        })
         back.pushHistory({ doBack: () => { setPath('/profiles') } })
         setPath('/profiles/edit')
-    }, [getProfileFromEvent, setCurrentProfile, setPath])
+    }, [multiProfile, getProfileFromEvent, setCurrentProfile, setPath])
 
     /** @type {Function} */
     const onCreateProfile = useCallback(() => {

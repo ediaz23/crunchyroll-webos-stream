@@ -4,6 +4,7 @@ import { Row, Column } from '@enact/ui/Layout'
 import FloatingLayer from '@enact/ui/FloatingLayer'
 import ri from '@enact/ui/resolution'
 import Spotlight from '@enact/spotlight'
+import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator'
 import Heading from '@enact/moonstone/Heading'
 import Dropdown from '@enact/moonstone/Dropdown'
 import Input from '@enact/moonstone/Input'
@@ -228,15 +229,14 @@ const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
 }
 
 /**
- * @todo @fixme error con la navegacion y el foco
  * @param {Object} obj
  * @param {Boolean} obj.open
  * @param {Array<import('crunchyroll-js-api').Types.AssesItem>} obj.avatars
  * @param {Function} obj.setProfile
  */
-const AvatarGrid = ({ open, avatars, setProfile }) => {
-    /** @type {{current: Function}} */
-    const scrollToRef = useRef(null)
+const AvatarGridBase = ({ open, avatars, setProfile, ...rest }) => {
+    /** @type {[Function, Function]} */
+    const [makeFocus, setMakeFocus] = useState(null)
     /** @type {[Array<String>, Function]} */
     const [albums, setAlbums] = useState([])
     /** @type {[Number, Function]} */
@@ -248,7 +248,7 @@ const AvatarGrid = ({ open, avatars, setProfile }) => {
     const saveAvatar = useSaveProfileField({ setProfile, field: 'avatar' })
 
     /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
+    const getScrollTo = useCallback((scrollTo) => { setMakeFocus(() => scrollTo) }, [])
 
     /** @type {Function} */
     const onSelectItem = useCallback((ev) => {
@@ -298,20 +298,17 @@ const AvatarGrid = ({ open, avatars, setProfile }) => {
     }, [avatars, albumSelected, setAvatarsList])
 
     useEffect(() => {
-        if (avatars.length && scrollToRef.current) {
-            scrollToRef.current({ index: 0, animate: false, focus: true })
+        if (makeFocus) {
+            makeFocus({ index: 0, animate: false, focus: true })
         }
-    }, [avatars])
-
-    useEffect(() => {
-        setTimeout(() => Spotlight.focus(), 100)
-    }, [])
+    }, [makeFocus])
 
     return (
         <FloatingLayer open={open} noAutoDismiss
-            style={{ backgroundColor: '#000000', padding: '1.6rem' }}>
+            style={{ backgroundColor: '#000000', padding: '1.6rem' }} {...rest}>
             <Column>
                 <Dropdown title={$L('Albums')}
+                    className='spottable-default'
                     selected={albumSelected}
                     width='x-large'
                     onSelect={onSelectAlbum}
@@ -330,6 +327,13 @@ const AvatarGrid = ({ open, avatars, setProfile }) => {
         </FloatingLayer>
     )
 }
+
+const AvatarGrid = SpotlightContainerDecorator({
+    enterTo: 'default-element',
+    defaultElement: '.spottable-default',
+    restrict: 'self-only',
+    leaveFor: { left: '', right: '', up: '', down: '' },
+}, AvatarGridBase)
 
 /**
  * @param {Object} obj

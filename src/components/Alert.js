@@ -15,7 +15,6 @@ import css from './Alert.module.less'
 
 
 /**
- * @todo @fixme error con la navegacion y el foco
  * @param {Object} obj
  * @param {Boolean} obj.open
  * @param {String} obj.title
@@ -25,7 +24,6 @@ import css from './Alert.module.less'
  * @param {Function} obj.forwardedRef
  */
 export const AlertBase = ({ open, title, message, onCancel, onAccept, forwardedRef, ...rest }) => {
-
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
 
@@ -39,22 +37,33 @@ export const AlertBase = ({ open, title, message, onCancel, onAccept, forwardedR
         }, 100)
     }, [])
 
-
     return (
         <FloatingLayer className={css.Alert} open={open} noAutoDismiss>
             <Column style={{ height: 'auto' }} {...rest} className={css.content} ref={forwardedRef}>
                 {title && <Heading size='medium'>{title}</Heading>}
                 {message && <Heading size="small">{message}</Heading>}
                 <Row align='baseline flex-end' ref={compRef}>
-                    {onCancel && <Button onClick={onCancel}>{$L('Cancel')}</Button>}
-                    <Button onClick={onAccept}>{$L('Accept')}</Button>
+                    {onCancel &&
+                        <Button className='spottable-default'
+                            onClick={onCancel}>
+                            {$L('Cancel')}
+                        </Button>
+                    }
+                    <Button className='spottable-default'
+                        onClick={onAccept}>
+                        {$L('Accept')}
+                    </Button>
                 </Row>
             </Column>
         </FloatingLayer>
     )
 }
 
-export const AlertSpot = SpotlightContainerDecorator(AlertBase)
+export const AlertSpot = SpotlightContainerDecorator({
+    enterTo: 'default-element',
+    restrict: 'self-only',
+    leaveFor: { left: '', right: '', up: '', down: '' },
+}, AlertBase)
 
 export const AlertSkin = Skinnable({ defaultSkin: 'light' }, AlertSpot)
 

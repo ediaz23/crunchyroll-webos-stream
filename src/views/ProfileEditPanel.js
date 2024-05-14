@@ -25,7 +25,7 @@ function getRamdomItem(pList) {
 }
 
 
-const EditProfilePanel = ({ ...rest }) => {
+const ProfileEditPanel = ({ ...rest }) => {
     /** @type {Function} */
     const mapLang = useMapLang()
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
@@ -122,4 +122,4 @@ const EditProfilePanel = ({ ...rest }) => {
     )
 }
 
-export default EditProfilePanel
+export default ProfileEditPanel

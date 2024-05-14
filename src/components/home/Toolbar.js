@@ -23,7 +23,6 @@ const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
 
     useEffect(() => {
         if (compRef && autoFocus && active) {
-            Spotlight.set(compRef.current.node.parentElement.dataset.spotlightId)
             Spotlight.focus(compRef.current.node)
         }
     }, [compRef, autoFocus, active])
@@ -62,18 +61,9 @@ const HomeToolbar = ({ toolbarList, currentIndex, hideText, autoFocus, onClick, 
         if (onLeave) {
             const { keyCode, target } = ev
             const direction = getDirection(keyCode)
-            if (direction) {
-                if (['right', 'left'].includes(direction)) {
-                    ev.stopPropagation()
-                    if (direction === 'right') {
-                        moveFocus(target, direction)
-                    }
-                } else if (direction === 'up') {
-                    if (target?.dataset?.index === '0') {
-                        ev.stopPropagation()
-                        moveFocus(target, direction)
-                    }
-                }
+            if (direction === 'right') {
+                ev.stopPropagation()
+                moveFocus(target, direction)
             }
         }
     }, [onLeave, moveFocus])
@@ -120,6 +110,9 @@ HomeToolbar.defaultProps = {
     autoFocus: false,
 }
 
-export const HomeToolbarSpotlight = SpotlightContainerDecorator(HomeToolbar)
+export const HomeToolbarSpotlight = SpotlightContainerDecorator({
+    restrict: 'self-only',
+    leaveFor: { left: '', up: '', down: '' },
+}, HomeToolbar)
 
 export default HomeToolbar
