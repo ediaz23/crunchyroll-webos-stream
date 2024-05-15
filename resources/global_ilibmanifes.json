@@ -3,14 +3,45 @@
         "localeinfo.json",
         "dateformats.json",
         "unitfmt.json",
+
+        "ar/localeinfo.json",
+        "ar/dateformats.json",
+        "ar/unitfmt.json",
+
+        "de/localeinfo.json",
+        "de/dateformats.json",
+        "de/unitfmt.json",
+        
         "en/localeinfo.json",
         "en/dateformats.json",
         "en/unitfmt.json",
+
         "es/localeinfo.json",
         "es/dateformats.json",
         "es/unitfmt.json",
+        
         "es/419/localeinfo.json",
         "es/419/dateformats.json",
-        "es/419/unitfmt.json"
+        "es/419/unitfmt.json",
+
+        "fr/localeinfo.json",
+        "fr/dateformats.json",
+        "fr/unitfmt.json",
+
+        "hi/localeinfo.json",
+        "hi/dateformats.json",
+        "hi/unitfmt.json",
+        
+        "it/localeinfo.json",
+        "it/dateformats.json",
+        "it/unitfmt.json",
+        
+        "pt/localeinfo.json",
+        "pt/dateformats.json",
+        "pt/unitfmt.json",
+        
+        "ru/localeinfo.json",
+        "ru/dateformats.json",
+        "ru/unitfmt.json"
     ]
 }

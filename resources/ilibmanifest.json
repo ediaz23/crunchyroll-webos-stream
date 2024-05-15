@@ -1,6 +1,12 @@
 {
     "files": [
+        "ar/strings.json",
+        "de/strings.json",
         "en/strings.json",
-        "es/strings.json"
+        "es/strings.json",
+        "fr/strings.json",
+        "hi/strings.json",
+        "it/strings.json",
+        "pt/strings.json"
     ]
 }

@@ -81,7 +81,7 @@
         "crunchyroll-js-api": "^1.2.9",
         "dashjs": "^4.7.4",
         "fake-xml-http-request": "^2.1.2",
-        "i18n-iso-countries": "^7.11.1",
+        "i18n-iso-countries": "^7.11.2",
         "i18n-iso-m49": "^1.0.0",
         "ilib": "^14.20.0",
         "prop-types": "^15.8.1",
@@ -89,7 +89,7 @@
         "react-dom": "^18.2.0",
         "recoil": "^0.7.7",
         "uuid": "^9.0.1",
-        "web-vitals": "^3.5.2",
+        "web-vitals": "^4.0.0",
         "webostvjs": "^1.2.5"
     },
     "resolutions": {

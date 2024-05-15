@@ -14,6 +14,7 @@ gulp.task('clean-ilib', (cb) => {
         fs.writeFileSync(realManifest, content, 'utf8')
         cb()
     } catch (err) {
+        console.error(err)
         cb(err)
     }
 })
@@ -43,6 +44,7 @@ gulp.task('copy-in18', (cb) => {
         }
         cb()
     } catch (err) {
+        console.error(err)
         cb(err)
     }
 })
@@ -52,26 +54,29 @@ gulp.task('clean', () =>
         .then(deleteAsync('dist/**', { force: true }))
 )
 
-gulp.task('pack', cb =>
+gulp.task('pack', cb => {
     exec('npm run pack', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
-)
+})
 
-gulp.task('pack-p', cb =>
+gulp.task('pack-p', cb => {
     exec('npm run pack-p', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
-)
+})
 
 gulp.task('installService', cb => {
     exec('NODE_ENV=development npm install --prefix=./service', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
 })
@@ -80,6 +85,7 @@ gulp.task('buildService', cb => {
     exec('npm run build --prefix=./service', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
 })
@@ -88,6 +94,7 @@ gulp.task('buildService-p', cb => {
     exec('npm run build-p --prefix=./service', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
 })
@@ -96,6 +103,7 @@ gulp.task('app', cb => {
     exec('ares-package --no-minify dist/ ./service/dist -o bin/', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
 })
@@ -104,6 +112,7 @@ gulp.task('app-p', cb => {
     exec('ares-package dist/ ./service/dist -o bin/', (err, stdout, stderr) => {
         console.log(stdout)
         console.log(stderr)
+        if (err) { console.error(err) }
         cb(err)
     })
 })
