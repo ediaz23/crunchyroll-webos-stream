@@ -14,7 +14,7 @@ const config = {
             list: ['$L'],
             extensions: ['.js']
         },
-        lngs: ['en', 'es'],
+        lngs: ['en', 'es', 'ar', 'de', 'fr', 'hi', 'it', 'pt', 'ru'],
         ns: ['strings'],
         defaultLng: 'en',
         defaultNs: 'strings',

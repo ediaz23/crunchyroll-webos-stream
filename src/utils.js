@@ -1,5 +1,8 @@
 
 import 'webostvjs'
+import 'i18n-iso-m49'
+import 'i18n-iso-countries'
+import '@cospired/i18n-iso-languages'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -126,6 +129,53 @@ export const loadLibData = async (file) => {
 }
 
 /**
+ * Load data from translation lib
+ * @param {Promise<Object>} prom
+ * @param {Function} fn
+ * @returns {Object}
+ */
+export const loadBrowserTranslate = async (prom, fn) => {
+    let out = {}
+    try {
+        out = await prom
+    } catch (e) {
+        console.error(e)
+        if (fn) {
+            try {
+                loadBrowserTranslate(fn())
+            } catch (e1) {
+                console.error(e1)
+            }
+        }
+    }
+    return out
+}
+
+/**
+ * Load data from translation lib
+ * @param {String} lib
+ * @param {String} lib
+ * @returns {Object}
+ */
+export const loadTvTranslate = async (lib, lang) => {
+    let out = {}
+    try {
+        out = await loadLibData(`${lib}/langs/${lang}.json`)
+    } catch (e) {
+        console.error(e)
+        if (lang !== 'en') {
+            try {
+                out = await loadTvTranslate(lib, 'en')
+            } catch (e2) {
+                console.error(e2)
+            }
+        }
+    }
+    return out
+}
+
+
+/**
  * @param {Uint8Array} uint8Array
  * @returns {String}
  */
@@ -167,6 +217,8 @@ export default {
     supportDRM,
     loadData,
     loadLibData,
+    loadBrowserTranslate,
+    loadTvTranslate,
     arrayToBase64,
     base64toArray,
     uint8ArrayToString,
