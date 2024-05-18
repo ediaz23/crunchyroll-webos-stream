@@ -22,6 +22,8 @@
         "install-tv-1": "ares-install -d tv1 bin/com.crunchyroll.stream.app_1.1.0_all.ipk",
         "start": "ares-launch com.crunchyroll.stream.app",
         "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
+        "stats": "NODE_ENV=development REACT_APP_SERVING=false enact pack --stats",
+        "stats-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p --stats",
         "play": "npm run build && npm run install-tv && npm run start",
         "play-1": "NODE_ENV=development npm run build-dev && npm run install-tv-1 && npm run start-1",
         "play-p": "NODE_ENV=production npm run build-p && npm run install-tv-1 && npm run start-1",

@@ -147,7 +147,7 @@ const ProfilesPanel = ({ ...rest }) => {
                                     compRef={setFocus} />
                             )}
                         </Row>
-                        {multiProfile.profiles.length < multiProfile.max_profiles &&
+                        {multiProfile.profiles.length < multiProfile.tier_max_profiles &&
                             <Row align='center center' style={{ marginTop: '3rem' }}>
                                 <Button onClick={onCreateProfile}>
                                     <Icon style={{ marginRight: '0.5rem' }}>
