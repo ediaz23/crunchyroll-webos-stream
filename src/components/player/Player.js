@@ -4,6 +4,7 @@ import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
 import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
+import { CrunchyrollError } from 'crunchyroll-js-api'
 import dashjs from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
 
@@ -12,6 +13,7 @@ import SubtitleSelect from './SubtitleSelect'
 import Rating from './Rating'
 import ContentInfo from './ContentInfo'
 import ContactMe from '../login/ContactMe'
+import PopupMessage from '../Popup'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import logger from '../../logger'
@@ -652,6 +654,8 @@ const Player = ({ ...rest }) => {
     const [skipEvents, setSkipEvents] = useState(null)
     /** @type {[SkiptEvent, Function]} */
     const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
+    /** @type {[String, Function]}  */
+    const [message, setMessage] = useState('')
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -752,13 +756,33 @@ const Player = ({ ...rest }) => {
         }
     }, [])
 
+    /** @type {Function} */
+    const onClosePopup = useCallback(() => setMessage(''), [setMessage])
+
+    /** @type {Function} */
+    const handleCrunchyError = useCallback((err) => {
+        if (err instanceof CrunchyrollError) {
+            if (err.httpStatus === 403) {
+                setMessage(err.message + '. ' + $L('Maybe it is a premium content.'))
+            } else if (err.httpStatus === 420 && err.message === 'TOO_MANY_ACTIVE_STREAMS') {
+                setMessage($L('Too many active streams.'))
+            } else {
+                setMessage(err.message || err.httpStatusText)
+            }
+        } else {
+            setMessage(err)
+        }
+    }, [setMessage])
+
     useEffect(() => {  // find audios, it's needed to find stream url
-        findAudio({ profile, audios }).then(setAudio).catch(console.error)
+        findAudio({ profile, audios }).then(setAudio)
     }, [profile, audios, setAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
         if (audios.includes(audio)) {
-            findStream({ profile, audios, audio, getLang, content }).then(setStream).catch(console.error)
+            findStream({ profile, audios, audio, getLang, content })
+                .then(setStream)
+                .catch(handleCrunchyError)
         }
         return () => {
             setStream(lastStream => {
@@ -768,13 +792,13 @@ const Player = ({ ...rest }) => {
                 return emptyStream
             })
         }
-    }, [profile, content, audios, audio, getLang, setStream, emptyStream])
+    }, [profile, content, audios, audio, getLang, setStream, emptyStream, handleCrunchyError])
 
     useEffect(() => {  // find subtitles preview and skip events
         if (stream.urls) {
-            findSubtitle(stream).then(setSubtitle).catch(console.error)
-            findPreviews(stream).then(setPreviews).catch(console.error)
-            findSkipEvents(stream).then(setSkipEvents).catch(console.error)
+            findSubtitle(stream).then(setSubtitle)
+            findPreviews(stream).then(setPreviews)
+            findSkipEvents(stream).then(setSkipEvents)
         }
         return () => {
             setPreviews(lastPreview => {
@@ -794,7 +818,7 @@ const Player = ({ ...rest }) => {
                     setIsPaused(false)
                     playerRef.current = player
                     playerRef.current.play()
-                }).catch(console.error)
+                }).catch(setMessage)
         }
         return () => {
             setLoading(true)
@@ -824,19 +848,29 @@ const Player = ({ ...rest }) => {
                     episodeId: audio.guid,
                     token: stream.token,
                     playhead: state.currentTime,
-                }).then(setSession)
-                    .catch(e => {  // if fail retry in 1 second
-                        logger.error('Error keep alive stream')
-                        logger.error(e)
-                        setSession(lastSession => {
-                            return { ...lastSession, renewSeconds: 11 }
-                        })
+                }).then(setSession).catch(e => {  // if fail retry in 2 second
+                    logger.error('Error keep alive stream')
+                    logger.error(e)
+                    setSession(lastSession => {
+                        const retries = (lastSession.retries || 0) + 1
+                        let out = null
+                        if (retries <= 12) {
+                            out = {
+                                ...lastSession,
+                                renewSeconds: 18,
+                                retries,
+                            }
+                        } else {
+                            handleCrunchyError(e)
+                        }
+                        return out
                     })
+                })
 
-            }, (session.renewSeconds - 10) * 1000)
+            }, (session.renewSeconds - 20) * 1000)
         }
         return () => clearTimeout(sessionTimeout)
-    }, [profile, audio, stream, session, setSession])
+    }, [profile, audio, stream, session, setSession, handleCrunchyError])
 
     useEffect(() => {  // plause / play watch
         let timeout = null
@@ -990,6 +1024,9 @@ const Player = ({ ...rest }) => {
                 onSpotlightUp={onSkipBtnNavigate}>
                 {currentSkipEvent && currentSkipEvent.title}
             </Button>
+            <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
+                {message}
+            </PopupMessage>
         </div>
     )
 }
