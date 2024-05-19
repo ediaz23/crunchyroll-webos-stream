@@ -1,8 +1,5 @@
 
 import 'webostvjs'
-import 'i18n-iso-m49'
-import 'i18n-iso-countries'
-import '@cospired/i18n-iso-languages'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -118,7 +115,6 @@ export const loadData = async (file) => {
     })
 }
 
-
 /**
  * Load data from node_module
  * @param {String} file
@@ -174,7 +170,6 @@ export const loadTvTranslate = async (lib, lang) => {
     return out
 }
 
-
 /**
  * @param {Uint8Array} uint8Array
  * @returns {String}
@@ -192,7 +187,6 @@ export const arrayToBase64 = (body) => {
     const str = uint8ArrayToString(uint8Array)
     return btoa(str)
 }
-
 
 /**
  * @param {String} content
