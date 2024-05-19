@@ -2,6 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 import gulp from 'gulp'
+import crypto from 'crypto'
 import { deleteAsync } from 'del'
 import { exec } from 'child_process'
 
@@ -42,6 +43,51 @@ gulp.task('copy-in18', (cb) => {
                 }
             }
         }
+        cb()
+    } catch (err) {
+        console.error(err)
+        cb(err)
+    }
+})
+
+gulp.task('manifest', cb => {
+    try {
+        const appinfo = JSON.parse(fs.readFileSync('./webos-meta/appinfo.json', 'utf8'))
+        const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
+        const ipkName = `${appinfo.id}_${appinfo.version}_all.ipk`
+        if (appinfo.version !== packageJson.version) {
+            throw new Error('appinfo and manifest version mismatch.')
+        }
+        if (!fs.existsSync(`./bin/${ipkName}`)) {
+            throw new Error('ipk not found.')
+        }
+        const ikpFile = fs.readFileSync(`./bin/${ipkName}`)
+        const hash = crypto.createHash('sha256')
+        hash.update(ikpFile)
+
+        const out = {
+            id: appinfo.id,
+            version: appinfo.version,
+            type: 'web',
+            title: appinfo.title,
+            appDescription: packageJson.description,
+            iconUri: 'https://raw.githubusercontent.com/ediaz23/crunchyroll-webos-stream/master/webos-meta/icon-large.png',
+            sourceUrl: packageJson.repository,
+            rootRequired: false,
+            ipkUrl: ipkName,
+            ipkHash: {
+                sha256: hash.digest('hex')
+            }
+        }
+        for (const key of Object.keys(out)) {
+            if (!(out[key] != null)) {
+                throw new Error(`key ${key} is not define`)
+            }
+        }
+        if (!out.ipkHash.sha256) {
+            throw new Error('key sha256 is not define')
+        }
+        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '), { encoding: 'utf-8' })
         cb()
     } catch (err) {
         console.error(err)
@@ -122,6 +168,7 @@ gulp.task('cleanService', () => deleteAsync('service/dist/**', { force: true }))
 gulp.task('build', gulp.series('clean', 'pack', 'app'));
 gulp.task('build-service', gulp.series('installService', 'buildService'))
 gulp.task('build-dev', gulp.series('clean', 'pack', 'copy-in18', 'installService', 'buildService', 'app', 'cleanService'));
-gulp.task('build-p', gulp.series('clean', 'pack-p', 'copy-in18', 'installService', 'buildService-p', 'app-p', 'cleanService'));
+gulp.task('build-p', gulp.series('clean', 'pack-p', 'copy-in18', 'installService', 'buildService-p', 'app-p', 'cleanService', 'manifest'));
+
 
 export default gulp

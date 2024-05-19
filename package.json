@@ -24,6 +24,7 @@
         "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
         "stats": "NODE_ENV=development REACT_APP_SERVING=false enact pack --stats",
         "stats-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p --stats",
+        "manifest": "gulp manifest",
         "play": "npm run build && npm run install-tv && npm run start",
         "play-1": "NODE_ENV=development npm run build-dev && npm run install-tv-1 && npm run start-1",
         "play-p": "NODE_ENV=production npm run build-p && npm run install-tv-1 && npm run start-1",
@@ -54,7 +55,8 @@
         },
         "packagerOptions": {
             "ignore": [
-                "service/**"
+                "service/**",
+                "org.webosbrew.manifest.json"
             ]
         }
     },
