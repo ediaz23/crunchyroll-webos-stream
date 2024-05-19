@@ -600,7 +600,9 @@ const findSkipEvents = async (stream) => {
     return out
 }
 
-
+/**
+ * @todo @fixme bug after playing video music "comet" of yoasobi
+ */
 const Player = ({ ...rest }) => {
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
