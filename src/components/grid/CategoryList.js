@@ -14,11 +14,10 @@ import css from './ContentGrid.module.less'
 
 /**
  * Show Category list
- * @param {{
-    category: String,
-    setCategory: Function,
-    setDelay: Function,
- }}
+ * @param {Object} obj
+ * @param {String} obj.category
+ * @param {Function} obj.setCategory
+ * @param {Function} obj.setDelay
  */
 const CategoryList = ({ category, setCategory, setDelay, ...rest }) => {
     /** @type {Array<{id: String, title: String}>} */
@@ -27,7 +26,7 @@ const CategoryList = ({ category, setCategory, setDelay, ...rest }) => {
     const selectCategory = useCallback((ev) => {
         if (ev.target && ev.target.id) {
             setCategory(ev.target.id)
-            setDelay(1000)
+            setDelay({ delay: 100, scroll: true })
         }
     }, [setCategory, setDelay])
 
