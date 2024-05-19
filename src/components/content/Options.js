@@ -125,16 +125,17 @@ export const getNextContent = async (profile, content) => {
         } else if (content.type === 'movie_listing') {
             getNextProm = getNextMovie(profile, content)
         }
+        getNextProm.then(async tmpEpisode => {
+            if (tmpEpisode) {
+                await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
+            }
+            return tmpEpisode
+        })
         nextProm.then(nextEp => {
             if (nextEp) {
                 resolve(nextEp)
             } else {
-                getNextProm.then(async tmpEpisode => {
-                    if (tmpEpisode) {
-                        await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
-                    }
-                    resolve(tmpEpisode)
-                })
+                getNextProm.then(resolve)
             }
         })
     })

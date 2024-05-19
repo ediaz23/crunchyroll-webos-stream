@@ -812,13 +812,12 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // attach subs
         if (stream.urls && subtitle && stream.id === content.id) {
-            createDashPlayer(audio, stream, content, subtitle)
-                .then(player => {
-                    setLoading(false)
-                    setIsPaused(false)
-                    playerRef.current = player
-                    playerRef.current.play()
-                }).catch(setMessage)
+            createDashPlayer(audio, stream, content, subtitle).then(player => {
+                setLoading(false)
+                setIsPaused(false)
+                playerRef.current = player
+                playerRef.current.play()
+            }).catch(setMessage)
         }
         return () => {
             setLoading(true)
