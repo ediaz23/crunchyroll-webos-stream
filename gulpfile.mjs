@@ -120,6 +120,15 @@ gulp.task('clean-ilib', cleanIlib)
 
 gulp.task('copy-in18', copyIn18)
 
+gulp.task('license', cb => {
+    try {
+        fs.copyFileSync('./LICENSE', './bin/LICENSE')
+        cb()
+    } catch(err) {
+        handleError(cb)(err)
+    }
+})
+
 gulp.task('manifest', generateManifest)
 
 gulp.task('clean', () =>
@@ -152,6 +161,6 @@ gulp.task('build-dev', gulp.series('clean', 'update-appinfo', 'pack', 'copy-in18
     'installService', 'buildService', 'app', 'cleanService'));
 
 gulp.task('build-p', gulp.series('clean', 'update-appinfo', 'pack-p', 'copy-in18',
-    'installService', 'buildService-p', 'app-p', 'cleanService', 'manifest'));
+    'installService', 'buildService-p', 'app-p', 'cleanService', 'manifest', 'license'));
 
 export default gulp
