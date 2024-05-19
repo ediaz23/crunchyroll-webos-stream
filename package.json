@@ -56,7 +56,8 @@
         "packagerOptions": {
             "ignore": [
                 "service/**",
-                "org.webosbrew.manifest.json"
+                "org.webosbrew.manifest.json",
+                "screenshots"
             ]
         }
     },
