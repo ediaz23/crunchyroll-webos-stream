@@ -1,18 +1,18 @@
 /* global ENACT_PACK_ISOMORPHIC */
-import {createRoot, hydrateRoot} from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import { RecoilRoot } from 'recoil'
 import App from './App'
-//import reportWebVitals from './reportWebVitals'
+import reportWebVitals from './reportWebVitals'
 
 const appElement = (<RecoilRoot> <App /> </RecoilRoot>)
 
 // In a browser environment, render instead of exporting
 if (typeof window !== 'undefined') {
-	if (ENACT_PACK_ISOMORPHIC) {
-		hydrateRoot(document.getElementById('root'), appElement)
-	} else {
-		createRoot(document.getElementById('root')).render(appElement)
-	}
+    if (ENACT_PACK_ISOMORPHIC) {
+        hydrateRoot(document.getElementById('root'), appElement)
+    } else {
+        createRoot(document.getElementById('root')).render(appElement)
+    }
 }
 
 export default appElement
@@ -21,4 +21,4 @@ export default appElement
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint.
 // Learn more: https://github.com/enactjs/cli/blob/master/docs/measuring-performance.md
-// reportWebVitals()
+reportWebVitals()

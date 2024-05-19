@@ -136,12 +136,12 @@ export const loadBrowserTranslate = async (prom, fn) => {
         out = await prom
     } catch (e) {
         console.error(e)
-        if (fn) {
-            try {
+        try {
+            if (fn) {
                 loadBrowserTranslate(fn())
-            } catch (e1) {
-                console.error(e1)
             }
+        } catch (e1) {
+            console.error(e1)
         }
     }
     return out
@@ -159,12 +159,12 @@ export const loadTvTranslate = async (lib, lang) => {
         out = await loadLibData(`${lib}/langs/${lang}.json`)
     } catch (e) {
         console.error(e)
-        if (lang !== 'en') {
-            try {
+        try {
+            if (lang !== 'en') {
                 out = await loadTvTranslate(lib, 'en')
-            } catch (e2) {
-                console.error(e2)
             }
+        } catch (e2) {
+            console.error(e2)
         }
     }
     return out

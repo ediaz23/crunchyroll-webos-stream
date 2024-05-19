@@ -110,24 +110,26 @@ const AppLocal = I18nDecorator({
     resources: [{
         resource: async options => {
             const localeInfo = new LocaleInfo(options.locale).getLocale()
-            let countryData = {}, regionData = {}, langData = {}
+            const prom = []
             if (process.env.REACT_APP_SERVING === 'true') {
-                countryData = await utils.loadBrowserTranslate(
+                prom.push(utils.loadBrowserTranslate(
                     import(`i18n-iso-countries/langs/${localeInfo.language}.json`),
-                    () => import(`i18n-iso-countries/langs/en.json`))
-                regionData = await utils.loadBrowserTranslate(
+                    () => import(`i18n-iso-countries/langs/en.json`)
+                ))
+                prom.push(utils.loadBrowserTranslate(
                     import(`i18n-iso-m49/langs/${localeInfo.language}.json`),
                     () => import(`i18n-iso-m49/langs/en.json`)
-                )
-                langData = await utils.loadBrowserTranslate(
+                ))
+                prom.push(utils.loadBrowserTranslate(
                     import(`@cospired/i18n-iso-languages/langs/${localeInfo.language}.json`),
                     () => import(`@cospired/i18n-iso-languages/langs/en.json`)
-                )
+                ))
             } else {
-                countryData = await utils.loadTvTranslate('i18n-iso-countries', localeInfo.language)
-                regionData = await utils.loadTvTranslate('i18n-iso-m49', localeInfo.language)
-                langData = await utils.loadTvTranslate('@cospired/i18n-iso-languages', localeInfo.language)
+                prom.push(utils.loadTvTranslate('i18n-iso-countries', localeInfo.language))
+                prom.push(utils.loadTvTranslate('i18n-iso-m49', localeInfo.language))
+                prom.push(utils.loadTvTranslate('@cospired/i18n-iso-languages', localeInfo.language))
             }
+            const [countryData, regionData, langData] = await Promise.all(prom)
             regions.registerLocale(countries, countryData, regionData)
             languages.registerLocale(langData)
         },
