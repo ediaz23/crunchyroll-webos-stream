@@ -39,7 +39,7 @@ const ContentPanel = ({ ...rest }) => {
             {content.type === 'musicArtist' && <Artist profile={profile} artist={content} />}
             <Alert open={showError}
                 title={$L('Content not supported?')}
-                message={$L('Please contact to developer or create a issues')}
+                message={$L('Please contact to developer or create an issues')}
                 onAccept={onAccept}
             />
         </Panel>
