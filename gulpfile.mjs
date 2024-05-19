@@ -5,9 +5,26 @@ import gulp from 'gulp'
 import crypto from 'crypto'
 import { deleteAsync } from 'del'
 import { exec } from 'child_process'
+import packageJson from './package.json' assert { type: 'json' }
+import appInfo from './webos-meta/appinfo.json' assert { type: 'json' }
+import ilibmanifest from './resources/ilibmanifest.json' assert { type: 'json' }
 
 
-gulp.task('clean-ilib', (cb) => {
+function handleError(cb) {
+    return (err, stdout, stderr) => {
+        if (stdout) { console.log(stdout) }
+        if (stderr) { console.log(stderr) }
+        if (err) { console.error(err) }
+        cb(err)
+    }
+}
+
+function installAppTv(cb, tv) {
+    const tvStr = tv && '-d tv1' || ''
+    exec(`ares-install ${tvStr} bin/${appInfo.id}_${packageJson.version}_all.ipk`, handleError(cb))
+}
+
+function cleanIlib(cb) {
     try {
         const fakeManifest = './resources/global_ilibmanifes.json'
         const realManifest = './node_modules/ilib/locale/ilibmanifest.json'
@@ -15,18 +32,14 @@ gulp.task('clean-ilib', (cb) => {
         fs.writeFileSync(realManifest, content, 'utf8')
         cb()
     } catch (err) {
-        console.error(err)
-        cb(err)
+        handleError(cb)(err)
     }
-})
+}
 
-gulp.task('copy-in18', (cb) => {
+function copyIn18(cb) {
     try {
         const libs = ['i18n-iso-countries', 'i18n-iso-m49', '@cospired/i18n-iso-languages']
-        const manifest = './resources/ilibmanifest.json'
-        /** @type {{files: Array<String>}} */
-        const content = JSON.parse(fs.readFileSync(manifest, 'utf8'))
-        for (const file of content.files) {
+        for (const file of ilibmanifest.files) {
             const lang = file.split('/')[0]
             for (const lib of libs) {
                 const jsonPath = `node_modules/${lib}/langs/${lang}.json`
@@ -45,19 +58,13 @@ gulp.task('copy-in18', (cb) => {
         }
         cb()
     } catch (err) {
-        console.error(err)
-        cb(err)
+        handleError(cb)(err)
     }
-})
+}
 
-gulp.task('manifest', cb => {
+function generateManifest(cb) {
     try {
-        const appinfo = JSON.parse(fs.readFileSync('./webos-meta/appinfo.json', 'utf8'))
-        const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
-        const ipkName = `${appinfo.id}_${appinfo.version}_all.ipk`
-        if (appinfo.version !== packageJson.version) {
-            throw new Error('appinfo and manifest version mismatch.')
-        }
+        const ipkName = `${appInfo.id}_${appInfo.version}_all.ipk`
         if (!fs.existsSync(`./bin/${ipkName}`)) {
             throw new Error('ipk not found.')
         }
@@ -66,10 +73,10 @@ gulp.task('manifest', cb => {
         hash.update(ikpFile)
 
         const out = {
-            id: appinfo.id,
-            version: appinfo.version,
+            id: appInfo.id,
+            version: packageJson.version,
             type: 'web',
-            title: appinfo.title,
+            title: appInfo.title,
             appDescription: packageJson.description,
             iconUri: 'https://raw.githubusercontent.com/ediaz23/crunchyroll-webos-stream/master/webos-meta/icon-large.png',
             sourceUrl: packageJson.repository,
@@ -87,88 +94,64 @@ gulp.task('manifest', cb => {
         if (!out.ipkHash.sha256) {
             throw new Error('key sha256 is not define')
         }
-        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '), { encoding: 'utf-8' })
+        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '),
+            { encoding: 'utf-8' })
         cb()
     } catch (err) {
-        console.error(err)
-        cb(err)
+        handleError(cb)(err)
     }
-})
+}
+
+function updateAppInfo(cb) {
+    try {
+        if (packageJson.version !== appInfo.version) {
+            appInfo.version = packageJson.version
+        }
+        fs.writeFileSync('./webos-meta/appinfo.json', JSON.stringify(appInfo, null, '    ') + '\n',
+            { encoding: 'utf-8' })
+        cb()
+    } catch (err) {
+        handleError(cb)(err)
+    }
+}
+
+
+gulp.task('clean-ilib', cleanIlib)
+
+gulp.task('copy-in18', copyIn18)
+
+gulp.task('manifest', generateManifest)
 
 gulp.task('clean', () =>
     deleteAsync('bin/**', { force: true })
         .then(deleteAsync('dist/**', { force: true }))
 )
 
-gulp.task('pack', cb => {
-    exec('npm run pack', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
+gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
+gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 
-gulp.task('pack-p', cb => {
-    exec('npm run pack-p', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
+gulp.task('installService', cb => { exec('NODE_ENV=development npm install --prefix=./service', handleError(cb)) })
 
-gulp.task('installService', cb => {
-    exec('NODE_ENV=development npm install --prefix=./service', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
+gulp.task('buildService', cb => { exec('npm run build --prefix=./service', handleError(cb)) })
+gulp.task('buildService-p', cb => { exec('npm run build-p --prefix=./service', handleError(cb)) })
 
-gulp.task('buildService', cb => {
-    exec('npm run build --prefix=./service', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
+gulp.task('app', cb => { exec('ares-package --no-minify dist/ ./service/dist -o bin/', handleError(cb)) })
+gulp.task('app-p', cb => { exec('ares-package dist/ ./service/dist -o bin/', handleError(cb)) })
 
-gulp.task('buildService-p', cb => {
-    exec('npm run build-p --prefix=./service', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
-
-gulp.task('app', cb => {
-    exec('ares-package --no-minify dist/ ./service/dist -o bin/', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
-
-gulp.task('app-p', cb => {
-    exec('ares-package dist/ ./service/dist -o bin/', (err, stdout, stderr) => {
-        console.log(stdout)
-        console.log(stderr)
-        if (err) { console.error(err) }
-        cb(err)
-    })
-})
+gulp.task('install-app-tv1', cb => { installAppTv(cb, true) })
+gulp.task('install-app', cb => { installAppTv(cb, false) })
 
 gulp.task('cleanService', () => deleteAsync('service/dist/**', { force: true }))
 
+gulp.task('update-appinfo', updateAppInfo)
+
 gulp.task('build', gulp.series('clean', 'pack', 'app'));
 gulp.task('build-service', gulp.series('installService', 'buildService'))
-gulp.task('build-dev', gulp.series('clean', 'pack', 'copy-in18', 'installService', 'buildService', 'app', 'cleanService'));
-gulp.task('build-p', gulp.series('clean', 'pack-p', 'copy-in18', 'installService', 'buildService-p', 'app-p', 'cleanService', 'manifest'));
 
+gulp.task('build-dev', gulp.series('clean', 'update-appinfo', 'pack', 'copy-in18',
+    'installService', 'buildService', 'app', 'cleanService'));
+
+gulp.task('build-p', gulp.series('clean', 'update-appinfo', 'pack-p', 'copy-in18',
+    'installService', 'buildService-p', 'app-p', 'cleanService', 'manifest'));
 
 export default gulp

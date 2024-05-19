@@ -22,7 +22,6 @@ export const getUserBenefits = async (account) => {
                 auth: { token: `${token.tokenType} ${token.accessToken}`, locale: 'en' },
                 externalId: account.externalId,
             })
-            console.log(out)
         }
     } catch (error) {
         if (error instanceof Error) {
