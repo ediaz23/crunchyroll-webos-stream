@@ -10,7 +10,10 @@ import { $L } from '../hooks/language'
 import Login from '../components/login/Login'
 import ContactMe from '../components/login/ContactMe'
 import PopupMessage from '../components/Popup'
-import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
+import {
+    pathState, initScreenState, autoLoginState,
+    isPremiumState
+} from '../recoilConfig'
 import api from '../api'
 
 
@@ -25,6 +28,8 @@ const LoginPanel = ({ ...rest }) => {
     const [message, setMessage] = useState('')
     /** @type {Function} */
     const setInitScreenState = useSetRecoilState(initScreenState)
+    /** @type {Function} */
+    const setPremiumState = useSetRecoilState(isPremiumState)
     /** @type {[Boolean, Function]}  */
     const [autoLogin, setAutoLogin] = useRecoilState(autoLoginState)
     /** @type {[Boolean, Function]}  */
@@ -32,11 +37,18 @@ const LoginPanel = ({ ...rest }) => {
 
     const makeLogin = useCallback(async () => {
         await api.auth.login()
-        await api.account.getAccount()
+        const account = await api.account.getAccount()
+        const benefits = await api.subscription.getUserBenefits(account)
+        for (const item of benefits.items) {
+            if (item.benefit=== 'cr_premium') {
+                setPremiumState(true)
+                break
+            }
+        }
         setInitScreenState('/profiles')
         setPath('/profiles')
         setAutoLogin(true)
-    }, [setInitScreenState, setPath, setAutoLogin])
+    }, [setInitScreenState, setPath, setAutoLogin, setPremiumState])
 
     const doLogin = useCallback(async () => {
         if (email && password) {

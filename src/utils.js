@@ -208,12 +208,22 @@ export const base64toArray = (content) => {
     return bytes
 }
 
+/**
+ * @param {Object} item
+ * @returns {Boolean}
+ */
+export const getIsPremium = (item) => {
+    return (item.episode_metadata || item.movie_metadata || {
+        is_premium_only: item.isPremiumOnly || item.is_premium_only
+    }).is_premium_only
+}
 
 export default {
     isTv,
     stringifySorted,
     formatDurationMs,
     getDuration,
+    getIsPremium,
     supportDRM,
     loadData,
     loadLibData,

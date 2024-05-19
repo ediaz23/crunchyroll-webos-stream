@@ -9,14 +9,14 @@ import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
 import api from '../../api'
+import { getIsPremium } from '../../utils'
 
 
 /**
  * Caculate playhead progress
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    episodesData: Array<Object>,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Array<Object>} obj.episodesData
  */
 export async function calculatePlayheadProgress({ profile, episodesData }) {
     const epIds = episodesData.map(e => e.id)
@@ -44,13 +44,13 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
 
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    series: Object,
-    setContentToPlay: Function,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.series
+ * @param {Function} obj.setContentToPlay
+ * @param {Boolean} obj.isPremium account is premium?
  */
-const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
+const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState([])
     /** @type {[Object, Function]} */
@@ -87,7 +87,10 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
             } else {
                 const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: season.id })
                 await calculatePlayheadProgress({ profile, episodesData })
-                episodesData.forEach(ep => { ep.type = 'episode' })
+                episodesData.forEach(ep => {
+                    ep.type = 'episode'
+                    ep.showPremium = !isPremium && getIsPremium(ep)
+                })
                 season.episodes = episodesData
                 setEpisodes(episodesData)
             }
@@ -98,7 +101,7 @@ const Seasons = ({ profile, series, setContentToPlay, ...rest }) => {
             timeout = setTimeout(loadData, 1000)
         }
         return () => clearTimeout(timeout)
-    }, [profile, season])
+    }, [profile, season, isPremium])
 
     return (
         <Row align='start space-between' {...rest}>
@@ -138,6 +141,7 @@ Seasons.propTypes = {
     profile: PropTypes.object.isRequired,
     series: PropTypes.object.isRequired,
     setContentToPlay: PropTypes.func.isRequired,
+    isPremium: PropTypes.bool.isRequired,
 }
 
 export default Seasons

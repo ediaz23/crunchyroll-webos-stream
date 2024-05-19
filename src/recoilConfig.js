@@ -29,14 +29,6 @@ export const homeIndexState = atom({
     default: 0
 })
 
-/**
- * @todo quitar?
- */
-export const searchState = atom({
-    key: 'searchState',
-    default: ''
-})
-
 export const initScreenState = atom({
     key: 'initScreenState',
     default: '/init'
@@ -108,4 +100,9 @@ export const categoriesState = atom({
     key: 'categoriesState',
     default: [],
     effects: [localStorageEffect('categoriesState')]
+})
+
+export const isPremiumState = atom({
+    key: 'isPremiumState',
+    default: false
 })

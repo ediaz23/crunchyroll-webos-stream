@@ -9,16 +9,17 @@ import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
 import { calculatePlayheadProgress } from './Seasons'
 import api from '../../api'
+import { getIsPremium } from '../../utils'
 
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    movieListing: Object,
-    setContentToPlay: Function,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.movieListing
+ * @param {Function} obj.setContentToPlay
+ * @param {Boolean} obj.isPremium account is premium?
  */
-const Movies = ({ profile, movieListing, setContentToPlay, ...rest }) => {
+const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [listings, setListings] = useState([])
     /** @type {[Object, Function]} */
@@ -50,7 +51,10 @@ const Movies = ({ profile, movieListing, setContentToPlay, ...rest }) => {
             } else {
                 const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: listing.id })
                 await calculatePlayheadProgress({ profile, episodesData: moviesData })
-                moviesData.forEach(ep => { ep.type = 'movie' })
+                moviesData.forEach(ep => {
+                    ep.type = 'movie'
+                    ep.showPremium = !isPremium && getIsPremium(ep)
+                })
                 listing.movies = moviesData
                 setMovies(moviesData)
             }
@@ -58,7 +62,7 @@ const Movies = ({ profile, movieListing, setContentToPlay, ...rest }) => {
         if (listing.id) {
             loadData()
         }
-    }, [profile, listing])
+    }, [profile, listing, isPremium])
 
     return (
         <Row align='start space-between' {...rest}>
@@ -77,6 +81,7 @@ Movies.propTypes = {
     profile: PropTypes.object.isRequired,
     movieListing: PropTypes.object.isRequired,
     setContentToPlay: PropTypes.func.isRequired,
+    isPremium: PropTypes.bool.isRequired,
 }
 
 export default Movies

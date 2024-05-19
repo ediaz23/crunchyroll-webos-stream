@@ -7,12 +7,13 @@ import PropTypes from 'prop-types'
 
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 
+import { $L } from '../../hooks/language'
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homeViewReadyState, homePositionState } from '../../recoilConfig'
+import { homeViewReadyState, homePositionState, isPremiumState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
 import withNavigable from '../../hooks/navigable'
-import { formatDurationMs, getDuration } from '../../utils'
+import { formatDurationMs, getDuration, getIsPremium } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
@@ -20,17 +21,20 @@ import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 const NavigableDiv = withNavigable('div', '')
 
 
-export const Poster = ({ item, image, itemSize, ...rest }) => {
+export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
     /** @type {Array<String>} */
     const playableTypes = useMemo(() =>
         ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
-    let progress = 0, duration = undefined
+    let progress = 0, duration = undefined, showPremium = false
 
     if (playableTypes.includes(item.type)) {
         duration = getDuration(item)
         if (duration !== undefined && item.playhead !== undefined) {
             progress = item.playhead / (duration / 100) * 100
+        }
+        if (!isPremium) {
+            showPremium = getIsPremium(item)
         }
     }
 
@@ -47,6 +51,7 @@ export const Poster = ({ item, image, itemSize, ...rest }) => {
             {playableTypes.includes(item.type) &&
                 <div className={css.contentTime}>{formatDurationMs(duration)}</div>
             }
+            {showPremium && <div className={globalCss.contenPremium}>{$L('Premium')}</div>}
             <Heading size="small" marqueeOn='hover' >
                 {item.name}
             </Heading>
@@ -79,6 +84,8 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {{rowIndex: Number, columnIndex: Number}} */
     const homePosition = useRecoilValue(homePositionState)
+    /** @type {Boolean} */
+    const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
@@ -159,6 +166,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
                             onFocus: selectElement,
                             onClick: showContentDetail,
                             itemHeight,
+                            isPremium,
                         }}
                         direction='horizontal'
                         verticalScrollbar='hidden'

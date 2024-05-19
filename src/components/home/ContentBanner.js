@@ -46,10 +46,10 @@ const setTags = (metadata, tags) => {
  * @param {Array} meta
  */
 const setEpisodeMetadata = (metadata, meta) => {
-    if (metadata.season_number !== null) {
+    if (metadata.season_number != null) {
         meta.push(`${$L('Season')} ${metadata.season_number}`)
     }
-    if (metadata.episode) {
+    if (metadata.episode != null) {
         meta.push(`${$L('Ep')} ${metadata.episode}`)
     }
     if (metadata.episode_air_date) {
@@ -62,13 +62,13 @@ const setEpisodeMetadata = (metadata, meta) => {
  * @param {Array} meta
  */
 const setSerieMetadata = (metadata, meta) => {
-    if (metadata.season_count !== null) {
+    if (metadata.season_count != null) {
         meta.push(`${$L('Seasons')} ${metadata.season_count}`)
     }
-    if (metadata.episode_count !== null) {
+    if (metadata.episode_count != null) {
         meta.push(`${$L('Episodes')} ${metadata.episode_count}`)
     }
-    if (metadata.series_launch_year !== null) {
+    if (metadata.series_launch_year != null) {
         meta.push(`${metadata.series_launch_year}`)
     }
 }
@@ -78,7 +78,7 @@ const setSerieMetadata = (metadata, meta) => {
  * @param {Array} meta
  */
 const setMovieMetadata = (metadata, meta) => {
-    if (metadata.movie_release_year !== null) {
+    if (metadata.movie_release_year != null) {
         meta.push(`${metadata.movie_release_year}`)
     }
 }
@@ -99,6 +99,9 @@ export const ContentMetadata = ({ content }) => {
     } else if (content.movie_listing_metadata) {
         setTags(content.movie_listing_metadata, tags)
         setMovieMetadata(content.movie_listing_metadata, meta)
+    } else if (content.movie_metadata) {
+        setTags(content.movie_metadata, tags)
+        setMovieMetadata(content.movie_metadata, meta)
     } else if (content.genres) {
         content.genres.forEach(val => tags.push(val.displayValue))
         if (content.publishDate) {

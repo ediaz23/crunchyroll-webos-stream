@@ -9,6 +9,7 @@ import BodyText from '@enact/moonstone/BodyText'
 import VirtualList from '@enact/moonstone/VirtualList'
 import Image from '@enact/moonstone/Image'
 
+import { $L } from '../../hooks/language'
 import withNavigable from '../../hooks/navigable'
 import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
@@ -20,13 +21,12 @@ const NavigableDiv = withNavigable('div', '')
 
 /**
  * Render an item
- * @param {{
-    episodes: Array<Object>,
-    images: Array<Object>,
-    titles: Array<Object>,
-    index: Number,
-    itemHeight: Number,
- }}
+ * @param {Object} obj
+ * @param {Array<Object>} obj.episodes
+ * @param {Array<Object>} obj.images
+ * @param {Array<Object>} obj.titles
+ * @param {Number} obj.index
+ * @param {Number} obj.itemHeight
  */
 const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...restProps }) => {
     return (
@@ -38,6 +38,9 @@ const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...re
                             <div className={globalCss.progress}>
                                 <div style={{ width: `${episodes[index].playhead.progress}%` }} />
                             </div>
+                            {episodes[index].showPremium &&
+                                <div className={globalCss.contenPremium}>{$L('Premium')}</div>
+                            }
                         </Image>
                     }
                 </Cell>
@@ -66,10 +69,9 @@ const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...re
 }
 
 /**
- * @param {{
-    episodes: Array<Object>,
-    selectEpisode: Function,
- }}
+ * @param {Object} obj
+ * @param {Array<Object>} obj.episodes
+ * @param {Function} obj.selectEpisode
  */
 const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
     /** @type {Function} */

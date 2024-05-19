@@ -12,9 +12,9 @@ import Movies from './Movies'
 import LangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
-import { pathState, playContentState } from '../../recoilConfig'
+import { pathState, playContentState, isPremiumState } from '../../recoilConfig'
 import api from '../../api'
 import css from './ContentDetail.module.less'
 import back from '../../back'
@@ -23,16 +23,17 @@ import back from '../../back'
 const ActivityViews = ({ index, children }) => children[index]
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
  */
 const ContentDetail = ({ profile, content, ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
     const setPlayContent = useSetRecoilState(playContentState)
+    /** @type {Boolean} */
+    const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -107,12 +108,14 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                                 <Seasons
                                     profile={profile}
                                     series={content}
-                                    setContentToPlay={setContentToPlay} />
+                                    setContentToPlay={setContentToPlay}
+                                    isPremium={isPremium} />
                                 :
                                 <Movies
                                     profile={profile}
                                     movieListing={content}
-                                    setContentToPlay={setContentToPlay} />
+                                    setContentToPlay={setContentToPlay}
+                                    isPremium={isPremium} />
                             }
                             <LangSelector
                                 profile={profile}

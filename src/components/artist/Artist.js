@@ -6,10 +6,10 @@ import Image from '@enact/moonstone/Image'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { pathState, playContentState } from '../../recoilConfig'
+import { pathState, playContentState, isPremiumState } from '../../recoilConfig'
 
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
@@ -18,19 +18,21 @@ import Options from './Options'
 import back from '../../back'
 import api from '../../api'
 import css from './Artist.module.less'
+import { getIsPremium } from '../../utils'
 
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    artist: Object,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.artist
  */
 const Artist = ({ profile, artist, ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
     const setPlayContent = useSetRecoilState(playContentState)
+    /** @type {Boolean} */
+    const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -57,12 +59,13 @@ const Artist = ({ profile, artist, ...rest }) => {
     }, [artist, getImagePerResolution])
 
     const preProcessVideos = useCallback(({ data }) => {
-        for (let item of data) {
-            item.playhead = { progress: 0 }
-        }
+        data.forEach(ep => {
+            ep.playhead = { progress: 0 }
+            ep.showPremium = !isPremium && getIsPremium(ep)
+        })
         setVideos(data)
         setLoading(false)
-    }, [setVideos])
+    }, [setVideos, isPremium])
 
     useEffect(() => {
         if (artist.concerts && artist.concerts.length > 0) {

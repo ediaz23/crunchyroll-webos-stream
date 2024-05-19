@@ -1,0 +1,74 @@
+{
+    "__class__": "collection",
+    "__href__": "/subscriptions/1024158720/benefits",
+    "__links__": null,
+    "__actions__": null,
+    "subscription_country": "CL",
+    "total": 8,
+    "items": [
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "cr_premium",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "cr_fan_pack",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "no_ads",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "catalog",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "simulcast",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "concurrent_streams.4",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "offline_viewing",
+            "source": ""
+        },
+        {
+            "__class__": "benefit",
+            "__href__": "",
+            "__links__": null,
+            "__actions__": null,
+            "benefit": "cr_bento",
+            "source": ""
+        }
+    ]
+}

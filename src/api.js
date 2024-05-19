@@ -11,6 +11,7 @@ import * as music from './api/music'
 import * as review from './api/review'
 import * as content from './api/content'
 import * as drm from './api/drm'
+import * as subscription from './api/subscription'
 import * as utils from './api/utils'
 
 
@@ -26,5 +27,6 @@ export default {
     misc,
     music,
     review,
+    subscription,
     utils,
 }
