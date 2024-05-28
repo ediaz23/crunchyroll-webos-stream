@@ -50,12 +50,13 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest })
                 setMovies(listing.movies)
             } else {
                 const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: listing.id })
-                await calculatePlayheadProgress({ profile, episodesData: moviesData })
+                const prom = calculatePlayheadProgress({ profile, episodesData: moviesData })
                 moviesData.forEach(ep => {
                     ep.type = 'movie'
                     ep.showPremium = !isPremium && getIsPremium(ep)
                 })
                 listing.movies = moviesData
+                await prom
                 setMovies(moviesData)
             }
         }

@@ -23,6 +23,12 @@ copyrighted content without permission. We do not condone or support piracy, and
 software is not the responsibility of the project contributors or maintainers.
 
 
+## Tested on Devices
+
+  - NANO079SNA, WebOS 5.5.0-1107
+  - 86QNED866RE, WebOS 23
+
+
 ## How to run on local? (Linux)
 
 1) Install git, node and npm. I use node version v16.17.0 and npm version 8.15.0 (google it), example:

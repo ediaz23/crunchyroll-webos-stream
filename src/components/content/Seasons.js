@@ -86,12 +86,13 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
                 setEpisodes(season.episodes)
             } else {
                 const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: season.id })
-                await calculatePlayheadProgress({ profile, episodesData })
+                const prom = calculatePlayheadProgress({ profile, episodesData })
                 episodesData.forEach(ep => {
                     ep.type = 'episode'
                     ep.showPremium = !isPremium && getIsPremium(ep)
                 })
                 season.episodes = episodesData
+                await prom
                 setEpisodes(episodesData)
             }
         }

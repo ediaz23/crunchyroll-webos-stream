@@ -739,7 +739,11 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const onSkipEvent = useCallback(() => {
-        playerRef.current.seek(currentSkipEvent.end - 5)
+        if (currentSkipEvent.end - currentSkipEvent.start > 5) {
+            playerRef.current.seek(currentSkipEvent.end - 5)
+        } else {
+            playerRef.current.seek(currentSkipEvent.end)
+        }
         setCurrentSkipEvent(resetCurrentSkipEvent)
     }, [currentSkipEvent, resetCurrentSkipEvent])
 
@@ -934,8 +938,9 @@ const Player = ({ ...rest }) => {
         /** @type {Function} */
         const processFn = update => {
             for (const type of availableEvents) {
-                if (skipEvents[type].start <= update.time && update.time <= (skipEvents[type].start + 15)
-                    && update.time > 0) {
+                const gapSeconds = Math.min(15, skipEvents[type].end - skipEvents[type].start)
+                const end = Math.min(skipEvents[type].start + gapSeconds, skipEvents[type].end)
+                if (skipEvents[type].start <= update.time && update.time <= end && update.time > 0) {
                     setCurrentSkipEvent(oldValue => {
                         if (oldValue !== skipEvents[type]) {
                             playerCompRef.current.hideControls()
@@ -946,7 +951,7 @@ const Player = ({ ...rest }) => {
                                 }
                             }, 100)
                             clearTimeout(timeout)
-                            timeout = setTimeout(() => setCurrentSkipEvent(resetCurrentSkipEvent), 1000 * 15)
+                            timeout = setTimeout(() => setCurrentSkipEvent(resetCurrentSkipEvent), 1000 * gapSeconds)
                         }
                         return skipEvents[type]
                     })
