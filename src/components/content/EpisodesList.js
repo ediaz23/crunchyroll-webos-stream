@@ -24,11 +24,10 @@ const NavigableDiv = withNavigable('div', '')
  * @param {Object} obj
  * @param {Array<Object>} obj.episodes
  * @param {Array<Object>} obj.images
- * @param {Array<Object>} obj.titles
  * @param {Number} obj.index
  * @param {Number} obj.itemHeight
  */
-const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...restProps }) => {
+const renderItem = ({ episodes, images, index, itemHeight: height, ...restProps }) => {
     return (
         <NavigableDiv {...restProps} key={index} style={{ height }}>
             <Row align='start space-between' style={{ paddingBottom: '0.5rem', paddingTop: '0.5rem' }}>
@@ -47,9 +46,20 @@ const renderItem = ({ episodes, images, titles, index, itemHeight: height, ...re
                 <Cell grow>
                     <Column size='100%'>
                         <Cell shrink>
-                            <Heading size="title">
-                                {titles[index]}
-                            </Heading>
+                            <Row>
+                                {episodes[index].episode_number &&
+                                    <Cell shrink>
+                                        <Heading size="title">
+                                            {episodes[index].episode_number}
+                                        </Heading>
+                                    </Cell>
+                                }
+                                <Cell grow>
+                                    <Heading size="title">
+                                        {episodes[index].title}
+                                    </Heading>
+                                </Cell>
+                            </Row>
                         </Cell>
                         <Cell grow style={{ overflow: 'hidden' }}>
                             <BodyText size='small' style={{ fontSize: '1rem' }}>
@@ -88,14 +98,6 @@ const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
         }
         return episode.list_image
     }), [itemHeight, episodes, getImagePerResolution])
-    /** @type {Array<String>} */
-    const titles = useMemo(() => episodes.map(episode => {
-        return [
-            (episode.episode_number && episode.episode_number.toString()) || '',
-            (episode.episode_number && '-') || '',
-            episode.title
-        ].join(' ').trim()
-    }), [episodes])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -124,7 +126,6 @@ const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
                 itemHeight,
                 episodes,
                 images,
-                titles,
             }}
         />
     )

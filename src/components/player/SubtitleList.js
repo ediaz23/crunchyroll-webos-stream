@@ -14,11 +14,10 @@ import PropTypes from 'prop-types'
  * @property {String} title
  */
 /**
- * @param {{
-    subtitles: Array<Subtitle>,
-    subtitle: Subtitle,
-    onSelectSubtitle: Function
- }}
+ * @param {Object} obj
+ * @param {Array<Subtitle>} obj.subtitles
+ * @param {Subtitle} obj.subtitle
+ * @param {Function} obj.onSelectSubtitle
  */
 const SubtitleList = ({ subtitles, subtitle, onSelectSubtitle, ...rest }) => {
 

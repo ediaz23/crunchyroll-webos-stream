@@ -2,9 +2,9 @@
 import api from '../api'
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    setProfile: Function}}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Function} obj.setProfile
  */
 export const useSaveProfile = ({ profile, setProfile }) => {
     return async (newValue) => {
@@ -14,10 +14,10 @@ export const useSaveProfile = ({ profile, setProfile }) => {
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    setProfile: Function,
-    field: String}}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Function} obj.setProfile
+ * @param {String} obj.field
  */
 export const useSaveOneProfileField = ({ profile, setProfile, field }) => {
     const saveProfile = useSaveProfile({ profile, setProfile })

@@ -8,12 +8,12 @@ import SubtitleList from './SubtitleList'
 
 const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
 
+
 /**
- * @param {{
-    subtitles: Array<import('./SubtitleList').Subtitle>,
-    subtitle: Subtitle,
-    selectSubtitle: Function
- }}
+ * @param {Object} obj
+ * @param {Array<import('./SubtitleList').Subtitle>} obj.subtitles
+ * @param {import('./SubtitleList').Subtitle} obj.subtitle
+ * @param {Function} obj.onSelectSubtitle
  */
 const SubtitleSelect = ({ subtitles, subtitle, selectSubtitle, ...rest }) => {
 

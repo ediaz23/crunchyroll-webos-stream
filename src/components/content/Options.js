@@ -28,10 +28,9 @@ const useChangeActivity = (setIndex, index) => {
 
 /**
  * Compute titles
- * @param {{
-    content: Object,
-    nextContent: Object,
- }}
+ * @param {Object} obj
+ * @param {Object} obj.content
+ * @param {Object} obj.nextContent
  * @returns {{watch: String, description: String, subtitle: String, moreDetail: String}}
  */
 const computeTitles = ({ content, nextContent }) => {

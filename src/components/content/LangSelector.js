@@ -15,10 +15,9 @@ import css from './ContentDetail.module.less'
 
 
 /**
- * @param {{
-    profile:import('crunchyroll-js-api').Types.Profile
-    content: Object,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
  */
 const LangSelector = ({ profile, content, ...rest }) => {
     /** @type {Function} */

@@ -16,11 +16,10 @@ import PropTypes from 'prop-types'
  */
 
 /**
- * @param {{
-    audios: Array<Audio>,
-    audio: Audio,
-    onSelectAudio: Function
- }}
+ * @param {Object} obj
+ * @param {Array<Audio>} obj.audios
+ * @param {Audio} obj.audio
+ * @param {Function} obj.selectAudio
  */
 const AudioList = ({ audios, audio, onSelectAudio, ...rest }) => {
 

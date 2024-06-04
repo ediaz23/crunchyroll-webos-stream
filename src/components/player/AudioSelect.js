@@ -9,11 +9,10 @@ import AudioList from './AudioList'
 const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
 
 /**
- * @param {{
-    audios: Array<import('./AudioList').Audio>,
-    audio: Audio,
-    selectAudio: Function
- }}
+ * @param {Object} obj
+ * @param {Array<import('./AudioList').Audio>} obj.audios
+ * @param {import('./AudioList').Audio} obj.audio
+ * @param {Function} obj.selectAudio
  */
 const AudioSelect = ({ audios, audio, selectAudio, ...rest }) => {
 

@@ -68,12 +68,11 @@ import { $L } from '../../hooks/language'
  */
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
-    playerCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
- }}
- @returns {Promise}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
+ * @param {{current: import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} obj.playerCompRef
+ * @returns {Promise}
  */
 const updatePlayHead = async ({ profile, content, playerCompRef }) => {
     if (['episode', 'movie'].includes(content.type)) {
@@ -88,11 +87,10 @@ const updatePlayHead = async ({ profile, content, playerCompRef }) => {
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
-    playerCompRef: {current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
+ * @param {{current: import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} obj.playerCompRef
  * @returns {Function}
  */
 const updatePlayHeadLoop = ({ profile, content, playerCompRef }) => {
@@ -109,10 +107,9 @@ const updatePlayHeadLoop = ({ profile, content, playerCompRef }) => {
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
  * @returns {Promise<{playhead: Number, fully_watched: Boolean}>}
  */
 const findPlayHead = async ({ profile, content }) => {
@@ -130,10 +127,9 @@ const findPlayHead = async ({ profile, content }) => {
 }
 
 /**
- * @param {{
-    content: Object,
-    getLang: Function,
- }}
+ * @param {Object} obj
+ * @param {Object} obj.content
+ * @param {Function} obj.getLang
  * @returns {Array<import('./AudioList').Audio>}
  */
 const searchAudios = ({ content, getLang }) => {
@@ -161,10 +157,9 @@ const searchAudios = ({ content, getLang }) => {
 
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    audios: Array<import('./AudioList').Audio>
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Array<import('./AudioList').Audio>} obj.audios
  * @returns {Promise<import('./AudioList').Audio>}
  */
 const findAudio = async ({ profile, audios }) => {
@@ -179,10 +174,9 @@ const findAudio = async ({ profile, audios }) => {
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    subtitles: Array<import('./SubtitleList').Subtitle>
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Array<import('./SubtitleList').Subtitle>} obj.subtitles
  * @returns {Promise<import('./SubtitleList').Subtitle>}
  */
 const findSubtitle = async ({ profile, subtitles }) => {
@@ -194,13 +188,12 @@ const findSubtitle = async ({ profile, subtitles }) => {
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    audios: Array<import('./AudioList').Audio>,
-    audio: import('./AudioList').Audio,
-    getLang: Function,
-    content: Object,
-  }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Array<import('./AudioList').Audio>} obj.audios
+ * @param {import('./AudioList').Audio} obj.audio
+ * @param {Function} obj.getLang
+ * @param {Object} obj.content
  * @returns {Promise<Stream>}
  */
 const findStream = async ({ profile, audios, audio, getLang, content }) => {
@@ -315,9 +308,7 @@ const findPreviews = async ({ bif }) => {
 }
 
 /**
- * @param {{
-    content: Object,
-  }}
+ * @param {{ content: Object }}
  * @returns {String}
  */
 const findPoster = ({ content }) => {
@@ -333,16 +324,15 @@ const findPoster = ({ content }) => {
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
-    concerts: Array<String>,
-    step: Number,
-    apiFunction: Function,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
+ * @param {Number} obj.step
+ * @param {Array<String>} obj.concerts
+ * @param {Function} obj.apiFunction
  * @returns {Promise<Object>}
  */
-const getNextVideoOrConcert = async ({ profile, content, concerts, step, apiFunction }) => {
+const getNextVideoOrConcert = async ({ profile, content, step, concerts, apiFunction }) => {
     let out = null
     const index = concerts.findIndex(val => val === content.id)
     const nextIndex = index + step
@@ -356,11 +346,10 @@ const getNextVideoOrConcert = async ({ profile, content, concerts, step, apiFunc
 }
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
-    step: Number,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
+ * @param {Number} obj.step
  * @returns {Promise<{total: Number, data: Array<Object>}>}
  */
 const findNextEp = async ({ profile, content, step }) => {

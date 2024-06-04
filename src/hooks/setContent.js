@@ -17,11 +17,10 @@ export function useSetContent() {
     const setHomePosition = useSetRecoilState(homePositionState)
 
     /**
-     * @param {{
-        content: Object,
-        rowIndex: Number,
-        columnIndex: Number,
-     }}
+     * @param {Object} obj
+     * @param {Object} obj.content
+     * @param {Number} obj.rowIndex
+     * @param {Number} obj.columnIndex
      */
     return ({ content, rowIndex, columnIndex }) => {
         back.pushHistory({

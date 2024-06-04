@@ -11,10 +11,9 @@ import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
 
 /**
- * @param {{
-    artist: Object,
-    selectContent: Function
- }}
+ * @param {Object} obj
+ * @param {Object} obj.artist
+ * @param {Function} obj.selectContent
  */
 const Options = ({ artist, selectContent, ...rest }) => {
     /** @type {Array<String>} */
@@ -33,18 +32,18 @@ const Options = ({ artist, selectContent, ...rest }) => {
     /** @type {Array<Object>} */
     const data = useMemo(() => {
         let out = []
-        if (concertIds.length > 0) {
-            out.push({
-                childProps: { onFocus: selectConcerts },
-                icon: '🎤',
-                title: $L('Concerts'),
-            })
-        }
         if (videoIds.length > 0) {
             out.push({
                 childProps: { onFocus: selectVideos },
                 icon: '🎥',
                 title: $L('Videos'),
+            })
+        }
+        if (concertIds.length > 0) {
+            out.push({
+                childProps: { onFocus: selectConcerts },
+                icon: '🎤',
+                title: $L('Concerts'),
             })
         }
         return out
@@ -76,7 +75,6 @@ const Options = ({ artist, selectContent, ...rest }) => {
     }, [data])
 
     return (
-
         <VirtualList
             {...rest}
             className={css.optionsContainer}

@@ -16,16 +16,20 @@ const NavigableDiv = withNavigable('div')
 
 /**
  * Render an item
- * @param {{
-    index: Number,
-    itemHeight: Number,
-    seasons: Array<Object>,
- }}
+ * @param {Object} obj
+ * @param {Number} obj.index
+ * @param {Number} obj.itemHeight
+ * @param {Array<Object>} obj.seasons
  */
 const renderItem = ({ index, itemHeight: height, seasons, ...rest }) => {
     return (
         <NavigableDiv {...rest} key={index} style={{ height }}>
             <Row>
+                {seasons[index].season_sequence_number &&
+                    <Cell shrink>
+                        {seasons[index].season_sequence_number}
+                    </Cell>
+                }
                 <Cell className={css.name}>
                     <Marquee marqueeOn='render'>
                         {seasons[index].title}
@@ -42,10 +46,9 @@ const renderItem = ({ index, itemHeight: height, seasons, ...rest }) => {
 }
 
 /**
- * @param {{
-    seasons: Array<Object>,
-    selectEpisode: Function,
- }}
+ * @param {Object} obj
+ * @param {Array<Object>} obj.seasons
+ * @param {Function} obj.selectEpisode
  */
 const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
     /** @type {{current: Function}} */
