@@ -142,14 +142,13 @@ export const getNextContent = async (profile, content) => {
 }
 
 /**
- * @param {{
-    profile: Object,
-    content: Object,
-    rating: Number,
-    updateRating: Function,
-    setIndex: Function,
-    setContentToPlay: Function,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.Object
+ * @param {Number} obj.rating
+ * @param {Function} obj.updateRating
+ * @param {Function} obj.setIndex
+ * @param {Function} obj.setContentToPlay
  */
 const Options = ({ profile, content, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
 
@@ -229,8 +228,11 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                         </Heading>
                     }
                     <div className={css.scrollerContainer}>
-                        <Scroller direction='vertical' horizontalScrollbar='hidden'
-                            verticalScrollbar='auto'>
+                        <Scroller
+                            direction='vertical'
+                            horizontalScrollbar='hidden'
+                            verticalScrollbar='auto'
+                            focusableScrollbar>
                             <BodyText size='small'>
                                 {description}
                             </BodyText>

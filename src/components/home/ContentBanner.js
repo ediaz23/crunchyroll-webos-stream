@@ -1,6 +1,6 @@
 
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { Row, Cell } from '@enact/ui/Layout'
+import { Row, Cell, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
@@ -134,10 +134,11 @@ ContentMetadata.propTypes = {
     content: PropTypes.object.isRequired,
 }
 
-
 /**
  * Show header for content, with title
- * @param {{content: Object, noCategory: Boolean}}
+ * @param {Object} obj
+ * @param {Object} obj.content
+ * @param {Boolean} obj.noCategory
  */
 export const ContentHeader = ({ content, noCategory }) => {
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
@@ -183,6 +184,11 @@ ContentHeader.propTypes = {
 const RowNavigable = withNavigable(Row, css.active)
 
 
+/**
+ * @param {Object} obj
+ * @param {Object} obj.content
+ * @param {Boolean} obj.noCategory
+ */
 const HomeContentBanner = ({ content, noCategory, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -200,10 +206,16 @@ const HomeContentBanner = ({ content, noCategory, ...rest }) => {
     return (
         <RowNavigable id='content-banner' className={css.homeContentBanner} {...rest}>
             <Cell size="50%">
-                <ContentHeader content={content} noCategory={noCategory} />
-                <BodyText size='small'>
-                    {content.description}
-                </BodyText>
+                <Column>
+                    <Cell shrink>
+                        <ContentHeader content={content} noCategory={noCategory} />
+                    </Cell>
+                    <Cell>
+                        <BodyText size='small'>
+                            {content.description}
+                        </BodyText>
+                    </Cell>
+                </Column>
             </Cell>
             <Cell ref={compRef}>
                 {image.source &&
