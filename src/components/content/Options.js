@@ -33,10 +33,10 @@ const useChangeActivity = (setIndex, index) => {
 const computeEpTitle = (content) => {
     let season = null, episodeNumber = null, watch = null, subtitle = null
     if (content.episode_metadata) {
-        season = content.episode_metadata.season_number
+        season = content.episode_metadata.season_sequence_number
         episodeNumber = content.episode_metadata.episode_number
     } else {
-        season = content.season_number
+        season = content.season_sequence_number
         episodeNumber = content.episode_number
     }
     if (episodeNumber != null) {
@@ -106,7 +106,6 @@ export const getNextEpidose = async (profile, content) => {
             .then(({ data: episodesData }) => {
                 out.firstEp = episodesData[0]
                 out.firstEp.type = 'episode'
-                out.firstEp.season_number = 1
                 return episodesData
             })
     ]
@@ -115,7 +114,6 @@ export const getNextEpidose = async (profile, content) => {
             if (episodesData.length > 1) {
                 out.lastEp = episodesData[episodesData.length - 1]
                 out.lastEp.type = 'episode'
-                out.lastEp.season_number = 1
             }
         })
         proms.push(proms[0])
@@ -125,7 +123,6 @@ export const getNextEpidose = async (profile, content) => {
                 .then(({ data: episodesData }) => {
                     out.lastEp = episodesData[episodesData.length - 1]
                     out.lastEp.type = 'episode'
-                    out.lastEp.season_number = seasonsData.length
                 })
         )
     }

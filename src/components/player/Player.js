@@ -692,9 +692,14 @@ const Player = ({ ...rest }) => {
     /** @type {Function} */
     const onPrevEp = useCallback((ev) => {
         ev.preventDefault()
-        setLoading(true)
         playerRef.current.pause()
-        findNextEp({ profile, content, step: -1 }).then(onChangeEp)
+        if (playerRef.current.time() <= 30) {
+            setLoading(true)
+            findNextEp({ profile, content, step: -1 }).then(onChangeEp)
+        } else {
+            playerRef.current.seek(0)
+            playerRef.current.play()
+        }
     }, [profile, content, onChangeEp, setLoading])
 
     /** @type {Function} */
