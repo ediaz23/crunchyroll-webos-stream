@@ -27,32 +27,57 @@ const useChangeActivity = (setIndex, index) => {
 }
 
 /**
+ * @param {Object} content
+ * @returns {{watch: String, subtitle: String}}
+ */
+const computeEpTitle = (content) => {
+    let season = null, episodeNumber = null, watch = null, subtitle = null
+    if (content.episode_metadata) {
+        season = content.episode_metadata.season_number
+        episodeNumber = content.episode_metadata.episode_number
+    } else {
+        season = content.season_number
+        episodeNumber = content.episode_number
+    }
+    if (episodeNumber != null) {
+        watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
+        subtitle = `${$L('Episode')} ${episodeNumber}: ${content.title || ''}`
+    } else {
+        watch = `${$L('Watch')} ${$L('Season')} ${season}: ${content.title || ''}`
+        subtitle = content.title || ''
+    }
+    return { watch, subtitle }
+}
+
+/**
+ * @typedef TitleObj
+ * @type {Object}
+ * @property {String} watch
+ * @property {String} watchLast
+ * @property {String} description
+ * @property {String} subtitle
+ * @property {String} moreDetail
+ */
+
+/**
  * Compute titles
  * @param {Object} obj
  * @param {Object} obj.content
  * @param {Object} obj.nextContent
- * @returns {{watch: String, description: String, subtitle: String, moreDetail: String}}
+ * @param {Object} obj.lastContent
+ * @returns {TitleObj}
  */
-const computeTitles = ({ content, nextContent }) => {
+const computeTitles = ({ content, nextContent, lastContent }) => {
     let subtitle = '', description = content.description || '', watch = $L('Watch')
-    let moreDetail = ''
+    let moreDetail = '', watchLast = $L('Watch')
 
     if (nextContent) {
         if (nextContent.type === 'episode') {
-            let season = 1, episodeNumber = 1
-            if (nextContent.episode_metadata) {
-                season = nextContent.episode_metadata.season_number
-                episodeNumber = nextContent.episode_metadata.episode_number
-            } else {
-                season = nextContent.season_number
-                episodeNumber = nextContent.episode_number
-            }
-            if (episodeNumber !== null && episodeNumber !== undefined) {
-                watch = `${$L('Watch')} ${$L('Season')} ${season}: ${$L('E')} ${episodeNumber}`
-                subtitle = `${$L('Episode')} ${episodeNumber}: ${nextContent.title || ''}`
-            } else {
-                watch = `${$L('Watch')} ${$L('Season')} ${season}: ${nextContent.title || ''}`
-                subtitle = nextContent.title || ''
+            const nextContentTitle = computeEpTitle(nextContent)
+            watch = nextContentTitle.watch
+            subtitle = nextContentTitle.subtitle
+            if (lastContent) {
+                watchLast = computeEpTitle(lastContent).watch
             }
         } else if (nextContent.type === 'movie') {
             watch = `${$L('Watch')} ${nextContent.title || ''}`
@@ -64,21 +89,53 @@ const computeTitles = ({ content, nextContent }) => {
     } else if (content.type === 'movie_listing') {
         moreDetail = $L('Movies and more')
     }
-    return { watch, description, subtitle, moreDetail }
+    return { watch, watchLast, description, subtitle, moreDetail }
 }
 
 /**
  * get next episode
  * @param {Object} profile
  * @param {Object} content
- * @returns {Promise<Object>}
+ * @returns {Promise<{firstEp: Object, lastEp: Object}>}
  */
 export const getNextEpidose = async (profile, content) => {
+    const out = { firstEp: null, lastEp: null }
     const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
-    const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
-    const tmpEpisode = episodesData[0]
-    tmpEpisode.type = 'episode'
-    return tmpEpisode
+    const proms = [
+        api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
+            .then(({ data: episodesData }) => {
+                out.firstEp = episodesData[0]
+                out.firstEp.type = 'episode'
+                out.firstEp.season_number = 1
+                return episodesData
+            })
+    ]
+    if (seasonsData.length === 1) {
+        proms[0].then(episodesData => {
+            if (episodesData.length > 1) {
+                out.lastEp = episodesData[episodesData.length - 1]
+                out.lastEp.type = 'episode'
+                out.lastEp.season_number = 1
+            }
+        })
+        proms.push(proms[0])
+    } else {
+        proms.push(
+            api.cms.getEpisodes(profile, { seasonId: seasonsData[seasonsData.length - 1].id })
+                .then(({ data: episodesData }) => {
+                    out.lastEp = episodesData[episodesData.length - 1]
+                    out.lastEp.type = 'episode'
+                    out.lastEp.season_number = seasonsData.length
+                })
+        )
+    }
+    proms[0].then(() => calculatePlayheadProgress({ profile, episodesData: [out.firstEp] }))
+    proms[1].then(() => {
+        if (out.lastEp) {
+            return calculatePlayheadProgress({ profile, episodesData: [out.lastEp] })
+        }
+    })
+    return Promise.all(proms).then(() => out)
 }
 
 /**
@@ -89,9 +146,11 @@ export const getNextEpidose = async (profile, content) => {
  */
 export const getNextMovie = async (profile, content) => {
     const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: content.id })
-    const tmpMovie = moviesData[0]
+    let tmpMovie = moviesData[0]
     tmpMovie.type = 'movie'
-    return { ...tmpMovie, ...(tmpMovie.panel || {}), panel: null }
+    tmpMovie = { ...tmpMovie, ...(tmpMovie.panel || {}), panel: null }
+    await calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
+    return tmpMovie
 }
 
 /**
@@ -124,12 +183,6 @@ export const getNextContent = async (profile, content) => {
         } else if (content.type === 'movie_listing') {
             getNextProm = getNextMovie(profile, content)
         }
-        getNextProm.then(async tmpEpisode => {
-            if (tmpEpisode) {
-                await calculatePlayheadProgress({ profile, episodesData: [tmpEpisode] })
-            }
-            return tmpEpisode
-        })
         nextProm.then(nextEp => {
             if (nextEp) {
                 resolve(nextEp)
@@ -154,13 +207,15 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     /** @type {[Object, Function]} */
     const [nextContent, setNextConent] = useState(null)
     /** @type {[Object, Function]} */
+    const [lastContent, setLastConent] = useState(null)
+    /** @type {[Object, Function]} */
     const [isInWatchlist, setIsInWatchlist] = useState(false)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
-    /** @type {{watch: String, description: String, subtitle: String, moreDetail: String}} */
-    const { watch, description, subtitle, moreDetail } = useMemo(() => {
-        return computeTitles({ content, nextContent })
-    }, [content, nextContent])
+    /** @type {TitleObj} */
+    const { watch, watchLast, description, subtitle, moreDetail } = useMemo(() => {
+        return computeTitles({ content, nextContent, lastContent })
+    }, [content, nextContent, lastContent])
     /** @type {Function} */
     const moreEpisodes = useChangeActivity(setIndex, 1)
     /** @type {Function} */
@@ -169,6 +224,10 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const playNextContent = useCallback(() => {
         setContentToPlay(nextContent)
     }, [setContentToPlay, nextContent])
+    /** @type {Function} */
+    const playLastContent = useCallback(() => {
+        setContentToPlay(lastContent)
+    }, [setContentToPlay, lastContent])
 
     /** @type {Function} */
     const toggleWatchlist = useCallback(() => {
@@ -193,7 +252,14 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 })
             )
         }
-        nextEpProm.then(setNextConent)
+        nextEpProm.then(tmpNextContent => {
+            if (tmpNextContent.firstEp) {
+                setNextConent(tmpNextContent.firstEp)
+                setLastConent(tmpNextContent.lastEp)
+            } else {
+                setNextConent(tmpNextContent)
+            }
+        })
         setLoading(true)
         Promise.all(proms).then(() => setLoading(false))
     }, [profile, content, setLoading])
@@ -252,6 +318,12 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                                 <Item id='play' onClick={playNextContent}>
                                     <Icon>play</Icon>
                                     <span>{watch}</span>
+                                </Item>
+                            }
+                            {lastContent &&
+                                <Item id='play' onClick={playLastContent}>
+                                    <Icon>play</Icon>
+                                    <span>{watchLast}</span>
                                 </Item>
                             }
                             <Item onClick={moreEpisodes}>
