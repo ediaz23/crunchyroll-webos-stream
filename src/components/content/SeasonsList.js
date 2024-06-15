@@ -49,8 +49,9 @@ const renderItem = ({ index, itemHeight: height, seasons, ...rest }) => {
  * @param {Object} obj
  * @param {Array<Object>} obj.seasons
  * @param {Function} obj.selectEpisode
+ * @param {Number} [obj.seasonIndex]
  */
-const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
+const SeasonsList = ({ seasons, selectSeason, seasonIndex, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Function} */
@@ -61,11 +62,11 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
         const interval = setInterval(() => {
             if (scrollToRef.current && seasons.length > 0) {
                 clearInterval(interval)
-                scrollToRef.current({ index: 0, animate: false, focus: true })
+                scrollToRef.current({ index: seasonIndex || 0, animate: false, focus: true })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [seasons])
+    }, [seasons, seasonIndex])
 
     return (
         <VirtualList
@@ -89,6 +90,7 @@ const SeasonsList = ({ seasons, selectSeason, ...rest }) => {
 SeasonsList.propTypes = {
     seasons: PropTypes.arrayOf(PropTypes.object).isRequired,
     selectSeason: PropTypes.func.isRequired,
+    seasonIndex: PropTypes.number,
 }
 
 export default SeasonsList

@@ -1,7 +1,10 @@
 
 import { useSetRecoilState } from 'recoil'
 
-import { pathState, playContentState, selectedContentState, homePositionState } from '../recoilConfig'
+import {
+    pathState, playContentState, selectedContentState,
+    homePositionState, contentDetailBakState
+} from '../recoilConfig'
 
 import back from '../back'
 
@@ -15,6 +18,8 @@ export function useSetContent() {
     const setSelectedContent = useSetRecoilState(selectedContentState)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
+    /** @type {Function} */
+    const contentDetailBak = useSetRecoilState(contentDetailBakState)
 
     /**
      * @param {Object} obj
@@ -37,6 +42,7 @@ export function useSetContent() {
             setPath('/profiles/home/player')
         } else {
             setSelectedContent(content)
+            contentDetailBak({})
             setPath('/profiles/home/content')
         }
         setHomePosition({ rowIndex, columnIndex })

@@ -18,61 +18,90 @@ import { getIsPremium } from '../../utils'
  * @param {Object} obj.movieListing
  * @param {Function} obj.setContentToPlay
  * @param {Boolean} obj.isPremium account is premium?
+ * @param {Object} obj.contentDetailBak
+ * @param {Function} obj.onSelectSeason
  */
-const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest }) => {
+const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDetailBak, onSelectSeason, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
-    const [listings, setListings] = useState([])
-    /** @type {[Object, Function]} */
-    const [listing, setListing] = useState({})
+    const [listings, setListings] = useState(JSON.parse(JSON.stringify(contentDetailBak.listings || [])))
+    /** @type {[Number, Function]} */
+    const [listingIndex, setListingIndex] = useState(contentDetailBak.listingIndex || 0)
     /** @type {[Array<Object>, Function]} */
-    const [movies, setMovies] = useState([])
+    const [movies, setMovies] = useState(contentDetailBak.movies || [])
 
     /** @type {Function} */
     const selectListing = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        setListing(listings[parseInt(target.dataset.index)])
-    }, [listings, setListing])
+        setListingIndex(parseInt(target.dataset.index))
+    }, [setListingIndex])
 
+    /** @type {Function} */
     const playMovie = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        setContentToPlay(movies[parseInt(target.dataset.index)])
-    }, [movies, setContentToPlay])
+        const movieIndex = parseInt(target.dataset.index)
+        setContentToPlay(movies[movieIndex], {
+            listings,
+            listingIndex,
+            movies,
+            movieIndex,
+        })
+    }, [listings, listingIndex, movies, setContentToPlay])
 
     useEffect(() => {
-        const listingsTmp = [{ ...movieListing, movies: [] }]
-        setListings(listingsTmp)
-        setListing(listingsTmp[0])
-    }, [profile, movieListing, setListings])
+        if (contentDetailBak.listingIndex != null &&
+            contentDetailBak.listingIndex !== listingIndex) {
+            // reset bak values
+            onSelectSeason({
+                movies: undefined,
+                movieIndex: undefined,
+            })
+        }
+    }, [profile, listingIndex, contentDetailBak.listingIndex, onSelectSeason])
 
     useEffect(() => {
-        const loadData = async () => {
-            if (listing.movies.length) {
-                setMovies(listing.movies)
+        if (contentDetailBak.listings == null) {
+            const listingsTmp = [{ ...movieListing, movies: [] }]
+            setListings(listingsTmp)
+        }
+    }, [profile, movieListing, setListings, contentDetailBak.listings])
+
+    useEffect(() => {
+        const loadData = () => {
+            if (listings[listingIndex].movies.length) {
+                setMovies(listings[listingIndex].movies)
             } else {
-                const { data: moviesData } = await api.cms.getMovies(profile, { movieListingId: listing.id })
-                const prom = calculatePlayheadProgress({ profile, episodesData: moviesData })
-                moviesData.forEach(ep => {
-                    ep.type = 'movie'
-                    ep.showPremium = !isPremium && getIsPremium(ep)
-                })
-                listing.movies = moviesData
-                await prom
-                setMovies(moviesData)
+                api.cms.getMovies(profile, { movieListingId: listings[listingIndex].id })
+                    .then(({ data }) => Promise.all([
+                        Promise.resolve().then(() => {
+                            data.forEach(ep => {
+                                ep.type = 'movie'
+                                ep.showPremium = !isPremium && getIsPremium(ep)
+                            })
+                            listings[listingIndex].movies = data
+                        }),
+                        calculatePlayheadProgress({ profile, episodesData: data }),
+                    ]).then(() => setMovies(data)))
             }
         }
-        if (listing.id) {
+        if (listings.length && contentDetailBak.movies == null) {
             loadData()
         }
-    }, [profile, listing, isPremium])
+    }, [profile, listings, listingIndex, isPremium, contentDetailBak.movies])
 
     return (
         <Row align='start space-between' {...rest}>
             <Cell size="49%">
                 <ContentHeader content={movieListing} />
-                <SeasonsList seasons={listings} selectSeason={selectListing} />
+                <SeasonsList
+                    seasons={listings}
+                    selectSeason={selectListing}
+                    seasonIndex={listingIndex} />
             </Cell>
             <Cell size="49%">
-                <EpisodesList episodes={movies} selectEpisode={playMovie} />
+                <EpisodesList
+                    episodes={movies}
+                    selectEpisode={playMovie}
+                    episodeIndex={contentDetailBak.movieIndex} />
             </Cell>
         </Row>
     )
@@ -83,6 +112,8 @@ Movies.propTypes = {
     movieListing: PropTypes.object.isRequired,
     setContentToPlay: PropTypes.func.isRequired,
     isPremium: PropTypes.bool.isRequired,
+    contentDetailBak: PropTypes.object.isRequired,
+    onSelectSeason: PropTypes.func.isRequired,
 }
 
 export default Movies

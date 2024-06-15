@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
+
 import api from '../../api'
 import { getIsPremium } from '../../utils'
 
@@ -49,60 +50,86 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
  * @param {Object} obj.series
  * @param {Function} obj.setContentToPlay
  * @param {Boolean} obj.isPremium account is premium?
+ * @param {Object} obj.contentDetailBak
+ * @param {Function} obj.onSelectSeason
  */
-const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
+const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBak, onSelectSeason, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
-    const [seasons, setSeasons] = useState([])
-    /** @type {[Object, Function]} */
-    const [season, setSeason] = useState({})
+    const [seasons, setSeasons] = useState(JSON.parse(JSON.stringify(contentDetailBak.seasons || [])))
+    /** @type {[Number, Function]} */
+    const [seasonIndex, setSeasonIndex] = useState(contentDetailBak.seasonIndex || 0)
     /** @type {[Array<Object>, Function]} */
-    const [episodes, setEpisodes] = useState([])
+    const [episodes, setEpisodes] = useState(contentDetailBak.episodes || [])
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
 
     /** @type {Function} */
     const selectSeason = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        setSeason(seasons[parseInt(target.dataset.index)])
-    }, [seasons, setSeason])
+        setSeasonIndex(parseInt(target.dataset.index))
+    }, [setSeasonIndex])
 
+    /** @type {Function} */
     const playEpisode = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        setContentToPlay(episodes[parseInt(target.dataset.index)])
-    }, [episodes, setContentToPlay])
+        const episodeIndex = parseInt(target.dataset.index)
+        setContentToPlay(episodes[episodeIndex], {
+            seasons,
+            seasonIndex,
+            episodes,
+            episodeIndex,
+
+        })
+    }, [seasons, seasonIndex, episodes, setContentToPlay])
 
     useEffect(() => {
-        setLoading(true)
-        api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
-            data.forEach(e => { e.episodes = [] })
-            setSeason(data[0])
-            setSeasons(data)
-        }).then(() => setLoading(false))
-    }, [profile, series, setSeason])
+        if (contentDetailBak.seasonIndex != null &&
+            contentDetailBak.seasonIndex !== seasonIndex) {
+            // reset bak values
+            onSelectSeason({
+                episodes: undefined,
+                episodeIndex: undefined,
+            })
+        }
+    }, [profile, seasonIndex, contentDetailBak.seasonIndex, onSelectSeason])
 
     useEffect(() => {
-        const loadData = async () => {
-            if (season.episodes.length) {
-                setEpisodes(season.episodes)
+        if (contentDetailBak.seasons == null) {
+            setLoading(true)
+            api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
+                data.forEach(e => { e.episodes = [] })
+                setSeasons(data)
+            }).then(() => setLoading(false))
+        } else {
+            setLoading(false)
+        }
+    }, [profile, series, contentDetailBak.seasons])
+
+    useEffect(() => {
+        const loadData = () => {
+            if (seasons[seasonIndex].episodes.length) {
+                setEpisodes(seasons[seasonIndex].episodes)
             } else {
-                const { data: episodesData } = await api.cms.getEpisodes(profile, { seasonId: season.id })
-                const prom = calculatePlayheadProgress({ profile, episodesData })
-                episodesData.forEach(ep => {
-                    ep.type = 'episode'
-                    ep.showPremium = !isPremium && getIsPremium(ep)
-                })
-                season.episodes = episodesData
-                await prom
-                setEpisodes(episodesData)
+                api.cms.getEpisodes(profile, { seasonId: seasons[seasonIndex].id })
+                    .then(({ data }) => Promise.all([
+                        Promise.resolve().then(() => {
+                            data.forEach(ep => {
+                                ep.type = 'episode'
+                                ep.showPremium = !isPremium && getIsPremium(ep)
+                            })
+                            seasons[seasonIndex].episodes = data
+                        }),
+                        calculatePlayheadProgress({ profile, episodesData: data }),
+                    ]).then(() => setEpisodes(data)))
             }
         }
         let timeout = null
-        if (season.id) {
+        if (seasons.length && contentDetailBak.episodes == null) {
             setEpisodes([])
             timeout = setTimeout(loadData, 1000)
         }
         return () => clearTimeout(timeout)
-    }, [profile, season, isPremium])
+    }, [profile, seasons, seasonIndex, isPremium, contentDetailBak.episodes])
 
     return (
         <Row align='start space-between' {...rest}>
@@ -119,13 +146,19 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
                                 <ContentHeader content={series} />
                             </Cell>
                             <Cell>
-                                <SeasonsList seasons={seasons} selectSeason={selectSeason} />
+                                <SeasonsList
+                                    seasons={seasons}
+                                    selectSeason={selectSeason}
+                                    seasonIndex={seasonIndex} />
                             </Cell>
                         </Column>
                     </Cell>
                     <Cell size="49%">
                         {episodes.length ?
-                            <EpisodesList episodes={episodes} selectEpisode={playEpisode} />
+                            <EpisodesList
+                                episodes={episodes}
+                                selectEpisode={playEpisode}
+                                episodeIndex={contentDetailBak.episodeIndex} />
                             :
                             <Column align='center center' style={{ height: '100%', width: '100%' }}>
                                 <Spinner />
@@ -143,6 +176,8 @@ Seasons.propTypes = {
     series: PropTypes.object.isRequired,
     setContentToPlay: PropTypes.func.isRequired,
     isPremium: PropTypes.bool.isRequired,
+    contentDetailBak: PropTypes.object.isRequired,
+    onSelectSeason: PropTypes.func.isRequired,
 }
 
 export default Seasons

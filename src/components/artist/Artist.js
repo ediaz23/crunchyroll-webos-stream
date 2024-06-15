@@ -1,16 +1,20 @@
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
 import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState, useRecoilValue } from 'recoil'
+import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { pathState, playContentState, isPremiumState } from '../../recoilConfig'
+import {
+    pathState, playContentState, isPremiumState,
+    contentDetailBakState
+} from '../../recoilConfig'
 
+import { $L } from '../../hooks/language'
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
 import EpisodesList from '../content/EpisodesList'
@@ -33,24 +37,54 @@ const Artist = ({ profile, artist, ...rest }) => {
     const setPlayContent = useSetRecoilState(playContentState)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
+    /** @type {[Object, Function]}  */
+    const [contentDetailBak, setContentDetailBak] = useRecoilState(contentDetailBakState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {[Object, Function]} */
-    const [videos, setVideos] = useState([])
-    /** @type {[String, Function]} */
-    const [selectContent, setSelectContent] = useState('')
+    const [videos, setVideos] = useState(contentDetailBak.videos || [])
+    /** @type {[Number, Function]} */
+    const [selectIndex, setSelectIndex] = useState(contentDetailBak.selectIndex || 0)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
+    /** @type {Array<{icon: String, title: String}>} */
+    const optionList = useMemo(() => {
+        let out = []
+        if (artist.videos && artist.videos.length > 0) {
+            out.push({ icon: '🎥', title: $L('Videos') })
+        }
+        if (artist.concerts && artist.concerts.length > 0) {
+            out.push({ icon: '🎤', title: $L('Concerts') })
+        }
+        return out
+    }, [artist])
 
-    const selectVideo = useCallback((ev) => {
+    /** @type {{video: Number, concert: Number}} */
+    const optionIndex = useMemo(() => {
+        let out = {}, index = 0
+        if (artist.videos && artist.videos.length > 0) {
+            out.video = index
+            index += 1
+        }
+        if (artist.concerts && artist.concerts.length > 0) {
+            out.concert = index
+        }
+        return out
+    }, [artist])
+
+    /** @type {Function} */
+    const setContentToPlay = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
+        const videIndex = parseInt(target.dataset.index)
+        setContentDetailBak({ videos, videIndex, selectIndex })
         back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-        setPlayContent(videos[parseInt(target.dataset.index)])
+        setPlayContent(videos[videIndex])
         setPath('/profiles/home/player')
-    }, [videos, setPath, setPlayContent])
+    }, [videos, setPath, setPlayContent, selectIndex, setContentDetailBak])
 
+    /** @type {Function} */
     const calculateImage = useCallback((ref) => {
         if (ref) {
             const boundingRect = ref.getBoundingClientRect()
@@ -58,6 +92,7 @@ const Artist = ({ profile, artist, ...rest }) => {
         }
     }, [artist, getImagePerResolution])
 
+    /** @type {Function} */
     const preProcessVideos = useCallback(({ data }) => {
         data.forEach(ep => {
             ep.playhead = { progress: 0 }
@@ -67,22 +102,34 @@ const Artist = ({ profile, artist, ...rest }) => {
         setLoading(false)
     }, [setVideos, isPremium])
 
-    useEffect(() => {
-        if (artist.concerts && artist.concerts.length > 0) {
-            setSelectContent('concerts')
-        } else if (artist.videos && artist.videos.length > 0) {
-            setSelectContent('videos')
-        }
-    }, [artist])
+    /** @type {Function} */
+    const onSetSelectContent = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
+        setSelectIndex(parseInt(target.dataset.index))
+    }, [setSelectIndex])
 
     useEffect(() => {
-        setLoading(true)
-        if (selectContent === 'videos') {
-            api.music.getVideos(profile, artist.videos).then(preProcessVideos)
-        } else if (selectContent === 'concerts') {
-            api.music.getConcerts(profile, artist.concerts).then(preProcessVideos)
+        if (contentDetailBak.selectIndex != null &&
+            contentDetailBak.selectIndex !== selectIndex) {
+            setContentDetailBak({
+                videos: undefined,
+                videIndex: undefined,
+            })
         }
-    }, [profile, artist, selectContent, preProcessVideos])
+    }, [selectIndex, setContentDetailBak, contentDetailBak.selectIndex])
+
+    useEffect(() => {
+        if (contentDetailBak.videIndex == null) {
+            setLoading(true)
+            if (selectIndex === optionIndex.video) {
+                api.music.getVideos(profile, artist.videos).then(preProcessVideos)
+            } else if (selectIndex === optionIndex.concert) {
+                api.music.getConcerts(profile, artist.concerts).then(preProcessVideos)
+            }
+        } else {
+            setLoading(false)
+        }
+    }, [profile, artist, optionIndex, selectIndex, preProcessVideos, contentDetailBak.videIndex])
 
     return (
         <Row className={css.contentArtist} {...rest}>
@@ -103,7 +150,10 @@ const Artist = ({ profile, artist, ...rest }) => {
                                     </BodyText>
                                 </Scroller>
                             </div>
-                            <Options artist={artist} selectContent={setSelectContent} />
+                            <Options
+                                optionList={optionList}
+                                selectContent={onSetSelectContent}
+                                selectIndex={selectIndex} />
                         </Cell>
                         <Cell size="49%">
                             {loading ?
@@ -111,7 +161,10 @@ const Artist = ({ profile, artist, ...rest }) => {
                                     <Spinner />
                                 </Column>
                                 :
-                                <EpisodesList episodes={videos} selectEpisode={selectVideo} />
+                                <EpisodesList
+                                    episodes={videos}
+                                    selectEpisode={setContentToPlay}
+                                    episodeIndex={contentDetailBak.videIndex} />
                             }
                         </Cell>
                     </Row>

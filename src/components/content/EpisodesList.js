@@ -2,12 +2,12 @@
 import { useEffect, useCallback, useRef, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
-import PropTypes from 'prop-types'
-
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import VirtualList from '@enact/moonstone/VirtualList'
 import Image from '@enact/moonstone/Image'
+
+import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
 import withNavigable from '../../hooks/navigable'
@@ -82,8 +82,9 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...restProps 
  * @param {Object} obj
  * @param {Array<Object>} obj.episodes
  * @param {Function} obj.selectEpisode
+ * @param {Number} [obj.episodeIndex]
  */
-const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
+const EpisodesList = ({ episodes, selectEpisode, episodeIndex, ...rest }) => {
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {{current: Function}} */
@@ -104,12 +105,12 @@ const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
             if (scrollToRef.current) {
                 clearInterval(interval)
                 if (episodes.length > 0) {
-                    scrollToRef.current({ index: 0, animate: false, focus: true })
+                    scrollToRef.current({ index: episodeIndex || 0, animate: false, focus: true })
                 }
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [episodes])
+    }, [episodes, episodeIndex])
 
     return (
         <VirtualList
@@ -134,6 +135,7 @@ const EpisodesList = ({ episodes, selectEpisode, ...rest }) => {
 EpisodesList.propTypes = {
     episodes: PropTypes.arrayOf(PropTypes.object).isRequired,
     selectEpisode: PropTypes.func.isRequired,
+    episodeIndex: PropTypes.number,
 }
 
 export default EpisodesList

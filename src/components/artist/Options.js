@@ -1,84 +1,57 @@
 
-import { useCallback, useMemo, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 import ri from '@enact/ui/resolution'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import VirtualList from '@enact/moonstone/VirtualList'
 import PropTypes from 'prop-types'
 
-import { $L } from '../../hooks/language'
 import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
 
 /**
  * @param {Object} obj
- * @param {Object} obj.artist
+ * @param {Array<Object>} obj.optionList
  * @param {Function} obj.selectContent
+ * @param {Number} [obj.selectIndex]
  */
-const Options = ({ artist, selectContent, ...rest }) => {
-    /** @type {Array<String>} */
-    const videoIds = useMemo(() => artist.videos, [artist])
-    /** @type {Array<String>} */
-    const concertIds = useMemo(() => artist.concerts, [artist])
+const Options = ({ optionList, selectContent, selectIndex, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     const itemHeight = ri.scale(70)
 
-    const selectVideos = useCallback(() => selectContent('videos'), [selectContent])
-    const selectConcerts = useCallback(() => selectContent('concerts'), [selectContent])
-
-    /** @type {Array<Object>} */
-    const data = useMemo(() => {
-        let out = []
-        if (videoIds.length > 0) {
-            out.push({
-                childProps: { onFocus: selectVideos },
-                icon: '🎥',
-                title: $L('Videos'),
-            })
-        }
-        if (concertIds.length > 0) {
-            out.push({
-                childProps: { onFocus: selectConcerts },
-                icon: '🎤',
-                title: $L('Concerts'),
-            })
-        }
-        return out
-    }, [selectVideos, selectConcerts, videoIds, concertIds])
-
     /** @type {Function} */
     const renderItem = useCallback(({ index, itemHeight: height, ...restProps }) => {
         return (
             <Item {...restProps}
-                {...data[index].childProps}
+                onFocus={selectContent}
                 key={index}
                 style={{ height }}>
                 <Icon className={cssShared.IconCustomColor}>
-                    {data[index].icon}
+                    {optionList[index].icon}
                 </Icon>
-                <span>{data[index].title}</span>
+                <span>{optionList[index].title}</span>
             </Item>
         )
-    }, [data])
+    }, [optionList, selectContent])
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current && data.length > 0) {
+            if (scrollToRef.current && optionList.length > 0) {
                 clearInterval(interval)
-                scrollToRef.current({ index: 0, animate: false, focus: true })
+                scrollToRef.current({ index: selectIndex || 0, animate: false, focus: true })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [data])
+    }, [optionList, selectIndex])
 
     return (
         <VirtualList
             {...rest}
             className={css.optionsContainer}
-            dataSize={data.length}
+            dataSize={optionList.length}
             itemRenderer={renderItem}
             itemSize={itemHeight}
             cbScrollTo={getScrollTo}
@@ -90,8 +63,9 @@ const Options = ({ artist, selectContent, ...rest }) => {
 }
 
 Options.propTypes = {
-    artist: PropTypes.object.isRequired,
+    optionList: PropTypes.array.isRequired,
     selectContent: PropTypes.func.isRequired,
+    selectIndex: PropTypes.number
 }
 
 export default Options

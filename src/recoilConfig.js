@@ -106,3 +106,8 @@ export const isPremiumState = atom({
     key: 'isPremiumState',
     default: false
 })
+
+export const contentDetailBakState = atom({
+    key: 'contentDetailBakState',
+    default: {},
+})
