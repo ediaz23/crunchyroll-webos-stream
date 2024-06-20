@@ -12,11 +12,11 @@ import PropTypes from 'prop-types'
  */
 
 /**
- * @param {{
-    title: String,
-    languages: Array<LangTuple>,
-    save: Function,
-    value: String}}
+ * @param {Object} obj
+ * @param {String} obj.title
+ * @param {Array<LangTuple>} obj.languages
+ * @param {Function} obj.save
+ * @param {String} obj.value
  */
 const SelectLanguage = ({ title, languages, save, value }) => {
     /** @type {Array<String>} */

@@ -1,12 +1,11 @@
 
 
 /**
- * @param {{
-    width: Number,
-    height: Number,
-    mode: 'tall'|'wide',
-    content: Object,
-  }}
+ * @param {Object} obj
+ * @param {Number} obj.width
+ * @param {Number} obj.height
+ * @param {Number} obj.content
+ * @param {'tall'|'wide'} obj.mode
  * @returns {{source: String, size: {width: Number, height: Number}}
  */
 const getImagePerResolution = ({ width, height, content, mode }) => {

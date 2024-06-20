@@ -8,10 +8,9 @@ import css from '../Share.module.less'
 
 
 /**
- * @param {{
-    profile: import('crunchyroll-js-api').Types.Profile,
-    content: Object,
- }}
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Object} obj.content
  */
 const Rating = ({ profile, content, ...rest }) => {
     /** @type {[String, setRating]} */
@@ -43,8 +42,13 @@ const Rating = ({ profile, content, ...rest }) => {
         api.review.getRatings(profile, shortContent).then(data => {
             if (data && data.rating) {
                 setRating(data.rating)
+            } else {
+                setRating('')
             }
-        }).catch(console.error)
+        }).catch(err => {
+            console.error(err)
+            setRating('')
+        })
     }, [profile, shortContent, setRating])
 
     return (

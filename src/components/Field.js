@@ -4,10 +4,9 @@ import Heading from '@enact/moonstone/Heading'
 import PropTypes from 'prop-types'
 
 /**
- * @param {{
-    title: String,
-    children: Object
- }}
+ * @param {Object} obj
+ * @param {String} obj.title
+ * @param {Object} obj.children
  */
 const Field = ({ title, children, ...rest }) => {
     return (
