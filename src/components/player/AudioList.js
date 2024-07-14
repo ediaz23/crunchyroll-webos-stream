@@ -2,7 +2,10 @@
 import { useMemo } from 'react'
 import RadioItem from '@enact/moonstone/RadioItem'
 import Group from '@enact/ui/Group'
+import ri from '@enact/ui/resolution'
 import PropTypes from 'prop-types'
+
+import Scroller from '../../patch/Scroller'
 
 
 /**
@@ -29,15 +32,22 @@ const AudioList = ({ audios, audio, onSelectAudio, ...rest }) => {
     const selectedAudio = audioList.findIndex(val => audio && val.key === audio.audio_locale)
 
     return (
-        <Group
-            childComponent={RadioItem}
-            defaultSelected={selectedAudio}
-            onSelect={onSelectAudio}
-            select="radio"
-            selectedProp="selected"
-            {...rest}>
-            {audioList}
-        </Group>
+        <Scroller direction='vertical'
+            horizontalScrollbar='hidden'
+            verticalScrollbar='visible'
+            focusableScrollbar>
+            <div style={{ maxHeight: ri.scale(400) }}>
+                <Group
+                    childComponent={RadioItem}
+                    defaultSelected={selectedAudio}
+                    onSelect={onSelectAudio}
+                    select="radio"
+                    selectedProp="selected"
+                    {...rest}>
+                    {audioList}
+                </Group>
+            </div>
+        </Scroller>
     )
 }
 

@@ -40,7 +40,7 @@ const LoginPanel = ({ ...rest }) => {
         const account = await api.account.getAccount()
         const benefits = await api.subscription.getUserBenefits(account)
         for (const item of benefits.items) {
-            if (item.benefit=== 'cr_premium') {
+            if (item.benefit === 'cr_premium') {
                 setPremiumState(true)
                 break
             }

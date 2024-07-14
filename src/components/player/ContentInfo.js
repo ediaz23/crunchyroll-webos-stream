@@ -1,6 +1,7 @@
 
 import { useState } from 'react'
 import IconButton from '@enact/moonstone/IconButton'
+import ri from '@enact/ui/resolution'
 
 import { $L } from '../../hooks/language'
 import HomeContentBanner from '../home/ContentBanner'
@@ -15,7 +16,9 @@ const ContentInfo = ({ content }) => {
     return (
         <>
             <PopupMessage setShowPopup={setOnShowSubPopup}>
-                <HomeContentBanner content={content} noCategory spotlightDisabled />
+                <div style={{ height: ri.scale(400) }}>
+                    <HomeContentBanner content={content} noCategory spotlightDisabled />
+                </div>
             </PopupMessage>
             <IconButton
                 backgroundOpacity="lightTranslucent"
