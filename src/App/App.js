@@ -22,6 +22,7 @@ import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
+import DeveloperPanel from '../views/DeveloperPanel'
 import useCustomFetch from '../hooks/customFetch'
 import api from '../api'
 import utils from '../utils'
@@ -100,6 +101,7 @@ const App = ({ ...rest }) => {
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />
                     <Route path='askClose' component={ConfirmExitPanel} {...rest} />
+                    <Route path='developer' component={DeveloperPanel} {...rest} />
                 </RoutablePanels>
             </div>
         </ErrorBoundary>

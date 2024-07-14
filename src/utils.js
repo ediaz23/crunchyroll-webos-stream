@@ -212,6 +212,54 @@ export const getIsPremium = (item) => {
     }).is_premium_only
 }
 
+/**
+ * @param {Object} obj
+ * @param {Number} space
+ * @returns {String}
+ */
+export function customStringify(obj, space = 2) {
+    const seen = new WeakSet();
+
+    function helper(value, level) {
+        if (value === null) {
+            return 'null';
+        }
+
+        if (typeof value === 'undefined') {
+            return 'undefined';
+        }
+
+        if (typeof value === 'function') {
+            return value.toString();
+        }
+
+        if (typeof value !== 'object') {
+            return JSON.stringify(value);
+        }
+
+        if (seen.has(value)) {
+            return '"[Circular]"';
+        }
+        seen.add(value);
+
+        const indent = ' '.repeat(level * space);
+        const indentInner = ' '.repeat((level + 1) * space);
+
+        if (Array.isArray(value)) {
+            const arrayItems = value.map(item => `${indentInner}${helper(item, level + 1)}`).join(',\n');
+            return `[\n${arrayItems}\n${indent}]`;
+        }
+
+        const objectItems = Object.entries(value).map(([key, val]) => {
+            return `${indentInner}"${key}": ${helper(val, level + 1)}`;
+        }).join(',\n');
+
+        return `{\n${objectItems}\n${indent}}`;
+    }
+
+    return helper(obj, 0);
+}
+
 export default {
     isTv,
     stringifySorted,
@@ -226,4 +274,5 @@ export default {
     arrayToBase64,
     base64toArray,
     uint8ArrayToString,
+    customStringify,
 }

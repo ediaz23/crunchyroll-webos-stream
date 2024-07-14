@@ -1,7 +1,7 @@
 
 import 'webostvjs'
 import { api, localStore } from 'crunchyroll-js-api'
-import { LOAD_MOCK_DATA } from '../const'
+import { LOAD_MOCK_DATA, ERROR_CODES } from '../const'
 import { getMockData } from '../mock-data/mockData'
 import { translateError } from '../api/utils'
 
@@ -25,7 +25,7 @@ export const getUserBenefits = async (account) => {
         }
     } catch (error) {
         if (error instanceof Error) {
-            if (error.message === 'Forbidden') {
+            if (error.message === 'Forbidden' || error.code === ERROR_CODES.subscription_not_found) {
                 out = { items: [] }
             } else {
                 await translateError(error)

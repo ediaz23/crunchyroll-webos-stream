@@ -57,7 +57,7 @@ const LoginPanel = ({ ...rest }) => {
                 await api.auth.setCredentials({ username: email, password })
                 await makeLogin()
             } catch (error) {
-                setMessage(error.message)
+                setMessage(error.message || error.code)
             } finally {
                 setLoading(false)
             }
