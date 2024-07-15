@@ -27,6 +27,7 @@ export const ERROR_CODES = {
     invalid_auth_token: 'accounts.get_profile.invalid_auth_token',
     invalid_client: 'auth.obtain_access_token.client_inactive',
     create_profile_error: 'accounts.create_multi_profile.data_validation_error',
+    subscription_not_found: 'subscription.not_found',
 }
 
 export default {}

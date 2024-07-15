@@ -19,6 +19,7 @@ import {
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
 import Logout from '../components/login/Logout'
+import DevBtn from '../components/DevBtn'
 import api from '../api'
 import { DEV_FAST_SELECT } from '../const'
 import back from '../back'
@@ -147,16 +148,17 @@ const ProfilesPanel = ({ ...rest }) => {
                                     compRef={setFocus} />
                             )}
                         </Row>
-                        {multiProfile.profiles.length < multiProfile.tier_max_profiles &&
-                            <Row align='center center' style={{ marginTop: '3rem' }}>
+                        <Row align='center center' style={{ marginTop: '3rem' }}>
+                            {multiProfile.profiles.length < multiProfile.tier_max_profiles &&
                                 <Button onClick={onCreateProfile}>
                                     <Icon style={{ marginRight: '0.5rem' }}>
                                         plus
                                     </Icon>
                                     {$L('Add')}
                                 </Button>
-                            </Row>
-                        }
+                            }
+                            <DevBtn />
+                        </Row>
                     </>
                     :
                     <Spinner />

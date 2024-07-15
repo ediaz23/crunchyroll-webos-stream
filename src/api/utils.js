@@ -41,6 +41,8 @@ export const translateError = async (error) => {
             newError = new CrunchyrollError($L('Please check your email and password'), error.code)
         } else if (error.code === ERROR_CODES.invalid_password) {
             newError = new CrunchyrollError($L('Wrong password'), error.code)
+        } else if (error.code === ERROR_CODES.subscription_not_found) {
+            newError = new CrunchyrollError($L('Subscription not found'), error.code)
         } else if (error.code === ERROR_CODES.invalid_refresh_token) {
             newError = new CrunchyrollError($L('Invalid access token, try to log in again'), error.code)
             await localStore.setNewData({ token: null })

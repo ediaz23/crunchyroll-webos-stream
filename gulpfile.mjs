@@ -154,7 +154,7 @@ gulp.task('cleanService', () => deleteAsync('service/dist/**', { force: true }))
 
 gulp.task('update-appinfo', updateAppInfo)
 
-gulp.task('build', gulp.series('clean', 'pack', 'app'));
+gulp.task('build', gulp.series('clean', 'update-appinfo', 'pack', 'copy-in18'));
 gulp.task('build-service', gulp.series('installService', 'buildService'))
 
 gulp.task('build-dev', gulp.series('clean', 'update-appinfo', 'pack', 'copy-in18',
