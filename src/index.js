@@ -1,4 +1,5 @@
 /* global ENACT_PACK_ISOMORPHIC */
+import './my_polyfills'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { RecoilRoot } from 'recoil'
 import App from './App'

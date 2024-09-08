@@ -63,6 +63,8 @@ export const translateError = async (error) => {
             newError = new CrunchyrollError($L('Error creating profile.') + extra, error.code)
         }
         logger.error(error)
+    } else {
+        logger.error(error)
     }
     throw newError
 }

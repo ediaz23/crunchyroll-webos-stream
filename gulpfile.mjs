@@ -30,6 +30,16 @@ function cleanIlib(cb) {
         const realManifest = './node_modules/ilib/locale/ilibmanifest.json'
         const content = fs.readFileSync(fakeManifest, 'utf8')
         fs.writeFileSync(realManifest, content, 'utf8')
+        
+        const packageCrunchyrollPath = './node_modules/crunchyroll-js-api/package.json'
+        const packageCrunchyrollContent  = JSON.parse(fs.readFileSync(packageCrunchyrollPath, 'utf8'))
+        packageCrunchyrollContent.type = 'commonjs'
+        fs.writeFileSync(packageCrunchyrollPath, JSON.stringify(packageCrunchyrollContent, null, '    '), 'utf8')
+        
+        const i18nIsoM49Path = './node_modules/i18n-iso-m49/package.json'
+        const i18nIsoM49Content  = JSON.parse(fs.readFileSync(i18nIsoM49Path, 'utf8'))
+        i18nIsoM49Content.type = 'commonjs'
+        fs.writeFileSync(i18nIsoM49Path, JSON.stringify(i18nIsoM49Content, null, '    '), 'utf8')
         cb()
     } catch (err) {
         handleError(cb)(err)

@@ -1,0 +1,113 @@
+{
+  "name": "com.crunchyroll.webos.stream",
+  "version": "1.1.3",
+  "description": "Unofficial Crunchyroll app for LG Smart TVs.",
+  "main": "src/index.js",
+  "scripts": {
+    "serve": "NODE_ENV=development REACT_APP_SERVING=true enact serve",
+    "serve-p": "NODE_ENV=production REACT_APP_SERVING=true enact serve",
+    "pack": "NODE_ENV=development REACT_APP_SERVING=false enact pack",
+    "pack-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p",
+    "watch": "NODE_ENV=development REACT_APP_SERVING=false enact pack --watch",
+    "clean": "enact clean",
+    "lint": "enact lint .",
+    "license": "enact license",
+    "test": "enact test",
+    "test-watch": "enact test --watch",
+    "build": "NODE_ENV=development gulp build",
+    "build-dev": "NODE_ENV=development gulp build-dev",
+    "build-p": "NODE_ENV=production gulp build-p",
+    "build-service": "gulp build-service",
+    "install-tv": "gulp install-app",
+    "install-tv-1": "gulp install-app-tv1",
+    "start": "ares-launch com.crunchyroll.stream.app",
+    "start-1": "ares-launch -d tv1 com.crunchyroll.stream.app",
+    "stats": "NODE_ENV=development REACT_APP_SERVING=false enact pack --stats",
+    "stats-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p --stats",
+    "manifest": "gulp manifest",
+    "play": "NODE_ENV=development npm run build-dev && npm run install-tv && npm run start",
+    "play-1": "NODE_ENV=development npm run build-dev && npm run install-tv-1 && npm run start-1",
+    "play-p": "NODE_ENV=production npm run build-p && npm run install-tv-1 && npm run start-1",
+    "translate": "npx i18next-scanner --config ./i18next-scanner.config.react.js",
+    "postinstall": "gulp clean-ilib"
+  },
+  "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "repository": "https://github.com/ediaz23/crunchyroll-webos-stream",
+  "keywords": [
+    "anime",
+    "crunchyroll",
+    "webos",
+    "player",
+    "react",
+    "enact",
+    "recoil",
+    "moonstone"
+  ],
+  "enact": {
+    "theme": "moonstone",
+    "resolveFallback": {
+      "fs": false,
+      "path": false,
+      "node-fetch": false,
+      "form-data": false
+    },
+    "packagerOptions": {
+      "ignore": [
+        "service/**",
+        "org.webosbrew.manifest.json",
+        "screenshots"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=16.13.0"
+  },
+  "eslintConfig": {
+    "extends": "enact-proxy/strict"
+  },
+  "eslintIgnore": [
+    "node_modules/*",
+    "build/*",
+    "dist/*",
+    "service/*",
+    "libs/*"
+  ],
+  "dependencies": {
+    "@cospired/i18n-iso-languages": "^4.2.0",
+    "@enact/core": "^4.8.0",
+    "@enact/i18n": "^4.8.0",
+    "@enact/moonstone": "^4.5.6",
+    "@enact/spotlight": "^4.8.0",
+    "@enact/ui": "^4.8.0",
+    "@enact/webos": "^4.8.0",
+    "classnames": "^2.5.1",
+    "crunchyroll-js-api": "^1.3.1",
+    "dashjs": "^4.7.4",
+    "fake-xml-http-request": "^2.1.2",
+    "i18n-iso-countries": "^7.11.2",
+    "i18n-iso-m49": "^1.0.0",
+    "ilib": "^14.20.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recoil": "^0.7.7",
+    "uuid": "^9.0.1",
+    "web-vitals": "^4.0.0",
+    "webostvjs": "^1.2.5"
+  },
+  "resolutions": {
+    "//": "See https://github.com/facebook/create-react-app/issues/11773",
+    "react-error-overlay": "6.0.9"
+  },
+  "devDependencies": {
+    "@types/webostvjs": "^1.2.5",
+    "del": "^7.1.0",
+    "eslint-config-enact-proxy": "^1.0.7",
+    "gulp": "^5.0.0",
+    "gulp-shell": "^0.8.0",
+    "i18next-scanner": "^4.5.0",
+    "react-error-overlay": "^6.0.11"
+  }
+}
