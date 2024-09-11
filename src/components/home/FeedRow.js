@@ -21,11 +21,12 @@ import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
 const NavigableDiv = withNavigable('div', '')
 
 
-export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
+export const Poster = ({ item, image, itemHeight, itemSize, isPremium, compKey: key, ...rest }) => {
     /** @type {Array<String>} */
     const playableTypes = useMemo(() =>
         ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
+    rest.style.height = itemHeight
     let progress = 0, duration = undefined, showPremium = false
 
     if (playableTypes.includes(item.type)) {
@@ -39,7 +40,7 @@ export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
     }
 
     return (
-        <NavigableDiv {...rest}>
+        <NavigableDiv key={key} {...rest}>
             <Image src={image.source} sizing='none' style={image.size}>
                 {playableTypes.includes(item.type) &&
                     <div className={globalCss.progress} style={{ bottom: '1.8rem' }}>
@@ -59,14 +60,17 @@ export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
     )
 }
 
-const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
+const HomeFeedItem = ({ feed, index, imageHeight, key, rowIndex, ...rest }) => {
     const feedItem = feed.items[index]
     const getImagePerResolution = useGetImagePerResolution()
     const margin = ri.scale(20)
-    const image = getImagePerResolution({ height: itemHeight, width: rest.itemSize - margin, content: feedItem })
+    const image = getImagePerResolution({ height: imageHeight, width: rest.itemSize - margin, content: feedItem })
+
     return (
         <Poster item={feedItem}
             image={image}
+            key={key}
+            compKey={`${rowIndex}_${key}`}
             {...rest} />
     )
 }
@@ -76,6 +80,8 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     const compRef = useRef({ current: null })
     /** @type {[Number, Function]} */
     const [itemHeight, setItemHeight] = useState(0)
+    /** @type {[Number, Function]} */
+    const [imageHeight, setImageHeight] = useState(0)
     /** @type {Number} */
     const itemWidth = ri.scale(320)
     /** @type {{current: Function}} */
@@ -115,9 +121,10 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     useEffect(() => {
         if (compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect()
-            setItemHeight(itemSize - boundingRect.height * 2)
+            setItemHeight(itemSize - boundingRect.height)
+            setImageHeight(itemSize - boundingRect.height * 2)
         }
-    }, [itemSize, setItemHeight])
+    }, [itemSize, setItemHeight, setImageHeight])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -166,7 +173,9 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
                             onFocus: selectElement,
                             onClick: showContentDetail,
                             itemHeight,
+                            imageHeight,
                             isPremium,
+                            rowIndex,
                         }}
                         direction='horizontal'
                         verticalScrollbar='hidden'

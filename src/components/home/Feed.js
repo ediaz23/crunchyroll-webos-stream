@@ -15,6 +15,7 @@ import api from '../../api'
 import { LOAD_MOCK_DATA } from '../../const'
 import logger from '../../logger'
 import kidImg from '../../../resources/img/child.jpg'
+import css from './Feed.module.less'
 
 
 /**
@@ -332,7 +333,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
     /** @type {Object} */
     const fakeItem = useMemo(getFakeFeedItem, [])
     /** @type {Function} */
-    const renderRow = useCallback(({ index, ...rest }) => {
+    const renderRow = useCallback(({ index, key, ...rest }) => {
         let out
         const feedItem = homeFeed[index]
         if (feedItem.processed) {
@@ -341,6 +342,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
                     feed={feedItem}
                     rowIndex={index}
                     setContent={setSelectedContent}
+                    key={key}
                     {...rest} />
             )
         } else {
@@ -360,7 +362,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
             delete rest.itemSize
             delete rest.cellId
             out = (
-                <div {...rest} style={{ height: itemSize }}>
+                <div {...rest} style={{ height: itemSize }} key={key}>
                     <Spinner />
                 </div>
             )
@@ -379,8 +381,8 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
     }, [homePosition.rowIndex])
 
     return (
-        <Column style={{ paddingLeft: '0.5rem' }} {...rest2}>
-            <Cell size="47%">
+        <Column className={css.feed} {...rest2}>
+            <Cell>
                 {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
             </Cell>
             <Cell>
