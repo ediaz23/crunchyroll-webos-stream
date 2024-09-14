@@ -143,7 +143,11 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
             const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
                 val.id === testContent[DEV_CONTENT_TYPE])
             if (content) {
-                setContentNavagate(content)
+                setContentNavagate({
+                    content,
+                    rowIndex: 0,
+                    columnIndex: feed.items.findIndex(i => i === content)
+                })
             }
         }
     }, [feed.items, setContentNavagate])
