@@ -150,7 +150,11 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
             const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
                 val.id === testContent[DEV_CONTENT_TYPE])
             if (content) {
-                setContentNavagate(content)
+                setContentNavagate({
+                    content,
+                    rowIndex: 0,
+                    columnIndex: feed.items.findIndex(i => i === content)
+                })
             }
         }
     }, [feed.items, setContentNavagate])
@@ -160,7 +164,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
             <Heading size="title" spacing="small" componentRef={compRef} marqueeOn='hover'>
                 {feed.title}
             </Heading>
-            <div style={{ height: `${itemHeight}px` }}>
+            <div className={css.feedRowContainer} style={{ height: `${itemHeight}px` }}>
                 {itemHeight > 0 &&
                     <VirtualListNested
                         dataSize={feed.items.length}
