@@ -139,9 +139,9 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                 </Column>
             }
             {!loading &&
-                <Row style={{ width: '100%' }}>
-                    <Cell size="49%">
-                        <Column>
+                <Row style={{ height: '100%', width: '100%' }}>
+                    <Cell size="49%" style={{ height: '100%', width: '49%' }}>
+                        <Column style={{ height: '100%', width: '100%' }}>
                             <Cell shrink>
                                 <ContentHeader content={series} />
                             </Cell>
@@ -153,7 +153,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                             </Cell>
                         </Column>
                     </Cell>
-                    <Cell size="49%">
+                    <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                         {episodes.length ?
                             <EpisodesList
                                 episodes={episodes}
