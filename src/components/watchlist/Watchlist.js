@@ -16,6 +16,7 @@ import useContentList from '../../hooks/contentList'
  * @returns {Promise<{total: Number, data: Array}>}
  */
 const processResult = async ({ profile, data }) => {
+    /** @type {Array} */
     const contentIds = data.map(item => {
         let out = item.id
         if (item.type === 'episode') {
@@ -25,7 +26,11 @@ const processResult = async ({ profile, data }) => {
         }
         return out
     })
-    return api.cms.getObjects(profile, { objectIds: contentIds, ratings: true })
+    let res = { total: 0, data: [] }
+    if (contentIds.length) {
+        res = await api.cms.getObjects(profile, { objectIds: contentIds, ratings: true })
+    }
+    return res
 }
 
 /**
