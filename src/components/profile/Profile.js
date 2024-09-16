@@ -9,6 +9,7 @@ import { $L } from '../../hooks/language'
 import css from './Profile.module.less'
 import withNavigable from '../../hooks/navigable'
 import api from '../../api'
+import kidImg from '../../../resources/img/child.jpg'
 
 
 const ImageNavigable = withNavigable(Image, css.profileFocus)
@@ -30,7 +31,7 @@ const Profile = ({ profile, onSelectProfile, onEditProfile, compRef, ...rest }) 
                     <ImageNavigable
                         data-profile-id={profile.profile_id}
                         className={css.profileImg}
-                        src={api.assets.getAvatarUrl(profile.avatar)}
+                        src={profile.avatar && api.assets.getAvatarUrl(profile.avatar) || kidImg}
                         alt={$L('Profile Picture')}
                         onClick={onSelectProfile}
                         ref={compRef} />

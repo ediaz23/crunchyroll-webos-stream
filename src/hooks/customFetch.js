@@ -8,7 +8,7 @@ import { _LOCALHOST_SERVER_ } from '../const'
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
 
-const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
+export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const CONCURRENT_REQ_LIMIT = 8
 let currentReqIndex = CONCURRENT_REQ_LIMIT
 

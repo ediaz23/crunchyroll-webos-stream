@@ -3,8 +3,10 @@ import { Row, Column } from '@enact/ui/Layout'
 import Input from '@enact/moonstone/Input'
 import Button from '@enact/moonstone/Button'
 import Heading from '@enact/moonstone/Heading'
+import Icon from '@enact/moonstone/Icon'
 import PropTypes from 'prop-types'
 
+import DevBtn from '../DevBtn'
 import { $L } from '../../hooks/language'
 import css from './Login.module.less'
 
@@ -32,8 +34,12 @@ const Login = ({ email, changeEmail, password, changePassword, doLogin, ...rest 
             </Row>
             <Row align="center flex-end">
                 <Button onClick={doLogin}>
+                    <Icon style={{ marginRight: '0.5rem' }}>
+                        plug
+                    </Icon>
                     {$L('Login')}
                 </Button>
+                <DevBtn />
             </Row>
         </Column>
     )

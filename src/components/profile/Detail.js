@@ -76,6 +76,12 @@ const ProfileInfo = ({ profile, setProfile, usernames, onShowSelectAvatar }) => 
         setTimeout(() => Spotlight.focus(), 100)
     }, [])
 
+    useEffect(() => {
+        if (profile.profile_id && !profile.username) {
+            onSelectUsername({ selected: 0 })
+        }
+    }, [profile, onSelectUsername])
+
     return (
         <Column className={css.formColumn}>
             <Heading size="large">{$L('Information')}</Heading>
@@ -102,7 +108,7 @@ const ProfileInfo = ({ profile, setProfile, usernames, onShowSelectAvatar }) => 
             </Field>
             <Field className={profile.profile_id ? css.textField : ''} title={$L('Username')}>
                 {profile.profile_id ?
-                    profile.username
+                    profile.username || 'Profile'
                     :
                     <Dropdown title={$L('Username')}
                         selected={usernames.indexOf(profile.username)}

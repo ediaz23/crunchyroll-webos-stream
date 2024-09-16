@@ -40,7 +40,7 @@ const LoginPanel = ({ ...rest }) => {
         const account = await api.account.getAccount()
         const benefits = await api.subscription.getUserBenefits(account)
         for (const item of benefits.items) {
-            if (item.benefit=== 'cr_premium') {
+            if (item.benefit === 'cr_premium') {
                 setPremiumState(true)
                 break
             }
@@ -57,7 +57,7 @@ const LoginPanel = ({ ...rest }) => {
                 await api.auth.setCredentials({ username: email, password })
                 await makeLogin()
             } catch (error) {
-                setMessage(error.message)
+                setMessage(error.message || error.code)
             } finally {
                 setLoading(false)
             }
