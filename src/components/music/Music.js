@@ -29,7 +29,7 @@ const MusicBrowse = ({ profile, title, contentKey, contentType, musicFeed, setMu
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
         loading, setLoading,
-    } = useContentList()
+    } = useContentList('music_browse')
 
     /** @type {[String, Function]} */
     const [query, setQuery] = useState(optionBak.query || '')

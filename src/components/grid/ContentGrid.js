@@ -45,7 +45,7 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine, noCatego
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
         loading, setLoading,
-    } = useContentList()
+    } = useContentList('content_grid')
 
     /** @type {[String, Function]} */
     const [category, setCategory] = useState(optionBak.category || 'all')
