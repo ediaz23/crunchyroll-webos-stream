@@ -32,13 +32,14 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
  */
 
 /**
+ * @param {String} type
  * @returns {ListViewProps}
  */
-export const useContentList = () => {
+export const useContentList = (type) => {
 
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {[{options: Object, contentList: Array<Object>}, Function]} */
+    /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
     const [homeBackup, setHomeBackup] = useRecoilState(homeBackupState)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
@@ -65,8 +66,8 @@ export const useContentList = () => {
 
     /** @type {Function} */
     const onLeave = useCallback((options) => {
-        setHomeBackup({ options, contentList })
-    }, [setHomeBackup, contentList])
+        setHomeBackup({ options, contentList, type })
+    }, [setHomeBackup, contentList, type])
 
     /** @type {Function} */
     const onFilter = useCallback(({ delay: delayP, scroll = false }) => {

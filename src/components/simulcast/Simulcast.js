@@ -35,7 +35,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
         loading, setLoading,
-    } = useContentList()
+    } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
     const [season, setSeason] = useState(optionBak.season || undefined)

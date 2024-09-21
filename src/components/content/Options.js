@@ -8,6 +8,7 @@ import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import Spinner from '@enact/moonstone/Spinner'
+import { useSetRecoilState, useRecoilState } from 'recoil'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
@@ -17,6 +18,7 @@ import { ContentHeader } from '../home/ContentBanner'
 import api from '../../api'
 import back from '../../back'
 import css from './ContentDetail.module.less'
+import { homePositionState, homeBackupState } from '../../recoilConfig'
 
 
 const useChangeActivity = (setIndex, index) => {
@@ -201,6 +203,10 @@ export const getNextContent = async (profile, content) => {
  */
 const Options = ({ profile, content, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
 
+    /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
+    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupState)
+    /** @type {Function} */
+    const setHomePosition = useSetRecoilState(homePositionState)
     /** @type {[Object, Function]} */
     const [nextContent, setNextConent] = useState(null)
     /** @type {[Object, Function]} */
@@ -233,8 +239,28 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
         } else {
             api.content.addWatchlistItem(profile, { contentId: content.id })
         }
+        if (homeBackup && homeBackup.type === 'watchlist' && homeBackup.contentList) {
+            if (isInWatchlist) {
+                const removedIndex = homeBackup.contentList.findIndex(c => c.id === content.id)
+                if (removedIndex >= 0) {
+                    const newList = homeBackup.contentList.filter(c => c.id !== content.id)
+                    setHomeBackup({
+                        ...homeBackup,
+                        contentList: newList.length ? newList : null
+                    })
+                    setHomePosition({ rowIndex: Math.max(0, removedIndex - 1) })
+                }
+            } else {
+                setHomeBackup({
+                    ...homeBackup,
+                    contentList: [content, ...(homeBackup.contentList || [])]
+                })
+                setHomePosition({ rowIndex: 0 })
+            }
+        }
         setIsInWatchlist(prev => !prev)
-    }, [profile, content, isInWatchlist, setIsInWatchlist])
+    }, [profile, content, isInWatchlist, setIsInWatchlist, homeBackup, setHomeBackup,
+        setHomePosition])
 
 
     useEffect(() => {

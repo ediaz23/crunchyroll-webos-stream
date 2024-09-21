@@ -44,7 +44,7 @@ const Watchlist = ({ profile, ...rest }) => {
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak,
         loading, setLoading,
-    } = useContentList()
+    } = useContentList('watchlist')
 
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
