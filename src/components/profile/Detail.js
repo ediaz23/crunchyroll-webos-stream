@@ -206,8 +206,8 @@ const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
             <Field className={css.textField} title={$L('App Language')}>
                 {lang}
             </Field>
-            <Row className={css.actions} align='center center' size="100%">
-                <Column className={css.buttonContainer} size="100%">
+            <Row className={css.actions} align='center center' size="100%" style={{ width: '100%' }}>
+                <Column className={css.buttonContainer} size="100%" style={{ height: '100%' }}>
                     <Button onClick={onSave}>
                         <Icon className={css.buttonIcon}>
                             checkselection

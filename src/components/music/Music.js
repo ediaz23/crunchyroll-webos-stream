@@ -106,7 +106,7 @@ const MusicBrowse = ({ profile, title, contentKey, contentType, musicFeed, setMu
     }, [profile, contentListBak, changeContentList, onFilter, contentKey])
 
     return (
-        <Column style={{ width: '100%' }} {...rest}>
+        <Column id="music-feed" style={{ width: '100%' }} {...rest}>
             <Cell shrink>
                 <Row>
                     <Cell shrink>
@@ -118,11 +118,12 @@ const MusicBrowse = ({ profile, title, contentKey, contentType, musicFeed, setMu
                         <Input placeholder={$L('Search')}
                             value={query}
                             onChange={onSearch}
-                            iconAfter="search" />
+                            iconAfter="search"
+                            style={{ paddingRight: '2rem' }} />
                     </Cell>
                 </Row>
             </Cell>
-            <Cell grow style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+            <Cell grow style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '90%' }}>
                 {loading &&
                     <Column align='center center'>
                         <Spinner />

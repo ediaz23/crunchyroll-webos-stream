@@ -13,6 +13,7 @@ import { $L } from '../../hooks/language'
 import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
+import scrollCss from '../../patch/Scroller.module.less'
 
 
 /**
@@ -97,7 +98,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, onLeav
         return () => clearInterval(interval)
     }, [autoScroll, homePosition.rowIndex])
 
-    return (<>
+    return (<div className={scrollCss.scrollerFix}>
         {contentList.length ?
             <VirtualGridList {...rest}
                 dataSize={contentList.length}
@@ -111,7 +112,7 @@ const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, onLeav
                 <h1>{$L('Empty')}</h1>
             </Row>
         }
-    </>)
+    </div>)
 }
 
 ContentGridItems.propTypes = {

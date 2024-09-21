@@ -58,7 +58,7 @@ const LangSelector = ({ profile, content, ...rest }) => {
 
     return (
         <Row {...rest}>
-            <Cell size="49%">
+            <Cell size="49%" style={{ maxWidth: '49%' }}>
                 <ContentHeader content={content} />
                 {subtitleLangList && subtitleLangList.length > 0 && (
                     <Field title={$L('Subtitle')} className={css.firstData}>

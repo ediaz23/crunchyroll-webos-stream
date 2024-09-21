@@ -138,8 +138,8 @@ const Artist = ({ profile, artist, ...rest }) => {
                     <Image className={css.poster} src={image.source} sizing='fill' />
                 }
                 <Cell className={css.modal}>
-                    <Row align='start space-between'>
-                        <Cell size="49%">
+                    <Row align='start space-between' style={{height: '100%'}}>
+                        <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                             <ContentHeader content={artist} />
                             <div className={css.scrollerContainer}>
                                 <Scroller direction='vertical'
@@ -155,7 +155,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                                 selectContent={onSetSelectContent}
                                 selectIndex={selectIndex} />
                         </Cell>
-                        <Cell size="49%">
+                        <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                             {loading ?
                                 <Column align='center center'>
                                     <Spinner />

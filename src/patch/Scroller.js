@@ -3,6 +3,7 @@ import Scrollable from '@enact/moonstone/Scrollable'
 import PropTypes from 'prop-types'
 import { ScrollerBase } from '@enact/moonstone/Scroller'
 
+import scrollCss from './Scroller.module.less'
 
 class ScrollerFix extends ScrollerBase {
     componentDidMount() {
@@ -14,14 +15,19 @@ class ScrollerFix extends ScrollerBase {
 }
 
 
-const Scroller = (props) => (
-    <Scrollable
-        {...props}
-        childRenderer={(scrollerProps) => { // eslint-disable-line react/jsx-no-bind
-            return <ScrollerFix {...scrollerProps} />
-        }}
-    />
-)
+const Scroller = (props) => {
+
+    const newClassName = `${props.className || ''} ${scrollCss.scrollerFix}`
+    return (
+        <Scrollable
+            {...props}
+            className={newClassName}
+            childRenderer={(scrollerProps) => { // eslint-disable-line react/jsx-no-bind
+                return <ScrollerFix {...scrollerProps} />
+            }}
+        />
+    )
+}
 
 Scroller.propTypes = /** @lends moonstone/Scroller.Scroller.prototype */ {
     direction: PropTypes.oneOf(['both', 'horizontal', 'vertical'])
