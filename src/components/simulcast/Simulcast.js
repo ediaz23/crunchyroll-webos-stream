@@ -164,7 +164,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
                 </Cell>
                 <Cell grow style={{ height: '90%' }}>
                     <Row className={css.scrollerContainer}>
-                        <Cell grow >
+                        <Cell grow style={{ height: '100%' }}>
                             {loading &&
                                 <Column align='center center'>
                                     <Spinner />

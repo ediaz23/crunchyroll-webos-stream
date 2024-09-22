@@ -1,15 +1,20 @@
-.scrollerFix {
+.scrollFixRule {
+    height: 100%;
 
-    >div>div::before,
-    >div>div::after {
-        height: 0 !important;
-    }
+    >div>div {
+        height: 100%;
 
-    > :global(.moonstone) {
-
-        >div>div::before,
-        >div>div::after {
+        &::before,
+        &::after {
             height: 0 !important;
         }
+    }
+}
+
+.scrollerFix {
+    .scrollFixRule;
+
+    > :global(.moonstone) {
+        .scrollFixRule;
     }
 }

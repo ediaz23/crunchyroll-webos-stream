@@ -138,7 +138,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                     <Image className={css.poster} src={image.source} sizing='fill' />
                 }
                 <Cell className={css.modal}>
-                    <Row align='start space-between' style={{height: '100%'}}>
+                    <Row align='start space-between'>
                         <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                             <ContentHeader content={artist} />
                             <div className={css.scrollerContainer}>

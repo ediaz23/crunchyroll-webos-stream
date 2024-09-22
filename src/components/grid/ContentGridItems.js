@@ -98,21 +98,23 @@ const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, onLeav
         return () => clearInterval(interval)
     }, [autoScroll, homePosition.rowIndex])
 
-    return (<div className={scrollCss.scrollerFix}>
-        {contentList.length ?
-            <VirtualGridList {...rest}
-                dataSize={contentList.length}
-                itemRenderer={renderItem}
-                itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                spacing={ri.scale(25)}
-                cbScrollTo={getScrollTo}
-            />
-            :
-            <Row align='center center' {...rest}>
-                <h1>{$L('Empty')}</h1>
-            </Row>
-        }
-    </div>)
+    return (
+        <div className={scrollCss.scrollerFix}>
+            {contentList.length ?
+                <VirtualGridList {...rest}
+                    dataSize={contentList.length}
+                    itemRenderer={renderItem}
+                    itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+                    spacing={ri.scale(25)}
+                    cbScrollTo={getScrollTo}
+                />
+                :
+                <Row align='center center' {...rest}>
+                    <h1>{$L('Empty')}</h1>
+                </Row>
+            }
+        </div>
+    )
 }
 
 ContentGridItems.propTypes = {

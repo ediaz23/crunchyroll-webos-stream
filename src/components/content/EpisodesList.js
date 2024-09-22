@@ -15,6 +15,7 @@ import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentDetail.module.less'
 import globalCss from '../Share.module.less'
+import scrollCss from '../../patch/Scroller.module.less'
 
 
 const NavigableDiv = withNavigable('div', '')
@@ -113,22 +114,24 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, ...rest }) => {
     }, [episodes, episodeIndex])
 
     return (
-        <VirtualList
-            {...rest}
-            dataSize={episodes.length}
-            itemRenderer={renderItem}
-            itemSize={itemHeight}
-            cbScrollTo={getScrollTo}
-            direction='vertical'
-            verticalScrollbar='hidden'
-            childProps={{
-                onClick: selectEpisode,
-                className: css.episode,
-                itemHeight,
-                episodes,
-                images,
-            }}
-        />
+        <div className={scrollCss.scrollerFix}>
+            <VirtualList
+                {...rest}
+                dataSize={episodes.length}
+                itemRenderer={renderItem}
+                itemSize={itemHeight}
+                cbScrollTo={getScrollTo}
+                direction='vertical'
+                verticalScrollbar='hidden'
+                childProps={{
+                    onClick: selectEpisode,
+                    className: css.episode,
+                    itemHeight,
+                    episodes,
+                    images,
+                }}
+            />
+        </div>
     )
 }
 

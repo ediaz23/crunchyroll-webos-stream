@@ -25,6 +25,7 @@ import SelectLanguage from '../SelectLanguage'
 import Alert from '../Alert'
 import PopupMessage from '../Popup'
 import css from './Detail.module.less'
+import scrollCss from '../../patch/Scroller.module.less'
 import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
 import back from '../../back'
@@ -321,14 +322,18 @@ const AvatarGridBase = ({ open, avatars, setProfile, ...rest }) => {
                     style={{ marginBottom: '1rem' }}>
                     {albums}
                 </Dropdown>
-                <VirtualGridList
-                    className={css.avatarList}
-                    dataSize={avatarsList.length}
-                    itemRenderer={renderItem}
-                    itemSize={{ minHeight: ri.scale(200), minWidth: ri.scale(200) }}
-                    spacing={ri.scale(25)}
-                    cbScrollTo={getScrollTo}
-                />
+                <div style={{ height: '90%' }}>
+                    <div className={scrollCss.scrollerFix}>
+                        <VirtualGridList
+                            className={css.avatarList}
+                            dataSize={avatarsList.length}
+                            itemRenderer={renderItem}
+                            itemSize={{ minHeight: ri.scale(200), minWidth: ri.scale(200) }}
+                            spacing={ri.scale(25)}
+                            cbScrollTo={getScrollTo}
+                        />
+                    </div>
+                </div>
             </Column>
         </FloatingLayer>
     )
