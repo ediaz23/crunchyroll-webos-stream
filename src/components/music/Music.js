@@ -56,17 +56,15 @@ const MusicBrowse = ({ profile, title, contentKey, contentType, musicFeed, setMu
 
     /** @type {Function} */
     const onLoad = useCallback((index) => {
-        if (index % options.quantity === 0) {
-            if (contentList[index] === undefined) {
-                mergeContentList(false, index)
-                api.discover.search(profile, { ...options, start: index }).then(res => {
+        if (mergeContentList(false, index)) {
+            api.discover.search(profile, { ...options, start: index })
+                .then(res => {
                     if (res.total) {
                         mergeContentList(res.data[0].items, index)
                     }
                 })
-            }
         }
-    }, [options, profile, contentList, mergeContentList])
+    }, [options, profile, mergeContentList])
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
