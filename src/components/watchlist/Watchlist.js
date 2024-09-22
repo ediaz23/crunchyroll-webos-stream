@@ -64,16 +64,15 @@ const Watchlist = ({ profile, ...rest }) => {
 
     /** @type {Function} */
     const onLoad = useCallback((index) => {
-        if (contentList[index] === undefined) {
-            mergeContentList(false, index)
-            api.discover.getWatchlist(profile, { ...options, start: index }).then(res =>
-                processResult({ profile, data: res.data }).then(res2 => {
-                    mergeContentList(res2.data, index)
-                })
-            )
-
+        if (mergeContentList(false, index)) {
+            api.discover.getWatchlist(profile, { ...options, start: index })
+                .then(res =>
+                    processResult({ profile, data: res.data }).then(res2 =>
+                        mergeContentList(res2.data, index)
+                    )
+                )
         }
-    }, [profile, contentList, mergeContentList, options])
+    }, [profile, mergeContentList, options])
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {

@@ -90,14 +90,11 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     /** @type {Function} */
     const onLoad = useCallback((index) => {
-        if (contentList[index] === undefined) {
-            mergeContentList(false, index)
-            api.discover.getBrowseAll(profile, { ...options, start: index }).then(res =>
-                mergeContentList(res.data, index)
-            )
-
+        if (mergeContentList(false, index)) {
+            api.discover.getBrowseAll(profile, { ...options, start: index })
+                .then(res => mergeContentList(res.data, index))
         }
-    }, [profile, contentList, mergeContentList, options])
+    }, [profile, mergeContentList, options])
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {

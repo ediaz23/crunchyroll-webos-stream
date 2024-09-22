@@ -1,5 +1,5 @@
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import { useSetRecoilState, useRecoilState } from 'recoil'
 import { homeViewReadyState, homeBackupState, homePositionState } from '../recoilConfig'
 
@@ -51,6 +51,8 @@ export const useContentList = (type) => {
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
+    /** @type {{current: Array<{start: Number, end: Number}>}} */
+    const queue = useRef([])
     /** @type {Number} */
     const quantity = 20
 
@@ -77,17 +79,37 @@ export const useContentList = (type) => {
 
     /** @type {Function} */
     const mergeContentList = useCallback((items, index) => {
-        setContentList(prevArray => {
-            if (!Array.isArray(items)) {
-                const size = Math.min(prevArray.length - index, quantity)
-                items = Array.from({ length: size }, () => items)
+        let out = false
+        /** all this code is for avoid multiples request onload */
+        if (!Array.isArray(items)) {
+            if (items === undefined) {
+                queue.current = queue.current.filter(i => !(i.start <= index && index <= i.end))
+                out = true
+            } else {
+                if (!queue.current.find(i => i.start <= index && index <= i.end)) {
+                    queue.current.push({ start: index, end: index + quantity })
+                    out = true
+                }
             }
-            return [
-                ...prevArray.slice(0, index),
-                ...items,
-                ...prevArray.slice(index + items.length)
-            ]
-        })
+        } else {
+            queue.current = queue.current.filter(i => !(i.start <= index && index <= i.end))
+            out = true
+        }
+        /** -------------------------------------------------- */
+        if (out) {
+            setContentList(prevArray => {
+                if (!Array.isArray(items)) {
+                    const size = Math.min(prevArray.length - index, quantity)
+                    items = Array.from({ length: size }, () => items)
+                }
+                return [
+                    ...prevArray.slice(0, index),
+                    ...items,
+                    ...prevArray.slice(index + items.length)
+                ]
+            })
+        }
+        return out
     }, [setContentList, quantity])
 
     return {

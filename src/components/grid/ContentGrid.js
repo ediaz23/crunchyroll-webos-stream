@@ -76,22 +76,20 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine, noCatego
 
     /** @type {Function} */
     const onLoad = useCallback((index) => {
-        if (index % options.quantity === 0) {
-            if (contentList[index] === undefined) {
-                mergeContentList(false, index)
-                if (engine === 'search') {
-                    api.discover.search(profile, { ...options, start: index }).then(res => {
+        if (mergeContentList(false, index)) {
+            if (engine === 'search') {
+                api.discover.search(profile, { ...options, start: index })
+                    .then(res => {
                         if (res.total) {
                             mergeContentList(res.data[0].items, index)
                         }
                     })
-                } else {
-                    api.discover.getBrowseAll(profile, { ...options, start: index })
-                        .then(res => mergeContentList(res.data, index))
-                }
+            } else {
+                api.discover.getBrowseAll(profile, { ...options, start: index })
+                    .then(res => mergeContentList(res.data, index))
             }
         }
-    }, [engine, options, profile, contentList, mergeContentList])
+    }, [engine, options, profile, mergeContentList])
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
