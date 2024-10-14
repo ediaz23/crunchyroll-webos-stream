@@ -10,6 +10,7 @@ import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
 
 import api from '../../api'
+import { $L } from '../../hooks/language'
 import { getIsPremium } from '../../utils'
 
 
@@ -59,7 +60,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
     /** @type {[Number, Function]} */
     const [seasonIndex, setSeasonIndex] = useState(contentDetailBak.seasonIndex || 0)
     /** @type {[Array<Object>, Function]} */
-    const [episodes, setEpisodes] = useState(contentDetailBak.episodes || [])
+    const [episodes, setEpisodes] = useState(contentDetailBak.episodes || null)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
 
@@ -73,13 +74,15 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
     const playEpisode = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const episodeIndex = parseInt(target.dataset.index)
-        setContentToPlay(episodes[episodeIndex], {
-            seasons,
-            seasonIndex,
-            episodes,
-            episodeIndex,
+        if (episodes) {
+            setContentToPlay(episodes[episodeIndex], {
+                seasons,
+                seasonIndex,
+                episodes,
+                episodeIndex,
 
-        })
+            })
+        }
     }, [seasons, seasonIndex, episodes, setContentToPlay])
 
     useEffect(() => {
@@ -119,14 +122,18 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                             })
                             seasons[seasonIndex].episodes = data
                         }),
-                        calculatePlayheadProgress({ profile, episodesData: data }),
+                        Promise.resolve().then(() => {
+                            if (data.length) {
+                                return calculatePlayheadProgress({ profile, episodesData: data })
+                            }
+                        }),
                     ]).then(() => setEpisodes(data)))
             }
         }
         let timeout = null
         if (seasons.length && contentDetailBak.episodes == null) {
-            setEpisodes([])
-            timeout = setTimeout(loadData, 1000)
+            setEpisodes(null)
+            timeout = setTimeout(loadData, 256)
         }
         return () => clearTimeout(timeout)
     }, [profile, seasons, seasonIndex, isPremium, contentDetailBak.episodes])
@@ -154,15 +161,21 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                         </Column>
                     </Cell>
                     <Cell size="49%">
-                        {episodes.length ?
+                        {!episodes &&
+                            <Column align='center center' style={{ height: '100%', width: '100%' }}>
+                                <Spinner />
+                            </Column>
+                        }
+                        {episodes && episodes.length === 0 &&
+                            <Column align='center center' style={{ height: '100%', width: '100%' }}>
+                                <h1>{$L('Empty')}</h1>
+                            </Column>
+                        }
+                        {episodes && episodes.length > 0 &&
                             <EpisodesList
                                 episodes={episodes}
                                 selectEpisode={playEpisode}
                                 episodeIndex={contentDetailBak.episodeIndex} />
-                            :
-                            <Column align='center center' style={{ height: '100%', width: '100%' }}>
-                                <Spinner />
-                            </Column>
                         }
                     </Cell>
                 </Row>

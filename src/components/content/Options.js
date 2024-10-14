@@ -106,8 +106,10 @@ export const getNextEpidose = async (profile, content) => {
     const proms = [
         api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
             .then(({ data: episodesData }) => {
-                out.firstEp = episodesData[0]
-                out.firstEp.type = 'episode'
+                if (episodesData.length) {
+                    out.firstEp = episodesData[0]
+                    out.firstEp.type = 'episode'
+                }
                 return episodesData
             })
     ]
@@ -123,12 +125,18 @@ export const getNextEpidose = async (profile, content) => {
         proms.push(
             api.cms.getEpisodes(profile, { seasonId: seasonsData[seasonsData.length - 1].id })
                 .then(({ data: episodesData }) => {
-                    out.lastEp = episodesData[episodesData.length - 1]
-                    out.lastEp.type = 'episode'
+                    if (episodesData.length) {
+                        out.lastEp = episodesData[episodesData.length - 1]
+                        out.lastEp.type = 'episode'
+                    }
                 })
         )
     }
-    proms[0].then(() => calculatePlayheadProgress({ profile, episodesData: [out.firstEp] }))
+    proms[0].then(() => {
+        if (out.firstEp) {
+            return calculatePlayheadProgress({ profile, episodesData: [out.firstEp] })
+        }
+    })
     proms[1].then(() => {
         if (out.lastEp) {
             return calculatePlayheadProgress({ profile, episodesData: [out.lastEp] })
