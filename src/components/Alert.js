@@ -7,6 +7,7 @@ import { Column } from '@enact/ui/Layout'
 import FloatingLayer from '@enact/ui/FloatingLayer'
 import Skinnable from '@enact/moonstone/Skinnable'
 import Heading from '@enact/moonstone/Heading'
+import BodyText from '@enact/moonstone/BodyText'
 import Button from '@enact/moonstone/Button'
 import PropTypes from 'prop-types'
 
@@ -41,7 +42,7 @@ export const AlertBase = ({ open, title, message, onCancel, onAccept, forwardedR
         <FloatingLayer className={css.Alert} open={open} noAutoDismiss>
             <Column style={{ height: 'auto' }} {...rest} className={css.content} ref={forwardedRef}>
                 {title && <Heading size='medium'>{title}</Heading>}
-                {message && <Heading size="small">{message}</Heading>}
+                {message && <BodyText centered>{message}</BodyText>}
                 <Row align='baseline flex-end' ref={compRef}>
                     {onCancel &&
                         <Button className='spottable-default'
