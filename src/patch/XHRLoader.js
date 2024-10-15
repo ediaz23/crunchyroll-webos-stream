@@ -78,13 +78,16 @@ function onSend(xhr) {
             xhr.respond(500, {}, error)
         }
     }
+
     if (xhr.timeout) {
+        config.timeout = xhr.timeout
         timeout = setTimeout(() => {
             config.resStatus = 'timeout'
             xhr.readyState = window.XMLHttpRequest.DONE
             xhr.ontimeout?.({})
         }, xhr.timeout)
     }
+
     const backOnAbort = xhr.onabort
     xhr.onabort = event => {
         config.resStatus = 'abort'

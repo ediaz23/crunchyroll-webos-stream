@@ -44,9 +44,15 @@ export const setUpRequest = (url, options = {}) => {
             body: url.body,
             headers: url.headers,
             resStatus: 'active',
+            timeout: 5 * 1000,
         }
     } else {
-        config = { url, resStatus: 'active', ...options }
+        config = {
+            url,
+            resStatus: 'active',
+            timeout: 5 * 1000,
+            ...options,
+        }
     }
     if (config.body) {
         if (config.body instanceof URLSearchParams) {
