@@ -60,6 +60,7 @@ function onSend(xhr) {
 
     const onSuccess = (data) => {
         clearTimeout(timeout)
+        config.resStatus = 'done'
         const { status, content, headers, resUrl } = data
         logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
         xhr.responseURL = resUrl
@@ -68,6 +69,7 @@ function onSend(xhr) {
 
     const onFailure = (error) => {
         clearTimeout(timeout)
+        config.resStatus = 'fail'
         logger.error(`req ${config.method} ${config.url}`)
         logger.error(error)
         if (error.error) {
@@ -78,9 +80,17 @@ function onSend(xhr) {
     }
     if (xhr.timeout) {
         timeout = setTimeout(() => {
+            config.resStatus = 'timeout'
             xhr.readyState = window.XMLHttpRequest.DONE
             xhr.ontimeout?.({})
         }, xhr.timeout)
+    }
+    const backOnAbort = xhr.onabort
+    xhr.onabort = event => {
+        config.resStatus = 'abort'
+        if (backOnAbort) {
+            backOnAbort(event)
+        }
     }
     fetchUtils.makeRequest({ config, onSuccess, onFailure, onProgress: xhr._onProgress.bind(xhr) })
 }

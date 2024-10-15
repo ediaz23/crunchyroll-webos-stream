@@ -43,9 +43,10 @@ export const setUpRequest = (url, options = {}) => {
             method: url.method || 'get',
             body: url.body,
             headers: url.headers,
+            resStatus: 'active',
         }
     } else {
-        config = { url, ...options }
+        config = { url, resStatus: 'active', ...options }
     }
     if (config.body) {
         if (config.body instanceof URLSearchParams) {
@@ -103,6 +104,7 @@ export const makeFetchProgress = (onProgress) => {
  * @param {RequestInit} obj.config
  * @param {Function} obj.onSuccess
  * @param {Function} [obj.onProgress]
+ * * @param {Function} [obj.onFailure]
  */
 export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
     /** @type {Array<Uint8Array>} */
@@ -113,21 +115,25 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
      */
     return (res, sub) => {
         if (res.id === config.id) {
-            const { loaded, total, status, content } = res
-            if (200 <= status && status < 300) {
-                chunks.push(utils.base64toArray(content))
-                onProgress({ loaded, total })
-                if (loaded === total) {
-                    const resTmp = new window.Response(new window.Blob(chunks))
-                    resTmp.arrayBuffer().then(arr => {
-                        res.content = arr
-                        sub.cancel()
-                        onSuccess(res)
-                    })
+            if (config.resStatus === 'active') {
+                const { loaded, total, status, content } = res
+                if (200 <= status && status < 300) {
+                    chunks.push(utils.base64toArray(content))
+                    onProgress({ loaded, total })
+                    if (loaded === total) {
+                        const resTmp = new window.Response(new window.Blob(chunks))
+                        resTmp.arrayBuffer().then(arr => {
+                            res.content = arr
+                            sub.cancel()
+                            onSuccess(res)
+                        })
+                    }
+                } else {
+                    sub.cancel()
+                    onSuccess(res)
                 }
             } else {
                 sub.cancel()
-                onSuccess(res)
             }
         }
     }
@@ -146,13 +152,16 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
         const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
 
         if (onProgress) {
-            const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess })
+            const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
             config.id = uuidv4()
             const sub = webOS.service.request(serviceURL, {
                 method: `forwardRequest${currentReq}`,
                 parameters: config,
                 onSuccess: (res) => serviceProgress(res, sub),
-                onFailure: (err) => { sub.cancel(); onFailure(err) },
+                onFailure: (err) => {
+                    Promise.resolve().then(() => sub.cancel())  // deferred
+                    onFailure(err)
+                },
                 subscribe: true,
             })
         } else {
@@ -186,6 +195,7 @@ export const customFetch = async (url, options = {}, direct = false) => {
     return new Promise((res, rej) => {
         const config = setUpRequest(url, options)
         const onSuccess = (data) => {
+            config.resStatus = 'done'
             const { status, statusText, content, headers, resUrl } = data
             logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
             if (direct) {
@@ -208,6 +218,7 @@ export const customFetch = async (url, options = {}, direct = false) => {
             }
         }
         const onFailure = (error) => {
+            config.resStatus = 'fail'
             logger.error(`req ${config.method || 'get'} ${config.url}`)
             logger.error(error)
             if (error.error) {

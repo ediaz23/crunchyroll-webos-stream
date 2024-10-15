@@ -281,25 +281,27 @@ const findPreviews = async ({ bif }) => {
     const out = { chunks: [] }
 
     try {
-        /** @type {Uint8Array} */
-        const bifData = await downloadBifFile(bif)
-        const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
+        if (bif) {
+            /** @type {Uint8Array} */
+            const bifData = await downloadBifFile(bif)
+            const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
 
-        let imageStartIndex = -1
-        for (let i = 0; i < bifData.length - 1; i++) {
-            if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
-                if (imageStartIndex !== -1) {
-                    const chunk = bifData.slice(imageStartIndex, i)
-                    const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
-                    out.chunks.push({ start: imageStartIndex, end: i, url })
+            let imageStartIndex = -1
+            for (let i = 0; i < bifData.length - 1; i++) {
+                if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
+                    if (imageStartIndex !== -1) {
+                        const chunk = bifData.slice(imageStartIndex, i)
+                        const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
+                        out.chunks.push({ start: imageStartIndex, end: i, url })
+                    }
+                    imageStartIndex = i
                 }
-                imageStartIndex = i
             }
-        }
-        if (imageStartIndex !== -1) {
-            const chunk = bifData.slice(imageStartIndex)
-            const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
-            out.chunks.push({ start: imageStartIndex, url })
+            if (imageStartIndex !== -1) {
+                const chunk = bifData.slice(imageStartIndex)
+                const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
+                out.chunks.push({ start: imageStartIndex, url })
+            }
         }
     } catch (e) {
         logger.error(e)
