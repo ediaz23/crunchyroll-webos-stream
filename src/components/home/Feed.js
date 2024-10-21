@@ -318,7 +318,14 @@ export const getFakeFeedItem = () => {
     }
 }
 
-const HomeFeed = ({ profile, homeFeed, setHomeFeed, type, ...rest2 }) => {
+/**
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
+ * @param {Array<Object>} obj.homeFeed
+ * @param {Function} obj.setHomeFeed
+ * @param {'home'|'music'} obj.type
+ */
+const HomeFeed = ({ profile, homeFeed, setHomeFeed, type = 'home', ...rest2 }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Function} */
@@ -407,11 +414,7 @@ HomeFeed.propTypes = {
     profile: PropTypes.object.isRequired,
     homeFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
     setHomeFeed: PropTypes.func.isRequired,
-    type: PropTypes.oneOf(['home', 'music']).isRequired,
-}
-
-HomeFeed.defaultProps = {
-    type: 'home'
+    type: PropTypes.oneOf(['home', 'music']),
 }
 
 export default HomeFeed

@@ -392,7 +392,8 @@ const listItemsRenderer = (props) => {
 }
 
 /* eslint-enable enact/prop-types */
-const ScrollableVirtualList = ({ role, ...rest }) => {
+const ScrollableVirtualList = ({ ...rest }) => {
+    const { role, ...combinedRest } = { ...ScrollableVirtualListSuperBase.defaultProps, ...rest }
     warning(
         !rest.itemSizes || !rest.cbScrollTo,
         'VirtualList with `minSize` in `itemSize` prop does not support `cbScrollTo` prop'
@@ -400,12 +401,12 @@ const ScrollableVirtualList = ({ role, ...rest }) => {
 
     return (
         <Scrollable
-            {...rest}
+            {...combinedRest}
             childRenderer={(childProps) => { // eslint-disable-line react/jsx-no-bind
                 return (
                     <VirtualListBase
                         {...childProps}
-                        focusableScrollbar={rest.focusableScrollbar}
+                        focusableScrollbar={combinedRest.focusableScrollbar}
                         itemsRenderer={listItemsRenderer}
                         role={role}
                     />
@@ -416,7 +417,6 @@ const ScrollableVirtualList = ({ role, ...rest }) => {
 }
 
 ScrollableVirtualList.propTypes = ScrollableVirtualListSuperBase.propTypes  // eslint-disable-line react/forbid-foreign-prop-types
-ScrollableVirtualList.defaultProps = ScrollableVirtualListSuperBase.defaultProps
 
 /**
  * @see https://github.com/enactjs/moonstone/blob/master/VirtualList/VirtualList.js

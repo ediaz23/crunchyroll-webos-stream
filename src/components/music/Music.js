@@ -23,7 +23,8 @@ import useContentList from '../../hooks/contentList'
  * @param {Array<Object>} obj.musicFeed Music feed array
  * @param {Function} obj.setMusicFeed setState for musicFeed
  */
-const MusicBrowse = ({ profile, title, contentKey, contentType, musicFeed, setMusicFeed, ...rest }) => {
+const MusicBrowse = ({
+    profile, title, contentKey, contentType = 'music', musicFeed, setMusicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
@@ -152,10 +153,6 @@ MusicBrowse.propTypes = {
     musicFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
     setMusicFeed: PropTypes.func.isRequired,
     contentType: PropTypes.string,
-}
-
-MusicBrowse.defaultProps = {
-    contentType: 'music'
 }
 
 export default MusicBrowse

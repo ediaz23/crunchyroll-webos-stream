@@ -14,8 +14,9 @@ class ScrollerFix extends ScrollerBase {
 }
 
 
-const Scroller = (props) => (
+const Scroller = ({ direction = 'both', ...props }) => (
     <Scrollable
+        direction={direction}
         {...props}
         childRenderer={(scrollerProps) => { // eslint-disable-line react/jsx-no-bind
             return <ScrollerFix {...scrollerProps} />
@@ -25,10 +26,6 @@ const Scroller = (props) => (
 
 Scroller.propTypes = /** @lends moonstone/Scroller.Scroller.prototype */ {
     direction: PropTypes.oneOf(['both', 'horizontal', 'vertical'])
-}
-
-Scroller.defaultProps = {
-    direction: 'both'
 }
 
 export default Scroller

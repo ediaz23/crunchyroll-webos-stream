@@ -189,7 +189,7 @@ const RowNavigable = withNavigable(Row, css.active)
  * @param {Object} obj.content
  * @param {Boolean} obj.noCategory
  */
-const HomeContentBanner = ({ content, noCategory, ...rest }) => {
+const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
@@ -229,10 +229,6 @@ const HomeContentBanner = ({ content, noCategory, ...rest }) => {
 HomeContentBanner.propTypes = {
     content: PropTypes.object.isRequired,
     noCategory: PropTypes.bool
-}
-
-HomeContentBanner.defaultProps = {
-    noCategory: false
 }
 
 export default HomeContentBanner

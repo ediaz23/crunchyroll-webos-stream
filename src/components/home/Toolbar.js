@@ -38,7 +38,21 @@ const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
     )
 }
 
-const HomeToolbar = ({ toolbarList, currentIndex, hideText, autoFocus, onClick, onBlur, onFocus, onLeave, ...rest }) => {
+/**
+ * Left toolbar
+ * @param {Object} obj
+ * @param {Array<{key: String, icon: String, label: String}>} obj.toolbarList
+ * @param {Number} obj.currentIndex
+ * @param {Boolean} [obj.hideText]
+ * @param {Boolean} [obj.autoFocus]
+ * @param {Function} obj.onClick
+ * @param {Function} obj.onBlur
+ * @param {Function} obj.onFocus
+ * @param {Function} obj.onLeave
+ */
+const HomeToolbar = ({
+    toolbarList, currentIndex, hideText = false, autoFocus = false,
+    onClick, onBlur, onFocus, onLeave, ...rest }) => {
 
     const toolbarIndex = useMemo(() => toolbarList.reduce((accumulator, item, index) => {
         accumulator[item.key] = { ...item, index }
@@ -103,11 +117,6 @@ HomeToolbar.propTypes = {
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     onLeave: PropTypes.func,
-}
-
-HomeToolbar.defaultProps = {
-    hideText: false,
-    autoFocus: false,
 }
 
 export const HomeToolbarSpotlight = SpotlightContainerDecorator({

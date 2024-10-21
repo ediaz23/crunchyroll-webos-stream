@@ -39,7 +39,8 @@ import css from './ContentGrid.module.less'
  * @param {Boolean} obj.noCategory Not show category
  * @param {Boolean} obj.noSearch Not show input
  */
-const ContentGrid = ({ profile, title, contentKey, contentType, engine, noCategory, noSearch, ...rest }) => {
+const ContentGrid = ({
+    profile, title, contentKey, contentType, engine = 'browse', noCategory, noSearch, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
@@ -195,10 +196,6 @@ ContentGrid.propTypes = {
     contentType: PropTypes.string,
     engine: PropTypes.string,
     noCategory: PropTypes.bool
-}
-
-ContentGrid.defaultProps = {
-    engine: 'browse'
 }
 
 export default ContentGrid

@@ -20,12 +20,12 @@ import { useSetContent } from '../../hooks/setContent'
  * @param {Object} obj
  * @param {Array<Object>} obj.contentList
  * @param {Function} [obj.load]
- * @param {Boolean} obj.autoScroll
+ * @param {Boolean} [obj.autoScroll]
  * @param {Function} [obj.onFocus]
- * @param {'tall'|'wide'} obj.mode
+ * @param {'tall'|'wide'} [obj.mode]
  * @param {Function} obj.onLeave
  */
-const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, onLeave, ...rest }) => {
+const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, ...rest }) => {
     /** @type {{rowIndex: Number, columnIndex: Number}} */
     const homePosition = useRecoilValue(homePositionState)
     /** @type {{current: Function}} */
@@ -116,16 +116,11 @@ const ContentGridItems = ({ contentList, load, autoScroll, onFocus, mode, onLeav
 
 ContentGridItems.propTypes = {
     contentList: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])).isRequired,
-    autoScroll: PropTypes.bool.isRequired,
-    mode: PropTypes.oneOf(['tall', 'wide']).isRequired,
     onLeave: PropTypes.func.isRequired,
+    autoScroll: PropTypes.bool,
+    mode: PropTypes.oneOf(['tall', 'wide']),
     load: PropTypes.func,
     onFocus: PropTypes.func,
-}
-
-ContentGridItems.defaultProps = {
-    mode: 'tall',
-    autoScroll: true,
 }
 
 export default ContentGridItems
