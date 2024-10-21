@@ -291,7 +291,8 @@ const findPreviews = async ({ bif }) => {
                 if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
                     if (imageStartIndex !== -1) {
                         const chunk = bifData.slice(imageStartIndex, i)
-                        const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
+                        const blob = new window.Blob([chunk], { type: 'image/jpeg' })
+                        const url = window.URL.createObjectURL(blob)
                         out.chunks.push({ start: imageStartIndex, end: i, url })
                     }
                     imageStartIndex = i
@@ -299,7 +300,8 @@ const findPreviews = async ({ bif }) => {
             }
             if (imageStartIndex !== -1) {
                 const chunk = bifData.slice(imageStartIndex)
-                const url = window.URL.createObjectURL(new Blob([chunk], { type: 'image/jpeg' }))
+                const blob = new window.Blob([chunk], { type: 'image/jpeg' })
+                const url = window.URL.createObjectURL(blob)
                 out.chunks.push({ start: imageStartIndex, url })
             }
         }

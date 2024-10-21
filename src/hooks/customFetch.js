@@ -165,7 +165,7 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
                 parameters: config,
                 onSuccess: (res) => serviceProgress(res, sub),
                 onFailure: (err) => {
-                    Promise.resolve().then(() => sub.cancel())  // deferred
+                    sub.cancel()
                     onFailure(err)
                 },
                 subscribe: true,

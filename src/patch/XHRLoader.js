@@ -57,12 +57,13 @@ function onSend(xhr) {
         method: xhr.method,
         headers: xhr.requestHeaders,
     })
+    const logReq = `${config.method || 'GET'} ${config.url}`
 
     const onSuccess = (data) => {
         clearTimeout(timeout)
         config.resStatus = 'done'
         const { status, content, headers, resUrl } = data
-        logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
+        logger.debug(`okey ${logReq} ${status}`)
         xhr.responseURL = resUrl
         xhr.respond(status, headers, content)
     }
@@ -70,7 +71,7 @@ function onSend(xhr) {
     const onFailure = (error) => {
         clearTimeout(timeout)
         config.resStatus = 'fail'
-        logger.error(`req ${config.method} ${config.url}`)
+        logger.error(`error ${logReq}`)
         logger.error(error)
         if (error.error) {
             xhr.respond(500, {}, error.error)
@@ -82,6 +83,7 @@ function onSend(xhr) {
     if (xhr.timeout) {
         config.timeout = xhr.timeout
         timeout = setTimeout(() => {
+            logger.debug(`time ${logReq}`)
             config.resStatus = 'timeout'
             xhr.readyState = window.XMLHttpRequest.DONE
             xhr.ontimeout?.({})
@@ -90,7 +92,9 @@ function onSend(xhr) {
 
     const backOnAbort = xhr.onabort
     xhr.onabort = event => {
+        clearTimeout(timeout)
         config.resStatus = 'abort'
+        logger.debug(`abort ${logReq}`)
         if (backOnAbort) {
             backOnAbort(event)
         }
