@@ -1,6 +1,6 @@
 {
     "id": "com.crunchyroll.stream.app",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "vendor": "Esteban Diaz",
     "type": "web",
     "main": "index.html",
@@ -10,5 +10,6 @@
     "largeIcon": "icon-large.png",
     "iconColor": "#1c8adb",
     "uiRevision": 2,
-    "disableBackHistoryAPI": true
+    "disableBackHistoryAPI": true,
+    "requiredMemory": 150
 }

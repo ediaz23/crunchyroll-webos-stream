@@ -475,7 +475,9 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
     dashPlayer.updateSettings({
         streaming: {
             buffer: {
-                bufferTimeAtTopQualityLongForm: 120,
+                stableBufferTime: 15,
+                bufferTimeAtTopQuality: 150,
+                bufferTimeAtTopQualityLongForm: 300,
             }
         }
     })
@@ -821,6 +823,14 @@ const Player = ({ ...rest }) => {
                 setIsPaused(false)
                 playerRef.current = player
                 playerRef.current.play()
+                /* how to log, add function and off events in clean up function
+                player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
+                player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
+                player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, onBufferLoaded)
+                player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_STARTED, onBufferLogging)
+                player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, onBufferLogging)
+                player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, onBufferLogging)
+				*/
             }).catch(setMessage)
         }
         return () => {

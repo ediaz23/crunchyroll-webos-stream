@@ -8,10 +8,82 @@ import logger from '../logger'
  * Fix other type of response
  */
 class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
+
+    /**
+     * string for logging
+     * @returns {String}
+     */
+    get logReq() {
+        return `${this.method || 'GET'} ${this.url}`
+    }
+
+    /**
+     * @override
+     */
+    respond(status, headers, body) {
+        if (200 <= status && status < 300) {
+            this.reqConfig.resStatus = 'done'
+            logger.debug(`okey ${this.logReq} ${status}`)
+        } else {
+            this.reqConfig.resStatus = 'fail'
+            logger.error(`error ${this.logReq}`)
+            logger.error(body)
+        }
+        super.respond(status, headers, body)
+    }
+
+    /**
+     * @override
+     */
+    send(data) {
+        this.reqConfig = fetchUtils.setUpRequest(this.url, {
+            method: this.method,
+            headers: this.requestHeaders,
+            timeout: this.timeout,
+        })
+        super.send(data)
+        if (this.timeout) {
+            this.reqTimeout = setTimeout(() => {
+                logger.debug(`time ${this.logReq}`)
+                this.reqConfig.resStatus = 'timeout'
+                this.status = 0
+                this.ontimeout?.({})
+                this._readyStateChange(window.XMLHttpRequest.DONE)
+            }, this.timeout)
+        }
+        if (this.async) {
+            Promise.resolve().then(() => {
+                fetchUtils.makeRequest({
+                    config: this.reqConfig,
+                    onSuccess: this._onSuccess.bind(this),
+                    onFailure: this._onFailure.bind(this),
+                    onProgress: this._onProgress.bind(this),
+                })
+            }).catch(this._onFailure.bind(this))
+        } else {
+            fetchUtils.makeRequest({
+                config: this.reqConfig,
+                onSuccess: this._onSuccess.bind(this),
+                onFailure: this._onFailure.bind(this),
+            })
+        }
+    }
+
+    /**
+     * @override
+     */
+    abort() {
+        clearTimeout(this.reqTimeout)
+        this.reqConfig.resStatus = 'abort'
+        logger.debug(`abort ${this.logReq}`)
+        super.abort()
+    }
+
     /**
      * @param {ArrayBuffer} body
      */
     _setResponseBody(body) {
+        clearTimeout(this.reqTimeout)
         this.responseText = ''
 
         if (this.responseType === 'arraybuffer') {
@@ -37,70 +109,42 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
         }
     }
 
+    /**
+     * simulate progress donwloading
+     * @param {Object} obj
+     * @param {Number} obj.loaded
+     * @param {Number} obj.total
+     */
     _onProgress({ loaded, total }) {
         if (this.async) {
             this._readyStateChange(FakeXMLHttpRequest.LOADING)
         }
         this._progress(true, loaded, total)
     }
-}
 
-
-/**
- * redirect reques to webOS service
- * @param {import('fake-xml-http-request').default} xhr
- */
-function onSend(xhr) {
-    let timeout = undefined
-
-    const config = fetchUtils.setUpRequest(xhr.url, {
-        method: xhr.method,
-        headers: xhr.requestHeaders,
-    })
-    const logReq = `${config.method || 'GET'} ${config.url}`
-
-    const onSuccess = (data) => {
-        clearTimeout(timeout)
-        config.resStatus = 'done'
+    /**
+     * call on request end
+     * @param {Object} data
+     */
+    _onSuccess(data) {
         const { status, content, headers, resUrl } = data
-        logger.debug(`okey ${logReq} ${status}`)
-        xhr.responseURL = resUrl
-        xhr.respond(status, headers, content)
+        this.responseURL = resUrl
+        this.respond(status, headers, content)
     }
 
-    const onFailure = (error) => {
-        clearTimeout(timeout)
-        config.resStatus = 'fail'
-        logger.error(`error ${logReq}`)
-        logger.error(error)
+    /**
+     * call on request end
+     * @param {Object} error
+     */
+    _onFailure(error) {
         if (error.error) {
-            xhr.respond(500, {}, error.error)
+            this.respond(500, {}, error.error)
         } else {
-            xhr.respond(500, {}, error)
+            this.respond(500, {}, error)
         }
     }
-
-    if (xhr.timeout) {
-        config.timeout = xhr.timeout
-        timeout = setTimeout(() => {
-            logger.debug(`time ${logReq}`)
-            config.resStatus = 'timeout'
-            xhr.readyState = window.XMLHttpRequest.DONE
-            xhr.ontimeout?.({})
-        }, xhr.timeout)
-    }
-
-    const backOnAbort = xhr.onabort
-    xhr.onabort = event => {
-        clearTimeout(timeout)
-        config.resStatus = 'abort'
-        logger.debug(`abort ${logReq}`)
-        if (backOnAbort) {
-            backOnAbort(event)
-        }
-    }
-    fetchUtils.makeRequest({ config, onSuccess, onFailure, onProgress: xhr._onProgress.bind(xhr) })
 }
+
 
 /**
  * @module XHRLoader
@@ -164,7 +208,6 @@ function XHRLoader(cfg) {
         xhr.onabort = httpRequest.onabort
         xhr.ontimeout = httpRequest.ontimeout
         xhr.timeout = httpRequest.timeout
-        xhr.onSend = onSend
         xhr.chunkSize = 2 << 11  // simulate progress but it's not realy used
 
         xhr.send()
@@ -173,10 +216,8 @@ function XHRLoader(cfg) {
     }
 
     function abort(request) {
-        const x = request.response
-        if (x) {  // fix error
-            x.onloadend = x.onerror = x.onprogress = undefined //Ignore events from aborted requests.
-            x.abort()
+        if (request.response) {  // fix error
+            request.response.abort()
         }
     }
 
