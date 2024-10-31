@@ -1,6 +1,6 @@
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
-import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
+import { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
 import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
@@ -16,16 +16,17 @@ import ContactMe from '../login/ContactMe'
 import PopupMessage from '../Popup'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
+import * as fetchUtils from '../../hooks/customFetch'
+import { $L } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
 import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../resources/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
-import * as fetchUtils from '../../hooks/customFetch'
 import utils from '../../utils'
 import XHRLoader from '../../patch/XHRLoader'
-import { $L } from '../../hooks/language'
+import VideoPlayer from '../../patch/VideoPlayer'
 
 
 /**
@@ -817,21 +818,27 @@ const Player = ({ ...rest }) => {
     }, [profile, stream, setSubtitle, setPreviews, setSkipEvents])
 
     useEffect(() => {  // attach subs
+        let interval = null
         if (stream.urls && subtitle && stream.id === content.id) {
-            createDashPlayer(audio, stream, content, subtitle).then(player => {
-                setLoading(false)
-                setIsPaused(false)
-                playerRef.current = player
-                playerRef.current.play()
-                /* how to log, add function and off events in clean up function
-                player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
-                player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
-                player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, onBufferLoaded)
-                player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_STARTED, onBufferLogging)
-                player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, onBufferLogging)
-                player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, onBufferLogging)
-				*/
-            }).catch(setMessage)
+            interval = setInterval(() => {
+                if (playerCompRef.current) {
+                    clearInterval(interval)
+                    createDashPlayer(audio, stream, content, subtitle).then(player => {
+                        setLoading(false)
+                        setIsPaused(false)
+                        playerRef.current = player
+                        playerRef.current.play()
+                        /* how to log, add function and off events in clean up function
+                        player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
+                        player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
+                        player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, onBufferLoaded)
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_STARTED, onBufferLogging)
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, onBufferLogging)
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, onBufferLogging)
+                        */
+                    }).catch(setMessage)
+                }
+            }, 100)
         }
         return () => {
             setLoading(true)
@@ -840,6 +847,7 @@ const Player = ({ ...rest }) => {
                 playerRef.current.destroy()
                 playerRef.current = null
             }
+            clearInterval(interval)
         }
     }, [profile, content, stream, audio, subtitle, setLoading])
 
