@@ -117,41 +117,38 @@ const VideoPlayer = class extends VideoPlayerBase {
     }
 
     patchMediaSliderDecorator(Comp) {
-        let jumpBy = 5
-        let timeout = null
-        let direction = 0
-        const getSeconds = (d) => {
-            jumpBy = direction !== d ? 5 : jumpBy
-            const out = jumpBy
-            clearTimeout(timeout)
-            direction = d
-            if (jumpBy <= 5) {
+        var _jumpBy = 5
+        var _jumpByResetTimeout = null
+        var _jumpByDirection = 0
+        var _getJumpBySeconds = function _getJumpBySeconds (direction) {
+            _jumpBy = _jumpByDirection !== direction ? 5 : _jumpBy
+            var out = _jumpBy
+            clearTimeout(_jumpByResetTimeout)
+            _jumpByDirection = direction
+            if (_jumpBy <= 5) {
                 // nothing
-            } else if (jumpBy <= 10) {
-                timeout = setTimeout(() => { jumpBy = 5 }, 2 * 1000)
+            } else if (_jumpBy <= 10) {
+                _jumpByResetTimeout = setTimeout(() => { _jumpBy = 5 }, 2 * 1000)
             } else {
-                timeout = setTimeout(() => { jumpBy = 5 }, 5 * 1000)
+                _jumpByResetTimeout = setTimeout(() => { _jumpBy = 5 }, 5 * 1000)
             }
-            jumpBy = Math.min(jumpBy << 1, 30)
+            _jumpBy = Math.min(_jumpBy << 1, 30)
             return out
         }
-        const decrement = (state) => {
+        var _decrement = function decrement(state) {
             if (state.tracking && state.x > 0) {
-                const x = Math.max(0, state.x - (getSeconds(-1) / this.videoRef.state.duration))
+                var x = Math.max(0, state.x - (_getJumpBySeconds(-1) / this.videoRef.state.duration))
                 return { x }
             }
             return null
         }
-        Comp.prototype.decrement = function() { this.setState(decrement) }
-
-        const increment = (state) => {
+        var _increment = function increment(state) {
             if (state.tracking && state.x < 1) {
-                const x = Math.min(1, state.x + (getSeconds(1) / this.videoRef.state.duration))
+                const x = Math.min(1, state.x + (_getJumpBySeconds(1) / this.videoRef.state.duration))
                 return { x }
             }
             return null
         }
-        Comp.prototype.increment = function() { this.setState(increment) }
     }
 
     render() {

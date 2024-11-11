@@ -30,10 +30,83 @@ function cleanIlib(cb) {
         const realManifest = './node_modules/ilib/locale/ilibmanifest.json'
         const content = fs.readFileSync(fakeManifest, 'utf8')
         fs.writeFileSync(realManifest, content, 'utf8')
-        cb()
     } catch (err) {
-        handleError(cb)(err)
+        return handleError(cb)(err)
     }
+    try {
+        const filePath = './node_modules/@enact/moonstone/VideoPlayer/VideoPlayer.js'
+        /** @type {String} */
+        let fileContent = fs.readFileSync(filePath, 'utf-8')
+        if (!fileContent.includes('crunchypatch')) {
+            fileContent = fileContent.replace('_MediaSlider["default"], {',
+                `_MediaSlider["default"], {
+              duration: this.state.duration, // crunchypatch`
+            );
+            fs.writeFileSync(filePath, fileContent, 'utf-8')
+        }
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
+    try {
+        const filePath = './node_modules/@enact/moonstone/VideoPlayer/MediaSliderDecorator.js'
+        /** @type {String} */
+        let fileContent = fs.readFileSync(filePath, 'utf-8')
+        if (!fileContent.includes('crunchypatch')) {
+            // init state
+            fileContent = fileContent.replace('tracking: false,',
+                `tracking: false,
+          duration: 0, // crunchypatch`
+            );
+            // setState
+            fileContent = fileContent.replace('tracking: true,',
+                `tracking: true,
+          duration: this.props.duration, // crunchypatch`
+            );
+            // decrement
+            fileContent = fileContent.replace('var _decrement = function decrement(state) {',
+                `
+// crunchypatch
+var _jumpBy = 5
+var _jumpByResetTimeout = null
+var _jumpByDirection = 0
+var _getJumpBySeconds = function _getJumpBySeconds (direction) {
+    _jumpBy = _jumpByDirection !== direction ? 5 : _jumpBy
+    var out = _jumpBy
+    clearTimeout(_jumpByResetTimeout)
+    _jumpByDirection = direction
+    if (_jumpBy <= 5) {
+        // nothing
+    } else if (_jumpBy <= 10) {
+        _jumpByResetTimeout = setTimeout(() => { _jumpBy = 5 }, 2 * 1000)
+    } else {
+        _jumpByResetTimeout = setTimeout(() => { _jumpBy = 5 }, 5 * 1000)
+    }
+    _jumpBy = Math.min(_jumpBy << 1, 30)
+    return out
+}
+var _decrement = function decrement(state) {  // crunchypatch
+    if (state.tracking && state.x > 0) {
+        var x = Math.max(0, state.x - (_getJumpBySeconds(-1) / state.duration))
+        return { x }
+    }`.trim()
+            );
+            // _increment
+            fileContent = fileContent.replace('var _increment = function increment(state) {',
+                `
+var _increment = function increment(state) {  // crunchypatch
+    if (state.tracking && state.x < 1) {
+        const x = Math.min(1, state.x + (_getJumpBySeconds(1) / state.duration))
+        return { x }
+    }`.trim()
+            );
+            fs.writeFileSync(filePath, fileContent, 'utf-8')
+        }
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
+    cb()
 }
 
 function copyIn18(cb) {
@@ -124,7 +197,7 @@ gulp.task('license', cb => {
     try {
         fs.copyFileSync('./LICENSE', './bin/LICENSE')
         cb()
-    } catch(err) {
+    } catch (err) {
         handleError(cb)(err)
     }
 })

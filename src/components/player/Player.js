@@ -1,6 +1,6 @@
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
-import { MediaControls } from '@enact/moonstone/VideoPlayer'
+import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
 import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
@@ -26,7 +26,6 @@ import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import utils from '../../utils'
 import XHRLoader from '../../patch/XHRLoader'
-import VideoPlayer from '../../patch/VideoPlayer'
 
 
 /**
