@@ -73,14 +73,15 @@ var _jumpByDirection = 0
 var _getJumpBySeconds = function _getJumpBySeconds (direction) {
     _jumpBy = _jumpByDirection !== direction ? 5 : _jumpBy
     var out = _jumpBy
+    var restFn = function restFn() { _jumpBy = 5 }
     clearTimeout(_jumpByResetTimeout)
     _jumpByDirection = direction
     if (_jumpBy <= 5) {
         // nothing
     } else if (_jumpBy <= 10) {
-        _jumpByResetTimeout = setTimeout(() => { _jumpBy = 5 }, 2 * 1000)
+        _jumpByResetTimeout = setTimeout(restFn, 2 * 1000)
     } else {
-        _jumpByResetTimeout = setTimeout(() => { _jumpBy = 5 }, 5 * 1000)
+        _jumpByResetTimeout = setTimeout(restFn, 5 * 1000)
     }
     _jumpBy = Math.min(_jumpBy << 1, 30)
     return out
