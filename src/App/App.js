@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator'
 import { Panels, Routable, Route } from '@enact/moonstone/Panels'
 import LocaleInfo from 'ilib/lib/LocaleInfo'
@@ -27,6 +27,7 @@ import useCustomFetch from '../hooks/customFetch'
 import api from '../api'
 import utils from '../utils'
 import back from '../back'
+import css from './App.module.less'
 import './attachErrorHandler'
 
 
@@ -43,6 +44,7 @@ const App = ({ ...rest }) => {
     const setInitScreenState = useSetRecoilState(initScreenState)
     /** @type {Function} */
     const setContactBtn = useSetRecoilState(contactBtnState)
+    const newClassName = useMemo(() => `${rest.className} ${css.app}`, [rest.className])
 
     const closeApp = useCallback(() => {
         if (utils.isTv()) {
@@ -87,7 +89,7 @@ const App = ({ ...rest }) => {
 
     return (
         <ErrorBoundary {...rest}>
-            <div {...rest}>
+            <div {...rest} className={newClassName}>
                 <RoutablePanels {...rest} path={path} onApplicationClose={closeApp} noCloseButton>
                     <Route path='init' component={InitialPanel} {...rest} />
                     <Route path='warning' component={WarningPanel} {...rest} />

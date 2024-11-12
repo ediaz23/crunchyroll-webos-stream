@@ -249,8 +249,8 @@ const HomePanel = (props) => {
     }, [setHomeViewReady])
 
     return (
-        <Panel {...props}>
-            <Row style={{ height: '100%' }}>
+        <Panel id="home-panel" {...props}>
+            <Row>
                 <Cell shrink>
                     <HomeToolbar toolbarList={toolbarList}
                         currentIndex={currentActivity}

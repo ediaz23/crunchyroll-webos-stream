@@ -316,7 +316,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 </Column>
             }
             {!loading &&
-                <Cell size='49%'>
+                <Cell size='49%' style={{ maxWidth: '49%', width: '49%' }}>
                     <ContentHeader content={content} />
                     {subtitle &&
                         <Heading size='small' spacing='small' className={css.firstData}>

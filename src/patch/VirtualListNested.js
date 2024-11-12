@@ -1,5 +1,5 @@
 
-import { Fragment } from 'react'
+import { Fragment, useMemo } from 'react'
 import kind from '@enact/core/kind'
 import { I18nContextDecorator } from '@enact/i18n/I18nDecorator'
 import { getTargetByDirectionFromElement } from '@enact/spotlight/src/target'
@@ -14,6 +14,8 @@ import { ScrollableBase as ScrollableSuperBase } from '@enact/moonstone/Scrollab
 import { ScrollableVirtualList as ScrollableVirtualListSuperBase } from '@enact/moonstone/VirtualList/VirtualListBase'
 import Skinnable from '@enact/moonstone/Skinnable'
 import warning from 'warning'
+
+import scrollCss from './Scroller.module.less'
 
 
 const SpotlightAccelerator = new Accelerator();
@@ -398,10 +400,11 @@ const ScrollableVirtualList = ({ ...rest }) => {
         !rest.itemSizes || !rest.cbScrollTo,
         'VirtualList with `minSize` in `itemSize` prop does not support `cbScrollTo` prop'
     )
-
+    const newClassName = useMemo(() => `${rest.className || ''} ${scrollCss.scrollerFix}`, [rest.className])
     return (
         <Scrollable
             {...combinedRest}
+            className={newClassName}
             childRenderer={(childProps) => { // eslint-disable-line react/jsx-no-bind
                 return (
                     <VirtualListBase

@@ -81,7 +81,7 @@ const ContactMePanel = ({ noAcceptBtn, ...rest }) => {
                     <Button id="accept" onClick={accept}>{$L('Continue')}</Button>
                 }
             </Header>
-            <Row style={{ height: '50%' }} align="center">
+            <Row style={{ height: '35vh' }} align="center">
                 <Cell>
                     <ExpandableItem
                         style={{
@@ -120,7 +120,7 @@ const ContactMePanel = ({ noAcceptBtn, ...rest }) => {
                     />
                 </Cell>
             </Row>
-            <Row style={{ height: '50%' }} align="center">
+            <Row style={{ height: '35vh' }} align="center">
                 <Cell >
                     <ExpandableItem
                         style={{

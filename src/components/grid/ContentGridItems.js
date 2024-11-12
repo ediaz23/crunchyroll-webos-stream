@@ -13,6 +13,7 @@ import { $L } from '../../hooks/language'
 import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
+import scrollCss from '../../patch/Scroller.module.less'
 
 
 /**
@@ -97,21 +98,23 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
         return () => clearInterval(interval)
     }, [autoScroll, homePosition.rowIndex])
 
-    return (<>
-        {contentList.length ?
-            <VirtualGridList {...rest}
-                dataSize={contentList.length}
-                itemRenderer={renderItem}
-                itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                spacing={ri.scale(25)}
-                cbScrollTo={getScrollTo}
-            />
-            :
-            <Row align='center center' {...rest}>
-                <h1>{$L('Empty')}</h1>
-            </Row>
-        }
-    </>)
+    return (
+        <div className={scrollCss.scrollerFix}>
+            {contentList.length ?
+                <VirtualGridList {...rest}
+                    dataSize={contentList.length}
+                    itemRenderer={renderItem}
+                    itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+                    spacing={ri.scale(25)}
+                    cbScrollTo={getScrollTo}
+                />
+                :
+                <Row align='center center' {...rest}>
+                    <h1>{$L('Empty')}</h1>
+                </Row>
+            }
+        </div>
+    )
 }
 
 ContentGridItems.propTypes = {

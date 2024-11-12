@@ -141,7 +141,7 @@ const ContentGrid = ({
     return (
         <Row className={css.ContentGrid} {...rest}>
             <Column>
-                <Cell shrink>
+                <Cell shrink style={{ height: '10%' }}>
                     <Row>
                         <Cell shrink>
                             <Heading>
@@ -153,22 +153,23 @@ const ContentGrid = ({
                                 <Input placeholder={$L('Search')}
                                     value={query}
                                     onChange={onSearch}
-                                    iconAfter="search" />
+                                    iconAfter="search"
+                                    style={{ paddingRight: '2rem' }} />
                             </Cell>
                         }
                     </Row>
                 </Cell>
-                <Cell grow>
+                <Cell grow style={{ height: '90%' }}>
                     <Row className={css.scrollerContainer}>
                         {!noCategory &&
-                            <Cell size="20%">
+                            <Cell size="20%" style={{ height: '100%', width: '20%' }}>
                                 <CategoryList
                                     category={category}
                                     setCategory={setCategory}
                                     setDelay={onFilter} />
                             </Cell>
                         }
-                        <Cell grow >
+                        <Cell grow style={{ height: '100%', width: noCategory ? '100%' : '80%' }}>
                             {loading &&
                                 <Column align='center center'>
                                     <Spinner />

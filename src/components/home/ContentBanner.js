@@ -205,12 +205,12 @@ const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
 
     return (
         <RowNavigable id='content-banner' className={css.homeContentBanner} {...rest}>
-            <Cell size="50%">
+            <Cell>
                 <Column>
                     <Cell shrink>
                         <ContentHeader content={content} noCategory={noCategory} />
                     </Cell>
-                    <Cell>
+                    <Cell style={{ height: 'auto' }}>
                         <BodyText size='small'>
                             {content.description}
                         </BodyText>

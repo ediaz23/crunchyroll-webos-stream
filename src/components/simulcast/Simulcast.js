@@ -133,7 +133,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
     return (
         <Row className={css.ContentGrid} {...rest}>
             <Column>
-                <Cell shrink>
+                <Cell shrink style={{ height: '10%' }}>
                     <Row>
                         <Cell shrink>
                             <Dropdown title={$L('Order')}
@@ -162,9 +162,9 @@ const Simulcast = ({ profile, title, ...rest }) => {
                         }
                     </Row>
                 </Cell>
-                <Cell grow>
+                <Cell grow style={{ height: '90%' }}>
                     <Row className={css.scrollerContainer}>
-                        <Cell grow >
+                        <Cell grow style={{ height: '100%' }}>
                             {loading &&
                                 <Column align='center center'>
                                     <Spinner />

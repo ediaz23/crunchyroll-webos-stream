@@ -90,14 +90,14 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
 
     return (
         <Row align='start space-between' {...rest}>
-            <Cell size="49%">
+            <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                 <ContentHeader content={movieListing} />
                 <SeasonsList
                     seasons={listings}
                     selectSeason={selectListing}
                     seasonIndex={listingIndex} />
             </Cell>
-            <Cell size="49%">
+            <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                 <EpisodesList
                     episodes={movies}
                     selectEpisode={playMovie}

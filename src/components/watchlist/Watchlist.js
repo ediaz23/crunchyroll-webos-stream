@@ -107,10 +107,10 @@ const Watchlist = ({ profile, ...rest }) => {
             }
             {!loading &&
                 <Column>
-                    <Cell size="50%">
+                    <Cell size="50%" style={{ height: '50%' }}>
                         {selectedContent && <HomeContentBanner content={selectedContent} />}
                     </Cell>
-                    <Cell grow>
+                    <Cell grow style={{ height: '50%' }}>
                         <ContentGridItems
                             contentList={contentList}
                             load={onLoad}

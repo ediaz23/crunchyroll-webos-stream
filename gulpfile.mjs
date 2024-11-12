@@ -107,6 +107,20 @@ var _increment = function increment(state) {  // crunchypatch
         return handleError(cb)(err)
     }
 
+    try {
+        const packageCrunchyrollPath = './node_modules/crunchyroll-js-api/package.json'
+        const packageCrunchyrollContent = JSON.parse(fs.readFileSync(packageCrunchyrollPath, 'utf8'))
+        packageCrunchyrollContent.type = 'commonjs'
+        fs.writeFileSync(packageCrunchyrollPath, JSON.stringify(packageCrunchyrollContent, null, '    '), 'utf8')
+
+        const i18nIsoM49Path = './node_modules/i18n-iso-m49/package.json'
+        const i18nIsoM49Content = JSON.parse(fs.readFileSync(i18nIsoM49Path, 'utf8'))
+        i18nIsoM49Content.type = 'commonjs'
+        fs.writeFileSync(i18nIsoM49Path, JSON.stringify(i18nIsoM49Content, null, '    '), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
     cb()
 }
 

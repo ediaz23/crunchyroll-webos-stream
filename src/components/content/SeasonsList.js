@@ -10,6 +10,7 @@ import PropTypes from 'prop-types'
 import { $L } from '../../hooks/language'
 import withNavigable from '../../hooks/navigable'
 import css from './ContentDetail.module.less'
+import scrollCss from '../../patch/Scroller.module.less'
 
 
 const NavigableDiv = withNavigable('div')
@@ -69,21 +70,23 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, ...rest }) => {
     }, [seasons, seasonIndex])
 
     return (
-        <VirtualList
-            {...rest}
-            className={css.firstData}
-            dataSize={seasons.length}
-            itemRenderer={renderItem}
-            itemSize={itemHeight}
-            cbScrollTo={getScrollTo}
-            direction='vertical'
-            verticalScrollbar='hidden'
-            childProps={{
-                onFocus: selectSeason,
-                itemHeight,
-                seasons,
-            }}
-        />
+        <div className={scrollCss.scrollerFix}>
+            <VirtualList
+                {...rest}
+                className={css.firstData}
+                dataSize={seasons.length}
+                itemRenderer={renderItem}
+                itemSize={itemHeight}
+                cbScrollTo={getScrollTo}
+                direction='vertical'
+                verticalScrollbar='hidden'
+                childProps={{
+                    onFocus: selectSeason,
+                    itemHeight,
+                    seasons,
+                }}
+            />
+        </div>
     )
 }
 

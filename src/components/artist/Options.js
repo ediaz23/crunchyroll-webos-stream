@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 
 import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
+import scrollCss from '../../patch/Scroller.module.less'
 
 /**
  * @param {Object} obj
@@ -48,17 +49,19 @@ const Options = ({ optionList, selectContent, selectIndex, ...rest }) => {
     }, [optionList, selectIndex])
 
     return (
-        <VirtualList
-            {...rest}
-            className={css.optionsContainer}
-            dataSize={optionList.length}
-            itemRenderer={renderItem}
-            itemSize={itemHeight}
-            cbScrollTo={getScrollTo}
-            direction='vertical'
-            verticalScrollbar='hidden'
-            childProps={{ itemHeight }}
-        />
+        <div className={`${css.scrollerContainer} ${scrollCss.scrollerFix}`}>
+            <VirtualList
+                {...rest}
+                className={css.optionsContainer}
+                dataSize={optionList.length}
+                itemRenderer={renderItem}
+                itemSize={itemHeight}
+                cbScrollTo={getScrollTo}
+                direction='vertical'
+                verticalScrollbar='hidden'
+                childProps={{ itemHeight }}
+            />
+        </div>
     )
 }
 

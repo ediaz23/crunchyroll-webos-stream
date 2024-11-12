@@ -114,6 +114,10 @@ Control back event.
 
 ```
 window.dispatchEvent(new KeyboardEvent('keydown', { 'keyCode': 461 }))
+
+old version
+var e = document.createEvent('KeyboardEvent'); e.initKeyboardEvent('keydown', true, true, window, 'CustomKey', 0, '', false, ''); Object.defineProperty(e, 'which', { get: function() { return 461; } }); Object.defineProperty(e, 'keyCode', { get: function() { return 461; } }); document.dispatchEvent(e);
+
 ```
 
 ## Create a Dash file
