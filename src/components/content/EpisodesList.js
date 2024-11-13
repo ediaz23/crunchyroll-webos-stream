@@ -28,9 +28,9 @@ const NavigableDiv = withNavigable('div', '')
  * @param {Number} obj.index
  * @param {Number} obj.itemHeight
  */
-const renderItem = ({ episodes, images, index, itemHeight: height, ...restProps }) => {
+const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) => {
     return (
-        <NavigableDiv {...restProps} key={index} style={{ height }}>
+        <NavigableDiv className={css.episode} key={index} style={{ height }} {...rest}>
             <Row align='start space-between' style={{ paddingBottom: '0.5rem', paddingTop: '0.5rem' }}>
                 <Cell shrink style={{ overflow: 'hidden' }}>
                     {images[index] &&
@@ -84,15 +84,18 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...restProps 
  * @param {Array<Object>} obj.episodes
  * @param {Function} obj.selectEpisode
  * @param {Number} [obj.episodeIndex]
+ * @param {Function} obj.setScroll
+ * @param {Function} obj.setIndexRef
  */
-const EpisodesList = ({ episodes, selectEpisode, episodeIndex, ...rest }) => {
-    /** @type {Function} */
-    const getImagePerResolution = useGetImagePerResolution()
+const EpisodesList = ({ episodes, selectEpisode, episodeIndex, setScroll, setIndexRef, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
-    /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
+    /** @type {Number} */
     const itemHeight = ri.scale(260)
+    /** @type {{current: Number}} */
+    const episodeIndexRef = useRef(episodeIndex)
+    /** @type {Function} */
+    const getImagePerResolution = useGetImagePerResolution()
     /** @type {Array<{source: String}>} */
     const images = useMemo(() => episodes.map(episode => {
         if (!episode.list_image) {
@@ -100,16 +103,26 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, ...rest }) => {
         }
         return episode.list_image
     }), [itemHeight, episodes, getImagePerResolution])
+    /** @type {Function} */
+    const getScrollTo = useCallback((scrollTo) => {
+        scrollToRef.current = scrollTo
+        setScroll(scrollTo)
+    }, [setScroll])
+
+    useEffect(() => {
+        episodeIndexRef.current = episodeIndex
+        setIndexRef(episodeIndex)
+    }, [episodeIndex, setIndexRef])
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                scrollToRef.current({ index: episodeIndex || 0, animate: false, focus: true })
+                scrollToRef.current({ index: episodeIndexRef.current || 0, animate: false, focus: true })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [episodeIndex])
+    }, [])
 
     return (
         <VirtualList
@@ -122,7 +135,6 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, ...rest }) => {
             verticalScrollbar='hidden'
             childProps={{
                 onClick: selectEpisode,
-                className: css.episode,
                 itemHeight,
                 episodes,
                 images,
@@ -135,6 +147,8 @@ EpisodesList.propTypes = {
     episodes: PropTypes.arrayOf(PropTypes.object).isRequired,
     selectEpisode: PropTypes.func.isRequired,
     episodeIndex: PropTypes.number,
+    setScroll: PropTypes.func.isRequired,
+    setIndexRef: PropTypes.func.isRequired,
 }
 
 export default withLoadingList(EpisodesList, 'episodes')

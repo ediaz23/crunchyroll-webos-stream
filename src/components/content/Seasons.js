@@ -1,7 +1,6 @@
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
-import Spinner from '@enact/moonstone/Spinner'
 
 import PropTypes from 'prop-types'
 
@@ -57,17 +56,11 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState(JSON.parse(JSON.stringify(contentDetailBak.seasons || [])))
     /** @type {[Number, Function]} */
-    const [seasonIndex, setSeasonIndex] = useState(contentDetailBak.seasonIndex || 0)
+    const [seasonIndex, setSeasonIndex] = useState(contentDetailBak.seasonIndex)
     /** @type {[Array<Object>, Function]} */
-    const [episodes, setEpisodes] = useState(contentDetailBak.episodes || null)
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
-
-    /** @type {Function} */
-    const selectSeason = useCallback(ev => {
-        const target = ev.currentTarget || ev.target
-        setSeasonIndex(parseInt(target.dataset.index))
-    }, [setSeasonIndex])
+    const [episodes, setEpisodes] = useState(null)
+    /** @type {{current: Number}} */
+    const seasonIndexRef = useRef(null)
 
     /** @type {Function} */
     const playEpisode = useCallback(ev => {
@@ -77,9 +70,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
             setContentToPlay(episodes[episodeIndex], {
                 seasons,
                 seasonIndex,
-                episodes,
                 episodeIndex,
-
             })
         }
     }, [seasons, seasonIndex, episodes, setContentToPlay])
@@ -88,29 +79,26 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
         if (contentDetailBak.seasonIndex != null &&
             contentDetailBak.seasonIndex !== seasonIndex) {
             // reset bak values
-            onSelectSeason({
-                episodes: undefined,
-                episodeIndex: undefined,
-            })
+            onSelectSeason({ episodeIndex: undefined })
         }
     }, [profile, seasonIndex, contentDetailBak.seasonIndex, onSelectSeason])
 
     useEffect(() => {
         if (contentDetailBak.seasons == null) {
-            setLoading(true)
             api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
                 data.forEach(e => { e.episodes = [] })
                 setSeasons(data)
-            }).then(() => setLoading(false))
-        } else {
-            setLoading(false)
+            })
         }
     }, [profile, series, contentDetailBak.seasons])
 
     useEffect(() => {
+        seasonIndexRef.current = seasonIndex
         const loadData = () => {
             if (seasons[seasonIndex].episodes.length) {
-                setEpisodes(seasons[seasonIndex].episodes)
+                if (seasonIndex === seasonIndexRef.current) {
+                    setEpisodes(seasons[seasonIndex].episodes)
+                }
             } else {
                 api.cms.getEpisodes(profile, { seasonId: seasons[seasonIndex].id })
                     .then(({ data }) => Promise.all([
@@ -126,47 +114,42 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                                 return calculatePlayheadProgress({ profile, episodesData: data })
                             }
                         }),
-                    ]).then(() => setEpisodes(data)))
+                    ]).then(() => seasonIndex === seasonIndexRef.current && setEpisodes(data)))
             }
         }
         let timeout = null
-        if (seasons.length && contentDetailBak.episodes == null) {
+        if (seasons.length) {
             setEpisodes(null)
-            timeout = setTimeout(loadData, 256)
+            if (seasonIndex != null) {
+                timeout = setTimeout(loadData, 256)
+            }
         }
         return () => clearTimeout(timeout)
-    }, [profile, seasons, seasonIndex, isPremium, contentDetailBak.episodes])
+    }, [profile, seasons, seasonIndex, isPremium])
 
     return (
         <Row align='start space-between' {...rest}>
-            {loading &&
-                <Column align='center center' style={{ width: '100%' }}>
-                    <Spinner />
-                </Column>
-            }
-            {!loading &&
-                <Row style={{ width: '100%' }}>
-                    <Cell size="49%">
-                        <Column>
-                            <Cell shrink>
-                                <ContentHeader content={series} />
-                            </Cell>
-                            <Cell>
-                                <SeasonsList
-                                    seasons={seasons}
-                                    selectSeason={selectSeason}
-                                    seasonIndex={seasonIndex} />
-                            </Cell>
-                        </Column>
-                    </Cell>
-                    <Cell size="49%">
-                        <EpisodesList
-                            episodes={episodes}
-                            selectEpisode={playEpisode}
-                            episodeIndex={contentDetailBak.episodeIndex} />
-                    </Cell>
-                </Row>
-            }
+            <Row style={{ width: '100%' }}>
+                <Cell size="49%">
+                    <Column>
+                        <Cell shrink>
+                            <ContentHeader content={series} />
+                        </Cell>
+                        <Cell>
+                            <SeasonsList
+                                seasons={seasons}
+                                selectSeason={setSeasonIndex}
+                                seasonIndex={seasonIndex} />
+                        </Cell>
+                    </Column>
+                </Cell>
+                <Cell size="49%">
+                    <EpisodesList
+                        episodes={episodes}
+                        selectEpisode={playEpisode}
+                        episodeIndex={contentDetailBak.episodeIndex} />
+                </Cell>
+            </Row>
         </Row>
     )
 }
