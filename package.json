@@ -103,6 +103,7 @@
         "react-error-overlay": "6.0.9"
     },
     "devDependencies": {
+        "@types/react": "^18.3.12",
         "@types/webostvjs": "^1.2.5",
         "del": "^8.0.0",
         "eslint-config-enact-proxy": "^1.0.8",

@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
 import withNavigable from '../../hooks/navigable'
+import withLoadingList from '../../hooks/loadingList'
 import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentDetail.module.less'
@@ -104,13 +105,11 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, ...rest }) => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                if (episodes.length > 0) {
-                    scrollToRef.current({ index: episodeIndex || 0, animate: false, focus: true })
-                }
+                scrollToRef.current({ index: episodeIndex || 0, animate: false, focus: true })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [episodes, episodeIndex])
+    }, [episodeIndex])
 
     return (
         <VirtualList
@@ -138,4 +137,4 @@ EpisodesList.propTypes = {
     episodeIndex: PropTypes.number,
 }
 
-export default EpisodesList
+export default withLoadingList(EpisodesList, 'episodes')

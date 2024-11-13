@@ -1,6 +1,5 @@
 
 import { useCallback, useEffect, useRef, useMemo } from 'react'
-import { Row } from '@enact/ui/Layout'
 import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
@@ -9,10 +8,10 @@ import { useRecoilValue } from 'recoil'
 
 import PropTypes from 'prop-types'
 
-import { $L } from '../../hooks/language'
 import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
+import withLoadingList from '../../hooks/loadingList'
 
 
 /**
@@ -97,21 +96,15 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
         return () => clearInterval(interval)
     }, [autoScroll, homePosition.rowIndex])
 
-    return (<>
-        {contentList.length ?
-            <VirtualGridList {...rest}
-                dataSize={contentList.length}
-                itemRenderer={renderItem}
-                itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                spacing={ri.scale(25)}
-                cbScrollTo={getScrollTo}
-            />
-            :
-            <Row align='center center' {...rest}>
-                <h1>{$L('Empty')}</h1>
-            </Row>
-        }
-    </>)
+    return (
+        <VirtualGridList {...rest}
+            dataSize={contentList.length}
+            itemRenderer={renderItem}
+            itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+            spacing={ri.scale(25)}
+            cbScrollTo={getScrollTo}
+        />
+    )
 }
 
 ContentGridItems.propTypes = {
@@ -123,4 +116,4 @@ ContentGridItems.propTypes = {
     onFocus: PropTypes.func,
 }
 
-export default ContentGridItems
+export default withLoadingList(ContentGridItems, 'contentList')

@@ -10,7 +10,6 @@ import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
 
 import api from '../../api'
-import { $L } from '../../hooks/language'
 import { getIsPremium } from '../../utils'
 
 
@@ -161,22 +160,10 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                         </Column>
                     </Cell>
                     <Cell size="49%">
-                        {!episodes &&
-                            <Column align='center center' style={{ height: '100%', width: '100%' }}>
-                                <Spinner />
-                            </Column>
-                        }
-                        {episodes && episodes.length === 0 &&
-                            <Column align='center center' style={{ height: '100%', width: '100%' }}>
-                                <h1>{$L('Empty')}</h1>
-                            </Column>
-                        }
-                        {episodes && episodes.length > 0 &&
-                            <EpisodesList
-                                episodes={episodes}
-                                selectEpisode={playEpisode}
-                                episodeIndex={contentDetailBak.episodeIndex} />
-                        }
+                        <EpisodesList
+                            episodes={episodes}
+                            selectEpisode={playEpisode}
+                            episodeIndex={contentDetailBak.episodeIndex} />
                     </Cell>
                 </Row>
             }
