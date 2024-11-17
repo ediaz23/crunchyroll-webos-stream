@@ -329,12 +329,14 @@ export const getFakeFeedItem = () => {
 const HomeFeed = ({ profile, homeFeed, setHomeFeed, type = 'home', ...rest2 }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
+    /** @type {{current: Number}} */
+    const rowIndexRef = useRef(null)
+    /** @type {{rowIndex: Number, columnIndex: Number}} */
+    const homePosition = useRecoilValue(homePositionState)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
-    /** @type {{rowIndex: Number, columnIndex: Number}} */
-    const homePosition = useRecoilValue(homePositionState)
     /** @type {Number} */
     const itemHeigth = ri.scale(270)
     /** @type {Object} */
@@ -377,14 +379,18 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type = 'home', ...rest2 }) =
     }, [homeFeed, profile, type, setSelectedContent, setHomeFeed, fakeItem])
 
     useEffect(() => {
+        rowIndexRef.current = homePosition.rowIndex
+    }, [homePosition.rowIndex])
+
+    useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current) {
+            if (scrollToRef.current && rowIndexRef.current !== null) {
                 clearInterval(interval)
-                scrollToRef.current({ index: homePosition.rowIndex, animate: false, focus: false })
+                scrollToRef.current({ index: rowIndexRef.current, animate: false, focus: false })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [homePosition.rowIndex])
+    }, [])
 
     return (
         <Column className={css.feed} {...rest2}>

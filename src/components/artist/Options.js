@@ -6,47 +6,63 @@ import Icon from '@enact/moonstone/Icon'
 import VirtualList from '@enact/moonstone/VirtualList'
 import PropTypes from 'prop-types'
 
+import withLoadingList from '../../hooks/loadingList'
 import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
 import scrollCss from '../../patch/Scroller.module.less'
 
+
+const renderItem = ({ options, index, itemHeight: height, ...rest }) => {
+    return (
+        <Item key={index} style={{ height }} {...rest}>
+            <Icon className={cssShared.IconCustomColor}>
+                {options[index].icon}
+            </Icon>
+            <span>{options[index].title}</span>
+        </Item>
+    )
+}
+
 /**
  * @param {Object} obj
- * @param {Array<Object>} obj.optionList
- * @param {Function} obj.selectContent
+ * @param {Array<Object>} obj.options
+ * @param {Function} obj.selectOption
  * @param {Number} [obj.selectIndex]
+ * @param {Function} obj.setScroll
+ * @param {Function} obj.setIndexRef
  */
-const Options = ({ optionList, selectContent, selectIndex, ...rest }) => {
+const Options = ({ options, selectOption, selectIndex, setScroll, setIndexRef, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
-    /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
+    /** @type {Number} */
     const itemHeight = ri.scale(70)
-
+    /** @type {{current: Number}} */
+    const selectIndexRef = useRef(selectIndex)
     /** @type {Function} */
-    const renderItem = useCallback(({ index, itemHeight: height, ...restProps }) => {
-        return (
-            <Item {...restProps}
-                onFocus={selectContent}
-                key={index}
-                style={{ height }}>
-                <Icon className={cssShared.IconCustomColor}>
-                    {optionList[index].icon}
-                </Icon>
-                <span>{optionList[index].title}</span>
-            </Item>
-        )
-    }, [optionList, selectContent])
+    const getScrollTo = useCallback((scrollTo) => {
+        scrollToRef.current = scrollTo
+        setScroll(scrollTo)
+    }, [setScroll])
+    /** @type {Function} */
+    const onFocus = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
+        selectOption(parseInt(target.dataset.index))
+    }, [selectOption])
+
+    useEffect(() => {
+        selectIndexRef.current = selectIndex
+        setIndexRef(selectIndex)
+    }, [selectIndex, setIndexRef])
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current && optionList.length > 0) {
+            if (scrollToRef.current) {
                 clearInterval(interval)
-                scrollToRef.current({ index: selectIndex || 0, animate: false, focus: true })
+                scrollToRef.current({ index: selectIndexRef.current || 0, animate: false, focus: true })
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [optionList, selectIndex])
+    }, [])
 
     return (
         <div className={`${css.scrollerContainer} ${scrollCss.scrollerFix}`}>
@@ -59,16 +75,20 @@ const Options = ({ optionList, selectContent, selectIndex, ...rest }) => {
                 cbScrollTo={getScrollTo}
                 direction='vertical'
                 verticalScrollbar='hidden'
-                childProps={{ itemHeight }}
+                childProps={{
+                    onFocus,
+                    itemHeight,
+                    options
+                }}
             />
         </div>
     )
 }
 
 Options.propTypes = {
-    optionList: PropTypes.array.isRequired,
-    selectContent: PropTypes.func.isRequired,
+    options: PropTypes.array.isRequired,
+    selectOption: PropTypes.func.isRequired,
     selectIndex: PropTypes.number
 }
 
-export default Options
+export default withLoadingList(Options, 'options')

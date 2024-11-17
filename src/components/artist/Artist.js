@@ -1,9 +1,8 @@
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
-import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
@@ -44,25 +43,30 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {[Object, Function]} */
-    const [videos, setVideos] = useState(contentDetailBak.videos || [])
+    const [videos, setVideos] = useState(null)
     /** @type {[Number, Function]} */
-    const [selectIndex, setSelectIndex] = useState(contentDetailBak.selectIndex || 0)
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
-    /** @type {Array<{icon: String, title: String}>} */
-    const optionList = useMemo(() => {
-        let out = []
-        if (artist.videos && artist.videos.length > 0) {
-            out.push({ icon: '🎥', title: $L('Videos') })
-        }
-        if (artist.concerts && artist.concerts.length > 0) {
-            out.push({ icon: '🎤', title: $L('Concerts') })
+    const [optionIndex, setOptionIndex] = useState(contentDetailBak.optionIndex)
+    /** @type {{current: Number}} */
+    const optionRef = useRef(null)
+    /** @type {Array<{icon: String, title: String, videos: Array}>} */
+    const options = useMemo(() => {
+        let out
+        if (contentDetailBak.options) {
+            out = contentDetailBak.options
+        } else {
+            out = []
+            if (artist.videos && artist.videos.length > 0) {
+                out.push({ icon: '🎥', title: $L('Videos'), videos: [] })
+            }
+            if (artist.concerts && artist.concerts.length > 0) {
+                out.push({ icon: '🎤', title: $L('Concerts'), videos: [] })
+            }
         }
         return out
-    }, [artist])
+    }, [artist, contentDetailBak.options])
 
     /** @type {{video: Number, concert: Number}} */
-    const optionIndex = useMemo(() => {
+    const optionIndexes = useMemo(() => {
         let out = {}, index = 0
         if (artist.videos && artist.videos.length > 0) {
             out.video = index
@@ -77,12 +81,16 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {Function} */
     const setContentToPlay = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
-        const videIndex = parseInt(target.dataset.index)
-        setContentDetailBak({ videos, videIndex, selectIndex })
+        const videoIndex = parseInt(target.dataset.index)
+        setContentDetailBak({
+            options,
+            videoIndex,
+            optionIndex
+        })
         back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-        setPlayContent(videos[videIndex])
+        setPlayContent(videos[videoIndex])
         setPath('/profiles/home/player')
-    }, [videos, setPath, setPlayContent, selectIndex, setContentDetailBak])
+    }, [videos, setPath, setPlayContent, optionIndex, setContentDetailBak, options])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {
@@ -98,38 +106,38 @@ const Artist = ({ profile, artist, ...rest }) => {
             ep.playhead = { progress: 0 }
             ep.showPremium = !isPremium && getIsPremium(ep)
         })
-        setVideos(data)
-        setLoading(false)
-    }, [setVideos, isPremium])
-
-    /** @type {Function} */
-    const onSetSelectContent = useCallback(ev => {
-        const target = ev.currentTarget || ev.target
-        setSelectIndex(parseInt(target.dataset.index))
-    }, [setSelectIndex])
+        return data
+    }, [isPremium])
 
     useEffect(() => {
         if (contentDetailBak.selectIndex != null &&
-            contentDetailBak.selectIndex !== selectIndex) {
-            setContentDetailBak({
-                videos: undefined,
-                videIndex: undefined,
-            })
+            contentDetailBak.selectIndex !== optionIndex) {
+            // reset bak values
+            setContentDetailBak({ videoIndex: undefined })
         }
-    }, [selectIndex, setContentDetailBak, contentDetailBak.selectIndex])
+    }, [optionIndex, setContentDetailBak, contentDetailBak.selectIndex])
 
     useEffect(() => {
-        if (contentDetailBak.videIndex == null) {
-            setLoading(true)
-            if (selectIndex === optionIndex.video) {
-                api.music.getVideos(profile, artist.videos).then(preProcessVideos)
-            } else if (selectIndex === optionIndex.concert) {
-                api.music.getConcerts(profile, artist.concerts).then(preProcessVideos)
+        optionRef.current = optionIndex
+        if (optionIndex != null) {
+            /** @type {Promise} */
+            let prom = null
+            if (options[optionIndex].videos.length) {
+                prom = Promise.resolve().then(() => options[optionIndex].videos)
+            } else {
+                if (optionIndex === optionIndexes.video) {
+                    prom = api.music.getVideos(profile, artist.videos).then(preProcessVideos)
+                } else {
+                    prom = api.music.getConcerts(profile, artist.concerts).then(preProcessVideos)
+                }
             }
-        } else {
-            setLoading(false)
+            prom.then(data => {
+                if (optionRef.current === optionIndex) {
+                    setVideos(data)
+                }
+            })
         }
-    }, [profile, artist, optionIndex, selectIndex, preProcessVideos, contentDetailBak.videIndex])
+    }, [profile, artist, options, optionIndexes, optionIndex, preProcessVideos, setVideos])
 
     return (
         <Row className={css.contentArtist} {...rest}>
@@ -151,21 +159,15 @@ const Artist = ({ profile, artist, ...rest }) => {
                                 </Scroller>
                             </div>
                             <Options
-                                optionList={optionList}
-                                selectContent={onSetSelectContent}
-                                selectIndex={selectIndex} />
+                                options={options}
+                                selectOption={setOptionIndex}
+                                selectIndex={optionIndex} />
                         </Cell>
                         <Cell size="49%" style={{ height: '100%', width: '49%' }}>
-                            {loading ?
-                                <Column align='center center'>
-                                    <Spinner />
-                                </Column>
-                                :
-                                <EpisodesList
-                                    episodes={videos}
-                                    selectEpisode={setContentToPlay}
-                                    episodeIndex={contentDetailBak.videIndex} />
-                            }
+                            <EpisodesList
+                                episodes={videos}
+                                selectEpisode={setContentToPlay}
+                                episodeIndex={contentDetailBak.videoIndex} />
                         </Cell>
                     </Row>
                 </Cell>

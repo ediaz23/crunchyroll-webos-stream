@@ -1,6 +1,6 @@
 {
     "name": "com.crunchyroll.webos.stream",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
@@ -76,10 +76,6 @@
         "config/*",
         "scripts/*"
     ],
-    "resolutions": {
-        "//": "See https://github.com/facebook/create-react-app/issues/11773",
-        "react-error-overlay": "6.0.9"
-    },
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.2.0",
         "@enact/core": "^4.8.0",
@@ -106,6 +102,10 @@
         "web-vitals": "^4.0.0",
         "webostvjs": "^1.2.5"
     },
+    "resolutions": {
+        "//": "See https://github.com/facebook/create-react-app/issues/11773",
+        "react-error-overlay": "6.0.9"
+    },
     "devDependencies": {
         "@babel/plugin-transform-modules-commonjs": "^7.24.8",
         "@babel/plugin-transform-runtime": "^7.25.4",
@@ -115,6 +115,7 @@
         "@testing-library/jest-dom": "^6.2.0",
         "@testing-library/react": "^14.1.2",
         "@testing-library/user-event": "^14.5.2",
+        "@types/react": "^18.3.12",
         "@types/webostvjs": "^1.2.5",
         "babel-jest": "^29.7.0",
         "babel-loader": "^9.1.3",

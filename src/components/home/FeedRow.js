@@ -74,6 +74,10 @@ const HomeFeedItem = ({ feed, index, imageHeight, ...rest }) => {
 }
 
 const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, className, ...rest }) => {
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
+    /** @type {{current: Number}} */
+    const columnIndexRef = useRef(null)
     /** @type {{current: HTMLElement}} */
     const compRef = useRef({ current: null })
     /** @type {[Number, Function]} */
@@ -82,8 +86,6 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     const [imageHeight, setImageHeight] = useState(0)
     /** @type {Number} */
     const itemWidth = ri.scale(320)
-    /** @type {{current: Function}} */
-    const scrollToRef = useRef(null)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {{rowIndex: Number, columnIndex: Number}} */
@@ -125,17 +127,30 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     }, [itemSize, setItemHeight, setImageHeight])
 
     useEffect(() => {
+        if (rowIndex === homePosition.rowIndex) {
+            columnIndexRef.current = homePosition.columnIndex
+        } else {
+            columnIndexRef.current = null
+        }
+    }, [rowIndex, homePosition])
+
+    useEffect(() => {
+        if (columnIndexRef.current !== null) {
+            setHomeViewReady(true)
+        }
+    }, [setHomeViewReady])
+
+    useEffect(() => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                if (rowIndex === homePosition.rowIndex) {
-                    scrollToRef.current({ index: homePosition.columnIndex, animate: false, focus: true })
-                    setHomeViewReady(true)
+                if (columnIndexRef.current !== null) {
+                    scrollToRef.current({ index: columnIndexRef.current, animate: false, focus: true })
                 }
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [rowIndex, homePosition, setHomeViewReady])
+    }, [])
 
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {

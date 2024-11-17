@@ -300,8 +300,8 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
         if (!loading) {
             interval = setInterval(() => {
                 if (document.querySelector('#play')) {
-                    Spotlight.focus('#play')
                     clearInterval(interval)
+                    Spotlight.focus('#play')
                 }
             }, 100)
         }
