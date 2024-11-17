@@ -1,3 +1,4 @@
+@import (reference) '../patch/Scroller.module.less';
 
 .progress {
     height: 0.3rem;
@@ -43,4 +44,10 @@
 .virtualListContainer {
     height: 100%;
     overflow: hidden;
+
+    .scrollFixRule;
+
+    > :global(.moonstone) {
+        .scrollFixRule;
+    }
 }

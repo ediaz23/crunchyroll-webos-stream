@@ -210,7 +210,7 @@ const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
                     <Cell shrink>
                         <ContentHeader content={content} noCategory={noCategory} />
                     </Cell>
-                    <Cell style={{ height: 'auto' }}>
+                    <Cell grow style={{ height: 'auto' }}>
                         <BodyText size='small'>
                             {content.description}
                         </BodyText>

@@ -25,7 +25,7 @@ import SelectLanguage from '../SelectLanguage'
 import Alert from '../Alert'
 import PopupMessage from '../Popup'
 import css from './Detail.module.less'
-import scrollCss from '../../patch/Scroller.module.less'
+import cssShared from '../Share.module.less'
 import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
 import back from '../../back'
@@ -323,7 +323,7 @@ const AvatarGridBase = ({ open, avatars, setProfile, ...rest }) => {
                     {albums}
                 </Dropdown>
                 <div style={{ height: '90%' }}>
-                    <div className={scrollCss.scrollerFix}>
+                    <div className={cssShared.virtualListContainer}>
                         <VirtualGridList
                             className={css.avatarList}
                             dataSize={avatarsList.length}

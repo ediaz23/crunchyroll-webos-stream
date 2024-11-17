@@ -394,10 +394,10 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type = 'home', ...rest2 }) =
 
     return (
         <Column className={css.feed} {...rest2}>
-            <Cell>
+            <Cell shrink>
                 {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
             </Cell>
-            <Cell>
+            <Cell grow>
                 <VirtualListNested
                     dataSize={homeFeed.length}
                     itemRenderer={renderRow}

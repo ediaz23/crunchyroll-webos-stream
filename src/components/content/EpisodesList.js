@@ -16,7 +16,6 @@ import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentDetail.module.less'
 import globalCss from '../Share.module.less'
-import scrollCss from '../../patch/Scroller.module.less'
 
 
 const NavigableDiv = withNavigable('div', '')
@@ -45,7 +44,7 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
                         </Image>
                     }
                 </Cell>
-                <Cell grow>
+                <Cell grow style={{ width: 'auto' }}>
                     <Column size='100%'>
                         <Cell shrink>
                             <Row>
@@ -56,14 +55,14 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
                                         </Heading>
                                     </Cell>
                                 }
-                                <Cell grow>
+                                <Cell grow style={{ width: 'auto' }}>
                                     <Heading size="title">
                                         {episodes[index].title}
                                     </Heading>
                                 </Cell>
                             </Row>
                         </Cell>
-                        <Cell grow style={{ overflow: 'hidden' }}>
+                        <Cell grow style={{ overflow: 'hidden', height: 'auto' }}>
                             <BodyText size='small' style={{ fontSize: '1rem' }}>
                                 {episodes[index].description || '\u00a0\n '.repeat(50)}
                             </BodyText>
@@ -126,23 +125,21 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, setScroll, setInd
     }, [])
 
     return (
-        <div className={scrollCss.scrollerFix}>
-            <VirtualList
-                {...rest}
-                dataSize={episodes.length}
-                itemRenderer={renderItem}
-                itemSize={itemHeight}
-                cbScrollTo={getScrollTo}
-                direction='vertical'
-                verticalScrollbar='hidden'
-                childProps={{
-                    onClick: selectEpisode,
-                    itemHeight,
-                    episodes,
-                    images,
-                }}
-            />
-        </div>
+        <VirtualList
+            {...rest}
+            dataSize={episodes.length}
+            itemRenderer={renderItem}
+            itemSize={itemHeight}
+            cbScrollTo={getScrollTo}
+            direction='vertical'
+            verticalScrollbar='hidden'
+            childProps={{
+                onClick: selectEpisode,
+                itemHeight,
+                episodes,
+                images,
+            }}
+        />
     )
 }
 

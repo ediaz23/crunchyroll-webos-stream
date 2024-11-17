@@ -12,7 +12,6 @@ import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
 import withLoadingList from '../../hooks/loadingList'
-import scrollCss from '../../patch/Scroller.module.less'
 
 
 /**
@@ -114,15 +113,13 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     }, [])
 
     return (
-        <div className={scrollCss.scrollerFix}>
-            <VirtualGridList {...rest}
-                dataSize={contentList.length}
-                itemRenderer={renderItem}
-                itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                spacing={ri.scale(25)}
-                cbScrollTo={getScrollTo}
-            />
-        </div>
+        <VirtualGridList {...rest}
+            dataSize={contentList.length}
+            itemRenderer={renderItem}
+            itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+            spacing={ri.scale(25)}
+            cbScrollTo={getScrollTo}
+        />
     )
 }
 

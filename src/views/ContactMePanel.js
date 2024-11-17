@@ -34,6 +34,7 @@ const ImageInfo = (props) => (
             />
         }
         <Cell
+            grow
             component={Image}
             {...props.image}
             align='center'
@@ -41,6 +42,7 @@ const ImageInfo = (props) => (
                 backgroundSize: 'contain',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
+                height: 'auto',
             }}
         />
     </Layout>

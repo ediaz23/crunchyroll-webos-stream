@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 import withLoadingList from '../../hooks/loadingList'
 import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
-import scrollCss from '../../patch/Scroller.module.less'
 
 
 const renderItem = ({ options, index, itemHeight: height, ...rest }) => {
@@ -65,23 +64,21 @@ const Options = ({ options, selectOption, selectIndex, setScroll, setIndexRef, .
     }, [])
 
     return (
-        <div className={`${css.scrollerContainer} ${scrollCss.scrollerFix}`}>
-            <VirtualList
-                {...rest}
-                className={css.optionsContainer}
-                dataSize={optionList.length}
-                itemRenderer={renderItem}
-                itemSize={itemHeight}
-                cbScrollTo={getScrollTo}
-                direction='vertical'
-                verticalScrollbar='hidden'
-                childProps={{
-                    onFocus,
-                    itemHeight,
-                    options
-                }}
-            />
-        </div>
+        <VirtualList
+            {...rest}
+            className={css.optionsContainer}
+            dataSize={options.length}
+            itemRenderer={renderItem}
+            itemSize={itemHeight}
+            cbScrollTo={getScrollTo}
+            direction='vertical'
+            verticalScrollbar='hidden'
+            childProps={{
+                onFocus,
+                itemHeight,
+                options
+            }}
+        />
     )
 }
 

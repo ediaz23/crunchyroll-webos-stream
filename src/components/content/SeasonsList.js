@@ -11,7 +11,6 @@ import { $L } from '../../hooks/language'
 import withLoadingList from '../../hooks/loadingList'
 import withNavigable from '../../hooks/navigable'
 import css from './ContentDetail.module.less'
-import scrollCss from '../../patch/Scroller.module.less'
 
 
 const NavigableDiv = withNavigable('div')
@@ -32,7 +31,7 @@ const renderItem = ({ index, itemHeight: height, seasons, ...rest }) => {
                         {seasons[index].season_sequence_number}
                     </Cell>
                 }
-                <Cell className={css.name}>
+                <Cell grow className={css.name} style={{ width: 'auto' }}>
                     <Marquee marqueeOn='render'>
                         {seasons[index].title}
                     </Marquee>
@@ -97,23 +96,21 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, setScroll, setIndexRe
     }, [])
 
     return (
-        <div className={scrollCss.scrollerFix}>
-            <VirtualList
-                {...rest}
-                className={css.firstData}
-                dataSize={seasons.length}
-                itemRenderer={renderItem}
-                itemSize={itemHeight}
-                cbScrollTo={getScrollTo}
-                direction='vertical'
-                verticalScrollbar='hidden'
-                childProps={{
-                    onFocus,
-                    itemHeight,
-                    seasons,
-                }}
-            />
-        </div>
+        <VirtualList
+            {...rest}
+            className={css.firstData}
+            dataSize={seasons.length}
+            itemRenderer={renderItem}
+            itemSize={itemHeight}
+            cbScrollTo={getScrollTo}
+            direction='vertical'
+            verticalScrollbar='hidden'
+            childProps={{
+                onFocus,
+                itemHeight,
+                seasons,
+            }}
+        />
     )
 }
 

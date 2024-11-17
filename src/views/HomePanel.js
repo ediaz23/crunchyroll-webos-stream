@@ -258,7 +258,7 @@ const HomePanel = (props) => {
                         onFocus={showToolbar}
                         hideText />
                 </Cell>
-                <Cell grow>
+                <Cell grow style={{ width: 'auto' }}>
                     {loading &&
                         <Column align='center center'>
                             <Spinner />
