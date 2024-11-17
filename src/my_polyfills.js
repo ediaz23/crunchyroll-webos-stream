@@ -15,3 +15,16 @@ arrayMethods.forEach(function(method) {
         window.NodeList.prototype[method] = window.Array.prototype[method];
     }
 });
+
+
+(function() {
+    const originalGetBoundingClientRect = window.Element.prototype.getBoundingClientRect
+
+    window.Element.prototype.getBoundingClientRect = function() {
+        let rect = originalGetBoundingClientRect.call(this)
+
+        rect.x = rect.left;
+        rect.y = rect.top;
+        return rect
+    }
+})();
