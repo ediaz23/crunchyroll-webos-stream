@@ -1,7 +1,6 @@
 
 import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
-import Spinner from '@enact/moonstone/Spinner'
 
 import PropTypes from 'prop-types'
 
@@ -43,7 +42,6 @@ const Watchlist = ({ profile, ...rest }) => {
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak,
-        loading, setLoading,
     } = useContentList('watchlist')
 
     /** @type {[Object, Function]} */
@@ -81,14 +79,14 @@ const Watchlist = ({ profile, ...rest }) => {
 
     useEffect(() => {
         if (delay >= 0) {
-            setLoading(true)
+            changeContentList(null)
             api.discover.getWatchlist(profile, options).then(res =>
                 processResult({ profile, data: res.data }).then(res2 => {
                     changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
                 })
             )
         }
-    }, [profile, changeContentList, options, setLoading, delay])
+    }, [profile, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
         if (contentListBak) {
@@ -100,27 +98,20 @@ const Watchlist = ({ profile, ...rest }) => {
 
     return (
         <Column {...rest}>
-            {loading &&
-                <Column align='center center'>
-                    <Spinner />
-                </Column>
-            }
-            {!loading &&
-                <Column>
-                    <Cell size="50%">
-                        {selectedContent && <HomeContentBanner content={selectedContent} />}
-                    </Cell>
-                    <Cell grow>
-                        <ContentGridItems
-                            contentList={contentList}
-                            load={onLoad}
-                            onLeave={onLeaveView}
-                            autoScroll={autoScroll}
-                            onFocus={onSelectItem}
-                            mode='wide' />
-                    </Cell>
-                </Column>
-            }
+            <Column>
+                <Cell size="50%">
+                    {selectedContent && <HomeContentBanner content={selectedContent} />}
+                </Cell>
+                <Cell grow>
+                    <ContentGridItems
+                        contentList={contentList}
+                        load={onLoad}
+                        onLeave={onLeaveView}
+                        autoScroll={autoScroll}
+                        onFocus={onSelectItem}
+                        mode='wide' />
+                </Cell>
+            </Column>
         </Column>
     )
 }

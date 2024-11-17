@@ -44,9 +44,7 @@ export const useContentList = (type) => {
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
     /** @type {[Array<Object>, Function]} */
-    const [contentList, setContentList] = useState([])
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
+    const [contentList, setContentList] = useState(null)
     /** @type {[Boolean, Function]}  */
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
@@ -59,12 +57,11 @@ export const useContentList = (type) => {
     /** @type {Function} */
     const changeContentList = useCallback((newList) => {
         setContentList(newList)
-        setLoading(false)
         setHomeViewReady(true)
         if (homeBackup && homeBackup.contentList !== newList) {
             setHomePosition({ rowIndex: 0 })
         }
-    }, [setContentList, setHomeViewReady, setLoading, homeBackup, setHomePosition])
+    }, [setContentList, setHomeViewReady, homeBackup, setHomePosition])
 
     /** @type {Function} */
     const onLeave = useCallback((options) => {
@@ -115,7 +112,6 @@ export const useContentList = (type) => {
     return {
         contentList,
         quantity,
-        loading, setLoading,
         delay, setDelay,
         autoScroll, setAutoScroll,
         changeContentList,
