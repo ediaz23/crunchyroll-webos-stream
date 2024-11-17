@@ -115,13 +115,13 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
 
     return (
         <div className={scrollCss.scrollerFix}>
-                <VirtualGridList {...rest}
-                    dataSize={contentList.length}
-                    itemRenderer={renderItem}
-                    itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-                    spacing={ri.scale(25)}
-                    cbScrollTo={getScrollTo}
-                />
+            <VirtualGridList {...rest}
+                dataSize={contentList.length}
+                itemRenderer={renderItem}
+                itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+                spacing={ri.scale(25)}
+                cbScrollTo={getScrollTo}
+            />
         </div>
     )
 }

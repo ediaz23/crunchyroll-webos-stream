@@ -131,25 +131,25 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
         <Row align='start space-between' {...rest}>
             <Row style={{ height: '100%', width: '100%' }}>
                 <Cell size="49%" style={{ height: '100%', width: '49%' }}>
-                      <Column style={{ height: '100%', width: '100%' }}>
-                           <Cell shrink>
-                                <ContentHeader content={series} />
-                            </Cell>
-                            <Cell>
-                                <SeasonsList
-                                    seasons={seasons}
-                                    selectSeason={setSeasonIndex}
-                                    seasonIndex={seasonIndex} />
-                            </Cell>
-                        </Column>
-                    </Cell>
-                    <Cell size="49%" style={{ height: '100%', width: '49%' }}>
-                        <EpisodesList
-                            episodes={episodes}
-                            selectEpisode={playEpisode}
-                            episodeIndex={contentDetailBak.episodeIndex} />
-                    </Cell>
-                </Row>
+                    <Column style={{ height: '100%', width: '100%' }}>
+                        <Cell shrink>
+                            <ContentHeader content={series} />
+                        </Cell>
+                        <Cell>
+                            <SeasonsList
+                                seasons={seasons}
+                                selectSeason={setSeasonIndex}
+                                seasonIndex={seasonIndex} />
+                        </Cell>
+                    </Column>
+                </Cell>
+                <Cell size="49%" style={{ height: '100%', width: '49%' }}>
+                    <EpisodesList
+                        episodes={episodes}
+                        selectEpisode={playEpisode}
+                        episodeIndex={contentDetailBak.episodeIndex} />
+                </Cell>
+            </Row>
         </Row>
     )
 }
