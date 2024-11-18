@@ -93,7 +93,7 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, setScroll, setIndexRe
             clearInterval(interval)
             clearTimeout(timeoutRef.current)
         }
-    }, [seasons])
+    }, [])
 
     return (
         <VirtualList

@@ -145,6 +145,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                 </Cell>
                 <Cell size="49%">
                     <EpisodesList
+                        seasonIndex={seasonIndex}
                         episodes={episodes}
                         selectEpisode={playEpisode}
                         episodeIndex={contentDetailBak.episodeIndex} />

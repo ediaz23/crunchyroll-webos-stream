@@ -165,6 +165,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                         </Cell>
                         <Cell size="49%">
                             <EpisodesList
+                                seasonIndex={optionIndex}
                                 episodes={videos}
                                 selectEpisode={setContentToPlay}
                                 episodeIndex={contentDetailBak.videoIndex} />

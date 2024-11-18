@@ -81,13 +81,14 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
 
 /**
  * @param {Object} obj
+ * @param {Number} obj.seasonIndex
  * @param {Array<Object>} obj.episodes
  * @param {Function} obj.selectEpisode
  * @param {Number} [obj.episodeIndex]
  * @param {Function} obj.setScroll
  * @param {Function} obj.setIndexRef
  */
-const EpisodesList = ({ episodes, selectEpisode, episodeIndex, setScroll, setIndexRef, ...rest }) => {
+const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, setScroll, setIndexRef, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Number} */
@@ -122,7 +123,7 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, setScroll, setInd
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [episodes])
+    }, [seasonIndex])
 
     return (
         <VirtualList
@@ -144,6 +145,7 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, setScroll, setInd
 }
 
 EpisodesList.propTypes = {
+    seasonIndex: PropTypes.number.isRequired,
     episodes: PropTypes.arrayOf(PropTypes.object).isRequired,
     selectEpisode: PropTypes.func.isRequired,
     episodeIndex: PropTypes.number,
