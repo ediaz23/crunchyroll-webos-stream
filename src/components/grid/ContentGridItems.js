@@ -110,7 +110,7 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
+    }, [contentList])
 
     return (
         <VirtualGridList {...rest}

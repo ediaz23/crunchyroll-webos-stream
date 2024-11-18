@@ -84,8 +84,8 @@ const Artist = ({ profile, artist, ...rest }) => {
         const videoIndex = parseInt(target.dataset.index)
         setContentDetailBak({
             options,
+            optionIndex,
             videoIndex,
-            optionIndex
         })
         back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
         setPlayContent(videos[videoIndex])

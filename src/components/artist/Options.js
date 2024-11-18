@@ -61,7 +61,7 @@ const Options = ({ options, selectOption, selectIndex, setScroll, setIndexRef, .
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
+    }, [options])
 
     return (
         <VirtualList

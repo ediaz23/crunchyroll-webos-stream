@@ -145,7 +145,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
+    }, [feed.items])
 
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {

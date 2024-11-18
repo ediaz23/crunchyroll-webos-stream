@@ -122,7 +122,7 @@ const EpisodesList = ({ episodes, selectEpisode, episodeIndex, setScroll, setInd
             }
         }, 100)
         return () => clearInterval(interval)
-    }, [])
+    }, [episodes])
 
     return (
         <VirtualList
