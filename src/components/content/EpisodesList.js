@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
 import withNavigable from '../../hooks/navigable'
-import withLoadingList from '../../hooks/loadingList'
+import LoadingList from '../LoadingList'
 import { formatDurationMs, getDuration } from '../../utils'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import css from './ContentDetail.module.less'
@@ -81,14 +81,12 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
 
 /**
  * @param {Object} obj
- * @param {Number} obj.seasonIndex
- * @param {Array<Object>} obj.episodes
+ * @param {Number} [obj.seasonIndex]
+ * @param {Array<Object>} [obj.episodes]
  * @param {Function} obj.selectEpisode
  * @param {Number} [obj.episodeIndex]
- * @param {Function} obj.setScroll
- * @param {Function} obj.setIndexRef
  */
-const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, setScroll, setIndexRef, ...rest }) => {
+const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Number} */
@@ -98,22 +96,25 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, setS
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {Array<{source: String}>} */
-    const images = useMemo(() => episodes.map(episode => {
-        if (!episode.list_image) {
-            episode.list_image = getImagePerResolution({ height: itemHeight, content: episode })
+    const images = useMemo(() => {
+        let out = []
+        if (episodes) {
+            out = episodes.map(episode => {
+                if (!episode.list_image) {
+                    episode.list_image = getImagePerResolution({ height: itemHeight, content: episode })
+                }
+                return episode.list_image
+            })
         }
-        return episode.list_image
-    }), [itemHeight, episodes, getImagePerResolution])
+        return out
+    }, [itemHeight, episodes, getImagePerResolution])
+
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => {
         scrollToRef.current = scrollTo
-        setScroll(scrollTo)
-    }, [setScroll])
+    }, [seasonIndex])  // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        episodeIndexRef.current = episodeIndex
-        setIndexRef(episodeIndex)
-    }, [episodeIndex, setIndexRef])
+    useEffect(() => { episodeIndexRef.current = episodeIndex }, [seasonIndex, episodeIndex])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -122,35 +123,43 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, setS
                 scrollToRef.current({ index: episodeIndexRef.current || 0, animate: false, focus: true })
             }
         }, 100)
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+            scrollToRef.current = null
+        }
     }, [seasonIndex])
 
     return (
-        <VirtualList
-            {...rest}
-            dataSize={episodes.length}
-            itemRenderer={renderItem}
-            itemSize={itemHeight}
-            cbScrollTo={getScrollTo}
-            direction='vertical'
-            verticalScrollbar='hidden'
-            childProps={{
-                onClick: selectEpisode,
-                itemHeight,
-                episodes,
-                images,
-            }}
-        />
+        <LoadingList
+            list={episodes}
+            index={episodeIndex}
+            scrollFn={scrollToRef.current}>
+            {episodes && episodes.length > 0 &&
+                <VirtualList
+                    {...rest}
+                    dataSize={episodes.length}
+                    itemRenderer={renderItem}
+                    itemSize={itemHeight}
+                    cbScrollTo={getScrollTo}
+                    direction='vertical'
+                    verticalScrollbar='hidden'
+                    childProps={{
+                        onClick: selectEpisode,
+                        itemHeight,
+                        episodes,
+                        images,
+                    }}
+                />
+            }
+        </LoadingList>
     )
 }
 
 EpisodesList.propTypes = {
-    seasonIndex: PropTypes.number.isRequired,
-    episodes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    seasonIndex: PropTypes.number,
+    episodes: PropTypes.array,
     selectEpisode: PropTypes.func.isRequired,
     episodeIndex: PropTypes.number,
-    setScroll: PropTypes.func.isRequired,
-    setIndexRef: PropTypes.func.isRequired,
 }
 
-export default withLoadingList(EpisodesList, 'episodes')
+export default EpisodesList
