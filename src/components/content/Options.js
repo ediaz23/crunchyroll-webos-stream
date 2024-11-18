@@ -239,6 +239,12 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const playLastContent = useCallback(() => {
         setContentToPlay(lastContent)
     }, [setContentToPlay, lastContent])
+    /** @type {Function} */
+    const hackScroll = useCallback((event) => {
+        const container = event.target
+        container.scrollTop = 0
+        container.scrollLeft = 0
+    }, [])
 
     /** @type {Function} */
     const toggleWatchlist = useCallback(() => {
@@ -316,7 +322,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                 </Column>
             }
             {!loading &&
-                <Cell size='49%' style={{ maxWidth: '49%', width: '49%' }}>
+                <Cell size='49%' style={{ maxWidth: '49%', width: '49%' }} onScroll={hackScroll}>
                     <ContentHeader content={content} />
                     {subtitle &&
                         <Heading size='small' spacing='small' className={css.firstData}>

@@ -135,7 +135,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                         <Cell shrink>
                             <ContentHeader content={series} />
                         </Cell>
-                        <Cell grow style={{ height: 'auto' }}>
+                        <Cell grow style={{ height: 'auto', overflow: 'hidden' }}>
                             <SeasonsList
                                 seasons={seasons}
                                 selectSeason={setSeasonIndex}
