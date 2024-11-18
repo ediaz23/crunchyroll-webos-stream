@@ -3,7 +3,6 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import Input from '@enact/moonstone/Input'
-import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
@@ -45,7 +44,6 @@ const ContentGrid = ({
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
-        loading, setLoading,
     } = useContentList('content_grid')
 
     /** @type {[String, Function]} */
@@ -100,8 +98,8 @@ const ContentGrid = ({
     useEffect(() => {
         let delayDebounceFn = undefined
         if (delay >= 0) {
+            changeContentList(null)
             delayDebounceFn = setTimeout(() => {
-                setLoading(true)
                 if (engine === 'search') {
                     if (options.query !== '') {
                         api.discover.search(profile, options).then(res => {
@@ -128,7 +126,7 @@ const ContentGrid = ({
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, changeContentList, options, setLoading, contentKey, delay, engine])
+    }, [profile, changeContentList, options, contentKey, delay, engine])
 
     useEffect(() => {  // initializing
         if (contentListBak) {
@@ -170,18 +168,11 @@ const ContentGrid = ({
                             </Cell>
                         }
                         <Cell grow style={{ height: '100%', width: noCategory ? '100%' : '80%' }}>
-                            {loading &&
-                                <Column align='center center'>
-                                    <Spinner />
-                                </Column>
-                            }
-                            {!loading &&
-                                <ContentGridItems
-                                    contentList={contentList}
-                                    load={onLoad}
-                                    onLeave={onLeaveView}
-                                    autoScroll={autoScroll} />
-                            }
+                            <ContentGridItems
+                                contentList={contentList}
+                                load={onLoad}
+                                onLeave={onLeaveView}
+                                autoScroll={autoScroll} />
                         </Cell>
                     </Row>
                 </Cell>

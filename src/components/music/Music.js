@@ -3,7 +3,6 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Column, Cell, Row } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import Input from '@enact/moonstone/Input'
-import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
@@ -29,7 +28,6 @@ const MusicBrowse = ({
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
-        loading, setLoading,
     } = useContentList('music_browse')
 
     /** @type {[String, Function]} */
@@ -75,8 +73,8 @@ const MusicBrowse = ({
     useEffect(() => {
         let delayDebounceFn = undefined
         if (delay >= 0) {
+            changeContentList(null)
             delayDebounceFn = setTimeout(() => {
-                setLoading(true)
                 if (options.query !== '') {
                     api.discover.search(profile, options).then(res => {
                         if (res.total) {
@@ -94,7 +92,7 @@ const MusicBrowse = ({
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, changeContentList, options, setLoading, contentKey, delay])
+    }, [profile, changeContentList, options, contentKey, delay])
 
     useEffect(() => {  // initializing
         if (contentListBak) {
@@ -123,19 +121,14 @@ const MusicBrowse = ({
                 </Row>
             </Cell>
             <Cell grow style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem', height: '90%' }}>
-                {loading &&
-                    <Column align='center center'>
-                        <Spinner />
-                    </Column>
-                }
-                {!loading && query === '' &&
+                {query === '' &&
                     <HomeFeed
                         profile={profile}
                         homeFeed={musicFeed}
                         setHomeFeed={setMusicFeed}
                         type='music' />
                 }
-                {!loading && query !== '' &&
+                {query !== '' &&
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}

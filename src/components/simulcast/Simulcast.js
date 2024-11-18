@@ -1,7 +1,6 @@
 
 import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
-import Spinner from '@enact/moonstone/Spinner'
 import Button from '@enact/moonstone/Button'
 import LabeledItem from '@enact/moonstone/LabeledItem'
 import Dropdown from '@enact/moonstone/Dropdown'
@@ -34,7 +33,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak, optionBak,
-        loading, setLoading,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
@@ -103,14 +101,14 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     useEffect(() => {
         if (delay >= 0) {
-            setLoading(true)
+            changeContentList(null)
             if (season && season.id) {
                 api.discover.getBrowseAll(profile, options).then(res => {
                     changeContentList([...res.data, ...new Array(res.total - res.data.length)])
                 })
             }
         }
-    }, [profile, changeContentList, options, setLoading, season, delay])
+    }, [profile, changeContentList, options, season, delay])
 
     useEffect(() => {
         if (delay >= 0) {
@@ -165,18 +163,11 @@ const Simulcast = ({ profile, title, ...rest }) => {
                 <Cell grow style={{ height: '90%' }}>
                     <Row className={css.scrollerContainer}>
                         <Cell grow style={{ height: '100%' }}>
-                            {loading &&
-                                <Column align='center center'>
-                                    <Spinner />
-                                </Column>
-                            }
-                            {!loading &&
-                                <ContentGridItems
-                                    contentList={contentList}
-                                    load={onLoad}
-                                    onLeave={onLeaveView}
-                                    autoScroll={autoScroll} />
-                            }
+                            <ContentGridItems
+                                contentList={contentList}
+                                load={onLoad}
+                                onLeave={onLeaveView}
+                                autoScroll={autoScroll} />
                         </Cell>
                     </Row>
                 </Cell>
