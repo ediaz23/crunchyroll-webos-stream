@@ -152,7 +152,8 @@ const Artist = ({ profile, artist, ...rest }) => {
                             <div className={css.scrollerContainer}>
                                 <Scroller direction='vertical'
                                     horizontalScrollbar='hidden'
-                                    verticalScrollbar='auto'>
+                                    verticalScrollbar='auto'
+                                    focusableScrollbar>
                                     <BodyText size='small'>
                                         {artist.description}
                                     </BodyText>
