@@ -101,7 +101,8 @@
         "url-search-params-polyfill": "^8.2.5",
         "uuid": "^10.0.0",
         "web-vitals": "^4.0.0",
-        "webostvjs": "^1.2.5"
+        "webostvjs": "^1.2.5",
+        "whatwg-fetch": "^3.6.20"
     },
     "resolutions": {
         "//": "See https://github.com/facebook/create-react-app/issues/11773",
@@ -173,5 +174,12 @@
         "terser-webpack-plugin": "^5.3.10",
         "webpack": "^5.89.0",
         "webpack-dev-server": "^4.15.1"
-    }
+    },
+    "browserslist": [
+        "Chrome 38",
+        ">1%",
+        "last 2 versions",
+        "not ie < 12",
+        "not ie_mob < 12"
+    ]
 }

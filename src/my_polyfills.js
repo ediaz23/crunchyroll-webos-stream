@@ -2,6 +2,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'url-search-params-polyfill';
+import 'whatwg-fetch';
 
 
 if (typeof window.NodeList.prototype[Symbol.iterator] !== 'function') {
