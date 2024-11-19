@@ -49,21 +49,7 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
     /** @type {Array<{icon: String, title: String, videos: Array}>} */
-    const options = useMemo(() => {
-        let out
-        if (contentDetailBak.options) {
-            out = contentDetailBak.options
-        } else {
-            out = []
-            if (artist.videos && artist.videos.length > 0) {
-                out.push({ icon: '🎥', title: $L('Videos'), videos: [] })
-            }
-            if (artist.concerts && artist.concerts.length > 0) {
-                out.push({ icon: '🎤', title: $L('Concerts'), videos: [] })
-            }
-        }
-        return out
-    }, [artist, contentDetailBak.options])
+    const [options, setOptions] = useState(contentDetailBak.options)
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {
@@ -119,6 +105,7 @@ const Artist = ({ profile, artist, ...rest }) => {
 
     useEffect(() => {
         optionRef.current = optionIndex
+        setVideos(null)
         if (optionIndex != null) {
             /** @type {Promise} */
             let prom = null
@@ -138,6 +125,19 @@ const Artist = ({ profile, artist, ...rest }) => {
             })
         }
     }, [profile, artist, options, optionIndexes, optionIndex, preProcessVideos, setVideos])
+
+    useEffect(() => {
+        if (contentDetailBak.options == null) {
+            const out = []
+            if (artist.videos && artist.videos.length > 0) {
+                out.push({ icon: '🎥', title: $L('Videos'), videos: [] })
+            }
+            if (artist.concerts && artist.concerts.length > 0) {
+                out.push({ icon: '🎤', title: $L('Concerts'), videos: [] })
+            }
+            setOptions(out)
+        }
+    }, [profile, artist, contentDetailBak.options])
 
     return (
         <Row className={css.contentArtist} {...rest}>
@@ -161,10 +161,11 @@ const Artist = ({ profile, artist, ...rest }) => {
                             <Options
                                 options={options}
                                 selectOption={setOptionIndex}
-                                selectIndex={optionIndex} />
+                                optionIndex={optionIndex} />
                         </Cell>
                         <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                             <EpisodesList
+                                seasonIndex={optionIndex}
                                 episodes={videos}
                                 selectEpisode={setContentToPlay}
                                 episodeIndex={contentDetailBak.videoIndex} />

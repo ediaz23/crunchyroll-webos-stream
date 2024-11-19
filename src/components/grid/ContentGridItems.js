@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
 import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
-import withLoadingList from '../../hooks/loadingList'
+import LoadingList from '../LoadingList'
 
 
 /**
@@ -23,11 +23,8 @@ import withLoadingList from '../../hooks/loadingList'
  * @param {Function} [obj.onFocus]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Function} obj.onLeave
- * @param {Function} obj.setScroll
- * @param {Function} obj.setIndexRef
  */
-const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave,
-    setScroll, setIndexRef, ...rest }) => {
+const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
@@ -44,11 +41,9 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     const setContentNavagate = useSetContent()
 
     /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => {
-        scrollToRef.current = scrollTo
-        setScroll(scrollTo)
-    }, [setScroll])
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
 
+    /** @type {Function} */
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const index = parseInt(ev.currentTarget.dataset['index'])
@@ -57,6 +52,7 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
         }
     }, [contentList, setContentNavagate, onLeave])
 
+    /** @type {Function} */
     const renderItem = useCallback(({ index, ...rest2 }) => {
         let out
         const contentItem = contentList[index]
@@ -93,11 +89,11 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     useEffect(() => {
         if (autoScroll) {
             rowIndexRef.current = homePosition.rowIndex
-            setIndexRef(homePosition.rowIndex)
         } else {
             rowIndexRef.current = false
         }
-    }, [autoScroll, homePosition.rowIndex, setIndexRef])
+    }, [autoScroll, homePosition.rowIndex])
+
     useEffect(() => {
         const interval = setInterval(() => {
             if (scrollToRef.current) {
@@ -109,29 +105,40 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
                 }
             }
         }, 100)
-        return () => clearInterval(interval)
-    }, [contentList])
+        return () => {
+            clearInterval(interval)
+            scrollToRef.current = null
+        }
+    }, [])
 
     return (
-        <VirtualGridList {...rest}
-            dataSize={contentList.length}
-            itemRenderer={renderItem}
-            itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
-            spacing={ri.scale(25)}
-            cbScrollTo={getScrollTo}
-        />
+        <LoadingList
+            list={contentList}
+            index={homePosition.rowIndex}
+            scrollFn={scrollToRef.current}>
+            {contentList && contentList.length > 0 &&
+                <VirtualGridList {...rest}
+                    dataSize={contentList.length}
+                    itemRenderer={renderItem}
+                    itemSize={{ minHeight: itemHeight, minWidth: itemWidth }}
+                    spacing={ri.scale(25)}
+                    cbScrollTo={getScrollTo}
+                />
+            }
+        </LoadingList>
     )
 }
 
 ContentGridItems.propTypes = {
-    contentList: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])).isRequired,
+    contentList: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])),
+        PropTypes.oneOf([null]),
+    ]),
     onLeave: PropTypes.func.isRequired,
     autoScroll: PropTypes.bool,
     mode: PropTypes.oneOf(['tall', 'wide']),
     load: PropTypes.func,
     onFocus: PropTypes.func,
-    setScroll: PropTypes.func.isRequired,
-    setIndexRef: PropTypes.func.isRequired,
 }
 
-export default withLoadingList(ContentGridItems, 'contentList')
+export default ContentGridItems

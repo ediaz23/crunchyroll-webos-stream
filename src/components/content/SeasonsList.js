@@ -8,7 +8,7 @@ import VirtualList from '@enact/moonstone/VirtualList'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
-import withLoadingList from '../../hooks/loadingList'
+import LoadingList from '../LoadingList'
 import withNavigable from '../../hooks/navigable'
 import css from './ContentDetail.module.less'
 
@@ -48,13 +48,11 @@ const renderItem = ({ index, itemHeight: height, seasons, ...rest }) => {
 
 /**
  * @param {Object} obj
- * @param {Array<Object>} obj.seasons
+ * @param {Array<Object>} [obj.seasons]
  * @param {Function} obj.selectEpisode
  * @param {Number} [obj.seasonIndex]
- * @param {Function} obj.setScroll
- * @param {Function} obj.setIndexRef
  */
-const SeasonsList = ({ seasons, selectSeason, seasonIndex, setScroll, setIndexRef, ...rest }) => {
+const SeasonsList = ({ seasons, selectSeason, seasonIndex, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Number} */
@@ -63,11 +61,10 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, setScroll, setIndexRe
     const seasonIndexRef = useRef(seasonIndex)
     /** @type {{current: Number}} */
     const timeoutRef = useRef(null)
+
     /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => {
-        scrollToRef.current = scrollTo
-        setScroll(scrollTo)
-    }, [setScroll])
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
+
     /** @type {Function} */
     const onFocus = useCallback(ev => {
         clearTimeout(timeoutRef.current)
@@ -77,10 +74,7 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, setScroll, setIndexRe
         }, 500)
     }, [selectSeason])
 
-    useEffect(() => {
-        seasonIndexRef.current = seasonIndex
-        setIndexRef(seasonIndex)
-    }, [seasonIndex, setIndexRef])
+    useEffect(() => { seasonIndexRef.current = seasonIndex }, [seasonIndex])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -92,34 +86,40 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, setScroll, setIndexRe
         return () => {
             clearInterval(interval)
             clearTimeout(timeoutRef.current)
+            scrollToRef.current = null
         }
-    }, [seasons])
+    }, [])
 
     return (
-        <VirtualList
-            {...rest}
-            className={css.firstData}
-            dataSize={seasons.length}
-            itemRenderer={renderItem}
-            itemSize={itemHeight}
-            cbScrollTo={getScrollTo}
-            direction='vertical'
-            verticalScrollbar='hidden'
-            childProps={{
-                onFocus,
-                itemHeight,
-                seasons,
-            }}
-        />
+        <LoadingList
+            list={seasons}
+            index={seasonIndex}
+            scrollFn={scrollToRef.current}>
+            {seasons && seasons.length > 0 &&
+                <VirtualList
+                    {...rest}
+                    className={css.firstData}
+                    dataSize={seasons.length}
+                    itemRenderer={renderItem}
+                    itemSize={itemHeight}
+                    cbScrollTo={getScrollTo}
+                    direction='vertical'
+                    verticalScrollbar='hidden'
+                    childProps={{
+                        onFocus,
+                        itemHeight,
+                        seasons,
+                    }}
+                />
+            }
+        </LoadingList>
     )
 }
 
 SeasonsList.propTypes = {
-    seasons: PropTypes.arrayOf(PropTypes.object).isRequired,
+    seasons: PropTypes.array,
     selectSeason: PropTypes.func.isRequired,
     seasonIndex: PropTypes.number,
-    setScroll: PropTypes.func.isRequired,
-    setIndexRef: PropTypes.func.isRequired,
 }
 
-export default withLoadingList(SeasonsList, 'seasons')
+export default SeasonsList
