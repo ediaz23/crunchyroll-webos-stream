@@ -1,32 +1,17 @@
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import 'url-search-params-polyfill';
+import 'core-js/modules/web.dom-collections.for-each'; // forEach para NodeList
+import 'core-js/modules/web.dom-collections.iterator'; // Iteradores
 import 'whatwg-fetch';
+import 'element-closest-polyfill'
+import URLSearchParamsFix from 'core-js/web/url-search-params';
 
 
-if (typeof window.NodeList.prototype[Symbol.iterator] !== 'function') {
-    window.NodeList.prototype[Symbol.iterator] = window.Array.prototype[Symbol.iterator];
-}
+window.URLSearchParams = URLSearchParamsFix;
 
-const arrayMethods = [
-    'forEach', 'map', 'filter', 'reduce', 'some', 'every', 'find', 'includes'
-];
+Object.setPrototypeOf(window.NodeList.prototype, window.Array.prototype);
 
-arrayMethods.forEach(function(method) {
-    if (!window.NodeList.prototype[method]) {
-        window.NodeList.prototype[method] = window.Array.prototype[method];
-    }
-});
-
-(function() {
-    const originalGetBoundingClientRect = window.Element.prototype.getBoundingClientRect
-
-    window.Element.prototype.getBoundingClientRect = function() {
-        let rect = originalGetBoundingClientRect.call(this)
-
-        rect.x = rect.left;
-        rect.y = rect.top;
-        return rect
-    }
-})();
+const rectPrototype = Object.getPrototypeOf(document.documentElement.getBoundingClientRect());
+Object.defineProperty(rectPrototype, 'x', { get() { return this.left; } });
+Object.defineProperty(rectPrototype, 'y', { get() { return this.top; } })
