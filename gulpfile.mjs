@@ -108,15 +108,14 @@ var _increment = function increment(state) {  // crunchypatch
     }
 
     try {
-        const packageCrunchyrollPath = './node_modules/crunchyroll-js-api/package.json'
-        const packageCrunchyrollContent = JSON.parse(fs.readFileSync(packageCrunchyrollPath, 'utf8'))
-        packageCrunchyrollContent.type = 'commonjs'
-        fs.writeFileSync(packageCrunchyrollPath, JSON.stringify(packageCrunchyrollContent, null, '    '), 'utf8')
-
-        const i18nIsoM49Path = './node_modules/i18n-iso-m49/package.json'
-        const i18nIsoM49Content = JSON.parse(fs.readFileSync(i18nIsoM49Path, 'utf8'))
-        i18nIsoM49Content.type = 'commonjs'
-        fs.writeFileSync(i18nIsoM49Path, JSON.stringify(i18nIsoM49Content, null, '    '), 'utf8')
+        const fixCommonjs = file => {
+            const packagePath = file
+            const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+            packageContent.type = 'commonjs'
+            fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+        }
+        fixCommonjs('./node_modules/crunchyroll-js-api/package.json')
+        fixCommonjs('./node_modules/i18n-iso-m49/package.json')
     } catch (err) {
         return handleError(cb)(err)
     }
@@ -227,10 +226,10 @@ gulp.task('clean', () =>
 gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
 gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 
-gulp.task('installService', cb => { exec('NODE_ENV=development npm install --prefix=./service', handleError(cb)) })
+gulp.task('installService', cb => { exec('cd service; NODE_ENV=development npm install', handleError(cb)) })
 
-gulp.task('buildService', cb => { exec('npm run build --prefix=./service', handleError(cb)) })
-gulp.task('buildService-p', cb => { exec('npm run build-p --prefix=./service', handleError(cb)) })
+gulp.task('buildService', cb => { exec('cd service; npm run build;', handleError(cb)) })
+gulp.task('buildService-p', cb => { exec('cd service; npm run build-p;', handleError(cb)) })
 
 gulp.task('app', cb => { exec('ares-package --no-minify dist/ ./service/dist -o bin/', handleError(cb)) })
 gulp.task('app-p', cb => { exec('ares-package dist/ ./service/dist -o bin/', handleError(cb)) })

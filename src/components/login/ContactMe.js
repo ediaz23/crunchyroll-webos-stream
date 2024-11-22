@@ -28,7 +28,8 @@ const ContactMe = ({ origin }) => {
 
 
     return (
-        <IconButton size="small" onClick={contactMe} tooltipText={$L('About Me?')}>
+        <IconButton size="small" onClick={contactMe} tooltipText={$L('About Me?')}
+            tooltipRelative>
             info
         </IconButton>
     )

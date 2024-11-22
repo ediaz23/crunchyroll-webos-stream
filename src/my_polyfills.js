@@ -4,7 +4,7 @@ import 'regenerator-runtime/runtime';
 import 'core-js/modules/web.dom-collections.for-each'; // forEach para NodeList
 import 'core-js/modules/web.dom-collections.iterator'; // Iteradores
 import 'whatwg-fetch';
-import 'element-closest-polyfill'
+import 'element-closest-polyfill';
 import URLSearchParamsFix from 'core-js/web/url-search-params';
 
 

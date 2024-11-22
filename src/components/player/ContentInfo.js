@@ -23,7 +23,8 @@ const ContentInfo = ({ content }) => {
             <IconButton
                 backgroundOpacity="lightTranslucent"
                 onClick={onShowSubPopup}
-                tooltipText={$L('Content Info')}>
+                tooltipText={$L('Content Info')}
+                tooltipRelative>
                 info
             </IconButton>
         </>

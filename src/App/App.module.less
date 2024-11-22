@@ -1,13 +1,23 @@
 .app {
-	:global(#home-panel) {
+    :global(#home-panel) {
         >section {
             height: 100%;
+
             >div:first-of-type {
                 height: 100%;
+
                 >div {
                     height: 100%;
                 }
             }
+        }
+    }
+
+    :global(#media-controls) {
+
+        >div:first-child,
+        >div:last-child {
+            flex-basis: 30%;
         }
     }
 }

@@ -6,6 +6,7 @@ import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
 import dashjs from 'dashjs'
+//import dashjsBase from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
@@ -828,12 +829,24 @@ const Player = ({ ...rest }) => {
                         playerRef.current = player
                         playerRef.current.play()
                         /* how to log, add function and off events in clean up function
-                        player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
-                        player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
-                        player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, onBufferLoaded)
-                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_STARTED, onBufferLogging)
-                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, onBufferLogging)
-                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, onBufferLogging)
+                        const logPlayer = (name) => ev => {
+                            if (name === 'ERROR') {
+                                console.log(name, ev)
+                            }
+                        }
+                        player.updateSettings({ debug: { logLevel: dashjsBase.Debug.LOG_LEVEL_DEBUG } })
+                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_LOADED, logPlayer('MANIFEST_LOADED'))
+                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_LOADING_FINISHED, logPlayer('MANIFEST_LOADING_FINISHED'))
+                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_LOADING_STARTED, logPlayer('MANIFEST_LOADING_STARTED'))
+                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_VALIDITY_CHANGED, logPlayer('MANIFEST_VALIDITY_CHANGED'))
+                        player.on(dashjsBase.MediaPlayer.events.BUFFER_EMPTY, logPlayer('BUFFER_EMPTY'))
+                        player.on(dashjsBase.MediaPlayer.events.BUFFER_LOADED, logPlayer('BUFFER_LOADED'))
+                        player.on(dashjsBase.MediaPlayer.events.FRAGMENT_LOADING_STARTED, logPlayer('FRAGMENT_LOADING_STARTED'))
+                        player.on(dashjsBase.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, logPlayer('FRAGMENT_LOADING_PROGRESS'))
+                        player.on(dashjsBase.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, logPlayer('FRAGMENT_LOADING_COMPLETED'))
+                        player.on(dashjsBase.MediaPlayer.events.ERROR, logPlayer('ERROR'))
+                        player.on(dashjsBase.MediaPlayer.events.KEY_ERROR, logPlayer('KEY_ERROR'))
+                        player.on(dashjsBase.MediaPlayer.events.PLAYBACK_ERROR, logPlayer('PLAYBACK_ERROR'))
                         */
                     }).catch(setMessage)
                 }

@@ -69,40 +69,52 @@ export const setUpRequest = (url, options = {}) => {
  * @param {Function} [onProgress]
  * @returns {Function}
  */
-export const makeFetchProgress = (onProgress) => {
+export const makeFetchProgressXHR = (onProgress) => {
     /**
-     * @param {Response} res
+     * @param {string} url
+     * @param {object} options
      * @returns {Promise}
      */
-    return async (res) => {
-        if (onProgress) {
-            const reader = res.body.getReader()
-            const total = parseInt(res.headers.get('content-length'))
+    return (url, options) => {
+        return new Promise((resolve, reject) => {
+            const xhr = new window.XMLHttpRequest();
+            xhr.open(options.method || 'GET', url, true);
 
-            let loaded = 0
-            let loading = true
-            /** @type {Array<Uint8Array>} */
-            let chunks = []
+            if (options.headers) {
+                Object.entries(options.headers).forEach(([key, value]) => {
+                    xhr.setRequestHeader(key, value);
+                });
+            }
 
-            while (loading) {
-                const { done, value } = await reader.read()
-                if (done) {
-                    loading = false
-                    onProgress({ loaded, total })
-                } else {
-                    loaded += value.length
-                    chunks.push(value)
+            xhr.responseType = 'arraybuffer';
+
+            let total = 0;
+            let loaded = 0;
+
+            xhr.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    total = event.total;
+                    loaded = event.loaded;
                     onProgress({ loaded, total })
                 }
-            }
-            const resTmp = new window.Response(new window.Blob(chunks))
-            const { status, statusText, content, headers, resUrl } = await resTmp.json()
-            const buffContent = utils.base64toArray(content)
-            return { status, statusText, content: buffContent.buffer, headers, resUrl }
-        }
-        return res.json()
-    }
-}
+            };
+
+            xhr.onload = async () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const arrayBuffer = xhr.response;
+                    const resTmp = new window.Response(new window.Blob([arrayBuffer]))
+                    const { status, statusText, content, headers, resUrl } = await resTmp.json()
+                    const buffContent = utils.base64toArray(content)
+                    resolve({ status, statusText, content: buffContent.buffer, headers, resUrl });
+                } else {
+                    reject(new Error(`Error: ${xhr.statusText}`));
+                }
+            };
+            xhr.onerror = () => reject(new Error('Network error'));
+            xhr.send(options.body ? JSON.stringify(options.body) : null);
+        });
+    };
+};
 
 /**
  * make face progress for a services
@@ -179,14 +191,25 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
             })
         }
     } else {
-        const fetchProgress = makeFetchProgress(onProgress)
-        window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(config),
-        }).then(fetchProgress).then(onSuccess).catch(onFailure)
+        if (onProgress) {
+            const fetchProgressXHR = makeFetchProgressXHR(onProgress);
+
+            fetchProgressXHR(`${_LOCALHOST_SERVER_}/webos2`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: config,
+            }).then(onSuccess).catch(onFailure);
+        } else {
+            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config),
+            }).then(res => res.json()).then(onSuccess).catch(onFailure)
+        }
     }
 }
 

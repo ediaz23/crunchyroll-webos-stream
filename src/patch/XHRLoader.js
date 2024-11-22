@@ -91,8 +91,8 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
         } else if (this.responseType === 'blob') {
             this.response = new window.Blob([body])
         } else {
-            const decoder = new window.TextDecoder()
-            this.responseText = decoder.decode(body)
+            const decoder = new window.TextDecoder('utf-8')
+            this.responseText = decoder.decode(new Uint8Array(body))
             if (this.responseType === 'json') {
                 this.response = JSON.parse(this.responseText)
             } else if (this.responseType === 'document') {

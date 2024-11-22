@@ -42,8 +42,9 @@ const Logout = ({ text }) => {
                 <Button onClick={askLogout}>{$L('Logout')}</Button>
             }
             {!text &&
-                <IconButton size="small" onClick={askLogout} tooltipText={$L('Logout')}>
-                    arrowshrinkright
+                <IconButton size="small" onClick={askLogout} tooltipText={$L('Logout')}
+                    tooltipRelative>
+                    arrowextend
                 </IconButton>
             }
             <Alert open={askExit}
