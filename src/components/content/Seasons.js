@@ -67,6 +67,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
         const target = ev.currentTarget || ev.target
         const episodeIndex = parseInt(target.dataset.index)
         if (episodes) {
+            seasons.forEach(e => { e.episodes = [] })  // force reload
             setContentToPlay(episodes[episodeIndex], {
                 seasons,
                 seasonIndex,

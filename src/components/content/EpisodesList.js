@@ -62,14 +62,14 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
                                 </Cell>
                             </Row>
                         </Cell>
+                        <Cell shrink>
+                            <BodyText style={{ marginBottom: '0', marginTop: '0' }}>
+                                {formatDurationMs(getDuration(episodes[index]))}
+                            </BodyText>
+                        </Cell>
                         <Cell grow style={{ overflow: 'hidden' }}>
                             <BodyText size='small' style={{ fontSize: '1rem' }}>
                                 {episodes[index].description || '\u00a0\n '.repeat(50)}
-                            </BodyText>
-                        </Cell>
-                        <Cell shrink>
-                            <BodyText>
-                                {formatDurationMs(getDuration(episodes[index]))}
                             </BodyText>
                         </Cell>
                     </Column>

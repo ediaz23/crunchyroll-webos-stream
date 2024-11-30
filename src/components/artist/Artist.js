@@ -48,7 +48,7 @@ const Artist = ({ profile, artist, ...rest }) => {
     const [optionIndex, setOptionIndex] = useState(contentDetailBak.optionIndex)
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
-    /** @type {Array<{icon: String, title: String, videos: Array}>} */
+    /** @type {[Array<{icon: String, title: String, videos: Array}>, Function]} */
     const [options, setOptions] = useState(contentDetailBak.options)
 
     /** @type {{video: Number, concert: Number}} */
@@ -68,6 +68,7 @@ const Artist = ({ profile, artist, ...rest }) => {
     const setContentToPlay = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
         const videoIndex = parseInt(target.dataset.index)
+        options.forEach(e => { e.videos = [] })  // force reload
         setContentDetailBak({
             options,
             optionIndex,
@@ -91,6 +92,21 @@ const Artist = ({ profile, artist, ...rest }) => {
         data.forEach(ep => {
             ep.playhead = { progress: 0 }
             ep.showPremium = !isPremium && getIsPremium(ep)
+            let chunks = []
+            if (ep.originalRelease) {
+                chunks.push((new Date(ep.originalRelease)).getFullYear())
+            }
+            if (ep.genres && ep.genres.length) {
+                chunks.push(ep.genres.map(e => e.displayValue).join(', '))
+            }
+            if (chunks.length && !ep.description) {
+                ep.description = chunks.join('\n')
+            }
+        })
+        data.sort((a, b) => {
+            const dateA = a.originalRelease ? new Date(a.originalRelease) : new Date();
+            const dateB = b.originalRelease ? new Date(b.originalRelease) : new Date();
+            return dateB - dateA;
         })
         return data
     }, [isPremium])
@@ -118,6 +134,7 @@ const Artist = ({ profile, artist, ...rest }) => {
             }
             prom.then(data => {
                 if (optionRef.current === optionIndex) {
+                    options[optionIndex].videos = data
                     setVideos(data)
                 }
             })
