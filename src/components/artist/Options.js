@@ -42,7 +42,10 @@ const Options = ({ options, selectOption, optionIndex, ...rest }) => {
     /** @type {Function} */
     const onFocus = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        selectOption(parseInt(target.dataset.index))
+        const newIndex = parseInt(target.dataset.index)
+        if (selectIndexRef.current !== newIndex) {
+            selectOption(newIndex)
+        }
     }, [selectOption])
 
     useEffect(() => { selectIndexRef.current = optionIndex }, [optionIndex])

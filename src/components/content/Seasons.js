@@ -75,13 +75,11 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
         }
     }, [seasons, seasonIndex, episodes, setContentToPlay])
 
-    useEffect(() => {
-        if (contentDetailBak.seasonIndex != null &&
-            contentDetailBak.seasonIndex !== seasonIndex) {
-            // reset bak values
-            onSelectSeason({ episodeIndex: undefined })
-        }
-    }, [profile, seasonIndex, contentDetailBak.seasonIndex, onSelectSeason])
+    const setSeason = useCallback(index => {
+        // reset bak values
+        onSelectSeason({ episodeIndex: undefined })
+        setSeasonIndex(index)
+    }, [onSelectSeason])
 
     useEffect(() => {
         if (contentDetailBak.seasons == null) {
@@ -138,7 +136,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                         <Cell>
                             <SeasonsList
                                 seasons={seasons}
-                                selectSeason={setSeasonIndex}
+                                selectSeason={setSeason}
                                 seasonIndex={seasonIndex} />
                         </Cell>
                     </Column>

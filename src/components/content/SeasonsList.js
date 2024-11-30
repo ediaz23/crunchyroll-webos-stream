@@ -70,7 +70,10 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, ...rest }) => {
         clearTimeout(timeoutRef.current)
         timeoutRef.current = setTimeout(() => {
             const target = ev.currentTarget || ev.target
-            selectSeason(parseInt(target.dataset.index))
+            const newIndex = parseInt(target.dataset.index)
+            if (seasonIndexRef.current !== newIndex) {
+                selectSeason(newIndex)
+            }
         }, 500)
     }, [selectSeason])
 

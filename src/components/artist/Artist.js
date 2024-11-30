@@ -95,13 +95,11 @@ const Artist = ({ profile, artist, ...rest }) => {
         return data
     }, [isPremium])
 
-    useEffect(() => {
-        if (contentDetailBak.selectIndex != null &&
-            contentDetailBak.selectIndex !== optionIndex) {
-            // reset bak values
-            setContentDetailBak({ videoIndex: undefined })
-        }
-    }, [optionIndex, setContentDetailBak, contentDetailBak.selectIndex])
+    const setOption = useCallback((index) => {
+        // reset bak values
+        setContentDetailBak({ videoIndex: undefined })
+        setOptionIndex(index)
+    }, [setContentDetailBak])
 
     useEffect(() => {
         optionRef.current = optionIndex
@@ -161,7 +159,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                             </div>
                             <Options
                                 options={options}
-                                selectOption={setOptionIndex}
+                                selectOption={setOption}
                                 optionIndex={optionIndex} />
                         </Cell>
                         <Cell size="49%">
