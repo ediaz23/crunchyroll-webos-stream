@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
-import { Row, Cell } from '@enact/ui/Layout'
+import { Row, Cell, Column } from '@enact/ui/Layout'
 
 import PropTypes from 'prop-types'
 
@@ -30,33 +30,23 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
     const [movies, setMovies] = useState(contentDetailBak.movies || [])
 
     /** @type {Function} */
-    const selectListing = useCallback(ev => {
-        const target = ev.currentTarget || ev.target
-        setListingIndex(parseInt(target.dataset.index))
-    }, [setListingIndex])
+    const selectListing = useCallback(index => {
+        // reset bak values
+        onSelectSeason({ movieIndex: undefined })
+        setListingIndex(index)
+    }, [onSelectSeason])
 
     /** @type {Function} */
     const playMovie = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const movieIndex = parseInt(target.dataset.index)
+        listings.forEach(e => { e.movies = [] })
         setContentToPlay(movies[movieIndex], {
             listings,
             listingIndex,
-            movies,
             movieIndex,
         })
     }, [listings, listingIndex, movies, setContentToPlay])
-
-    useEffect(() => {
-        if (contentDetailBak.listingIndex != null &&
-            contentDetailBak.listingIndex !== listingIndex) {
-            // reset bak values
-            onSelectSeason({
-                movies: undefined,
-                movieIndex: undefined,
-            })
-        }
-    }, [profile, listingIndex, contentDetailBak.listingIndex, onSelectSeason])
 
     useEffect(() => {
         if (contentDetailBak.listings == null) {
@@ -91,14 +81,21 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
     return (
         <Row align='start space-between' {...rest}>
             <Cell size="49%">
-                <ContentHeader content={movieListing} />
-                <SeasonsList
-                    seasons={listings}
-                    selectSeason={selectListing}
-                    seasonIndex={listingIndex} />
+                <Column>
+                    <Cell shrink>
+                        <ContentHeader content={movieListing} />
+                    </Cell>
+                    <Cell>
+                        <SeasonsList
+                            seasons={listings}
+                            selectSeason={selectListing}
+                            seasonIndex={listingIndex} />
+                    </Cell>
+                </Column>
             </Cell>
             <Cell size="49%">
                 <EpisodesList
+                    seasonIndex={listingIndex}
                     episodes={movies}
                     selectEpisode={playMovie}
                     episodeIndex={contentDetailBak.movieIndex} />
