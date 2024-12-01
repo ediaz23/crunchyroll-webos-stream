@@ -1,0 +1,50 @@
+.Field {
+    overflow: hidden;
+
+    &.textField {
+        >div {
+            width: 100%;
+
+            >div:last-of-type {
+                color: #ccc;
+                background-color: #383838;
+                padding: 0.2rem 0.5rem;
+                border-radius: 0.2rem;
+                margin-left: 1rem;
+                margin: 0 0.375rem;
+            }
+        }
+    }
+
+    &.imageField {
+        >div>div {
+            align-items: flex-end;
+            display: flex;
+
+            div[role="img"] {
+                height: 7.5rem;
+                width: 7.5rem;
+            }
+
+
+        }
+    }
+
+    &.inputField {
+        input {
+            max-width: 15rem;
+        }
+    }
+
+    &.normal {
+        max-width: 17rem;
+    }
+
+    &.small {
+        max-width: 10rem;
+    }
+
+    &.large {
+        max-width: 22rem;
+    }
+}

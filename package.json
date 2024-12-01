@@ -1,6 +1,6 @@
 {
     "name": "com.crunchyroll.webos.stream",
-    "version": "1.1.8",
+    "version": "1.2.0",
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
@@ -83,7 +83,7 @@
         "@enact/ui": "^4.8.0",
         "@enact/webos": "^4.8.0",
         "classnames": "^2.5.1",
-        "crunchyroll-js-api": "^1.4.0",
+        "crunchyroll-js-api": "^1.4.1",
         "dashjs": "^4.7.4",
         "fake-xml-http-request": "^2.1.2",
         "html-entities": "^2.5.2",
@@ -93,6 +93,7 @@
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-qr-code": "^2.0.15",
         "recoil": "^0.7.7",
         "uuid": "^10.0.0",
         "web-vitals": "^4.0.0",

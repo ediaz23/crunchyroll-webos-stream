@@ -85,15 +85,15 @@ const ProfileInfo = ({ profile, setProfile, usernames, onShowSelectAvatar }) => 
         <Column className={css.formColumn}>
             <Heading size="large">{$L('Information')}</Heading>
             <Heading size="small">{$L('Some info about your profile')}</Heading>
-            <Field className={css.imageField}>
-                <Image className={css.image}
+            <Field type='image'>
+                <Image
                     src={api.assets.getAvatarUrl(profile.avatar)}
                     alt={$L('Profile Picture')} />
-                <IconButton className={css.button} onClick={onShowSelectAvatar}>
+                <IconButton onClick={onShowSelectAvatar}>
                     edit
                 </IconButton>
             </Field>
-            <Field className={css.inputField} title={$L('Name')}>
+            <Field type='input' title={$L('Name')}>
                 <Input value={profile.profile_name}
                     className={css.input}
                     onChange={onChangeName}
@@ -105,7 +105,8 @@ const ProfileInfo = ({ profile, setProfile, usernames, onShowSelectAvatar }) => 
                     required
                 />
             </Field>
-            <Field className={profile.profile_id ? css.textField : ''} title={$L('Username')}>
+            <Field type={profile.profile_id ? 'text' : null} title={$L('Username')}
+                size={profile.profile_id ? 'small' : 'normal'}>
                 {profile.profile_id ?
                     profile.username || 'Profile'
                     :
@@ -144,19 +145,19 @@ const ProfileLang = ({ profile, setProfile, audioLangs, subtitleLangs, contentLa
         <Column className={css.formColumn}>
             <Heading size="large">{$L('Preferences')}</Heading>
             <Heading size="small">{$L('Set your language, video preferences')}</Heading>
-            <Field title={$L('Content Language')}>
+            <Field size='large' title={$L('Content Language')}>
                 <SelectLanguage
                     languages={contentLangs}
                     save={saveLang}
                     value={profile.preferred_communication_language || defaultLang} />
             </Field>
-            <Field title={$L('Audio Language')}>
+            <Field size='large' title={$L('Audio Language')}>
                 <SelectLanguage
                     languages={audioLangs}
                     save={saveAudio}
                     value={profile.preferred_content_audio_language || defaultLang} />
             </Field>
-            <Field title={$L('Subtitles Language')}>
+            <Field size='large' title={$L('Subtitles Language')}>
                 <SelectLanguage
                     languages={subtitleLangs}
                     save={saveSubs}
@@ -189,10 +190,10 @@ const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
         <Column className={css.formColumn}>
             <Heading size="large">{$L('Actions')}</Heading>
             <Heading size="small">{$L('Save changes')}</Heading>
-            <Field className={css.textField} title={$L('Email')} >
+            <Field type='text' title={$L('Email')} >
                 {profile.email}
             </Field>
-            <Field className={css.textField} title={$L('App Language')}>
+            <Field type='text' title={$L('App Language')}>
                 {lang}
             </Field>
             <Row className={css.actions} align='center center' size="100%">
