@@ -52,14 +52,13 @@ const Options = ({ options, selectOption, optionIndex, ...rest }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current) {
+            if (scrollToRef.current && selectIndexRef.current != null) {
                 clearInterval(interval)
-                scrollToRef.current({ index: selectIndexRef.current || 0, animate: false, focus: true })
+                scrollToRef.current({ index: selectIndexRef.current, animate: false, focus: true })
             }
         }, 100)
         return () => {
             clearInterval(interval)
-            scrollToRef.current = null
         }
     }, [])
 

@@ -58,7 +58,7 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, ...rest }) => {
     /** @type {Number} */
     const itemHeight = ri.scale(70)
     /** @type {{current: Number}} */
-    const seasonIndexRef = useRef(seasonIndex)
+    const seasonIndexRef = useRef(null)
     /** @type {{current: Number}} */
     const timeoutRef = useRef(null)
 
@@ -81,15 +81,14 @@ const SeasonsList = ({ seasons, selectSeason, seasonIndex, ...rest }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current) {
+            if (scrollToRef.current && seasonIndexRef.current != null) {
                 clearInterval(interval)
-                scrollToRef.current({ index: seasonIndexRef.current || 0, animate: false, focus: true })
+                scrollToRef.current({ index: seasonIndexRef.current, animate: false, focus: true })
             }
         }, 100)
         return () => {
             clearInterval(interval)
             clearTimeout(timeoutRef.current)
-            scrollToRef.current = null
         }
     }, [])
 

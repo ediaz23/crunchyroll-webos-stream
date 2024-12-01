@@ -32,8 +32,8 @@ const ActivityViews = ({ index, children }) => children[index]
 const ContentDetail = ({ profile, content, ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
+    /** @type {[Object, Function]} */
+    const [playContent, setPlayContent] = useRecoilState(playContentState)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {[{currentIndex: Number}, Function]}  */
@@ -86,11 +86,6 @@ const ContentDetail = ({ profile, content, ...rest }) => {
         setCurrentIndex(tmpIndex)
     }, [setContentDetailBak, setCurrentIndex])
 
-    /** @type {Function} */
-    const onSelectSeason = useCallback(newVal => setContentDetailBak(oldVal => {
-        return { ...oldVal, ...newVal }
-    }), [setContentDetailBak])
-
     useEffect(() => { // to back state after back from playing
         if (contentDetailBak.currentIndex != null) {
             back.pushHistory({ doBack: () => { setCurrentIndex(0) } })
@@ -137,18 +132,18 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                                 <Seasons
                                     profile={profile}
                                     series={content}
+                                    playContent={playContent}
                                     setContentToPlay={setContentToPlay}
                                     isPremium={isPremium}
-                                    contentDetailBak={contentDetailBak}
-                                    onSelectSeason={onSelectSeason} />
+                                    contentDetailBak={contentDetailBak} />
                                 :
                                 <Movies
                                     profile={profile}
                                     movieListing={content}
+                                    playContent={playContent}
                                     setContentToPlay={setContentToPlay}
                                     isPremium={isPremium}
-                                    contentDetailBak={contentDetailBak}
-                                    onSelectSeason={onSelectSeason} />
+                                    contentDetailBak={contentDetailBak} />
                             }
                             <LangSelector
                                 profile={profile}

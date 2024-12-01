@@ -32,8 +32,8 @@ import { getIsPremium } from '../../utils'
 const Artist = ({ profile, artist, ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
+    /** @type {[Object, Function]} */
+    const [playContent, setPlayContent] = useRecoilState(playContentState)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {[Object, Function]}  */
@@ -42,14 +42,18 @@ const Artist = ({ profile, artist, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
-    /** @type {[Object, Function]} */
-    const [videos, setVideos] = useState(null)
+    /** @type {[Array<{icon: String, title: String, videos: Array}>, Function]} */
+    const [options, setOptions] = useState(JSON.parse(JSON.stringify(contentDetailBak.options || [])))
     /** @type {[Number, Function]} */
     const [optionIndex, setOptionIndex] = useState(contentDetailBak.optionIndex)
+    /** @type {[Array<Object>, Function]} */
+    const [videos, setVideos] = useState(null)
+    /** @type {[Number, Function]} */
+    const [videoIndex, setVideoIndex] = useState(null)
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
-    /** @type {[Array<{icon: String, title: String, videos: Array}>, Function]} */
-    const [options, setOptions] = useState(contentDetailBak.options)
+    /** @type {{current: Object}} */
+    const playContentRef = useRef(playContent)
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {
@@ -67,16 +71,14 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {Function} */
     const setContentToPlay = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
-        const videoIndex = parseInt(target.dataset.index)
-        options.forEach(e => { e.videos = [] })  // force reload
-        setContentDetailBak({
-            options,
-            optionIndex,
-            videoIndex,
-        })
-        back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-        setPlayContent(videos[videoIndex])
-        setPath('/profiles/home/player')
+        const index = parseInt(target.dataset.index)
+        if (videos && videos.length) {
+            options.forEach(e => { e.videos = [] })  // force reload
+            setContentDetailBak({ options, optionIndex })
+            back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
+            setPlayContent(videos[index])
+            setPath('/profiles/home/player')
+        }
     }, [videos, setPath, setPlayContent, optionIndex, setContentDetailBak, options])
 
     /** @type {Function} */
@@ -111,16 +113,39 @@ const Artist = ({ profile, artist, ...rest }) => {
         return data
     }, [isPremium])
 
-    const setOption = useCallback((index) => {
-        // reset bak values
-        setContentDetailBak({ videoIndex: undefined })
-        setOptionIndex(index)
-    }, [setContentDetailBak])
+    useEffect(() => {
+        if (videos != null && videos.length) {
+            if (playContentRef.current != null) {
+                const index = videos.findIndex(v => v.id === playContentRef.current.id)
+                setVideoIndex(Math.max(0, index))
+                playContentRef.current = null
+            } else {
+                setVideoIndex(0)
+            }
+        }
+    }, [videos])
+
+    useEffect(() => {
+        if (contentDetailBak.options == null) {
+            const out = []
+            if (artist.videos && artist.videos.length > 0) {
+                out.push({ icon: '🎥', title: $L('Videos'), videos: [] })
+            }
+            if (artist.concerts && artist.concerts.length > 0) {
+                out.push({ icon: '🎤', title: $L('Concerts'), videos: [] })
+            }
+            setOptions(out)
+            if (out.length) {
+                setOptionIndex(0)
+            }
+        }
+    }, [profile, artist, contentDetailBak.options])
 
     useEffect(() => {
         optionRef.current = optionIndex
         setVideos(null)
-        if (optionIndex != null) {
+        setVideoIndex(null)
+        if (optionIndex != null && options.length) {
             /** @type {Promise} */
             let prom = null
             if (options[optionIndex].videos.length) {
@@ -140,19 +165,6 @@ const Artist = ({ profile, artist, ...rest }) => {
             })
         }
     }, [profile, artist, options, optionIndexes, optionIndex, preProcessVideos, setVideos])
-
-    useEffect(() => {
-        if (contentDetailBak.options == null) {
-            const out = []
-            if (artist.videos && artist.videos.length > 0) {
-                out.push({ icon: '🎥', title: $L('Videos'), videos: [] })
-            }
-            if (artist.concerts && artist.concerts.length > 0) {
-                out.push({ icon: '🎤', title: $L('Concerts'), videos: [] })
-            }
-            setOptions(out)
-        }
-    }, [profile, artist, contentDetailBak.options])
 
     return (
         <Row className={css.contentArtist} {...rest}>
@@ -176,7 +188,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                             </div>
                             <Options
                                 options={options}
-                                selectOption={setOption}
+                                selectOption={setOptionIndex}
                                 optionIndex={optionIndex} />
                         </Cell>
                         <Cell size="49%">
@@ -184,7 +196,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                                 seasonIndex={optionIndex}
                                 episodes={videos}
                                 selectEpisode={setContentToPlay}
-                                episodeIndex={contentDetailBak.videoIndex} />
+                                episodeIndex={videoIndex} />
                         </Cell>
                     </Row>
                 </Cell>
