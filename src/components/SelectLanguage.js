@@ -1,5 +1,6 @@
 
 import { useCallback } from 'react'
+import { getDirection } from '@enact/spotlight'
 import Dropdown from '@enact/moonstone/Dropdown'
 import PropTypes from 'prop-types'
 
@@ -10,6 +11,17 @@ import PropTypes from 'prop-types'
  * @property {String} key
  * @property {String} children
  */
+
+/**
+ * @param {Event} ev
+ */
+export const dropdownKeydown = ev => {
+    const direction = getDirection(ev.keyCode)
+    if (direction === 'right') {
+        ev.nativeEvent.stopPropagation()
+    }
+}
+
 
 /**
  * @param {Object} obj
@@ -28,7 +40,9 @@ const SelectLanguage = ({ title, languages, save, value }) => {
         <Dropdown title={title}
             selected={langs.indexOf(value)}
             width='x-large'
-            onSelect={onSelected}>
+            onSelect={onSelected}
+            onKeyDown={dropdownKeydown}
+            showCloseButton>
             {languages}
         </Dropdown>
     )

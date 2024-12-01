@@ -6,10 +6,11 @@ import LabeledItem from '@enact/moonstone/LabeledItem'
 import Dropdown from '@enact/moonstone/Dropdown'
 import PropTypes from 'prop-types'
 
-import { $L } from '../../hooks/language'
 import ContentGridItems from '../grid/ContentGridItems'
-import api from '../../api'
 import css from '../grid/ContentGrid.module.less'
+import { dropdownKeydown } from '../SelectLanguage'
+import { $L } from '../../hooks/language'
+import api from '../../api'
 import useContentList from '../../hooks/contentList'
 
 
@@ -137,7 +138,9 @@ const Simulcast = ({ profile, title, ...rest }) => {
                             <Dropdown title={$L('Order')}
                                 selected={order.findIndex(i => i.key === sort)}
                                 width='small'
-                                onSelect={onSelectOrder}>
+                                onSelect={onSelectOrder}
+                                onKeyDown={dropdownKeydown}
+                                showCloseButton>
                                 {orderStr}
                             </Dropdown>
                         </Cell>

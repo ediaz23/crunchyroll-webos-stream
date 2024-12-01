@@ -20,7 +20,7 @@ import Locale from 'ilib/lib/Locale'
 
 import { $L } from '../../hooks/language'
 import Field from '../Field'
-import SelectLanguage from '../SelectLanguage'
+import SelectLanguage, { dropdownKeydown } from '../SelectLanguage'
 import Alert from '../Alert'
 import PopupMessage from '../Popup'
 import css from './Detail.module.less'
@@ -112,7 +112,9 @@ const ProfileInfo = ({ profile, setProfile, usernames, onShowSelectAvatar }) => 
                     <Dropdown title={$L('Username')}
                         selected={usernames.indexOf(profile.username)}
                         width='x-large'
-                        onSelect={onSelectUsername}>
+                        onSelect={onSelectUsername}
+                        onKeyDown={dropdownKeydown}
+                        showCloseButton>
                         {usernames}
                     </Dropdown>
                 }
@@ -305,7 +307,9 @@ const AvatarGridBase = ({ open, avatars, setProfile, ...rest }) => {
                     selected={albumSelected}
                     width='x-large'
                     onSelect={onSelectAlbum}
-                    style={{ marginBottom: '1rem' }}>
+                    style={{ marginBottom: '1rem' }}
+                    onKeyDown={dropdownKeydown}
+                    showCloseButton>
                     {albums}
                 </Dropdown>
                 <VirtualGridList
