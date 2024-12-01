@@ -9,7 +9,6 @@ import Heading from '@enact/moonstone/Heading'
 import Dropdown from '@enact/moonstone/Dropdown'
 import Input from '@enact/moonstone/Input'
 import Image from '@enact/moonstone/Image'
-import CheckboxItem from '@enact/moonstone/CheckboxItem'
 import Button from '@enact/moonstone/Button'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
@@ -138,12 +137,6 @@ const ProfileLang = ({ profile, setProfile, audioLangs, subtitleLangs, contentLa
     const saveAudio = useSaveProfileField({ setProfile, field: 'preferred_content_audio_language' })
     /** @type {Function} */
     const saveSubs = useSaveProfileField({ setProfile, field: 'preferred_content_subtitle_language' })
-    /** @type {Function} */
-    const saveAdult = useSaveProfileField({ setProfile, field: 'maturity_rating' })
-    /** @type {Function} */
-    const onToggleAdult = useCallback(({ selected }) => {
-        saveAdult({ maturity_rating: selected ? 'M3' : 'M2' })
-    }, [saveAdult])
 
     return (
         <Column className={css.formColumn}>
@@ -166,12 +159,6 @@ const ProfileLang = ({ profile, setProfile, audioLangs, subtitleLangs, contentLa
                     languages={subtitleLangs}
                     save={saveSubs}
                     value={profile.preferred_content_subtitle_language || defaultLang} />
-            </Field>
-            <Field >
-                <CheckboxItem defaultSelected={profile.maturity_rating === 'M3'}
-                    onToggle={onToggleAdult}>
-                    {$L('Adult content')}
-                </CheckboxItem>
             </Field>
         </Column>
     )
