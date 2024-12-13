@@ -7,6 +7,7 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
 import dashjs from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
+import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -21,7 +22,7 @@ import { $L } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
 import { getContentParam } from '../../api/utils'
-import emptyVideo from '../../../resources/empty.mp4'
+import emptyVideo from '../../../assets/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import utils from '../../utils'
@@ -403,6 +404,82 @@ const findNextEp = async ({ profile, content, step }) => {
 }
 
 /**
+ * @returns {Promise<Object.<String, String>>}
+ */
+const loadFonts = async () => {
+    const fonts = [
+        new URL(`../../../assets/fonts/Satisfy/Satisfy-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Comic_Neue/ComicNeue-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Gupter/Gupter-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Courier_Prime/CourierPrime-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Alegreya_Sans_SC/AlegreyaSansSC-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Medium.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-SemiBold.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Light.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Thin.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Bold.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Hairline.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Black.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Regular.ttf`, import.meta.url),  // always keen at end
+    ].map(u => u.href)
+
+    /** @type {Object} */
+    const fontsMap = fonts.reduce((prev, current) => {
+        const name = current.split('/').pop().split('.').shift().toLowerCase()
+        prev[name] = current
+        return prev
+    }, {})
+    fontsMap['trebuchet ms'] = new URL(`../../../assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf`, import.meta.url).href
+    fontsMap['times new roman'] = new URL(`../../../assets/fonts/Alegreya_Sans_SC/AlegreyaSansSC-Regular.ttf`, import.meta.url).href
+    fontsMap['arial'] = new URL(`../../../assets/fonts/Lato/Lato-Regular.ttf`, import.meta.url).href
+    fontsMap['arial-bold'] = new URL(`../../../assets/fonts/Lato/Lato-Bold.ttf`, import.meta.url).href
+    await Promise.all(Object.keys(fontsMap).map(key => new Promise((res, rej) => {
+        const xhr = new window.XMLHttpRequest()
+        xhr.open('GET', fontsMap[key], true)
+        xhr.responseType = 'arraybuffer'
+        xhr.onload = () => {
+            if (xhr.status === 0 || xhr.status === 200) {
+                const file = new Blob([xhr.response], { type: 'font/ttf' });
+                fontsMap[key] = URL.createObjectURL(file)
+                res()
+            } else {
+                rej(new Error($L('An error occurred')))
+            }
+        }
+        xhr.onerror = err => rej(err || new Error($L('An error occurred')))
+        xhr.ontimeout = () => rej(new Error('timeout'))
+        xhr.send()
+    })))
+    return fontsMap
+}
+
+/**
+ * @todo manejar errores
+ * @param {Object} obj
+ * @param {String} obj.subContent
+ * @param {Object.<String, String>} obj.fonts
+ * @param {Functio} obj.onSuccess
+ * @param {Functio} obj.onError
+ * @returns {import('libass-wasm')}
+ */
+const createOptapus = ({ subContent, fonts, onSuccess, onError }) => {
+    const octopusWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url)
+    const _wasm = new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url)
+
+    const octopus = new SubtitlesOctopus({
+        video: document.querySelector('video'),
+        subContent,
+        availableFonts: fonts,
+        fallbackFont: fonts['lato-regular'],
+        workerUrl: octopusWorkerUrl.href,
+        onReady: () => onSuccess(octopus),
+        onError: onError,
+        _wasm,
+    })
+}
+
+/**
  * @param {import('dashjs').LicenseResponse} res
  * @return {}
  */
@@ -457,10 +534,9 @@ const modifierDashRequest = (profile) => {
  * @param {import('./AudioList').Audio} audio
  * @param {Stream} stream
  * @param {Object} content
- * @param {import('./SubtitleList').Subtitle} subtitle
  * @returns {Promise<import('dashjs').MediaPlayerClass>}
  */
-const createDashPlayer = async (audio, stream, content, subtitle) => {
+const createDashPlayer = async (audio, stream, content) => {
     let url = null
     const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
     /** @type {import('dashjs').MediaPlayerClass}*/
@@ -481,6 +557,8 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
             }
         }
     })
+    url = stream.urls[0].url
+    /*
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
         url = stream.urls.find(val => val.locale === 'off')
@@ -488,6 +566,7 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
     if (url) {
         url = url.url
     }
+    */
     dashPlayer.initialize()
     dashPlayer.setAutoPlay(false)
     dashPlayer.attachSource(url + '#t=' + Math.max(startSec, 0))
@@ -630,6 +709,8 @@ const Player = ({ ...rest }) => {
     const playerCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
     const playerRef = useRef(null)
+    /** @type {{current: import('libass-wasm')}*/
+    const octopusRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
         return {
@@ -653,6 +734,8 @@ const Player = ({ ...rest }) => {
     const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
     /** @type {[String, Function]}  */
     const [message, setMessage] = useState('')
+    /** @type {[Object.<String, String>, Function]}  */
+    const [fonts, setFonts] = useState(null)
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -775,8 +858,10 @@ const Player = ({ ...rest }) => {
             } else {
                 setMessage(err.message || err.httpStatusText)
             }
+        } else if (err) {
+            setMessage(err.message || `${err}`)
         } else {
-            setMessage(err)
+            setMessage($L('An error occurred'))
         }
     }, [setMessage])
 
@@ -818,15 +903,13 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // attach subs
         let interval = null
-        if (stream.urls && subtitle && stream.id === content.id) {
+        if (stream.urls && stream.id === content.id) {
             interval = setInterval(() => {
                 if (playerCompRef.current) {
                     clearInterval(interval)
-                    createDashPlayer(audio, stream, content, subtitle).then(player => {
-                        setLoading(false)
-                        setIsPaused(false)
+                    createDashPlayer(audio, stream, content).then(player => {
                         playerRef.current = player
-                        playerRef.current.play()
+                        setLoading(false)
                         /* how to log, add function and off events in clean up function
                         player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
                         player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
@@ -835,7 +918,7 @@ const Player = ({ ...rest }) => {
                         player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, onBufferLogging)
                         player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, onBufferLogging)
                         */
-                    }).catch(setMessage)
+                    }).catch(handleCrunchyError)
                 }
             }, 100)
         }
@@ -848,7 +931,67 @@ const Player = ({ ...rest }) => {
             }
             clearInterval(interval)
         }
-    }, [profile, content, stream, audio, subtitle, setLoading])
+    }, [profile, content, stream, audio, setLoading, handleCrunchyError])
+
+    useEffect(() => {
+        loadFonts().then(setFonts).catch(handleCrunchyError)
+        return () => {
+            setFonts(lastFonts => {
+                if (lastFonts) {
+                    lastFonts.forEach(prev => window.URL.revokeObjectURL(prev))
+                }
+                return null;
+            })
+        }
+    }, [handleCrunchyError])
+
+    useEffect(() => {  // attach subs
+        if (!loading && subtitle && fonts) {
+            let loadSub = async () => {
+                playerRef.current.pause()
+                setIsPaused(true)
+                if (subtitle.locale === 'off') {
+                    if (octopusRef.current) {
+                        octopusRef.current.freeTrack()
+                    }
+                } else {
+                    const res = await fetchUtils.customFetch(subtitle.url)
+                    const subContent = await res.text()
+                    if (octopusRef.current) {
+                        octopusRef.current.setTrack(subContent)
+                    } else {
+                        return new Promise(onSuccess =>
+                            createOptapus({
+                                subContent,
+                                fonts,
+                                onSuccess,
+                                onError: err => {
+                                    if (octopusRef.current) {
+                                        octopusRef.current.dispose()
+                                        octopusRef.current = null
+                                    }
+                                    handleCrunchyError(err.message)
+                                    onSuccess()
+                                }
+                            })
+                        )
+                    }
+                }
+            }
+            loadSub().then(octopus => {
+                if (octopus) {
+                    octopusRef.current = octopus
+                    playerRef.current.play()
+                    setIsPaused(false)
+                }
+            }).catch(handleCrunchyError)
+        }
+        return () => {
+            if (octopusRef.current) {
+                octopusRef.current.freeTrack()
+            }
+        }
+    }, [fonts, subtitle, loading, handleCrunchyError])
 
     useEffect(() => {  // set stream session
         if (stream === emptyStream) {
@@ -987,6 +1130,15 @@ const Player = ({ ...rest }) => {
             setCurrentSkipEvent(resetCurrentSkipEvent)
         }
     }, [loading, skipEvents, resetCurrentSkipEvent])
+
+    useEffect(() => {
+        return () => {
+            if (octopusRef.current) {
+                octopusRef.current.dispose()
+                octopusRef.current = null
+            }
+        }
+    }, [])
 
     return (
         <div className={rest.className}>
