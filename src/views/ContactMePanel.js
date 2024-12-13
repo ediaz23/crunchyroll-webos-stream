@@ -15,11 +15,11 @@ import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { $L } from '../hooks/language'
 import { pathState, contactBtnState } from '../recoilConfig'
 import api from '../api'
-import ethImg from '../../resources/img/eth.png'
-import emailImg from '../../resources/img/email.png'
-import coffeeImg from '../../resources/img/coffee.png'
-import githubImg from '../../resources/img/github.png'
-import perfilImg from '../../resources/img/profile.jpg'
+import ethImg from '../../assets/img/eth.png'
+import emailImg from '../../assets/img/email.png'
+import coffeeImg from '../../assets/img/coffee.png'
+import githubImg from '../../assets/img/github.png'
+import perfilImg from '../../assets/img/profile.jpg'
 
 
 const ImageInfo = (props) => (

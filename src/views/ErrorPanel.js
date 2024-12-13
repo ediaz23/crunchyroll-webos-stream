@@ -32,7 +32,7 @@ const ErrorPanel = ({ message, closeErrorPanel, ...rest }) => {
     return (
         <Panel {...rest}>
             <Alert open
-                title={$L('An error occurred?')}
+                title={$L('An error occurred')}
                 message={message}
                 onAccept={onAccept}
             />
