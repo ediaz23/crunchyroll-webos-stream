@@ -463,17 +463,17 @@ const loadFonts = async () => {
  * @param {Functio} obj.onError
  * @returns {import('libass-wasm')}
  */
-const createOptapus = ({ subContent, fonts, onSuccess, onError }) => {
-    const octopusWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url)
+const createSubtitleWorker = ({ subContent, fonts, onSuccess, onError }) => {
+    const subtitleWorkerUrl = new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url)
     const _wasm = new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url)
 
-    const octopus = new SubtitlesOctopus({
+    const subtitleWorker = new SubtitlesOctopus({
         video: document.querySelector('video'),
         subContent,
         availableFonts: fonts,
         fallbackFont: fonts['lato-regular'],
-        workerUrl: octopusWorkerUrl.href,
-        onReady: () => onSuccess(octopus),
+        workerUrl: subtitleWorkerUrl.href,
+        onReady: () => onSuccess(subtitleWorker),
         onError: onError,
         _wasm,
     })
@@ -710,7 +710,7 @@ const Player = ({ ...rest }) => {
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
     const playerRef = useRef(null)
     /** @type {{current: import('libass-wasm')}*/
-    const octopusRef = useRef(null)
+    const subtitleWorkerRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
         return {
@@ -951,24 +951,24 @@ const Player = ({ ...rest }) => {
                 playerRef.current.pause()
                 setIsPaused(true)
                 if (subtitle.locale === 'off') {
-                    if (octopusRef.current) {
-                        octopusRef.current.freeTrack()
+                    if (subtitleWorkerRef.current) {
+                        subtitleWorkerRef.current.freeTrack()
                     }
                 } else {
                     const res = await fetchUtils.customFetch(subtitle.url)
                     const subContent = await res.text()
-                    if (octopusRef.current) {
-                        octopusRef.current.setTrack(subContent)
+                    if (subtitleWorkerRef.current) {
+                        subtitleWorkerRef.current.setTrack(subContent)
                     } else {
                         return new Promise(onSuccess =>
-                            createOptapus({
+                            createSubtitleWorker({
                                 subContent,
                                 fonts,
                                 onSuccess,
                                 onError: err => {
-                                    if (octopusRef.current) {
-                                        octopusRef.current.dispose()
-                                        octopusRef.current = null
+                                    if (subtitleWorkerRef.current) {
+                                        subtitleWorkerRef.current.dispose()
+                                        subtitleWorkerRef.current = null
                                     }
                                     handleCrunchyError(err.message)
                                     onSuccess()
@@ -978,17 +978,17 @@ const Player = ({ ...rest }) => {
                     }
                 }
             }
-            loadSub().then(octopus => {
-                if (octopus) {
-                    octopusRef.current = octopus
+            loadSub().then(subtitleWorker => {
+                if (subtitleWorker) {
+                    subtitleWorkerRef.current = subtitleWorker
                     playerRef.current.play()
                     setIsPaused(false)
                 }
             }).catch(handleCrunchyError)
         }
         return () => {
-            if (octopusRef.current) {
-                octopusRef.current.freeTrack()
+            if (subtitleWorkerRef.current) {
+                subtitleWorkerRef.current.freeTrack()
             }
         }
     }, [fonts, subtitle, loading, handleCrunchyError])
@@ -1133,9 +1133,9 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {
         return () => {
-            if (octopusRef.current) {
-                octopusRef.current.dispose()
-                octopusRef.current = null
+            if (subtitleWorkerRef.current) {
+                subtitleWorkerRef.current.dispose()
+                subtitleWorkerRef.current = null
             }
         }
     }, [])
