@@ -29,7 +29,7 @@
         "play-1": "NODE_ENV=development npm run build-dev && npm run install-tv-1 && npm run start-1",
         "play-p": "NODE_ENV=production npm run build-p && npm run install-tv-1 && npm run start-1",
         "translate": "npx i18next-scanner --config ./i18next-scanner.config.react.js",
-        "postinstall": "gulp gulp-postinstall"
+        "postinstall": "gulp clean-ilib"
     },
     "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
     "license": "Apache-2.0",
@@ -51,8 +51,7 @@
             "fs": false,
             "path": false,
             "node-fetch": false,
-            "form-data": false,
-            "JASSUB": false
+            "form-data": false
         },
         "packagerOptions": {
             "ignore": [
@@ -91,7 +90,7 @@
         "i18n-iso-countries": "^7.13.0",
         "i18n-iso-m49": "^1.0.0",
         "ilib": "^14.20.0",
-        "jassub": "^1.7.17",
+        "libass-wasm": "^4.1.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",

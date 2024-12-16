@@ -7,7 +7,7 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
 import dashjs from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
-import JASSUB from '../../../libs/jassub/jassub.js'
+import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -407,19 +407,38 @@ const findNextEp = async ({ profile, content, step }) => {
  * @returns {Promise<Object.<String, String>>}
  */
 const loadFonts = async () => {
+    new URL(`../../../assets/fonts/Lato/OFL.txt`, import.meta.url)
+    new URL(`../../../assets/fonts/Roboto_Mono/LICENSE.txt`, import.meta.url)
     const fonts = [
-        new URL('jassub/dist/default.woff2', import.meta.url),
+        new URL(`../../../assets/fonts/default.woff2`, import.meta.url),
+        new URL(`../../../assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf`, import.meta.url),
+        new URL(`../../../assets/fonts/Lato/Lato-Regular.ttf`, import.meta.url),
     ].map(u => u.href)
-    return Promise.all(fonts.map(font => new Promise(res => {
+    const fontsContent = await Promise.all(fonts.map(font => new Promise(res => {
         const xhr = new window.XMLHttpRequest()
         xhr.open('GET', font, true)
         xhr.responseType = 'arraybuffer'
-        xhr.onload = () => res(xhr.response)
-        xhr.onerror = res
-        xhr.ontimeout = res
+        xhr.onload = () => res((xhr.status === 0 || xhr.status === 200) && xhr.response ? xhr.response : null)
         xhr.send()
-    }))).then(res => res.filter(el => !!el).map(el => new Uint8Array(el)))
+    })))
+    /** @type {Object} */
+    const fontsMap = fonts.reduce((prev, current, currentIndex) => {
+        if (fontsContent[currentIndex]) {
+            const name = current.split('/').pop().split('.').shift().toLowerCase().replace('-', ' ')
+            const ext = current.split('.').pop()
+            console.log(ext, fontsContent[currentIndex])
+            prev[name] = window.URL.createObjectURL(new Blob([fontsContent[currentIndex]], { type: `font/ttf` }))
+        }
+        return prev
+    }, {})
+    fontsMap['liberation sans'] = fontsMap['default']
+    fontsMap['trebuchet ms'] = fontsMap['robotomono regular']
+    fontsMap['roboto mono'] = fontsMap['robotomono regular']
+    fontsMap['lato'] = fontsMap['lato regular']
+    fontsMap['arial'] = fontsMap['lato regular']
+    return fontsMap
 }
+
 
 /**
  * @param {import('dashjs').LicenseResponse} res
@@ -642,7 +661,7 @@ const Player = ({ ...rest }) => {
     const playerCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
     const playerRef = useRef(null)
-    /** @type {{current: import('jassub').default}*/
+    /** @type {{current: import('libass-wasm')}*/
     const subtitleWorkerRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
@@ -868,7 +887,14 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {
         loadFonts().then(setFonts).catch(handleCrunchyError)
-        return () => setFonts(null)
+        return () => {
+            setFonts(lastFonts => {
+                if (lastFonts) {
+                    lastFonts.forEach(prev => window.URL.revokeObjectURL(prev))
+                }
+                return null
+            })
+        }
     }, [handleCrunchyError])
 
     useEffect(() => {  // attach subs
@@ -886,31 +912,31 @@ const Player = ({ ...rest }) => {
                     if (subtitleWorkerRef.current) {
                         subtitleWorkerRef.current.setTrack(subContent)
                     } else {
-                        return new Promise(onReady => {
-                            subtitleWorkerRef.current = new JASSUB({
+                        return new Promise(onSuccess => {
+                            const subtitleWorker = new SubtitlesOctopus({
                                 video: document.querySelector('video'),
                                 subContent,
-                                fonts,
-                                workerUrl: new URL('../../../libs/jassub/jassub-worker.js', import.meta.url).href,
-                                // wasmUrl: new URL('jassub/dist/jassub-worker.wasm', import.meta.url).href,
-                                legacyWasmUrl: new URL('jassub/dist/jassub-worker.wasm.js', import.meta.url).href,
-                                debug: false,
-                            })
-                            subtitleWorkerRef.current.addEventListener('ready', () => onReady(true))
-                            subtitleWorkerRef.current.addEventListener('error', err => {
-                                if (subtitleWorkerRef.current) {
-                                    subtitleWorkerRef.current.destroy()
-                                    subtitleWorkerRef.current = null
-                                }
-                                console.error(err, err?.stack)
-                                handleCrunchyError(err)
+                                availableFonts: fonts,
+                                fallbackFont: fonts['roboto mono'],
+                                workerUrl: new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url).href,
+                                onReady: () => onSuccess(subtitleWorker),
+                                onError: err => {
+                                    if (subtitleWorkerRef.current) {
+                                        subtitleWorkerRef.current.dispose()
+                                        subtitleWorkerRef.current = null
+                                    }
+                                    handleCrunchyError(err)
+                                    onSuccess()
+                                },
+                                _wasm: new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url),
                             })
                         })
                     }
                 }
             }
-            loadSub().then(ready => {
-                if (ready) {
+            loadSub().then(subtitleWorker => {
+                if (subtitleWorker) {
+                    subtitleWorkerRef.current = subtitleWorker
                     playerRef.current.play()
                     setIsPaused(false)
                 }
@@ -1064,7 +1090,7 @@ const Player = ({ ...rest }) => {
     useEffect(() => {
         return () => {
             if (subtitleWorkerRef.current) {
-                subtitleWorkerRef.current.destroy()
+                subtitleWorkerRef.current.dispose()
                 subtitleWorkerRef.current = null
             }
         }
