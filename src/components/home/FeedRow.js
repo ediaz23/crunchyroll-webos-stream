@@ -31,7 +31,7 @@ export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
     if (playableTypes.includes(item.type)) {
         duration = getDuration(item)
         if (duration !== undefined && item.playhead !== undefined) {
-            progress = item.playhead / (duration / 100) * 100
+            progress = item.playhead / (duration / 1000) * 100
         }
         if (!isPremium) {
             showPremium = getIsPremium(item)
