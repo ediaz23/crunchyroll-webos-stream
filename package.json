@@ -1,6 +1,6 @@
 {
     "name": "com.crunchyroll.webos.stream",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
@@ -90,7 +90,6 @@
         "i18n-iso-countries": "^7.13.0",
         "i18n-iso-m49": "^1.0.0",
         "ilib": "^14.20.0",
-        "libass-wasm": "^4.1.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",

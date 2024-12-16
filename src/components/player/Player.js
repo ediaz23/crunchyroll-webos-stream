@@ -7,7 +7,6 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
 import dashjs from 'dashjs'
 //import dashjs from 'dashjs/dist/dash.all.debug'
-import SubtitlesOctopus from 'libass-wasm'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -404,43 +403,6 @@ const findNextEp = async ({ profile, content, step }) => {
 }
 
 /**
- * @returns {Promise<Object.<String, String>>}
- */
-const loadFonts = async () => {
-    new URL(`../../../assets/fonts/Lato/OFL.txt`, import.meta.url)
-    new URL(`../../../assets/fonts/Roboto_Mono/LICENSE.txt`, import.meta.url)
-    const fonts = [
-        new URL(`../../../assets/fonts/default.woff2`, import.meta.url),
-        new URL(`../../../assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf`, import.meta.url),
-        new URL(`../../../assets/fonts/Lato/Lato-Regular.ttf`, import.meta.url),
-    ].map(u => u.href)
-    const fontsContent = await Promise.all(fonts.map(font => new Promise(res => {
-        const xhr = new window.XMLHttpRequest()
-        xhr.open('GET', font, true)
-        xhr.responseType = 'arraybuffer'
-        xhr.onload = () => res((xhr.status === 0 || xhr.status === 200) && xhr.response ? xhr.response : null)
-        xhr.send()
-    })))
-    /** @type {Object} */
-    const fontsMap = fonts.reduce((prev, current, currentIndex) => {
-        if (fontsContent[currentIndex]) {
-            const name = current.split('/').pop().split('.').shift().toLowerCase().replace('-', ' ')
-            const ext = current.split('.').pop()
-            console.log(ext, fontsContent[currentIndex])
-            prev[name] = window.URL.createObjectURL(new Blob([fontsContent[currentIndex]], { type: `font/ttf` }))
-        }
-        return prev
-    }, {})
-    fontsMap['liberation sans'] = fontsMap['default']
-    fontsMap['trebuchet ms'] = fontsMap['robotomono regular']
-    fontsMap['roboto mono'] = fontsMap['robotomono regular']
-    fontsMap['lato'] = fontsMap['lato regular']
-    fontsMap['arial'] = fontsMap['lato regular']
-    return fontsMap
-}
-
-
-/**
  * @param {import('dashjs').LicenseResponse} res
  * @return {}
  */
@@ -495,9 +457,10 @@ const modifierDashRequest = (profile) => {
  * @param {import('./AudioList').Audio} audio
  * @param {Stream} stream
  * @param {Object} content
+ * @param {import('./SubtitleList').Subtitle} subtitle
  * @returns {Promise<import('dashjs').MediaPlayerClass>}
  */
-const createDashPlayer = async (audio, stream, content) => {
+const createDashPlayer = async (audio, stream, content, subtitle) => {
     let url = null
     const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
     /** @type {import('dashjs').MediaPlayerClass}*/
@@ -518,7 +481,13 @@ const createDashPlayer = async (audio, stream, content) => {
             }
         }
     })
-    url = stream.urls[0].url
+    url = stream.urls.find(val => val.locale === subtitle.locale)
+    if (!url) {
+        url = stream.urls.find(val => val.locale === 'off')
+    }
+    if (url) {
+        url = url.url
+    }
     dashPlayer.initialize()
     dashPlayer.setAutoPlay(false)
     dashPlayer.attachSource(url + '#t=' + Math.max(startSec, 0))
@@ -661,8 +630,6 @@ const Player = ({ ...rest }) => {
     const playerCompRef = useRef(null)
     /** @type {{current: import('dashjs').MediaPlayerClass}*/
     const playerRef = useRef(null)
-    /** @type {{current: import('libass-wasm')}*/
-    const subtitleWorkerRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
         return {
@@ -686,8 +653,6 @@ const Player = ({ ...rest }) => {
     const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
     /** @type {[String, Function]}  */
     const [message, setMessage] = useState('')
-    /** @type {[Object.<String, String>, Function]}  */
-    const [fonts, setFonts] = useState(null)
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -855,13 +820,15 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // attach subs
         let interval = null
-        if (stream.urls && stream.id === content.id) {
+        if (stream.urls && subtitle && stream.id === content.id) {
             interval = setInterval(() => {
                 if (playerCompRef.current) {
                     clearInterval(interval)
-                    createDashPlayer(audio, stream, content).then(player => {
+                    createDashPlayer(audio, stream, content, subtitle).then(player => {
                         playerRef.current = player
+                        playerRef.current.play()
                         setLoading(false)
+                        setIsPaused(false)
                         /* how to log, add function and off events in clean up function
                         player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
                         player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
@@ -883,71 +850,7 @@ const Player = ({ ...rest }) => {
             }
             clearInterval(interval)
         }
-    }, [profile, content, stream, audio, setLoading, handleCrunchyError])
-
-    useEffect(() => {
-        loadFonts().then(setFonts).catch(handleCrunchyError)
-        return () => {
-            setFonts(lastFonts => {
-                if (lastFonts) {
-                    lastFonts.forEach(prev => window.URL.revokeObjectURL(prev))
-                }
-                return null
-            })
-        }
-    }, [handleCrunchyError])
-
-    useEffect(() => {  // attach subs
-        if (!loading && subtitle && fonts) {
-            let loadSub = async () => {
-                playerRef.current.pause()
-                setIsPaused(true)
-                if (subtitle.locale === 'off') {
-                    if (subtitleWorkerRef.current) {
-                        subtitleWorkerRef.current.freeTrack()
-                    }
-                } else {
-                    const res = await fetchUtils.customFetch(subtitle.url)
-                    const subContent = await res.text()
-                    if (subtitleWorkerRef.current) {
-                        subtitleWorkerRef.current.setTrack(subContent)
-                    } else {
-                        return new Promise(onSuccess => {
-                            const subtitleWorker = new SubtitlesOctopus({
-                                video: document.querySelector('video'),
-                                subContent,
-                                availableFonts: fonts,
-                                fallbackFont: fonts['roboto mono'],
-                                workerUrl: new URL('libass-wasm/dist/js/subtitles-octopus-worker.js', import.meta.url).href,
-                                onReady: () => onSuccess(subtitleWorker),
-                                onError: err => {
-                                    if (subtitleWorkerRef.current) {
-                                        subtitleWorkerRef.current.dispose()
-                                        subtitleWorkerRef.current = null
-                                    }
-                                    handleCrunchyError(err)
-                                    onSuccess()
-                                },
-                                _wasm: new URL('libass-wasm/dist/js/subtitles-octopus-worker.wasm', import.meta.url),
-                            })
-                        })
-                    }
-                }
-            }
-            loadSub().then(subtitleWorker => {
-                if (subtitleWorker) {
-                    subtitleWorkerRef.current = subtitleWorker
-                    playerRef.current.play()
-                    setIsPaused(false)
-                }
-            }).catch(handleCrunchyError)
-        }
-        return () => {
-            if (subtitleWorkerRef.current) {
-                subtitleWorkerRef.current.freeTrack()
-            }
-        }
-    }, [fonts, subtitle, loading, handleCrunchyError])
+    }, [profile, content, stream, audio, subtitle, setLoading, handleCrunchyError])
 
     useEffect(() => {  // set stream session
         if (stream === emptyStream) {
@@ -1086,15 +989,6 @@ const Player = ({ ...rest }) => {
             setCurrentSkipEvent(resetCurrentSkipEvent)
         }
     }, [loading, skipEvents, resetCurrentSkipEvent])
-
-    useEffect(() => {
-        return () => {
-            if (subtitleWorkerRef.current) {
-                subtitleWorkerRef.current.dispose()
-                subtitleWorkerRef.current = null
-            }
-        }
-    }, [])
 
     return (
         <div className={rest.className}>
