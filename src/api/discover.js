@@ -292,3 +292,18 @@ export const getSeasonList = async (profile) => {
     }
     return out
 }
+
+/**
+ * Mark as watched
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @param {String} contentId
+ * @returns {Promise>}
+ */
+export const markAsWatched = async (profile, contentId) => {
+    try {
+        const account = await getContentParam(profile)
+        await api.discover.markAsWatched({ account, contentId })
+    } catch (error) {
+        await translateError(error)
+    }
+}

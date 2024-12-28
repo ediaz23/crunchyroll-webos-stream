@@ -16,7 +16,7 @@ import css from './Toolbar.module.less'
 
 const NavigableDiv = withNavigable('div', css.iconFocus)
 
-const IconText = ({ icon, active, children, autoFocus, ...rest }) => {
+export const IconText = ({ icon, active, children, autoFocus = false, ...rest }) => {
 
     /** @type {{current: {node: HTMLElement}}} */
     const compRef = useRef(null)

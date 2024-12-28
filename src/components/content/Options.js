@@ -15,6 +15,7 @@ import { $L } from '../../hooks/language'
 import Scroller from '../../patch/Scroller'
 import { calculatePlayheadProgress } from './Seasons'
 import { ContentHeader } from '../home/ContentBanner'
+import PopupMessage from '../Popup'
 import api from '../../api'
 import back from '../../back'
 import css from './ContentDetail.module.less'
@@ -223,6 +224,8 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const [isInWatchlist, setIsInWatchlist] = useState(false)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
+    /** @type {[{type: String, message: String}, Function]}  */
+    const [message, setMessage] = useState(null)
     /** @type {TitleObj} */
     const { watch, watchLast, description, subtitle, moreDetail } = useMemo(() => {
         return computeTitles({ content, nextContent, lastContent })
@@ -270,6 +273,18 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     }, [profile, content, isInWatchlist, setIsInWatchlist, homeBackup, setHomeBackup,
         setHomePosition])
 
+    /** @type {Function} */
+    const markAsWatched = useCallback(() => {
+        api.discover.markAsWatched(profile, content.id)
+            .then(() => setMessage({ type: 'info', message: $L('Marked as watched') }))
+            .catch(err => {
+                if (err) {
+                    setMessage({ type: 'error', message: err.message || `${err}` })
+                } else {
+                    setMessage({ type: 'error', message: $L('An error occurred') })
+                }
+            }).finally(() => setTimeout(() => setMessage(null), 2000))
+    }, [profile, content])
 
     useEffect(() => {
         /** @type {Promise} */
@@ -371,10 +386,19 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
                                     <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
                                 </Item>
                             )}
+                            {'series' === content.type && (
+                                <Item onClick={markAsWatched}>
+                                    <Icon>checkselection</Icon>
+                                    <span>{$L('Mark as watched')}</span>
+                                </Item>
+                            )}
                         </Scroller>
                     </div>
                 </Cell>
             }
+            <PopupMessage show={!!(message?.type)} type={message?.type}>
+                {message?.message || 'nothing'}
+            </PopupMessage>
         </Row>
     )
 }

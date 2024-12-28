@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
+import IconButton from '@enact/moonstone/IconButton'
 import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
@@ -712,6 +713,14 @@ const Player = ({ ...rest }) => {
     const onEndVideo = useCallback((ev) => setEndEvent(ev), [setEndEvent])
 
     /** @type {Function} */
+    const markAsWatched = useCallback(() => {
+        api.discover.markAsWatched(profile, content.id)
+            .then(() => console.log('watched'))
+            .catch(console.error)
+        onNextEp(new Event('fake'))
+    }, [profile, content, onNextEp])
+
+    /** @type {Function} */
     const onPlayPause = useCallback(() => {
         if (playerCompRef.current) {
             const { paused } = playerCompRef.current.getMediaState()
@@ -1013,9 +1022,16 @@ const Player = ({ ...rest }) => {
                 <MediaControls id="media-controls">
                     <leftComponents>
                         <ContentInfo content={content} />
-                        {['episode'].includes(content.type) &&
+                        {['episode'].includes(content.type) && (<>
+                            <IconButton
+                                backgroundOpacity="lightTranslucent"
+                                onClick={markAsWatched}
+                                tooltipText={$L('Mark as watched')}>
+                                checkselection
+                            </IconButton>
                             <Rating profile={profile} content={content} />
-                        }
+
+                        </>)}
                     </leftComponents>
                     <rightComponents>
                         {stream.subtitles.length > 1 &&

@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
 
 import PropTypes from 'prop-types'
@@ -72,9 +72,12 @@ const Watchlist = ({ profile, ...rest }) => {
         }
     }, [profile, mergeContentList, options])
 
+    /** @type {{current: Boolean}} */
+    const autoScrollRef = useRef(true)
+
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
-        onLeave(null)
+        onLeave(null, false)
     }, [onLeave])
 
     useEffect(() => {
@@ -82,7 +85,8 @@ const Watchlist = ({ profile, ...rest }) => {
             changeContentList(null)
             api.discover.getWatchlist(profile, options).then(res =>
                 processResult({ profile, data: res.data }).then(res2 => {
-                    changeContentList([...res2.data, ...new Array(res.total - res.data.length)])
+                    changeContentList([...res2.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
+                    autoScrollRef.current = true
                 })
             )
         }
@@ -93,6 +97,7 @@ const Watchlist = ({ profile, ...rest }) => {
             changeContentList(contentListBak)
         } else {
             onFilter({ delay: 0, scroll: true })
+            autoScrollRef.current = false
         }
     }, [profile, contentListBak, changeContentList, onFilter])
 

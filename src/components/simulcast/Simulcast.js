@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Button from '@enact/moonstone/Button'
 import LabeledItem from '@enact/moonstone/LabeledItem'
@@ -69,6 +69,9 @@ const Simulcast = ({ profile, title, ...rest }) => {
         }
     }, [season, sort, quantity])
 
+    /** @type {{current: Boolean}} */
+    const autoScrollRef = useRef(true)
+
     /** @type {Function} */
     const onSelectOrder = useCallback(({ selected }) => {
         setOrder(order[selected].key)
@@ -97,7 +100,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
-        onLeave({ season, seasons, sort })
+        onLeave({ season, seasons, sort }, false)
     }, [onLeave, season, seasons, sort])
 
     useEffect(() => {
@@ -105,27 +108,29 @@ const Simulcast = ({ profile, title, ...rest }) => {
             changeContentList(null)
             if (season && season.id) {
                 api.discover.getBrowseAll(profile, options).then(res => {
-                    changeContentList([...res.data, ...new Array(res.total - res.data.length)])
+                    changeContentList([...res.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
+                    autoScrollRef.current = true
                 })
             }
         }
     }, [profile, changeContentList, options, season, delay])
 
     useEffect(() => {
-        if (delay >= 0) {
+        if (delay >= 0 && !season) {
             api.discover.getSeasonList(profile).then(({ data: seasonsList }) => {
                 seasonsList.forEach((item, index) => { item.index = index })
                 setSeasons(seasonsList)
                 setSeason(seasonsList[0])
             })
         }
-    }, [profile, setSeason, delay])
+    }, [profile, setSeason, delay, season])
 
-    useEffect(() => {  // iinitializing
+    useEffect(() => {  // initializing
         if (contentListBak) {
             changeContentList(contentListBak)
         } else {
             onFilter({ delay: 0, scroll: true })
+            autoScrollRef.current = false
         }
     }, [profile, contentListBak, changeContentList, onFilter])
 

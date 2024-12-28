@@ -1,9 +1,12 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
+import Heading from '@enact/moonstone/Heading'
+import LabeledIconButton from '@enact/moonstone/LabeledIconButton'
 
 import PropTypes from 'prop-types'
 
+import { $L } from '../../hooks/language'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
@@ -28,9 +31,10 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
     for (const ep of episodesData) {
         if (playheads[ep.id]) {
             const duration = ep.duration_ms / 1000
+            const playhead = playheads[ep.id].fully_watched ? duration : playheads[ep.id].playhead
             ep.playhead = {
                 ...playheads[ep.id],
-                progress: playheads[ep.id].playhead / duration * 100
+                progress: playhead / duration * 100
             }
         } else {
             ep.playhead = {
@@ -75,6 +79,25 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
             setContentToPlay(episodes[index], { seasons, seasonIndex })
         }
     }, [seasons, seasonIndex, episodes, setContentToPlay])
+
+    /** @type {Function} */
+    const markAsWatched = useCallback(ev => {
+        if ((ev.type === 'click' || (ev.type === 'keydown' && ev.key === 'Enter'))) {
+            if (episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0) {
+                for (const ep of episodes) {
+                    if (!ep.playhead) {
+                        ep.playhead = {}
+                    }
+                    ep.playhead.fully_watched = true
+                    ep.playhead.progress = 100
+                }
+                setEpisodes([...episodes])
+                api.discover.markAsWatched(profile, seasons[seasonIndex].id)
+                    .then(() => console.log('watched'))
+                    .catch(console.error)
+            }
+        }
+    }, [profile, seasons, seasonIndex, episodes])
 
     useEffect(() => {
         if (episodes != null && episodes.length) {
@@ -135,7 +158,7 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
                         <Cell shrink>
                             <ContentHeader content={series} />
                         </Cell>
-                        <Cell>
+                        <Cell grow>
                             <SeasonsList
                                 seasons={seasons}
                                 selectSeason={setSeasonIndex}
@@ -144,11 +167,30 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
                     </Column>
                 </Cell>
                 <Cell size="49%">
-                    <EpisodesList
-                        seasonIndex={seasonIndex}
-                        episodes={episodes}
-                        selectEpisode={playEpisode}
-                        episodeIndex={episodeIndex} />
+                    <Column>
+                        {series.type === 'series' && seasons.length > 0 && (
+                            <Cell shrink>
+                                <Heading size="small">
+                                    {seasons[seasonIndex].season_tags.join(', ')}
+                                </Heading>
+                                <LabeledIconButton
+                                    icon='checkselection'
+                                    labelPosition='after'
+                                    onClick={markAsWatched}
+                                    onKeyDown={markAsWatched}
+                                    disabled={!(episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)}>
+                                    {$L('Mark as watched')}
+                                </LabeledIconButton>
+                            </Cell>
+                        )}
+                        <Cell grow>
+                            <EpisodesList
+                                seasonIndex={seasonIndex}
+                                episodes={episodes}
+                                selectEpisode={playEpisode}
+                                episodeIndex={episodeIndex} />
+                        </Cell>
+                    </Column>
                 </Cell>
             </Row>
         </Row>

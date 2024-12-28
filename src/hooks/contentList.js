@@ -55,17 +55,21 @@ export const useContentList = (type) => {
     const quantity = 20
 
     /** @type {Function} */
-    const changeContentList = useCallback((newList) => {
+    const changeContentList = useCallback((newList, resetIndex = true) => {
         setContentList(newList)
         setHomeViewReady(true)
-        if (homeBackup && homeBackup.contentList !== newList) {
+        if (homeBackup && homeBackup.contentList !== newList && resetIndex) {
             setHomePosition({ rowIndex: 0 })
         }
     }, [setContentList, setHomeViewReady, homeBackup, setHomePosition])
 
     /** @type {Function} */
-    const onLeave = useCallback((options) => {
-        setHomeBackup({ options, contentList, type })
+    const onLeave = useCallback((options, saveList = true) => {
+        if (saveList) {
+            setHomeBackup({ options, contentList, type })
+        } else {
+            setHomeBackup({ options, contentList: null, type })
+        }
     }, [setHomeBackup, contentList, type])
 
     /** @type {Function} */
@@ -95,6 +99,9 @@ export const useContentList = (type) => {
         /** -------------------------------------------------- */
         if (out) {
             setContentList(prevArray => {
+                if (prevArray == null) {
+                    return items
+                }
                 if (!Array.isArray(items)) {
                     const size = Math.min(prevArray.length - index, quantity)
                     items = Array.from({ length: size }, () => items)

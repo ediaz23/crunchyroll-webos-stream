@@ -39,6 +39,9 @@ const setTags = (metadata, tags) => {
     if (metadata.is_mature) {
         tags.push($L('Adults'))
     }
+    if (metadata.is_complete) {
+        tags.push($L('Complete'))
+    }
 }
 
 /**
@@ -89,19 +92,31 @@ const setMovieMetadata = (metadata, meta) => {
 export const ContentMetadata = ({ content }) => {
     const tags = [], meta = []
     let rating = null
+    /** @type {Array<String>} */
+    let contentDescriptors = []
+    /** @type {Array<{text: String}>} */
+    let awards = []
 
     if (content.episode_metadata) {
         setTags(content.episode_metadata, tags)
         setEpisodeMetadata(content.episode_metadata, meta)
+        contentDescriptors = content.episode_metadata.content_descriptors
+        awards = content.episode_metadata.awards
     } else if (content.series_metadata) {
         setTags(content.series_metadata, tags)
         setSerieMetadata(content.series_metadata, meta)
+        contentDescriptors = content.series_metadata.content_descriptors
+        awards = content.series_metadata.awards
     } else if (content.movie_listing_metadata) {
         setTags(content.movie_listing_metadata, tags)
         setMovieMetadata(content.movie_listing_metadata, meta)
+        contentDescriptors = content.movie_listing_metadata.content_descriptors
+        awards = content.movie_listing_metadata.awards
     } else if (content.movie_metadata) {
         setTags(content.movie_metadata, tags)
         setMovieMetadata(content.movie_metadata, meta)
+        contentDescriptors = content.movie_metadata.content_descriptors
+        awards = content.movie_metadata.awards
     } else if (content.genres) {
         content.genres.forEach(val => tags.push(val.displayValue))
         if (content.publishDate) {
@@ -112,7 +127,7 @@ export const ContentMetadata = ({ content }) => {
         rating = content.rating.average
     }
 
-    return (
+    return (<>
         <Row align='baseline space-between'>
             <Heading size='small' spacing="small">
                 {tags.join(' ')}
@@ -128,7 +143,21 @@ export const ContentMetadata = ({ content }) => {
                 </Heading>
             )}
         </Row>
-    )
+        {!!(contentDescriptors && contentDescriptors.length) && (
+            <Row align='baseline'>
+                <Heading size='small' spacing="small">
+                    {contentDescriptors.join(', ')}
+                </Heading>
+            </Row>
+        )}
+        {!!(awards && awards.length) && (
+            <Row align='baseline'>
+                <Heading size='small' spacing="small">
+                    {awards[0].text}
+                </Heading>
+            </Row>
+        )}
+    </>)
 }
 ContentMetadata.propTypes = {
     content: PropTypes.object.isRequired,

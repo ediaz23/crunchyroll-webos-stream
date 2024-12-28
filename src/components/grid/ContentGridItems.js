@@ -87,12 +87,14 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     }, [contentList, itemHeight, getImagePerResolution, onSelectItem, onFocus, load, mode])
 
     useEffect(() => {
-        if (autoScroll) {
-            rowIndexRef.current = homePosition.rowIndex
-        } else {
-            rowIndexRef.current = false
+        if (contentList != null) {
+            if (autoScroll && contentList.length > 0) {
+                rowIndexRef.current = Math.min(homePosition.rowIndex, contentList.length - 1)
+            } else {
+                rowIndexRef.current = false
+            }
         }
-    }, [autoScroll, homePosition.rowIndex])
+    }, [autoScroll, homePosition.rowIndex, contentList])
 
     useEffect(() => {
         const interval = setInterval(() => {
