@@ -48,9 +48,7 @@ const Watchlist = ({ profile, ...rest }) => {
     const [selectedContent, setSelectedContent] = useState(null)
 
     /** @type {import('../grid/ContentGrid').SearchOptions} */
-    const options = useMemo(() => {
-        return { quantity }
-    }, [quantity])
+    const options = useMemo(() => { return { quantity } }, [quantity])
 
     /** @type {Function} */
     const onSelectItem = useCallback((ev) => {

@@ -1,17 +1,19 @@
 
-import { useEffect, useCallback, useState, useMemo } from 'react'
+import { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
-import Spotlight from '@enact/spotlight'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import Spinner from '@enact/moonstone/Spinner'
-import { useSetRecoilState, useRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
 import PropTypes from 'prop-types'
 
+import EpisodesList from './EpisodesList'
 import { $L } from '../../hooks/language'
+import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
+import { useBackVideoIndex } from '../../hooks/backVideoIndex'
 import Scroller from '../../patch/Scroller'
 import { calculatePlayheadProgress } from './Seasons'
 import { ContentHeader } from '../home/ContentBanner'
@@ -19,12 +21,22 @@ import PopupMessage from '../Popup'
 import api from '../../api'
 import back from '../../back'
 import css from './ContentDetail.module.less'
-import { homePositionState, homeBackupState } from '../../recoilConfig'
+import { homePositionState, homeBackupState, contentDetailBakState } from '../../recoilConfig'
 
 
 const useChangeActivity = (setIndex, index) => {
-    return () => {
-        back.pushHistory({ doBack: () => { setIndex(0) } })
+    /** @type {Function} */
+    const setcontentDetailBak = useSetRecoilState(contentDetailBakState)
+    return event => {
+        /** @type {Event} */
+        const ev = event
+        const target = ev.currentTarget || ev.target
+        back.pushHistory({
+            doBack: () => {
+                setIndex(0)
+                setcontentDetailBak({ optionIndex: target.id })
+            }
+        })
         setIndex(index)
     }
 }
@@ -105,14 +117,13 @@ export const getNextEpidose = async (profile, content) => {
     const out = { firstEp: null, lastEp: null }
     const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
     const proms = [
-        api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id })
-            .then(({ data: episodesData }) => {
-                if (episodesData.length) {
-                    out.firstEp = episodesData[0]
-                    out.firstEp.type = 'episode'
-                }
-                return episodesData
-            })
+        api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id }).then(({ data: episodesData }) => {
+            if (episodesData.length) {
+                out.firstEp = episodesData[0]
+                out.firstEp.type = 'episode'
+            }
+            return episodesData
+        })
     ]
     if (seasonsData.length === 1) {
         proms[0].then(episodesData => {
@@ -121,29 +132,22 @@ export const getNextEpidose = async (profile, content) => {
                 out.lastEp.type = 'episode'
             }
         })
-        proms.push(proms[0])
     } else {
-        proms.push(
-            api.cms.getEpisodes(profile, { seasonId: seasonsData[seasonsData.length - 1].id })
-                .then(({ data: episodesData }) => {
-                    if (episodesData.length) {
-                        out.lastEp = episodesData[episodesData.length - 1]
-                        out.lastEp.type = 'episode'
-                    }
-                })
-        )
+        const seasonId = seasonsData[seasonsData.length - 1].id
+        proms.push(api.cms.getEpisodes(profile, { seasonId }).then(({ data: episodesData }) => {
+            if (episodesData.length) {
+                out.lastEp = episodesData[episodesData.length - 1]
+                out.lastEp.type = 'episode'
+            }
+        }))
     }
-    proms[0].then(() => {
-        if (out.firstEp) {
-            return calculatePlayheadProgress({ profile, episodesData: [out.firstEp] })
+    return Promise.all(proms).then(async () => {
+        const eps = [out.firstEp, out.lastEp].filter(ep => !!ep)
+        if (eps.length > 0) {
+            await calculatePlayheadProgress({ profile, episodesData: eps })
         }
+        return out
     })
-    proms[1].then(() => {
-        if (out.lastEp) {
-            return calculatePlayheadProgress({ profile, episodesData: [out.lastEp] })
-        }
-    })
-    return Promise.all(proms).then(() => out)
 }
 
 /**
@@ -204,18 +208,23 @@ export const getNextContent = async (profile, content) => {
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
- * @param {Object} obj.Object
- * @param {Number} obj.rating
- * @param {Function} obj.updateRating
+ * @param {Object} obj.content
+ * @param {Function} obj.saveRating
  * @param {Function} obj.setIndex
  * @param {Function} obj.setContentToPlay
  */
-const Options = ({ profile, content, rating, updateRating, setIndex, setContentToPlay, ...rest }) => {
+const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...rest }) => {
 
     /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
     const [homeBackup, setHomeBackup] = useRecoilState(homeBackupState)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
+    /** @type {Object}  */
+    const contentDetailBak = useRecoilValue(contentDetailBakState)
+    /** @type {[String, Function]} */
+    const [optionIndex, setOptionIndex] = useState(contentDetailBak.optionIndex)
+    /** @type {[Number, Function]} */
+    const [rating, setRating] = useState(contentDetailBak.rating || 0)
     /** @type {[Object, Function]} */
     const [nextContent, setNextConent] = useState(null)
     /** @type {[Object, Function]} */
@@ -226,14 +235,28 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const [loading, setLoading] = useState(true)
     /** @type {[{type: String, message: String}, Function]}  */
     const [message, setMessage] = useState(null)
+    /** @type {[String, Function]}  */
+    const [spotlightRestrict, setSpotlightRestrict] = useState(null)
+    /** @type {[Array<Object>, Function]} */
+    const [videos, setVideos] = useState(null)
+    /** @type {[Number, Function]} */
+    const [videoIndex, setVideoIndex] = useState(null)
+    /** @type {{current: Number}} */
+    const optionRef = useRef(null)
+    /** @type {{current: Function}} */
+    const scrollToRef = useRef(null)
+    /** @type {{current: Object}} */
+    const playContentRef = useBackVideoIndex(videos, setVideoIndex)
     /** @type {TitleObj} */
     const { watch, watchLast, description, subtitle, moreDetail } = useMemo(() => {
         return computeTitles({ content, nextContent, lastContent })
     }, [content, nextContent, lastContent])
+    /** @type {Object} */
+    const optionsMap = useMemo(() => { return { music: 0, similar: 1 } }, [])
     /** @type {Function} */
     const moreEpisodes = useChangeActivity(setIndex, 1)
     /** @type {Function} */
-    const changeSubs = useChangeActivity(setIndex, 2)
+    const changeAudio = useChangeActivity(setIndex, 2)
     /** @type {Function} */
     const playNextContent = useCallback(() => {
         setContentToPlay(nextContent)
@@ -242,6 +265,17 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
     const playLastContent = useCallback(() => {
         setContentToPlay(lastContent)
     }, [setContentToPlay, lastContent])
+    /** @type {Function} */
+    const playMusicContent = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
+        const index = parseInt(target.dataset.index)
+        setContentToPlay(videos[index], { optionIndex })
+    }, [setContentToPlay, videos, optionIndex])
+    /** @type {Function} */
+    const processVideos = useProcessMusicVideos()
+
+    /** @type {Function} */
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
 
     /** @type {Function} */
     const toggleWatchlist = useCallback(() => {
@@ -286,6 +320,37 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
             }).finally(() => setTimeout(() => setMessage(null), 2000))
     }, [profile, content])
 
+    /** @type {Function} */
+    const selectOption = useCallback(event => {
+        /** @type {Event} */
+        const ev = event
+        const target = ev.currentTarget || ev.target
+
+        let newOption = null
+        if (ev.type === 'click' || (ev.type === 'keyup' && ev.key === 'Enter')) {
+            newOption = target.id
+        } else if (Object.keys(optionsMap).includes(target.id)) {
+            newOption = optionRef.current == null ? null : target.id
+        }
+        if (optionRef.current !== newOption) {
+            setOptionIndex(newOption)
+        }
+        setSpotlightRestrict(null)
+    }, [setOptionIndex, setSpotlightRestrict, optionsMap])
+
+    /** @type {Function} */
+    const updateRating = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
+        const star = parseInt(target.dataset.star) + 1
+        api.review.updateRating(profile, {
+            contentId: content.id,
+            contentType: content.type,
+            rating: `${star}s`
+        }).then(() => setRating(star))
+    }, [profile, content])
+
+    useEffect(() => saveRating(rating), [rating, saveRating])
+
     useEffect(() => {
         /** @type {Promise} */
         const nextEpProm = getNextContent(profile, content)
@@ -293,9 +358,17 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
         const proms = [nextEpProm]
         if (['series', 'movie_listing'].includes(content.type)) {
             proms.push(
-                api.content.getWatchlistItems(profile, { contentIds: [content.id] }).then(res => {
-                    setIsInWatchlist(res.total > 0)
-                })
+                api.content.getWatchlistItems(profile, {
+                    contentIds: [content.id]
+                }).then(res => setIsInWatchlist(res.total > 0))
+            )
+        }
+        if (contentDetailBak.rating == null) {
+            proms.push(
+                api.review.getRatings(profile, {
+                    contentId: content.id,
+                    contentType: content.type,
+                }).then(res => setRating(parseInt(res.rating.trimEnd('s'))))
             )
         }
         nextEpProm.then(tmpNextContent => {
@@ -308,93 +381,156 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
         })
         setLoading(true)
         Promise.all(proms).then(() => setLoading(false))
-    }, [profile, content, setLoading])
+    }, [profile, content, setLoading, contentDetailBak.rating])
+
+    useEffect(() => {
+        optionRef.current = optionIndex
+        setVideos(null)
+        setVideoIndex(null)
+        if (optionIndex != null && optionsMap[optionIndex] != null) {
+            if (optionsMap[optionIndex] === 0) {
+                api.music.getFeatured(profile, content.id).then(res => {
+                    if (optionRef.current === optionIndex) {
+                        setVideos(processVideos(res, res.data))
+                        if (res.data.length > 0) {
+                            setSpotlightRestrict('music')
+                        }
+                    }
+                })
+            } else if (optionsMap[optionIndex] === 1) {
+                api.discover.getSimilar(profile, {
+                    contentId: content.id,
+                    quantity: 30,
+                    ratings: true
+                }).then(res => {
+                    console.log(res)
+                })
+            }
+        }
+    }, [profile, content, optionIndex, setVideos, processVideos, optionsMap])
 
     useEffect(() => {
         let interval = null
         if (!loading) {
             interval = setInterval(() => {
-                if (document.querySelector('#play')) {
+                const idSelector = `#${optionRef.current || 'play'}`
+                if (document.querySelector(idSelector) && scrollToRef.current) {
                     clearInterval(interval)
-                    Spotlight.focus('#play')
+                    scrollToRef.current({ node: document.querySelector(idSelector), animate: false, focus: true })
+                    if (!optionRef.current) {
+                        playContentRef.current = null
+                    }
                 }
             }, 100)
         }
         return () => clearInterval(interval)
-    }, [loading])
+    }, [loading, playContentRef])
 
     return (
-        <Row {...rest}>
+        <Row align='start space-between' {...rest}>
             {loading &&
                 <Column align='center center' style={{ height: 'auto', width: '100%' }}>
                     <Spinner />
                 </Column>
             }
             {!loading &&
-                <Cell size='49%'>
-                    <ContentHeader content={content} />
-                    {subtitle &&
-                        <Heading size='small' spacing='small' className={css.firstData}>
-                            {subtitle}
-                        </Heading>
-                    }
-                    <div className={css.scrollerContainer}>
-                        <Scroller
-                            direction='vertical'
-                            horizontalScrollbar='hidden'
-                            verticalScrollbar='auto'
-                            focusableScrollbar>
-                            <BodyText size='small'>
-                                {description}
-                            </BodyText>
-                        </Scroller>
-                    </div>
-                    <BodyText component='div' size='small' style={{ marginBottom: '1em', marginTop: '1em' }}>
-                        {Array.from({ length: 5 }, (_v, i) =>
-                            <IconButton size='small' key={i} data-star={i}
-                                onClick={updateRating}>
-                                {(i < rating) ? 'star' : 'hollowstar'}
-                            </IconButton>
-                        )}
-                    </BodyText>
-                    <div className={css.scrollerContainer}>
-                        <Scroller direction='vertical' horizontalScrollbar='hidden'
-                            verticalScrollbar='visible'>
-                            {nextContent &&
-                                <Item id='play' onClick={playNextContent}>
-                                    <Icon>play</Icon>
-                                    <span>{watch}</span>
-                                </Item>
-                            }
-                            {lastContent &&
-                                <Item id='play' onClick={playLastContent}>
-                                    <Icon>play</Icon>
-                                    <span>{watchLast}</span>
-                                </Item>
-                            }
-                            <Item onClick={moreEpisodes}>
-                                <Icon>series</Icon>
-                                <span>{moreDetail}</span>
-                            </Item>
-                            <Item onClick={changeSubs}>
-                                <Icon>audio</Icon>
-                                <span>{$L('Audio and Subtitles')}</span>
-                            </Item>
-                            {['series', 'movie_listing'].includes(content.type) && (
-                                <Item onClick={toggleWatchlist}>
-                                    <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
-                                    <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
-                                </Item>
+                <Row style={{ width: '100%' }}>
+                    <Cell size='49%' style={{ overflow: 'hidden' }}>
+                        <ContentHeader content={content} />
+                        {subtitle &&
+                            <Heading size='small' spacing='small' className={css.firstData}>
+                                {subtitle}
+                            </Heading>
+                        }
+                        <div className={css.scrollerContainer}>
+                            <Scroller
+                                direction='vertical'
+                                horizontalScrollbar='hidden'
+                                verticalScrollbar='auto'
+                                focusableScrollbar>
+                                <BodyText size='small'>
+                                    {description}
+                                </BodyText>
+                            </Scroller>
+                        </div>
+                        <BodyText component='div' size='small' style={{ marginBottom: '1em', marginTop: '1em' }}>
+                            {Array.from({ length: 5 }, (_v, i) =>
+                                <IconButton size='small' key={i} data-star={i}
+                                    onClick={updateRating}>
+                                    {(i < rating) ? 'star' : 'hollowstar'}
+                                </IconButton>
                             )}
-                            {'series' === content.type && (
-                                <Item onClick={markAsWatched}>
-                                    <Icon>checkselection</Icon>
-                                    <span>{$L('Mark as watched')}</span>
+                        </BodyText>
+                        <div className={css.scrollerContainer}>
+                            <Scroller direction='vertical'
+                                horizontalScrollbar='hidden'
+                                verticalScrollbar='visible'
+                                cbScrollTo={getScrollTo}>
+                                {nextContent &&
+                                    <Item id='play' onClick={playNextContent} onFocus={selectOption}
+                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'play'}>
+                                        <Icon>play</Icon>
+                                        <span>{watch}</span>
+                                    </Item>
+                                }
+                                {lastContent &&
+                                    <Item id='play' onClick={playLastContent} onFocus={selectOption}
+                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'play'}>
+                                        <Icon>play</Icon>
+                                        <span>{watchLast}</span>
+                                    </Item>
+                                }
+                                <Item id='series' onClick={moreEpisodes} onFocus={selectOption}
+                                    spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'series'}>
+                                    <Icon>series</Icon>
+                                    <span>{moreDetail}</span>
                                 </Item>
-                            )}
-                        </Scroller>
-                    </div>
-                </Cell>
+                                {['series', 'movie_listing'].includes(content.type) &&
+                                    <Item id='music' onClick={selectOption} onFocus={selectOption}
+                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'music'}>
+                                        <Icon>music</Icon>
+                                        <span>{$L('Music')}</span>
+                                    </Item>
+                                }
+                                {['series', 'movie_listing'].includes(content.type) &&
+                                    <Item id='similar' onClick={selectOption} onFocus={selectOption}
+                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'similar'}>
+                                        <Icon>search</Icon>
+                                        <span>{$L('Similar')}</span>
+                                    </Item>
+                                }
+                                {['series', 'movie_listing'].includes(content.type) &&
+                                    <Item id='list' onClick={toggleWatchlist} onFocus={selectOption}
+                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'list'}>
+                                        <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
+                                        <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
+                                    </Item>
+                                }
+                                {'series' === content.type &&
+                                    <Item id='watched' onClick={markAsWatched} onFocus={selectOption}
+                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'watched'}>
+                                        <Icon>checkselection</Icon>
+                                        <span>{$L('Mark as watched')}</span>
+                                    </Item>
+                                }
+                                <Item id='audio' onClick={changeAudio} onFocus={selectOption}
+                                    spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'audio'}>
+                                    <Icon>audio</Icon>
+                                    <span>{$L('Audio and Subtitles')}</span>
+                                </Item>
+                            </Scroller>
+                        </div>
+                    </Cell>
+                    <Cell size='49%' style={{ overflow: 'hidden' }}>
+                        {optionIndex != null && optionsMap[optionIndex] != null &&
+                            <EpisodesList
+                                seasonIndex={optionsMap[optionIndex]}
+                                episodes={videos}
+                                selectEpisode={playMusicContent}
+                                episodeIndex={videoIndex} />
+                        }
+                    </Cell>
+                </Row>
             }
             <PopupMessage show={!!(message?.type)} type={message?.type}>
                 {message?.message || 'nothing'}
@@ -406,8 +542,7 @@ const Options = ({ profile, content, rating, updateRating, setIndex, setContentT
 Options.propTypes = {
     profile: PropTypes.object.isRequired,
     content: PropTypes.object.isRequired,
-    rating: PropTypes.number.isRequired,
-    updateRating: PropTypes.func.isRequired,
+    saveRating: PropTypes.func.isRequired,
     setIndex: PropTypes.func.isRequired,
     setContentToPlay: PropTypes.func.isRequired,
 }

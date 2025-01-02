@@ -11,7 +11,7 @@ import { translateError, getContentParam } from './utils'
  * @param {Object} params
  * @param {String} params.contentId
  * @param {String} params.contentType
- * @return {Promise}
+ * @return {Promise<import('crunchyroll-js-api').Types.RatingStars>}
  */
 export const getRatings = async (profile, params) => {
     let out = null
@@ -34,7 +34,7 @@ export const getRatings = async (profile, params) => {
  * @param {String} params.contentId
  * @param {String} params.rating
  * @param {String} params.contentType
- * @returns {Promise<import('../types').RatingStars>}
+ * @return {Promise<import('crunchyroll-js-api').Types.RatingStars>}
  */
 export const updateRating = async (profile, params) => {
     let out = null

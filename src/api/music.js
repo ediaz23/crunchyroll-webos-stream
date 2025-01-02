@@ -90,7 +90,7 @@ export const getVideos = async (profile, musicIds) => {
 
 
 /**
- * Get episodes for a season
+ * Get streams for a season
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.streamUrl
@@ -112,7 +112,7 @@ export const getStreamsWithURL = async (profile, params) => {
 }
 
 /**
- * Get episodes for a season
+ * Get streams for a season
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
@@ -123,6 +123,24 @@ export const getStreams = async (profile, params) => {
     try {
         const account = await getContentParam(profile)
         out = await api.music.getStreams({ account, ...params })
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * Get featured
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @param {Object} params
+ * @param {String} params.contentId
+ * @returns {Promise<{data: Array<Object>, total: Number}>}
+ */
+export const getFeatured = async (profile, contentId) => {
+    let out = null
+    try {
+        const account = await getContentParam(profile)
+        out = await api.music.getFeatured({ account, contentId })
     } catch (error) {
         await translateError(error)
     }

@@ -5,15 +5,14 @@ import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilState } from 'recoil'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import {
-    pathState, playContentState, isPremiumState,
-    contentDetailBakState
-} from '../../recoilConfig'
+import { pathState, playContentState, contentDetailBakState } from '../../recoilConfig'
 
 import { $L } from '../../hooks/language'
+import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
+import { useBackVideoIndex } from '../../hooks/backVideoIndex'
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
 import EpisodesList from '../content/EpisodesList'
@@ -21,7 +20,6 @@ import Options from './Options'
 import back from '../../back'
 import api from '../../api'
 import css from './Artist.module.less'
-import { getIsPremium } from '../../utils'
 
 
 /**
@@ -32,10 +30,8 @@ import { getIsPremium } from '../../utils'
 const Artist = ({ profile, artist, ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
-    /** @type {[Object, Function]} */
-    const [playContent, setPlayContent] = useRecoilState(playContentState)
-    /** @type {Boolean} */
-    const isPremium = useRecoilValue(isPremiumState)
+    /** @type {Function} */
+    const setPlayContent = useSetRecoilState(playContentState)
     /** @type {[Object, Function]}  */
     const [contentDetailBak, setContentDetailBak] = useRecoilState(contentDetailBakState)
     /** @type {Function} */
@@ -52,8 +48,6 @@ const Artist = ({ profile, artist, ...rest }) => {
     const [videoIndex, setVideoIndex] = useState(null)
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
-    /** @type {{current: Object}} */
-    const playContentRef = useRef(playContent)
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {
@@ -90,40 +84,9 @@ const Artist = ({ profile, artist, ...rest }) => {
     }, [artist, getImagePerResolution])
 
     /** @type {Function} */
-    const preProcessVideos = useCallback(({ data }) => {
-        data.forEach(ep => {
-            ep.playhead = { progress: 0 }
-            ep.showPremium = !isPremium && getIsPremium(ep)
-            let chunks = []
-            if (ep.originalRelease) {
-                chunks.push((new Date(ep.originalRelease)).getFullYear())
-            }
-            if (ep.genres && ep.genres.length) {
-                chunks.push(ep.genres.map(e => e.displayValue).join(', '))
-            }
-            if (chunks.length && !ep.description) {
-                ep.description = chunks.join('\n')
-            }
-        })
-        data.sort((a, b) => {
-            const dateA = a.originalRelease ? new Date(a.originalRelease) : new Date();
-            const dateB = b.originalRelease ? new Date(b.originalRelease) : new Date();
-            return dateB - dateA;
-        })
-        return data
-    }, [isPremium])
+    const processVideos = useProcessMusicVideos()
 
-    useEffect(() => {
-        if (videos != null && videos.length) {
-            if (playContentRef.current != null) {
-                const index = videos.findIndex(v => v.id === playContentRef.current.id)
-                setVideoIndex(Math.max(0, index))
-                playContentRef.current = null
-            } else {
-                setVideoIndex(0)
-            }
-        }
-    }, [videos])
+    useBackVideoIndex(videos, setVideoIndex)
 
     useEffect(() => {
         if (contentDetailBak.options == null) {
@@ -152,9 +115,9 @@ const Artist = ({ profile, artist, ...rest }) => {
                 prom = Promise.resolve().then(() => options[optionIndex].videos)
             } else {
                 if (optionIndex === optionIndexes.video) {
-                    prom = api.music.getVideos(profile, artist.videos).then(preProcessVideos)
+                    prom = api.music.getVideos(profile, artist.videos).then(processVideos)
                 } else {
-                    prom = api.music.getConcerts(profile, artist.concerts).then(preProcessVideos)
+                    prom = api.music.getConcerts(profile, artist.concerts).then(processVideos)
                 }
             }
             prom.then(data => {
@@ -164,7 +127,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                 }
             })
         }
-    }, [profile, artist, options, optionIndexes, optionIndex, preProcessVideos, setVideos])
+    }, [profile, artist, options, optionIndexes, optionIndex, processVideos, setVideos])
 
     return (
         <Row className={css.contentArtist} {...rest}>

@@ -333,16 +333,16 @@ const findPoster = ({ content }) => {
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Object} obj.content
  * @param {Number} obj.step
- * @param {Array<String>} obj.concerts
+ * @param {Array<String>} obj.videos
  * @param {Function} obj.apiFunction
  * @returns {Promise<Object>}
  */
-const getNextVideoOrConcert = async ({ profile, content, step, concerts, apiFunction }) => {
+const getNextVideoOrConcert = async ({ profile, content, step, videos, apiFunction }) => {
     let out = null
-    const index = concerts.findIndex(val => val === content.id)
+    const index = videos.findIndex(val => val === content.id)
     const nextIndex = index + step
-    if (index >= 0 && nextIndex >= 0 && nextIndex < concerts.length) {
-        const { data: newConcerts } = await apiFunction(profile, [concerts[nextIndex]])
+    if (index >= 0 && nextIndex >= 0 && nextIndex < videos.length) {
+        const { data: newConcerts } = await apiFunction(profile, [videos[nextIndex]])
         if (newConcerts.length > 0) {
             out = newConcerts[0]
         }
@@ -373,24 +373,34 @@ const findNextEp = async ({ profile, content, step }) => {
             out = { total: 1, data: [movies.data[nextIndex]] }
         }
     } else if (['musicConcert', 'musicVideo'].includes(content.type)) {
-        const { data: artists } = await api.music.getArtists(profile, [content.artist.id])
-        if (artists.length > 0) {
-            const params = { profile, content, step }
-            if ('musicConcert' === content.type) {
-                out = await getNextVideoOrConcert({
-                    ...params,
-                    concerts: artists[0].concerts,
-                    apiFunction: api.music.getConcerts
-                })
-            } else if ('musicVideo' === content.type) {
-                out = await getNextVideoOrConcert({
-                    ...params,
-                    concerts: artists[0].videos,
-                    apiFunction: api.music.getVideos
-                })
+        /** @type {{videos: Array<Object>}} */
+        const { videos } = content
+        if (videos) {
+            const videoIndex = videos.findIndex(item => item.id === content.id)
+            const nextIndex = videoIndex + step
+            if (0 <= nextIndex && nextIndex < videos.length) {
+                out = { total: 1, data: [{ ...videos[nextIndex] }] }
             }
-            if (out) {
-                out = { total: 1, data: [out] }
+        } else {
+            const { data: artists } = await api.music.getArtists(profile, [content.artist.id])
+            if (artists.length > 0) {
+                const params = { profile, content, step }
+                if ('musicConcert' === content.type) {
+                    out = await getNextVideoOrConcert({
+                        ...params,
+                        videos: artists[0].concerts,
+                        apiFunction: api.music.getConcerts
+                    })
+                } else if ('musicVideo' === content.type) {
+                    out = await getNextVideoOrConcert({
+                        ...params,
+                        videos: artists[0].videos,
+                        apiFunction: api.music.getVideos
+                    })
+                }
+                if (out) {
+                    out = { total: 1, data: [out] }
+                }
             }
         }
     }

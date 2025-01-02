@@ -83,7 +83,7 @@
         "@enact/ui": "^4.8.0",
         "@enact/webos": "^4.8.0",
         "classnames": "^2.5.1",
-        "crunchyroll-js-api": "^1.4.1",
+        "crunchyroll-js-api": "^1.4.3",
         "dashjs": "^4.7.4",
         "fake-xml-http-request": "^2.1.2",
         "html-entities": "^2.5.2",
@@ -106,6 +106,7 @@
     "devDependencies": {
         "@types/gulp": "^4.0.17",
         "@types/react": "^18.3.12",
+        "@types/uuid": "^10.0.0",
         "@types/webostvjs": "^1.2.5",
         "del": "^8.0.0",
         "eslint-config-enact-proxy": "^1.0.8",

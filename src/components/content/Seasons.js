@@ -7,6 +7,7 @@ import LabeledIconButton from '@enact/moonstone/LabeledIconButton'
 import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
+import { useBackVideoIndex } from '../../hooks/backVideoIndex'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
@@ -51,12 +52,11 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Object} obj.series
- * @param {Object} obj.playContent
  * @param {Function} obj.setContentToPlay
  * @param {Boolean} obj.isPremium account is premium?
  * @param {Object} obj.contentDetailBak
  */
-const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
+const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState(JSON.parse(JSON.stringify(contentDetailBak.seasons || [])))
     /** @type {[Number, Function]} */
@@ -67,8 +67,6 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
     const [episodeIndex, setEpisodeIndex] = useState(null)
     /** @type {{current: Number}} */
     const seasonIndexRef = useRef(null)
-    /** @type {{current: Object}} */
-    const playContentRef = useRef(playContent)
 
     /** @type {Function} */
     const playEpisode = useCallback(ev => {
@@ -82,7 +80,7 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
 
     /** @type {Function} */
     const markAsWatched = useCallback(ev => {
-        if ((ev.type === 'click' || (ev.type === 'keydown' && ev.key === 'Enter'))) {
+        if (ev.type === 'click' || (ev.type === 'keyup' && ev.key === 'Enter')) {
             if (episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0) {
                 for (const ep of episodes) {
                     if (!ep.playhead) {
@@ -99,17 +97,7 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
         }
     }, [profile, seasons, seasonIndex, episodes])
 
-    useEffect(() => {
-        if (episodes != null && episodes.length) {
-            if (playContentRef.current != null) {
-                const index = episodes.findIndex(ep => ep.id === playContentRef.current.id)
-                setEpisodeIndex(Math.max(0, index))
-                playContentRef.current = null
-            } else {
-                setEpisodeIndex(0)
-            }
-        }
-    }, [episodes])
+    useBackVideoIndex(episodes, setEpisodeIndex)
 
     useEffect(() => {
         if (contentDetailBak.seasons == null) {
@@ -153,7 +141,7 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
     return (
         <Row align='start space-between' {...rest}>
             <Row style={{ width: '100%' }}>
-                <Cell size="49%">
+                <Cell size='49%'>
                     <Column>
                         <Cell shrink>
                             <ContentHeader content={series} />
@@ -166,7 +154,7 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
                         </Cell>
                     </Column>
                 </Cell>
-                <Cell size="49%">
+                <Cell size='49%'>
                     <Column>
                         {series.type === 'series' && seasons.length > 0 && (
                             <Cell shrink>
@@ -177,7 +165,6 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
                                     icon='checkselection'
                                     labelPosition='after'
                                     onClick={markAsWatched}
-                                    onKeyDown={markAsWatched}
                                     disabled={!(episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)}>
                                     {$L('Mark as watched')}
                                 </LabeledIconButton>
@@ -200,7 +187,6 @@ const Seasons = ({ profile, series, playContent, setContentToPlay, isPremium, co
 Seasons.propTypes = {
     profile: PropTypes.object.isRequired,
     series: PropTypes.object.isRequired,
-    playContent: PropTypes.object,
     setContentToPlay: PropTypes.func.isRequired,
     isPremium: PropTypes.bool.isRequired,
     contentDetailBak: PropTypes.object.isRequired,

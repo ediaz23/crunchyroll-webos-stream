@@ -150,7 +150,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
-                series: 'GRDV0019R',
+                series: 'GJ0H7QGQK',
                 episode: 'GZ7UV13VE',
                 musicArtist: 'MA899F289',
                 musicConcert: 'MC413F8154',

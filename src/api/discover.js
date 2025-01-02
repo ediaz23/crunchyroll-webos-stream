@@ -162,7 +162,7 @@ export const getRecomendation = async (profile, params) => {
  * @param {String} params.contentId
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
- * @param {Boolean} [obj.ratings]
+ * @param {Boolean} [params.ratings]
  * @return {Promise}
  */
 export const getSimilar = async (profile, params) => {

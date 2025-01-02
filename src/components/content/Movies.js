@@ -4,6 +4,7 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 
 import PropTypes from 'prop-types'
 
+import { useBackVideoIndex } from '../../hooks/backVideoIndex'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
@@ -16,12 +17,11 @@ import { getIsPremium } from '../../utils'
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Object} obj.movieListing
- * @param {Object} obj.playContent
  * @param {Function} obj.setContentToPlay
  * @param {Boolean} obj.isPremium account is premium?
  * @param {Object} obj.contentDetailBak
  */
-const Movies = ({ profile, movieListing, playContent, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
+const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
     const [listings, setListings] = useState(JSON.parse(JSON.stringify(contentDetailBak.listings || [])))
     /** @type {[Number, Function]} */
@@ -32,8 +32,6 @@ const Movies = ({ profile, movieListing, playContent, setContentToPlay, isPremiu
     const [movieIndex, setMovieIndex] = useState(null)
     /** @type {{current: Number}} */
     const listingIndexRef = useRef(null)
-    /** @type {{current: Object}} */
-    const playContentRef = useRef(playContent)
 
     /** @type {Function} */
     const playMovie = useCallback(ev => {
@@ -45,17 +43,7 @@ const Movies = ({ profile, movieListing, playContent, setContentToPlay, isPremiu
         }
     }, [listings, listingIndex, movies, setContentToPlay])
 
-    useEffect(() => {
-        if (movies != null && movies.length) {
-            if (playContentRef.current != null) {
-                const index = movies.findIndex(m => m.id === playContentRef.current.id)
-                setMovieIndex(Math.max(0, index))
-                playContentRef.current = null
-            } else {
-                setMovieIndex(0)
-            }
-        }
-    }, [movies])
+    useBackVideoIndex(movies, setMovieIndex)
 
     useEffect(() => {
         if (contentDetailBak.listings == null) {
@@ -121,7 +109,6 @@ const Movies = ({ profile, movieListing, playContent, setContentToPlay, isPremiu
 Movies.propTypes = {
     profile: PropTypes.object.isRequired,
     movieListing: PropTypes.object.isRequired,
-    playContent: PropTypes.object,
     setContentToPlay: PropTypes.func.isRequired,
     isPremium: PropTypes.bool.isRequired,
     contentDetailBak: PropTypes.object.isRequired,
