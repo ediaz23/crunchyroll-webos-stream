@@ -16,10 +16,11 @@ import useContentList from '../hooks/contentList'
  * @param {String} obj.type
  * @param {Function} obj.loadData
  * @param {Function} [obj.beforeLeave]
+ * @param {Function} [obj.onSelect]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Boolean} [obj.noPoster]
  */
-const ContentListPoster = ({ profile, type, loadData, beforeLeave, mode = 'wide', noPoster = false, ...rest }) => {
+const ContentListPoster = ({ profile, type, loadData, beforeLeave, onSelect, mode = 'wide', noPoster = false, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
@@ -94,8 +95,9 @@ const ContentListPoster = ({ profile, type, loadData, beforeLeave, mode = 'wide'
                         contentList={contentList}
                         load={onLoad}
                         onLeave={onLeaveView}
-                        autoScroll={autoScroll}
+                        onSelect={onSelect}
                         onFocus={onSelectItem}
+                        autoScroll={autoScroll}
                         mode={mode} />
                 </Cell>
             </Column>
@@ -108,6 +110,7 @@ ContentListPoster.propTypes = {
     type: PropTypes.string.isRequired,
     loadData: PropTypes.func.isRequired,
     beforeLeave: PropTypes.func,
+    onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
 }

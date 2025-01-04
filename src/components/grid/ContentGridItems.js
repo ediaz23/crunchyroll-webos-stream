@@ -8,10 +8,10 @@ import { useRecoilValue } from 'recoil'
 
 import PropTypes from 'prop-types'
 
+import LoadingList from '../LoadingList'
 import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
-import LoadingList from '../LoadingList'
 
 
 /**
@@ -24,7 +24,7 @@ import LoadingList from '../LoadingList'
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Function} obj.onLeave
  */
-const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, ...rest }) => {
+const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, onSelect, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
@@ -47,10 +47,14 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const index = parseInt(ev.currentTarget.dataset['index'])
-            setContentNavagate({ content: contentList[index], rowIndex: index })
-            onLeave()
+            if (onSelect) {
+                onSelect({ content: contentList[index], rowIndex: index })
+            } else {
+                setContentNavagate({ content: contentList[index], rowIndex: index })
+                onLeave()
+            }
         }
-    }, [contentList, setContentNavagate, onLeave])
+    }, [contentList, setContentNavagate, onLeave, onSelect])
 
     /** @type {Function} */
     const renderItem = useCallback(({ index, ...rest2 }) => {
@@ -141,6 +145,7 @@ ContentGridItems.propTypes = {
     mode: PropTypes.oneOf(['tall', 'wide']),
     load: PropTypes.func,
     onFocus: PropTypes.func,
+    onSelect: PropTypes.func,
 }
 
 export default ContentGridItems

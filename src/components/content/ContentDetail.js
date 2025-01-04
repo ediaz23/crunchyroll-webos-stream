@@ -4,7 +4,7 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 import Image from '@enact/moonstone/Image'
 
 import PropTypes from 'prop-types'
-import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 
 import Options from './Options'
 import Seasons from './Seasons'
@@ -12,12 +12,10 @@ import Movies from './Movies'
 import LangSelector from './LangSelector'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 
-import {
-    pathState, playContentState, isPremiumState,
-    contentDetailBakState
-} from '../../recoilConfig'
+import { isPremiumState, contentDetailBakState } from '../../recoilConfig'
 import css from './ContentDetail.module.less'
 import back from '../../back'
+import { useSetPlayableContent } from '../../hooks/setContent'
 
 
 const ActivityViews = ({ index, children }) => children[index]
@@ -28,10 +26,6 @@ const ActivityViews = ({ index, children }) => children[index]
  * @param {Object} obj.content
  */
 const ContentDetail = ({ profile, content, ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {[{currentIndex: Number}, Function]}  */
@@ -44,17 +38,17 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     const [currentIndex, setCurrentIndex] = useState(contentDetailBak.currentIndex || 0)
     /** @type {{current: Number}} */
     const ratingRef = useRef(0)
+    /** @type {Function} */
+    const setPlayableContent = useSetPlayableContent()
 
     /** @type {Function} */
     const setContentToPlay = useCallback((contentToPlay, backState) => {
         if (currentIndex !== 0) {
             back.popHistory()
         }
-        setContentDetailBak({ currentIndex, rating: ratingRef.current, ...(backState || {}) })
-        back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-        setPlayContent(contentToPlay)
-        setPath('/profiles/home/player')
-    }, [setPath, setPlayContent, currentIndex, setContentDetailBak])
+        const contentBak = { currentIndex, rating: ratingRef.current, ...(backState || {}) }
+        setPlayableContent({ contentToPlay, contentBak })
+    }, [currentIndex, setPlayableContent])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {

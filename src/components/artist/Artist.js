@@ -5,10 +5,10 @@ import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState, useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { pathState, playContentState, contentDetailBakState } from '../../recoilConfig'
+import { contentDetailBakState } from '../../recoilConfig'
 
 import { $L } from '../../hooks/language'
 import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
@@ -17,8 +17,8 @@ import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
 import EpisodesList from '../content/EpisodesList'
 import Options from './Options'
-import back from '../../back'
 import api from '../../api'
+import { useSetPlayableContent } from '../../hooks/setContent'
 import css from './Artist.module.less'
 
 
@@ -28,12 +28,8 @@ import css from './Artist.module.less'
  * @param {Object} obj.artist
  */
 const Artist = ({ profile, artist, ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
-    /** @type {[Object, Function]}  */
-    const [contentDetailBak, setContentDetailBak] = useRecoilState(contentDetailBakState)
+    /** @type {Object}  */
+    const contentDetailBak = useRecoilValue(contentDetailBakState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -48,6 +44,8 @@ const Artist = ({ profile, artist, ...rest }) => {
     const [videoIndex, setVideoIndex] = useState(null)
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
+    /** @type {Function} */
+    const setPlayableContent = useSetPlayableContent()
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {
@@ -68,12 +66,10 @@ const Artist = ({ profile, artist, ...rest }) => {
         const index = parseInt(target.dataset.index)
         if (videos && videos.length) {
             options.forEach(e => { e.videos = [] })  // force reload
-            setContentDetailBak({ options, optionIndex })
-            back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-            setPlayContent(videos[index])
-            setPath('/profiles/home/player')
+            const contentBak = { options, optionIndex }
+            setPlayableContent({ contentToPlay: videos[index], contentBak })
         }
-    }, [videos, setPath, setPlayContent, optionIndex, setContentDetailBak, options])
+    }, [videos, optionIndex, setPlayableContent, options])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {
