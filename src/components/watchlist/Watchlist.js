@@ -1,13 +1,9 @@
 
-import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
-import { Cell, Column } from '@enact/ui/Layout'
-
+import { useCallback } from 'react'
 import PropTypes from 'prop-types'
 
-import HomeContentBanner from '../home/ContentBanner'
-import ContentGridItems from '../grid/ContentGridItems'
+import ContentListPoster from '../ContentListPoster'
 import api from '../../api'
-import useContentList from '../../hooks/contentList'
 
 
 /**
@@ -39,83 +35,20 @@ const processResult = async ({ profile, data }) => {
  */
 const Watchlist = ({ profile, ...rest }) => {
 
-    const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak,
-    } = useContentList('watchlist')
+    const loadData = useCallback(async options => {
+        const res = await api.discover.getWatchlist(profile, options)
+        const { data } = await processResult({ profile, ...res })
+        return {...res, data}
 
-    /** @type {[Object, Function]} */
-    const [selectedContent, setSelectedContent] = useState(null)
-
-    /** @type {import('../grid/ContentGrid').SearchOptions} */
-    const options = useMemo(() => { return { quantity } }, [quantity])
-
-    /** @type {Function} */
-    const onSelectItem = useCallback((ev) => {
-        if (ev.currentTarget) {
-            const content = contentList[parseInt(ev.currentTarget.dataset['index'])]
-            setSelectedContent(content)
-        }
-    }, [contentList, setSelectedContent])
-
-    /** @type {Function} */
-    const onLoad = useCallback((index) => {
-        if (mergeContentList(false, index)) {
-            api.discover.getWatchlist(profile, { ...options, start: index })
-                .then(res =>
-                    processResult({ profile, data: res.data }).then(res2 =>
-                        mergeContentList(res2.data, index)
-                    )
-                )
-        }
-    }, [profile, mergeContentList, options])
-
-    /** @type {{current: Boolean}} */
-    const autoScrollRef = useRef(true)
-
-    /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave(null, false)
-    }, [onLeave])
-
-    useEffect(() => {
-        if (delay >= 0) {
-            changeContentList(null)
-            api.discover.getWatchlist(profile, options).then(res =>
-                processResult({ profile, data: res.data }).then(res2 => {
-                    changeContentList([...res2.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
-                    autoScrollRef.current = true
-                })
-            )
-        }
-    }, [profile, changeContentList, options, delay])
-
-    useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-            autoScrollRef.current = false
-        }
-    }, [profile, contentListBak, changeContentList, onFilter])
+    }, [profile])
 
     return (
-        <Column {...rest}>
-            <Column>
-                <Cell size="50%">
-                    {selectedContent && <HomeContentBanner content={selectedContent} />}
-                </Cell>
-                <Cell grow>
-                    <ContentGridItems
-                        contentList={contentList}
-                        load={onLoad}
-                        onLeave={onLeaveView}
-                        autoScroll={autoScroll}
-                        onFocus={onSelectItem}
-                        mode='wide' />
-                </Cell>
-            </Column>
-        </Column>
+        <ContentListPoster
+            profile={profile}
+            loadData={loadData}
+            type='watchlist'
+            {...rest}
+        />
     )
 }
 

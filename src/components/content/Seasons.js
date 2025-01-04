@@ -165,6 +165,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                                     icon='checkselection'
                                     labelPosition='after'
                                     onClick={markAsWatched}
+                                    style={{ maxWidth: '13rem'}}
                                     disabled={!(episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)}>
                                     {$L('Mark as watched')}
                                 </LabeledIconButton>

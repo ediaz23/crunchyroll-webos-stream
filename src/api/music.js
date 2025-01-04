@@ -136,11 +136,11 @@ export const getStreams = async (profile, params) => {
  * @param {String} params.contentId
  * @returns {Promise<{data: Array<Object>, total: Number}>}
  */
-export const getFeatured = async (profile, contentId) => {
+export const getFeatured = async (profile, params) => {
     let out = null
     try {
         const account = await getContentParam(profile)
-        out = await api.music.getFeatured({ account, contentId })
+        out = await api.music.getFeatured({ account, ...params })
     } catch (error) {
         await translateError(error)
     }
