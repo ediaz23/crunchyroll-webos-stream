@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 
 import { playContentState } from '../recoilConfig'
 
@@ -12,7 +12,7 @@ import { playContentState } from '../recoilConfig'
 export const useBackVideoIndex = (videos, setVideoIndex) => {
 
     /** @type {[Object, Function]} */
-    const playContent = useRecoilValue(playContentState)
+    const [playContent, setPlayContent] = useRecoilState(playContentState)
     /** @type {{current: Object}} */
     const playContentRef = useRef(playContent)
 
@@ -27,6 +27,8 @@ export const useBackVideoIndex = (videos, setVideoIndex) => {
             }
         }
     }, [videos, setVideoIndex])
+
+    useEffect(() => setPlayContent(null), [setPlayContent])
 
     return playContentRef
 }

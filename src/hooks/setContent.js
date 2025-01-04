@@ -19,18 +19,20 @@ export function useSetContent() {
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
     /** @type {Function} */
-    const contentDetailBak = useSetRecoilState(contentDetailBakState)
+    const setContentDetailBak = useSetRecoilState(contentDetailBakState)
 
     /**
      * @param {Object} obj
      * @param {Object} obj.content
      * @param {Number} obj.rowIndex
      * @param {Number} obj.columnIndex
+     * @param {String} [obj.backPath]
+     * @param {String} [obj.contentBak]
      */
-    return ({ content, rowIndex, columnIndex }) => {
+    return ({ content, rowIndex, columnIndex, backPath = '/profiles/home', contentBak = {} }) => {
         back.pushHistory({
             doBack: () => {
-                setPath('/profiles/home')
+                setPath(backPath)
             }
         })
         if (['episode', 'musicConcert', 'movie', 'musicVideo'].includes(content.type)) {
@@ -42,7 +44,7 @@ export function useSetContent() {
             setPath('/profiles/home/player')
         } else {
             setSelectedContent(content)
-            contentDetailBak({})
+            setContentDetailBak(contentBak)
             setPath('/profiles/home/content')
         }
         setHomePosition({ rowIndex, columnIndex })

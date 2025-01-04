@@ -15,9 +15,11 @@ import useContentList from '../hooks/contentList'
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.type
  * @param {Function} obj.loadData
+ * @param {Function} [obj.beforeLeave]
  * @param {'tall'|'wide'} [obj.mode]
+ * @param {Boolean} [obj.noPoster]
  */
-const ContentListPoster = ({ profile, type, loadData, mode = 'wide', ...rest }) => {
+const ContentListPoster = ({ profile, type, loadData, beforeLeave, mode = 'wide', noPoster = false, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
@@ -52,8 +54,11 @@ const ContentListPoster = ({ profile, type, loadData, mode = 'wide', ...rest }) 
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
-        onLeave(null, false)
-    }, [onLeave])
+        if (beforeLeave) {
+            const [optionsBak, saveList] = beforeLeave()
+            onLeave(optionsBak, saveList)
+        }
+    }, [onLeave, beforeLeave])
 
     useEffect(() => {
         if (delay >= 0) {
@@ -78,7 +83,11 @@ const ContentListPoster = ({ profile, type, loadData, mode = 'wide', ...rest }) 
         <Column {...rest}>
             <Column>
                 <Cell size="50%">
-                    {selectedContent && <HomeContentBanner content={selectedContent} />}
+                    {selectedContent &&
+                        <HomeContentBanner
+                            content={selectedContent}
+                            noPoster={noPoster} />
+                    }
                 </Cell>
                 <Cell grow>
                     <ContentGridItems
@@ -98,7 +107,9 @@ ContentListPoster.propTypes = {
     profile: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
     loadData: PropTypes.func.isRequired,
+    beforeLeave: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
+    noPoster: PropTypes.bool,
 }
 
 export default ContentListPoster

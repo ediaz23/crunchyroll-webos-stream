@@ -58,9 +58,6 @@ const MusicList = ({ profile, loadData, setContentToPlay, optionIndex }) => {
     const [videoIndex, setVideoIndex] = useState(null)
     /** @type {Function} */
     const processVideos = useProcessMusicVideos()
-    /** @type {{current: Object}} */
-    //    const playContentRef = useBackVideoIndex(videos, setVideoIndex)
-    useBackVideoIndex(videos, setVideoIndex)
 
     /** @type {Function} */
     const playMusicContent = useCallback(ev => {
@@ -68,6 +65,8 @@ const MusicList = ({ profile, loadData, setContentToPlay, optionIndex }) => {
         const index = parseInt(target.dataset.index)
         setContentToPlay(videos[index], { optionIndex })
     }, [setContentToPlay, videos, optionIndex])
+
+    useBackVideoIndex(videos, setVideoIndex)
 
     useEffect(() => {
         setVideos(null)
@@ -297,7 +296,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
     /** @type {[String, Function]}  */
     const [spotlightRestrict, setSpotlightRestrict] = useState(null)
     /** @type {[String, Function]}  */
-    const [subtitle, setSubtitle] = useState('')
+    const [subtitle, setSubtitle] = useState('\u00A0')
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
     /** @type {{current: Function}} */
@@ -392,14 +391,14 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
         }
         if (currentContent) {
             if (currentContent.type === 'episode') {
-                setSubtitle(computeEpSubTitle(currentContent))
+                setSubtitle(computeEpSubTitle(currentContent) || '\u00A0')
             } else if (currentContent.type === 'movie') {
-                setSubtitle(currentContent.title)
+                setSubtitle(currentContent.title || '\u00A0')
             } else {
-                setSubtitle('')
+                setSubtitle('\u00A0')
             }
         } else {
-            setSubtitle('')
+            setSubtitle('\u00A0')
         }
     }, [setOptionIndex, setSpotlightRestrict, nextContent, lastContent])
 
@@ -483,9 +482,6 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                 if (document.querySelector(idSelector) && scrollToRef.current) {
                     clearInterval(interval)
                     scrollToRef.current({ node: document.querySelector(idSelector), animate: false, focus: true })
-                    //                    if (!optionRef.current) {
-                    //                        playContentRef.current = null
-                    //                    }
                 }
             }, 100)
         }
@@ -495,95 +491,105 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
     return (
         <Row align='start space-between' {...rest}>
             {loading &&
-                <Column align='center center' style={{ height: 'auto', width: '100%' }}>
+                <Column align='center center' style={{ height: '100%', width: '100%' }}>
                     <Spinner />
                 </Column>
             }
             {!loading &&
                 <Row style={{ width: '100%' }}>
                     <Cell size='49%' style={{ overflow: 'hidden' }}>
-                        <ContentHeader content={content} />
-                        <Heading size='small' spacing='small' className={css.firstData}>
-                            {subtitle}
-                        </Heading>
-                        <div className={css.scrollerContainer}>
-                            <Scroller
-                                direction='vertical'
-                                horizontalScrollbar='hidden'
-                                verticalScrollbar='auto'
-                                focusableScrollbar>
-                                <BodyText size='small'>
-                                    {description}
+                        <Column style={{ height: '100%', width: '100%' }}>
+                            <Cell size='35vh' shrink>
+                                <ContentHeader content={content} />
+                                <Heading size='small' spacing='small' className={css.firstData}>
+                                    {subtitle}
+                                </Heading>
+                            </Cell>
+                            <Cell size='13vh'>
+                                <div className={css.scrollerContainer}>
+                                    <Scroller
+                                        direction='vertical'
+                                        horizontalScrollbar='hidden'
+                                        verticalScrollbar='auto'
+                                        focusableScrollbar>
+                                        <BodyText size='small'>
+                                            {description}
+                                        </BodyText>
+                                    </Scroller>
+                                </div>
+                            </Cell>
+                            <Cell shrink>
+                                <BodyText component='div' size='small' style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                                    {Array.from({ length: 5 }, (_v, i) =>
+                                        <IconButton size='small' key={i} data-star={i}
+                                            onClick={updateRating}>
+                                            {(i < rating) ? 'star' : 'hollowstar'}
+                                        </IconButton>
+                                    )}
                                 </BodyText>
-                            </Scroller>
-                        </div>
-                        <BodyText component='div' size='small' style={{ marginBottom: '1em', marginTop: '1em' }}>
-                            {Array.from({ length: 5 }, (_v, i) =>
-                                <IconButton size='small' key={i} data-star={i}
-                                    onClick={updateRating}>
-                                    {(i < rating) ? 'star' : 'hollowstar'}
-                                </IconButton>
-                            )}
-                        </BodyText>
-                        <div className={css.scrollerContainer}>
-                            <Scroller direction='vertical'
-                                horizontalScrollbar='hidden'
-                                verticalScrollbar='visible'
-                                cbScrollTo={getScrollTo}>
-                                {nextContent &&
-                                    <Item id='play' onClick={playNextContent} onFocus={selectOption}
-                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'play'}>
-                                        <Icon>play</Icon>
-                                        <span>{watch}</span>
-                                    </Item>
-                                }
-                                {lastContent &&
-                                    <Item id='play-last' onClick={playLastContent} onFocus={selectOption}
-                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'play-last'}>
-                                        <Icon>play</Icon>
-                                        <span>{watchLast}</span>
-                                    </Item>
-                                }
-                                <Item id='series' onClick={moreEpisodes} onFocus={selectOption}
-                                    spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'series'}>
-                                    <Icon>series</Icon>
-                                    <span>{moreDetail}</span>
-                                </Item>
-                                {['series', 'movie_listing'].includes(content.type) &&
-                                    <Item id='music' onClick={selectOption} onFocus={selectOption}
-                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'music'}>
-                                        <Icon>music</Icon>
-                                        <span>{$L('Music')}</span>
-                                    </Item>
-                                }
-                                {['series', 'movie_listing'].includes(content.type) &&
-                                    <Item id='similar' onClick={selectOption} onFocus={selectOption}
-                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'similar'}>
-                                        <Icon>search</Icon>
-                                        <span>{$L('Similar')}</span>
-                                    </Item>
-                                }
-                                {['series', 'movie_listing'].includes(content.type) &&
-                                    <Item id='list' onClick={toggleWatchlist} onFocus={selectOption}
-                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'list'}>
-                                        <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
-                                        <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
-                                    </Item>
-                                }
-                                {'series' === content.type &&
-                                    <Item id='watched' onClick={markAsWatched} onFocus={selectOption}
-                                        spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'watched'}>
-                                        <Icon>checkselection</Icon>
-                                        <span>{$L('Mark as watched')}</span>
-                                    </Item>
-                                }
-                                <Item id='audio' onClick={changeAudio} onFocus={selectOption}
-                                    spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'audio'}>
-                                    <Icon>audio</Icon>
-                                    <span>{$L('Audio and Subtitles')}</span>
-                                </Item>
-                            </Scroller>
-                        </div>
+                            </Cell>
+                            <Cell size='28vh' grow style={{ maxHeight: '35vh' }}>
+                                <div className={css.scrollerContainer}>
+                                    <Scroller direction='vertical'
+                                        horizontalScrollbar='hidden'
+                                        verticalScrollbar='visible'
+                                        cbScrollTo={getScrollTo}>
+                                        {nextContent &&
+                                            <Item id='play' onClick={playNextContent} onFocus={selectOption}
+                                                spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'play'}>
+                                                <Icon>play</Icon>
+                                                <span>{watch}</span>
+                                            </Item>
+                                        }
+                                        {lastContent &&
+                                            <Item id='play-last' onClick={playLastContent} onFocus={selectOption}
+                                                spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'play-last'}>
+                                                <Icon>play</Icon>
+                                                <span>{watchLast}</span>
+                                            </Item>
+                                        }
+                                        <Item id='series' onClick={moreEpisodes} onFocus={selectOption}
+                                            spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'series'}>
+                                            <Icon>series</Icon>
+                                            <span>{moreDetail}</span>
+                                        </Item>
+                                        {['series', 'movie_listing'].includes(content.type) &&
+                                            <Item id='music' onClick={selectOption} onFocus={selectOption}
+                                                spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'music'}>
+                                                <Icon>music</Icon>
+                                                <span>{$L('Music')}</span>
+                                            </Item>
+                                        }
+                                        {['series', 'movie_listing'].includes(content.type) &&
+                                            <Item id='similar' onClick={selectOption} onFocus={selectOption}
+                                                spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'similar'}>
+                                                <Icon>search</Icon>
+                                                <span>{$L('Similar')}</span>
+                                            </Item>
+                                        }
+                                        {['series', 'movie_listing'].includes(content.type) &&
+                                            <Item id='list' onClick={toggleWatchlist} onFocus={selectOption}
+                                                spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'list'}>
+                                                <Icon>{isInWatchlist ? 'closex' : 'plus'}</Icon>
+                                                <span>{isInWatchlist ? $L('Remove from my list') : $L('Add to my list')}</span>
+                                            </Item>
+                                        }
+                                        {'series' === content.type &&
+                                            <Item id='watched' onClick={markAsWatched} onFocus={selectOption}
+                                                spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'watched'}>
+                                                <Icon>checkselection</Icon>
+                                                <span>{$L('Mark as watched')}</span>
+                                            </Item>
+                                        }
+                                        <Item id='audio' onClick={changeAudio} onFocus={selectOption}
+                                            spotlightDisabled={spotlightRestrict != null && spotlightRestrict !== 'audio'}>
+                                            <Icon>audio</Icon>
+                                            <span>{$L('Audio and Subtitles')}</span>
+                                        </Item>
+                                    </Scroller>
+                                </div>
+                            </Cell>
+                        </Column>
                     </Cell>
                     <Cell size='49%' style={{ overflow: 'hidden' }}>
                         {optionIndex === 'music' &&
@@ -598,6 +604,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                                 profile={profile}
                                 loadData={loadSimilar}
                                 type='similar'
+                                noPoster
                                 {...rest}
                             />
                         }

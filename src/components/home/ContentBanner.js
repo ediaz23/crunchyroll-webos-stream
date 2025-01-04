@@ -216,9 +216,10 @@ const RowNavigable = withNavigable(Row, css.active)
 /**
  * @param {Object} obj
  * @param {Object} obj.content
- * @param {Boolean} obj.noCategory
+ * @param {Boolean} [obj.noCategory]
+ * @param {Boolean} [obj.noPoster]
  */
-const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
+const HomeContentBanner = ({ content, noCategory = false, noPoster = false, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
@@ -228,7 +229,11 @@ const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
     useEffect(() => {
         if (compRef && compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect()
-            setImage(getImagePerResolution({ height: boundingRect.height, width: boundingRect.width, content }))
+            setImage(getImagePerResolution({
+                height: boundingRect.height,
+                width: boundingRect.width,
+                content,
+            }))
         }
     }, [compRef, content, getImagePerResolution])
 
@@ -246,18 +251,21 @@ const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
                     </Cell>
                 </Column>
             </Cell>
-            <Cell ref={compRef}>
-                {image.source &&
-                    <Image className={css.poster} src={image.source} sizing='fill' />
-                }
-            </Cell>
+            {!noPoster &&
+                <Cell ref={compRef}>
+                    {image.source &&
+                        <Image className={css.poster} src={image.source} sizing='fill' />
+                    }
+                </Cell>
+            }
         </RowNavigable>
     )
 }
 
 HomeContentBanner.propTypes = {
     content: PropTypes.object.isRequired,
-    noCategory: PropTypes.bool
+    noCategory: PropTypes.bool,
+    noPoster: PropTypes.bool,
 }
 
 export default HomeContentBanner

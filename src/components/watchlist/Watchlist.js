@@ -34,18 +34,22 @@ const processResult = async ({ profile, data }) => {
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  */
 const Watchlist = ({ profile, ...rest }) => {
-
+    /** @type {Function} */
     const loadData = useCallback(async options => {
         const res = await api.discover.getWatchlist(profile, options)
         const { data } = await processResult({ profile, ...res })
-        return {...res, data}
+        return { ...res, data }
 
     }, [profile])
+
+    /** @type {Function} */
+    const beforeLeave = useCallback(() => [null, false], [])
 
     return (
         <ContentListPoster
             profile={profile}
             loadData={loadData}
+            beforeLeave={beforeLeave}
             type='watchlist'
             {...rest}
         />
