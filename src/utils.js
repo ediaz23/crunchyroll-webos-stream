@@ -179,6 +179,19 @@ export const uint8ArrayToString = (uint8Array) => {
 }
 
 /**
+ * @param {String} content
+ * @returns {Uint8Array}
+ */
+export const stringToUint8Array = (content) => {
+    const buffer = new ArrayBuffer(content.length)
+    const bytes = new Uint8Array(buffer)
+    for (let i = 0; i < content.length; i++) {
+        bytes[i] = content.charCodeAt(i) & 0xff
+    }
+    return bytes
+}
+
+/**
  * @param {Uint8Array|ArrayBuffer} body
  * @returns {String}
  */
@@ -274,5 +287,6 @@ export default {
     arrayToBase64,
     base64toArray,
     uint8ArrayToString,
+    stringToUint8Array,
     customStringify,
 }
