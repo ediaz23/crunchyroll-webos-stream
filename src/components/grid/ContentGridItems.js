@@ -81,7 +81,7 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
             )
         } else {
             if (load) {
-                Promise.resolve().then(() => load(index))
+                load(index)
             }
             out = (
                 <div {...rest2} >

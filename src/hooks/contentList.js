@@ -50,10 +50,10 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
-    /** @type {{current: Array<{start: Number, end: Number}>}} */
-    const queue = useRef([])
+    /** @type {{current: Set}} */
+    const queue = useRef(new Set())
     /** @type {Number} */
-    const quantity = 20
+    const quantity = 25
 
     /** @type {Function} */
     const changeContentList = useCallback((newList, resetIndex = true) => {
@@ -81,38 +81,29 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
 
     /** @type {Function} */
     const mergeContentList = useCallback((items, index) => {
+        const end = index + quantity
         let out = false
-        /** all this code is for avoid multiples request onload */
-        if (!Array.isArray(items)) {
-            if (items === undefined) {
-                queue.current = queue.current.filter(i => !(i.start <= index && index <= i.end))
-                out = true
-            } else {
-                if (!queue.current.find(i => i.start <= index && index <= i.end)) {
-                    queue.current.push({ start: index, end: index + quantity })
-                    out = true
+        if (Array.isArray(items)) {
+            setContentList(prevArray => {
+                let updatedList = items
+                if (prevArray != null) {
+                    updatedList = [...prevArray]
+                    items.forEach((value, i) => {
+                        updatedList[index + i] = value
+                    })
                 }
+                return updatedList
+            })
+            for (let i = index; i < end; i++) {
+                queue.current.delete(i)
             }
         } else {
-            queue.current = queue.current.filter(i => !(i.start <= index && index <= i.end))
-            out = true
-        }
-        /** -------------------------------------------------- */
-        if (out) {
-            setContentList(prevArray => {
-                if (prevArray == null) {
-                    return items
+            if (!queue.current.has(index)) {
+                for (let i = index; i < end; i++) {
+                    queue.current.add(i)
                 }
-                if (!Array.isArray(items)) {
-                    const size = Math.min(prevArray.length - index, quantity)
-                    items = Array.from({ length: size }, () => items)
-                }
-                return [
-                    ...prevArray.slice(0, index),
-                    ...items,
-                    ...prevArray.slice(index + items.length)
-                ]
-            })
+                out = true
+            }
         }
         return out
     }, [setContentList, quantity])

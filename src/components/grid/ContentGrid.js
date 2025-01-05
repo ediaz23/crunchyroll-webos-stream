@@ -80,12 +80,14 @@ const ContentGrid = ({
                 api.discover.search(profile, { ...options, start: index })
                     .then(res => {
                         if (res.total) {
-                            mergeContentList(res.data[0].items, index)
+                            mergeContentList(res.data[0].items || [], index)
+                        } else {
+                            mergeContentList([], index)
                         }
                     })
             } else {
                 api.discover.getBrowseAll(profile, { ...options, start: index })
-                    .then(res => mergeContentList(res.data, index))
+                    .then(res => mergeContentList(res.data || [], index))
             }
         }
     }, [engine, options, profile, mergeContentList])
