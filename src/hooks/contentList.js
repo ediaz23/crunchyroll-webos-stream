@@ -33,16 +33,17 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
 
 /**
  * @param {String} type
+ * @param {Object} [homeBackupOverride]
+ * @param {Object} [homePositionOverride]
  * @returns {ListViewProps}
  */
-export const useContentList = (type) => {
-
+export const useContentList = (type, homeBackupOverride, homePositionOverride) => {
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
-    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupState)
+    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupOverride || homeBackupState)
     /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionState)
+    const setHomePosition = useSetRecoilState(homePositionOverride || homePositionState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState(null)
     /** @type {[Boolean, Function]}  */

@@ -15,17 +15,20 @@ import useContentList from '../hooks/contentList'
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.type
  * @param {Function} obj.loadData
- * @param {Function} [obj.beforeLeave]
  * @param {Function} [obj.onSelect]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Boolean} [obj.noPoster]
+ * @param {Boolean} [obj.noSaveList]
+ * @param {Object} [obj.homeBackupOverride]
+ * @param {Object} [obj.homePositionOverride]
  */
-const ContentListPoster = ({ profile, type, loadData, beforeLeave, onSelect, mode = 'wide', noPoster = false, ...rest }) => {
+const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noSaveList = false,
+    homeBackupOverride, homePositionOverride, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
         contentListBak,
-    } = useContentList(type)
+    } = useContentList(type, homeBackupOverride, homePositionOverride)
 
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
@@ -55,11 +58,8 @@ const ContentListPoster = ({ profile, type, loadData, beforeLeave, onSelect, mod
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
-        if (beforeLeave) {
-            const [optionsBak, saveList] = beforeLeave()
-            onLeave(optionsBak, saveList)
-        }
-    }, [onLeave, beforeLeave])
+        onLeave(null, !noSaveList)
+    }, [onLeave, noSaveList])
 
     useEffect(() => {
         if (delay >= 0) {
@@ -98,7 +98,8 @@ const ContentListPoster = ({ profile, type, loadData, beforeLeave, onSelect, mod
                         onSelect={onSelect}
                         onFocus={onSelectItem}
                         autoScroll={autoScroll}
-                        mode={mode} />
+                        mode={mode}
+                        homePositionOverride={homePositionOverride} />
                 </Cell>
             </Column>
         </Column>
@@ -109,10 +110,12 @@ ContentListPoster.propTypes = {
     profile: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
     loadData: PropTypes.func.isRequired,
-    beforeLeave: PropTypes.func,
     onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
+    noSaveList: PropTypes.bool,
+    homeBackupOverride: PropTypes.any,
+    homePositionOverride: PropTypes.any,
 }
 
 export default ContentListPoster

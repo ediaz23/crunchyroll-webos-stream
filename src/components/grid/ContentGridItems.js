@@ -23,14 +23,16 @@ import { useSetContent } from '../../hooks/setContent'
  * @param {Function} [obj.onFocus]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Function} obj.onLeave
+ * @param {Object} obj.homePositionOverride
  */
-const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, onSelect, ...rest }) => {
+const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, onSelect,
+    homePositionOverride, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
     const rowIndexRef = useRef(null)
     /** @type {{rowIndex: Number, columnIndex: Number}} */
-    const homePosition = useRecoilValue(homePositionState)
+    const homePosition = useRecoilValue(homePositionOverride || homePositionState)
     /** @type {[Number, Number]} */
     const [itemHeight, itemWidth] = useMemo(() => {
         return mode === 'tall' ? [ri.scale(390), ri.scale(240)] : [ri.scale(270), ri.scale(320)]
@@ -47,11 +49,11 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const index = parseInt(ev.currentTarget.dataset['index'])
+            onLeave()  // for first if must be before
             if (onSelect) {
                 onSelect({ content: contentList[index], rowIndex: index })
             } else {
                 setContentNavagate({ content: contentList[index], rowIndex: index })
-                onLeave()
             }
         }
     }, [contentList, setContentNavagate, onLeave, onSelect])
@@ -146,6 +148,7 @@ ContentGridItems.propTypes = {
     load: PropTypes.func,
     onFocus: PropTypes.func,
     onSelect: PropTypes.func,
+    homePositionOverride: PropTypes.any
 }
 
 export default ContentGridItems

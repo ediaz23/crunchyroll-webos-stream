@@ -42,15 +42,12 @@ const Watchlist = ({ profile, ...rest }) => {
 
     }, [profile])
 
-    /** @type {Function} */
-    const beforeLeave = useCallback(() => [null, false], [])
-
     return (
         <ContentListPoster
             profile={profile}
             loadData={loadData}
-            beforeLeave={beforeLeave}
             type='watchlist'
+            noSaveList
             {...rest}
         />
     )

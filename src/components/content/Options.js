@@ -7,7 +7,7 @@ import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import IconButton from '@enact/moonstone/IconButton'
 import Spinner from '@enact/moonstone/Spinner'
-import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 import PropTypes from 'prop-types'
 
 import EpisodesList from './EpisodesList'
@@ -22,12 +22,13 @@ import PopupMessage from '../Popup'
 import api from '../../api'
 import back from '../../back'
 import css from './ContentDetail.module.less'
-import { homePositionState, homeBackupState, contentDetailBakState } from '../../recoilConfig'
+import { contentDetailBakState, contentDetailBackupState, contentDetailPositionState } from '../../recoilConfig'
+import { useReplaceSelectedContent } from '../../hooks/setContent'
 
 
 const useChangeActivity = (setIndex, index) => {
     /** @type {Function} */
-    const setcontentDetailBak = useSetRecoilState(contentDetailBakState)
+    const setContentDetailBak = useSetRecoilState(contentDetailBakState)
     return event => {
         /** @type {Event} */
         const ev = event
@@ -35,7 +36,7 @@ const useChangeActivity = (setIndex, index) => {
         back.pushHistory({
             doBack: () => {
                 setIndex(0)
-                setcontentDetailBak({ optionIndex: target.id })
+                setContentDetailBak({ optionIndex: target.id })
             }
         })
         setIndex(index)
@@ -43,14 +44,15 @@ const useChangeActivity = (setIndex, index) => {
 }
 
 /**
- * ContentListPoster
+ * MusicList
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {Function} obj.loadData
- * @param {Function} obj.setContentToPlay
+ * @param {Object} obj.content
+ * @param {Function} obj.onLoadData
  * @param {String} obj.optionIndex
+ * @param {Function} obj.setContentToPlay
  */
-const MusicList = ({ profile, loadData, setContentToPlay, optionIndex }) => {
+const MusicList = ({ profile, content, onLoadData, optionIndex, setContentToPlay }) => {
 
     /** @type {[Array<Object>, Function]} */
     const [videos, setVideos] = useState(null)
@@ -66,6 +68,17 @@ const MusicList = ({ profile, loadData, setContentToPlay, optionIndex }) => {
         setContentToPlay(videos[index], { optionIndex })
     }, [setContentToPlay, videos, optionIndex])
 
+    /** @type {Function} */
+    const loadMusic = useCallback(async (options) => {
+        const music = await api.music.getFeatured(profile, {
+            ...options,
+            contentId: content.id,
+            ratings: true
+        })
+        onLoadData(music)
+        return music
+    }, [profile, content, onLoadData])
+
     useBackVideoIndex(videos, setVideoIndex)
 
     useEffect(() => {
@@ -74,8 +87,8 @@ const MusicList = ({ profile, loadData, setContentToPlay, optionIndex }) => {
     }, [optionIndex])
 
     useEffect(() => {
-        loadData().then(res => setVideos(processVideos(res, res.data)))
-    }, [profile, loadData, processVideos, setVideos])
+        loadMusic().then(res => setVideos(processVideos(res, res.data)))
+    }, [profile, loadMusic, processVideos, setVideos])
 
     return (
         <EpisodesList
@@ -83,6 +96,52 @@ const MusicList = ({ profile, loadData, setContentToPlay, optionIndex }) => {
             episodes={videos}
             selectEpisode={playMusicContent}
             episodeIndex={videoIndex} />
+    )
+}
+
+/**
+ * SimilarList
+ * @fixme try to keep response to improve speed, now it is disabled for sync issues.
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
+ * @param {Object} obj.content
+ * @param {Function} obj.onLoadData
+ * @param {String} obj.optionIndex
+ * @param {String} obj.rating
+ */
+const SimilarList = ({ profile, content, onLoadData, optionIndex, rating }) => {
+
+    /** @type {Function} */
+    const replaceSelectedContent = useReplaceSelectedContent()
+
+    /** @type {Function} */
+    const onSelectSimilar = useCallback(newContent => {
+        const contentBak = { optionIndex, rating }
+        replaceSelectedContent({ ...newContent, contentBak })
+    }, [replaceSelectedContent, optionIndex, rating])
+
+    /** @type {Function} */
+    const loadSimilar = useCallback(async options => {
+        const similar = await api.discover.getSimilar(profile, {
+            ...options,
+            contentId: content.id,
+            ratings: true
+        })
+        onLoadData(similar)
+        return similar
+    }, [profile, content, onLoadData])
+
+    return (
+        <ContentListPoster
+            profile={profile}
+            loadData={loadSimilar}
+            onSelect={onSelectSimilar}
+            homeBackupOverride={contentDetailBackupState}
+            homePositionOverride={contentDetailPositionState}
+            type='similar'
+            noPoster
+            noSaveList
+        />
     )
 }
 
@@ -272,11 +331,6 @@ export const getNextContent = async (profile, content) => {
  * @param {Function} obj.setContentToPlay
  */
 const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...rest }) => {
-
-    /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
-    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupState)
-    /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionState)
     /** @type {Object}  */
     const contentDetailBak = useRecoilValue(contentDetailBakState)
     /** @type {[String, Function]} */
@@ -328,28 +382,8 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
         } else {
             api.content.addWatchlistItem(profile, { contentId: content.id })
         }
-        if (homeBackup && homeBackup.type === 'watchlist' && homeBackup.contentList) {
-            if (isInWatchlist) {
-                const removedIndex = homeBackup.contentList.findIndex(c => c.id === content.id)
-                if (removedIndex >= 0) {
-                    const newList = homeBackup.contentList.filter(c => c.id !== content.id)
-                    setHomeBackup({
-                        ...homeBackup,
-                        contentList: newList.length ? newList : null
-                    })
-                    setHomePosition({ rowIndex: Math.max(0, removedIndex - 1) })
-                }
-            } else {
-                setHomeBackup({
-                    ...homeBackup,
-                    contentList: [content, ...(homeBackup.contentList || [])]
-                })
-                setHomePosition({ rowIndex: 0 })
-            }
-        }
         setIsInWatchlist(prev => !prev)
-    }, [profile, content, isInWatchlist, setIsInWatchlist, homeBackup, setHomeBackup,
-        setHomePosition])
+    }, [profile, content, isInWatchlist, setIsInWatchlist])
 
     /** @type {Function} */
     const markAsWatched = useCallback(() => {
@@ -413,31 +447,19 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
         }).then(() => setRating(star))
     }, [profile, content])
 
-    /** @type {Function} */
-    const loadMusic = useCallback(async (options) => {
-        const music = await api.music.getFeatured(profile, {
-            ...options,
-            contentId: content.id,
-            ratings: true
-        })
+    /** @type {Function}  */
+    const onLoadMusic = useCallback(music => {
         if (optionRef.current === optionIndex && music.total > 0) {
             setSpotlightRestrict('music')
         }
-        return music
-    }, [profile, content, optionIndex])
+    }, [setSpotlightRestrict, optionIndex])
 
     /** @type {Function} */
-    const loadSimilar = useCallback(async options => {
-        const similar = await api.discover.getSimilar(profile, {
-            ...options,
-            contentId: content.id,
-            ratings: true
-        })
+    const onLoadSimilar = useCallback(similar => {
         if (optionRef.current === optionIndex && similar.total > 0) {
             setSpotlightRestrict('similar')
         }
-        return similar
-    }, [profile, content, optionIndex])
+    }, [setSpotlightRestrict, optionIndex])
 
     useEffect(() => saveRating(rating), [rating, saveRating])
     useEffect(() => { optionRef.current = optionIndex }, [optionIndex])
@@ -595,17 +617,18 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                         {optionIndex === 'music' &&
                             <MusicList
                                 profile={profile}
-                                loadData={loadMusic}
+                                content={content}
+                                onLoadData={onLoadMusic}
                                 setContentToPlay={setContentToPlay}
                                 optionIndex={optionIndex} />
                         }
                         {optionIndex === 'similar' &&
-                            <ContentListPoster
+                            <SimilarList
                                 profile={profile}
-                                loadData={loadSimilar}
-                                type='similar'
-                                noPoster
-                                {...rest}
+                                content={content}
+                                onLoadData={onLoadSimilar}
+                                optionIndex={optionIndex}
+                                rating={rating}
                             />
                         }
                     </Cell>

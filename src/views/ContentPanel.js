@@ -34,9 +34,24 @@ const ContentPanel = ({ ...rest }) => {
 
     return (
         <Panel {...rest}>
-            {content.type === 'series' && <ContentDetail profile={profile} content={content} />}
-            {content.type === 'movie_listing' && <ContentDetail profile={profile} content={content} />}
-            {content.type === 'musicArtist' && <Artist profile={profile} artist={content} />}
+            {content.type === 'series' &&
+                <ContentDetail
+                    profile={profile}
+                    content={content}
+                    key={content.id} />
+            }
+            {content.type === 'movie_listing' &&
+                <ContentDetail
+                    profile={profile}
+                    content={content}
+                    key={content.id} />
+            }
+            {content.type === 'musicArtist' &&
+                <Artist
+                    profile={profile}
+                    artist={content}
+                    key={content.id} />
+            }
             <Alert open={showError}
                 title={$L('Content not supported?')}
                 message={$L('Please contact to developer or create an issues')}
