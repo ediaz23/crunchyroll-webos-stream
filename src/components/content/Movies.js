@@ -23,7 +23,10 @@ import { getIsPremium } from '../../utils'
  */
 const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
-    const [listings, setListings] = useState(JSON.parse(JSON.stringify(contentDetailBak.listings || [])))
+    const [listings, setListings] = useState(contentDetailBak.listings
+        ? JSON.parse(JSON.stringify(contentDetailBak.listings))  // to avoid error setting movies, line 74
+        : null
+    )
     /** @type {[Number, Function]} */
     const [listingIndex, setListingIndex] = useState(contentDetailBak.listingIndex)
     /** @type {[Array<Object>, Function]} */
@@ -57,7 +60,7 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
         listingIndexRef.current = listingIndex
         setMovies(null)
         setMovieIndex(null)
-        if (listingIndex != null && listings.length) {
+        if (listingIndex != null && listings != null) {
             if (listings[listingIndex].movies.length) {
                 setMovies(listings[listingIndex].movies)
             } else {

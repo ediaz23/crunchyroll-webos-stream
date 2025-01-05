@@ -35,7 +35,10 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {[Array<{icon: String, title: String, videos: Array}>, Function]} */
-    const [options, setOptions] = useState(JSON.parse(JSON.stringify(contentDetailBak.options || [])))
+    const [options, setOptions] = useState(contentDetailBak.options
+        ? JSON.parse(JSON.stringify(contentDetailBak.options))  // to avoid error setting videos, line 124
+        : null
+    )
     /** @type {[Number, Function]} */
     const [optionIndex, setOptionIndex] = useState(contentDetailBak.optionIndex)
     /** @type {[Array<Object>, Function]} */
@@ -104,7 +107,7 @@ const Artist = ({ profile, artist, ...rest }) => {
         optionRef.current = optionIndex
         setVideos(null)
         setVideoIndex(null)
-        if (optionIndex != null && options.length) {
+        if (optionIndex != null && options != null) {
             /** @type {Promise} */
             let prom = null
             if (options[optionIndex].videos.length) {

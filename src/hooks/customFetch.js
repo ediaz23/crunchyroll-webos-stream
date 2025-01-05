@@ -84,7 +84,7 @@ export const decodeResponse = ({ content, compress }) => {
 
 /**
  * @param {Object} data
- * @return {String} 
+ * @return {String}
  */
 export const encodeRequest = (data) => {
     return utils.arrayToBase64(gzipSync(utils.stringToUint8Array(JSON.stringify(data))))

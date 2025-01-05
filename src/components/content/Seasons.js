@@ -58,7 +58,10 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
  */
 const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
     /** @type {[Array<Object>, Function]} */
-    const [seasons, setSeasons] = useState(JSON.parse(JSON.stringify(contentDetailBak.seasons || [])))
+    const [seasons, setSeasons] = useState(contentDetailBak.seasons
+        ? JSON.parse(JSON.stringify(contentDetailBak.seasons))  // to avoid error setting episodes, line 132
+        : null
+    )
     /** @type {[Number, Function]} */
     const [seasonIndex, setSeasonIndex] = useState(contentDetailBak.seasonIndex)
     /** @type {[Array<Object>, Function]} */
@@ -113,7 +116,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
         seasonIndexRef.current = seasonIndex
         setEpisodes(null)
         setEpisodeIndex(null)
-        if (seasonIndex != null && seasons.length) {
+        if (seasonIndex != null && seasons != null) {
             if (seasons[seasonIndex].episodes.length) {
                 if (seasonIndex === seasonIndexRef.current) {
                     setEpisodes(seasons[seasonIndex].episodes)
@@ -156,7 +159,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                 </Cell>
                 <Cell size='49%'>
                     <Column>
-                        {series.type === 'series' && seasons.length > 0 && (
+                        {series.type === 'series' && seasons != null && seasons.length > 0 && (
                             <Cell shrink>
                                 <Heading size="small">
                                     {seasons[seasonIndex].season_tags.join(', ')}
@@ -165,7 +168,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                                     icon='checkselection'
                                     labelPosition='after'
                                     onClick={markAsWatched}
-                                    style={{ maxWidth: '13rem'}}
+                                    style={{ maxWidth: '13rem' }}
                                     disabled={!(episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)}>
                                     {$L('Mark as watched')}
                                 </LabeledIconButton>
