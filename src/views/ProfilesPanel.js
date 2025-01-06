@@ -11,8 +11,8 @@ import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
 import {
-    pathState, currentProfileState, selectedContentState,
-    homeIndexState, homePositionState, homeViewReadyState,
+    pathState, currentProfileState,
+    homeIndexState, homeViewReadyState,
     homeFeedState, homeFeedExpirationState,
     musicFeedExpirationState,
 } from '../recoilConfig'
@@ -23,6 +23,7 @@ import DevBtn from '../components/DevBtn'
 import api from '../api'
 import { DEV_FAST_SELECT } from '../const'
 import back from '../back'
+import { useResetHomeState } from '../hooks/setContent'
 
 
 const ProfilesPanel = ({ ...rest }) => {
@@ -37,17 +38,15 @@ const ProfilesPanel = ({ ...rest }) => {
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {Function} */
-    const setSelectedContent = useSetRecoilState(selectedContentState)
-    /** @type {Function} */
     const setHomeFeedExpiration = useSetRecoilState(homeFeedExpirationState)
     /** @type {Function} */
     const setMusicFeedExpiration = useSetRecoilState(musicFeedExpirationState)
     /** @type {Function} */
     const setCurrentActivity = useSetRecoilState(homeIndexState)
-    /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionState)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(false)
+    /** @type {Function} */
+    const resetHomeState = useResetHomeState()
 
     /** @type {Function} */
     const getProfileFromEvent = useCallback((event) => {
@@ -65,15 +64,14 @@ const ProfilesPanel = ({ ...rest }) => {
             setHomeViewReady(false)
             setHomeFeed([])
             setCurrentProfile(profile)
-            setSelectedContent(null)
             setHomeFeedExpiration(null)
             setMusicFeedExpiration(null)
             setCurrentActivity(0)
-            setHomePosition({ rowIndex: 0, columnIndex: 0 })
+            resetHomeState()
             back.pushHistory({ doBack: () => { setPath('/profiles') } })
             setPath('/profiles/home')
         })
-    }, [setCurrentProfile, setPath, setSelectedContent, setCurrentActivity, setHomePosition,
+    }, [setCurrentProfile, setPath, setCurrentActivity, resetHomeState,
         setHomeFeed, setHomeViewReady,
         setMusicFeedExpiration, setHomeFeedExpiration, setLoading])
 

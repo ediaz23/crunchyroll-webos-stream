@@ -33,39 +33,44 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
 
 /**
  * @param {String} type
+ * @param {Object} [homeBackupOverride]
+ * @param {Object} [homePositionOverride]
  * @returns {ListViewProps}
  */
-export const useContentList = (type) => {
-
+export const useContentList = (type, homeBackupOverride, homePositionOverride) => {
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
-    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupState)
+    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupOverride || homeBackupState)
     /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionState)
+    const setHomePosition = useSetRecoilState(homePositionOverride || homePositionState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState(null)
     /** @type {[Boolean, Function]}  */
     const [autoScroll, setAutoScroll] = useState(true)
     /** @type {[Number, Function]} */
     const [delay, setDelay] = useState(-1)
-    /** @type {{current: Array<{start: Number, end: Number}>}} */
-    const queue = useRef([])
+    /** @type {{current: Set}} */
+    const queue = useRef(new Set())
     /** @type {Number} */
-    const quantity = 20
+    const quantity = 25
 
     /** @type {Function} */
-    const changeContentList = useCallback((newList) => {
+    const changeContentList = useCallback((newList, resetIndex = true) => {
         setContentList(newList)
         setHomeViewReady(true)
-        if (homeBackup && homeBackup.contentList !== newList) {
+        if (homeBackup && homeBackup.contentList !== newList && resetIndex) {
             setHomePosition({ rowIndex: 0 })
         }
     }, [setContentList, setHomeViewReady, homeBackup, setHomePosition])
 
     /** @type {Function} */
-    const onLeave = useCallback((options) => {
-        setHomeBackup({ options, contentList, type })
+    const onLeave = useCallback((options, saveList = true) => {
+        if (saveList) {
+            setHomeBackup({ options, contentList, type })
+        } else {
+            setHomeBackup({ options, contentList: null, type })
+        }
     }, [setHomeBackup, contentList, type])
 
     /** @type {Function} */
@@ -76,35 +81,29 @@ export const useContentList = (type) => {
 
     /** @type {Function} */
     const mergeContentList = useCallback((items, index) => {
+        const end = index + quantity
         let out = false
-        /** all this code is for avoid multiples request onload */
-        if (!Array.isArray(items)) {
-            if (items === undefined) {
-                queue.current = queue.current.filter(i => !(i.start <= index && index <= i.end))
-                out = true
-            } else {
-                if (!queue.current.find(i => i.start <= index && index <= i.end)) {
-                    queue.current.push({ start: index, end: index + quantity })
-                    out = true
+        if (Array.isArray(items)) {
+            setContentList(prevArray => {
+                let updatedList = items
+                if (prevArray != null) {
+                    updatedList = [...prevArray]
+                    items.forEach((value, i) => {
+                        updatedList[index + i] = value
+                    })
                 }
+                return updatedList
+            })
+            for (let i = index; i < end; i++) {
+                queue.current.delete(i)
             }
         } else {
-            queue.current = queue.current.filter(i => !(i.start <= index && index <= i.end))
-            out = true
-        }
-        /** -------------------------------------------------- */
-        if (out) {
-            setContentList(prevArray => {
-                if (!Array.isArray(items)) {
-                    const size = Math.min(prevArray.length - index, quantity)
-                    items = Array.from({ length: size }, () => items)
+            if (!queue.current.has(index)) {
+                for (let i = index; i < end; i++) {
+                    queue.current.add(i)
                 }
-                return [
-                    ...prevArray.slice(0, index),
-                    ...items,
-                    ...prevArray.slice(index + items.length)
-                ]
-            })
+                out = true
+            }
         }
         return out
     }, [setContentList, quantity])

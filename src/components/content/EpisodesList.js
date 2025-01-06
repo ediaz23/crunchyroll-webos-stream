@@ -62,14 +62,14 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
                                 </Cell>
                             </Row>
                         </Cell>
+                        <Cell shrink>
+                            <BodyText style={{ marginBottom: '0', marginTop: '0' }}>
+                                {formatDurationMs(getDuration(episodes[index]))}
+                            </BodyText>
+                        </Cell>
                         <Cell grow style={{ overflow: 'hidden', height: 'auto' }}>
                             <BodyText size='small' style={{ fontSize: '1rem' }}>
                                 {episodes[index].description || '\u00a0\n '.repeat(50)}
-                            </BodyText>
-                        </Cell>
-                        <Cell shrink>
-                            <BodyText>
-                                {formatDurationMs(getDuration(episodes[index]))}
                             </BodyText>
                         </Cell>
                     </Column>
@@ -92,7 +92,7 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...r
     /** @type {Number} */
     const itemHeight = ri.scale(260)
     /** @type {{current: Number}} */
-    const episodeIndexRef = useRef(episodeIndex)
+    const episodeIndexRef = useRef(null)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {Array<{source: String}>} */
@@ -118,14 +118,13 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...r
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current) {
+            if (scrollToRef.current && episodeIndexRef.current != null) {
                 clearInterval(interval)
-                scrollToRef.current({ index: episodeIndexRef.current || 0, animate: false, focus: true })
+                scrollToRef.current({ index: episodeIndexRef.current, animate: false, focus: true })
             }
         }, 100)
         return () => {
             clearInterval(interval)
-            scrollToRef.current = null
         }
     }, [seasonIndex])
 

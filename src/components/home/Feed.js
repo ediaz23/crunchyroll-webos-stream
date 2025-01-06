@@ -14,7 +14,7 @@ import VirtualListNested from '../../patch/VirtualListNested'
 import api from '../../api'
 import { LOAD_MOCK_DATA } from '../../const'
 import logger from '../../logger'
-import kidImg from '../../../resources/img/child.jpg'
+import kidImg from '../../../assets/img/child.jpg'
 import css from './Feed.module.less'
 
 
@@ -394,7 +394,7 @@ const HomeFeed = ({ profile, homeFeed, setHomeFeed, type = 'home', ...rest2 }) =
 
     return (
         <Column className={css.feed} {...rest2}>
-            <Cell shrink>
+            <Cell size="47%" shrink>
                 {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
             </Cell>
             <Cell grow>

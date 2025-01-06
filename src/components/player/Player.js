@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
+import IconButton from '@enact/moonstone/IconButton'
 import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
@@ -22,7 +23,7 @@ import { $L } from '../../hooks/language'
 import logger from '../../logger'
 import api from '../../api'
 import { getContentParam } from '../../api/utils'
-import emptyVideo from '../../../resources/empty.mp4'
+import emptyVideo from '../../../assets/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import utils from '../../utils'
@@ -333,16 +334,16 @@ const findPoster = ({ content }) => {
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Object} obj.content
  * @param {Number} obj.step
- * @param {Array<String>} obj.concerts
+ * @param {Array<String>} obj.videos
  * @param {Function} obj.apiFunction
  * @returns {Promise<Object>}
  */
-const getNextVideoOrConcert = async ({ profile, content, step, concerts, apiFunction }) => {
+const getNextVideoOrConcert = async ({ profile, content, step, videos, apiFunction }) => {
     let out = null
-    const index = concerts.findIndex(val => val === content.id)
+    const index = videos.findIndex(val => val === content.id)
     const nextIndex = index + step
-    if (index >= 0 && nextIndex >= 0 && nextIndex < concerts.length) {
-        const { data: newConcerts } = await apiFunction(profile, [concerts[nextIndex]])
+    if (index >= 0 && nextIndex >= 0 && nextIndex < videos.length) {
+        const { data: newConcerts } = await apiFunction(profile, [videos[nextIndex]])
         if (newConcerts.length > 0) {
             out = newConcerts[0]
         }
@@ -373,24 +374,34 @@ const findNextEp = async ({ profile, content, step }) => {
             out = { total: 1, data: [movies.data[nextIndex]] }
         }
     } else if (['musicConcert', 'musicVideo'].includes(content.type)) {
-        const { data: artists } = await api.music.getArtists(profile, [content.artist.id])
-        if (artists.length > 0) {
-            const params = { profile, content, step }
-            if ('musicConcert' === content.type) {
-                out = await getNextVideoOrConcert({
-                    ...params,
-                    concerts: artists[0].concerts,
-                    apiFunction: api.music.getConcerts
-                })
-            } else if ('musicVideo' === content.type) {
-                out = await getNextVideoOrConcert({
-                    ...params,
-                    concerts: artists[0].videos,
-                    apiFunction: api.music.getVideos
-                })
+        /** @type {{videos: Array<Object>}} */
+        const { videos } = content
+        if (videos) {
+            const videoIndex = videos.findIndex(item => item.id === content.id)
+            const nextIndex = videoIndex + step
+            if (0 <= nextIndex && nextIndex < videos.length) {
+                out = { total: 1, data: [{ ...videos[nextIndex] }] }
             }
-            if (out) {
-                out = { total: 1, data: [out] }
+        } else {
+            const { data: artists } = await api.music.getArtists(profile, [content.artist.id])
+            if (artists.length > 0) {
+                const params = { profile, content, step }
+                if ('musicConcert' === content.type) {
+                    out = await getNextVideoOrConcert({
+                        ...params,
+                        videos: artists[0].concerts,
+                        apiFunction: api.music.getConcerts
+                    })
+                } else if ('musicVideo' === content.type) {
+                    out = await getNextVideoOrConcert({
+                        ...params,
+                        videos: artists[0].videos,
+                        apiFunction: api.music.getVideos
+                    })
+                }
+                if (out) {
+                    out = { total: 1, data: [out] }
+                }
             }
         }
     }
@@ -713,6 +724,14 @@ const Player = ({ ...rest }) => {
     const onEndVideo = useCallback((ev) => setEndEvent(ev), [setEndEvent])
 
     /** @type {Function} */
+    const markAsWatched = useCallback(() => {
+        api.discover.markAsWatched(profile, content.id)
+            .then(() => console.log('watched'))
+            .catch(console.error)
+        onNextEp(new Event('fake'))
+    }, [profile, content, onNextEp])
+
+    /** @type {Function} */
     const onPlayPause = useCallback(() => {
         if (playerCompRef.current) {
             const { paused } = playerCompRef.current.getMediaState()
@@ -776,8 +795,10 @@ const Player = ({ ...rest }) => {
             } else {
                 setMessage(err.message || err.httpStatusText)
             }
+        } else if (err) {
+            setMessage(err.message || `${err}`)
         } else {
-            setMessage(err)
+            setMessage($L('An error occurred'))
         }
     }, [setMessage])
 
@@ -824,10 +845,10 @@ const Player = ({ ...rest }) => {
                 if (playerCompRef.current) {
                     clearInterval(interval)
                     createDashPlayer(audio, stream, content, subtitle).then(player => {
-                        setLoading(false)
-                        setIsPaused(false)
                         playerRef.current = player
                         playerRef.current.play()
+                        setLoading(false)
+                        setIsPaused(false)
                         /* how to log, add function and off events in clean up function
                         const logPlayer = (name) => ev => {
                             if (name === 'ERROR') {
@@ -848,7 +869,7 @@ const Player = ({ ...rest }) => {
                         player.on(dashjsBase.MediaPlayer.events.KEY_ERROR, logPlayer('KEY_ERROR'))
                         player.on(dashjsBase.MediaPlayer.events.PLAYBACK_ERROR, logPlayer('PLAYBACK_ERROR'))
                         */
-                    }).catch(setMessage)
+                    }).catch(handleCrunchyError)
                 }
             }, 100)
         }
@@ -861,7 +882,7 @@ const Player = ({ ...rest }) => {
             }
             clearInterval(interval)
         }
-    }, [profile, content, stream, audio, subtitle, setLoading])
+    }, [profile, content, stream, audio, subtitle, setLoading, handleCrunchyError])
 
     useEffect(() => {  // set stream session
         if (stream === emptyStream) {
@@ -1024,9 +1045,16 @@ const Player = ({ ...rest }) => {
                 <MediaControls id="media-controls">
                     <leftComponents>
                         <ContentInfo content={content} />
-                        {['episode'].includes(content.type) &&
+                        {['episode'].includes(content.type) && (<>
+                            <IconButton
+                                backgroundOpacity="lightTranslucent"
+                                onClick={markAsWatched}
+                                tooltipText={$L('Mark as watched')}>
+                                checkselection
+                            </IconButton>
                             <Rating profile={profile} content={content} />
-                        }
+
+                        </>)}
                     </leftComponents>
                     <rightComponents>
                         {stream.subtitles.length > 1 &&

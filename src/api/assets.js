@@ -38,7 +38,7 @@ export const getAvatarList = async (lang) => {
  * @param {String} avatar
  * @returns {String}
  */
-export const getAvatarUrl = avatar => `${config.configApp.url_static}/assets/avatar/170x170/${avatar}`
+export const getAvatarUrl = avatar => `${config.urlStatic}/assets/avatar/170x170/${avatar}`
 
 
 /**

@@ -8,8 +8,8 @@ import Spinner from '@enact/moonstone/Spinner'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import {
-    currentProfileState, selectedContentState, categoriesState,
-    homeViewReadyState, homeIndexState, homePositionState, homeBackupState,
+    currentProfileState, categoriesState,
+    homeViewReadyState, homeIndexState,
     homeFeedState, homeFeedExpirationState,
     musicFeedState, musicFeedExpirationState,
 } from '../recoilConfig'
@@ -24,6 +24,7 @@ import api from '../api'
 import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
 import { $L } from '../hooks/language'
+import { useResetHomeState } from '../hooks/setContent'
 
 
 /**
@@ -143,15 +144,9 @@ const HomePanel = (props) => {
     /** @type {[Boolean, Function]} */
     const [homeViewReady, setHomeViewReady] = useRecoilState(homeViewReadyState)
     /** @type {Function} */
-    const setSelectedContent = useSetRecoilState(selectedContentState)
-    /** @type {Function} */
     const setCategories = useSetRecoilState(categoriesState)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
-    /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionState)
-    /** @type {Function} */
-    const setHomeBackup = useSetRecoilState(homeBackupState)
 
     /** @type {[Array<Object>, Function]} */
     const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
@@ -166,6 +161,8 @@ const HomePanel = (props) => {
     const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
     /** @type {Function} */
     const setMusicFeedFn = useSetFeed(setMusicFeed)
+    /** @type {Function} */
+    const resetHomeState = useResetHomeState()
 
     /** @type {Array<{key: String, icon: String, label: String}>} */
     const toolbarList = useMemo(() => [
@@ -191,12 +188,9 @@ const HomePanel = (props) => {
         const tmpIndex = parseInt(ev.currentTarget.dataset.index)
         setCurrentActivity(tmpIndex)
         if (tmpIndex !== currentActivity) {
-            setHomePosition({ rowIndex: 0, columnIndex: 0 })
-            setSelectedContent(null)
-            setHomeBackup(null)
+            resetHomeState()
         }
-    }, [setCurrentActivity, setShowFullToolbar, setHomePosition, currentActivity,
-        setSelectedContent, setHomeBackup])
+    }, [setCurrentActivity, setShowFullToolbar, currentActivity, resetHomeState])
 
     /** @type {Function} */
     const showToolbar = useCallback((ev) => {
@@ -237,8 +231,8 @@ const HomePanel = (props) => {
         }
         setLoading(true)
         loadFeed().then(() => setLoading(false))
-    }, [profile, currentActivity, setSelectedContent, setCategories,
-        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration, setHomePosition,
+    }, [profile, currentActivity, setCategories,
+        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration,
         setMusicFeed, musicFeedExpiration, setMusicFeedExpiration,
     ])
 

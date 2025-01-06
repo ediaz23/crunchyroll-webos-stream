@@ -5,23 +5,21 @@ import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
-import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import {
-    pathState, playContentState, isPremiumState,
-    contentDetailBakState
-} from '../../recoilConfig'
+import { contentDetailBakState } from '../../recoilConfig'
 
 import { $L } from '../../hooks/language'
+import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
+import { useBackVideoIndex } from '../../hooks/backVideoIndex'
 import Scroller from '../../patch/Scroller'
 import { ContentHeader } from '../home/ContentBanner'
 import EpisodesList from '../content/EpisodesList'
 import Options from './Options'
-import back from '../../back'
 import api from '../../api'
+import { useSetPlayableContent } from '../../hooks/setContent'
 import css from './Artist.module.less'
-import { getIsPremium } from '../../utils'
 
 
 /**
@@ -30,26 +28,27 @@ import { getIsPremium } from '../../utils'
  * @param {Object} obj.artist
  */
 const Artist = ({ profile, artist, ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
-    /** @type {Boolean} */
-    const isPremium = useRecoilValue(isPremiumState)
-    /** @type {[Object, Function]}  */
-    const [contentDetailBak, setContentDetailBak] = useRecoilState(contentDetailBakState)
+    /** @type {Object}  */
+    const contentDetailBak = useRecoilValue(contentDetailBakState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
-    /** @type {[Object, Function]} */
-    const [videos, setVideos] = useState(null)
+    /** @type {[Array<{icon: String, title: String, videos: Array}>, Function]} */
+    const [options, setOptions] = useState(contentDetailBak.options
+        ? JSON.parse(JSON.stringify(contentDetailBak.options))  // to avoid error setting videos, line 124
+        : null
+    )
     /** @type {[Number, Function]} */
     const [optionIndex, setOptionIndex] = useState(contentDetailBak.optionIndex)
+    /** @type {[Array<Object>, Function]} */
+    const [videos, setVideos] = useState(null)
+    /** @type {[Number, Function]} */
+    const [videoIndex, setVideoIndex] = useState(null)
     /** @type {{current: Number}} */
     const optionRef = useRef(null)
-    /** @type {Array<{icon: String, title: String, videos: Array}>} */
-    const [options, setOptions] = useState(contentDetailBak.options)
+    /** @type {Function} */
+    const setPlayableContent = useSetPlayableContent()
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {
@@ -67,16 +66,13 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {Function} */
     const setContentToPlay = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
-        const videoIndex = parseInt(target.dataset.index)
-        setContentDetailBak({
-            options,
-            optionIndex,
-            videoIndex,
-        })
-        back.pushHistory({ doBack: () => { setPath('/profiles/home/content') } })
-        setPlayContent(videos[videoIndex])
-        setPath('/profiles/home/player')
-    }, [videos, setPath, setPlayContent, optionIndex, setContentDetailBak, options])
+        const index = parseInt(target.dataset.index)
+        if (videos && videos.length) {
+            options.forEach(e => { e.videos = [] })  // force reload
+            const contentBak = { options, optionIndex }
+            setPlayableContent({ contentToPlay: videos[index], contentBak })
+        }
+    }, [videos, optionIndex, setPlayableContent, options])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {
@@ -87,44 +83,9 @@ const Artist = ({ profile, artist, ...rest }) => {
     }, [artist, getImagePerResolution])
 
     /** @type {Function} */
-    const preProcessVideos = useCallback(({ data }) => {
-        data.forEach(ep => {
-            ep.playhead = { progress: 0 }
-            ep.showPremium = !isPremium && getIsPremium(ep)
-        })
-        return data
-    }, [isPremium])
+    const processVideos = useProcessMusicVideos()
 
-    useEffect(() => {
-        if (contentDetailBak.selectIndex != null &&
-            contentDetailBak.selectIndex !== optionIndex) {
-            // reset bak values
-            setContentDetailBak({ videoIndex: undefined })
-        }
-    }, [optionIndex, setContentDetailBak, contentDetailBak.selectIndex])
-
-    useEffect(() => {
-        optionRef.current = optionIndex
-        setVideos(null)
-        if (optionIndex != null) {
-            /** @type {Promise} */
-            let prom = null
-            if (options[optionIndex].videos.length) {
-                prom = Promise.resolve().then(() => options[optionIndex].videos)
-            } else {
-                if (optionIndex === optionIndexes.video) {
-                    prom = api.music.getVideos(profile, artist.videos).then(preProcessVideos)
-                } else {
-                    prom = api.music.getConcerts(profile, artist.concerts).then(preProcessVideos)
-                }
-            }
-            prom.then(data => {
-                if (optionRef.current === optionIndex) {
-                    setVideos(data)
-                }
-            })
-        }
-    }, [profile, artist, options, optionIndexes, optionIndex, preProcessVideos, setVideos])
+    useBackVideoIndex(videos, setVideoIndex)
 
     useEffect(() => {
         if (contentDetailBak.options == null) {
@@ -136,8 +97,36 @@ const Artist = ({ profile, artist, ...rest }) => {
                 out.push({ icon: '🎤', title: $L('Concerts'), videos: [] })
             }
             setOptions(out)
+            if (out.length) {
+                setOptionIndex(0)
+            }
         }
     }, [profile, artist, contentDetailBak.options])
+
+    useEffect(() => {
+        optionRef.current = optionIndex
+        setVideos(null)
+        setVideoIndex(null)
+        if (optionIndex != null && options != null) {
+            /** @type {Promise} */
+            let prom = null
+            if (options[optionIndex].videos.length) {
+                prom = Promise.resolve().then(() => options[optionIndex].videos)
+            } else {
+                if (optionIndex === optionIndexes.video) {
+                    prom = api.music.getVideos(profile, artist.videos).then(processVideos)
+                } else {
+                    prom = api.music.getConcerts(profile, artist.concerts).then(processVideos)
+                }
+            }
+            prom.then(data => {
+                if (optionRef.current === optionIndex) {
+                    options[optionIndex].videos = data
+                    setVideos(data)
+                }
+            })
+        }
+    }, [profile, artist, options, optionIndexes, optionIndex, processVideos, setVideos])
 
     return (
         <Row className={css.contentArtist} {...rest}>
@@ -169,7 +158,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                                 seasonIndex={optionIndex}
                                 episodes={videos}
                                 selectEpisode={setContentToPlay}
-                                episodeIndex={contentDetailBak.videoIndex} />
+                                episodeIndex={videoIndex} />
                         </Cell>
                     </Row>
                 </Cell>

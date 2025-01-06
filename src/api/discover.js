@@ -162,8 +162,8 @@ export const getRecomendation = async (profile, params) => {
  * @param {String} params.contentId
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
- * @param {Boolean} [obj.ratings]
- * @return {Promise}
+ * @param {Boolean} [params.ratings]
+ * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getSimilar = async (profile, params) => {
     let out = null
@@ -291,4 +291,19 @@ export const getSeasonList = async (profile) => {
         await translateError(error)
     }
     return out
+}
+
+/**
+ * Mark as watched
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @param {String} contentId
+ * @returns {Promise>}
+ */
+export const markAsWatched = async (profile, contentId) => {
+    try {
+        const account = await getContentParam(profile)
+        await api.discover.markAsWatched({ account, contentId })
+    } catch (error) {
+        await translateError(error)
+    }
 }

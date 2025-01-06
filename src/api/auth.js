@@ -1,6 +1,6 @@
 
 import 'webostvjs'
-import { localStore } from 'crunchyroll-js-api'
+import { localStore, api } from 'crunchyroll-js-api'
 import { translateError } from '../api/utils'
 
 /**
@@ -72,4 +72,36 @@ export const switchProfile = async (profileId) => {
     } catch (error) {
         await translateError(error)
     }
+}
+
+/**
+ * get device code
+ * @returns {Promise<import('crunchyroll-js-api').Types.DeviceCode>}
+ */
+export const getDeviceCode = async () => {
+    let out = null
+    try {
+        out = await api.auth.getDeviceCode()
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
+}
+
+/**
+ * get device code
+ * @returns {Promise<import('crunchyroll-js-api').Types.Token>}
+ */
+export const getDeviceAuth = async (deviceCode) => {
+    /** @type {import('crunchyroll-js-api').Types.Token} */
+    let out = null
+    try {
+        out = await api.auth.getDeviceAuth({ device: storage.device, deviceCode })
+        if (out) {
+            localStore.saveToken(out)
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return out
 }

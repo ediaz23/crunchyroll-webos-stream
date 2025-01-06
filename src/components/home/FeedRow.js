@@ -32,7 +32,7 @@ export const Poster = ({ item, image, itemHeight, itemSize, isPremium, ...rest }
     if (playableTypes.includes(item.type)) {
         duration = getDuration(item)
         if (duration !== undefined && item.playhead !== undefined) {
-            progress = item.playhead / (duration / 100) * 100
+            progress = item.playhead / (duration / 1000) * 100
         }
         if (!isPremium) {
             showPremium = getIsPremium(item)
@@ -155,7 +155,7 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     useEffect(() => {
         if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
-                series: 'GRDV0019R',
+                series: 'GJ0H7QGQK',
                 episode: 'GZ7UV13VE',
                 musicArtist: 'MA899F289',
                 musicConcert: 'MC413F8154',

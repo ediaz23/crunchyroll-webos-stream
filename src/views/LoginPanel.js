@@ -1,13 +1,13 @@
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { Row, Column } from '@enact/ui/Layout'
 import { Header, Panel } from '@enact/moonstone/Panels'
-import Spinner from '@enact/moonstone/Spinner'
+import Heading from '@enact/moonstone/Heading'
+import Button from '@enact/moonstone/Button'
 
 import { useSetRecoilState, useRecoilState } from 'recoil'
 
-import { $L } from '../hooks/language'
-import Login from '../components/login/Login'
+import { LoginWithEmail, LoginWithCode, LoginWithQR } from '../components/login/Login'
 import ContactMe from '../components/login/ContactMe'
 import PopupMessage from '../components/Popup'
 import {
@@ -15,26 +15,31 @@ import {
     isPremiumState
 } from '../recoilConfig'
 import api from '../api'
+import { $L } from '../hooks/language'
+import logger from '../logger'
 
+
+const ActivityViews = ({ index, children }) => children[index]
 
 const LoginPanel = ({ ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
-    /** @type {[String, Function]} */
-    const [email, setEmail] = useState('')
-    /** @type {[String, Function]} */
-    const [password, setPassword] = useState('')
-    /** @type {[String, Function]}  */
-    const [message, setMessage] = useState('')
     /** @type {Function} */
     const setInitScreenState = useSetRecoilState(initScreenState)
     /** @type {Function} */
     const setPremiumState = useSetRecoilState(isPremiumState)
     /** @type {[Boolean, Function]}  */
     const [autoLogin, setAutoLogin] = useRecoilState(autoLoginState)
-    /** @type {[Boolean, Function]}  */
-    const [loading, setLoading] = useState(true)
+    /** @type {[String, Function]}  */
+    const [message, setErrorMessage] = useState('')
+    /** @type {[Number, Function]} */
+    const [currentIndex, setCurrentIndex] = useState(0)
+    /** @type {[String, Function]} */
+    const [deviceCode, setDeviceCode] = useState(null)
+    /** @type {{current: import('crunchyroll-js-api').Types.DeviceCode}} */
+    const deviceRef = useRef(null)
 
+    /** @type {Function} */
     const makeLogin = useCallback(async () => {
         await api.auth.login()
         const account = await api.account.getAccount()
@@ -50,65 +55,92 @@ const LoginPanel = ({ ...rest }) => {
         setAutoLogin(true)
     }, [setInitScreenState, setPath, setAutoLogin, setPremiumState])
 
-    const doLogin = useCallback(async () => {
-        if (email && password) {
-            try {
-                setLoading(true)
-                await api.auth.setCredentials({ username: email, password })
-                await makeLogin()
-            } catch (error) {
-                setMessage(error.message || error.code)
-            } finally {
-                setLoading(false)
-            }
-        } else {
-            setMessage($L('Please enter a valid email and password'))
-        }
-    }, [setMessage, email, password, makeLogin])
-    const changeEmail = useCallback(({ value }) => {
-        setMessage('')
-        setEmail(value)
-    }, [setEmail, setMessage])
-    const changePassword = useCallback(({ value }) => {
-        setMessage('')
-        setPassword(value)
-    }, [setPassword, setMessage])
+    /** @type {Function} */
+    const setView = useCallback(ev => {
+        const target = ev.currentTarget || ev.target
+        setCurrentIndex(parseInt(target.dataset.index))
+    }, [])
+
+    /** @type {Function} */
+    const onError = useCallback(error => {
+        logger.error(error)
+        setErrorMessage(error.message || error.code)
+        deviceRef.current = null
+        setCurrentIndex(0)
+    }, [setErrorMessage, setCurrentIndex])
 
     useEffect(() => {
-        const loadData = async () => {
-            const setCredentiasl = async () => {
-                const credentials = await api.auth.getCredentials()
-                if (credentials) {
-                    setEmail(credentials.username)
-                    setPassword(credentials.password)
-                }
-                setLoading(false)
-            }
-            if (autoLogin && await api.auth.getSession()) {
+        let timeout = null
+        let interval = null
+        if (currentIndex >= 1) {
+            setDeviceCode(null)
+            const startLogin = async () => {
                 try {
-                    await makeLogin()
-                } catch (_e) {
-                    await setCredentiasl()
+                    if (deviceRef.current) {
+                        const now = new Date()
+                        const diff = (now.getTime() - new Date(deviceRef.current.created_date).getTime()) / 1000
+                        if (diff >= (deviceRef.current.expires_in - 15)) {
+                            deviceRef.current = null
+                        }
+                    }
+                    if (!deviceRef.current) {
+                        deviceRef.current = await api.auth.getDeviceCode()
+                    }
+                    setDeviceCode(deviceRef.current.user_code)
+                    timeout = setTimeout(() => {
+                        deviceRef.current = null
+                        clearTimeout(interval)
+                        startLogin()
+                    }, deviceRef.current.expires_in * 1000)
+                    interval = setInterval(() => {
+                        api.auth.getDeviceAuth(deviceRef.current.device_code).then(res => {
+                            if (res) {
+                                clearInterval(interval)
+                                clearTimeout(timeout)
+                                return makeLogin()
+                            }
+                        }).catch(onError)
+                    }, deviceRef.current.interval)
+                } catch (error) {
+                    onError(error)
                 }
-            } else {
-                await setCredentiasl()
             }
+            startLogin()
         }
-        loadData()
-    }, [setEmail, setPassword, makeLogin, autoLogin, setLoading])
+        return () => {
+            clearTimeout(timeout)
+            clearInterval(interval)
+        }
+    }, [currentIndex, onError, makeLogin])
+
+    useEffect(() => {
+        return () => { deviceRef.current = null }
+    }, [])
 
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
                 <ContactMe origin='login' />
             </Header>
-            <Column align='center center'>
+            <Column>
                 <Row align='center center'>
-                    {loading ?
-                        <Spinner />
-                        :
-                        <Login {...{ email, changeEmail, password, changePassword, doLogin, message }} />
-                    }
+                    <Heading size="large">{$L('Login')}</Heading>
+                </Row>
+                <Row align='center center' style={{ marginBottom: '0.6rem' }}>
+                    <Button data-index='0' onClick={setView}>{$L('Email')}</Button>
+                    <Button data-index='1' onClick={setView}>{$L('Code')}</Button>
+                    <Button data-index='2' onClick={setView}>{$L('QR code')}</Button>
+                </Row>
+                <Row align='center center'>
+                    <ActivityViews index={currentIndex}>
+                        <LoginWithEmail
+                            autoLogin={autoLogin}
+                            makeLogin={makeLogin}
+                            setErrorMessage={setErrorMessage}
+                        />
+                        <LoginWithCode deviceCode={deviceCode} />
+                        <LoginWithQR deviceCode={deviceCode} />
+                    </ActivityViews>
                 </Row>
             </Column>
             <PopupMessage show={!!message} type='error'>

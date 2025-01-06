@@ -1,0 +1,1346 @@
+{
+    "data": [
+        {
+            "id": "hero_carousel-116482",
+            "title": "[WWxA] 2024-11-19",
+            "resource_type": "hero_carousel",
+            "display_type": "hero",
+            "source_media_id": "",
+            "source_media_title": "",
+            "items": [
+                {
+                    "id": 97523,
+                    "images": {
+                        "landscape_poster": "11637d8c-cc9a-4d8f-baab-686b8f642d16.png",
+                        "portrait_poster": "e4ef8e26-a99e-4b07-bee2-63e2be8ba843.png"
+                    },
+                    "link": "https://www.crunchyroll.com/artist/MA41FDBE91/creepy-nuts?utm_source=cap_cr&utm_medium=carousel_2&utm_campaign=music-creepynuts_en&referrer=cap_cr_carousel_2_music-creepynuts",
+                    "slug": "Crunchyroll Music: Creepy Nuts",
+                    "title": "Creepy Nuts 2.0",
+                    "description": "¡Conciertos y videos de Creepy Nuts en Crunchyroll!",
+                    "button_text": "VER AHORA",
+                    "third_party_impression_tracker": ""
+                },
+                {
+                    "id": 97524,
+                    "images": {
+                        "landscape_poster": "9da3455f-6890-4a43-a858-4c3698a25148.png",
+                        "portrait_poster": "0c309b6d-b209-46ff-bbe5-a1f2653a0b7e.png"
+                    },
+                    "link": "https://www.crunchyroll.com/artist/MA899F289/man-with-a-mission?utm_source=cap_cr&utm_medium=carousel_mlp&utm_campaign=music-mwam_en&referrer=cap_cr_carousel_mlp_music-mwam",
+                    "slug": "Crunchyroll Music: MAN WITH A MISSION",
+                    "title": "MAN WITH A MISSION",
+                    "description": "¡Conciertos y videos de MAN WITH A MISSION en Crunchyroll!",
+                    "button_text": "VER AHORA",
+                    "third_party_impression_tracker": ""
+                },
+                {
+                    "id": 97525,
+                    "images": {
+                        "landscape_poster": "98725b2e-00a5-4ad4-99d4-d779fb008654.png",
+                        "portrait_poster": "cc444eab-30be-4a51-8a9e-4e35a2319fad.png"
+                    },
+                    "link": "https://www.crunchyroll.com/artist/MA2B631720/spyair?utm_source=cap_cr&utm_medium=carousel_mlp&utm_campaign=music-spyair_en&referrer=cap_cr_carousel_mlp_music-spyair",
+                    "slug": "Crunchyroll Music: SPYAIR",
+                    "title": "SPYAIR",
+                    "description": "¡Conciertos y videos de SPYAIR en Crunchyroll!",
+                    "button_text": "VER AHORA",
+                    "third_party_impression_tracker": ""
+                },
+                {
+                    "id": 97526,
+                    "images": {
+                        "landscape_poster": "5c8337af-76a3-40ee-aa9d-cb373e96606d.png",
+                        "portrait_poster": "d6717e5c-c8b8-45d7-8fca-aef753eea071.png"
+                    },
+                    "link": "https://www.crunchyroll.com/artist/MA7AFECB5F/tmrevolution?utm_source=cap_cr&utm_medium=carousel_mlp&utm_campaign=music-tmr_en&referrer=cap_cr_carousel_mlp_music-tmr",
+                    "slug": "Crunchyroll Music: T.M.Revolution",
+                    "title": "T.M.Revolution",
+                    "description": "¡Videos de T.M.Revolution en Crunchyroll!",
+                    "button_text": "VER AHORA",
+                    "third_party_impression_tracker": ""
+                },
+                {
+                    "id": 97527,
+                    "images": {
+                        "landscape_poster": "8eebab7f-c8d9-418a-b0bd-ea01fca884fd.png",
+                        "portrait_poster": "2e19aad1-f307-4a92-99ad-6f9e22cd4df7.png"
+                    },
+                    "link": "x",
+                    "slug": "Crunchyroll Music: TK from Ling tosite sigure ",
+                    "title": "TK from Ling tosite sigure 2.0 ",
+                    "description": "¡Conciertos y videos de TK from Ling tosite sigure 2.0 en Crunchyroll!",
+                    "button_text": "VER AHORA",
+                    "third_party_impression_tracker": ""
+                }
+            ]
+        },
+        {
+            "id": "MA41FDBE91",
+            "resource_type": "musicArtist",
+            "display_type": "hero",
+            "source_media_id": "",
+            "source_media_title": "",
+            "object": {
+                "updatedAt": "2024-11-18T19:23:36.728Z",
+                "isPublic": true,
+                "description": "Una unidad de hip hop formada por el rapero \"R-Shitei\", quien ganó tres veces consecutivas en la competencia de batallas de rap en Japón, y el ganador del DMC World DJ Championships 2019, \"DJ Matsunaga\". Creepy Nuts hizo su debut en una discográfica importante con Sony Music en 2017 y lanzó su última canción, \"Katsute Tensaidatta Oretachie\", en agosto de 2020.\n\nEn noviembre de 2020 realizaron un concierto de dos días en el Nippon Budokan, cuyas entradas se agotaron de inmediato. Además de la música, expanden sus carreras en diversos campos como comerciales, programas de variedades, series de televisión, programas de radio y escritura. Actualmente presentan un programa de radio llamado \"Creepy Nuts' All Night Nippon 0 (ZERO)\" en Nippon Broadcasting System y el programa de televisión \"Igunuts!!\" en TV Asahi.",
+                "totalVideoDurationMs": 3647000,
+                "name": "Creepy Nuts",
+                "publishDate": "2023-04-27T13:00:00Z",
+                "concerts": [],
+                "type": "musicArtist",
+                "totalConcertDurationMs": 0,
+                "images": {
+                    "poster_tall": [
+                        {
+                            "height": 90,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/60x90/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 60
+                        },
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/120x180/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 120
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/240x360/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 240
+                        },
+                        {
+                            "height": 720,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/480x720/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 480
+                        },
+                        {
+                            "height": 1125,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/750x1125/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 750
+                        },
+                        {
+                            "height": 1440,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/960x1440/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 960
+                        },
+                        {
+                            "height": 1688,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1125x1688/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 1125
+                        },
+                        {
+                            "height": 1800,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x1800/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 1200
+                        },
+                        {
+                            "height": 2340,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1560x2340/catalog/music/ecb0624a656bff9a23e21b724223530e.jpeg",
+                            "type": "poster_tall",
+                            "width": 1560
+                        }
+                    ],
+                    "poster_wide": [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/16dffc93519228fec0b5e1c2249a7fad.jpeg",
+                            "type": "poster_wide",
+                            "width": 1920
+                        }
+                    ]
+                },
+                "readyToPublish": true,
+                "id": "MA41FDBE91",
+                "slug": "creepy-nuts",
+                "genres": [
+                    {
+                        "displayValue": "Hip-Hop/Rap",
+                        "id": "hip-hoprap"
+                    }
+                ],
+                "videos": [
+                    "MV51BF4B21",
+                    "MVBD759C24",
+                    "MV1DD1BD83",
+                    "MVACEE8F37",
+                    "MV80AE75AA",
+                    "MV28DE5FE4",
+                    "MVA6B87BB7",
+                    "MV7687DAF2",
+                    "MV14BEEC19",
+                    "MVA7B1F03F",
+                    "MV4FCA864C",
+                    "MV4A72ACB2",
+                    "MV29161DF2",
+                    "MV20A81976",
+                    "MV20D5197C",
+                    "MV96616200"
+                ],
+                "createdAt": "2023-03-07T07:22:41.783Z"
+            }
+        },
+        {
+            "id": "collection-116481",
+            "title": "Artista protagonista: BEAT CRUSADERS",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "music_video",
+            "description": "¡Descubre un nuevo artista favorito con BEAT CRUSADERS!",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MV54F250D4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV20422003",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV9218536",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5BB51A9D",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV29159D41",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV198CF85C",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV7790F98B",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV89D45DE0",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV846335B9",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV67DA3CCC",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2C3CD6D6",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV1D6A6403",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVB491B049",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV236F20EA",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVB73CB5A2",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV481A07EB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV8D9CD1BF",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV27065861",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4C4B8A3E",
+                    "type": "musicVideo"
+                }
+            ]
+        },
+        {
+            "id": "in_feed_banner-30025",
+            "title": "LiSA 2024-11-19",
+            "resource_type": "in_feed_banner",
+            "display_type": "shelf",
+            "description": "¡Conciertos y videos de LiSA en Crunchyroll!",
+            "source_media_id": "",
+            "source_media_title": "",
+            "link": "https://www.crunchyroll.com/artist/MA179CB50D/lisa?utm_source=cap_cr&utm_medium=standard_banner_mlp&utm_campaign=music-lisa_en&referrer=cap_cr_standard_banner_mlp_music-lisa",
+            "new_window": false,
+            "images": {
+                "mobile_small": "34032976-3cba-41ea-919f-948447fd24a1.png",
+                "mobile_large": "",
+                "desktop_small": "",
+                "desktop_large": "d9bb9899-adad-461d-b0ce-bb640e0dab46.png"
+            }
+        },
+        {
+            "id": "collection-41262",
+            "title": "Básicos del anime: Openings",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "music_video",
+            "description": "¿No puedes sacarte ese opening de la cabeza?",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MV80AE75AA",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBBAD8FEB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV54F250D4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV20422003",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2493C591",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVB8603669",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV7145FED6",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5703A1E1",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4A97254A",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV3CE6D277",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV30E58CF",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4250EE6C",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV8276CFD4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV8743E551",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV8898A158",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2FCA4AB0",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBCBB9776",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV3C84F6A4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVAC0486A",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV1106BB1",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV55E75391",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV816E7F13",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVAC6607E2",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV52761EAA",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV517CCE96",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV11A2D56F",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV835555D8",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV93BFBC38",
+                    "type": "musicVideo"
+                }
+            ]
+        },
+        {
+            "id": "collection-28575",
+            "title": "Artistas que amamos",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "artist",
+            "description": "Algunos de los artistas musicales favoritos de Crunchyroll",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MA179CB50D",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA41FDBE91",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA2AFBD7F6",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA28286FC2",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA464307C7",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA16E847FD",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA1F138D7E",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA5C04271B",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA93EE6275",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MAA34EECE2",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MAAC1C79B9",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA1212BDFF",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA1508520E",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA59467FCD",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MAF2654CA",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA71D2634C",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA2AF8023E",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MAAE957524",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA649D1ADA",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA1DFF511",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA8A56333D",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA1C30AB77",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MAD19C824",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA29ED68B",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA53AA1B72",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MABBDB9876",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA7972F224",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA95C93EB2",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA4E2EF229",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA899F289",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA8FCDD0B7",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA296DD469",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA90B33207",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA2F6BC195",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA7AFECB5F",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA2D4BF4A9",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA4F7F6726",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MAAFAC546B",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA5D7360F",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA6B26C76D",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA6480DAB5",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA7A8DC740",
+                    "type": "musicArtist"
+                },
+                {
+                    "id": "MA80B7E38C",
+                    "type": "musicArtist"
+                }
+            ]
+        },
+        {
+            "id": "in_feed_banner-37543",
+            "title": "BURNOUT SYNDROMES 2024-11-19",
+            "resource_type": "in_feed_banner",
+            "display_type": "shelf",
+            "description": "¡Conciertos y videos de BURNOUT SYNDROMES en Crunchyroll!",
+            "source_media_id": "",
+            "source_media_title": "",
+            "link": "https://www.crunchyroll.com/artist/MA29ED68B/burnout-syndromes?utm_source=cap_cr&utm_medium=standard_banner_mlp&utm_campaign=music-burnoutsyndromes_en&referrer=cap_cr_standard_banner_mlp_music-burnoutsyndromes",
+            "new_window": false,
+            "images": {
+                "mobile_small": "ba7537eb-6cca-41f4-9a78-944fc196336e.png",
+                "mobile_large": "",
+                "desktop_small": "",
+                "desktop_large": "e44671a9-32e0-430f-a7cf-ddfe75db97a9.png"
+            }
+        },
+        {
+            "id": "collection-44165",
+            "title": "Básicos del anime: Endings",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "music_video",
+            "description": "¿No puedes sacarte ese ending de la cabeza?",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MV6AAEBCDC",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA2422F2E",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV43ED31A5",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV462EEA2A",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV9AFD6197",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV50FFD1EB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4ABE0CFB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5B025AF5",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV687B7FCE",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV3D5F64C4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV28190B14",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV55046AF2",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV6CBC83DD",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA41404AF",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV411DEB38",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV3F05EAD6",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA47EFC4B",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV65866FBB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVC0573E7",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV41912632",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5A2788EF",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBFD1AAC1",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4EFD2544",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV6425A155",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV286C2EF6",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5870D647",
+                    "type": "musicVideo"
+                }
+            ]
+        },
+        {
+            "id": "collection-29987",
+            "title": "Conciertos completos",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "music_concert",
+            "description": "¡Disfruta de tus artistas favoritos sobre el escenario!",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MC7A10441F",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCB0F673DB",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC4FEDE281",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC7C4D598E",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC153AE472",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCBFE0A91E",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC283700D8",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC4A3620BB",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC40CE80F5",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC403E4E6",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC47706DAF",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC6B2A75C4",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC469CA6AB",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC63DDE2C3",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCA82DB6CE",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC2BDE594D",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC9FE731C9",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC199610EF",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC67D32057",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC9CE5282F",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC51D55EA6",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC9D02A878",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC13B71354",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC30D02C0B",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCA42004A5",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC7F27972E",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC6E07A759",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC1EEEA945",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC16CF43DA",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCA6E72829",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC5DFBF41A",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC7ED96AD0",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCE5F876B",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC4C23F2CF",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC95C81E38",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC62137299",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC23942048",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC5FD0DF9E",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC80E5A248",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC2E2AC135",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC10F6B450",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCA94FB7DF",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC21A00685",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC287E5072",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC3AFB7683",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC44301295",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC1A9E6F8B",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC48CCBBE0",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MCE4FD83D",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC617D25E6",
+                    "type": "musicConcert"
+                },
+                {
+                    "id": "MC75AC9250",
+                    "type": "musicConcert"
+                }
+            ]
+        },
+        {
+            "id": "collection-39808",
+            "title": "Artista protagonista: Little Glee Monster",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "music_video",
+            "description": "¡Añade una nueva canción a tu lista de no saltar nunca!\n",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MV55998398",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV71165358",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2C17E2AE",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV9106DF61",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVAA4392D",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV98684BE5",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5FC0D9A4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5BBF8A38",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV27AA55A8",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV23781C2E",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV25933218",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBB3D8A27",
+                    "type": "musicVideo"
+                }
+            ]
+        },
+        {
+            "id": "in_feed_banner-44168",
+            "title": "Fujifabric 2024-11-19",
+            "resource_type": "in_feed_banner",
+            "display_type": "shelf",
+            "description": "¡Conciertos y videos de Fujifabric en Crunchyroll!",
+            "source_media_id": "",
+            "source_media_title": "",
+            "link": "https://www.crunchyroll.com/artist/MA2D4BF4A9/fujifabric?utm_source=cap_cr&utm_medium=standard_banner_mlp&utm_campaign=music-fujifabric_en&referrer=cap_cr_standard_banner_mlp_music-fujifabric",
+            "new_window": false,
+            "images": {
+                "mobile_small": "633f098c-fac6-4473-9114-bb46f1d74d7e.png",
+                "mobile_large": "",
+                "desktop_small": "",
+                "desktop_large": "34bbfd03-f0ae-44f9-8b54-727df48fbc32.png"
+            }
+        },
+        {
+            "id": "collection-29986",
+            "title": "Videos musicales icónicos",
+            "resource_type": "curated_collection",
+            "display_type": "shelf",
+            "response_type": "music_video",
+            "description": "¡Disfruta del ritmo de tus canciones favoritas!",
+            "source_media_id": "",
+            "source_media_title": "",
+            "collection_items": [
+                {
+                    "id": "MVAFCFD2A5",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBC3422FB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4B33126D",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV6DDD26E",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV45BFC85D",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV13537CE2",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV55CF9AA4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4E2591FC",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5D1709F7",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV9D0D21A3",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4361FCAF",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV291F4D54",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV9B307F05",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV16365616",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVABDD27F3",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV434DB4D4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV570E715B",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBD3535F6",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV532AD96C",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV3E87BCF9",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV10E679B5",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV787E1A00",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA7A27110",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV192FC182",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV20D5197C",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV16BBEE52",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV56022326",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA4B2E1AC",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV50E128F8",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV86F72A8E",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV53ED3891",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV493E1608",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5FF4B7F4",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2F1F6F52",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA0376EE3",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV65866FBB",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV98EECDBA",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV15C21A17",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2490459B",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4124C2FC",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV80142150",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVC37C28F",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV241C8891",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV5C0948BE",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV14BEEC19",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV3275BA6A",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV2E31594A",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV6CA0B396",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV71C0B831",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV1484F4D7",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV76D3DFEE",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV25427E82",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV50E760EE",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV56793B33",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV20F34468",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA7E05078",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVB2B2BE93",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV56AB5E75",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVA2590C9",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV32216A0E",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV4BB7CEC1",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MVBF182BF0",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV9BAEB4FA",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV49A14AFD",
+                    "type": "musicVideo"
+                },
+                {
+                    "id": "MV35213B19",
+                    "type": "musicVideo"
+                }
+            ]
+        }
+    ],
+    "meta": {},
+    "total": 12
+}

@@ -39,6 +39,9 @@ const setTags = (metadata, tags) => {
     if (metadata.is_mature) {
         tags.push($L('Adults'))
     }
+    if (metadata.is_complete) {
+        tags.push($L('Complete'))
+    }
 }
 
 /**
@@ -89,19 +92,31 @@ const setMovieMetadata = (metadata, meta) => {
 export const ContentMetadata = ({ content }) => {
     const tags = [], meta = []
     let rating = null
+    /** @type {Array<String>} */
+    let contentDescriptors = []
+    /** @type {Array<{text: String}>} */
+    let awards = []
 
     if (content.episode_metadata) {
         setTags(content.episode_metadata, tags)
         setEpisodeMetadata(content.episode_metadata, meta)
+        contentDescriptors = content.episode_metadata.content_descriptors
+        awards = content.episode_metadata.awards
     } else if (content.series_metadata) {
         setTags(content.series_metadata, tags)
         setSerieMetadata(content.series_metadata, meta)
+        contentDescriptors = content.series_metadata.content_descriptors
+        awards = content.series_metadata.awards
     } else if (content.movie_listing_metadata) {
         setTags(content.movie_listing_metadata, tags)
         setMovieMetadata(content.movie_listing_metadata, meta)
+        contentDescriptors = content.movie_listing_metadata.content_descriptors
+        awards = content.movie_listing_metadata.awards
     } else if (content.movie_metadata) {
         setTags(content.movie_metadata, tags)
         setMovieMetadata(content.movie_metadata, meta)
+        contentDescriptors = content.movie_metadata.content_descriptors
+        awards = content.movie_metadata.awards
     } else if (content.genres) {
         content.genres.forEach(val => tags.push(val.displayValue))
         if (content.publishDate) {
@@ -112,7 +127,7 @@ export const ContentMetadata = ({ content }) => {
         rating = content.rating.average
     }
 
-    return (
+    return (<>
         <Row align='baseline space-between'>
             <Heading size='small' spacing="small">
                 {tags.join(' ')}
@@ -128,7 +143,21 @@ export const ContentMetadata = ({ content }) => {
                 </Heading>
             )}
         </Row>
-    )
+        {!!(contentDescriptors && contentDescriptors.length) && (
+            <Row align='baseline'>
+                <Heading size='small' spacing="small">
+                    {contentDescriptors.join(', ')}
+                </Heading>
+            </Row>
+        )}
+        {!!(awards && awards.length) && (
+            <Row align='baseline'>
+                <Heading size='small' spacing="small">
+                    {awards[0].text}
+                </Heading>
+            </Row>
+        )}
+    </>)
 }
 ContentMetadata.propTypes = {
     content: PropTypes.object.isRequired,
@@ -187,9 +216,10 @@ const RowNavigable = withNavigable(Row, css.active)
 /**
  * @param {Object} obj
  * @param {Object} obj.content
- * @param {Boolean} obj.noCategory
+ * @param {Boolean} [obj.noCategory]
+ * @param {Boolean} [obj.noPoster]
  */
-const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
+const HomeContentBanner = ({ content, noCategory = false, noPoster = false, ...rest }) => {
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
@@ -199,13 +229,17 @@ const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
     useEffect(() => {
         if (compRef && compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect()
-            setImage(getImagePerResolution({ height: boundingRect.height, width: boundingRect.width, content }))
+            setImage(getImagePerResolution({
+                height: boundingRect.height,
+                width: boundingRect.width,
+                content,
+            }))
         }
     }, [compRef, content, getImagePerResolution])
 
     return (
         <RowNavigable id='content-banner' className={css.homeContentBanner} {...rest}>
-            <Cell>
+            <Cell size="50%">
                 <Column>
                     <Cell shrink>
                         <ContentHeader content={content} noCategory={noCategory} />
@@ -217,18 +251,21 @@ const HomeContentBanner = ({ content, noCategory = false, ...rest }) => {
                     </Cell>
                 </Column>
             </Cell>
-            <Cell ref={compRef}>
-                {image.source &&
-                    <Image className={css.poster} src={image.source} sizing='fill' />
-                }
-            </Cell>
+            {!noPoster &&
+                <Cell ref={compRef}>
+                    {image.source &&
+                        <Image className={css.poster} src={image.source} sizing='fill' />
+                    }
+                </Cell>
+            }
         </RowNavigable>
     )
 }
 
 HomeContentBanner.propTypes = {
     content: PropTypes.object.isRequired,
-    noCategory: PropTypes.bool
+    noCategory: PropTypes.bool,
+    noPoster: PropTypes.bool,
 }
 
 export default HomeContentBanner
