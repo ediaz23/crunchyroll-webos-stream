@@ -155,6 +155,7 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
                     if (loaded === total) {
                         const resTmp = new window.Response(new window.Blob(chunks))
                         resTmp.arrayBuffer().then(arr => {
+                            res.compress = false
                             res.content = arr
                             sub.cancel()
                             onSuccess(res)
@@ -180,14 +181,13 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
  * @param {Function} [obj.onProgress]
  */
 export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
+    config.id = uuidv4()
     const parameters = { d: encodeRequest(config) }
     if (utils.isTv()) {
         const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
         const method = `forwardRequest${currentReq}`
-
         if (onProgress) {
             const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
-            config.id = uuidv4()
             const sub = webOS.service.request(serviceURL, {
                 method,
                 parameters,
