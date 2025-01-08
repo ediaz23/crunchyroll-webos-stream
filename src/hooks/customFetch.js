@@ -1,7 +1,7 @@
 
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
-import { gzipSync, gunzipSync } from 'fflate'
+import { gzipSync, gunzipSync } from 'fflate/esm/browser.js'
 import utils from '../utils'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
@@ -137,7 +137,7 @@ export const makeFetchProgressXHR = (onProgress) => {
                 }
             };
             xhr.onerror = () => reject(new Error('Network error'));
-            xhr.send(options.body ? JSON.stringify(options.body) : null);
+            xhr.send(options.body ? options.body : null);
         });
     };
 };
@@ -219,24 +219,21 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
             })
         }
     } else {
+        const fetchOptions = {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(parameters),
+        }
         if (onProgress) {
             const fetchProgressXHR = makeFetchProgressXHR(onProgress);
 
-            fetchProgressXHR(`${_LOCALHOST_SERVER_}/webos2`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(parameters),
-            }).then(onSuccess).catch(onFailure);
+            fetchProgressXHR(`${_LOCALHOST_SERVER_}/webos2`, fetchOptions)
+                .then(onSuccess).catch(onFailure);
         } else {
-            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(config),
-            }).then(res => res.json()).then(onSuccess).catch(onFailure)
+            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, fetchOptions)
+                .then(res => res.json()).then(onSuccess).catch(onFailure)
         }
     }
 }

@@ -120,6 +120,19 @@ var _increment = function increment(state) {  // crunchypatch
         return handleError(cb)(err)
     }
 
+    try {
+        const packagePath = './node_modules/fflate/package.json'
+        /** @type {Object} */
+        const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+        packageContent.exports['./esm/browser.js'] = {
+            import: "./esm/browser.js",
+            require: "./esm/browser.js"
+        }
+        fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
     cb()
 }
 

@@ -160,7 +160,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                 <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                     <Column>
                         {series.type === 'series' && seasons != null && seasons.length > 0 && (
-                            <Cell shrink>
+                            <Cell shrink style={{ height: '15%' }}>
                                 <Heading size="small">
                                     {seasons[seasonIndex].season_tags.join(', ')}
                                 </Heading>
@@ -174,7 +174,9 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                                 </LabeledIconButton>
                             </Cell>
                         )}
-                        <Cell grow>
+                        <Cell grow style={{
+                            height: series.type === 'series' && seasons != null && seasons.length > 0 ? '85%' : '100%'
+                        }}>
                             <EpisodesList
                                 seasonIndex={seasonIndex}
                                 episodes={episodes}

@@ -371,12 +371,6 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
     const playLastContent = useCallback(() => {
         setContentToPlay(lastContent)
     }, [setContentToPlay, lastContent])
-    /** @type {Function} */
-    const hackScroll = useCallback((event) => {
-        const container = event.target
-        container.scrollTop = 0
-        container.scrollLeft = 0
-    }, [])
 
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
@@ -524,16 +518,16 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                 </Column>
             }
             {!loading &&
-                <Row style={{ width: '100%' }}>
-                    <Cell size='49%' style={{ maxWidth: '49%', width: '49%' }} onScroll={hackScroll}>
+                <Row style={{ width: '100%', height: '100%' }}>
+                    <Cell size='49%' style={{ width: '49%', height: '100%' }}>
                         <Column style={{ height: '100%', width: '100%' }}>
-                            <Cell size='35vh' shrink>
+                            <Cell size='32%' style={{ height: '32%', width: '100%' }}>
                                 <ContentHeader content={content} />
                                 <Heading size='small' spacing='small' className={css.firstData}>
                                     {subtitle}
                                 </Heading>
                             </Cell>
-                            <Cell size='13vh'>
+                            <Cell size='15%' style={{ height: '15%', width: '100%' }}>
                                 <div className={css.scrollerContainer}>
                                     <Scroller
                                         direction='vertical'
@@ -546,7 +540,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                                     </Scroller>
                                 </div>
                             </Cell>
-                            <Cell shrink>
+                            <Cell size="13%" style={{ height: '13%', width: '100%' }}>
                                 <BodyText component='div' size='small' style={{ marginTop: '1rem', marginBottom: '1rem' }}>
                                     {Array.from({ length: 5 }, (_v, i) =>
                                         <IconButton size='small' key={i} data-star={i}
@@ -556,7 +550,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                                     )}
                                 </BodyText>
                             </Cell>
-                            <Cell size='28vh' grow style={{ maxHeight: '35vh' }}>
+                            <Cell size='40%' style={{ height: '40%', width: '100%' }}>
                                 <div className={css.scrollerContainer}>
                                     <Scroller direction='vertical'
                                         horizontalScrollbar='hidden'
@@ -619,7 +613,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                             </Cell>
                         </Column>
                     </Cell>
-                    <Cell size='49%' style={{ maxWidth: '49%', width: '49%', overflow: 'hidden' }}>
+                    <Cell size='49%' style={{ width: '49%', height: '100%' }}>
                         {optionIndex === 'music' &&
                             <MusicList
                                 profile={profile}
