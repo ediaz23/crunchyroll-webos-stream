@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import LabeledIconButton from '@enact/moonstone/LabeledIconButton'
+import Spinner from '@enact/moonstone/Spinner'
 
 import PropTypes from 'prop-types'
 
@@ -68,6 +69,8 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
     const [episodes, setEpisodes] = useState(null)
     /** @type {[Number, Function]} */
     const [episodeIndex, setEpisodeIndex] = useState(null)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(false)
     /** @type {{current: Number}} */
     const seasonIndexRef = useRef(null)
 
@@ -85,6 +88,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
     const markAsWatched = useCallback(ev => {
         if (ev.type === 'click' || (ev.type === 'keyup' && ev.key === 'Enter')) {
             if (episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0) {
+                setLoading(true)
                 for (const ep of episodes) {
                     if (!ep.playhead) {
                         ep.playhead = {}
@@ -96,9 +100,10 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                 api.discover.markAsWatched(profile, seasons[seasonIndex].id)
                     .then(() => console.log('watched'))
                     .catch(console.error)
+                    .finally(() => setLoading(false))
             }
         }
-    }, [profile, seasons, seasonIndex, episodes])
+    }, [profile, seasons, seasonIndex, episodes, setLoading])
 
     useBackVideoIndex(episodes, setEpisodeIndex)
 
@@ -164,14 +169,20 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                                 <Heading size="small">
                                     {seasons[seasonIndex].season_tags.join(', ')}
                                 </Heading>
-                                <LabeledIconButton
-                                    icon='checkselection'
-                                    labelPosition='after'
-                                    onClick={markAsWatched}
-                                    style={{ maxWidth: '13rem' }}
-                                    disabled={!(episodes && episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)}>
-                                    {$L('Mark as watched')}
-                                </LabeledIconButton>
+                                {loading && <Spinner />}
+                                {!loading &&
+                                    <LabeledIconButton
+                                        icon='checkselection'
+                                        labelPosition='after'
+                                        onClick={markAsWatched}
+                                        onKeyUp={markAsWatched}
+                                        style={{ maxWidth: '13rem' }}
+                                        disabled={!(episodes &&
+                                            episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)
+                                        }>
+                                        {$L('Mark as watched')}
+                                    </LabeledIconButton>
+                                }
                             </Cell>
                         )}
                         <Cell grow>
