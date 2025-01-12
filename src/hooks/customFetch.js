@@ -232,18 +232,15 @@ export const customFetch = async (url, options = {}, direct = false) => {
             config.resStatus = 'done'
             const { status, statusText, content, headers, resUrl, compress } = data
             logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
+            const decodedContent = content ? decodeResponse({ content, compress }) : undefined
             if (direct) {
                 if (200 <= status && status < 300) {
-                    res(content)
+                    res(decodedContent)
                 } else {
                     rej({ status, statusText, headers })
                 }
             } else {
-                let newBody = undefined
-                if (content) {
-                    newBody = decodeResponse({ content, compress })
-                }
-                res(new ResponseHack(newBody, {
+                res(new ResponseHack(decodedContent, {
                     status,
                     statusText,
                     headers,
