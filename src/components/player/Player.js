@@ -26,7 +26,6 @@ import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../assets/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
-import utils from '../../utils'
 import XHRLoader from '../../patch/XHRLoader'
 
 
@@ -249,28 +248,29 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
  * Download file per chunkSize
  * @param {String} url
  * @param {Number} chunkSize
- * @returns {Promise<Uint8Array>}
+ * @returns {Promise<{bifData: Uint8Array, requests: Array<Promise>}>}
  */
-const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
+const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
     const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
-    let result = null
+    /** @type {Uint8Array} */
+    let bifData = null
+    /** @type {Array<Promise>} */
+    const requests = []
     if (headResponse.ok) {
         const totalSize = parseInt(headResponse.headers.get('Content-Length'))
         if (isNaN(totalSize) || !totalSize) {
             throw new Error('Bif size not working')
         }
-        result = new Uint8Array(totalSize)
+        bifData = new Uint8Array(totalSize)
         for (let start = 0; start < totalSize; start += chunkSize) {
             const end = Math.min(start + chunkSize - 1, totalSize - 1)
-            const response = await fetchUtils.customFetch(url, {
-                headers: { Range: `bytes=${start}-${end}` }
-            }, true)
-            const chunkArray = utils.base64toArray(response)
-            result.set(chunkArray, start)
+            const reqConfig = { headers: { Range: `bytes=${start}-${end}` } }
+            requests.push(fetchUtils.customFetch(url, reqConfig, true))
+            requests[requests.length - 1].then(chunkArray => bifData.set(chunkArray, start))
         }
     }
 
-    return result
+    return { bifData, requests }
 }
 
 /**
@@ -284,12 +284,19 @@ const findPreviews = async ({ bif }) => {
 
     try {
         if (bif) {
-            /** @type {Uint8Array} */
-            const bifData = await downloadBifFile(bif)
+            /** @type {{bifData: Uint8Array, requests: Array<Promise>}} */
+            const { bifData, requests } = await downloadBifFile(bif)
             const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
 
             let imageStartIndex = -1
+            let currentChunkIndex = -1;
             for (let i = 0; i < bifData.length - 1; i++) {
+                const chunkIndex = Math.floor((i / bifData.length) * requests.length);
+
+                if (chunkIndex !== currentChunkIndex) {
+                    currentChunkIndex = chunkIndex
+                    await requests[chunkIndex]
+                }
                 if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
                     if (imageStartIndex !== -1) {
                         const chunk = bifData.slice(imageStartIndex, i)
@@ -300,6 +307,7 @@ const findPreviews = async ({ bif }) => {
                     imageStartIndex = i
                 }
             }
+            await requests[requests.length - 1]
             if (imageStartIndex !== -1) {
                 const chunk = bifData.slice(imageStartIndex)
                 const blob = new window.Blob([chunk], { type: 'image/jpeg' })
