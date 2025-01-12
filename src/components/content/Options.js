@@ -521,13 +521,13 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                 <Row style={{ width: '100%' }}>
                     <Cell size='49%' style={{ overflow: 'hidden' }}>
                         <Column style={{ height: '100%', width: '100%' }}>
-                            <Cell size='35vh' shrink>
+                            <Cell size='32%'>
                                 <ContentHeader content={content} />
                                 <Heading size='small' spacing='small' className={css.firstData}>
                                     {subtitle}
                                 </Heading>
                             </Cell>
-                            <Cell size='13vh'>
+                            <Cell size='15%'>
                                 <div className={css.scrollerContainer}>
                                     <Scroller
                                         direction='vertical'
@@ -540,7 +540,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                                     </Scroller>
                                 </div>
                             </Cell>
-                            <Cell shrink>
+                            <Cell size="13%">
                                 <BodyText component='div' size='small' style={{ marginTop: '1rem', marginBottom: '1rem' }}>
                                     {Array.from({ length: 5 }, (_v, i) =>
                                         <IconButton size='small' key={i} data-star={i}
@@ -550,7 +550,7 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                                     )}
                                 </BodyText>
                             </Cell>
-                            <Cell size='28vh' grow style={{ maxHeight: '35vh' }}>
+                            <Cell size='40%'>
                                 <div className={css.scrollerContainer}>
                                     <Scroller direction='vertical'
                                         horizontalScrollbar='hidden'
