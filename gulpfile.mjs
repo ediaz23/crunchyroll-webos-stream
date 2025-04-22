@@ -133,6 +133,19 @@ var _increment = function increment(state) {  // crunchypatch
         return handleError(cb)(err)
     }
 
+    try {
+        const packagePath = './package-lock.json'
+        const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+        const filteredPackages = Object.fromEntries(
+            Object.entries(packageContent.packages)
+                .filter(([key]) => !key.endsWith('/fsevents'))
+        )
+        packageContent.packages = filteredPackages
+        fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
     cb()
 }
 
