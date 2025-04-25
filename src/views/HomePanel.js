@@ -1,7 +1,6 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
-import Transition from '@enact/ui/Transition'
 import { Panel } from '@enact/moonstone/Panels'
 import Spinner from '@enact/moonstone/Spinner'
 
@@ -13,13 +12,12 @@ import {
     homeFeedState, homeFeedExpirationState,
     musicFeedState, musicFeedExpirationState,
 } from '../recoilConfig'
-import HomeToolbar, { HomeToolbarSpotlight } from '../components/home/Toolbar'
+import HomeToolbar, { FloatingHomeToolbar } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
 import MusicBrowse from '../components/music/Music'
 import ContentGrid from '../components/grid/ContentGrid'
 import Simulcast from '../components/simulcast/Simulcast'
 import Watchlist from '../components/watchlist/Watchlist'
-import FloatingLayerFix from '../patch/FloatingLayer'
 import api from '../api'
 import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
@@ -178,8 +176,8 @@ const HomePanel = (props) => {
     ], [])
 
     /** @type {Function} */
-    const toggleShowFullToolbar = useCallback(() => {
-        setShowFullToolbar(val => !val)
+    const hideShowFullToolbar = useCallback(() => {
+        setShowFullToolbar(false)
     }, [setShowFullToolbar])
 
     /** @type {Function} */
@@ -283,24 +281,18 @@ const HomePanel = (props) => {
                                 setMusicFeed={setMusicFeedFn} />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
-                            <ConfirmExitPanel onCancel={toggleShowFullToolbar} />
+                            <ConfirmExitPanel onCancel={hideShowFullToolbar} />
                         </ActivityViews>
                     }
                 </Cell>
             </Row>
-            <Transition visible={showFullToolbar} type='slide' direction='right'>
-                <FloatingLayerFix open={showFullToolbar} onDismiss={toggleShowFullToolbar}
-                    style={{
-                        background: 'linear-gradient(to right, #000000 20%, rgba(0, 0, 0, 0))',
-                        paddingLeft: '0.6rem',
-                    }}>
-                    <HomeToolbarSpotlight toolbarList={toolbarList}
-                        currentIndex={currentActivity}
-                        onClick={setActivity}
-                        onLeave={toggleShowFullToolbar}
-                        autoFocus />
-                </FloatingLayerFix>
-            </Transition>
+            <FloatingHomeToolbar
+                open={showFullToolbar}
+                toolbarList={toolbarList}
+                currentIndex={currentActivity}
+                onClick={setActivity}
+                onLeave={hideShowFullToolbar}
+            />
         </Panel>
     )
 }

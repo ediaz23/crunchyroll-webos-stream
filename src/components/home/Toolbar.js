@@ -5,12 +5,14 @@ import Spotlight, { getDirection } from '@enact/spotlight'
 import { getTargetByDirectionFromElement } from '@enact/spotlight/src/target'
 import SpotlightContainerDecorator from '@enact/spotlight/SpotlightContainerDecorator'
 import { Column } from '@enact/ui/Layout'
+import Transition from '@enact/ui/Transition'
 import Icon from '@enact/moonstone/Icon'
 import Marquee from '@enact/moonstone/Marquee'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import withNavigable from '../../hooks/navigable'
+import FloatingLayerFix from '../../patch/FloatingLayer'
 import css from './Toolbar.module.less'
 
 
@@ -45,10 +47,10 @@ export const IconText = ({ icon, active, children, autoFocus = false, ...rest })
  * @param {Number} obj.currentIndex
  * @param {Boolean} [obj.hideText]
  * @param {Boolean} [obj.autoFocus]
- * @param {Function} obj.onClick
- * @param {Function} obj.onBlur
- * @param {Function} obj.onFocus
- * @param {Function} obj.onLeave
+ * @param {Function} [obj.onClick]
+ * @param {Function} [obj.onBlur]
+ * @param {Function} [obj.onFocus]
+ * @param {Function} [obj.onLeave]
  */
 const HomeToolbar = ({
     toolbarList, currentIndex, hideText = false, autoFocus = false,
@@ -118,9 +120,79 @@ HomeToolbar.propTypes = {
     onLeave: PropTypes.func,
 }
 
-export const HomeToolbarSpotlight = SpotlightContainerDecorator({
+/**
+ * Floating Left toolbar
+ * @param {Object} obj
+ * @param {Boolean} obj.open
+ * @param {Array<{key: String, icon: String, label: String}>} obj.toolbarList
+ * @param {Number} obj.currentIndex
+* @param {Function} obj.onLeave
+ * @param {Function} [obj.onClick]
+ */
+export const FloatingHomeToolbarBase = ({ open, toolbarList, currentIndex, onLeave, onClick, ...rest }) => {
+    /** @type {{current: int}} */
+    const closeTimeout = useRef(null)
+    /** @type {Function} */
+    const clearTimeoutFn = () => {
+        clearTimeout(closeTimeout.current)
+        closeTimeout.current = null
+    }
+    /** @type {Function} */
+    const onLeaveSuper = useCallback(() => {
+        clearTimeoutFn()
+        onLeave()
+    }, [onLeave])
+
+    /** @type {Function} */
+    const onBlurCaptureSuper = rest.onBlurCapture
+    rest.onBlurCapture = useCallback((ev) => {
+        clearTimeoutFn()
+        closeTimeout.current = setTimeout(onLeaveSuper, 150)
+        onBlurCaptureSuper(ev)
+    }, [onBlurCaptureSuper, onLeaveSuper])
+
+    /** @type {Function} */
+    const onFocusCaptureSuper = rest.onFocusCapture
+    rest.onFocusCapture = useCallback((ev) => {
+        clearTimeoutFn()
+        onFocusCaptureSuper(ev)
+    }, [onFocusCaptureSuper])
+
+    useEffect(() => clearTimeoutFn, [])
+
+    return (
+        <Transition visible={open} type='slide' direction='right'>
+            <FloatingLayerFix open={open} onDismiss={onLeaveSuper}
+                style={{
+                    background: 'linear-gradient(to right, #000000 20%, rgba(0, 0, 0, 0))',
+                    paddingLeft: '0.6rem',
+                }}
+                {...rest}>
+                <HomeToolbar toolbarList={toolbarList}
+                    currentIndex={currentIndex}
+                    onClick={onClick}
+                    onLeave={onLeaveSuper}
+                    autoFocus />
+            </FloatingLayerFix>
+        </Transition>
+    )
+}
+
+export const FloatingHomeToolbar = SpotlightContainerDecorator({
     restrict: 'self-only',
     leaveFor: { left: '', up: '', down: '' },
-}, HomeToolbar)
+}, FloatingHomeToolbarBase)
+
+FloatingHomeToolbar.defaultProps = {
+    open: PropTypes.bool.isRequired,
+    toolbarList: PropTypes.arrayOf(PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        icon: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+    })).isRequired,
+    currentIndex: PropTypes.number.isRequired,
+    onLeave: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
+}
 
 export default HomeToolbar
