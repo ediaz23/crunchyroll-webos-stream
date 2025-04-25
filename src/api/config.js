@@ -62,8 +62,7 @@ export const setInstalled = async () => {
  * Return next date to show contact screen
  * @returns {Promise<Date>}
  */
-export const getNextContactDate = async () =>
-    storage.nextDonation ? new Date(storage.nextDonation) : undefined
+export const getNextContactDate = async () => storage.nextDonation ? new Date(storage.nextDonation) : undefined
 
 /**
  * Set next date to show contact screen
@@ -72,7 +71,7 @@ export const getNextContactDate = async () =>
 export const setNextContactDate = async () => {
     const today = new Date()
     const nextDate = new Date()
-    nextDate.setMonth(today.getMonth() + 3)  // mounth is 0-based
+    nextDate.setDate(today.getDate() + 35)  // to remender reinit developer time counter.
     await localStore.setNewData({ nextDonation: nextDate.toISOString() })
 }
 
