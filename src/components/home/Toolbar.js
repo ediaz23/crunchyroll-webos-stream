@@ -99,7 +99,6 @@ const HomeToolbar = ({
                     </IconText>
                 )
             })}
-
         </Column>
     )
 }
