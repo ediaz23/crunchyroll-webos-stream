@@ -3,6 +3,9 @@ import * as fetchUtils from '../hooks/customFetch'
 import { default as FakeXMLHttpRequestBase } from 'fake-xml-http-request'
 import logger from '../logger'
 
+/** @type {{dashjs: import('dashjs')}*/
+const { dashjs } = window
+
 
 /**
  * Fix other type of response
@@ -145,83 +148,91 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
     }
 }
 
-
 /**
  * @module XHRLoader
  * @description Manages download by webOS service
- * @param {Object} cfg - dependencies from parent
  */
-function XHRLoader(cfg) {
-    cfg = cfg || {}
-    const requestModifier = cfg.requestModifier
+function XHRLoader() {
+    let instance;
+    let xhr;
 
-    function load(httpRequest) {
-        if (requestModifier && requestModifier.modifyRequest) {
-            requestModifier.modifyRequest(httpRequest, requestModifier)
-                .then(() => requestFn(httpRequest))
-        }
-        else {
-            requestFn(httpRequest)
-        }
-    }
+    /**
+     * Load request
+     * @param {CommonMediaRequest} commonMediaRequest
+     * @param {CommonMediaResponse} commonMediaResponse
+     */
+    function load(commonMediaRequest, commonMediaResponse) {
+        xhr = null;
+        xhr = new FakeXMLHttpRequest();
+        xhr.open(commonMediaRequest.method, commonMediaRequest.url, true);
 
-    function requestFn(httpRequest) {
-        const requestStartTime = new Date()
-        const request = httpRequest.request
-
-        let xhr = new FakeXMLHttpRequest()
-        xhr.open(httpRequest.method, httpRequest.url, true)
-
-        if (request.responseType) {
-            xhr.responseType = request.responseType
+        if (commonMediaRequest.responseType) {
+            xhr.responseType = commonMediaRequest.responseType;
         }
 
-        if (request.range) {
-            xhr.setRequestHeader('Range', 'bytes=' + request.range)
-        }
-
-        if (!request.requestStartDate) {
-            request.requestStartDate = requestStartTime
-        }
-
-        if (requestModifier && requestModifier.modifyRequestHeader) {
-            xhr = requestModifier.modifyRequestHeader(xhr, {
-                url: httpRequest.url
-            })
-        }
-
-        if (httpRequest.headers) {
-            for (let header in httpRequest.headers) {
-                let value = httpRequest.headers[header]
+        if (commonMediaRequest.headers) {
+            for (let header in commonMediaRequest.headers) {
+                let value = commonMediaRequest.headers[header];
                 if (value) {
-                    xhr.setRequestHeader(header, value)
+                    xhr.setRequestHeader(header, value);
                 }
             }
         }
 
-        xhr.withCredentials = httpRequest.withCredentials
+        xhr.withCredentials = commonMediaRequest.credentials === 'include';
+        xhr.timeout = commonMediaRequest.timeout;
 
-        xhr.onload = httpRequest.onload
-        xhr.onloadend = httpRequest.onend
-        xhr.onerror = httpRequest.onerror
-        xhr.onprogress = httpRequest.progress
-        xhr.onabort = httpRequest.onabort
-        xhr.ontimeout = httpRequest.ontimeout
-        xhr.timeout = httpRequest.timeout
-        xhr.chunkSize = 2 << 11  // simulate progress but it's not realy used
+        xhr.onload = function() {
+            commonMediaResponse.url = this.responseURL;
+            commonMediaResponse.status = this.status;
+            commonMediaResponse.statusText = this.statusText;
+            commonMediaResponse.headers = dashjs.Utils.parseHttpHeaders(this.getAllResponseHeaders());
+            commonMediaResponse.data = this.response;
+        }
+        if (commonMediaRequest.customData) {
+            xhr.onloadend = commonMediaRequest.customData.onloadend;
+            xhr.onprogress = commonMediaRequest.customData.onprogress
+            xhr.onabort = commonMediaRequest.customData.onabort;
+            xhr.ontimeout = commonMediaRequest.customData.ontimeout;
+        }
 
-        xhr.send()
+        xhr.send();
 
-        httpRequest.response = xhr
+        commonMediaRequest.customData.abort = abort.bind(this);
+        return true;
     }
 
-    function abort(request) {
-        if (request.response) {  // fix error
-            request.response.abort()
+    function abort() {
+        if (xhr) {
+            xhr.onloadend = xhr.onerror = xhr.onprogress = xhr.onload = null; // Remove event listeners
+            xhr.abort();
+            xhr = null;
         }
     }
 
-    return { load, abort }
+    function getXhr() {
+        return xhr
+    }
+
+    function resetInitialSettings() {
+        abort();
+    }
+
+    function reset() {
+        abort();
+        instance = null;
+    }
+
+    instance = {
+        load,
+        abort,
+        getXhr,
+        reset,
+        resetInitialSettings
+    };
+
+    return instance;
+
 }
 
 export default XHRLoader

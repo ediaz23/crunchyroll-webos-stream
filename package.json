@@ -84,7 +84,6 @@
         "@enact/webos": "^4.8.0",
         "classnames": "^2.5.1",
         "crunchyroll-js-api": "^1.4.3",
-        "dashjs": "^5.0.1",
         "fake-xml-http-request": "^2.1.2",
         "fflate": "^0.8.2",
         "html-entities": "^2.5.2",
@@ -96,7 +95,7 @@
         "react-dom": "^18.2.0",
         "react-qr-code": "^2.0.15",
         "recoil": "^0.7.7",
-        "uuid": "^11.1.0",
+        "uuid": "^10.0.0",
         "web-vitals": "^4.2.4",
         "webostvjs": "^1.2.12"
     },

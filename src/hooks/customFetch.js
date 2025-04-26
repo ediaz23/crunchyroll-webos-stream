@@ -101,6 +101,7 @@ export const makeFetchProgress = (onProgress) => {
      * @returns {Promise}
      */
     return async (res) => {
+        let out = null
         if (onProgress) {
             const reader = res.body.getReader()
             const total = parseInt(res.headers.get('content-length'))
@@ -124,9 +125,14 @@ export const makeFetchProgress = (onProgress) => {
             const resTmp = new window.Response(new window.Blob(chunks))
             const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
             const buffContent = decodeResponse({ content, compress })
-            return { status, statusText, content: buffContent.buffer, headers, resUrl }
+            out = { status, statusText, content: buffContent.buffer, headers, resUrl }
+        } else {
+            out = await res.json()
+            if (out.returnValue === false) {
+                throw out
+            }
         }
-        return res.json()
+        return out
     }
 }
 
@@ -251,9 +257,12 @@ export const customFetch = async (url, options = {}, direct = false) => {
         const onFailure = (error) => {
             config.resStatus = 'fail'
             logger.error(`req ${config.method || 'get'} ${config.url}`)
-            logger.error(error)
             if (error.error) {
-                rej(new Error(error.error))
+                if (error.retry) {
+                    rej(error)
+                } else {
+                    rej(new Error(error.error))
+                }
             } else {
                 rej(error)
             }

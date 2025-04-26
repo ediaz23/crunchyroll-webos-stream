@@ -87,21 +87,9 @@ export const setDeviceInformation = async () => {
             type: 'LG Smart TV'
         }
         if (utils.isTv()) {
-            await new Promise(res => {
-                webOS.service.request('luna://com.webos.service.tv.systemproperty', {
-                    method: 'getSystemInfo',
-                    parameters: { keys: ['modelName'] },
-                    onComplete: (inResponse) => {
-                        const isSucceeded = inResponse.returnValue
-
-                        if (isSucceeded) {
-                            device.name = inResponse.modelName
-                        }
-                        res()
-                    },
-                    onFailure: res,
-                })
-            })
+            /** @type {import('webostvjs').DeviceInfo}*/
+            const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
+            device.name = deviceInfo?.modelName || device.name
         }
         await localStore.setNewData({ device })
     }
