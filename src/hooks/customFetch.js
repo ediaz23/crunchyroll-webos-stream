@@ -101,10 +101,18 @@ export const makeFetchProgressXHR = (onProgress) => {
      * @param {object} options
      * @returns {Promise}
      */
+<<<<<<< HEAD
     return (url, options) => {
         return new Promise((resolve, reject) => {
             const xhr = new window.XMLHttpRequest();
             xhr.open(options.method || 'GET', url, true);
+=======
+    return async (res) => {
+        let out = null
+        if (onProgress) {
+            const reader = res.body.getReader()
+            const total = parseInt(res.headers.get('content-length'))
+>>>>>>> refs/heads/master
 
             if (options.headers) {
                 Object.entries(options.headers).forEach(([key, value]) => {
@@ -123,6 +131,7 @@ export const makeFetchProgressXHR = (onProgress) => {
                     loaded = event.loaded;
                     onProgress({ loaded, total })
                 }
+<<<<<<< HEAD
             };
 
             xhr.onload = async () => {
@@ -141,6 +150,22 @@ export const makeFetchProgressXHR = (onProgress) => {
         });
     };
 };
+=======
+            }
+            const resTmp = new window.Response(new window.Blob(chunks))
+            const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
+            const buffContent = decodeResponse({ content, compress })
+            out = { status, statusText, content: buffContent.buffer, headers, resUrl }
+        } else {
+            out = await res.json()
+            if (out.returnValue === false) {
+                throw out
+            }
+        }
+        return out
+    }
+}
+>>>>>>> refs/heads/master
 
 /**
  * make face progress for a services
@@ -271,9 +296,12 @@ export const customFetch = async (url, options = {}, direct = false) => {
         const onFailure = (error) => {
             config.resStatus = 'fail'
             logger.error(`req ${config.method || 'get'} ${config.url}`)
-            logger.error(error)
             if (error.error) {
-                rej(new Error(error.error))
+                if (error.retry) {
+                    rej(error)
+                } else {
+                    rej(new Error(error.error))
+                }
             } else {
                 rej(error)
             }

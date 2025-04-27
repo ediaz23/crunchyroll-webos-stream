@@ -10,7 +10,7 @@ import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
 import back from '../back'
 
 
-const ErrorPanel = ({ message, closeErrorPanel, ...rest }) => {
+const ErrorPanel = ({ message, closeErrorPanel, onlyClose, ...rest }) => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
@@ -20,12 +20,16 @@ const ErrorPanel = ({ message, closeErrorPanel, ...rest }) => {
 
 
     const onAccept = useCallback(() => {
-        back.pushHistory({ doBack: () => setPath('/askClose') })
-        setAutoLoginState(false)
-        setInitScreenState('/login')
-        setPath('/login')
-        closeErrorPanel()
-    }, [setAutoLoginState, setInitScreenState, setPath, closeErrorPanel])
+        if (onlyClose) {
+            closeErrorPanel()
+        } else {
+            back.pushHistory({ doBack: () => setPath('/askClose') })
+            setAutoLoginState(false)
+            setInitScreenState('/login')
+            setPath('/login')
+            closeErrorPanel()
+        }
+    }, [setAutoLoginState, setInitScreenState, setPath, closeErrorPanel, onlyClose])
 
     useEffect(() => { back.cleanHistory() }, [])
 
@@ -43,6 +47,7 @@ const ErrorPanel = ({ message, closeErrorPanel, ...rest }) => {
 ErrorPanel.propTypes = {
     message: PropTypes.string.isRequired,
     closeErrorPanel: PropTypes.func.isRequired,
+    onlyClose: PropTypes.bool,
 }
 
 export default ErrorPanel

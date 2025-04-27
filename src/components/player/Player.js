@@ -1,4 +1,5 @@
 
+import './dash.all.min'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
@@ -6,9 +7,6 @@ import IconButton from '@enact/moonstone/IconButton'
 import Spotlight from '@enact/spotlight'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { CrunchyrollError } from 'crunchyroll-js-api'
-import dashjs from 'dashjs'
-//import dashjsBase from 'dashjs'
-//import dashjs from 'dashjs/dist/dash.all.debug'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
@@ -27,6 +25,7 @@ import emptyVideo from '../../../assets/empty.mp4'
 import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
+import utils from '../../utils'
 
 
 /**
@@ -67,6 +66,11 @@ import XHRLoader from '../../patch/XHRLoader'
  * @property {String} type
  * @property {Function} process
  */
+
+/** @type {{dashjs: import('dashjs')}*/
+const { dashjs } = window
+/** @type {{webOS: import('webostvjs').WebOS}} */
+const { webOS } = window
 
 /**
  * @param {Object} obj
@@ -448,6 +452,7 @@ const requestDashLicense = (profile) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
         const account = await getContentParam(profile)
+        req.headers = req.headers || {};
         if (req.url.endsWith('widevine')) {
             req.headers['Content-Type'] = 'application/octet-stream'
         } else if (req.url.endsWith('playReady')) {
@@ -474,6 +479,66 @@ const modifierDashRequest = (profile) => {
 }
 
 /**
+ * @param {import('dashjs').MediaPlayerClass} dashPlayer
+ */
+const setStreamingConfig = async (dashPlayer) => {
+
+    let bufferTimeDefault = 20
+    let bufferTimeAtTopQuality = 100
+    let bufferTimeAtTopQualityLongForm = 200
+    let bufferToKeep = 10
+    let isHighEndDevice = true
+
+    if (utils.isTv()) {
+        const parseRamSizeInGB = (ddrSizeString) => {
+            const match = ddrSizeString.match(/([\d.]+)G/i);
+            return match ? parseFloat(match[1]) : 0;
+        }
+
+        /** @type {import('webostvjs').DeviceInfo}*/
+        const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
+        const ramInGB = parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+        const is4KOrHigher = (deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160)
+        const hasHighDynamicRange = deviceInfo.hdr10 || deviceInfo.dolbyVision || false
+        isHighEndDevice = ramInGB >= 1.5 || is4KOrHigher || hasHighDynamicRange
+
+        if (isHighEndDevice) {
+            bufferTimeDefault = 25
+            bufferTimeAtTopQuality = 150
+            bufferTimeAtTopQualityLongForm = 300
+            bufferToKeep = 15
+        } else if (ramInGB >= 1) {
+            bufferTimeDefault = 22
+            bufferTimeAtTopQuality = 120
+            bufferTimeAtTopQualityLongForm = 250
+            bufferToKeep = 12
+        } else {
+            bufferTimeDefault = 15
+            bufferTimeAtTopQuality = 80
+            bufferTimeAtTopQualityLongForm = 150
+            bufferToKeep = 8
+        }
+    }
+
+    dashPlayer.updateSettings({
+        streaming: {
+            buffer: {
+                bufferTimeDefault,
+                bufferTimeAtTopQuality,
+                bufferTimeAtTopQualityLongForm,
+                longFormContentDurationThreshold: 600,
+                fastSwitchEnabled: true,
+                bufferToKeep,
+            },
+            abr: {
+                initialBitrate: { audio: -1, video: -1 },
+                autoSwitchBitrate: { audio: true, video: true },
+            }
+        }
+    })
+}
+
+/**
  * @param {import('./AudioList').Audio} audio
  * @param {Stream} stream
  * @param {Object} content
@@ -487,20 +552,8 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
     const dashPlayer = dashjs.MediaPlayer().create()
 
     dashPlayer.extend('XHRLoader', XHRLoader)
-    dashPlayer.extend('RequestModifier', function() {
-        return {
-            modifyRequest: modifierDashRequest(stream.profile),
-        }
-    })
-    dashPlayer.updateSettings({
-        streaming: {
-            buffer: {
-                stableBufferTime: 15,
-                bufferTimeAtTopQuality: 150,
-                bufferTimeAtTopQualityLongForm: 300,
-            }
-        }
-    })
+    dashPlayer.addRequestInterceptor(modifierDashRequest(stream.profile))
+    await setStreamingConfig(dashPlayer)
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
         url = stream.urls.find(val => val.locale === 'off')
@@ -876,6 +929,13 @@ const Player = ({ ...rest }) => {
                         player.on(dashjsBase.MediaPlayer.events.ERROR, logPlayer('ERROR'))
                         player.on(dashjsBase.MediaPlayer.events.KEY_ERROR, logPlayer('KEY_ERROR'))
                         player.on(dashjsBase.MediaPlayer.events.PLAYBACK_ERROR, logPlayer('PLAYBACK_ERROR'))
+                        player.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_REQUESTED, e => {
+                            console.log('Cambio de calidad solicitado:', e.mediaType, 'nivel:', e.newQuality);
+                        })
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, e => {
+                            console.log('Fragment:', e.mediaType, 'bytes:', e.bytesLength, 'tiempo(ms):',
+                                e.request.finishTime - e.request.responseTime);
+                        })
                         */
                     }).catch(handleCrunchyError)
                 }

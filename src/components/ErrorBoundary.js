@@ -50,14 +50,28 @@ class ErrorBoundary extends Component {
     render() {
         if (this.state.hasError) {
             let errorMessage = $L('Unhandled error occurred')
+            let onlyClose = false
             if (this.state.error) {
                 if (this.state.error.message) {
                     errorMessage = this.state.error.message
+                    if (this.state.error.httpStatus &&
+                        [408, 429, 500, 502, 503, 504].includes(this.state.error.httpStatus)) {
+                        onlyClose = true
+                    }
+                } else if (this.state.error.error && typeof this.state.error.error === 'string') {
+                    errorMessage = this.state.error.error
+                    onlyClose = !!this.state.error.retry
                 } else {
                     errorMessage = `${this.state.error}`
                 }
             }
-            return <ErrorPanel message={errorMessage} closeErrorPanel={this.closeErrorPanel} {...this.props} />
+            return (
+                <ErrorPanel
+                    message={errorMessage}
+                    closeErrorPanel={this.closeErrorPanel}
+                    onlyClose={onlyClose}
+                    {...this.props} />
+            )
         }
 
 

@@ -62,8 +62,7 @@ export const setInstalled = async () => {
  * Return next date to show contact screen
  * @returns {Promise<Date>}
  */
-export const getNextContactDate = async () =>
-    storage.nextDonation ? new Date(storage.nextDonation) : undefined
+export const getNextContactDate = async () => storage.nextDonation ? new Date(storage.nextDonation) : undefined
 
 /**
  * Set next date to show contact screen
@@ -72,7 +71,7 @@ export const getNextContactDate = async () =>
 export const setNextContactDate = async () => {
     const today = new Date()
     const nextDate = new Date()
-    nextDate.setMonth(today.getMonth() + 3)  // mounth is 0-based
+    nextDate.setDate(today.getDate() + 35)  // to remender reinit developer time counter.
     await localStore.setNewData({ nextDonation: nextDate.toISOString() })
 }
 
@@ -88,21 +87,9 @@ export const setDeviceInformation = async () => {
             type: 'LG Smart TV'
         }
         if (utils.isTv()) {
-            await new Promise(res => {
-                webOS.service.request('luna://com.webos.service.tv.systemproperty', {
-                    method: 'getSystemInfo',
-                    parameters: { keys: ['modelName'] },
-                    onComplete: (inResponse) => {
-                        const isSucceeded = inResponse.returnValue
-
-                        if (isSucceeded) {
-                            device.name = inResponse.modelName
-                        }
-                        res()
-                    },
-                    onFailure: res,
-                })
-            })
+            /** @type {import('webostvjs').DeviceInfo}*/
+            const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
+            device.name = deviceInfo?.modelName || device.name
         }
         await localStore.setNewData({ device })
     }
