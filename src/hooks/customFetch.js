@@ -101,18 +101,10 @@ export const makeFetchProgressXHR = (onProgress) => {
      * @param {object} options
      * @returns {Promise}
      */
-<<<<<<< HEAD
     return (url, options) => {
         return new Promise((resolve, reject) => {
             const xhr = new window.XMLHttpRequest();
             xhr.open(options.method || 'GET', url, true);
-=======
-    return async (res) => {
-        let out = null
-        if (onProgress) {
-            const reader = res.body.getReader()
-            const total = parseInt(res.headers.get('content-length'))
->>>>>>> refs/heads/master
 
             if (options.headers) {
                 Object.entries(options.headers).forEach(([key, value]) => {
@@ -131,11 +123,10 @@ export const makeFetchProgressXHR = (onProgress) => {
                     loaded = event.loaded;
                     onProgress({ loaded, total })
                 }
-<<<<<<< HEAD
             };
 
             xhr.onload = async () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
+                if (xhr.status) {
                     const arrayBuffer = xhr.response;
                     const resTmp = new window.Response(new window.Blob([arrayBuffer]))
                     const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
@@ -150,22 +141,6 @@ export const makeFetchProgressXHR = (onProgress) => {
         });
     };
 };
-=======
-            }
-            const resTmp = new window.Response(new window.Blob(chunks))
-            const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
-            const buffContent = decodeResponse({ content, compress })
-            out = { status, statusText, content: buffContent.buffer, headers, resUrl }
-        } else {
-            out = await res.json()
-            if (out.returnValue === false) {
-                throw out
-            }
-        }
-        return out
-    }
-}
->>>>>>> refs/heads/master
 
 /**
  * make face progress for a services
@@ -258,7 +233,12 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
                 .then(onSuccess).catch(onFailure);
         } else {
             window.fetch(`${_LOCALHOST_SERVER_}/webos2`, fetchOptions)
-                .then(res => res.json()).then(onSuccess).catch(onFailure)
+                .then(res => res.json()).then(out => {
+                    if (out.returnValue === false) {
+                        throw out
+                    }
+                    return out
+                }).then(onSuccess).catch(onFailure)
         }
     }
 }
