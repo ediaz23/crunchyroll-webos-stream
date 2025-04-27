@@ -136,7 +136,7 @@ const ContactMePanel = ({ noAcceptBtn, ...rest }) => {
                 <Cell style={{ height: '100%' }}>
                     <ImageInfo
                         image={{ src: emailImg }}
-                        title={{ children: $L('Email (Binance, WISE)') }}
+                        title={{ children: $L('Email (Binance)') }}
                     />
                 </Cell>
                 <Cell style={{ height: '100%' }}>
