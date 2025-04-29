@@ -72,7 +72,8 @@
         "build/*",
         "dist/*",
         "service/*",
-        "libs/*"
+        "libs/*",
+        "src/components/player/dash*.js"
     ],
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.2.0",
