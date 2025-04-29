@@ -42,6 +42,7 @@ function cleanIlib(cb) {
                 `_MediaSlider["default"], {
               duration: this.state.duration, // crunchypatch`
             );
+            fileContent = fileContent.replace("'toggleControls']", "'toggleControls', 'activityDetected']");
             fs.writeFileSync(filePath, fileContent, 'utf-8')
         }
     } catch (err) {

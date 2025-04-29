@@ -11,10 +11,11 @@ const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
 /**
  * @param {Object} obj
  * @param {Array<import('./AudioList').Audio>} obj.audios
- * @param {import('./AudioList').Audio} obj.audio
+ * @param {import('./AudioList').Audio} [obj.audio]
  * @param {Function} obj.selectAudio
+ * @param {Function} [obj.triggerActivity]
  */
-const AudioSelect = ({ audios, audio, selectAudio, ...rest }) => {
+const AudioSelect = ({ audios, audio, selectAudio, triggerActivity, ...rest }) => {
 
     /** @type {[Boolean, Function]} */
     const [showAudioList, setShowAudioList] = useState(false)
@@ -26,8 +27,12 @@ const AudioSelect = ({ audios, audio, selectAudio, ...rest }) => {
         onHideAudioList()
     }, [onHideAudioList, selectAudio])
     const audioList = useCallback(() => (
-        <AudioList audios={audios} audio={audio} onSelectAudio={onSelectAudio} />
-    ), [audios, audio, onSelectAudio])
+        <AudioList
+            audios={audios}
+            audio={audio}
+            onSelectAudio={onSelectAudio}
+            triggerActivity={triggerActivity} />
+    ), [audios, audio, onSelectAudio, triggerActivity])
 
     return (
         <IconButtonWithPopup
@@ -48,6 +53,7 @@ AudioSelect.propTypes = {
     audios: PropTypes.arrayOf(PropTypes.object).isRequired,
     audio: PropTypes.object,
     selectAudio: PropTypes.func.isRequired,
+    triggerActivity: PropTypes.func,
 }
 
 export default AudioSelect

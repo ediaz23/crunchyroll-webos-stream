@@ -21,10 +21,11 @@ import Scroller from '../../patch/Scroller'
 /**
  * @param {Object} obj
  * @param {Array<Audio>} obj.audios
- * @param {Audio} obj.audio
+ * @param {Audio} [obj.audio]
  * @param {Function} obj.selectAudio
+ * @param {Function} [obj.triggerActivity]
  */
-const AudioList = ({ audios, audio, onSelectAudio, ...rest }) => {
+const AudioList = ({ audios, audio, onSelectAudio, triggerActivity, ...rest }) => {
 
     const audioList = useMemo(() => audios.map(a => {
         return { key: a.audio_locale, children: a.title }
@@ -35,6 +36,8 @@ const AudioList = ({ audios, audio, onSelectAudio, ...rest }) => {
         <Scroller direction='vertical'
             horizontalScrollbar='hidden'
             verticalScrollbar='visible'
+            onFocus={triggerActivity}
+            onScrollStart={triggerActivity}
             focusableScrollbar>
             <div style={{ maxHeight: ri.scale(400) }}>
                 <Group
@@ -55,6 +58,7 @@ AudioList.propTypes = {
     audios: PropTypes.arrayOf(PropTypes.object).isRequired,
     audio: PropTypes.object,
     onSelectAudio: PropTypes.func.isRequired,
+    triggerActivity: PropTypes.func,
 }
 
 export default AudioList

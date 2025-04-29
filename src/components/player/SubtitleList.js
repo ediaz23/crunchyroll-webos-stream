@@ -19,10 +19,11 @@ import Scroller from '../../patch/Scroller'
 /**
  * @param {Object} obj
  * @param {Array<Subtitle>} obj.subtitles
- * @param {Subtitle} obj.subtitle
+ * @param {Subtitle} [obj.subtitle]
  * @param {Function} obj.onSelectSubtitle
+ * @param {Function} [obj.triggerActivity]
  */
-const SubtitleList = ({ subtitles, subtitle, onSelectSubtitle, ...rest }) => {
+const SubtitleList = ({ subtitles, subtitle, onSelectSubtitle, triggerActivity, ...rest }) => {
 
     const subtitleList = useMemo(() => subtitles.map(a => {
         return { key: a.locale, children: a.title }
@@ -33,6 +34,8 @@ const SubtitleList = ({ subtitles, subtitle, onSelectSubtitle, ...rest }) => {
         <Scroller direction='vertical'
             horizontalScrollbar='hidden'
             verticalScrollbar='visible'
+            onFocus={triggerActivity}
+            onScrollStart={triggerActivity}
             focusableScrollbar>
             <div style={{ maxHeight: ri.scale(400) }}>
                 <Group
@@ -53,6 +56,7 @@ SubtitleList.propTypes = {
     subtitles: PropTypes.arrayOf(PropTypes.object).isRequired,
     subtitle: PropTypes.object,
     onSelectSubtitle: PropTypes.func.isRequired,
+    triggerActivity: PropTypes.func,
 }
 
 export default SubtitleList

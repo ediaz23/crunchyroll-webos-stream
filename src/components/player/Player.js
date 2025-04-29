@@ -495,11 +495,10 @@ const modifierDashRequest = (profile) => {
  */
 const setStreamingConfig = async (dashPlayer) => {
 
-    let bufferTimeDefault = 20
-    let bufferTimeAtTopQuality = 100
-    let bufferTimeAtTopQualityLongForm = 200
-    let bufferToKeep = 10
+    let bufferTimeAtTopQuality = 150
+    let bufferTimeAtTopQualityLongForm = 300
     let isHighEndDevice = true
+    let bufferPruningInterval = 10
 
     if (utils.isTv()) {
         const parseRamSizeInGB = (ddrSizeString) => {
@@ -515,32 +514,30 @@ const setStreamingConfig = async (dashPlayer) => {
         isHighEndDevice = ramInGB >= 1.5 || is4KOrHigher || hasHighDynamicRange
 
         if (isHighEndDevice) {
-            bufferTimeDefault = 25
             bufferTimeAtTopQuality = 150
             bufferTimeAtTopQualityLongForm = 300
-            bufferToKeep = 15
+            bufferPruningInterval = 10
         } else if (ramInGB >= 1) {
-            bufferTimeDefault = 22
             bufferTimeAtTopQuality = 120
             bufferTimeAtTopQualityLongForm = 250
-            bufferToKeep = 12
+            bufferPruningInterval = 7
         } else {
-            bufferTimeDefault = 15
             bufferTimeAtTopQuality = 80
             bufferTimeAtTopQualityLongForm = 150
-            bufferToKeep = 8
+            bufferPruningInterval = 5
         }
     }
 
     dashPlayer.updateSettings({
         streaming: {
             buffer: {
-                bufferTimeDefault,
+                bufferTimeDefault: 15,
                 bufferTimeAtTopQuality,
                 bufferTimeAtTopQualityLongForm,
                 longFormContentDurationThreshold: 600,
                 fastSwitchEnabled: true,
-                bufferToKeep,
+                bufferToKeep: 12,
+                bufferPruningInterval,
             },
             abr: {
                 initialBitrate: { audio: -1, video: -1 },
@@ -882,6 +879,11 @@ const Player = ({ ...rest }) => {
         }
     }, [setMessage])
 
+    /** @type {Function} */
+    const triggerActivity = useCallback(() => {
+        playerCompRef.current?.activityDetected()
+    }, [])
+
     useEffect(() => {  // find audios, it's needed to find stream url
         findAudio({ profile, langConfig: langConfigRef.current, audios }).then(setAudio)
     }, [profile, audios, setAudio, setEndEvent])
@@ -1135,12 +1137,14 @@ const Player = ({ ...rest }) => {
                         {stream.subtitles.length > 1 &&
                             <SubtitleSelect subtitles={stream.subtitles}
                                 subtitle={subtitle}
-                                selectSubtitle={selectSubtitle} />
+                                selectSubtitle={selectSubtitle}
+                                triggerActivity={triggerActivity} />
                         }
                         {stream.audios.length > 1 &&
                             <AudioSelect audios={stream.audios}
                                 audio={audio}
-                                selectAudio={selectAudio} />
+                                selectAudio={selectAudio}
+                                triggerActivity={triggerActivity} />
                         }
                         <ContactMe origin='/profiles/home/player' />
                     </rightComponents>
