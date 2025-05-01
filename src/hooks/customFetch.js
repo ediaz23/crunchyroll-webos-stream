@@ -10,7 +10,7 @@ import { _LOCALHOST_SERVER_ } from '../const'
 const { webOS } = window
 
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
-const CONCURRENT_REQ_LIMIT = 8
+const CONCURRENT_REQ_LIMIT = 10
 let currentReqIndex = CONCURRENT_REQ_LIMIT
 
 /**

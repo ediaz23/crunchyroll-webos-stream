@@ -214,7 +214,7 @@ gulp.task('clean', () =>
 gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
 gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 
-gulp.task('installService', cb => { exec('NODE_ENV=development npm install --prefix=./service', handleError(cb)) })
+gulp.task('installService', cb => { exec('NODE_ENV=development npm ci --prefix=./service', handleError(cb)) })
 
 gulp.task('buildService', cb => { exec('npm run build --prefix=./service', handleError(cb)) })
 gulp.task('buildService-p', cb => { exec('npm run build-p --prefix=./service', handleError(cb)) })

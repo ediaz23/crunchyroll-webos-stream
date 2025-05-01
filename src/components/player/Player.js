@@ -497,8 +497,7 @@ const setStreamingConfig = async (dashPlayer) => {
 
     let bufferTimeAtTopQuality = 150
     let bufferTimeAtTopQualityLongForm = 300
-    let isHighEndDevice = true
-    let bufferPruningInterval = 10
+    let initialBufferLevel = 16
 
     if (utils.isTv()) {
         const parseRamSizeInGB = (ddrSizeString) => {
@@ -509,40 +508,56 @@ const setStreamingConfig = async (dashPlayer) => {
         /** @type {import('webostvjs').DeviceInfo}*/
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
         const ramInGB = parseRamSizeInGB(deviceInfo.ddrSize || '1G')
-        const is4KOrHigher = (deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160)
-        const hasHighDynamicRange = deviceInfo.hdr10 || deviceInfo.dolbyVision || false
-        isHighEndDevice = ramInGB >= 1.5 || is4KOrHigher || hasHighDynamicRange
+        const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
+        const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
 
-        if (isHighEndDevice) {
-            bufferTimeAtTopQuality = 150
-            bufferTimeAtTopQualityLongForm = 300
-            bufferPruningInterval = 10
-        } else if (ramInGB >= 1) {
-            bufferTimeAtTopQuality = 120
-            bufferTimeAtTopQualityLongForm = 250
-            bufferPruningInterval = 7
+        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0)
+
+        if (score >= 6) {
+            // Gama alta
+            bufferTimeAtTopQuality = 180
+            bufferTimeAtTopQualityLongForm = 320
+            initialBufferLevel = 24
+        } else if (score >= 5) {
+            // Gama media-alta (como tu WebOS 5)
+            bufferTimeAtTopQuality = 144
+            bufferTimeAtTopQualityLongForm = 280
+            initialBufferLevel = 20
+        } else if (score >= 3.5) {
+            // Gama media
+            bufferTimeAtTopQuality = 128
+            bufferTimeAtTopQualityLongForm = 240
+            initialBufferLevel = 18
         } else {
-            bufferTimeAtTopQuality = 80
-            bufferTimeAtTopQualityLongForm = 150
-            bufferPruningInterval = 5
+            // Gama baja
+            bufferTimeAtTopQuality = 96
+            bufferTimeAtTopQualityLongForm = 180
+            initialBufferLevel = 14
         }
     }
 
     dashPlayer.updateSettings({
         streaming: {
             buffer: {
-                bufferTimeDefault: 15,
+                bufferTimeDefault: 20,
                 bufferTimeAtTopQuality,
                 bufferTimeAtTopQualityLongForm,
                 longFormContentDurationThreshold: 600,
                 fastSwitchEnabled: true,
                 bufferToKeep: 12,
-                bufferPruningInterval,
+                bufferPruningInterval: 8,
+                initialBufferLevel,
             },
             abr: {
+                autoSwitchBitrate: {
+                    audio: true,
+                    video: true
+                },
                 initialBitrate: { audio: -1, video: -1 },
-                autoSwitchBitrate: { audio: true, video: true },
-            }
+                // IA recomendation
+                // initialBitrate: { audio: 96000, video: 2000000 },
+                limitBitrateByPortal: true
+            },
         }
     })
 }
