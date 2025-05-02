@@ -42,6 +42,7 @@ function cleanIlib(cb) {
                 `_MediaSlider["default"], {
               duration: this.state.duration, // crunchypatch`
             );
+            fileContent = fileContent.replace("'toggleControls']", "'toggleControls', 'activityDetected']");
             fs.writeFileSync(filePath, fileContent, 'utf-8')
         }
     } catch (err) {
@@ -252,7 +253,7 @@ gulp.task('clean', () =>
 gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
 gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 
-gulp.task('installService', cb => { exec('cd service; NODE_ENV=development npm install', handleError(cb)) })
+gulp.task('installService', cb => { exec('cd service; NODE_ENV=development npm ci', handleError(cb)) })
 
 gulp.task('buildService', cb => { exec('cd service; npm run build;', handleError(cb)) })
 gulp.task('buildService-p', cb => { exec('cd service; npm run build-p;', handleError(cb)) })

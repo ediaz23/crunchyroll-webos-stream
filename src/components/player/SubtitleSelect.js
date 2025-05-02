@@ -12,10 +12,11 @@ const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
 /**
  * @param {Object} obj
  * @param {Array<import('./SubtitleList').Subtitle>} obj.subtitles
- * @param {import('./SubtitleList').Subtitle} obj.subtitle
+ * @param {import('./SubtitleList').Subtitle} [obj.subtitle]
  * @param {Function} obj.onSelectSubtitle
+ * @param {Function} [obj.triggerActivity]
  */
-const SubtitleSelect = ({ subtitles, subtitle, selectSubtitle, ...rest }) => {
+const SubtitleSelect = ({ subtitles, subtitle, selectSubtitle, triggerActivity, ...rest }) => {
 
     /** @type {[Boolean, Function]} */
     const [showSubtitleList, setShowSubtitleList] = useState(false)
@@ -27,8 +28,12 @@ const SubtitleSelect = ({ subtitles, subtitle, selectSubtitle, ...rest }) => {
         onHideSubtitleList()
     }, [onHideSubtitleList, selectSubtitle])
     const subtitleList = useCallback(() => (
-        <SubtitleList subtitles={subtitles} subtitle={subtitle} onSelectSubtitle={onSelectSubtitle} />
-    ), [subtitles, subtitle, onSelectSubtitle])
+        <SubtitleList
+            subtitles={subtitles}
+            subtitle={subtitle}
+            onSelectSubtitle={onSelectSubtitle}
+            triggerActivity={triggerActivity} />
+    ), [subtitles, subtitle, onSelectSubtitle, triggerActivity])
 
     return (
         <IconButtonWithPopup
@@ -49,6 +54,7 @@ SubtitleSelect.propTypes = {
     subtitles: PropTypes.arrayOf(PropTypes.object).isRequired,
     subtitle: PropTypes.object,
     selectSubtitle: PropTypes.func.isRequired,
+    triggerActivity: PropTypes.func,
 }
 
 export default SubtitleSelect

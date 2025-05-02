@@ -67,6 +67,13 @@ import utils from '../../utils'
  * @property {Function} process
  */
 
+/**
+ * @typedef LangConfig
+ * @type {Object}
+ * @property {String} audio
+ * @property {String} subtitle
+ */
+
 /** @type {{dashjs: import('dashjs')}*/
 const { dashjs } = window
 /** @type {{webOS: import('webostvjs').WebOS}} */
@@ -163,12 +170,13 @@ const searchAudios = ({ content, getLang }) => {
 
 /**
  * @param {Object} obj
- * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile keep this for consistency
+ * @param {LangConfig} obj.langConfig
  * @param {Array<import('./AudioList').Audio>} obj.audios
  * @returns {Promise<import('./AudioList').Audio>}
  */
-const findAudio = async ({ profile, audios }) => {
-    let audio = audios.find(e => e.audio_locale === profile.preferred_content_audio_language)
+const findAudio = async ({ langConfig, audios }) => {
+    let audio = audios.find(e => e.audio_locale === langConfig.audio)
     if (!audio) {
         audio = audios.find(e => e.audio_locale === 'ja-JP')
         if (!audio) {
@@ -181,11 +189,12 @@ const findAudio = async ({ profile, audios }) => {
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {LangConfig} obj.langConfig
  * @param {Array<import('./SubtitleList').Subtitle>} obj.subtitles
  * @returns {Promise<import('./SubtitleList').Subtitle>}
  */
-const findSubtitle = async ({ profile, subtitles }) => {
-    let sub = subtitles.find(e => e.locale === profile.preferred_content_subtitle_language)
+const findSubtitle = async ({ langConfig, subtitles }) => {
+    let sub = subtitles.find(e => e.locale === langConfig.subtitle)
     if (!sub) {
         sub = subtitles[0]
     }
@@ -195,13 +204,14 @@ const findSubtitle = async ({ profile, subtitles }) => {
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {LangConfig} obj.langConfig
  * @param {Array<import('./AudioList').Audio>} obj.audios
  * @param {import('./AudioList').Audio} obj.audio
  * @param {Function} obj.getLang
  * @param {Object} obj.content
  * @returns {Promise<Stream>}
  */
-const findStream = async ({ profile, audios, audio, getLang, content }) => {
+const findStream = async ({ profile, langConfig, audios, audio, getLang, content }) => {
     /** @type {Stream} */
     let out = null, data = {}, urls = []
     if (_PLAY_TEST_) {  // test stream
@@ -216,6 +226,7 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
                 url: `${_LOCALHOST_SERVER_}/frieren-26.ass`
             }],
             profile,
+            langConfig,
             skipUrl: `${_LOCALHOST_SERVER_}/frieren-26.json`
 
         }
@@ -240,6 +251,7 @@ const findStream = async ({ profile, audios, audio, getLang, content }) => {
                 return { ...subtitle, locale: subtitle.language, title: getLang(subtitle.language) }
             }),
             profile,
+            langConfig,
             skipUrl: `https://static.crunchyroll.com/skip-events/production/${audio.guid}.json`,
             session: data.session,
             token: data.token,
@@ -483,11 +495,9 @@ const modifierDashRequest = (profile) => {
  */
 const setStreamingConfig = async (dashPlayer) => {
 
-    let bufferTimeDefault = 20
-    let bufferTimeAtTopQuality = 100
-    let bufferTimeAtTopQualityLongForm = 200
-    let bufferToKeep = 10
-    let isHighEndDevice = true
+    let bufferTimeAtTopQuality = 150
+    let bufferTimeAtTopQualityLongForm = 300
+    let initialBufferLevel = 16
 
     if (utils.isTv()) {
         const parseRamSizeInGB = (ddrSizeString) => {
@@ -498,42 +508,56 @@ const setStreamingConfig = async (dashPlayer) => {
         /** @type {import('webostvjs').DeviceInfo}*/
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
         const ramInGB = parseRamSizeInGB(deviceInfo.ddrSize || '1G')
-        const is4KOrHigher = (deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160)
-        const hasHighDynamicRange = deviceInfo.hdr10 || deviceInfo.dolbyVision || false
-        isHighEndDevice = ramInGB >= 1.5 || is4KOrHigher || hasHighDynamicRange
+        const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
+        const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
 
-        if (isHighEndDevice) {
-            bufferTimeDefault = 25
-            bufferTimeAtTopQuality = 150
-            bufferTimeAtTopQualityLongForm = 300
-            bufferToKeep = 15
-        } else if (ramInGB >= 1) {
-            bufferTimeDefault = 22
-            bufferTimeAtTopQuality = 120
-            bufferTimeAtTopQualityLongForm = 250
-            bufferToKeep = 12
+        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0)
+
+        if (score >= 6) {
+            // Gama alta
+            bufferTimeAtTopQuality = 180
+            bufferTimeAtTopQualityLongForm = 320
+            initialBufferLevel = 24
+        } else if (score >= 5) {
+            // Gama media-alta (como tu WebOS 5)
+            bufferTimeAtTopQuality = 144
+            bufferTimeAtTopQualityLongForm = 280
+            initialBufferLevel = 20
+        } else if (score >= 3.5) {
+            // Gama media
+            bufferTimeAtTopQuality = 128
+            bufferTimeAtTopQualityLongForm = 240
+            initialBufferLevel = 18
         } else {
-            bufferTimeDefault = 15
-            bufferTimeAtTopQuality = 80
-            bufferTimeAtTopQualityLongForm = 150
-            bufferToKeep = 8
+            // Gama baja
+            bufferTimeAtTopQuality = 96
+            bufferTimeAtTopQualityLongForm = 180
+            initialBufferLevel = 14
         }
     }
 
     dashPlayer.updateSettings({
         streaming: {
             buffer: {
-                bufferTimeDefault,
+                bufferTimeDefault: 20,
                 bufferTimeAtTopQuality,
                 bufferTimeAtTopQualityLongForm,
                 longFormContentDurationThreshold: 600,
                 fastSwitchEnabled: true,
-                bufferToKeep,
+                bufferToKeep: 12,
+                bufferPruningInterval: 8,
+                initialBufferLevel,
             },
             abr: {
+                autoSwitchBitrate: {
+                    audio: true,
+                    video: true
+                },
                 initialBitrate: { audio: -1, video: -1 },
-                autoSwitchBitrate: { audio: true, video: true },
-            }
+                // IA recomendation
+                // initialBitrate: { audio: 96000, video: 2000000 },
+                limitBitrateByPortal: true
+            },
         }
     })
 }
@@ -689,6 +713,11 @@ const Player = ({ ...rest }) => {
         return searchAudios({ content, getLang })
     }, [content, getLang])
     const poster = useMemo(() => findPoster({ content }), [content])
+    /** @type {{current: LangConfig}}*/
+    const langConfigRef = useRef({
+        audio: profile.preferred_content_audio_language,
+        subtitle: profile.preferred_content_subtitle_language,
+    })
     /** @type {[import('./AudioList').Audio, Function]} */
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
@@ -699,9 +728,9 @@ const Player = ({ ...rest }) => {
     const [preview, setPreview] = useState(null)
     /** @type {[Event, Function]} */
     const [endEvent, setEndEvent] = useState(null)
-    /** @type {{current:import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
+    /** @type {{current: import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const playerCompRef = useRef(null)
-    /** @type {{current: import('dashjs').MediaPlayerClass}*/
+    /** @type {{current: import('dashjs').MediaPlayerClass}} */
     const playerRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
@@ -730,11 +759,13 @@ const Player = ({ ...rest }) => {
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
         setAudio(audios[select])
+        langConfigRef.current.audio = audios[select].audio_locale
     }, [setAudio, audios])
 
     /** @type {Function} */
     const selectSubtitle = useCallback((select) => {
         setSubtitle(stream.subtitles[select])
+        langConfigRef.current.subtitle = stream.subtitles[select].locale
     }, [stream, setSubtitle])
 
     /** @type {Function} */
@@ -863,13 +894,18 @@ const Player = ({ ...rest }) => {
         }
     }, [setMessage])
 
+    /** @type {Function} */
+    const triggerActivity = useCallback(() => {
+        playerCompRef.current?.activityDetected()
+    }, [])
+
     useEffect(() => {  // find audios, it's needed to find stream url
-        findAudio({ profile, audios }).then(setAudio)
+        findAudio({ profile, langConfig: langConfigRef.current, audios }).then(setAudio)
     }, [profile, audios, setAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
         if (audios.includes(audio)) {
-            findStream({ profile, audios, audio, getLang, content })
+            findStream({ profile, langConfig: langConfigRef.current, audios, audio, getLang, content })
                 .then(setStream)
                 .catch(handleCrunchyError)
         }
@@ -1128,12 +1164,14 @@ const Player = ({ ...rest }) => {
                         {stream.subtitles.length > 1 &&
                             <SubtitleSelect subtitles={stream.subtitles}
                                 subtitle={subtitle}
-                                selectSubtitle={selectSubtitle} />
+                                selectSubtitle={selectSubtitle}
+                                triggerActivity={triggerActivity} />
                         }
                         {stream.audios.length > 1 &&
                             <AudioSelect audios={stream.audios}
                                 audio={audio}
-                                selectAudio={selectAudio} />
+                                selectAudio={selectAudio}
+                                triggerActivity={triggerActivity} />
                         }
                         <ContactMe origin='/profiles/home/player' />
                     </rightComponents>
