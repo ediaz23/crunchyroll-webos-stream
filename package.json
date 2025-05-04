@@ -88,6 +88,7 @@
         "classnames": "^2.5.1",
         "core-js": "3.39.0",
         "crunchyroll-js-api": "^1.4.3",
+        "dashjs-webos5": "^5.0.101",
         "element-closest-polyfill": "^1.0.7",
         "fake-xml-http-request": "^2.1.2",
         "fflate": "^0.8.2",
