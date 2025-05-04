@@ -1,5 +1,5 @@
 
-import './dash.all.min'
+import 'dashjs-webos5'
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import VideoPlayer, { MediaControls } from '@enact/moonstone/VideoPlayer'
 import Button from '@enact/moonstone/Button'
@@ -74,7 +74,7 @@ import utils from '../../utils'
  * @property {String} subtitle
  */
 
-/** @type {{dashjs: import('dashjs')}*/
+/** @type {{dashjs: import('dashjs-webos5')}*/
 const { dashjs } = window
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -439,7 +439,7 @@ const findNextEp = async ({ profile, content, step }) => {
 }
 
 /**
- * @param {import('dashjs').LicenseResponse} res
+ * @param {import('dashjs-webos5').LicenseResponse} res
  * @return {}
  */
 const decodeLicense = (res) => {
@@ -460,7 +460,7 @@ const decodeLicense = (res) => {
  * @return {Function}
  */
 const requestDashLicense = (profile) => {
-    /** @param {import('dashjs').LicenseRequest} req */
+    /** @param {import('dashjs-webos5').LicenseRequest} req */
     return async (req) => {
         /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
         const account = await getContentParam(profile)
@@ -491,7 +491,7 @@ const modifierDashRequest = (profile) => {
 }
 
 /**
- * @param {import('dashjs').MediaPlayerClass} dashPlayer
+ * @param {import('dashjs-webos5').MediaPlayerClass} dashPlayer
  */
 const setStreamingConfig = async (dashPlayer) => {
 
@@ -567,12 +567,12 @@ const setStreamingConfig = async (dashPlayer) => {
  * @param {Stream} stream
  * @param {Object} content
  * @param {import('./SubtitleList').Subtitle} subtitle
- * @returns {Promise<import('dashjs').MediaPlayerClass>}
+ * @returns {Promise<import('dashjs-webos5').MediaPlayerClass>}
  */
 const createDashPlayer = async (audio, stream, content, subtitle) => {
     let url = null
     const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
-    /** @type {import('dashjs').MediaPlayerClass}*/
+    /** @type {import('dashjs-webos5').MediaPlayerClass}*/
     const dashPlayer = dashjs.MediaPlayer().create()
 
     dashPlayer.extend('XHRLoader', XHRLoader)
@@ -730,7 +730,7 @@ const Player = ({ ...rest }) => {
     const [endEvent, setEndEvent] = useState(null)
     /** @type {{current: import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
     const playerCompRef = useRef(null)
-    /** @type {{current: import('dashjs').MediaPlayerClass}} */
+    /** @type {{current: import('dashjs-webos5').MediaPlayerClass}} */
     const playerRef = useRef(null)
     /** @type {Stream} */
     const emptyStream = useMemo(() => {
