@@ -1,6 +1,6 @@
 {
     "id": "com.crunchyroll.stream.app",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "vendor": "Esteban Diaz",
     "type": "web",
     "main": "index.html",
