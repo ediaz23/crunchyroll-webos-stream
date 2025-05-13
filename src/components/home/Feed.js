@@ -203,8 +203,12 @@ const processDynamicCollection = async (carousel, profile) => {
             data: res.data.filter(val => {
                 let out = true
                 if (val.type === 'episode') {
-                    out = !added.has(val.episode_metadata.series_id)
-                    added.add(val.episode_metadata.series_id)
+                    if (val.images && Object.keys(val.images).length) {
+                        out = !added.has(val.episode_metadata.series_id)
+                        added.add(val.episode_metadata.series_id)
+                    } else {
+                        out = false
+                    }
                 }
                 return out
             })
