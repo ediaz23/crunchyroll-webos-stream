@@ -76,6 +76,8 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
     const columnIndexRef = useRef(null)
+    /** @type {{current: Object}} */
+    const feedRef = useRef(feed)
     /** @type {{current: HTMLElement}} */
     const compRef = useRef({ current: null })
     /** @type {[Number, Function]} */
@@ -122,16 +124,18 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     }, [itemSize, setItemHeight])
 
     useEffect(() => {
+        feedRef.current = feed
         if (rowIndex === homePosition.rowIndex) {
             columnIndexRef.current = homePosition.columnIndex
         } else {
             columnIndexRef.current = null
         }
-    }, [rowIndex, homePosition])
+    }, [feed, rowIndex, homePosition])
 
     useEffect(() => {
         if (columnIndexRef.current !== null) {
-            setHomeViewReady(true)
+            /** this need a Pormise cause Feed -> renderRow need a Promise as well. */
+            Promise.resolve().then(() => setHomeViewReady(true))
         }
     }, [setHomeViewReady])
 
@@ -139,8 +143,12 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
         const interval = setInterval(() => {
             if (scrollToRef.current) {
                 clearInterval(interval)
-                if (columnIndexRef.current !== null) {
-                    scrollToRef.current({ index: columnIndexRef.current, animate: false, focus: true })
+                if (columnIndexRef.current !== null && feedRef.current) {
+                    if (feedRef.current.resource_type === 'dynamic_collection') {
+                        scrollToRef.current({ index: 0, animate: false, focus: true })
+                    } else {
+                        scrollToRef.current({ index: columnIndexRef.current, animate: false, focus: true })
+                    }
                 }
             }
         }, 100)

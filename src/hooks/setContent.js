@@ -6,6 +6,7 @@ import {
     pathState, playContentState, selectedContentState,
     homePositionState, contentDetailBakState, homeBackupState,
     contentDetailBackupState, contentDetailPositionState,
+    homeFeedState,
 } from '../recoilConfig'
 
 import back from '../back'
@@ -68,6 +69,8 @@ export function useSetContent() {
     const setContentDetailBackup = useSetRecoilState(contentDetailBackupState)
     /** @type {Function} */
     const setContentDetailPosition = useSetRecoilState(contentDetailPositionState)
+    /** @type {Function} */
+    const setHomeFeed = useSetRecoilState(homeFeedState)
 
     return useCallback(
         /**
@@ -76,6 +79,16 @@ export function useSetContent() {
         ({ content, rowIndex, columnIndex, backPath = '/profiles/home', contentBak = {} }) => {
             back.pushHistory({
                 doBack: () => {
+                    if (backPath === '/profiles/home') {
+                        setHomeFeed(backState => {
+                            return backState.map(item =>
+                                item.resource_type === 'dynamic_collection'
+                                    ? { ...item, processed: undefined }
+                                    : item
+                            )
+                        })
+
+                    }
                     setPath(backPath)
                 }
             })
@@ -95,7 +108,7 @@ export function useSetContent() {
             }
             setHomePosition({ rowIndex, columnIndex })
         }, [setPath, setPlayContent, setSelectedContent, setHomePosition, setContentDetailBak,
-        setContentDetailBackup, setContentDetailPosition]
+        setContentDetailBackup, setContentDetailPosition, setHomeFeed]
     )
 }
 
