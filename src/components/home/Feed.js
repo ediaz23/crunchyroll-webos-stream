@@ -78,7 +78,7 @@ const processCarousel = async (carousel, profile, type) => {
         objectIds = Array.from(new Set(resObjectIds.filter(item => !!item)))
     }
     if (objectIds.length) {
-        if (type === 'music') {
+        if (type === 'music' || carousel.items[0].link.includes('/artist/')) {
             out.items = (await api.music.getArtists(profile, objectIds)).data
         } else {
             out.items = (await api.cms.getObjects(profile, { objectIds, ratings: true })).data
