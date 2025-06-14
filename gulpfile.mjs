@@ -109,6 +109,17 @@ var _increment = function increment(state) {  // crunchypatch
     }
 
     try {
+        const filePath = 'src/views/DeveloperPanel.js'
+        /** @type {String} */
+        let fileContent = fs.readFileSync(filePath, 'utf-8')
+        const versionLine = `                        <BodyText className='app-version'>{$L('Version') + ' ${packageJson.version}'} </BodyText>`
+        fileContent = fileContent.replace(/^.*app-version.*$/m, versionLine);
+        fs.writeFileSync(filePath, fileContent, 'utf-8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+    
+    try {
         const fixCommonjs = file => {
             const packagePath = file
             const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
