@@ -18,6 +18,7 @@ import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
+import { usePreviewWorker } from '../../hooks/previewWorker'
 import logger from '../../logger'
 import api from '../../api'
 import { getContentParam } from '../../api/utils'
@@ -256,83 +257,6 @@ const findStream = async ({ profile, langConfig, audios, audio, getLang, content
             session: data.session,
             token: data.token,
         }
-    }
-    return out
-}
-
-/**
- * Download file per chunkSize
- * @param {String} url
- * @param {Number} chunkSize
- * @returns {Promise<{bifData: Uint8Array, requests: Array<Promise>}>}
- */
-const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
-    const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
-    /** @type {Uint8Array} */
-    let bifData = null
-    /** @type {Array<Promise>} */
-    const requests = []
-    if (headResponse.ok) {
-        const totalSize = parseInt(headResponse.headers.get('Content-Length'))
-        if (isNaN(totalSize) || !totalSize) {
-            throw new Error('Bif size not working')
-        }
-        bifData = new Uint8Array(totalSize)
-        for (let start = 0; start < totalSize; start += chunkSize) {
-            const end = Math.min(start + chunkSize - 1, totalSize - 1)
-            const reqConfig = { headers: { Range: `bytes=${start}-${end}` } }
-            requests.push(fetchUtils.customFetch(url, reqConfig, true))
-            requests[requests.length - 1].then(chunkArray => bifData.set(chunkArray, start))
-        }
-    }
-
-    return { bifData, requests }
-}
-
-/**
- * @todo improve memory usage
- * @param {{ bif: String }} obj
- * @returns {Promise<{chunks: Array<{start: int, end: int, url: string}>}>}
- */
-const findPreviews = async ({ bif }) => {
-    /** @type {{chunks: Array<{start: int, end: int, url: string}>}} */
-    const out = { chunks: [] }
-
-    try {
-        if (bif) {
-            /** @type {{bifData: Uint8Array, requests: Array<Promise>}} */
-            const { bifData, requests } = await downloadBifFile(bif)
-            const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
-
-            let imageStartIndex = -1
-            let currentChunkIndex = -1;
-            for (let i = 0; i < bifData.length - 1; i++) {
-                const chunkIndex = Math.floor((i / bifData.length) * requests.length);
-
-                if (chunkIndex !== currentChunkIndex) {
-                    currentChunkIndex = chunkIndex
-                    await requests[chunkIndex]
-                }
-                if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
-                    if (imageStartIndex !== -1) {
-                        const chunk = bifData.slice(imageStartIndex, i)
-                        const blob = new window.Blob([chunk], { type: 'image/jpeg' })
-                        const url = window.URL.createObjectURL(blob)
-                        out.chunks.push({ start: imageStartIndex, end: i, url })
-                    }
-                    imageStartIndex = i
-                }
-            }
-            await requests[requests.length - 1]
-            if (imageStartIndex !== -1) {
-                const chunk = bifData.slice(imageStartIndex)
-                const blob = new window.Blob([chunk], { type: 'image/jpeg' })
-                const url = window.URL.createObjectURL(blob)
-                out.chunks.push({ start: imageStartIndex, url })
-            }
-        }
-    } catch (e) {
-        logger.error(e)
     }
     return out
 }
@@ -700,6 +624,7 @@ const Player = ({ ...rest }) => {
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
     const getLang = useGetLanguage()
+    const { findPreviews, cancelPreviews } = usePreviewWorker();
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Object, Function]} */
@@ -926,6 +851,7 @@ const Player = ({ ...rest }) => {
             findSkipEvents(stream).then(setSkipEvents)
         }
         return () => {
+            cancelPreviews()
             setPreviews(lastPreview => {
                 lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
                 return { chunks: [], data: null }
@@ -933,7 +859,7 @@ const Player = ({ ...rest }) => {
             setSubtitle(null)
             setSkipEvents(null)
         }
-    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents])
+    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents, findPreviews, cancelPreviews])
 
     useEffect(() => {  // attach subs
         let interval = null
