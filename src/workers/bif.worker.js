@@ -32,7 +32,7 @@ self.onmessage = ({ data }) => {
                 if (start !== -1) {
                     const s = offset - prevLen + start
                     const e = offset - prevLen + i
-                    slices.push({ start: s, end: e, slice: buf.slice(start, i) })
+                    slices.push({ start: s, end: e, slice: buf.slice(start, i), last })
                 }
                 start = i
             }
@@ -44,7 +44,7 @@ self.onmessage = ({ data }) => {
             if (entry.tail.length >= 2) {
                 const s = offset + chunk.length - entry.tail.length
                 const e = offset + chunk.length
-                slices.push({ start: s, end: e, slice: entry.tail })
+                slices.push({ start: s, end: e, slice: entry.tail, last })
             }
             tasks.delete(taskId)
         }

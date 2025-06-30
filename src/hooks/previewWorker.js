@@ -68,7 +68,10 @@ export const createPreviewWorker = () => {
             worker.postMessage({ type: 'cancel', taskId })
             listeners.delete(taskId)
         },
-        terminate: () => worker.terminate()
+        terminate: () => {
+            listeners.clear()
+            worker.terminate()
+        }
     }
 }
 
@@ -114,10 +117,14 @@ export function usePreviewWorker() {
             /** @type {Function} */
             const appendSlise = (slices) => {
                 if (currentTask.current.id === thisTaskId & currentTask.current.active) {
-                    slices.forEach(({ start, end, slice }) => {
+                    slices.forEach(({ start, end, slice, last }) => {
                         const blob = new Blob([slice], { type: 'image/jpeg' })
                         const url = URL.createObjectURL(blob)
                         out.chunks[chunkIndex++] = { start, end, url }
+                        if (last && streamRef.current) {
+                            streamRef.current.terminate()
+                            streamRef.current = null
+                        }
                     })
                 }
             }
@@ -142,8 +149,15 @@ export function usePreviewWorker() {
     }, [cancelPreviews])
 
     useEffect(() => {
-        streamRef.current = createPreviewWorker()
-        return () => streamRef.current.terminate()
+        if (!streamRef.current) {
+            streamRef.current = createPreviewWorker()
+        }
+        return () => {
+            if (streamRef.current) {
+                streamRef.current.terminate()
+            }
+            streamRef.current = null
+        }
     }, [])
 
     return { findPreviews, cancelPreviews }
