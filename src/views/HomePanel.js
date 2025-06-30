@@ -183,7 +183,7 @@ const HomePanel = (props) => {
     /** @type {Function} */
     const setActivity = useCallback((ev) => {
         setShowFullToolbar(false)
-        const tmpIndex = parseInt(ev.currentTarget.dataset.index)
+        const tmpIndex = ev ? parseInt(ev.currentTarget.dataset.index) : 0
         setCurrentActivity(tmpIndex)
         if (tmpIndex !== currentActivity) {
             resetHomeState()
@@ -281,7 +281,7 @@ const HomePanel = (props) => {
                                 setMusicFeed={setMusicFeedFn} />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
-                            <ConfirmExitPanel onCancel={hideShowFullToolbar} />
+                            <ConfirmExitPanel onCancel={setActivity} />
                         </ActivityViews>
                     }
                 </Cell>

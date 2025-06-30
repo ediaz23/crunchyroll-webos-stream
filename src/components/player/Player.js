@@ -824,6 +824,45 @@ const Player = ({ ...rest }) => {
         playerCompRef.current?.activityDetected()
     }, [])
 
+    const leftComponents = useMemo(() => {
+        return (
+            <>
+                <ContentInfo content={content} />
+                {['episode'].includes(content.type) && (
+                    <>
+                        <IconButton
+                            backgroundOpacity="lightTranslucent"
+                            onClick={markAsWatched}
+                            tooltipText={$L('Mark as watched')}>
+                            checkselection
+                        </IconButton>
+                        <Rating profile={profile} content={content} />
+                    </>
+                )}
+            </>
+        );
+    }, [content, markAsWatched, profile])
+
+    const rightComponents = useMemo(() => {
+        return (
+            <>
+                {stream.subtitles.length > 1 &&
+                    <SubtitleSelect subtitles={stream.subtitles}
+                        subtitle={subtitle}
+                        selectSubtitle={selectSubtitle}
+                        triggerActivity={triggerActivity} />
+                }
+                {stream.audios.length > 1 &&
+                    <AudioSelect audios={stream.audios}
+                        audio={audio}
+                        selectAudio={selectAudio}
+                        triggerActivity={triggerActivity} />
+                }
+                <ContactMe origin='profiles/home/player' />
+            </>
+        );
+    }, [stream, subtitle, selectSubtitle, audio, selectAudio, triggerActivity])
+
     useEffect(() => {  // find audios, it's needed to find stream url
         findAudio({ profile, langConfig: langConfigRef.current, audios }).then(setAudio)
     }, [profile, audios, setAudio, setEndEvent])
@@ -1061,34 +1100,8 @@ const Player = ({ ...rest }) => {
                     <source src={emptyVideo} />
                 </video>
                 <MediaControls id="media-controls">
-                    <leftComponents>
-                        <ContentInfo content={content} />
-                        {['episode'].includes(content.type) && (<>
-                            <IconButton
-                                backgroundOpacity="lightTranslucent"
-                                onClick={markAsWatched}
-                                tooltipText={$L('Mark as watched')}>
-                                checkselection
-                            </IconButton>
-                            <Rating profile={profile} content={content} />
-
-                        </>)}
-                    </leftComponents>
-                    <rightComponents>
-                        {stream.subtitles.length > 1 &&
-                            <SubtitleSelect subtitles={stream.subtitles}
-                                subtitle={subtitle}
-                                selectSubtitle={selectSubtitle}
-                                triggerActivity={triggerActivity} />
-                        }
-                        {stream.audios.length > 1 &&
-                            <AudioSelect audios={stream.audios}
-                                audio={audio}
-                                selectAudio={selectAudio}
-                                triggerActivity={triggerActivity} />
-                        }
-                        <ContactMe origin='/profiles/home/player' />
-                    </rightComponents>
+                    <leftComponents>{leftComponents}</leftComponents>
+                    <rightComponents>{rightComponents}</rightComponents>
                 </MediaControls>
             </VideoPlayer>
             <Button id="skip-button"
