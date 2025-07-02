@@ -1,7 +1,6 @@
 
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
-import { gzipSync, gunzipSync } from 'fflate'
 import utils from '../utils'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
@@ -12,6 +11,7 @@ const { webOS } = window
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const CONCURRENT_REQ_LIMIT = 10
 let currentReqIndex = CONCURRENT_REQ_LIMIT
+
 
 /**
  * Hack class to set url property
@@ -65,31 +65,6 @@ export const setUpRequest = (url, options = {}) => {
     return config
 }
 
-
-/**
- * @param {Object} obj
- * @param {String} obj.content
- * @param {Boolean} obj.compress
- * @return {Uint8Array}
- */
-export const decodeResponse = ({ content, compress }) => {
-    let out
-    if (compress) {
-        out = gunzipSync(utils.base64toArray(content))
-    } else {
-        out = utils.base64toArray(content)
-    }
-    return out
-}
-
-/**
- * @param {Object} data
- * @return {String}
- */
-export const encodeRequest = (data) => {
-    return utils.arrayToBase64(gzipSync(utils.stringToUint8Array(JSON.stringify(data))))
-}
-
 /**
  * fake progress event
  * @param {Function} [onProgress]
@@ -124,7 +99,7 @@ export const makeFetchProgress = (onProgress) => {
             }
             const resTmp = new window.Response(new window.Blob(chunks))
             const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
-            const buffContent = decodeResponse({ content, compress })
+            const buffContent = await utils.decodeResponse({ content, compress })
             out = { status, statusText, content: buffContent.buffer, headers, resUrl }
         } else {
             out = await res.json()
@@ -156,17 +131,23 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
             if (config.resStatus === 'active') {
                 const { loaded, total, status, content, compress } = res
                 if (200 <= status && status < 300) {
-                    chunks.push(decodeResponse({ content, compress }))
-                    onProgress({ loaded, total })
-                    if (loaded === total) {
-                        const resTmp = new window.Response(new window.Blob(chunks))
-                        resTmp.arrayBuffer().then(arr => {
-                            res.compress = false
-                            res.content = arr
-                            sub.cancel()
-                            onSuccess(res)
-                        })
-                    }
+                    utils.decodeResponse({ content, compress }).then(chunk => {
+                        chunks.push(chunk)
+                        onProgress({ loaded, total })
+                        if (loaded === total) {
+                            const resTmp = new window.Response(new window.Blob(chunks))
+                            resTmp.arrayBuffer().then(arr => {
+                                res.compress = false
+                                res.content = arr
+                                sub.cancel()
+                                onSuccess(res)
+                            })
+                        }
+                    }).catch(() => {
+                        sub.cancel()
+                        res.status = 500
+                        onSuccess(res)
+                    })
                 } else {
                     sub.cancel()
                     onSuccess(res)
@@ -187,41 +168,43 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
  * @param {Function} [obj.onProgress]
  */
 export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
-    config.id = uuidv4()
-    const parameters = { d: encodeRequest(config) }
-    if (utils.isTv()) {
-        const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
-        const method = `forwardRequest${currentReq}`
-        if (onProgress) {
-            const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
-            const sub = webOS.service.request(serviceURL, {
-                method,
-                parameters,
-                onSuccess: (res) => serviceProgress(res, sub),
-                onFailure: (err) => {
-                    sub.cancel()
-                    onFailure(err)
-                },
-                subscribe: true,
-            })
+    utils.encodeRequest(config).then(d => {
+        config.id = uuidv4()
+        const parameters = { d }
+        if (utils.isTv()) {
+            const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
+            const method = `forwardRequest${currentReq}`
+            if (onProgress) {
+                const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
+                const sub = webOS.service.request(serviceURL, {
+                    method,
+                    parameters,
+                    onSuccess: (res) => serviceProgress(res, sub),
+                    onFailure: (err) => {
+                        sub.cancel()
+                        onFailure(err)
+                    },
+                    subscribe: true,
+                })
+            } else {
+                webOS.service.request(serviceURL, {
+                    method,
+                    parameters,
+                    onSuccess,
+                    onFailure,
+                })
+            }
         } else {
-            webOS.service.request(serviceURL, {
-                method,
-                parameters,
-                onSuccess,
-                onFailure,
-            })
+            const fetchProgress = makeFetchProgress(onProgress)
+            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(parameters),
+            }).then(fetchProgress).then(onSuccess).catch(onFailure)
         }
-    } else {
-        const fetchProgress = makeFetchProgress(onProgress)
-        window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(parameters),
-        }).then(fetchProgress).then(onSuccess).catch(onFailure)
-    }
+    }).catch(onFailure)
 }
 
 /**
@@ -238,21 +221,24 @@ export const customFetch = async (url, options = {}, direct = false) => {
             config.resStatus = 'done'
             const { status, statusText, content, headers, resUrl, compress } = data
             logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
-            const decodedContent = content ? decodeResponse({ content, compress }) : undefined
-            if (direct) {
-                if (200 <= status && status < 300) {
-                    res(decodedContent)
+            /**  @type {Promise<Uint8Array>} */
+            const decodedContentProm = content ? utils.decodeResponse({ content, compress }) : Promise.resolve()
+            decodedContentProm.then(decodedContent => {
+                if (direct) {
+                    if (200 <= status && status < 300) {
+                        res(decodedContent)
+                    } else {
+                        rej({ status, statusText, headers })
+                    }
                 } else {
-                    rej({ status, statusText, headers })
+                    res(new ResponseHack(decodedContent, {
+                        status,
+                        statusText,
+                        headers,
+                        url: resUrl || config.url,
+                    }))
                 }
-            } else {
-                res(new ResponseHack(decodedContent, {
-                    status,
-                    statusText,
-                    headers,
-                    url: resUrl || config.url,
-                }))
-            }
+            })
         }
         const onFailure = (error) => {
             config.resStatus = 'fail'

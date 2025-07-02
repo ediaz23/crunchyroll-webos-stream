@@ -1,5 +1,6 @@
 
 import 'webostvjs'
+import { gzipSync, gunzipSync } from 'fflate'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -8,7 +9,7 @@ const { webOS } = window
  * Rreturn if is a tv device
  * @returns {Boolean}
  */
-export const isTv = () => window.PalmServiceBridge || window.PalmServiceBridge
+export const isTv = () => !!window.PalmServiceBridge
 
 /**
  * Convert object to json but sort keys before
@@ -273,6 +274,30 @@ export function customStringify(obj, space = 2) {
     return helper(obj, 0);
 }
 
+/**
+ * @param {Object} obj
+ * @param {String} obj.content
+ * @param {Boolean} obj.compress
+ * @return {Promise<Uint8Array>}
+ */
+const decodeResponse = async ({ content, compress }) => {
+    let out
+    if (compress) {
+        out = gunzipSync(base64toArray(content))
+    } else {
+        out = base64toArray(content)
+    }
+    return out
+}
+
+/**
+ * @param {Object} data
+ * @return {Promise<String>}
+ */
+const encodeRequest = async (data) => {
+    return arrayToBase64(gzipSync(stringToUint8Array(JSON.stringify(data))))
+}
+
 export default {
     isTv,
     stringifySorted,
@@ -289,4 +314,6 @@ export default {
     uint8ArrayToString,
     stringToUint8Array,
     customStringify,
+    decodeResponse,
+    encodeRequest,
 }
