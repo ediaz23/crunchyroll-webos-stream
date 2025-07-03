@@ -1,4 +1,5 @@
-/* global self */
+
+import { gzipSync, gunzipSync } from 'fflate'
 
 /**
  * @param {String} content
@@ -52,12 +53,9 @@ function base64toArray(content) {
  * @return {Uint8Array}
  */
 function decodeResponse({ content, compress }) {
-    /** @type {{fflate:  import('fflate')}} */
-    const { fflate } = self
-
     let out
     if (compress) {
-        out = fflate.gunzipSync(base64toArray(content))
+        out = gunzipSync(base64toArray(content))
     } else {
         out = base64toArray(content)
     }
@@ -69,23 +67,14 @@ function decodeResponse({ content, compress }) {
  * @return {String}
  */
 function encodeRequest(data) {
-    /** @type {{fflate:  import('fflate')}} */
-    const { fflate } = self
-
-    return arrayToBase64(fflate.gzipSync(stringToUint8Array(JSON.stringify(data))))
+    return arrayToBase64(gzipSync(stringToUint8Array(JSON.stringify(data))))
 }
 
-const workObj = {
+export default {
     arrayToBase64,
     base64toArray,
     stringToUint8Array,
     uint8ArrayToString,
     decodeResponse,
     encodeRequest,
-}
-
-if (typeof module !== 'undefined') {
-    module.exports = workObj
-} else {
-    self.workObj = workObj
 }

@@ -1,6 +1,6 @@
 {
     "name": "com.crunchyroll.webos.stream",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {

@@ -1,19 +1,11 @@
 /* global Worker */
 
 import 'webostvjs'
-import { gzipSync, gunzipSync } from 'fflate'
 import utilsImpl from './utils.impl'
 
-window.fflate = { gzipSync, gunzipSync }
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
-
-// eslint-disable-next-line no-unused-vars
-const _utilsImpl = new URL('./utils.impl.js', import.meta.url)
-const fflateLib = new URL('../node_modules/fflate/umd/index.js', import.meta.url)
-const UtilWorker = new URL('./workers/util.worker.js', import.meta.url)
-const worker = new Worker(UtilWorker)
-
+const worker = new Worker(new URL('./workers/util.worker.js', import.meta.url), { type: 'module' })
 let taskCounter = 0
 const taskMap = new Map()
 
@@ -44,11 +36,10 @@ export const isTv = () => !!window.PalmServiceBridge
  */
 const callWorker = (type, ...args) => {
     return new Promise((res, rej) => {
-        const scriptPath = isTv() ? webOS.fetchAppRootPath() : fflateLib.origin
         const taskId = `task-${++taskCounter}`
         taskMap.set(taskId, { res, rej })
 
-        worker.postMessage({ scriptPath, type, taskId, payload: args })
+        worker.postMessage({ type, taskId, payload: args })
     })
 }
 

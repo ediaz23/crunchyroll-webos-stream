@@ -884,12 +884,14 @@ const Player = ({ ...rest }) => {
     }, [profile, content, audios, audio, getLang, setStream, emptyStream, handleCrunchyError])
 
     useEffect(() => {  // find subtitles preview and skip events
+        let previewTimeout = null
         if (stream.urls) {
             findSubtitle(stream).then(setSubtitle)
-            findPreviews(stream).then(setPreviews)
+            previewTimeout = setTimeout(() => findPreviews(stream).then(setPreviews), 1000 * 5)
             findSkipEvents(stream).then(setSkipEvents)
         }
         return () => {
+            clearTimeout(previewTimeout)
             cancelPreviews()
             setPreviews(lastPreview => {
                 lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
