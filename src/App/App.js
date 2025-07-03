@@ -83,6 +83,9 @@ const App = ({ ...rest }) => {
             setDBInit(true)
         }
         initDB()
+        return () => {
+            utils.worker.terminate()
+        }
     }, [setDBInit, customFetch])
 
     return (

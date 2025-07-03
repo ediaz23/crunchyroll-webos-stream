@@ -1,15 +1,101 @@
+/* global Worker */
 
 import 'webostvjs'
 import { gzipSync, gunzipSync } from 'fflate'
+import utilsImpl from './utils.impl'
 
+window.fflate = { gzipSync, gunzipSync }
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
+
+// eslint-disable-next-line no-unused-vars
+const _utilsImpl = new URL('./utils.impl.js', import.meta.url)
+const fflateLib = new URL('../node_modules/fflate/umd/index.js', import.meta.url)
+const UtilWorker = new URL('./workers/util.worker.js', import.meta.url)
+const worker = new Worker(UtilWorker)
+
+let taskCounter = 0
+const taskMap = new Map()
+
+
+worker.onmessage = ({ data }) => {
+    const { taskId, result, error, success } = data
+    const { res, rej } = taskMap.get(taskId) || {}
+    taskMap.delete(taskId)
+
+    if (success) {
+        res(result)
+    } else {
+        rej(new Error(error))
+    }
+}
 
 /**
  * Rreturn if is a tv device
  * @returns {Boolean}
  */
 export const isTv = () => !!window.PalmServiceBridge
+
+
+/**
+ * @param {String} type
+ * @param {Array} args
+ * @return {Promise}
+ */
+const callWorker = (type, ...args) => {
+    return new Promise((res, rej) => {
+        const scriptPath = isTv() ? webOS.fetchAppRootPath() : fflateLib.origin
+        const taskId = `task-${++taskCounter}`
+        taskMap.set(taskId, { res, rej })
+
+        worker.postMessage({ scriptPath, type, taskId, payload: args })
+    })
+}
+
+export const arrayToBase64 = utilsImpl.arrayToBase64
+/**
+ * @param {Uint8Array|ArrayBuffer} body
+ * @returns {Promise<String>}
+ */
+export const arrayToBase64Async = body => callWorker('arrayToBase64', body)
+
+export const base64toArray = utilsImpl.base64toArray
+/**
+ * @param {String} content
+ * @returns {Promise<Uint8Array>}
+ */
+export const base64toArrayAsync = content => callWorker('base64toArray', content)
+
+export const stringToUint8Array = utilsImpl.stringToUint8Array
+/**
+ * @param {String} content
+ * @returns {Promise<Uint8Array>}
+ */
+export const stringToUint8ArrayAsync = content => callWorker('stringToUint8Array', content)
+
+export const uint8ArrayToString = utilsImpl.uint8ArrayToString
+/**
+ * @param {Uint8Array} content
+ * @returns {Promise<String>}
+ */
+export const uint8ArrayToStringAsync = content => callWorker('uint8ArrayToString', content)
+
+export const decodeResponse = utilsImpl.decodeResponse
+/**
+ * @param {Object} obj
+ * @param {String} obj.content
+ * @param {Boolean} obj.compress
+ * @return {Promise<Uint8Array>}
+ */
+export const decodeResponseAsync = ({ content, compress }) => callWorker('decodeResponse', { content, compress })
+
+export const encodeRequest = utilsImpl.encodeRequest
+/**
+ * @param {Object} content
+ * @return {Promise<String>}
+ */
+export const encodeRequestAsync = content => callWorker('encodeRequest', content)
+
 
 /**
  * Convert object to json but sort keys before
@@ -171,50 +257,6 @@ export const loadTvTranslate = async (lib, lang) => {
     return out
 }
 
-/**
- * @param {Uint8Array} uint8Array
- * @returns {String}
- */
-export const uint8ArrayToString = (uint8Array) => {
-    return [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
-}
-
-/**
- * @param {String} content
- * @returns {Uint8Array}
- */
-export const stringToUint8Array = (content) => {
-    const buffer = new ArrayBuffer(content.length)
-    const bytes = new Uint8Array(buffer)
-    for (let i = 0; i < content.length; i++) {
-        bytes[i] = content.charCodeAt(i) & 0xff
-    }
-    return bytes
-}
-
-/**
- * @param {Uint8Array|ArrayBuffer} body
- * @returns {String}
- */
-export const arrayToBase64 = (body) => {
-    const uint8Array = body instanceof Uint8Array ? body : new Uint8Array(body)
-    const str = uint8ArrayToString(uint8Array)
-    return btoa(str)
-}
-
-/**
- * @param {String} content
- * @returns {Uint8Array}
- */
-export const base64toArray = (content) => {
-    const binaryString = atob(content)
-    const buffer = new ArrayBuffer(binaryString.length)
-    const bytes = new Uint8Array(buffer)
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i) & 0xff
-    }
-    return bytes
-}
 
 /**
  * @param {Object} item
@@ -274,31 +316,8 @@ export function customStringify(obj, space = 2) {
     return helper(obj, 0);
 }
 
-/**
- * @param {Object} obj
- * @param {String} obj.content
- * @param {Boolean} obj.compress
- * @return {Promise<Uint8Array>}
- */
-const decodeResponse = async ({ content, compress }) => {
-    let out
-    if (compress) {
-        out = gunzipSync(base64toArray(content))
-    } else {
-        out = base64toArray(content)
-    }
-    return out
-}
-
-/**
- * @param {Object} data
- * @return {Promise<String>}
- */
-const encodeRequest = async (data) => {
-    return arrayToBase64(gzipSync(stringToUint8Array(JSON.stringify(data))))
-}
-
 export default {
+    worker,
     isTv,
     stringifySorted,
     formatDurationMs,
@@ -309,11 +328,18 @@ export default {
     loadLibData,
     loadBrowserTranslate,
     loadTvTranslate,
-    arrayToBase64,
-    base64toArray,
-    uint8ArrayToString,
-    stringToUint8Array,
     customStringify,
+
+    arrayToBase64,
+    arrayToBase64Async,
+    base64toArray,
+    base64toArrayAsync,
+    stringToUint8Array,
+    stringToUint8ArrayAsync,
+    uint8ArrayToString,
+    uint8ArrayToStringAsync,
     decodeResponse,
+    decodeResponseAsync,
     encodeRequest,
+    encodeRequestAsync,
 }

@@ -34,10 +34,11 @@ class ResponseHack extends Response {
  * set up request to be done
  * @param {String | Request} url
  * @param {RequestInit} [options]
- * @return {RequestInit}
+ * @param {Boolean} sync
+ * @return {RequestInit | Promise<RequestInit>}
  */
-export const setUpRequest = (url, options = {}) => {
-    let config
+export const setUpRequest = (url, options = {}, sync = true) => {
+    let config, out
     if (url instanceof Request) {
         config = {
             url: url.url,
@@ -55,14 +56,22 @@ export const setUpRequest = (url, options = {}) => {
             ...options,
         }
     }
+    out = config
     if (config.body) {
         if (config.body instanceof URLSearchParams) {
             config.body = config.body.toString()
         } else if (config.body instanceof Uint8Array || config.body instanceof ArrayBuffer) {
-            config.body = utils.arrayToBase64(config.body)
+            if (sync) {
+                config.body = utils.arrayToBase64(config.body)
+            } else {
+                out = utils.arrayToBase64Async(config.body).then(body => {
+                    config.body = body
+                    return config
+                })
+            }
         }
     }
-    return config
+    return out
 }
 
 /**
@@ -70,7 +79,7 @@ export const setUpRequest = (url, options = {}) => {
  * @param {Function} [onProgress]
  * @returns {Function}
  */
-export const makeFetchProgress = (onProgress) => {
+const makeFetchProgress = (onProgress) => {
     /**
      * @param {Response} res
      * @returns {Promise}
@@ -99,7 +108,7 @@ export const makeFetchProgress = (onProgress) => {
             }
             const resTmp = new window.Response(new window.Blob(chunks))
             const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
-            const buffContent = await utils.decodeResponse({ content, compress })
+            const buffContent = await utils.decodeResponseAsync({ content, compress })
             out = { status, statusText, content: buffContent.buffer, headers, resUrl }
         } else {
             out = await res.json()
@@ -117,37 +126,31 @@ export const makeFetchProgress = (onProgress) => {
  * @param {RequestInit} obj.config
  * @param {Function} obj.onSuccess
  * @param {Function} [obj.onProgress]
- * * @param {Function} [obj.onFailure]
+ * @returns {(res, sub) => Promise}
  */
-export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
+const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
     /** @type {Array<Uint8Array>} */
     let chunks = []
     /**
      * @param {Response} res
      * @param {Object} sub
      */
-    return (res, sub) => {
+    return async (res, sub) => {
         if (res.id === config.id) {
             if (config.resStatus === 'active') {
                 const { loaded, total, status, content, compress } = res
                 if (200 <= status && status < 300) {
-                    utils.decodeResponse({ content, compress }).then(chunk => {
-                        chunks.push(chunk)
-                        onProgress({ loaded, total })
-                        if (loaded === total) {
-                            const resTmp = new window.Response(new window.Blob(chunks))
-                            resTmp.arrayBuffer().then(arr => {
-                                res.compress = false
-                                res.content = arr
-                                sub.cancel()
-                                onSuccess(res)
-                            })
-                        }
-                    }).catch(() => {
-                        sub.cancel()
-                        res.status = 500
-                        onSuccess(res)
-                    })
+                    chunks.push(await utils.decodeResponseAsync({ content, compress }))
+                    onProgress({ loaded, total })
+                    if (loaded === total) {
+                        const resTmp = new window.Response(new window.Blob(chunks))
+                        resTmp.arrayBuffer().then(arr => {
+                            res.compress = false
+                            res.content = arr
+                            sub.cancel()
+                            onSuccess(res)
+                        })
+                    }
                 } else {
                     sub.cancel()
                     onSuccess(res)
@@ -163,48 +166,67 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
  * Does request throught service or fetch
  * @param {Object} obj
  * @param {RequestInit} obj.config
+ * @param {Object} obj.parameters
  * @param {Function} obj.onSuccess
  * @param {Function} obj.onFailure
  * @param {Function} [obj.onProgress]
  */
-export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
-    utils.encodeRequest(config).then(d => {
-        config.id = uuidv4()
-        const parameters = { d }
-        if (utils.isTv()) {
-            const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
-            const method = `forwardRequest${currentReq}`
-            if (onProgress) {
-                const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
-                const sub = webOS.service.request(serviceURL, {
-                    method,
-                    parameters,
-                    onSuccess: (res) => serviceProgress(res, sub),
-                    onFailure: (err) => {
-                        sub.cancel()
-                        onFailure(err)
-                    },
-                    subscribe: true,
-                })
-            } else {
-                webOS.service.request(serviceURL, {
-                    method,
-                    parameters,
-                    onSuccess,
-                    onFailure,
-                })
-            }
-        } else {
-            const fetchProgress = makeFetchProgress(onProgress)
-            window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
+const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress }) => {
+    if (utils.isTv()) {
+        const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
+        const method = `forwardRequest${currentReq}`
+        if (onProgress) {
+            const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
+            const sub = webOS.service.request(serviceURL, {
+                method,
+                parameters,
+                onSuccess: (res) => serviceProgress(res, sub),
+                onFailure: (err) => {
+                    sub.cancel()
+                    onFailure(err)
                 },
-                body: JSON.stringify(parameters),
-            }).then(fetchProgress).then(onSuccess).catch(onFailure)
+                subscribe: true,
+            })
+        } else {
+            webOS.service.request(serviceURL, {
+                method,
+                parameters,
+                onSuccess,
+                onFailure,
+            })
         }
-    }).catch(onFailure)
+    } else {
+        const fetchProgress = makeFetchProgress(onProgress)
+        window.fetch(`${_LOCALHOST_SERVER_}/webos2`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(parameters),
+        }).then(fetchProgress).then(onSuccess).catch(onFailure)
+    }
+}
+
+/**
+ * Does request throught service or fetch
+ * @param {Object} obj
+ * @param {RequestInit} obj.config
+ * @param {Function} obj.onSuccess
+ * @param {Function} obj.onFailure
+ * @param {Function} [obj.onProgress]
+ * @param {Boolean} sync
+ */
+export const makeRequest = (obj, sync = true) => {
+    obj.config.id = uuidv4()
+    if (sync) {
+        obj.parameters = { d: utils.encodeRequest(obj.config) }
+        _makeRequest(obj)
+    } else {
+        utils.encodeRequestAsync(obj.config).then(d => {
+            obj.parameters = { d }
+            _makeRequest(obj)
+        })
+    }
 }
 
 /**
@@ -215,46 +237,46 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
  * @returns {Promise<Response>}
  */
 export const customFetch = async (url, options = {}, direct = false) => {
-    return new Promise((res, rej) => {
-        const config = setUpRequest(url, options)
-        const onSuccess = (data) => {
-            config.resStatus = 'done'
-            const { status, statusText, content, headers, resUrl, compress } = data
-            logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
-            /**  @type {Promise<Uint8Array>} */
-            const decodedContentProm = content ? utils.decodeResponse({ content, compress }) : Promise.resolve()
-            decodedContentProm.then(decodedContent => {
-                if (direct) {
-                    if (200 <= status && status < 300) {
-                        res(decodedContent)
-                    } else {
-                        rej({ status, statusText, headers })
-                    }
-                } else {
-                    res(new ResponseHack(decodedContent, {
-                        status,
-                        statusText,
-                        headers,
-                        url: resUrl || config.url,
-                    }))
-                }
-            })
-        }
-        const onFailure = (error) => {
-            config.resStatus = 'fail'
-            logger.error(`req ${config.method || 'get'} ${config.url}`)
-            if (error.error) {
-                if (error.retry) {
-                    rej(error)
-                } else {
-                    rej(new Error(error.error))
-                }
+    let res, rej
+    const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
+    const configProm = setUpRequest(url, options, false)
+    const config = await configProm
+    const onSuccess = async (data) => {
+        config.resStatus = 'done'
+        const { status, statusText, content, headers, resUrl, compress } = data
+        logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
+        /**  @type {Uint8Array} */
+        const decodedContent = content ? await utils.decodeResponseAsync({ content, compress }) : undefined
+        if (direct) {
+            if (200 <= status && status < 300) {
+                res(decodedContent)
             } else {
-                rej(error)
+                rej({ status, statusText, headers })
             }
+        } else {
+            res(new ResponseHack(decodedContent, {
+                status,
+                statusText,
+                headers,
+                url: resUrl || config.url,
+            }))
         }
-        makeRequest({ config, onFailure, onSuccess })
-    })
+    }
+    const onFailure = (error) => {
+        config.resStatus = 'fail'
+        logger.error(`req ${config.method || 'get'} ${config.url}`)
+        if (error.error) {
+            if (error.retry) {
+                rej(error)
+            } else {
+                rej(new Error(error.error))
+            }
+        } else {
+            rej(error)
+        }
+    }
+    makeRequest({ config, onFailure, onSuccess })
+    return prom
 }
 
 const useCustomFetch = () => customFetch
