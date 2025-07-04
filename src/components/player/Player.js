@@ -681,7 +681,7 @@ const Player = ({ ...rest }) => {
     const [preview, setPreview] = useState(null)
     /** @type {{current: String}} */
     const previewRef = useRef(null)
-    const { findPreviews } = usePreviewWorker(!!stream.urls)
+    const findPreviews = usePreviewWorker(!!stream.urls)
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {

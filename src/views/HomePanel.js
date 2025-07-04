@@ -23,97 +23,8 @@ import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
 import { $L } from '../hooks/language'
 import { useResetHomeState } from '../hooks/setContent'
+import { useHomeFeedWorker } from '../hooks/homefeedWorker'
 
-
-/**
- * Process the feed
- * @param {Array<{resource_type: String}>} feed
- * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise<Array<Object>>}
- */
-const postProcessHomefeed = (feed) => {
-    const mergedFeed = []
-    const panelObject = { resource_type: 'panel', panels: [] }
-    const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
-    const musicArtistObject = { resource_type: 'music_artist_banner', panels: [] }
-    for (let item of feed) {
-        if (item.resource_type === 'panel') {
-            // find one panel then add to panelObject
-            // only if not added before
-            if (panelObject.panels.length === 0) {
-                mergedFeed.push(panelObject)
-            }
-            let newItem = { panel: item.panel }
-            if (panelObject.panels.length === 0) {
-                Object.assign(newItem, {
-                    resource_type: item.resource_type,
-                    response_type: item.response_type,
-                })
-            }
-            panelObject.panels.push(newItem)
-        } else if (item.resource_type === 'in_feed_banner') {
-            if (bannerObject.panels.length === 0) {
-                mergedFeed.push(bannerObject)
-            }
-            let newItem = {
-                resource_type: item.resource_type,
-                link: item.link,
-            }
-            if (bannerObject.panels.length === 0) {
-                Object.assign(newItem, {
-                    id: item.id,
-                    response_type: item.response_type,
-                })
-            }
-            bannerObject.panels.push(newItem)
-        } else if (item.resource_type === 'musicArtist') {
-            if (musicArtistObject.panels.length === 0) {
-                mergedFeed.push(musicArtistObject)
-            }
-            let newItem = { object: item.object }
-            if (musicArtistObject.panels.length === 0) {
-                Object.assign(newItem, {
-                    id: item.id,
-                    resource_type: item.resource_type,
-                    response_type: item.response_type,
-                })
-            }
-            musicArtistObject.panels.push(newItem)
-        } else {
-            let newItem = {
-                id: item.id,
-                resource_type: item.resource_type,
-                response_type: item.response_type,
-            }
-            if (item.resource_type === 'hero_carousel') {
-                newItem.items = item.items.map(i => {
-                    return {
-                        slug: i.slug,
-                        link: i.link,
-                    }
-                })
-            } else if (item.resource_type === 'curated_collection') {
-                Object.assign(newItem, {
-                    title: item.title,
-                    ids: item.ids,
-                })
-                if (item.collection_items) {
-                    newItem.ids = item.collection_items.map(i => i.id)
-                }
-            } else if (item.resource_type === 'dynamic_collection') {
-                Object.assign(newItem, {
-                    title: item.title,
-                    source_media_id: item.source_media_id,
-                    query_params: item.query_params,
-                })
-            } else {
-                Object.assign(newItem, item)
-            }
-            mergedFeed.push(newItem)
-        }
-    }
-    return mergedFeed
-}
 
 /**
  * Hook helper
@@ -161,6 +72,7 @@ const HomePanel = (props) => {
     const setMusicFeedFn = useSetFeed(setMusicFeed)
     /** @type {Function} */
     const resetHomeState = useResetHomeState()
+    const processHomeFeed = useHomeFeedWorker()
 
     /** @type {Array<{key: String, icon: String, label: String}>} */
     const toolbarList = useMemo(() => [
@@ -203,26 +115,19 @@ const HomePanel = (props) => {
             const now = new Date()
             if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
                 await Promise.all([
+                    api.discover.getHomeFeed(profile).then(processHomeFeed).then(setHomeFeed),
                     api.discover.getCategories(profile).then(({ data: categs }) => {
                         setCategories([
                             { id: 'all', title: $L('All') },
                             ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
                         ])
                     }),
-                    api.discover.getHomeFeed(profile).then(({ data }) => {
-                        setHomeFeed(
-                            postProcessHomefeed(
-                                data.filter(item => item.response_type !== 'news_feed')
-                            )
-                        )
-                    })
                 ])
                 now.setHours(now.getHours() + 3)
                 setHomeFeedExpiration(now)
             }
             if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
-                const { data } = await api.music.getFeed(profile)
-                setMusicFeed(postProcessHomefeed(data.filter(item => item.response_type !== 'news_feed')))
+                api.music.getFeed(profile).then(processHomeFeed).then(setMusicFeed)
                 now.setHours(now.getHours() + 3)
                 setMusicFeedExpiration(now)
             }
@@ -232,6 +137,7 @@ const HomePanel = (props) => {
     }, [profile, currentActivity, setCategories,
         setHomeFeed, homeFeedExpiration, setHomeFeedExpiration,
         setMusicFeed, musicFeedExpiration, setMusicFeedExpiration,
+        processHomeFeed,
     ])
 
     useEffect(() => {

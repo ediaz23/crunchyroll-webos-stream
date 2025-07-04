@@ -31,18 +31,22 @@ export const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
 }
 
 /**
+ * @callback FindPreviewsCallBack
+ * @param {Object} obj
+ * @param {String} obj.bif
+ * @returns {Promise<{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}>}
+ */
+
+/**
  * @param {Boolean} active
- * @returns {{
-        findPreviews: ({ bif }) => Promise<{chunks: Array}>,
-    }}
+ * @returns {FindPreviewsCallBack}
  */
 export function usePreviewWorker(active) {
     /** @type {[Worker, Function]} */
     const [worker, setWorker] = useState(null)
 
     /**
-     * @param {{ bif: String }} param
-     * @returns {Promise<{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}>}
+     * @type {FindPreviewsCallBack}
      */
     const findPreviews = useCallback(async ({ bif }) => {
         /** @type {{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}} */
@@ -90,5 +94,5 @@ export function usePreviewWorker(active) {
         }
     }, [active])
 
-    return { findPreviews }
+    return findPreviews
 }
