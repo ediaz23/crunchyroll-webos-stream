@@ -24,6 +24,7 @@ self.onmessage = ({ data }) => {
         buf.set(entry.tail, 0)
         buf.set(chunk, prevLen)
 
+        /** @type {Array<{start: Number, end: Number, slice: Uint8Array, last: Boolean}>} */
         const slices = []
         let start = -1
 

@@ -42,10 +42,10 @@ export function usePreviewWorker(active) {
 
     /**
      * @param {{ bif: String }} param
-     * @returns {Promise<{chunks: Array<{start: Number, end: Number, url: String}>}>}
+     * @returns {Promise<{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}>}
      */
     const findPreviews = useCallback(async ({ bif }) => {
-        /** @type {{chunks: Array<{start: Number, end: Number, url: String}>}} */
+        /** @type {{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}} */
         let out = { chunks: [] }
         if (bif && worker) {
             const header = await fetchUtils.customFetch(bif, { headers: { Range: 'bytes=0-127' } }, true)
@@ -54,11 +54,10 @@ export function usePreviewWorker(active) {
 
             out.chunks = Array.from({ length: imageCount })
             worker.isActive = true
+            /** @param {{data: {slices: Array<{start: Number, end: Number, slice: Uint8Array, last: Boolean}>}}} */
             worker.onmessage = ({ data }) => {
                 data.slices.forEach(({ start, end, slice, last }) => {
-                    const blob = new Blob([slice], { type: 'image/jpeg' })
-                    const url = URL.createObjectURL(blob)
-                    out.chunks[chunkIndex++] = { start, end, url }
+                    out.chunks[chunkIndex++] = { start, end, slice }
                     if (last && worker.isActive) {
                         worker.terminate()
                         worker.isActive = false

@@ -646,10 +646,6 @@ const Player = ({ ...rest }) => {
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
     const [subtitle, setSubtitle] = useState(null)
-    /** @type {[{chunks: Array<{start: int, end: int, url: String}>}, Function]} */
-    const [previews, setPreviews] = useState({ chunks: [] })
-    /** @type {[String, Function]} */
-    const [preview, setPreview] = useState(null)
     /** @type {[Event, Function]} */
     const [endEvent, setEndEvent] = useState(null)
     /** @type {{current: import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
@@ -679,6 +675,12 @@ const Player = ({ ...rest }) => {
     const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
     /** @type {[String, Function]}  */
     const [message, setMessage] = useState('')
+    /** @type {[{chunks: Array<{start: int, end: int, slice: Uint8Array}>}, Function]} */
+    const [previews, setPreviews] = useState({ chunks: [] })
+    /** @type {[String, Function]} */
+    const [preview, setPreview] = useState(null)
+    /** @type {{current: String}} */
+    const previewRef = useRef(null)
     const { findPreviews } = usePreviewWorker(!!stream.urls)
 
     /** @type {Function} */
@@ -698,8 +700,16 @@ const Player = ({ ...rest }) => {
         if (previews.chunks.length > 0 && proportion && !isNaN(proportion)) {
             const chunk = previews.chunks[Math.floor(proportion * previews.chunks.length)]
             if (chunk) {
-                setPreview(chunk.url)
+                if (previewRef.current) {
+                    window.URL.revokeObjectURL(previewRef.current)
+                }
+                previewRef.current = window.URL.createObjectURL(new Blob([chunk.slice], { type: 'image/jpeg' }))
+                setPreview(previewRef.current)
             } else {
+                if (previewRef.current) {
+                    window.URL.revokeObjectURL(previewRef.current)
+                    previewRef.current = null
+                }
                 setPreview(null)
             }
         }
@@ -892,12 +902,13 @@ const Player = ({ ...rest }) => {
         }
         return () => {
             clearTimeout(previewTimeout)
-            setPreviews(lastPreview => {
-                lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
-                return { chunks: [], data: null }
-            })
+            setPreviews({ chunks: [] })
             setSubtitle(null)
             setSkipEvents(null)
+            if (previewRef.current) {
+                window.URL.revokeObjectURL(previewRef.current)
+                previewRef.current = null
+            }
         }
     }, [profile, stream, setSubtitle, setPreviews, setSkipEvents, findPreviews])
 
