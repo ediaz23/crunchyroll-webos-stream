@@ -624,7 +624,6 @@ const Player = ({ ...rest }) => {
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
     const getLang = useGetLanguage()
-    const { findPreviews, cancelPreviews } = usePreviewWorker();
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Object, Function]} */
@@ -680,6 +679,7 @@ const Player = ({ ...rest }) => {
     const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
     /** @type {[String, Function]}  */
     const [message, setMessage] = useState('')
+    const { findPreviews } = usePreviewWorker(!!stream.urls)
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -892,7 +892,6 @@ const Player = ({ ...rest }) => {
         }
         return () => {
             clearTimeout(previewTimeout)
-            cancelPreviews()
             setPreviews(lastPreview => {
                 lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
                 return { chunks: [], data: null }
@@ -900,7 +899,7 @@ const Player = ({ ...rest }) => {
             setSubtitle(null)
             setSkipEvents(null)
         }
-    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents, findPreviews, cancelPreviews])
+    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents, findPreviews])
 
     useEffect(() => {  // attach subs
         let interval = null
