@@ -27,6 +27,7 @@ import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
+import JassubOverlay from './JassubOverlay'
 
 
 /**
@@ -490,10 +491,9 @@ const setStreamingConfig = async (dashPlayer) => {
  * @param {import('./AudioList').Audio} audio
  * @param {Stream} stream
  * @param {Object} content
- * @param {import('./SubtitleList').Subtitle} subtitle
  * @returns {Promise<import('dashjs-webos5').MediaPlayerClass>}
  */
-const createDashPlayer = async (audio, stream, content, subtitle) => {
+const createDashPlayer = async (audio, stream, content) => {
     let url = null
     const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
     /** @type {import('dashjs-webos5').MediaPlayerClass}*/
@@ -502,13 +502,7 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
     dashPlayer.extend('XHRLoader', XHRLoader)
     dashPlayer.addRequestInterceptor(modifierDashRequest(stream.profile))
     await setStreamingConfig(dashPlayer)
-    url = stream.urls.find(val => val.locale === subtitle.locale)
-    if (!url) {
-        url = stream.urls.find(val => val.locale === 'off')
-    }
-    if (url) {
-        url = url.url
-    }
+    url = stream.urls[0].url
     dashPlayer.initialize()
     dashPlayer.setAutoPlay(false)
     dashPlayer.attachSource(url + '#t=' + Math.max(startSec, 0))
@@ -942,11 +936,11 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // attach subs
         let interval = null
-        if (stream.urls && subtitle && stream.id === content.id) {
+        if (stream.urls && stream.id === content.id) {
             interval = setInterval(() => {
                 if (playerCompRef.current) {
                     clearInterval(interval)
-                    createDashPlayer(audio, stream, content, subtitle).then(player => {
+                    createDashPlayer(audio, stream, content).then(player => {
                         playerRef.current = player
                         playerRef.current.play()
                         setLoading(false)
@@ -979,7 +973,7 @@ const Player = ({ ...rest }) => {
             }
             clearInterval(interval)
         }
-    }, [profile, content, stream, audio, subtitle, setLoading, handleCrunchyError])
+    }, [profile, content, stream, audio, setLoading, handleCrunchyError])
 
     useEffect(() => {  // set stream session
         if (stream === emptyStream) {
@@ -1159,6 +1153,10 @@ const Player = ({ ...rest }) => {
                 onSpotlightUp={onSkipBtnNavigate}>
                 {currentSkipEvent && currentSkipEvent.title}
             </Button>
+            <JassubOverlay
+                subtitle={subtitle}
+                playPause={onPlayPause}
+                onError={handleCrunchyError} />
             <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
                 {message}
             </PopupMessage>

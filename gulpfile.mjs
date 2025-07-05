@@ -201,8 +201,59 @@ function updateAppInfo(cb) {
     }
 }
 
+function bableJassub(cb) {
+    const module_jassub = 'node_modules/jassub'
+    const mainName = 'jassub.js'
+    const workerName = 'jassub-worker.js'
+    const targetLib = 'libs/jassub'
+    try {
+        fs.copyFileSync(`${module_jassub}/dist/${workerName}`, `${module_jassub}/${workerName}`);
+        if (!fs.existsSync(targetLib)) {
+            fs.mkdirSync(targetLib, { recursive: true })
+        }
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+    deleteAsync('libs/jassub/**', { force: true }).then(() => {
+        const ignoreFiles = ['package.json', 'README.md', 'LICENSE', 'index.d.ts', 'src']
+        const ignore = ignoreFiles.join('|')
+        exec(`cd node_modules/jassub; enact transpile -o ../../libs/jassub/ -i '${ignore}'`, handleError(err => {
+            if (err) {
+                return cb(err)
+            }
+            let fileContent = fs.readFileSync(`${module_jassub}/src/${mainName}`, 'utf-8')
+            fileContent = fileContent.replace('globalThis', 'window')
+            fs.writeFileSync(`${targetLib}/${mainName}`, fileContent, 'utf-8')
+
+            fileContent = fs.readFileSync(`${targetLib}/${workerName}`, 'utf-8')
+            fileContent = fileContent.replace('self.fetch = function (f) {', `
+    self.fetch = function (f) {
+        return new Promise((resolve, reject) => {
+            const xhr = new self.XMLHttpRequest();
+            xhr.open('GET', data.wasmUrl, true);
+            xhr.responseType = 'arraybuffer'
+            xhr.onload = function() {
+                if ((xhr.status === 200 || xhr.status === 0) && xhr.response) {
+                    resolve(new Response(xhr.response, { headers: { 'Content-Type': 'application/wasm' }}));
+                } else {
+                    reject();
+                }
+            };
+            xhr.onerror = reject
+            xhr.send();
+        });                    
+            `.trim())
+            fs.writeFileSync(`${targetLib}/${workerName}`, fileContent, 'utf-8')
+            cb()
+        }))
+    })
+}
 
 gulp.task('clean-ilib', cleanIlib)
+
+gulp.task('bable-jassub', bableJassub)
+
+gulp.task('gulp-postinstall', gulp.series('clean-ilib', 'bable-jassub'))
 
 gulp.task('copy-in18', copyIn18)
 
