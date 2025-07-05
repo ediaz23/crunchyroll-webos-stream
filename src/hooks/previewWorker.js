@@ -8,10 +8,10 @@ const BifWorker = new URL('../workers/bif.worker.js', import.meta.url)
 /**
  * Download file per chunkSize
  * @param {String} url
- * @param {Number} chunkSize
+ * @param {Number} [chunkSize]
  * @returns {Promise<Array<{start: Number, end: Number, getData: () => Promise<Uint8Array>}>>}
  */
-export const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
+export const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
     const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
     /** @type {Array<{start: Number, end: Number, getData: () => Promise<Uint8Array>}>} */
     const requests = []
@@ -34,6 +34,7 @@ export const downloadBifFile = async (url, chunkSize = 1024 * 1024) => {
  * @callback FindPreviewsCallBack
  * @param {Object} obj
  * @param {String} obj.bif
+ * @param {Number} [chunkSize]
  * @returns {Promise<{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}>}
  */
 
@@ -48,34 +49,46 @@ export function usePreviewWorker(active) {
     /**
      * @type {FindPreviewsCallBack}
      */
-    const findPreviews = useCallback(async ({ bif }) => {
+    const findPreviews = useCallback(async ({ bif }, chunkSize = 256 * 1024) => {
         /** @type {{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}} */
         let out = { chunks: [] }
         if (bif && worker) {
+            let chunkIndex = 0, res
             const header = await fetchUtils.customFetch(bif, { headers: { Range: 'bytes=0-127' } }, true)
             const imageCount = (new DataView(header.buffer).getUint32(12, true)) - 1
-            let chunkIndex = 0
+            const hasImageCount = 0 < imageCount && imageCount < 100000
+            const prom = new Promise(resolve => { res = resolve })
 
-            out.chunks = Array.from({ length: imageCount })
-            worker.isActive = true
+            out.chunks = hasImageCount ? Array.from({ length: imageCount }) : []
             /** @param {{data: {slices: Array<{start: Number, end: Number, slice: Uint8Array, last: Boolean}>}}} */
             worker.onmessage = ({ data }) => {
+                let finish = false
                 data.slices.forEach(({ start, end, slice, last }) => {
-                    out.chunks[chunkIndex++] = { start, end, slice }
-                    if (last && worker.isActive) {
-                        worker.terminate()
-                        worker.isActive = false
+                    if (hasImageCount) {
+                        out.chunks[chunkIndex++] = { start, end, slice }
+                    } else {
+                        out.chunks.push({ start, end, slice })
                     }
+                    finish |= last
                 })
+                if (finish) {
+                    worker.terminate()
+                    if (!hasImageCount) {
+                        res()
+                    }
+                }
             }
-
-            downloadBifFile(bif).then(async requests => {
+            downloadBifFile(bif, chunkSize).then(async requests => {
                 for (const { start, end, getData } of requests) {
                     const chunk = await getData()
                     const last = end === requests[requests.length - 1].end
                     worker.postMessage({ type: 'append', chunk, start, last, }, [chunk.buffer])
                 }
             })
+            if (hasImageCount) {
+                res()
+            }
+            await prom
         }
         return out
     }, [worker])

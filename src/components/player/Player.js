@@ -893,24 +893,52 @@ const Player = ({ ...rest }) => {
         }
     }, [profile, content, audios, audio, getLang, setStream, emptyStream, handleCrunchyError])
 
-    useEffect(() => {  // find subtitles preview and skip events
-        let previewTimeout = null
+    useEffect(() => {  // findSubtitle
         if (stream.urls) {
             findSubtitle(stream).then(setSubtitle)
-            previewTimeout = setTimeout(() => findPreviews(stream).then(setPreviews), 1000 * 5)
+        }
+        return () => setSubtitle(null)
+    }, [profile, stream, setSubtitle])
+
+    useEffect(() => {  // findSkipEvents
+        if (stream.urls) {
             findSkipEvents(stream).then(setSkipEvents)
         }
+        return () => setSkipEvents(null)
+    }, [profile, stream, setSkipEvents])
+
+    useEffect(() => {  // findPreviews
+        let doFindPreviews = null
+        if (stream.urls && !loading) {
+            doFindPreviews = () => {
+                let chunkSize = null
+                const kbps = playerRef.current.getAverageThroughput('video')
+                const bufferSeconds = playerRef.current.getBufferLength('video')
+                const kbPerSec = kbps / 8
+                if (bufferSeconds > 20 && kbPerSec > 1000) {
+                    chunkSize = 512 * 1024
+                } else if (kbPerSec > 1000) {
+                    chunkSize = 256 * 1024
+                } else if (kbPerSec > 500) {
+                    chunkSize = 128 * 1024
+                } else {
+                    chunkSize = 64 * 1024
+                }
+                findPreviews(stream, chunkSize).then(setPreviews)
+            }
+            playerRef.current.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
+        }
         return () => {
-            clearTimeout(previewTimeout)
             setPreviews({ chunks: [] })
-            setSubtitle(null)
-            setSkipEvents(null)
             if (previewRef.current) {
                 window.URL.revokeObjectURL(previewRef.current)
                 previewRef.current = null
             }
+            if (doFindPreviews) {
+                playerRef.current.off(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
+            }
         }
-    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents, findPreviews])
+    }, [profile, stream, setPreviews, findPreviews, loading])
 
     useEffect(() => {  // attach subs
         let interval = null
