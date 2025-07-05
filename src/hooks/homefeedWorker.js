@@ -1,8 +1,22 @@
 /* global Worker */
 
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 
 const HomeFeedWorker = new URL('../workers/homefeed.worker.js', import.meta.url)
+
+/**
+ * @typedef HomefeedItem
+ * @type {Object}
+ * @property {String} id
+ * @property {String} type
+ * @property {String} title
+ * @property {String} description
+ * @property {String} analyticsId
+ * @property {Array<String>} contentIds
+ * @property {Array<HomefeedItem>} items
+ * @property {String} contentId
+ * @property {String} link
+ */
 
 /**
  * @callback ProcessHomeFeedCallBack
@@ -15,37 +29,32 @@ const HomeFeedWorker = new URL('../workers/homefeed.worker.js', import.meta.url)
  * @returns {ProcessHomeFeedCallBack}
  */
 export function useHomeFeedWorker() {
-    /** @type {[Worker, Function]} */
-    const [worker, setWorker] = useState(null)
+    /** @type {{current: Worker} */
+    const workerRef = useRef(null)
 
     /**
      * @type {ProcessHomeFeedCallBack}
      */
-    const processHomeFeed = useCallback(async (payload) => new Promise((res, rej) => {
-        if (worker && payload && payload.data) {
+    const processHomeFeed = useCallback(async ({ data: payload, type }) => new Promise((res, rej) => {
+        if (workerRef.current && payload) {
             /** @param {{data: {success: Boolean, result: Object, error: String}>}} */
-            worker.onmessage = ({ data }) => {
+            workerRef.current.onmessage = ({ data }) => {
                 if (data.success) {
                     res(data.result)
                 } else {
                     rej(new Error(data.error))
                 }
             }
-            worker.postMessage({ type: 'legacy', payload })
+            workerRef.current.postMessage({ payload, type })
         } else {
             res([])
         }
-    }), [worker])
+    }), [])
 
     useEffect(() => {
-        setWorker(new Worker(HomeFeedWorker))
+        workerRef.current = new Worker(HomeFeedWorker)
         return () => {
-            setWorker(oldWorker => {
-                if (oldWorker) {
-                    oldWorker.terminate()
-                }
-                return null
-            })
+            workerRef.current.terminate()
         }
     }, [])
 

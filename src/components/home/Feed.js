@@ -25,7 +25,7 @@ import kidImg from '../../../assets/img/child.jpg'
 export const convertItem2Object = async (item) => {
     let out = null
     try {
-        if (item.slug || item.resource_type === 'in_feed_banner') {
+        if (item.slug || item.resource_type === 'in_feed_banner' || item.type === 'Banner') {
             const res = await api.utils.fetchAuth(item.link)
             if (res.url.startsWith('https://www.crunchyroll.com/')) {
                 let split = res.url.split('/')
@@ -170,8 +170,14 @@ export const processCuratedCollection = async (carousel, profile) => {
     } else if ('music_concert' === carousel.response_type) {
         res = await api.music.getConcerts(profile, carousel.ids)
     } else if ('music_video' === carousel.response_type) {
+        if (LOAD_MOCK_DATA) {
+            carousel.ids = 'MV22070F02-MV368FAEDE-MV3B1C3E43-MV4C1B0ED5-MV5FEC0BEB-MVAF86FF64'.split('-')
+        }
         res = await api.music.getVideos(profile, carousel.ids)
     } else {
+        if (LOAD_MOCK_DATA) {
+            carousel.ids = 'G24H1N3MP_G65VQD2D6_G6NQ5DWZ6_G6W4QKX0R_GG5H5XQX4_GJ0H7QGQK'.split('-')
+        }
         res = await api.cms.getObjects(profile, { objectIds: carousel.ids, ratings: true })
     }
     return { ...carousel, items: res.data }
@@ -185,18 +191,19 @@ export const processCuratedCollection = async (carousel, profile) => {
  */
 const processDynamicCollection = async (carousel, profile) => {
     let res = {}
+    const quantity = LOAD_MOCK_DATA ? 20 : 30, ratings = true
     if ('history' === carousel.response_type) {
-        res = await api.discover.getHistory(profile, { quantity: 20, ratings: true })
+        res = await api.discover.getHistory(profile, { quantity, ratings })
         res = { data: res.data.map(removePanelField) }
     } else if ('watchlist' === carousel.response_type) {
-        res = await api.discover.getWatchlist(profile, { quantity: 20, ratings: true })
+        res = await api.discover.getWatchlist(profile, { quantity, ratings })
         res = { data: res.data.map(removePanelField) }
     } else if ('recommendations' === carousel.response_type) {
-        res = await api.discover.getRecomendation(profile, { quantity: 20, ratings: true })
+        res = await api.discover.getRecomendation(profile, { quantity, ratings })
     } else if ('because_you_watched' === carousel.response_type) {
-        res = await api.discover.getSimilar(profile, { contentId: carousel.source_media_id, quantity: 20, ratings: true })
+        res = await api.discover.getSimilar(profile, { quantity, ratings, contentId: carousel.source_media_id })
     } else if ('recent_episodes' === carousel.response_type) {
-        res = await api.discover.getBrowseAll(profile, { type: 'episode', quantity: 20, sort: 'newly_added', ratings: true })
+        res = await api.discover.getBrowseAll(profile, { quantity, ratings, type: 'episode', sort: 'newly_added' })
         const added = new Set()
         res = {
             data: res.data.filter(val => {
@@ -223,6 +230,9 @@ const processDynamicCollection = async (carousel, profile) => {
         }
         params.ratings = true
         res = await api.discover.getBrowseAll(profile, params)
+    } else if ('personalization' === carousel.response_type) {
+        res = await api.discover.getPersonalRecomendation(profile, { collectionId: carousel.analyticsId, ratings })
+        res = { data: res.recommendations }
     } else {
         new Error(`Dynamic Collection not supported ${carousel.resource_type} - ${carousel.response_type}`)
     }
@@ -260,7 +270,7 @@ export const postProcessFeedItem = async (val) => {
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Object>}
  */
-const processItemFeed = async (carousel, profile, type) => {
+const processItemFeedLegacy = async (carousel, profile, type) => {
     carousel = { ...carousel }
     let res = Promise.resolve(carousel)
     if (carousel.resource_type === 'hero_carousel') {
@@ -288,6 +298,68 @@ const processItemFeed = async (carousel, profile, type) => {
         logger.error('Feed')
         console.log(e)
     })
+}
+
+/**
+ * Process a single item in feed
+ * @param {import('../../hooks/homefeedWorker').HomefeedItem} feedItem
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @return {Promise<Object>}
+ */
+const processItemFeedNew = async (feedItem, profile, type) => {
+    feedItem = { ...feedItem }
+    let res = Promise.resolve(feedItem), response_type
+    const responseTypeMap = {
+        PersonalizedCollection: 'personalization',
+        HistoryCollection: 'history',
+        WatchlistCollection: 'watchlist',
+        RecentEpisodesCollection: 'recent_episodes',
+        MediaCard: 'generic_card',
+        HeroCollection: 'generic_card',
+        HeroMediaCard: 'generic_card',
+        MusicVideoCollection: 'music_video',
+    }
+
+    if (['PersonalizedCollection',
+        'HistoryCollection',
+        'WatchlistCollection',
+        'RecentEpisodesCollection'].includes(feedItem.type)) {
+        response_type = responseTypeMap[feedItem.type]
+        res = processDynamicCollection({ ...feedItem, response_type }, profile, type)
+    } else if (['MediaCard', 'HeroCollection', 'HeroMediaCard', 'MusicVideoCollection'].includes(feedItem.type)) {
+        response_type = responseTypeMap[feedItem.type]
+        feedItem.title = feedItem.title || $L('Watch Now')
+        res = processCuratedCollection({ ...feedItem, response_type, ids: feedItem.contentIds }, profile)
+    } else if ('Banner' === feedItem.type) {
+        res = processCarousel(feedItem, profile, type).then(res2 => {
+            feedItem.title = res2.title
+            feedItem.items = res2.items
+            return feedItem
+        })
+    } else {
+        logger.error(`Feed not supported ${feedItem.type}, ${feedItem.id}, ${feedItem.title}`)
+        return Promise.reject()
+    }
+    return res.then(async res2 => {
+        if (res2.items) {
+            res2.items = await Promise.all(res2.items.map(postProcessFeedItem))
+        }
+        return res2
+    }).catch(e => {
+        logger.error('Feed new')
+        console.log(e)
+    })
+}
+
+/**
+ * Process a single item in feed
+ * @param {Object} carousel
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @return {Promise<Object>}
+ */
+const processItemFeed = async (carousel, profile, type) => {
+    const fn = type === 'music' ? processItemFeedLegacy : processItemFeedNew
+    return fn(carousel, profile, type)
 }
 
 /**
@@ -325,7 +397,7 @@ export const getFakeFeedItem = () => {
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {Array<Object>} obj.homeFeed
+ * @param {Array<import('../../hooks/homefeedWorker').HomefeedItem>} obj.homeFeed
  * @param {Function} obj.setHomeFeed
  * @param {'home'|'music'} obj.type
  */

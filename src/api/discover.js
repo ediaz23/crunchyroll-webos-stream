@@ -114,7 +114,7 @@ export const getHistory = async (profile, params) => {
 /**
  * Get index data
  * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise}
+ * @return {Promise<{data: {total: Number, data: Array}, type:'legacy'|'new'}>}
  */
 export const getHomeFeed = async (profile) => {
     let out = null
@@ -128,8 +128,53 @@ export const getHomeFeed = async (profile) => {
     } catch (error) {
         await translateError(error)
     }
+    return { data: out, type: 'legacy' }
+}
+
+/**
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @return {Promise<{data: import('crunchyroll-js-api').Types.HomeItem, type:'legacy'|'new'}>}
+ */
+export const getNewHomeFeed = async (profile) => {
+    /** @type {import('crunchyroll-js-api').Types.HomeItem} */
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('homefeedNew2')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getHome({ account })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return { data: out, type: 'new' }
+}
+
+/**
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @param {Object} params
+ * @param {Number} params.collectionId
+ * @param {Boolean} params.ratings
+ * @param {Number} [params.vendor]
+ * @return {Promise<{recommendations: Array}>}
+ */
+export const getPersonalRecomendation = async (profile, params) => {
+    /** @type {import('crunchyroll-js-api').Types.HomeItem} */
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('personalRecomendation')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getPersonalRecomendation({account, ...params})
+        }
+    } catch (error) {
+        await translateError(error)
+    }
     return out
 }
+
 
 /**
  * Get object data
@@ -137,7 +182,7 @@ export const getHomeFeed = async (profile) => {
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
- * @param {Boolean} [obj.ratings]
+ * @param {Boolean} [params.ratings]
  * @return {Promise}
  */
 export const getRecomendation = async (profile, params) => {

@@ -57,7 +57,7 @@ const HomePanel = (props) => {
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
 
-    /** @type {[Array<Object>, Function]} */
+    /** @type {[Array<import('../hooks/homefeedWorker').HomefeedItem>, Function]} */
     const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
     /** @type {[Date, Function]} */
     const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
@@ -115,7 +115,7 @@ const HomePanel = (props) => {
             const now = new Date()
             if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
                 await Promise.all([
-                    api.discover.getHomeFeed(profile).then(processHomeFeed).then(setHomeFeed),
+                    api.discover.getNewHomeFeed(profile).then(processHomeFeed).then(setHomeFeed),
                     api.discover.getCategories(profile).then(({ data: categs }) => {
                         setCategories([
                             { id: 'all', title: $L('All') },

@@ -1,6 +1,84 @@
 /* global self */
 
 /**
+ * @param {import('crunchyroll-js-api').Types.HomeItem} data
+ * @param {import('crunchyroll-js-api').Types.HomeItem} parent
+ * @returns {import('../hooks/homefeedWorker').HomefeedItem}
+ */
+function processNewHomefeed(data, parent) {
+    /** @type {import('../hooks/homefeedWorker').HomefeedItem} */
+    const newItem = {
+        id: data.id,
+        type: data.type,
+        title: data.props.title,
+        description: data.props.description,
+        analyticsId: data.props.analyticsId,
+        contentId: null,
+        link: null,
+        contentIds: [],
+        items: data.children.map(i => processNewHomefeed(i, data)),
+    }
+
+    if (['HeroMediaLiveCard', 'HeroMediaCard', 'MediaCard'].includes(data.type)) {
+        if (parent && parent.parentId || data.type !== 'HeroMediaLiveCard') {
+            newItem.contentId = data.props.contentId
+        }
+    } else if (['PersonalizedCollection', 'HistoryCollection', 'Banner'].includes(data.type)) {
+        newItem.link = data.props.link
+    } else if (['MusicVideoCard'].includes(data.type)) {
+        newItem.contentId = data.props.musicVideoId
+    }
+    newItem.items = newItem.items.filter(item => {
+        return (
+            item.contentId ||
+            item.link ||
+            item.items.length > 0 ||
+            ['WatchlistCollection', 'RecentEpisodesCollection', 'MusicVideoCollection'].includes(item.type))
+    })
+    return newItem
+}
+
+/**
+ * @param {import('../hooks/homefeedWorker').HomefeedItem} data
+ */
+function mergeNewHomefeed(data) {
+    /** @type {Object.<string, Array<import('../hooks/homefeedWorker').HomefeedItem>>} */
+    const cards = {}
+    /** @type {Object.<string, import('../hooks/homefeedWorker').HomefeedItem>} */
+    const headerCards = {}
+    /** @type {Array<String>} */
+    const cardTypes = []
+    for (const item of data.items) {
+        if (item.type.endsWith('Card') || item.type.endsWith('Banner')) {
+            if (!(item.type in cards)) {
+                cards[item.type] = []
+                headerCards[item.type] = item
+                cardTypes.push(item.type)
+            }
+            cards[item.type].push(item)
+        }
+        item.contentIds = item.items.map(i => i.contentId).filter(i => !!i)
+    }
+    for (const cardType of cardTypes) {
+        cards[cardType][0] = Object.assign({}, cards[cardType][0])
+        headerCards[cardType].id = cardType
+        headerCards[cardType].title = null
+        headerCards[cardType].description = null
+        headerCards[cardType].contentId = null
+        headerCards[cardType].link = null
+        headerCards[cardType].items = cards[cardType]
+        headerCards[cardType].contentIds = cards[cardType].map(i => i.contentId).filter(i => !!i)
+    }
+    data.items = data.items.filter(item => {
+        if (item.type.endsWith('Card') || item.type.endsWith('Banner')) {
+            return item.id === item.type
+        }
+        return true
+    })
+    return data
+}
+
+/**
  * Process the feed
  * @param {Object} obj
  * @param {Array<{resource_type: String}>} obj.data
@@ -97,6 +175,11 @@ self.onmessage = ({ data }) => {
         let result
         if (type === 'legacy') {
             result = processLegacyHomefeed(payload)
+        } else {
+            result = mergeNewHomefeed(processNewHomefeed(payload))
+            if (result) {
+                result = result.items
+            }
         }
         self.postMessage({ result, success: true })
     } catch (e) {

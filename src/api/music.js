@@ -8,7 +8,7 @@ import { translateError, getContentParam } from './utils'
 /**
  * Get feed
  * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise<{total: Number, data: Array}>}
+ * @return {Promise<{data: {total: Number, data: Array}, type:'legacy'|'new'}>}
  */
 export const getFeed = async (profile) => {
     let out = null
