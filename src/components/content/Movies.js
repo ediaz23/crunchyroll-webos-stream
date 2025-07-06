@@ -64,21 +64,22 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
             if (listings[listingIndex].movies.length) {
                 setMovies(listings[listingIndex].movies)
             } else {
-                api.cms.getMovies(profile, { movieListingId: listings[listingIndex].id })
-                    .then(({ data }) => Promise.all([
-                        Promise.resolve().then(() => {
-                            data.forEach(ep => {
-                                ep.type = 'movie'
-                                ep.showPremium = !isPremium && getIsPremium(ep)
-                            })
-                            listings[listingIndex].movies = data
-                        }),
-                        Promise.resolve().then(() => {
-                            if (data.length) {
-                                return calculatePlayheadProgress({ profile, episodesData: data })
-                            }
-                        }),
-                    ]).then(() => listingIndex === listingIndexRef.current && setMovies(data)))
+                api.cms.getMovies(profile, { movieListingId: listings[listingIndex].id }).then(async ({ data }) => {
+                    data.forEach(ep => {
+                        ep.type = 'movie'
+                        ep.showPremium = !isPremium && getIsPremium(ep)
+                    })
+
+                    listings[listingIndex].movies = data
+
+                    if (data.length) {
+                        await calculatePlayheadProgress({ profile, episodesData: data })
+                    }
+
+                    if (listingIndex === listingIndexRef.current) {
+                        setMovies(data)
+                    }
+                })
             }
         }
     }, [profile, listings, listingIndex, isPremium])

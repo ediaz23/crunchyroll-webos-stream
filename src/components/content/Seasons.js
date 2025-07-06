@@ -127,21 +127,22 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                     setEpisodes(seasons[seasonIndex].episodes)
                 }
             } else {
-                api.cms.getEpisodes(profile, { seasonId: seasons[seasonIndex].id })
-                    .then(({ data }) => Promise.all([
-                        Promise.resolve().then(() => {
-                            data.forEach(ep => {
-                                ep.type = 'episode'
-                                ep.showPremium = !isPremium && getIsPremium(ep)
-                            })
-                            seasons[seasonIndex].episodes = data
-                        }),
-                        Promise.resolve().then(() => {
-                            if (data.length) {
-                                return calculatePlayheadProgress({ profile, episodesData: data })
-                            }
-                        }),
-                    ]).then(() => seasonIndex === seasonIndexRef.current && setEpisodes(data)))
+                api.cms.getEpisodes(profile, { seasonId: seasons[seasonIndex].id }).then(async ({ data }) => {
+                    data.forEach(ep => {
+                        ep.type = 'episode'
+                        ep.showPremium = !isPremium && getIsPremium(ep)
+                    })
+
+                    seasons[seasonIndex].episodes = data
+
+                    if (data.length) {
+                        await calculatePlayheadProgress({ profile, episodesData: data })
+                    }
+
+                    if (seasonIndex === seasonIndexRef.current) {
+                        setEpisodes(data)
+                    }
+                })
             }
         }
     }, [profile, seasons, seasonIndex, isPremium])

@@ -204,6 +204,8 @@ function updateAppInfo(cb) {
 
 gulp.task('clean-ilib', cleanIlib)
 
+gulp.task('gulp-postinstall', gulp.series('clean-ilib'))
+
 gulp.task('copy-in18', copyIn18)
 
 gulp.task('license', cb => {

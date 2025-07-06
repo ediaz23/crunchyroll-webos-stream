@@ -114,15 +114,14 @@ const HomePanel = (props) => {
         const loadFeed = async () => {
             const now = new Date()
             if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
-                await Promise.all([
-                    api.discover.getNewHomeFeed(profile).then(processHomeFeed).then(setHomeFeed),
-                    api.discover.getCategories(profile).then(({ data: categs }) => {
-                        setCategories([
-                            { id: 'all', title: $L('All') },
-                            ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
-                        ])
-                    }),
-                ])
+                const homeFeedPromise = api.discover.getNewHomeFeed(profile).then(processHomeFeed).then(setHomeFeed)
+                const categoriesPromise = api.discover.getCategories(profile).then(({ data: categs }) => {
+                    setCategories([
+                        { id: 'all', title: $L('All') },
+                        ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
+                    ])
+                })
+                await Promise.all([homeFeedPromise, categoriesPromise])
                 now.setHours(now.getHours() + 3)
                 setHomeFeedExpiration(now)
             }

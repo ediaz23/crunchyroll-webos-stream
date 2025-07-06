@@ -230,35 +230,29 @@ const computeTitles = ({ content, nextContent, lastContent }) => {
  * @param {Object} content
  * @returns {Promise<{firstEp: Object, lastEp: Object}>}
  */
-export const getNextEpidose = async (profile, content) => {
+export const getNextEpisode = async (profile, content) => {
     const out = { firstEp: null, lastEp: null }
     const { data: seasonsData } = await api.cms.getSeasons(profile, { serieId: content.id })
-    const proms = [
-        api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id }).then(({ data: episodesData }) => {
-            if (episodesData.length) {
-                out.firstEp = episodesData[0]
-                out.firstEp.type = 'episode'
-            }
-            return episodesData
-        })
-    ]
-    if (seasonsData.length === 1) {
-        proms[0].then(episodesData => {
-            if (episodesData.length > 1) {
-                out.lastEp = episodesData[episodesData.length - 1]
+
+    return Promise.all([
+        api.cms.getEpisodes(profile, { seasonId: seasonsData[0].id }),
+        seasonsData.length > 1
+            ? api.cms.getEpisodes(profile, { seasonId: seasonsData[seasonsData.length - 1].id })
+            : Promise.resolve({ data: null })
+    ]).then(async ([{ data: firstSeasonEp }, { data: lastSeasonEp }]) => {
+        if (firstSeasonEp.length) {
+            out.firstEp = firstSeasonEp[0]
+            out.firstEp.type = 'episode'
+
+            out.lastEp = firstSeasonEp[firstSeasonEp.length - 1]
+            out.lastEp.type = 'episode'
+        }
+        if (lastSeasonEp) {
+            if (lastSeasonEp.length) {
+                out.lastEp = lastSeasonEp[lastSeasonEp.length - 1]
                 out.lastEp.type = 'episode'
             }
-        })
-    } else {
-        const seasonId = seasonsData[seasonsData.length - 1].id
-        proms.push(api.cms.getEpisodes(profile, { seasonId }).then(({ data: episodesData }) => {
-            if (episodesData.length) {
-                out.lastEp = episodesData[episodesData.length - 1]
-                out.lastEp.type = 'episode'
-            }
-        }))
-    }
-    return Promise.all(proms).then(async () => {
+        }
         const eps = [out.firstEp, out.lastEp].filter(ep => !!ep)
         if (eps.length > 0) {
             await calculatePlayheadProgress({ profile, episodesData: eps })
@@ -308,7 +302,7 @@ export const getNextContent = async (profile, content) => {
         /** @type {Promise} */
         let getNextProm = Promise.resolve(null)
         if (content.type === 'series') {
-            getNextProm = getNextEpidose(profile, content)
+            getNextProm = getNextEpisode(profile, content)
         } else if (content.type === 'movie_listing') {
             getNextProm = getNextMovie(profile, content)
         }
@@ -465,35 +459,32 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
     useEffect(() => { optionRef.current = optionIndex }, [optionIndex])
 
     useEffect(() => {
-        /** @type {Promise} */
-        const nextEpProm = getNextContent(profile, content)
-        /** @type {Array<Promise>} */
-        const proms = [nextEpProm]
-        if (['series', 'movie_listing'].includes(content.type)) {
-            proms.push(
-                api.content.getWatchlistItems(profile, {
-                    contentIds: [content.id]
-                }).then(res => setIsInWatchlist(res.total > 0))
-            )
-        }
-        if (contentDetailBak.rating == null) {
-            proms.push(
-                api.review.getRatings(profile, {
-                    contentId: content.id,
-                    contentType: content.type,
-                }).then(res => setRating(parseInt(res.rating.trimEnd('s'))))
-            )
-        }
-        nextEpProm.then(tmpNextContent => {
-            if (tmpNextContent.firstEp) {
-                setNextConent(tmpNextContent.firstEp)
-                setLastConent(tmpNextContent.lastEp)
-            } else {
-                setNextConent(tmpNextContent)
-            }
-        })
         setLoading(true)
-        Promise.all(proms).then(() => setLoading(false))
+        Promise.all([
+            getNextContent(profile, content),
+            ['series', 'movie_listing'].includes(content.type)
+                ? api.content.getWatchlistItems(profile, { contentIds: [content.id] })
+                : null,
+            contentDetailBak.rating == null
+                ? api.review.getRatings(profile, { contentId: content.id, contentType: content.type, })
+                : null
+        ]).then(([nextEpRes, watchlistRes, ratingRes]) => {
+            if (nextEpRes) {
+                if (nextEpRes.firstEp) {
+                    setNextConent(nextEpRes.firstEp)
+                    setLastConent(nextEpRes.lastEp)
+                } else {
+                    setNextConent(nextEpRes)
+                }
+            }
+            if (watchlistRes) {
+                setIsInWatchlist(watchlistRes.total > 0)
+            }
+            if (ratingRes) {
+                setRating(parseInt(ratingRes.rating.trimEnd('s')))
+            }
+            setLoading(false)
+        })
     }, [profile, content, setLoading, contentDetailBak.rating])
 
     useEffect(() => {

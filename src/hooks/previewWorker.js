@@ -8,10 +8,10 @@ const BifWorker = new URL('../workers/bif.worker.js', import.meta.url)
 /**
  * Download file per chunkSize
  * @param {String} url
- * @param {Number} [chunkSize]
- * @returns {Promise<Array<{start: Number, end: Number, getData: () => Promise<Uint8Array>}>>}
+ * @param {Number} chunkSize
+ * @returns {Promise<Array<{start: Number, end: Number, reqConfig: RequestInit}>>}
  */
-export const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
+const downloadBifFile = async (url, chunkSize) => {
     const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
     /** @type {Array<{start: Number, end: Number, getData: () => Promise<Uint8Array>}>} */
     const requests = []
@@ -20,10 +20,11 @@ export const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
         if (isNaN(totalSize) || !totalSize) {
             throw new Error('Bif size not working')
         }
+        chunkSize <<= 10 // *1024
         for (let start = 0; start < totalSize; start += chunkSize) {
             const end = Math.min(start + chunkSize - 1, totalSize - 1)
             const reqConfig = { headers: { Range: `bytes=${start}-${end}` } }
-            requests.push({ start, end, getData: () => fetchUtils.customFetch(url, reqConfig, true) })
+            requests.push({ start, end, reqConfig })
         }
     }
 
@@ -31,10 +32,32 @@ export const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
 }
 
 /**
+ * Calculate bif chunk size
+ * @param {Number} kbps
+ * @param {Number} bufferSeconds
+ * @return {Number}
+ */
+const calculateChunkSize = (kbps, bufferSeconds) => {
+    let chunkSize = null
+    const kbPerSec = kbps / 8
+    if (bufferSeconds > 20 && kbPerSec > 1000) {
+        chunkSize = 1024
+    } else if (kbPerSec > 1000) {
+        chunkSize = 512
+    } else if (kbPerSec > 500) {
+        chunkSize = 256
+    } else {
+        chunkSize = 128
+    }
+    return chunkSize
+}
+
+/**
  * @callback FindPreviewsCallBack
  * @param {Object} obj
  * @param {String} obj.bif
- * @param {Number} [chunkSize]
+ * @param {Number} kbps
+ * @param {Number} bufferSeconds
  * @returns {Promise<{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}>}
  */
 
@@ -49,7 +72,7 @@ export function usePreviewWorker(active) {
     /**
      * @type {FindPreviewsCallBack}
      */
-    const findPreviews = useCallback(async ({ bif }, chunkSize = 256 * 1024) => {
+    const findPreviews = useCallback(async ({ bif }, kbps, bufferSeconds) => {
         /** @type {{chunks: Array<{start: Number, end: Number, slice: Uint8Array}>}} */
         let out = { chunks: [] }
         if (bif && worker) {
@@ -78,11 +101,19 @@ export function usePreviewWorker(active) {
                     }
                 }
             }
-            downloadBifFile(bif, chunkSize).then(async requests => {
-                for (const { start, end, getData } of requests) {
-                    const chunk = await getData()
+
+            downloadBifFile(bif, calculateChunkSize(kbps, bufferSeconds)).then(async requests => {
+                for (const { start, end, reqConfig } of requests) {
+                    const chunk = await fetchUtils.customFetch(bif, reqConfig, true)
                     const last = end === requests[requests.length - 1].end
-                    worker.postMessage({ type: 'append', chunk, start, last, }, [chunk.buffer])
+                    if (!worker.finished) {
+                        worker.postMessage({ type: 'append', chunk, start, last, }, [chunk.buffer])
+                    } else {
+                        if (!hasImageCount) {
+                            res()
+                        }
+                        break;
+                    }
                 }
             })
             if (hasImageCount) {
@@ -100,6 +131,7 @@ export function usePreviewWorker(active) {
         return () => {
             setWorker(oldWorker => {
                 if (oldWorker) {
+                    oldWorker.finished = true
                     oldWorker.terminate()
                 }
                 return null

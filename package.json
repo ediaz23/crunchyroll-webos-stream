@@ -29,7 +29,7 @@
         "play-1": "NODE_ENV=development npm run build-dev && npm run install-tv-1 && npm run start-1",
         "play-p": "NODE_ENV=production npm run build-p && npm run install-tv-1 && npm run start-1",
         "translate": "npx i18next-scanner --config ./i18next-scanner.config.react.js",
-        "postinstall": "gulp clean-ilib"
+        "postinstall": "gulp gulp-postinstall"
     },
     "author": "Esteban Díaz <esteban.diazt23@gmail.com>",
     "license": "Apache-2.0",

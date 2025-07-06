@@ -679,7 +679,7 @@ const Player = ({ ...rest }) => {
     const [previews, setPreviews] = useState({ chunks: [] })
     /** @type {[String, Function]} */
     const [preview, setPreview] = useState(null)
-    /** @type {{current: String}} */
+    /** @type {{current: {index: int, url: String}} */
     const previewRef = useRef(null)
     const findPreviews = usePreviewWorker(!!stream.urls)
 
@@ -698,16 +698,20 @@ const Player = ({ ...rest }) => {
     /** @type {Function} */
     const onScrub = useCallback(({ proportion }) => {
         if (previews.chunks.length > 0 && proportion && !isNaN(proportion)) {
-            const chunk = previews.chunks[Math.floor(proportion * previews.chunks.length)]
+            const index = Math.floor(proportion * previews.chunks.length)
+            const chunk = previews.chunks[index]
             if (chunk) {
-                if (previewRef.current) {
-                    window.URL.revokeObjectURL(previewRef.current)
+                if (!previewRef.current || previewRef.current.index !== index) {
+                    if (previewRef.current?.url) {
+                        window.URL.revokeObjectURL(previewRef.current.url)
+                    }
+                    previewRef.current = { index, url: null }
+                    previewRef.current.url = window.URL.createObjectURL(new Blob([chunk.slice], { type: 'image/jpeg' }))
+                    setPreview(previewRef.current.url)
                 }
-                previewRef.current = window.URL.createObjectURL(new Blob([chunk.slice], { type: 'image/jpeg' }))
-                setPreview(previewRef.current)
             } else {
-                if (previewRef.current) {
-                    window.URL.revokeObjectURL(previewRef.current)
+                if (previewRef.current?.url) {
+                    window.URL.revokeObjectURL(previewRef.current.url)
                     previewRef.current = null
                 }
                 setPreview(null)
@@ -910,28 +914,18 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // findPreviews
         let doFindPreviews = null
         if (stream.urls && !loading) {
-            doFindPreviews = () => {
-                let chunkSize = null
-                const kbps = playerRef.current.getAverageThroughput('video')
-                const bufferSeconds = playerRef.current.getBufferLength('video')
-                const kbPerSec = kbps / 8
-                if (bufferSeconds > 20 && kbPerSec > 1000) {
-                    chunkSize = 512 * 1024
-                } else if (kbPerSec > 1000) {
-                    chunkSize = 256 * 1024
-                } else if (kbPerSec > 500) {
-                    chunkSize = 128 * 1024
-                } else {
-                    chunkSize = 64 * 1024
-                }
-                findPreviews(stream, chunkSize).then(setPreviews)
-            }
+            doFindPreviews = () => findPreviews(
+                stream,
+                playerRef.current.getAverageThroughput('video'),
+                playerRef.current.getBufferLength('video')
+            ).then(setPreviews)
+
             playerRef.current.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
         }
         return () => {
             setPreviews({ chunks: [] })
-            if (previewRef.current) {
-                window.URL.revokeObjectURL(previewRef.current)
+            if (previewRef.current?.url) {
+                window.URL.revokeObjectURL(previewRef.current.url)
                 previewRef.current = null
             }
             if (doFindPreviews) {
