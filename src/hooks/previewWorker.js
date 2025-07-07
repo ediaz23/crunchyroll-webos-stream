@@ -38,16 +38,20 @@ const downloadBifFile = async (url, chunkSize) => {
  * @return {Number}
  */
 const calculateChunkSize = (kbps, bufferSeconds) => {
-    let chunkSize = null
-    const kbPerSec = kbps / 8
-    if (bufferSeconds > 20 && kbPerSec > 1000) {
-        chunkSize = 1024
-    } else if (kbPerSec > 1000) {
-        chunkSize = 512
-    } else if (kbPerSec > 500) {
-        chunkSize = 256
-    } else {
-        chunkSize = 128
+    let chunkSize = 64
+    try {
+        const kbPerSec = kbps / 8
+        if (bufferSeconds > 20 && kbPerSec > 1000) {
+            chunkSize = 1024
+        } else if (kbPerSec > 1000) {
+            chunkSize = 512
+        } else if (kbPerSec > 500) {
+            chunkSize = 256
+        } else {
+            chunkSize = 128
+        }
+    } catch (_e) {
+        //ignore
     }
     return chunkSize
 }

@@ -243,15 +243,14 @@ export const getNextEpisode = async (profile, content) => {
         if (firstSeasonEp.length) {
             out.firstEp = firstSeasonEp[0]
             out.firstEp.type = 'episode'
-
-            out.lastEp = firstSeasonEp[firstSeasonEp.length - 1]
-            out.lastEp.type = 'episode'
-        }
-        if (lastSeasonEp) {
-            if (lastSeasonEp.length) {
-                out.lastEp = lastSeasonEp[lastSeasonEp.length - 1]
+            if (firstSeasonEp.length > 1) {
+                out.lastEp = firstSeasonEp[firstSeasonEp.length - 1]
                 out.lastEp.type = 'episode'
             }
+        }
+        if (lastSeasonEp?.length) {
+            out.lastEp = lastSeasonEp[lastSeasonEp.length - 1]
+            out.lastEp.type = 'episode'
         }
         const eps = [out.firstEp, out.lastEp].filter(ep => !!ep)
         if (eps.length > 0) {

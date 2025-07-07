@@ -913,7 +913,7 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // findPreviews
         let doFindPreviews = null
-        if (stream.urls && !loading) {
+        if (stream.urls && !loading && playerRef.current) {
             doFindPreviews = () => findPreviews(
                 stream,
                 playerRef.current.getAverageThroughput('video'),
@@ -928,7 +928,7 @@ const Player = ({ ...rest }) => {
                 window.URL.revokeObjectURL(previewRef.current.url)
                 previewRef.current = null
             }
-            if (doFindPreviews) {
+            if (doFindPreviews && playerRef.current) {
                 playerRef.current.off(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
             }
         }
