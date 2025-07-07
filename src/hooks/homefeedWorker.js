@@ -1,4 +1,3 @@
-/* global Worker */
 
 import { useEffect, useCallback, useRef } from 'react'
 
@@ -52,7 +51,7 @@ export function useHomeFeedWorker() {
     }), [])
 
     useEffect(() => {
-        workerRef.current = new Worker(HomeFeedWorker)
+        workerRef.current = new window.Worker(HomeFeedWorker)
         return () => {
             workerRef.current.terminate()
         }

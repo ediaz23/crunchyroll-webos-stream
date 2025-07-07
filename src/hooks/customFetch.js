@@ -8,10 +8,24 @@ import { _LOCALHOST_SERVER_ } from '../const'
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
 
+export const worker = new window.Worker(new URL('../workers/cache.worker.js', import.meta.url), { type: 'module' })
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
+const pendingTasks = new Map()
 const CONCURRENT_REQ_LIMIT = 10
 let currentReqIndex = CONCURRENT_REQ_LIMIT
 
+/**
+ * @typedef ResponseProxy
+ * @type {Object}
+ * @property {Number} status
+ * @property {String} statusText
+ * @property {String|Uint8Array} [content]  base64
+ * @property {Object.<string, string>} headers
+ * @property {String} resUrl
+ * @property {Boolean} compress
+ * @property {Number} [load]
+ * @property {Number} [total]
+ */
 
 /**
  * Hack class to set url property
@@ -28,6 +42,36 @@ class ResponseHack extends Response {
             get: () => { return this.originUrl },
         })
     }
+}
+
+worker.addEventListener('message', (e) => {
+    const { taskId } = e.data
+    if (taskId && pendingTasks.has(taskId)) {
+        const resolve = pendingTasks.get(taskId)
+        pendingTasks.delete(taskId)
+        resolve(e.data)
+    }
+})
+
+/**
+ * @param {String} url
+ * @return {Promise<import('../workers/cache.worker').ReqEntry>}
+ */
+export async function getCache(url) {
+    const taskId = uuidv4()
+    const prom = new Promise((resolve) => {
+        pendingTasks.set(taskId, resolve)
+    })
+    worker.postMessage({ type: 'get', url, taskId })
+    return prom
+}
+
+/**
+ * @param {String} url
+ * @param {ResponseProxy} response
+ */
+export async function saveCache(url, response) {
+    worker.postMessage({ type: 'save', url, response })
 }
 
 /**
@@ -82,9 +126,10 @@ export const setUpRequest = (url, options = {}, sync = true) => {
 const makeFetchProgress = (onProgress) => {
     /**
      * @param {Response} res
-     * @returns {Promise}
+     * @returns {Promise<ResponseProxy>}
      */
     return async (res) => {
+        /** @type {ResponseProxy} */
         let out = null
         if (onProgress) {
             const reader = res.body.getReader()
@@ -107,6 +152,7 @@ const makeFetchProgress = (onProgress) => {
                 }
             }
             const resTmp = new window.Response(new window.Blob(chunks))
+            /** @type {ResponseProxy} */
             const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
             const buffContent = await utils.decodeResponseAsync({ content, compress })
             out = { status, statusText, content: buffContent.buffer, headers, resUrl }
@@ -138,6 +184,7 @@ const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
     return async (res, sub) => {
         if (res.id === config.id) {
             if (config.resStatus === 'active') {
+                /** @type {ResponseProxy} */
                 const { loaded, total, status, content, compress } = res
                 if (200 <= status && status < 300) {
                     chunks.push(await utils.decodeResponseAsync({ content, compress }))
@@ -222,8 +269,39 @@ export const makeRequest = (obj, sync = true) => {
         obj.parameters = { d: utils.encodeRequest(obj.config) }
         _makeRequest(obj)
     } else {
-        utils.encodeRequestAsync(obj.config).then(d => {
-            obj.parameters = { d }
+        /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
+        const cacheProm = (!obj.config.method || obj.config.method === 'get')
+            ? getCache(obj.config.url)
+            : Promise.resolve(null)
+        cacheProm.then(async entry => {
+            if (entry) {
+                if (entry.etag || entry.lastModified) {
+                    obj.config.headers = obj.config.headers || {}
+                    if (entry.etag) {
+                        obj.config.headers['If-None-Match'] = entry.etag
+                    }
+                    if (entry.lastModified) {
+                        obj.config.headers['If-Modified-Since'] = entry.lastModified
+                    }
+                } else {
+                    return obj.onSuccess(entry.response)
+                }
+            }
+            const superOnSuccess = obj.onSuccess
+            /** @param {ResponseProxy} data */
+            const checkSaveCache = (data) => {
+                if (data) {
+                    if (data.status === 200) {
+                        saveCache(obj.config.url, data).catch(obj.onFailure)
+                    }
+                    if (entry && data.status === 304) {
+                        data = entry.response
+                    }
+                }
+                superOnSuccess(data)
+            }
+            obj.onSuccess = checkSaveCache
+            obj.parameters = { d: await utils.encodeRequestAsync(obj.config) }
             _makeRequest(obj)
         })
     }
@@ -241,8 +319,12 @@ export const customFetch = async (url, options = {}, direct = false) => {
     const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
     const configProm = setUpRequest(url, options, false)
     const config = await configProm
+    /**
+     * @param {ResponseProxy} data
+     */
     const onSuccess = async (data) => {
         config.resStatus = 'done'
+        /** @type {ResponseProxy} */
         const { status, statusText, content, headers, resUrl, compress } = data
         logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
         /**  @type {Uint8Array} */

@@ -23,7 +23,7 @@ import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
-import useCustomFetch from '../hooks/customFetch'
+import useCustomFetch, { worker as fetchWorker } from '../hooks/customFetch'
 import api from '../api'
 import utils from '../utils'
 import back from '../back'
@@ -85,6 +85,8 @@ const App = ({ ...rest }) => {
         initDB()
         return () => {
             utils.worker.terminate()
+            fetchWorker.postMessage({ type: 'close' })
+            fetchWorker.terminate()
         }
     }, [setDBInit, customFetch])
 
