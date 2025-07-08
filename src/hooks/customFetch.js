@@ -31,8 +31,7 @@ function setAdaptiveCacheSize() {
 
             const MIN = 5 * 1024 * 1024  // 5 MB
             const MAX = 50 * 1024 * 1024  // 50 MB
-
-            Math.max(MIN, Math.min(MAX, Math.floor(base)))
+            worker.postMessage({ type: 'init', maxSize: Math.max(MIN, Math.min(MAX, Math.floor(base))) })
         })
     } else {
         worker.postMessage({ type: 'init', maxSize: baseSize })
@@ -104,13 +103,18 @@ export async function saveCache(url, response) {
 }
 
 /**
+ * @typedef SetUpRequestConfig
+ * @type {Object}
+ * @property {Boolean} [sync] turn on sync mode
+ *
  * set up request to be done
  * @param {String | Request} url
  * @param {RequestInit} [options]
- * @param {Boolean} sync
+ * @param {SetUpRequestConfig} fnConfig
  * @return {RequestInit | Promise<RequestInit>}
  */
-export const setUpRequest = (url, options = {}, sync = true) => {
+export const setUpRequest = (url, options = {}, fnConfig) => {
+    const { sync = true } = fnConfig
     let config, out
     if (url instanceof Request) {
         config = {
@@ -284,23 +288,30 @@ const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress }) 
 }
 
 /**
+ * @typedef MakeResquestConfig
+ * @type {Object}
+ * @property {Boolean} [sync] turn on sync mode
+ * @property {Boolean} [cache] use cache
+ *
  * Does request throught service or fetch
  * @param {Object} obj
  * @param {RequestInit} obj.config
  * @param {Function} obj.onSuccess
  * @param {Function} obj.onFailure
  * @param {Function} [obj.onProgress]
- * @param {Boolean} [sync]
- * @param {Boolean} [cache]
+ * @param {MakeResquestConfig} [fnConfig]
  */
-export const makeRequest = (obj, sync = true, cache = true) => {
+export const makeRequest = (obj, fnConfig) => {
+    /** @type {MakeResquestConfig} */
+    const { sync = false, cache = true } = fnConfig
     obj.config.id = uuidv4()
     if (sync) {
         obj.parameters = { d: utils.encodeRequest(obj.config) }
         _makeRequest(obj)
     } else {
+        const isGetMethod = !obj.config.method || obj.config.method === 'get'
         /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
-        const cacheProm = ((!obj.config.method || obj.config.method === 'get') && cache)
+        const cacheProm = isGetMethod && cache
             ? getCache(obj.config.url)
             : Promise.resolve(null)
         cacheProm.then(async entry => {
@@ -321,7 +332,7 @@ export const makeRequest = (obj, sync = true, cache = true) => {
             /** @param {ResponseProxy} data */
             const checkSaveCache = (data) => {
                 if (data) {
-                    if (data.status === 200) {
+                    if (isGetMethod && data.status === 200) {
                         saveCache(obj.config.url, data).catch(obj.onFailure)
                     }
                     if (entry && data.status === 304) {
@@ -338,17 +349,23 @@ export const makeRequest = (obj, sync = true, cache = true) => {
 }
 
 /**
+ * @typedef FetchConfig
+ * @type {Object}
+ * @property {Boolean} [direct] turn on return response as raw content
+ * @property {Boolean} [cache] use cache
+ *
  * Function to bypass cors issues
  * @param {String} url
  * @param {RequestInit} [options]
- * @param {Boolean} [direct] turn on return response as raw content
- * @param {Boolean} [cache]
+ * @param {FetchConfig} [fnConfig]
  * @returns {Promise<Response>}
  */
-export const customFetch = async (url, options = {}, direct = false, cache = true) => {
+export const customFetch = async (url, options = {}, fnConfig = {}) => {
     let res, rej
+    /** @type {FetchConfig} */
+    const { direct = false, cache = true, sync = false } = fnConfig
     const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
-    const configProm = setUpRequest(url, options, false)
+    const configProm = setUpRequest(url, options, { sync })
     const config = await configProm
     /**
      * @param {ResponseProxy} data
@@ -388,7 +405,7 @@ export const customFetch = async (url, options = {}, direct = false, cache = tru
             rej(error)
         }
     }
-    makeRequest({ config, onFailure, onSuccess }, false, cache)
+    makeRequest({ config, onFailure, onSuccess }, { sync, cache })
     return prom
 }
 

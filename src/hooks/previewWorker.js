@@ -81,7 +81,11 @@ export function usePreviewWorker(active) {
         let out = { chunks: [] }
         if (bif && worker) {
             let chunkIndex = 0, res
-            const header = await fetchUtils.customFetch(bif, { headers: { Range: 'bytes=0-127' } }, true, false)
+            const header = await fetchUtils.customFetch(
+                bif,
+                { headers: { Range: 'bytes=0-127' } },
+                { direct: true, cache: false }
+            )
             const imageCount = (new DataView(header.buffer).getUint32(12, true)) - 1
             const hasImageCount = 0 < imageCount && imageCount < 100000
             const prom = new Promise(resolve => { res = resolve })
@@ -108,7 +112,7 @@ export function usePreviewWorker(active) {
 
             downloadBifFile(bif, calculateChunkSize(kbps, bufferSeconds)).then(async requests => {
                 for (const { start, end, reqConfig } of requests) {
-                    const chunk = await fetchUtils.customFetch(bif, reqConfig, true, false)
+                    const chunk = await fetchUtils.customFetch(bif, reqConfig, { direct: true, cache: false })
                     const last = end === requests[requests.length - 1].end
                     if (!worker.finished) {
                         worker.postMessage({ type: 'append', chunk, start, last, }, [chunk.buffer])

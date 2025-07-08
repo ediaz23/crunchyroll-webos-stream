@@ -81,12 +81,14 @@ function expired(entry) {
  */
 function handleGet({ url: key, taskId }) {
     let out = { taskId, response: false }
-    const entry = memoryCache.lru.get(key)
-    if (entry && !expired(entry)) {
-        out = { taskId, ...entry }
-    } else {
-        if (entry) {
-            Promise.resolve().then(() => memoryCache.lru.delete(key))
+    if (memoryCache.lru) {
+        const entry = memoryCache.lru.get(key)
+        if (entry && !expired(entry)) {
+            out = { taskId, ...entry }
+        } else {
+            if (entry) {
+                Promise.resolve().then(() => memoryCache.lru.delete(key))
+            }
         }
     }
     return out
@@ -100,7 +102,7 @@ function handleGet({ url: key, taskId }) {
 function handleSave({ url: key, response }) {
     const maxAge = parseMaxAge(response)
     const size = response.content?.byteLength || response.content?.length || 0;
-    if (size < memoryCache.maxSize) {
+    if (memoryCache.lru && size < memoryCache.maxSize) {
         const etag = extractHeader(response, 'ETag')
         const lastModified = extractHeader(response, 'Last-Modified')
         /** @type {ReqEntry} */
