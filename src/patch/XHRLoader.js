@@ -59,7 +59,7 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
             onSuccess: this._onSuccess.bind(this),
             onFailure: this._onFailure.bind(this),
             onProgress: this.async ? this._onProgress.bind(this) : null,
-        }, !this.async)
+        }, !this.async, false)
 
     }
 

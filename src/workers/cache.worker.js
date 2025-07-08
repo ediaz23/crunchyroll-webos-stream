@@ -13,17 +13,34 @@ import QuickLRU from 'quick-lru';
  * @property {String} [lastModified]
  */
 
-const MAX_MEMORY = 6 * 1024 * 1024;  // 6MB
-/** @type {import('quick-lru').default<String, ReqEntry>} */
-const lru = new QuickLRU({ maxSize: MAX_MEMORY, size: v => v.size, })
+/**
+ * @type {{
+    maxSize: Number,
+    lru: import('quick-lru').default<String, ReqEntry>,
+    gcTimer: Number
+}}
+ */
+const memoryCache = {
+    maxSize: null,
+    lru: null,
+    gcTimer: null,
+}
 
-const gcTimer = setInterval(() => {
-    for (const [key, entry] of lru) {
-        if (expired(entry)) {
-            lru.delete(key)
+
+/**
+ * @param {{maxSize: Number}}
+ */
+function init({ maxSize }) {
+    memoryCache.maxSize = maxSize
+    memoryCache.lru = new QuickLRU({ maxSize, size: v => v.size, })
+    memoryCache.gcTimer = setInterval(() => {
+        for (const [key, entry] of memoryCache.lru) {
+            if (expired(entry)) {
+                memoryCache.lru.delete(key)
+            }
         }
-    }
-}, 60 * 1)
+    }, 60 * 1)
+}
 
 /**
  * @param {import('../hooks/customFetch').ResponseProxy} obj
@@ -64,12 +81,12 @@ function expired(entry) {
  */
 function handleGet({ url: key, taskId }) {
     let out = { taskId, response: false }
-    const entry = lru.get(key)
+    const entry = memoryCache.lru.get(key)
     if (entry && !expired(entry)) {
         out = { taskId, ...entry }
     } else {
         if (entry) {
-            Promise.resolve().then(() => lru.delete(key))
+            Promise.resolve().then(() => memoryCache.lru.delete(key))
         }
     }
     return out
@@ -83,7 +100,7 @@ function handleGet({ url: key, taskId }) {
 function handleSave({ url: key, response }) {
     const maxAge = parseMaxAge(response)
     const size = response.content?.byteLength || response.content?.length || 0;
-    if (size < MAX_MEMORY) {
+    if (size < memoryCache.maxSize) {
         const etag = extractHeader(response, 'ETag')
         const lastModified = extractHeader(response, 'Last-Modified')
         /** @type {ReqEntry} */
@@ -95,17 +112,19 @@ function handleSave({ url: key, response }) {
             etag,
             lastModified,
         }
-        lru.set(key, entry)
+        memoryCache.lru.set(key, entry)
     }
 }
 
-self.onmessage = (e) => {
-    const { type } = e.data
-    if (type === 'get') {
-        self.postMessage(handleGet(e.data))
+self.onmessage = ({ data }) => {
+    const { type } = data
+    if (type === 'init') {
+        init(data)
+    } else if (type === 'get') {
+        self.postMessage(handleGet(data))
     } else if (type === 'save') {
-        handleSave(e.data)
+        handleSave(data)
     } else if (type === 'close') {
-        clearInterval(gcTimer)
+        clearInterval(memoryCache.gcTimer)
     }
 }

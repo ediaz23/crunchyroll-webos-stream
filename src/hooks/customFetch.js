@@ -1,3 +1,4 @@
+/* global Worker */
 
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,11 +9,38 @@ import { _LOCALHOST_SERVER_ } from '../const'
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
 
-export const worker = new window.Worker(new URL('../workers/cache.worker.js', import.meta.url), { type: 'module' })
+export const worker = new Worker(new URL('../workers/cache.worker.js', import.meta.url), { type: 'module' })
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const pendingTasks = new Map()
 const CONCURRENT_REQ_LIMIT = 10
 let currentReqIndex = CONCURRENT_REQ_LIMIT
+
+
+function setAdaptiveCacheSize() {
+    const baseSize = 15 * 1024 * 1024  // 15MB
+    if (utils.isTv()) {
+        webOS.deviceInfo(deviceInfo => {
+            const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+            const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
+            const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
+
+            let base = Math.floor(ramInGB * baseSize)  // 15MB per GB of RAM
+
+            if (is4K) base *= 0.9  // reduce if 45
+            if (hasHDR) base *= 0.9  // reduce HDR
+
+            const MIN = 5 * 1024 * 1024  // 5 MB
+            const MAX = 50 * 1024 * 1024  // 50 MB
+
+            Math.max(MIN, Math.min(MAX, Math.floor(base)))
+        })
+    } else {
+        worker.postMessage({ type: 'init', maxSize: baseSize })
+    }
+    worker.active = true
+}
+
+if (!worker.active) { setAdaptiveCacheSize() }
 
 /**
  * @typedef ResponseProxy
@@ -44,12 +72,13 @@ class ResponseHack extends Response {
     }
 }
 
-worker.addEventListener('message', (e) => {
-    const { taskId } = e.data
+worker.addEventListener('message', ({ data }) => {
+    /** @type {{taskId: String, response: ResponseProxy}} */
+    const { taskId } = data
     if (taskId && pendingTasks.has(taskId)) {
         const resolve = pendingTasks.get(taskId)
         pendingTasks.delete(taskId)
-        resolve(e.data)
+        resolve(data.response ? data : null)
     }
 })
 
@@ -261,16 +290,17 @@ const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress }) 
  * @param {Function} obj.onSuccess
  * @param {Function} obj.onFailure
  * @param {Function} [obj.onProgress]
- * @param {Boolean} sync
+ * @param {Boolean} [sync]
+ * @param {Boolean} [cache]
  */
-export const makeRequest = (obj, sync = true) => {
+export const makeRequest = (obj, sync = true, cache = true) => {
     obj.config.id = uuidv4()
     if (sync) {
         obj.parameters = { d: utils.encodeRequest(obj.config) }
         _makeRequest(obj)
     } else {
         /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
-        const cacheProm = (!obj.config.method || obj.config.method === 'get')
+        const cacheProm = ((!obj.config.method || obj.config.method === 'get') && cache)
             ? getCache(obj.config.url)
             : Promise.resolve(null)
         cacheProm.then(async entry => {
@@ -311,10 +341,11 @@ export const makeRequest = (obj, sync = true) => {
  * Function to bypass cors issues
  * @param {String} url
  * @param {RequestInit} [options]
- * * @param {Boolean} [direct] turn on return response as raw content
+ * @param {Boolean} [direct] turn on return response as raw content
+ * @param {Boolean} [cache]
  * @returns {Promise<Response>}
  */
-export const customFetch = async (url, options = {}, direct = false) => {
+export const customFetch = async (url, options = {}, direct = false, cache = true) => {
     let res, rej
     const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
     const configProm = setUpRequest(url, options, false)
@@ -357,7 +388,7 @@ export const customFetch = async (url, options = {}, direct = false) => {
             rej(error)
         }
     }
-    makeRequest({ config, onFailure, onSuccess })
+    makeRequest({ config, onFailure, onSuccess }, false, cache)
     return prom
 }
 

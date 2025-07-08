@@ -424,14 +424,9 @@ const setStreamingConfig = async (dashPlayer) => {
     let initialBufferLevel = 16
 
     if (utils.isTv()) {
-        const parseRamSizeInGB = (ddrSizeString) => {
-            const match = ddrSizeString.match(/([\d.]+)G/i);
-            return match ? parseFloat(match[1]) : 0;
-        }
-
         /** @type {import('webostvjs').DeviceInfo}*/
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
-        const ramInGB = parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+        const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
         const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
         const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
 

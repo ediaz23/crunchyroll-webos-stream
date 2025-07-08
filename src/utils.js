@@ -260,6 +260,16 @@ export const getIsPremium = (item) => {
 }
 
 /**
+ * @param {String} ddrSizeString
+ * @return {Number}
+ */
+export const parseRamSizeInGB = (ddrSizeString) => {
+    const match = ddrSizeString.match(/([\d.]+)G/i);
+    return match ? parseFloat(match[1]) : 0;
+}
+
+
+/**
  * @param {Object} obj
  * @param {Number} space
  * @returns {String}
@@ -319,6 +329,7 @@ export default {
     loadLibData,
     loadBrowserTranslate,
     loadTvTranslate,
+    parseRamSizeInGB,
     customStringify,
 
     arrayToBase64,
