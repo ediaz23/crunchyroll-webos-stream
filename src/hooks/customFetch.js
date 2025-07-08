@@ -113,7 +113,7 @@ export async function saveCache(url, response) {
  * @param {SetUpRequestConfig} fnConfig
  * @return {RequestInit | Promise<RequestInit>}
  */
-export const setUpRequest = (url, options = {}, fnConfig) => {
+export const setUpRequest = (url, options = {}, fnConfig = {}) => {
     const { sync = true } = fnConfig
     let config, out
     if (url instanceof Request) {
@@ -301,7 +301,7 @@ const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress }) 
  * @param {Function} [obj.onProgress]
  * @param {MakeResquestConfig} [fnConfig]
  */
-export const makeRequest = (obj, fnConfig) => {
+export const makeRequest = (obj, fnConfig = {}) => {
     /** @type {MakeResquestConfig} */
     const { sync = false, cache = true } = fnConfig
     obj.config.id = uuidv4()
@@ -342,7 +342,11 @@ export const makeRequest = (obj, fnConfig) => {
                 superOnSuccess(data)
             }
             obj.onSuccess = checkSaveCache
-            obj.parameters = { d: await utils.encodeRequestAsync(obj.config) }
+            if (obj.config.body instanceof FormData) {
+                obj.parameters = { d: utils.encodeRequest(obj.config) }
+            } else {
+                obj.parameters = { d: await utils.encodeRequestAsync(obj.config) }
+            }
             _makeRequest(obj)
         })
     }
