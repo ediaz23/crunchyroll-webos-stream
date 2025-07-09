@@ -87,7 +87,6 @@ export function useSetContent() {
                                     : item
                             )
                         })
-
                     }
                     setPath(backPath)
                 }

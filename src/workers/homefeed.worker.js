@@ -23,18 +23,26 @@ function processNewHomefeed(data, parent) {
         if (parent && parent.parentId || data.type !== 'HeroMediaLiveCard') {
             newItem.contentId = data.props.contentId
         }
-    } else if (['PersonalizedCollection', 'HistoryCollection', 'Banner'].includes(data.type)) {
+    } else if (['PersonalizedCollection', 'Banner'].includes(data.type)) {
         newItem.link = data.props.link
     } else if (['MusicVideoCard'].includes(data.type)) {
         newItem.contentId = data.props.musicVideoId
     }
-    newItem.items = newItem.items.filter(item => {
-        return (
-            item.contentId ||
-            item.link ||
-            item.items.length > 0 ||
-            ['WatchlistCollection', 'RecentEpisodesCollection', 'MusicVideoCollection'].includes(item.type))
-    })
+    const filteredItems = newItem.items.filter(item => (
+        item.contentId ||
+        item.link ||
+        item.items.length > 0 ||
+        [
+            'WatchlistCollection',
+            'HistoryCollection',
+            'RecentEpisodesCollection',
+            'MusicVideoCollection'
+        ].includes(item.type)
+    ))
+    if (filteredItems.length !== newItem.items.length) {
+        console.log('homefeedWorker', 'filtered', newItem.items.filter(i => !filteredItems.includes(i)))
+    }
+    newItem.items = filteredItems
     return newItem
 }
 

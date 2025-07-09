@@ -191,7 +191,8 @@ export const processCuratedCollection = async (carousel, profile) => {
  */
 const processDynamicCollection = async (carousel, profile) => {
     let res = {}
-    const quantity = LOAD_MOCK_DATA ? 20 : 30, ratings = true
+    const quantity = LOAD_MOCK_DATA ? 20 : 30  // 20 beacuse all mock data is with 20
+    const ratings = true
     if ('history' === carousel.response_type) {
         res = await api.discover.getHistory(profile, { quantity, ratings })
         res = { data: res.data.map(removePanelField) }
@@ -236,7 +237,7 @@ const processDynamicCollection = async (carousel, profile) => {
     } else {
         new Error(`Dynamic Collection not supported ${carousel.resource_type} - ${carousel.response_type}`)
     }
-    return { ...carousel, items: res.data }
+    return { resource_type: 'dynamic_collection', ...carousel, items: res.data }
 }
 
 /**

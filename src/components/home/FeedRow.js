@@ -23,8 +23,7 @@ const NavigableDiv = withNavigable('div', '')
 
 export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
     /** @type {Array<String>} */
-    const playableTypes = useMemo(() =>
-        ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
+    const playableTypes = useMemo(() => ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
     let progress = 0, duration = undefined, showPremium = false
 
@@ -163,8 +162,9 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
                 musicArtist: 'MA899F289',
                 musicConcert: 'MC413F8154',
             }
-            const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
-                val.id === testContent[DEV_CONTENT_TYPE])
+            const content = feed.items.find(
+                val => val.type === DEV_CONTENT_TYPE && val.id === testContent[DEV_CONTENT_TYPE]
+            )
             if (content) {
                 setContentNavagate({
                     content,
