@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useState } from 'react'
 import * as fetchUtils from './customFetch'
+import logger from '../logger'
 
 const BifWorker = new URL('../workers/bif.worker.js', import.meta.url)
 
@@ -12,6 +13,7 @@ const BifWorker = new URL('../workers/bif.worker.js', import.meta.url)
  * @returns {Promise<Array<{start: Number, end: Number, reqConfig: RequestInit}>>}
  */
 const downloadBifFile = async (url, chunkSize) => {
+    logger.debug(`preview in chunkSize ${chunkSize} ${url}`)
     const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
     /** @type {Array<{start: Number, end: Number, getData: () => Promise<Uint8Array>}>} */
     const requests = []
@@ -27,7 +29,7 @@ const downloadBifFile = async (url, chunkSize) => {
             requests.push({ start, end, reqConfig })
         }
     }
-
+    logger.debug(`preview out requests ${requests.length} ${url}`)
     return requests
 }
 
@@ -38,7 +40,7 @@ const downloadBifFile = async (url, chunkSize) => {
  * @return {Number}
  */
 const calculateChunkSize = (kbps, bufferSeconds) => {
-    let chunkSize = 64
+    let chunkSize = 128
     try {
         const kbPerSec = kbps / 8
         if (bufferSeconds > 20 && kbPerSec > 1000) {
@@ -103,6 +105,7 @@ export function usePreviewWorker(active) {
                     finish |= last
                 })
                 if (finish) {
+                    logger.debug('preview finish')
                     worker.terminate()
                     if (!hasImageCount) {
                         res()
@@ -112,6 +115,7 @@ export function usePreviewWorker(active) {
 
             downloadBifFile(bif, calculateChunkSize(kbps, bufferSeconds)).then(async requests => {
                 for (const { start, end, reqConfig } of requests) {
+                    logger.debug(`preview downloadBifFile ${start} ${end}`)
                     const chunk = await fetchUtils.customFetch(bif, reqConfig, { direct: true, cache: false })
                     const last = end === requests[requests.length - 1].end
                     if (!worker.finished) {
