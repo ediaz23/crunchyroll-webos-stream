@@ -27,7 +27,6 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
  * @property {Function} setDelay setState function for delay
  * @property {Boolean} autoScroll autoScroll grid
  * @property {Function} setAutoScroll setState function for autoScroll
- * @property {Array<Object>} contentListBak Backup of content List
  * @property {Object} optionBak Backup of options
  */
 
@@ -59,19 +58,19 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
     const changeContentList = useCallback((newList, resetIndex = true) => {
         setContentList(newList)
         setHomeViewReady(true)
-        if (homeBackup && homeBackup.contentList !== newList && resetIndex) {
+        if (newList && resetIndex) {
             setHomePosition({ rowIndex: 0 })
         }
-    }, [setContentList, setHomeViewReady, homeBackup, setHomePosition])
+    }, [setContentList, setHomeViewReady, setHomePosition])
 
     /** @type {Function} */
     const onLeave = useCallback((options, saveList = true) => {
         if (saveList) {
-            setHomeBackup({ options, contentList, type })
+            setHomeBackup({ options, type })
         } else {
-            setHomeBackup({ options, contentList: null, type })
+            setHomeBackup({ options, type })
         }
-    }, [setHomeBackup, contentList, type])
+    }, [setHomeBackup, type])
 
     /** @type {Function} */
     const onFilter = useCallback(({ delay: delayP, scroll = false }) => {
@@ -117,7 +116,6 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
         mergeContentList,
         onLeave,
         onFilter,
-        contentListBak: homeBackup && homeBackup.contentList,
         optionBak: homeBackup && homeBackup.options || {},
     }
 }

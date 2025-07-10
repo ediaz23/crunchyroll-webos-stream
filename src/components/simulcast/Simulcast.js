@@ -33,7 +33,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak, optionBak,
+        optionBak,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
@@ -126,13 +126,9 @@ const Simulcast = ({ profile, title, ...rest }) => {
     }, [profile, setSeason, delay, season])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-            autoScrollRef.current = false
-        }
-    }, [profile, contentListBak, changeContentList, onFilter])
+        onFilter({ delay: 0, scroll: true })
+        autoScrollRef.current = false
+    }, [profile, changeContentList, onFilter])
 
     return (
         <Row className={css.ContentGrid} {...rest}>

@@ -27,7 +27,6 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak,
     } = useContentList(type, homeBackupOverride, homePositionOverride)
 
     /** @type {[Object, Function]} */
@@ -72,13 +71,9 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
     }, [profile, loadData, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-            autoScrollRef.current = false
-        }
-    }, [profile, contentListBak, changeContentList, onFilter])
+        onFilter({ delay: 0, scroll: true })
+        autoScrollRef.current = false
+    }, [profile, changeContentList, onFilter])
 
     return (
         <Column {...rest}>

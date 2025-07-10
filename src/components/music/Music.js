@@ -23,7 +23,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak, optionBak,
+        optionBak,
     } = useContentList('music_browse')
 
     /** @type {[String, Function]} */
@@ -92,12 +92,8 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     }, [profile, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-        }
-    }, [profile, contentListBak, changeContentList, onFilter])
+        onFilter({ delay: 0, scroll: true })
+    }, [profile, changeContentList, onFilter])
 
     return (
         <Column style={{ width: '100%' }} {...rest}>

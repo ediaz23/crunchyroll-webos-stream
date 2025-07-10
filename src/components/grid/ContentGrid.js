@@ -43,7 +43,7 @@ const ContentGrid = ({
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak, optionBak,
+        optionBak,
     } = useContentList('content_grid')
 
     /** @type {[String, Function]} */
@@ -77,17 +77,17 @@ const ContentGrid = ({
     const onLoad = useCallback((index) => {
         if (mergeContentList(false, index)) {
             if (engine === 'search') {
-                api.discover.search(profile, { ...options, start: index })
-                    .then(res => {
-                        if (res.total) {
-                            mergeContentList(res.data[0].items || [], index)
-                        } else {
-                            mergeContentList([], index)
-                        }
-                    })
+                api.discover.search(profile, { ...options, start: index }).then(res => {
+                    if (res.total) {
+                        mergeContentList(res.data[0].items || [], index)
+                    } else {
+                        mergeContentList([], index)
+                    }
+                })
             } else {
-                api.discover.getBrowseAll(profile, { ...options, start: index })
-                    .then(res => mergeContentList(res.data || [], index))
+                api.discover.getBrowseAll(profile, { ...options, start: index }).then(
+                    res => mergeContentList(res.data || [], index)
+                )
             }
         }
     }, [engine, options, profile, mergeContentList])
@@ -118,12 +118,12 @@ const ContentGrid = ({
                         changeContentList([])
                     }
                 } else {
-                    api.discover.getBrowseAll(profile, options).then(res => {
-                        changeContentList([
+                    api.discover.getBrowseAll(profile, options).then(
+                        res => changeContentList([
                             ...res.data,
                             ...new Array(res.total - res.data.length)
                         ])
-                    })
+                    )
                 }
             }, delay)
         }
@@ -131,12 +131,8 @@ const ContentGrid = ({
     }, [profile, changeContentList, options, contentKey, delay, engine])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-        }
-    }, [profile, contentListBak, changeContentList, onFilter, contentKey])
+        onFilter({ delay: 0, scroll: true })
+    }, [profile, changeContentList, onFilter, contentKey])
 
     return (
         <Row className={css.ContentGrid} {...rest}>
