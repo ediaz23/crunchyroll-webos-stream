@@ -909,12 +909,20 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // findPreviews
         let doFindPreviews = null
         if (stream.urls && !loading && playerRef.current) {
-            doFindPreviews = () => findPreviews(
-                stream,
-                playerRef.current.getAverageThroughput('video'),
-                playerRef.current.getBufferLength('video')
-            ).then(setPreviews)
+            let timeoutId = null
 
+            doFindPreviews = () => {
+                clearTimeout(timeoutId)
+                timeoutId = setTimeout(() => {
+                    timeoutId = null
+                    playerRef.current.off(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
+                    findPreviews(
+                        stream,
+                        playerRef.current.getAverageThroughput('video'),
+                        playerRef.current.getBufferLength('video')
+                    ).then(setPreviews)
+                }, 250)
+            }
             playerRef.current.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
         }
         return () => {
