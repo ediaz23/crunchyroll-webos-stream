@@ -411,7 +411,7 @@ export const customFetch = async (url, options = {}, fnConfig = {}) => {
     const { direct = false, cache = true, sync = false } = fnConfig
     const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
     const configProm = setUpRequest(url, options, { sync })
-    const config = await configProm
+    const config = sync ? configProm : await configProm
     /**
      * @param {ResponseProxy} data
      */

@@ -140,7 +140,6 @@ const SimilarList = ({ profile, content, onLoadData, optionIndex, rating }) => {
             homePositionOverride={contentDetailPositionState}
             type='similar'
             noPoster
-            noSaveList
         />
     )
 }

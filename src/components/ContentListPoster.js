@@ -18,11 +18,11 @@ import useContentList from '../hooks/contentList'
  * @param {Function} [obj.onSelect]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Boolean} [obj.noPoster]
- * @param {Boolean} [obj.noSaveList]
+ * @param {Boolean} [obj.noCache]
  * @param {Object} [obj.homeBackupOverride]
  * @param {Object} [obj.homePositionOverride]
  */
-const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noSaveList = false,
+const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noCache = false,
     homeBackupOverride, homePositionOverride, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
@@ -32,8 +32,8 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
 
-    /** @type {import('../grid/ContentGrid').SearchOptions} */
-    const options = useMemo(() => { return { quantity } }, [quantity])
+    /** @type {import('./grid/ContentGrid').SearchOptions} */
+    const options = useMemo(() => { return { quantity, noCache } }, [quantity, noCache])
 
     /** @type {Function} */
     const onSelectItem = useCallback((ev) => {
@@ -46,9 +46,7 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
     /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (mergeContentList(false, index)) {
-            loadData({ ...options, start: index }).then(res => {
-                mergeContentList(res.data, index)
-            })
+            loadData({ ...options, start: index }).then(res => mergeContentList(res.data, index))
         }
     }, [loadData, mergeContentList, options])
 
@@ -57,8 +55,8 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
-        onLeave(null, !noSaveList)
-    }, [onLeave, noSaveList])
+        onLeave(null)
+    }, [onLeave])
 
     useEffect(() => {
         if (delay >= 0) {
@@ -108,7 +106,7 @@ ContentListPoster.propTypes = {
     onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
-    noSaveList: PropTypes.bool,
+    noCache: PropTypes.bool,
     homeBackupOverride: PropTypes.any,
     homePositionOverride: PropTypes.any,
 }

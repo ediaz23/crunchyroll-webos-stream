@@ -100,7 +100,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     /** @type {Function} */
     const onLeaveView = useCallback(() => {
-        onLeave({ season, seasons, sort }, false)
+        onLeave({ season, seasons, sort })
     }, [onLeave, season, seasons, sort])
 
     useEffect(() => {

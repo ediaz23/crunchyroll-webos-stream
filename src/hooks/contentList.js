@@ -64,12 +64,8 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
     }, [setContentList, setHomeViewReady, setHomePosition])
 
     /** @type {Function} */
-    const onLeave = useCallback((options, saveList = true) => {
-        if (saveList) {
-            setHomeBackup({ options, type })
-        } else {
-            setHomeBackup({ options, type })
-        }
+    const onLeave = useCallback((options) => {
+        setHomeBackup({ options, type })
     }, [setHomeBackup, type])
 
     /** @type {Function} */
