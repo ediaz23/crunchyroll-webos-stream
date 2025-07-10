@@ -44,17 +44,6 @@ export const autoLoginState = atom({
     default: true
 })
 
-export const homeFeedState = atom({
-    key: 'homeFeedState',
-    default: [],
-    effects: [localStorageEffect('homeFeedState')]
-})
-
-export const homeFeedExpirationState = atom({
-    key: 'homeFeedExpirationState',
-    default: null,
-})
-
 export const homePositionState = atom({
     key: 'homePositionState',
     default: { rowIndex: 0, columnIndex: 0 },
@@ -63,17 +52,6 @@ export const homePositionState = atom({
 export const homeBackupState = atom({
     key: 'homeBackupState',
     default: null,
-})
-
-export const musicFeedState = atom({
-    key: 'musicFeedState',
-    default: [],
-    effects: [localStorageEffect('musicFeedState')]
-})
-
-export const musicFeedExpirationState = atom({
-    key: 'musicFeedExpirationState',
-    default: null
 })
 
 export const selectedContentState = atom({

@@ -4,8 +4,9 @@ import Locale from 'ilib/lib/Locale'
 import { $L } from '../hooks/language'
 import { ERROR_CODES } from '../const'
 import logger from '../logger'
-import { customFetch } from '../hooks/customFetch'
+import { customFetch, getCustomCache, saveCustomCache, clearCache } from '../hooks/customFetch'
 
+export { getCustomCache, saveCustomCache, clearCache }
 
 /**
  * Expand a sort url

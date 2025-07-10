@@ -102,6 +102,47 @@ export async function saveCache(url, response) {
     worker.postMessage({ type: 'save', url, response })
 }
 
+export function clearCache() {
+    worker.postMessage({ type: 'clear' })
+}
+
+/**
+ * @param {String} url
+ * @return {Promise<Object>}
+ */
+export async function getCustomCache(url) {
+    const item = await getCache(url)
+    let out = null
+    if (item) {
+        out = JSON.parse(item.response.content)
+    }
+    return out
+}
+
+/**
+ * Save cache custom cache
+ * @param {String} url
+ * @param {Object} data
+ * @param {Number} maxAge
+ * @return {Promise}
+ */
+export async function saveCustomCache(url, data, maxAge = 60) {
+    /** @type {import('../workers/cache.worker').ResponseProxy} */
+    const response = {
+        status: 200,
+        statusText: 'OK',
+        content: typeof data === 'string' ? data : JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': `max-age=${maxAge}`
+        },
+        resUrl: url,
+        compress: false
+    }
+    worker.postMessage({ type: 'save', url, response })
+}
+
+
 /**
  * @typedef SetUpRequestConfig
  * @type {Object}

@@ -4,9 +4,8 @@ import { useSetRecoilState } from 'recoil'
 
 import {
     pathState, playContentState, selectedContentState,
-    homePositionState, contentDetailBakState, homeBackupState,
-    contentDetailBackupState, contentDetailPositionState,
-    homeFeedState,
+    homePositionState, contentDetailBackupState,
+    contentDetailBakState, contentDetailPositionState,
 } from '../recoilConfig'
 
 import back from '../back'
@@ -69,8 +68,6 @@ export function useSetContent() {
     const setContentDetailBackup = useSetRecoilState(contentDetailBackupState)
     /** @type {Function} */
     const setContentDetailPosition = useSetRecoilState(contentDetailPositionState)
-    /** @type {Function} */
-    const setHomeFeed = useSetRecoilState(homeFeedState)
 
     return useCallback(
         /**
@@ -78,18 +75,7 @@ export function useSetContent() {
          */
         ({ content, rowIndex, columnIndex, backPath = '/profiles/home', contentBak = {} }) => {
             back.pushHistory({
-                doBack: () => {
-                    if (backPath === '/profiles/home') {
-                        setHomeFeed(backState => {
-                            return backState.map(item =>
-                                item.resource_type === 'dynamic_collection'
-                                    ? { ...item, processed: undefined }
-                                    : item
-                            )
-                        })
-                    }
-                    setPath(backPath)
-                }
+                doBack: () => setPath(backPath)
             })
             if (['episode', 'musicConcert', 'movie', 'musicVideo'].includes(content.type)) {
                 if (content.type === 'movie' && content.panel) {
@@ -106,8 +92,7 @@ export function useSetContent() {
                 setContentDetailPosition({ rowIndex: 0, columnIndex: 0 })
             }
             setHomePosition({ rowIndex, columnIndex })
-        }, [setPath, setPlayContent, setSelectedContent, setHomePosition, setContentDetailBak,
-        setContentDetailBackup, setContentDetailPosition, setHomeFeed]
+        }, [setPath, setPlayContent, setSelectedContent, setHomePosition, setContentDetailBak, setContentDetailBackup, setContentDetailPosition]
     )
 }
 
@@ -117,14 +102,11 @@ export function useResetHomeState() {
     const setSelectedContent = useSetRecoilState(selectedContentState)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
-    /** @type {Function} */
-    const setHomeBackup = useSetRecoilState(homeBackupState)
 
     return useCallback(() => {
         setHomePosition({ rowIndex: 0, columnIndex: 0 })
         setSelectedContent(null)
-        setHomeBackup(null)
-    }, [setSelectedContent, setHomePosition, setHomeBackup])
+    }, [setSelectedContent, setHomePosition])
 }
 
 

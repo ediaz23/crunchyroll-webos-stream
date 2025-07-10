@@ -22,7 +22,7 @@ export const getFeed = async (profile) => {
     } catch (error) {
         await translateError(error)
     }
-    return out
+    return { data: out, type: 'legacy' }
 }
 
 /**

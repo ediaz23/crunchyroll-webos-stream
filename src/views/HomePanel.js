@@ -9,8 +9,6 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 import {
     currentProfileState, categoriesState,
     homeViewReadyState, homeIndexState,
-    homeFeedState, homeFeedExpirationState,
-    musicFeedState, musicFeedExpirationState,
 } from '../recoilConfig'
 import HomeToolbar, { FloatingHomeToolbar } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
@@ -25,21 +23,6 @@ import { $L } from '../hooks/language'
 import { useResetHomeState } from '../hooks/setContent'
 import { useHomeFeedWorker } from '../hooks/homefeedWorker'
 
-
-/**
- * Hook helper
- * @param {Function} setHomeFeed
- * @returns {Function}
- */
-const useSetFeed = (setHomeFeed) => {
-    return (index, feedItem) => {
-        setHomeFeed(prevArray => [
-            ...prevArray.slice(0, index),
-            feedItem,
-            ...prevArray.slice(index + 1)
-        ])
-    }
-}
 
 const ActivityViews = ({ index, children }) => (children[index])
 
@@ -57,19 +40,11 @@ const HomePanel = (props) => {
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
 
-    /** @type {[Array<import('../hooks/homefeedWorker').HomefeedItem>, Function]} */
-    const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
-    /** @type {[Date, Function]} */
-    const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
-    /** @type {Function} */
-    const setHomeFeedFn = useSetFeed(setHomeFeed)
+    /** @type {[{id: Number, items: Array<import('../hooks/homefeedWorker').HomefeedItem>}, Function]} */
+    const [homeFeed, setHomeFeed] = useState({ id: Date.now(), items: [] })
 
-    /** @type {[Array<Object>, Function]} */
-    const [musicFeed, setMusicFeed] = useRecoilState(musicFeedState)
-    /** @type {[Date, Function]} */
-    const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
-    /** @type {Function} */
-    const setMusicFeedFn = useSetFeed(setMusicFeed)
+    /** @type {[{id: Number, items: Array<Object>}, Function]} */
+    const [musicFeed, setMusicFeed] = useState({ id: Date.now(), items: [] })
     /** @type {Function} */
     const resetHomeState = useResetHomeState()
     const processHomeFeed = useHomeFeedWorker()
@@ -112,32 +87,46 @@ const HomePanel = (props) => {
 
     useEffect(() => {
         const loadFeed = async () => {
-            const now = new Date()
-            if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
-                const homeFeedPromise = api.discover.getNewHomeFeed(profile).then(processHomeFeed).then(setHomeFeed)
-                const categoriesPromise = api.discover.getCategories(profile).then(({ data: categs }) => {
-                    setCategories([
-                        { id: 'all', title: $L('All') },
-                        ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
-                    ])
-                })
-                await Promise.all([homeFeedPromise, categoriesPromise])
-                now.setHours(now.getHours() + 3)
-                setHomeFeedExpiration(now)
+            if (currentActivity === 0) {
+                const [homeFeedCache, categoriesCache] = await Promise.all([
+                    api.utils.getCustomCache('/homeFeed'),
+                    api.utils.getCustomCache('/categories')
+                ])
+
+                if (homeFeedCache && categoriesCache) {
+                    setHomeFeed(homeFeedCache)
+                    setCategories(categoriesCache)
+                } else {
+                    const homeFeedProm = api.discover.getNewHomeFeed(profile).then(processHomeFeed)
+                    const categoriesProm = api.discover.getCategories(profile).then(({ data: categs }) => {
+                        return [
+                            { id: 'all', title: $L('All') },
+                            ...categs.map(cat => ({ id: cat.id, title: cat.localization.title }))
+                        ]
+                    })
+
+                    const [newHomeFeed, categories] = await Promise.all([homeFeedProm, categoriesProm])
+                    setHomeFeed(newHomeFeed)
+                    setCategories(categories)
+
+                    api.utils.saveCustomCache('/homeFeed', newHomeFeed, 3 * 60 * 60)  // 3h
+                    api.utils.saveCustomCache('/categories', categories, 3 * 60 * 60) // 3h
+                }
             }
-            if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
-                api.music.getFeed(profile).then(processHomeFeed).then(setMusicFeed)
-                now.setHours(now.getHours() + 3)
-                setMusicFeedExpiration(now)
+            if (currentActivity === 5) {
+                const musicFeedCache = await api.utils.getCustomCache('/musicFeed')
+                if (musicFeedCache) {
+                    setMusicFeed(musicFeedCache)
+                } else {
+                    const newMusicFeed = await api.music.getFeed(profile).then(processHomeFeed)
+                    setMusicFeed(newMusicFeed)
+                    api.utils.saveCustomCache('/musicFeed', { newMusicFeed }, 3 * 60 * 60) // 3h
+                }
             }
         }
         setLoading(true)
         loadFeed().then(() => setLoading(false))
-    }, [profile, currentActivity, setCategories,
-        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration,
-        setMusicFeed, musicFeedExpiration, setMusicFeedExpiration,
-        processHomeFeed,
-    ])
+    }, [profile, currentActivity, setCategories, setHomeFeed, setMusicFeed, processHomeFeed])
 
     useEffect(() => {
         return () => {
@@ -165,7 +154,7 @@ const HomePanel = (props) => {
                         <ActivityViews index={currentActivity}>
                             <HomeFeed profile={profile}
                                 homeFeed={homeFeed}
-                                setHomeFeed={setHomeFeedFn} />
+                                feedType='home' />
                             <Simulcast profile={profile}
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
@@ -180,10 +169,8 @@ const HomePanel = (props) => {
                                 contentType='movie_listing'
                                 title={toolbarList[currentActivity].label} />
                             <MusicBrowse profile={profile}
-                                contentKey='music'
                                 title={toolbarList[currentActivity].label}
-                                musicFeed={musicFeed}
-                                setMusicFeed={setMusicFeedFn} />
+                                musicFeed={musicFeed} />
                             <Watchlist profile={profile} />
                             <ContactMePanel noAcceptBtn />
                             <ConfirmExitPanel onCancel={setActivity} />

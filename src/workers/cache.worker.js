@@ -16,7 +16,7 @@ import QuickLRU from 'quick-lru';
 /**
  * @type {{
     maxSize: Number,
-    lru: import('quick-lru').default<String, ReqEntry>,
+    lru: import('quick-lru'),
     gcTimer: Number
 }}
  */
@@ -128,5 +128,7 @@ self.onmessage = ({ data }) => {
         handleSave(data)
     } else if (type === 'close') {
         clearInterval(memoryCache.gcTimer)
+    } else if (type === 'clear') {
+        memoryCache.lru.clear()
     }
 }

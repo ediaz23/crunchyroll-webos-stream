@@ -77,12 +77,14 @@ function mergeNewHomefeed(data) {
         headerCards[cardType].items = cards[cardType]
         headerCards[cardType].contentIds = cards[cardType].map(i => i.contentId).filter(i => !!i)
     }
+    data.id = Date.now()
     data.items = data.items.filter(item => {
         if (item.type.endsWith('Card') || item.type.endsWith('Banner')) {
             return item.id === item.type
         }
         return true
     })
+    data.items.forEach((item, index) => { item.index = index })
     return data
 }
 
@@ -173,7 +175,8 @@ function processLegacyHomefeed({ data }) {
             mergedFeed.push(newItem)
         }
     }
-    return mergedFeed
+    mergedFeed.forEach((item, index) => { item.index = index })
+    return { id: Date.now(), items: mergedFeed }
 }
 
 self.onmessage = ({ data }) => {
@@ -185,12 +188,10 @@ self.onmessage = ({ data }) => {
             result = processLegacyHomefeed(payload)
         } else {
             result = mergeNewHomefeed(processNewHomefeed(payload))
-            if (result) {
-                result = result.items
-            }
         }
         self.postMessage({ result, success: true })
     } catch (e) {
+        console.error(e)
         self.postMessage({ error: e.message, success: false })
     }
 }

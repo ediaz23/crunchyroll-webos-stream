@@ -13,8 +13,6 @@ import { $L } from '../hooks/language'
 import {
     pathState, currentProfileState,
     homeIndexState, homeViewReadyState,
-    homeFeedState, homeFeedExpirationState,
-    musicFeedExpirationState,
 } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
@@ -34,13 +32,7 @@ const ProfilesPanel = ({ ...rest }) => {
     /** @type {[import('crunchyroll-js-api').Types.ProfileResponse, Function]}  */
     const [multiProfile, setMultiProfile] = useState(null)
     /** @type {Function} */
-    const setHomeFeed = useSetRecoilState(homeFeedState)
-    /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {Function} */
-    const setHomeFeedExpiration = useSetRecoilState(homeFeedExpirationState)
-    /** @type {Function} */
-    const setMusicFeedExpiration = useSetRecoilState(musicFeedExpirationState)
     /** @type {Function} */
     const setCurrentActivity = useSetRecoilState(homeIndexState)
     /** @type {[Boolean, Function]}  */
@@ -59,21 +51,17 @@ const ProfilesPanel = ({ ...rest }) => {
     /** @type {Function} */
     const doSelectProfile = useCallback(profile => {
         setLoading(true)
+        api.utils.clearCache()
         api.auth.switchProfile(profile.profile_id).then(() => {
             setLoading(false)
             setHomeViewReady(false)
-            setHomeFeed([])
             setCurrentProfile(profile)
-            setHomeFeedExpiration(null)
-            setMusicFeedExpiration(null)
             setCurrentActivity(0)
             resetHomeState()
             back.pushHistory({ doBack: () => { setPath('/profiles') } })
             setPath('/profiles/home')
         })
-    }, [setCurrentProfile, setPath, setCurrentActivity, resetHomeState,
-        setHomeFeed, setHomeViewReady,
-        setMusicFeedExpiration, setHomeFeedExpiration, setLoading])
+    }, [setCurrentProfile, setPath, setCurrentActivity, resetHomeState, setHomeViewReady, setLoading])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {
