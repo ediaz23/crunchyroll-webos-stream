@@ -6,6 +6,7 @@ import { $L } from './language'
 import { LOAD_MOCK_DATA } from '../const'
 import logger from '../logger'
 import kidImg from '../../assets/img/child.jpg'
+import { isPlayable } from '../utils'
 
 
 const HomeFeedWorker = new URL('../workers/homefeed.worker.js', import.meta.url)
@@ -305,7 +306,7 @@ const processItemFeedLegacy = async (carousel, profile, type) => {
 
 /**
  * Process a single item in feed
- * @param {import('../../hooks/homefeedWorker').HomefeedItem} feedItem
+ * @param {HomefeedItem} feedItem
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<Object>}
  */
@@ -346,6 +347,11 @@ const processItemFeedNew = async (feedItem, profile, type) => {
     return res.then(async res2 => {
         if (res2.items) {
             res2.items = await Promise.all(res2.items.map(postProcessFeedItem))
+        }
+        if (res2.items && res2.items.length) {
+            res2.resource_type = isPlayable(res2.items[0].type) ? 'dynamic_collection' : null
+        } else {
+            res2.resource_type = null  // almost not be dynamic_collection
         }
         return res2
     }).catch(e => {

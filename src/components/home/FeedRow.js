@@ -8,15 +8,16 @@ import PropTypes from 'prop-types'
 
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 
+import { homeViewReadyState, isPremiumState } from '../../recoilConfig'
 import api from '../../api'
-import { $L } from '../../hooks/language'
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homeViewReadyState, homePositionState, isPremiumState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useSetContent } from '../../hooks/setContent'
 import { processItemFeed } from '../../hooks/homefeedWorker'
 import withNavigable from '../../hooks/navigable'
-import { formatDurationMs, getDuration, getIsPremium } from '../../utils'
+import { $L } from '../../hooks/language'
+import { useViewBackup } from '../../hooks/viewBackup'
+import { formatDurationMs, getDuration, getIsPremium, isPlayable } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
@@ -25,12 +26,10 @@ const NavigableDiv = withNavigable('div', '')
 
 
 export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
-    /** @type {Array<String>} */
-    const playableTypes = useMemo(() => ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
     let progress = 0, duration = undefined, showPremium = false
 
-    if (playableTypes.includes(item.type)) {
+    if (isPlayable(item.type)) {
         duration = getDuration(item)
         if (duration !== undefined && item.playhead !== undefined) {
             progress = item.playhead / (duration / 1000) * 100
@@ -43,14 +42,14 @@ export const Poster = ({ item, image, itemSize, isPremium, ...rest }) => {
     return (
         <NavigableDiv {...rest}>
             <Image src={image.source} sizing='none' style={image.size}>
-                {playableTypes.includes(item.type) &&
+                {isPlayable(item.type) &&
                     <div className={globalCss.progress} style={{ bottom: '1.8rem' }}>
                         <div style={{ width: `${progress}%` }} />
                     </div>
                 }
             </Image>
-            {playableTypes.includes(item.type) && <div className={css.playButton} />}
-            {playableTypes.includes(item.type) &&
+            {isPlayable(item.type) && <div className={css.playButton} />}
+            {isPlayable(item.type) &&
                 <div className={css.contentTime}>{formatDurationMs(duration)}</div>
             }
             {showPremium && <div className={globalCss.contenPremium}>{$L('Premium')}</div>}
@@ -72,35 +71,41 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
             {...rest} />
     )
 }
+
 /**
+ * @typedef RowInfo
+ * @type {Object}
+ * @property {Number} feedId
+ * @property {'home'|'music'} feedType
+ * @property {{id: String, items: Array}} fakeItem
+ * @property {Function} setContent
+ *
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {Number} obj.feedId
- * @param {'home'|'music'} obj.feedType
- * @param {{id: String, items: Array, index: Number}} obj.feedRow
- * @param {{id: String, items: Array}} obj.fakeItem
- * @param {Number} obj.itemSize
  * @param {String} obj.cellId
- * @param {Function} obj.setContent
+ * @param {Number} obj.itemSize
+ * @param {{id: String, items: Array, index: Number}} obj.feedRow
+ * @param {RowInfo} obj.rowInfo
  * @param {String} obj.style
  * @param {String} obj.className
  */
-const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
-    itemSize, cellId, setContent, style, className, ...rest }) => {
+const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
+    const { feedType, feedId, fakeItem, setContent } = rowInfo  // has to separte to avoid recall
+    const [backState, viewBackupRef] = useViewBackup(`homeFeedRow-${feedType}-${feedId}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
+    /** @type {{current: {rowIndex: Number, columnIndex: Number}}} */
+    const rowIndexRef = useRef(backState || {})
     /** @type {{current: HTMLElement}} */
-    const compRef = useRef({ current: null })
+    const compRef = useRef(null)
     /** @type {[Number, Function]} */
     const [itemHeight, setItemHeight] = useState(0)
     /** @type {Number} */
     const itemWidth = ri.scale(320)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {{rowIndex: Number, columnIndex: Number}} */
-    const homePosition = useRecoilValue(homePositionState)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
@@ -108,11 +113,11 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
     /** @type {Function} */
     const selectElement = useCallback((ev) => {
         if (feedData.id !== 'fake_item') {
-            setContent(feedData.items[parseInt(ev.target.dataset.index)])
+            setContent(feedData.items[parseInt(ev.target.dataset.index)], feedRow.index)
         } else {
-            setContent(null)
+            setContent(null, feedRow.index)
         }
-    }, [feedData, setContent])
+    }, [feedData, setContent, feedRow])
     /** @type {Function} */
     const setContentNavagate = useSetContent()
     /** @type {Function} */
@@ -122,9 +127,10 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
         const columnIndex = parseInt(parentElement.dataset.index)
         const content = feedData.items[columnIndex]
         if (feedData.id !== 'fake_item') {
-            setContentNavagate({ content, rowIndex: feedData.index, columnIndex })
+            viewBackupRef.current = { rowIndex: feedRow.index, columnIndex }
+            setContentNavagate({ content })
         }
-    }, [feedData, cellId, setContentNavagate])
+    }, [feedData, feedRow, cellId, setContentNavagate, viewBackupRef])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -142,9 +148,12 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
             interval = setInterval(() => {
                 if (scrollToRef.current) {
                     clearInterval(interval)
-                    const columnIndex = feedData.index === homePosition.rowIndex ? homePosition.columnIndex : null
+                    let columnIndex = null
+                    if (feedData.index === (rowIndexRef.current.rowIndex || 0)) {
+                        columnIndex = rowIndexRef.current.columnIndex || 0
+                    }
                     if (columnIndex !== null) {
-                        setHomeViewReady(true)  // Promise.resolve().then(() => setHomeViewReady(true))
+                        setHomeViewReady(true)
                         if (feedData.resource_type === 'dynamic_collection') {
                             scrollToRef.current({ index: 0, animate: false, focus: true })
                         } else {
@@ -155,7 +164,7 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
             }, 100)
         }
         return () => clearInterval(interval)
-    }, [feedData, homePosition, setHomeViewReady])
+    }, [feedData, setHomeViewReady])
 
     useEffect(() => {
         if (feedData && DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
@@ -202,7 +211,7 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
             }
         }
         loadData()
-    }, [profile, feedId, feedType, feedRow, fakeItem])
+    }, [profile, feedRow, feedType, feedId, fakeItem])
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>
@@ -218,8 +227,8 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
                         itemSize={itemWidth}
                         childProps={{
                             id: cellId,
-                            feed: feedData,
                             itemSize: itemWidth,
+                            feed: feedData,
                             onFocus: selectElement,
                             onClick: showContentDetail,
                             itemHeight,
@@ -237,14 +246,19 @@ const HomeFeedRow = ({ profile, feedId, feedType, feedRow, fakeItem,
 }
 
 HomeFeedRow.propTypes = {
-    profile: PropTypes.object.isRequired,
-    feedId: PropTypes.number.isRequired,
-    feedType: PropTypes.oneOf(['home', 'music']),
-    feedRow: PropTypes.object.isRequired,
-    fakeItem: PropTypes.object.isRequired,
-    itemSize: PropTypes.number.isRequired,
+    // required fields for virtualListNated
+    id: PropTypes.string.isRequired,
     cellId: PropTypes.string.isRequired,
-    setContent: PropTypes.func.isRequired,
+    itemSize: PropTypes.number.isRequired,
+    // <-
+    profile: PropTypes.object.isRequired,
+    feedRow: PropTypes.object.isRequired,
+    rowInfo: PropTypes.shape({
+        feedId: PropTypes.number.isRequired,
+        feedType: PropTypes.oneOf(['home', 'music']),
+        fakeItem: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    })
 }
 
 export default HomeFeedRow

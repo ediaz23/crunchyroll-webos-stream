@@ -6,10 +6,7 @@ import Spinner from '@enact/moonstone/Spinner'
 
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
-import {
-    currentProfileState, categoriesState,
-    homeViewReadyState, homeIndexState,
-} from '../recoilConfig'
+import { currentProfileState, categoriesState, homeViewReadyState } from '../recoilConfig'
 import HomeToolbar, { FloatingHomeToolbar } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
 import MusicBrowse from '../components/music/Music'
@@ -22,15 +19,17 @@ import ConfirmExitPanel from './ConfirnExitPanel'
 import { $L } from '../hooks/language'
 import { useResetHomeState } from '../hooks/setContent'
 import { useHomeFeedWorker } from '../hooks/homefeedWorker'
+import { useViewBackup } from '../hooks/viewBackup'
 
 
 const ActivityViews = ({ index, children }) => (children[index])
 
 const HomePanel = (props) => {
+    const [backState, viewBackupRef] = useViewBackup('homePanel')
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Number, Function]} */
-    const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)
+    const [currentActivity, setCurrentActivity] = useState(backState?.currentActivity || 0)
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {[Boolean, Function]} */
@@ -112,8 +111,7 @@ const HomePanel = (props) => {
                     api.utils.saveCustomCache('/homeFeed', newHomeFeed, 3 * 60 * 60)  // 3h
                     api.utils.saveCustomCache('/categories', categories, 3 * 60 * 60) // 3h
                 }
-            }
-            if (currentActivity === 5) {
+            } else if (currentActivity === 5) {
                 const musicFeedCache = await api.utils.getCustomCache('/musicFeed')
                 if (musicFeedCache) {
                     setMusicFeed(musicFeedCache)
@@ -125,7 +123,7 @@ const HomePanel = (props) => {
             }
         }
         setLoading(true)
-        loadFeed().then(() => setLoading(false))
+        loadFeed().then(() => currentActivity != null && setLoading(false))
     }, [profile, currentActivity, setCategories, setHomeFeed, setMusicFeed, processHomeFeed])
 
     useEffect(() => {
@@ -133,6 +131,9 @@ const HomePanel = (props) => {
             setHomeViewReady(false)
         }
     }, [setHomeViewReady])
+
+    /** backup all state to restore later */
+    viewBackupRef.current = { currentActivity }
 
     return (
         <Panel {...props}>

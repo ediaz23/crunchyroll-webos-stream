@@ -1,14 +1,16 @@
 
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, startTransition } from 'react'
 import { useSetRecoilState } from 'recoil'
 
 import {
     pathState, playContentState, selectedContentState,
     homePositionState, contentDetailBackupState,
     contentDetailBakState, contentDetailPositionState,
+    viewBackupState,
 } from '../recoilConfig'
 
 import back from '../back'
+import { isPlayable } from '../utils'
 
 /**
  * @callback setPlayableContent
@@ -38,7 +40,8 @@ export function useSetPlayableContent() {
             setContentDetailBak(contentBak)
             setPlayContent(contentToPlay)
             setPath('/profiles/home/player')
-        }, [setContentDetailBak, setPlayContent, setPath]
+        },
+        [setContentDetailBak, setPlayContent, setPath]
     )
 }
 
@@ -46,10 +49,7 @@ export function useSetPlayableContent() {
  * @callback setContent
  * @param {Object} obj
  * @param {Object} obj.content
- * @param {Number} obj.rowIndex
- * @param {Number} obj.columnIndex
  * @param {String} [obj.backPath]
- * @param {Object} [obj.contentBak]
  */
 
 /** @returns {setContent} */
@@ -61,23 +61,36 @@ export function useSetContent() {
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
     /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionState)
-    /** @type {Function} */
-    const setContentDetailBak = useSetRecoilState(contentDetailBakState)
-    /** @type {Function} */
-    const setContentDetailBackup = useSetRecoilState(contentDetailBackupState)
-    /** @type {Function} */
-    const setContentDetailPosition = useSetRecoilState(contentDetailPositionState)
+    const setViewBackup = useSetRecoilState(viewBackupState)
+    const backRef = useRef({})
+    const doBackRef = useRef(false)
+
+    useEffect(() => {
+        return () => {
+            if (doBackRef.current) {  // only on component can save all state
+                setViewBackup(prev => {
+                    backRef.current = prev
+                    return {}
+                })
+            }
+        }
+    }, [setViewBackup])
 
     return useCallback(
         /**
          * @type {setContent}
          */
-        ({ content, rowIndex, columnIndex, backPath = '/profiles/home', contentBak = {} }) => {
+        ({ content, backPath = '/profiles/home' }) => {
             back.pushHistory({
-                doBack: () => setPath(backPath)
+                doBack: () => {
+                    setPath(backPath)
+                    startTransition(() => {
+                        setViewBackup(backRef.current)
+                    })
+                }
             })
-            if (['episode', 'musicConcert', 'movie', 'musicVideo'].includes(content.type)) {
+            doBackRef.current = true  // active save state
+            if (isPlayable(content.type)) {
                 if (content.type === 'movie' && content.panel) {
                     setPlayContent({ ...content, ...content.panel, panel: null })
                 } else {
@@ -86,13 +99,9 @@ export function useSetContent() {
                 setPath('/profiles/home/player')
             } else {
                 setSelectedContent(content)
-                setContentDetailBak(contentBak)
                 setPath('/profiles/home/content')
-                setContentDetailBackup(null)
-                setContentDetailPosition({ rowIndex: 0, columnIndex: 0 })
             }
-            setHomePosition({ rowIndex, columnIndex })
-        }, [setPath, setPlayContent, setSelectedContent, setHomePosition, setContentDetailBak, setContentDetailBackup, setContentDetailPosition]
+        }, [setPath, setPlayContent, setSelectedContent, setViewBackup]
     )
 }
 
@@ -102,11 +111,14 @@ export function useResetHomeState() {
     const setSelectedContent = useSetRecoilState(selectedContentState)
     /** @type {Function} */
     const setHomePosition = useSetRecoilState(homePositionState)
+    /** @type {Function} */
+    const setViewBackup = useSetRecoilState(viewBackupState)
 
     return useCallback(() => {
         setHomePosition({ rowIndex: 0, columnIndex: 0 })
         setSelectedContent(null)
-    }, [setSelectedContent, setHomePosition])
+        setViewBackup({})
+    }, [setSelectedContent, setHomePosition, setViewBackup])
 }
 
 

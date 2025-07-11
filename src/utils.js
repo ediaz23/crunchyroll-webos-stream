@@ -317,6 +317,10 @@ export function customStringify(obj, space = 2) {
     return helper(obj, 0);
 }
 
+export function isPlayable(type) {
+    return ['episode', 'movie', 'musicConcert', 'musicVideo'].includes(type)
+}
+
 export default {
     worker,
     isTv,

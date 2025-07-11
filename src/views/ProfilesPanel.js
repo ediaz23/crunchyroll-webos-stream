@@ -12,7 +12,7 @@ import { useSetRecoilState } from 'recoil'
 import { $L } from '../hooks/language'
 import {
     pathState, currentProfileState,
-    homeIndexState, homeViewReadyState,
+    homeViewReadyState,
 } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
@@ -33,8 +33,6 @@ const ProfilesPanel = ({ ...rest }) => {
     const [multiProfile, setMultiProfile] = useState(null)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {Function} */
-    const setCurrentActivity = useSetRecoilState(homeIndexState)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(false)
     /** @type {Function} */
@@ -56,12 +54,11 @@ const ProfilesPanel = ({ ...rest }) => {
             setLoading(false)
             setHomeViewReady(false)
             setCurrentProfile(profile)
-            setCurrentActivity(0)
             resetHomeState()
             back.pushHistory({ doBack: () => { setPath('/profiles') } })
             setPath('/profiles/home')
         })
-    }, [setCurrentProfile, setPath, setCurrentActivity, resetHomeState, setHomeViewReady, setLoading])
+    }, [setCurrentProfile, setPath, resetHomeState, setHomeViewReady, setLoading])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {

@@ -3,13 +3,12 @@ import { useCallback, useEffect, useRef, useMemo, useState } from 'react'
 import { Column, Cell } from '@enact/ui/Layout'
 import ri from '@enact/ui/resolution'
 import PropTypes from 'prop-types'
-import { useRecoilValue } from 'recoil'
 
-import { homePositionState } from '../../recoilConfig'
 import HomeContentBanner from './ContentBanner'
 import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
 import { getFakeFeedItem } from '../../hooks/homefeedWorker'
+import { useViewBackup } from '../../hooks/viewBackup'
 
 
 /**
@@ -19,12 +18,11 @@ import { getFakeFeedItem } from '../../hooks/homefeedWorker'
  * @param {'home'|'music'} obj.feedType
  */
 const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
+    const [backState, viewBackupRef] = useViewBackup(`homeFeed-${feedType}-${homeFeed.id}`)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
-    const rowIndexRef = useRef(null)
-    /** @type {{rowIndex: Number, columnIndex: Number}} */
-    const homePosition = useRecoilValue(homePositionState)
+    const rowIndexRef = useRef(backState?.rowIndex || 0)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */
@@ -36,23 +34,18 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
 
     /** @type {Function} */
     const renderRow = useCallback(({ index, ...rest }) => (
-        <HomeFeedRow
-            profile={profile}
-            feedId={homeFeed.id}
-            feedRow={homeFeed.items[index]}
-            setContent={setSelectedContent}
-            feedType={feedType}
-            fakeItem={fakeItem}
-            {...rest} />
-    ), [profile, homeFeed, feedType, fakeItem])
+        <HomeFeedRow feedRow={homeFeed.items[index]} {...rest} />
+    ), [homeFeed])
 
-    useEffect(() => {
-        rowIndexRef.current = homePosition.rowIndex
-    }, [homePosition.rowIndex])
+    /** @type {Function} */
+    const setContent = useCallback((content, rowIndex) => {
+        viewBackupRef.current = { rowIndex }
+        setSelectedContent(content)
+    }, [viewBackupRef, setSelectedContent])
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (scrollToRef.current && rowIndexRef.current !== null) {
+            if (scrollToRef.current) {
                 clearInterval(interval)
                 scrollToRef.current({ index: rowIndexRef.current, animate: false, focus: false })
             }
@@ -71,9 +64,16 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
                     itemRenderer={renderRow}
                     itemSize={itemHeigth}
                     childProps={{
+                        profile,
                         id: 'rowFeed',
                         cellId: 'cellFeed',
-                        itemSize: itemHeigth
+                        itemSize: itemHeigth,
+                        rowInfo: {
+                            feedId: homeFeed.id,
+                            feedType,
+                            fakeItem,
+                            setContent,
+                        }
                     }}
                     direction='vertical'
                     verticalScrollbar='hidden'
