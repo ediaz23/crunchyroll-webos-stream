@@ -1,7 +1,8 @@
 
 import { useCallback, useState, useRef } from 'react'
-import { useSetRecoilState, useRecoilState } from 'recoil'
-import { homeViewReadyState, homeBackupState, homePositionState } from '../recoilConfig'
+import { useSetRecoilState } from 'recoil'
+import { homeViewReadyState } from '../recoilConfig'
+import { useViewBackup } from './viewBackup'
 
 
 /**
@@ -19,7 +20,6 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
  * @property {Number} quantity quantity to search
  * @property {Function} changeContentList set content list array
  * @property {Function} mergeContentList merge content list array
- * @property {Function} onLeave Function to call before leave
  * @property {OnFilterCallBak} onFilter call on filter with delay param
  * @property {Boolean} loading loading state
  * @property {Function} setLoading setState function for loading
@@ -27,7 +27,8 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
  * @property {Function} setDelay setState function for delay
  * @property {Boolean} autoScroll autoScroll grid
  * @property {Function} setAutoScroll setState function for autoScroll
- * @property {Object} optionBak Backup of options
+ * @property {Object} backState Backup of options
+ * @property {import('react').MutableRefObject} viewBackupRef Backup of options
  */
 
 /**
@@ -36,13 +37,10 @@ import { homeViewReadyState, homeBackupState, homePositionState } from '../recoi
  * @param {Object} [homePositionOverride]
  * @returns {ListViewProps}
  */
-export const useContentList = (type, homeBackupOverride, homePositionOverride) => {
+export const useContentList = (type) => {
+    const [backState, viewBackupRef] = useViewBackup(type)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {[{options: Object, contentList: Array<Object>, type: string}, Function]} */
-    const [homeBackup, setHomeBackup] = useRecoilState(homeBackupOverride || homeBackupState)
-    /** @type {Function} */
-    const setHomePosition = useSetRecoilState(homePositionOverride || homePositionState)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState(null)
     /** @type {[Boolean, Function]}  */
@@ -55,22 +53,15 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
     const quantity = 25
 
     /** @type {Function} */
-    const changeContentList = useCallback((newList, resetIndex = true) => {
+    const changeContentList = useCallback((newList) => {
+        setAutoScroll(true)
         setContentList(newList)
         setHomeViewReady(true)
-        if (newList && resetIndex) {
-            setHomePosition({ rowIndex: 0 })
-        }
-    }, [setContentList, setHomeViewReady, setHomePosition])
+    }, [setContentList, setHomeViewReady, setAutoScroll])
 
     /** @type {Function} */
-    const onLeave = useCallback((options) => {
-        setHomeBackup({ options, type })
-    }, [setHomeBackup, type])
-
-    /** @type {Function} */
-    const onFilter = useCallback(({ delay: delayP, scroll = false }) => {
-        setAutoScroll(scroll)
+    const onFilter = useCallback(({ delay: delayP}) => {
+        setAutoScroll(false)
         setDelay(delayP)
     }, [setDelay, setAutoScroll])
 
@@ -79,6 +70,7 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
         const end = index + quantity
         let out = false
         if (Array.isArray(items)) {
+            setAutoScroll(false)
             setContentList(prevArray => {
                 let updatedList = items
                 if (prevArray != null) {
@@ -101,7 +93,7 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
             }
         }
         return out
-    }, [setContentList, quantity])
+    }, [setContentList, quantity, setAutoScroll])
 
     return {
         contentList,
@@ -110,9 +102,9 @@ export const useContentList = (type, homeBackupOverride, homePositionOverride) =
         autoScroll, setAutoScroll,
         changeContentList,
         mergeContentList,
-        onLeave,
         onFilter,
-        optionBak: homeBackup && homeBackup.options || {},
+        backState,
+        viewBackupRef,
     }
 }
 

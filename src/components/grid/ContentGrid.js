@@ -39,18 +39,17 @@ import css from './ContentGrid.module.less'
  * @param {Boolean} obj.noCategory Not show category
  * @param {Boolean} obj.noSearch Not show input
  */
-const ContentGrid = ({
-    profile, title, contentKey, contentType, engine = 'browse', noCategory, noSearch, ...rest }) => {
+const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse', noCategory, noSearch, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        optionBak,
-    } = useContentList('content_grid')
+        mergeContentList, changeContentList, onFilter,
+        backState, viewBackupRef,
+    } = useContentList(contentKey)
 
     /** @type {[String, Function]} */
-    const [category, setCategory] = useState(optionBak.category || 'all')
+    const [category, setCategory] = useState(backState?.category || 'all')
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState(optionBak.query || '')
+    const [query, setQuery] = useState(backState?.query || '')
 
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
@@ -93,11 +92,6 @@ const ContentGrid = ({
         }
     }, [engine, options, profile, mergeContentList])
 
-    /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave({ category, query })
-    }, [onLeave, category, query])
-
     useEffect(() => {
         let delayDebounceFn = undefined
         if (delay >= 0) {
@@ -132,8 +126,11 @@ const ContentGrid = ({
     }, [profile, changeContentList, options, contentKey, delay, engine])
 
     useEffect(() => {  // initializing
-        onFilter({ delay: 0, scroll: true })
+        onFilter({ delay: 0 })
     }, [profile, changeContentList, onFilter, contentKey])
+
+    /** backup all state to restore later */
+    viewBackupRef.current = { category, query }
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -169,7 +166,6 @@ const ContentGrid = ({
                             <ContentGridItems
                                 contentList={contentList}
                                 load={onLoad}
-                                onLeave={onLeaveView}
                                 autoScroll={autoScroll} />
                         </Cell>
                     </Row>

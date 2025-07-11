@@ -441,7 +441,6 @@ export function useHomeFeedWorker() {
                 if (data.success) {
                     res(data.result)
                 } else {
-                    debugger;
                     rej(new Error(data.error))
                 }
             }

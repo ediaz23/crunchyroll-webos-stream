@@ -22,12 +22,12 @@ import useContentList from '../../hooks/contentList'
 const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        optionBak,
+        mergeContentList, changeContentList, onFilter,
+        backState, viewBackupRef,
     } = useContentList('music_browse')
 
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState(optionBak.query || '')
+    const [query, setQuery] = useState(backState?.query || '')
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
     /** @type {import('../grid/ContentGrid').SearchOptions} */
@@ -53,19 +53,13 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (mergeContentList(false, index)) {
-            api.discover.search(profile, { ...options, start: index })
-                .then(res => {
-                    if (res.total) {
-                        mergeContentList(res.data[0].items, index)
-                    }
-                })
+            api.discover.search(profile, { ...options, start: index }).then(res => {
+                if (res.total) {
+                    mergeContentList(res.data[0].items, index)
+                }
+            })
         }
     }, [options, profile, mergeContentList])
-
-    /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave({ query })
-    }, [onLeave, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -92,8 +86,11 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     }, [profile, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
-        onFilter({ delay: 0, scroll: true })
+        onFilter({ delay: 0 })
     }, [profile, changeContentList, onFilter])
+
+    /** backup all state to restore later */
+    viewBackupRef.current = { query }
 
     return (
         <Column style={{ width: '100%' }} {...rest}>
@@ -123,7 +120,6 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}
-                        onLeave={onLeaveView}
                         autoScroll={autoScroll} />
                 }
             </Cell>

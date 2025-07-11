@@ -118,7 +118,7 @@ const HomePanel = (props) => {
                 } else {
                     const newMusicFeed = await api.music.getFeed(profile).then(processHomeFeed)
                     setMusicFeed(newMusicFeed)
-                    api.utils.saveCustomCache('/musicFeed', { newMusicFeed }, 3 * 60 * 60) // 3h
+                    api.utils.saveCustomCache('/musicFeed', newMusicFeed, 3 * 60 * 60) // 3h
                 }
             }
         }
@@ -159,14 +159,14 @@ const HomePanel = (props) => {
                             <Simulcast profile={profile}
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='search'
+                                contentKey='home-search'
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='series'
+                                contentKey='home-series'
                                 contentType='series'
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='movies'
+                                contentKey='home-movies'
                                 contentType='movie_listing'
                                 title={toolbarList[currentActivity].label} />
                             <MusicBrowse profile={profile}

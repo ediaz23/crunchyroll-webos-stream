@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Button from '@enact/moonstone/Button'
 import LabeledItem from '@enact/moonstone/LabeledItem'
@@ -32,16 +32,16 @@ import useContentList from '../../hooks/contentList'
 const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        optionBak,
+        mergeContentList, changeContentList, onFilter,
+        backState, viewBackupRef,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
-    const [season, setSeason] = useState(optionBak.season || undefined)
+    const [season, setSeason] = useState(backState?.season || undefined)
     /** @type {[Array<Season>, Function]} */
-    const [seasons, setSeasons] = useState(optionBak.seasons || undefined)
+    const [seasons, setSeasons] = useState(backState?.seasons || undefined)
     /** @type {[String, Function]}  */
-    const [sort, setOrder] = useState(optionBak.sort || 'newly_added')
+    const [sort, setOrder] = useState(backState?.sort || 'newly_added')
 
     /** @type {Array<{key: String, value: String}>} */
     const order = useMemo(() => {
@@ -69,9 +69,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
         }
     }, [season, sort, quantity])
 
-    /** @type {{current: Boolean}} */
-    const autoScrollRef = useRef(true)
-
     /** @type {Function} */
     const onSelectOrder = useCallback(({ selected }) => {
         setOrder(order[selected].key)
@@ -98,18 +95,12 @@ const Simulcast = ({ profile, title, ...rest }) => {
         }
     }, [profile, mergeContentList, options])
 
-    /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave({ season, seasons, sort })
-    }, [onLeave, season, seasons, sort])
-
     useEffect(() => {
         if (delay >= 0) {
             changeContentList(null)
             if (season && season.id) {
                 api.discover.getBrowseAll(profile, options).then(res => {
-                    changeContentList([...res.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
-                    autoScrollRef.current = true
+                    changeContentList([...res.data, ...new Array(res.total - res.data.length)])
                 })
             }
         }
@@ -126,9 +117,11 @@ const Simulcast = ({ profile, title, ...rest }) => {
     }, [profile, setSeason, delay, season])
 
     useEffect(() => {  // initializing
-        onFilter({ delay: 0, scroll: true })
-        autoScrollRef.current = false
+        onFilter({ delay: 0})
     }, [profile, changeContentList, onFilter])
+
+    /** backup all state to restore later */
+    viewBackupRef.current = { season, seasons, sort }
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -170,7 +163,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
                             <ContentGridItems
                                 contentList={contentList}
                                 load={onLoad}
-                                onLeave={onLeaveView}
                                 autoScroll={autoScroll} />
                         </Cell>
                     </Row>
