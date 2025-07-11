@@ -398,6 +398,7 @@ export const makeRequest = (obj, fnConfig = {}) => {
  * @type {Object}
  * @property {Boolean} [direct] turn on return response as raw content
  * @property {Boolean} [cache] use cache
+ * @property {Boolean} [sync] turn on sync mode
  *
  * Function to bypass cors issues
  * @param {String} url

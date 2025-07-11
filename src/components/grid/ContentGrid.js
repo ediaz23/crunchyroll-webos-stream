@@ -19,13 +19,13 @@ import css from './ContentGrid.module.less'
  * @property {Number} quantity
  * @property {Boolean} ratings
  * @property {Boolean} noMock
- * @property {Boolean} noCache
  * @property {String} type
  * @property {String} contentKey
  * @property {String} category
  * @property {String} seasonTag
  * @property {String} sort
  * @property {String} query
+ * @property {import('crunchyroll-js-api').Types.FetchConfig} fnConfig
  */
 
 /**

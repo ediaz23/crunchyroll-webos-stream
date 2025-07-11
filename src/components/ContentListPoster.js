@@ -22,7 +22,7 @@ import useContentList from '../hooks/contentList'
  * @param {Object} [obj.homeBackupOverride]
  * @param {Object} [obj.homePositionOverride]
  */
-const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noCache = false,
+const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false,
     homeBackupOverride, homePositionOverride, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
@@ -33,7 +33,7 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
     const [selectedContent, setSelectedContent] = useState(null)
 
     /** @type {import('./grid/ContentGrid').SearchOptions} */
-    const options = useMemo(() => { return { quantity, noCache } }, [quantity, noCache])
+    const options = useMemo(() => { return { quantity } }, [quantity])
 
     /** @type {Function} */
     const onSelectItem = useCallback((ev) => {
@@ -106,7 +106,6 @@ ContentListPoster.propTypes = {
     onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
-    noCache: PropTypes.bool,
     homeBackupOverride: PropTypes.any,
     homePositionOverride: PropTypes.any,
 }

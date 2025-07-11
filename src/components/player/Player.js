@@ -131,7 +131,10 @@ const findPlayHead = async ({ profile, content }) => {
         fully_watched: false,
     }
     if (['episode', 'movie'].includes(content.type)) {
-        const { data } = await api.content.getPlayHeads(profile, { contentIds: [content.id] })
+        const { data } = await api.content.getPlayHeads(profile, {
+            contentIds: [content.id],
+            fnConfig: { cache: false }
+        })
         if (data && data.length > 0) {
             playhead = data[0]
         }
@@ -310,9 +313,9 @@ const findNextEp = async ({ profile, content, step }) => {
     let out = null
     if (['episode'].includes(content.type)) {
         if (step > 0) {
-            out = await api.discover.getNext(profile, { contentId: content.id })
+            out = await api.discover.getNext(profile, { contentId: content.id, fnConfig: { cache: false } })
         } else {
-            out = await api.discover.getPrev(profile, { contentId: content.id })
+            out = await api.discover.getPrev(profile, { contentId: content.id, fnConfig: { cache: false } })
         }
     } else if (['movie'].includes(content.type)) {
         const movies = await api.cms.getMovies(profile, { movieListingId: content.listing_id })
@@ -996,6 +999,7 @@ const Player = ({ ...rest }) => {
                     episodeId: audio.guid,
                     token: stream.token,
                     playhead: state.currentTime,
+                    fnConfig: { cache: false },
                 }).then(setSession).catch(e => {  // if fail retry in 2 second
                     logger.error('Error keep alive stream')
                     logger.error(e)

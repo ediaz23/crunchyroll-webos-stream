@@ -167,7 +167,7 @@ export const getPersonalRecomendation = async (profile, params) => {
             out = await getMockData('personalRecomendation')
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getPersonalRecomendation({account, ...params})
+            out = await api.discover.getPersonalRecomendation({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -230,6 +230,7 @@ export const getSimilar = async (profile, params) => {
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} [params.fnConfig]
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getNext = async (profile, params) => {
@@ -261,6 +262,7 @@ export const getNext = async (profile, params) => {
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} [params.fnConfig]
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getPrev = async (profile, params) => {
@@ -302,7 +304,7 @@ export const getWatchlist = async (profile, params) => {
             out = await getMockData('discoverWatchlist', params)
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getWatchlist({ account, ...params, order: 'desc' })
+            out = await api.discover.getWatchlist({ account, fnConfig: { cache: false }, ...params, order: 'desc' })
         }
     } catch (error) {
         await translateError(error)

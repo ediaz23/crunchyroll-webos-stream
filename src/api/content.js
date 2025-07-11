@@ -9,6 +9,7 @@ import { translateError, getContentParam } from './utils'
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Array<String>} params.contentIds
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} params.fnConfig
  * @return {Promise<{data: Array<Object>}>}
  */
 export const getPlayHeads = async (profile, params) => {
