@@ -16,6 +16,8 @@ import { isPlayable } from '../utils'
  * @callback SetContent
  * @param {Object} obj
  * @param {Object} obj.content
+ * @param {Boolean} [obj.saveCurrentState]
+ * @param {Boolean} [obj.restoreCurrentContent]
  */
 
 /** @returns {SetContent} */
@@ -46,30 +48,37 @@ export function useSetContentNavigate() {
         /**
          * @type {SetContent}
          */
-        ({ content }) => {
-            let backPath = null
-            doBackRef.current = true  // active save state
+        ({ content, saveCurrentState = true, restoreCurrentContent = false }) => {
+            let newPath, setContent
+            doBackRef.current = saveCurrentState  // active save state
             if (isPlayable(content.type)) {
                 if (content.type === 'movie' && content.panel) {
-                    setPlayContent({ ...content, ...content.panel, panel: null })
-                } else {
-                    setPlayContent(content)
+                    content = { ...content, ...content.panel, panel: null }
                 }
-                setPath(oldPath => {
-                    backPath = oldPath
-                    return '/profiles/home/player'
-                })
+                setContent = setPlayContent
+                newPath = '/profiles/home/player'
             } else {
-                setSelectedContent(content)
-                setPath(oldPath => {
-                    backPath = oldPath
-                    return '/profiles/home/content'
-                })
+                setContent = setSelectedContent
+                newPath = '/profiles/home/content'
             }
+
+            let backPath, backContent
+            setContent(oldContent => {
+                backContent = oldContent
+                return content
+            })
+            setPath(oldPath => {
+                backPath = oldPath
+                return newPath
+            })
+
             back.pushHistory({
                 doBack: () => {
                     setPath(backPath)
                     startTransition(() => {
+                        if (restoreCurrentContent) {
+                            setContent(backContent)
+                        }
                         setViewBackup(backRef.current)
                     })
                 }
