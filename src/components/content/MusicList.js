@@ -12,7 +12,7 @@ import api from '../../api'
  * MusicList
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {[Object, Function]} obj.optionState
+ * @param {[Object, Function]} obj.contentState
  * @param {Function} obj.onLoadData
  */
 const MusicList = ({ profile, contentState, onLoadData }) => {

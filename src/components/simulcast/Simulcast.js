@@ -33,7 +33,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef,
+        backState, viewBackupRef, setContentNavagate,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
@@ -95,6 +95,13 @@ const Simulcast = ({ profile, title, ...rest }) => {
         }
     }, [profile, mergeContentList, options])
 
+    /** @type {Function} */
+    const onSelect = useCallback(newContent => {
+        /** backup all state to restore later */
+        viewBackupRef.current = { season, seasons, sort }
+        setContentNavagate(newContent)
+    }, [setContentNavagate, viewBackupRef, season, seasons, sort])
+
     useEffect(() => {
         if (delay >= 0) {
             changeContentList(null)
@@ -117,11 +124,8 @@ const Simulcast = ({ profile, title, ...rest }) => {
     }, [profile, setSeason, delay, season])
 
     useEffect(() => {  // initializing
-        onFilter({ delay: 0})
+        onFilter({ delay: 0 })
     }, [profile, changeContentList, onFilter])
-
-    /** backup all state to restore later */
-    viewBackupRef.current = { season, seasons, sort }
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -163,6 +167,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
                             <ContentGridItems
                                 contentList={contentList}
                                 load={onLoad}
+                                onSelect={onSelect}
                                 autoScroll={autoScroll} />
                         </Cell>
                     </Row>

@@ -46,7 +46,7 @@ const ContentGridItems = ({ contentList, onSelect, load, autoScroll = true, onFo
             viewBackupRef.current = { rowIndex }
             onSelect({ content: contentList[rowIndex], rowIndex })
         }
-    }, [contentList, setContentNavagate, onLeave, onSelect, viewBackupRef])
+    }, [contentList, onSelect, viewBackupRef])
 
     /** @type {Function} */
     const renderItem = useCallback(({ index, ...rest2 }) => {

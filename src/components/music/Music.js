@@ -23,7 +23,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef,
+        backState, viewBackupRef, setContentNavagate,
     } = useContentList('music_browse')
 
     /** @type {[String, Function]} */
@@ -61,6 +61,13 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
         }
     }, [options, profile, mergeContentList])
 
+    /** @type {Function} */
+    const onSelect = useCallback(newContent => {
+        /** backup all state to restore later */
+        viewBackupRef.current = { query }
+        setContentNavagate(newContent)
+    }, [setContentNavagate, viewBackupRef, query])
+
     useEffect(() => {
         let delayDebounceFn = undefined
         if (delay >= 0) {
@@ -88,9 +95,6 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     useEffect(() => {  // initializing
         onFilter({ delay: 0 })
     }, [profile, changeContentList, onFilter])
-
-    /** backup all state to restore later */
-    viewBackupRef.current = { query }
 
     return (
         <Column style={{ width: '100%' }} {...rest}>
@@ -120,6 +124,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}
+                        onSelect={onSelect}
                         autoScroll={autoScroll} />
                 }
             </Cell>

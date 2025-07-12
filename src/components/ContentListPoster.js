@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
 
 import PropTypes from 'prop-types'
@@ -19,15 +19,13 @@ import useContentList from '../hooks/contentList'
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Boolean} [obj.noPoster]
  * @param {Boolean} [obj.noCache]
- * @param {Object} [obj.homeBackupOverride]
- * @param {Object} [obj.homePositionOverride]
  */
-const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false,
-    homeBackupOverride, homePositionOverride, ...rest }) => {
+const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-    } = useContentList(type, homeBackupOverride, homePositionOverride)
+        mergeContentList, changeContentList, onFilter,
+        setContentNavagate,
+    } = useContentList(type)
 
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
@@ -50,27 +48,17 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
         }
     }, [loadData, mergeContentList, options])
 
-    /** @type {{current: Boolean}} */
-    const autoScrollRef = useRef(true)
-
-    /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave(null)
-    }, [onLeave])
-
     useEffect(() => {
         if (delay >= 0) {
             changeContentList(null)
             loadData(options).then(res => {
-                changeContentList([...res.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
-                autoScrollRef.current = true
+                changeContentList([...res.data, ...new Array(res.total - res.data.length)])
             })
         }
     }, [profile, loadData, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
-        onFilter({ delay: 0, scroll: true })
-        autoScrollRef.current = false
+        onFilter({ delay: 0 })
     }, [profile, changeContentList, onFilter])
 
     return (
@@ -87,12 +75,10 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}
-                        onLeave={onLeaveView}
-                        onSelect={onSelect}
+                        onSelect={onSelect || setContentNavagate}
                         onFocus={onSelectItem}
                         autoScroll={autoScroll}
-                        mode={mode}
-                        homePositionOverride={homePositionOverride} />
+                        mode={mode} />
                 </Cell>
             </Column>
         </Column>
@@ -106,8 +92,6 @@ ContentListPoster.propTypes = {
     onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
-    homeBackupOverride: PropTypes.any,
-    homePositionOverride: PropTypes.any,
 }
 
 export default ContentListPoster
