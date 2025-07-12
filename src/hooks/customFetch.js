@@ -91,7 +91,9 @@ export async function getCache(url) {
         pendingTasks.set(taskId, resolve)
     })
     worker.postMessage({ type: 'get', url, taskId })
-    return prom
+    const data = await prom
+    logger.debug(`cache ${data ? 'hit' : 'miss'} ${url}`)
+    return data
 }
 
 /**
@@ -123,7 +125,7 @@ export async function getCustomCache(url) {
  * Save cache custom cache
  * @param {String} url
  * @param {Object} data
- * @param {Number} maxAge
+ * @param {Number} maxAge seconds
  * @return {Promise}
  */
 export async function saveCustomCache(url, data, maxAge = 60) {

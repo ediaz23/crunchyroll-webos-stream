@@ -44,16 +44,6 @@ export const autoLoginState = atom({
     default: true
 })
 
-export const homePositionState = atom({
-    key: 'homePositionState',
-    default: { rowIndex: 0, columnIndex: 0 },
-})
-
-export const homeBackupState = atom({
-    key: 'homeBackupState',
-    default: null,
-})
-
 export const selectedContentState = atom({
     key: 'selectedContentState',
     default: null
@@ -83,6 +73,16 @@ export const categoriesState = atom({
 export const isPremiumState = atom({
     key: 'isPremiumState',
     default: false
+})
+
+export const homePositionState = atom({
+    key: 'homePositionState',
+    default: { rowIndex: 0, columnIndex: 0 },
+})
+
+export const homeBackupState = atom({
+    key: 'homeBackupState',
+    default: null,
 })
 
 export const contentDetailBakState = atom({

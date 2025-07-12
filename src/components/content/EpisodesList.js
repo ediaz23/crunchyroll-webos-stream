@@ -81,12 +81,11 @@ const renderItem = ({ episodes, images, index, itemHeight: height, ...rest }) =>
 
 /**
  * @param {Object} obj
- * @param {Number} [obj.seasonIndex]
  * @param {Array<Object>} [obj.episodes]
- * @param {Function} obj.selectEpisode
  * @param {Number} [obj.episodeIndex]
+ * @param {Function} obj.selectEpisode
  */
-const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...rest }) => {
+const EpisodesList = ({ episodes, episodeIndex, selectEpisode, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Number} */
@@ -110,11 +109,11 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...r
     }, [itemHeight, episodes, getImagePerResolution])
 
     /** @type {Function} */
-    const getScrollTo = useCallback((scrollTo) => {
-        scrollToRef.current = scrollTo
-    }, [seasonIndex])  // eslint-disable-line react-hooks/exhaustive-deps
+    const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
 
-    useEffect(() => { episodeIndexRef.current = episodeIndex }, [seasonIndex, episodeIndex])
+    useEffect(() => {
+        episodeIndexRef.current = episodeIndex
+    }, [episodeIndex])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -126,7 +125,7 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...r
         return () => {
             clearInterval(interval)
         }
-    }, [seasonIndex])
+    }, [])
 
     return (
         <LoadingList
@@ -155,10 +154,9 @@ const EpisodesList = ({ seasonIndex, episodes, selectEpisode, episodeIndex, ...r
 }
 
 EpisodesList.propTypes = {
-    seasonIndex: PropTypes.number,
     episodes: PropTypes.array,
-    selectEpisode: PropTypes.func.isRequired,
     episodeIndex: PropTypes.number,
+    selectEpisode: PropTypes.func.isRequired,
 }
 
 export default EpisodesList
