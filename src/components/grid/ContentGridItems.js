@@ -4,43 +4,37 @@ import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import ri from '@enact/ui/resolution'
-import { useRecoilValue } from 'recoil'
 
 import PropTypes from 'prop-types'
 
 import LoadingList from '../LoadingList'
-import { homePositionState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { useSetContent } from '../../hooks/setContent'
+import { useViewBackup } from '../../hooks/viewBackup'
 
 
 /**
  * Show grid of items
  * @param {Object} obj
  * @param {Array<Object>} obj.contentList
+ * @param {Function} obj.onSelect
  * @param {Function} [obj.load]
  * @param {Boolean} [obj.autoScroll]
  * @param {Function} [obj.onFocus]
  * @param {'tall'|'wide'} [obj.mode]
- * @param {Function} obj.onLeave
- * @param {Object} obj.homePositionOverride
+ * @param {Function} [obj.onLeave]
  */
-const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode = 'tall', onLeave, onSelect,
-    homePositionOverride, ...rest }) => {
+const ContentGridItems = ({ contentList, onSelect, load, autoScroll = true, onFocus, mode = 'tall', ...rest }) => {
+    const [backState, viewBackupRef] = useViewBackup(`contentGridItems`)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
-    const rowIndexRef = useRef(null)
-    /** @type {{rowIndex: Number, columnIndex: Number}} */
-    const homePosition = useRecoilValue(homePositionOverride || homePositionState)
+    const rowIndexRef = useRef(backState?.rowIndex || 0)
     /** @type {[Number, Number]} */
     const [itemHeight, itemWidth] = useMemo(() => {
         return mode === 'tall' ? [ri.scale(390), ri.scale(240)] : [ri.scale(270), ri.scale(320)]
     }, [mode])
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
-    /** @type {Function} */
-    const setContentNavagate = useSetContent()
 
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
@@ -48,15 +42,11 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     /** @type {Function} */
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
-            const index = parseInt(ev.currentTarget.dataset['index'])
-            onLeave()  // for first if must be before
-            if (onSelect) {
-                onSelect({ content: contentList[index], rowIndex: index })
-            } else {
-                setContentNavagate({ content: contentList[index], rowIndex: index })
-            }
+            const rowIndex = parseInt(ev.currentTarget.dataset['index'])
+            viewBackupRef.current = { rowIndex }
+            onSelect({ content: contentList[rowIndex], rowIndex })
         }
-    }, [contentList, setContentNavagate, onLeave, onSelect])
+    }, [contentList, setContentNavagate, onLeave, onSelect, viewBackupRef])
 
     /** @type {Function} */
     const renderItem = useCallback(({ index, ...rest2 }) => {
@@ -93,36 +83,28 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
     }, [contentList, itemHeight, getImagePerResolution, onSelectItem, onFocus, load, mode])
 
     useEffect(() => {
-        if (contentList != null) {
-            if (autoScroll && contentList.length > 0) {
-                rowIndexRef.current = Math.min(homePosition.rowIndex, contentList.length - 1)
-            } else {
-                rowIndexRef.current = false
-            }
-        }
-    }, [autoScroll, homePosition.rowIndex, contentList])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (scrollToRef.current) {
-                if (rowIndexRef.current !== null && rowIndexRef.current !== false) {
+        let interval = null
+        if (autoScroll && rowIndexRef.current !== null) {
+            interval = setInterval(() => {
+                if (scrollToRef.current && contentList != null) {
                     clearInterval(interval)
-                    scrollToRef.current({ index: rowIndexRef.current, animate: false, focus: true })
-                } else if (rowIndexRef.current === false) {
-                    clearInterval(interval)
+                    if (contentList.length > 0) {
+                        const index = Math.min(rowIndexRef.current, contentList.length - 1)
+                        scrollToRef.current({ index, animate: false, focus: true })
+                        rowIndexRef.current = null  // avoid focus on search or loading
+                    }
                 }
-            }
-        }, 100)
+            }, 100)
+        }
         return () => {
             clearInterval(interval)
-            scrollToRef.current = null
         }
-    }, [])
+    }, [autoScroll, contentList])
 
     return (
         <LoadingList
             list={contentList}
-            index={homePosition.rowIndex}
+            index={rowIndexRef.current}
             scrollFn={scrollToRef.current}>
             {contentList && contentList.length > 0 &&
                 <VirtualGridList {...rest}
@@ -138,17 +120,15 @@ const ContentGridItems = ({ contentList, load, autoScroll = true, onFocus, mode 
 }
 
 ContentGridItems.propTypes = {
+    onSelect: PropTypes.func.isRequired,
     contentList: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])),
         PropTypes.oneOf([null]),
     ]),
-    onLeave: PropTypes.func.isRequired,
     autoScroll: PropTypes.bool,
     mode: PropTypes.oneOf(['tall', 'wide']),
     load: PropTypes.func,
     onFocus: PropTypes.func,
-    onSelect: PropTypes.func,
-    homePositionOverride: PropTypes.any
 }
 
 export default ContentGridItems
