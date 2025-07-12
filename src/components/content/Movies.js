@@ -89,7 +89,7 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest })
         setListings(listingsTmp)
         setListingIndex(lastIndex => {
             if (lastIndex == null) {
-                lastIndex = 0
+                lastIndex = listingsTmp.length ? 0 : null
             } else {
                 lastIndex = Math.min(lastIndex, listingsTmp.length)
             }

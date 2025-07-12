@@ -6,6 +6,7 @@ import Icon from '@enact/moonstone/Icon'
 import VirtualList from '@enact/moonstone/VirtualList'
 import PropTypes from 'prop-types'
 
+import { useDelayedCall } from '../../hooks/delayedCall'
 import LoadingList from '../LoadingList'
 import css from './Artist.module.less'
 import cssShared from '../Share.module.less'
@@ -24,11 +25,11 @@ const renderItem = ({ options, index, itemHeight: height, ...rest }) => {
 
 /**
  * @param {Object} obj
- * @param {Array<Object>} obj.options
- * @param {Function} obj.selectOption
+ * @param {Array<Object>} [obj.options]
  * @param {Number} [optionIndex]
+ * @param {Function} obj.selectOption
  */
-const Options = ({ options, selectOption, optionIndex, ...rest }) => {
+const OptionsList = ({ options, optionIndex, selectOption, ...rest }) => {
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {Number} */
@@ -40,15 +41,20 @@ const Options = ({ options, selectOption, optionIndex, ...rest }) => {
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
 
     /** @type {Function} */
-    const onFocus = useCallback(ev => {
+    const onFocusCallback = useCallback(ev => {
         const target = ev.currentTarget || ev.target
-        const newIndex = parseInt(target.dataset.index)
-        if (selectIndexRef.current !== newIndex) {
-            selectOption(newIndex)
+        const index = parseInt(target.dataset.index)
+        if (selectIndexRef.current !== index) {
+            selectOption(index)
         }
     }, [selectOption])
 
-    useEffect(() => { selectIndexRef.current = optionIndex }, [optionIndex])
+    /** @type {Function} */
+    const onFocus = useDelayedCall(onFocusCallback, 100)
+
+    useEffect(() => {
+        selectIndexRef.current = optionIndex
+    }, [optionIndex])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -88,10 +94,10 @@ const Options = ({ options, selectOption, optionIndex, ...rest }) => {
     )
 }
 
-Options.propTypes = {
+OptionsList.propTypes = {
     options: PropTypes.array,
-    selectOption: PropTypes.func.isRequired,
     optionIndex: PropTypes.number,
+    selectOption: PropTypes.func.isRequired,
 }
 
-export default Options
+export default OptionsList

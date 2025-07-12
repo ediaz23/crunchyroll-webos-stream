@@ -146,7 +146,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
             setSeasons(data)
             setSeasonIndex(lastIndex => {
                 if (lastIndex == null) {
-                    lastIndex = 0
+                    lastIndex = data.length ? 0 : null
                 } else {
                     lastIndex = Math.min(lastIndex, data.length)
                 }
