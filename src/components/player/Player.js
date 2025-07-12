@@ -116,7 +116,9 @@ const updatePlayHeadLoop = ({ profile, content, playerCompRef }) => {
             }
         }
     }, 1000 * 15) // every 15 sec
-    return () => clearInterval(interval)
+    return () => {
+        clearInterval(interval)
+    }
 }
 
 /**

@@ -163,7 +163,9 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                 }
             }, 100)
         }
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+        }
     }, [feedData, setHomeViewReady])
 
     useEffect(() => {

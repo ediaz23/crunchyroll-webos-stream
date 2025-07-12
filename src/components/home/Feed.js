@@ -50,7 +50,9 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
                 scrollToRef.current({ index: rowIndexRef.current, animate: false, focus: false })
             }
         }, 100)
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     return (

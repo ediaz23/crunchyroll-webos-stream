@@ -496,7 +496,9 @@ const Options = ({ profile, content, saveRating, setIndex, setContentToPlay, ...
                 }
             }, 100)
         }
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+        }
     }, [loading])
 
     return (

@@ -34,7 +34,9 @@ export const AlertBase = ({ open, title, message, onCancel, onAccept, forwardedR
                 clearInterval(interlval)
                 Spotlight.focus(compRef.current.children[0])
             }
-            return () => clearInterval(interlval)
+            return () => {
+                clearInterval(interlval)
+            }
         }, 100)
     }, [])
 

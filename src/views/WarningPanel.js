@@ -32,7 +32,9 @@ const WarningPanel = ({ ...rest }) => {
                 clearInterval(interval)
             }
         })
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     return (

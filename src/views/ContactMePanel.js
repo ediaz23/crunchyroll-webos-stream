@@ -69,7 +69,9 @@ const ContactMePanel = ({ noAcceptBtn, ...rest }) => {
                     clearInterval(interval)
                 }
             })
-            return () => clearInterval(interval)
+            return () => {
+                clearInterval(interval)
+            }
         }
     }, [contactBtn, noAcceptBtn])
 
