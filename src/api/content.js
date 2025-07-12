@@ -16,8 +16,8 @@ export const getPlayHeads = async (profile, params) => {
     let out = null
     try {
         params = params || {}
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('play-heads', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('play-heads', params, [getPlayHeads, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.content.getPlayheads({ account, ...params })
@@ -74,8 +74,8 @@ export const addWatchlistItem = async (profile, params) => {
 export const getWatchlistItems = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('watchlist-items', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('watchlist-items', params, [getWatchlistItems, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.content.getWatchlistItems({ account, ...params })

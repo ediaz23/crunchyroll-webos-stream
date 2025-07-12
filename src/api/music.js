@@ -34,8 +34,8 @@ export const getFeed = async (profile) => {
 export const getArtists = async (profile, artistIds) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('artist', artistIds)
+        if (LOAD_MOCK_DATA && !('noMock' in artistIds)) {
+            out = await getMockData('artist', artistIds, [getArtists, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.music.getArtist({ account, artistIds })
@@ -55,8 +55,8 @@ export const getArtists = async (profile, artistIds) => {
 export const getConcerts = async (profile, concertIds) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('concerts', concertIds)
+        if (LOAD_MOCK_DATA && !('noMock' in concertIds)) {
+            out = await getMockData('concerts', concertIds, [getConcerts, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.music.getConcerts({ account, concertIds })
@@ -76,8 +76,8 @@ export const getConcerts = async (profile, concertIds) => {
 export const getVideos = async (profile, musicIds) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('musicVideo', musicIds)
+        if (LOAD_MOCK_DATA && !('noMock' in musicIds)) {
+            out = await getMockData('musicVideo', musicIds, [getVideos, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.music.getVideo({ account, musicIds })
@@ -99,8 +99,8 @@ export const getVideos = async (profile, musicIds) => {
 export const getStreamsWithURL = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('streams-url', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('streams-url', params, [getStreamsWithURL, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.music.getStreamsWithURL({ account, ...params })
