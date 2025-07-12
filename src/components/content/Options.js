@@ -3,7 +3,6 @@ import { useEffect, useCallback, useState, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
-
 import IconButton from '@enact/moonstone/IconButton'
 import PropTypes from 'prop-types'
 
@@ -21,9 +20,9 @@ import { useViewBackup } from '../../hooks/viewBackup'
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {{content: Object, setContent: Function}} obj.contentState
- * @param {Function} obj.setIndex
+ * @param {{moreEpisodes: Function, changeAudio: Function}} obj.setFunctions
  */
-const Options = ({ profile, contentState, setIndex, ...rest }) => {
+const Options = ({ profile, contentState, setFunctions, ...rest }) => {
     const [backState, viewBackupRef] = useViewBackup('content-options')
     const { content, setContent: setContentSuper } = contentState
     /** @type {[String, Function]} */
@@ -111,8 +110,10 @@ const Options = ({ profile, contentState, setIndex, ...rest }) => {
                                     optionIndex,
                                     setOptionIndex
                                 }}
-                                setSubtitle={setSubtitle}
-                                setIndex={setIndex} />
+                                setFunctions={{
+                                    ...setFunctions,
+                                    setSubtitle,
+                                }} />
                         </Cell>
                     </Column>
                 </Cell>
@@ -148,7 +149,10 @@ Options.propTypes = {
         content: PropTypes.object.isRequired,
         setContent: PropTypes.func.isRequired,
     }).isRequired,
-    setIndex: PropTypes.func.isRequired,
+    setFunctions: PropTypes.shape({
+        moreEpisodes: PropTypes.func.isRequired,
+        changeAudio: PropTypes.func.isRequired,
+    }).isRequired,
 }
 
 export default Options

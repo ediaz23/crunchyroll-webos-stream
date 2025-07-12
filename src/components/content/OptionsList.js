@@ -4,9 +4,9 @@ import { Column } from '@enact/ui/Layout'
 import Item from '@enact/moonstone/Item'
 import Icon from '@enact/moonstone/Icon'
 import Spinner from '@enact/moonstone/Spinner'
+import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
-import back from '../../back'
 import api from '../../api'
 
 import Scroller from '../../patch/Scroller'
@@ -14,21 +14,6 @@ import PopupMessage from '../Popup'
 import { calculatePlayheadProgress } from './Seasons'
 import css from './ContentDetail.module.less'
 
-
-/**
- * @param {Function} setIndex
- * @param {Number} index
- */
-const useChangeActivity = (setIndex, index) => {
-    return () => {
-        back.pushHistory({
-            doBack: () => {
-                setIndex(0)
-            }
-        })
-        setIndex(index)
-    }
-}
 
 /**
  * @param {Object} content
@@ -200,9 +185,19 @@ const getNextContent = async (profile, content) => {
 }
 
 
-const OptionsList = ({ profile, music, similar, contentState, optionIndexState, setSubtitle, setIndex }) => {
-    const {optionIndex, setOptionIndex} = optionIndexState
-    const {content, setContent} = contentState
+/**
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {{content: Object, setContent: Function}} obj.contentState
+ * @param {{optionIndex: Object, setOptionIndex: Function}} obj.contentState
+ * @param {{moreEpisodes: Function, changeAudio: Function, setSubtitle: Function}} obj.setFunctions
+ * @param {{total: Number}} obj.music
+ * @param {{total: Number}} obj.similar
+ */
+const OptionsList = ({ profile, contentState, optionIndexState, setFunctions, music, similar }) => {
+    const { optionIndex, setOptionIndex } = optionIndexState
+    const { content, setContent } = contentState
+    const { moreEpisodes, changeAudio, setSubtitle } = setFunctions
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
     /** @type {[{type: String, message: String}, Function]}  */
@@ -223,10 +218,6 @@ const OptionsList = ({ profile, music, similar, contentState, optionIndexState, 
     const { watch, watchLast, moreDetail } = useMemo(() => {
         return computeTitles({ content, nextContent, lastContent })
     }, [content, nextContent, lastContent])
-    /** @type {Function} */
-    const moreEpisodes = useChangeActivity(setIndex, 1)
-    /** @type {Function} */
-    const changeAudio = useChangeActivity(setIndex, 2)
     /** @type {Function} */
     const playNextContent = useCallback(() => {
         setContent(nextContent)
@@ -428,6 +419,25 @@ const OptionsList = ({ profile, music, similar, contentState, optionIndexState, 
             {message?.message || 'nothing'}
         </PopupMessage>
     </>)
+}
+
+OptionsList.propTypes = {
+    profile: PropTypes.object.isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
+    optionIndexState: PropTypes.shape({
+        optionIndex: PropTypes.string,
+        setOptionIndex: PropTypes.func.isRequired,
+    }).isRequired,
+    setFunctions: PropTypes.shape({
+        moreEpisodes: PropTypes.func.isRequired,
+        changeAudio: PropTypes.func.isRequired,
+        setSubtitle: PropTypes.func.isRequired,
+    }).isRequired,
+    music: PropTypes.shape({ total: PropTypes.number.isRequired }).isRequired,
+    similar: PropTypes.shape({ total: PropTypes.number.isRequired }).isRequired,
 }
 
 export default OptionsList

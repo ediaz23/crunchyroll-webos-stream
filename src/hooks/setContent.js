@@ -48,7 +48,7 @@ export function useSetContentNavigate() {
         /**
          * @type {SetContent}
          */
-        ({ content, saveCurrentState = true, restoreCurrentContent = false }) => {
+        ({ content, restoreCurrentContent = false, saveCurrentState = true, saveHistory = true }) => {
             let newPath, setContent
             doBackRef.current = saveCurrentState  // active save state
             if (isPlayable(content.type)) {
@@ -62,27 +62,33 @@ export function useSetContentNavigate() {
                 newPath = '/profiles/home/content'
             }
 
-            let backPath, backContent
+            let backContent
+
             setContent(oldContent => {
                 backContent = oldContent
                 return content
             })
+
+            let backPath
+
             setPath(oldPath => {
                 backPath = oldPath
                 return newPath
             })
 
-            back.pushHistory({
-                doBack: () => {
-                    setPath(backPath)
-                    startTransition(() => {
-                        if (restoreCurrentContent) {
-                            setContent(backContent)
-                        }
-                        setViewBackup(backRef.current)
-                    })
-                }
-            })
+            if (saveHistory) {
+                back.pushHistory({
+                    doBack: () => {
+                        setPath(backPath)
+                        startTransition(() => {
+                            if (restoreCurrentContent) {
+                                setContent(backContent)
+                            }
+                            setViewBackup(backRef.current)
+                        })
+                    }
+                })
+            }
         }, [setPath, setPlayContent, setSelectedContent, setViewBackup]
     )
 }
