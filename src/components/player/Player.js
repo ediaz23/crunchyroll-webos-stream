@@ -880,18 +880,31 @@ const Player = ({ ...rest }) => {
     }, [profile, audios, setAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
+        /** @type {Stream} */
+        let newStream = null
         if (audios.includes(audio)) {
-            findStream({ profile, langConfig: langConfigRef.current, audios, audio, getLang, content })
-                .then(setStream)
-                .catch(handleCrunchyError)
+            findStream({
+                profile,
+                langConfig: langConfigRef.current,
+                audios,
+                audio,
+                getLang,
+                content
+            }).then(resStream => {
+                newStream = resStream
+                setStream(lastStream => {
+                    if (lastStream.token) {
+                        api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
+                    }
+                    return resStream
+                })
+            }).catch(handleCrunchyError)
         }
         return () => {
-            setStream(lastStream => {
-                if (lastStream.token) {
-                    api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
-                }
-                return emptyStream
-            })
+            if (newStream?.token) {
+                api.drm.deleteToken(profile, { episodeId: audio.guid, token: newStream?.token })
+            }
+            setStream(emptyStream)
         }
     }, [profile, content, audios, audio, getLang, setStream, emptyStream, handleCrunchyError])
 
@@ -912,21 +925,13 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // findPreviews
         let doFindPreviews = null
         if (stream.urls && !loading && playerRef.current) {
-            let timeoutId = null
-
-            doFindPreviews = () => {
-                clearTimeout(timeoutId)
-                timeoutId = setTimeout(() => {
-                    timeoutId = null
-                    playerRef.current.off(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
-                    findPreviews(
-                        stream,
-                        playerRef.current.getAverageThroughput('video'),
-                        playerRef.current.getBufferLength('video')
-                    ).then(setPreviews)
-                }, 250)
+            doFindPreviews = ({ bufferLevel }) => {
+                if (bufferLevel >= 10) {
+                    playerRef.current.off(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
+                    findPreviews(stream, playerRef.current.getAverageThroughput('video'),).then(setPreviews)
+                }
             }
-            playerRef.current.on(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
+            playerRef.current.on(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
         }
         return () => {
             setPreviews({ chunks: [] })
@@ -935,7 +940,7 @@ const Player = ({ ...rest }) => {
                 previewRef.current = null
             }
             if (doFindPreviews && playerRef.current) {
-                playerRef.current.off(dashjs.MediaPlayer.events.PLAYBACK_STARTED, doFindPreviews)
+                playerRef.current.off(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
             }
         }
     }, [profile, stream, setPreviews, findPreviews, loading])
