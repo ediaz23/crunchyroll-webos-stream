@@ -5,10 +5,6 @@ import BodyText from '@enact/moonstone/BodyText'
 import Image from '@enact/moonstone/Image'
 import PropTypes from 'prop-types'
 
-import { useRecoilValue } from 'recoil'
-
-import { contentDetailBakState } from '../../recoilConfig'
-
 import { $L } from '../../hooks/language'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
@@ -31,8 +27,6 @@ import css from './Artist.module.less'
  */
 const Artist = ({ profile, artist, ...rest }) => {
     const [backState, viewBackupRef] = useViewBackup('artist')
-    /** @type {Object}  */
-    const contentDetailBak = useRecoilValue(contentDetailBakState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -136,7 +130,7 @@ const Artist = ({ profile, artist, ...rest }) => {
             }
             return lastIndex
         })
-    }, [profile, artist, contentDetailBak.options])
+    }, [profile, artist])
 
     return (
         <Row className={css.contentArtist} {...rest}>
