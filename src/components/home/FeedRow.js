@@ -12,7 +12,7 @@ import { homeViewReadyState, isPremiumState } from '../../recoilConfig'
 import api from '../../api'
 import VirtualListNested from '../../patch/VirtualListNested'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { useSetContent } from '../../hooks/setContent'
+import { useSetContentNavigate } from '../../hooks/setContent'
 import { processItemFeed } from '../../hooks/homefeedWorker'
 import withNavigable from '../../hooks/navigable'
 import { $L } from '../../hooks/language'
@@ -118,19 +118,19 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
             setContent(null, feedRow.index)
         }
     }, [feedData, setContent, feedRow])
+
+    const setContentNavigate = useSetContentNavigate()
     /** @type {Function} */
-    const setContentNavagate = useSetContent()
-    /** @type {Function} */
-    const showContentDetail = useCallback((ev) => {
+    const setLocalContent = useCallback((ev) => {
         /** @type {HTMLElement} */
         const parentElement = ev.target.closest(`#${cellId}`)
         const columnIndex = parseInt(parentElement.dataset.index)
         const content = feedData.items[columnIndex]
         if (feedData.id !== 'fake_item') {
             viewBackupRef.current = { rowIndex: feedRow.index, columnIndex }
-            setContentNavagate({ content })
+            setContentNavigate({ content })
         }
-    }, [feedData, feedRow, cellId, setContentNavagate, viewBackupRef])
+    }, [feedData, feedRow, cellId, setContentNavigate, viewBackupRef])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -180,14 +180,10 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                 val => val.type === DEV_CONTENT_TYPE && val.id === testContent[DEV_CONTENT_TYPE]
             )
             if (content) {
-                setContentNavagate({
-                    content,
-                    rowIndex: 0,
-                    columnIndex: feedData.items.findIndex(i => i === content)
-                })
+                setContentNavigate({ content })
             }
         }
-    }, [feedData, setContentNavagate])
+    }, [feedData, setContentNavigate])
 
 
     useEffect(() => {
@@ -232,7 +228,7 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                             itemSize: itemWidth,
                             feed: feedData,
                             onFocus: selectElement,
-                            onClick: showContentDetail,
+                            onClick: setLocalContent,
                             itemHeight,
                             isPremium,
                         }}

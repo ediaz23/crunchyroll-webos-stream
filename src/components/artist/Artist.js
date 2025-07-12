@@ -10,7 +10,7 @@ import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
 import { useBackVideoIndex } from '../../hooks/backVideoIndex'
 import { useViewBackup } from '../../hooks/viewBackup'
-import { useSetPlayableContent } from '../../hooks/setContent'
+import { useSetContentNavigate } from '../../hooks/setContent'
 import Scroller from '../../patch/Scroller'
 
 import { ContentHeader } from '../home/ContentBanner'
@@ -45,8 +45,7 @@ const Artist = ({ profile, artist, ...rest }) => {
         options && optionIndex != null ? `artist/${options[optionIndex].id}` : null
     ), [options, optionIndex])
 
-    /** @type {Function} */
-    const setPlayableContent = useSetPlayableContent()
+    const setContentNavigate = useSetContentNavigate()
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {
@@ -62,15 +61,15 @@ const Artist = ({ profile, artist, ...rest }) => {
     }, [artist])
 
     /** @type {Function} */
-    const setContentToPlay = useCallback((ev) => {
+    const setLocalContent = useCallback((ev) => {
         const target = ev.currentTarget || ev.target
         const index = parseInt(target.dataset.index)
         if (videos && videos.length) {
             /** backup all state to restore later */
             viewBackupRef.current = { optionIndex }
-            setPlayableContent({ contentToPlay: videos[index] })
+            setContentNavigate({ content: videos[index] })
         }
-    }, [optionIndex, videos, setPlayableContent, viewBackupRef])
+    }, [optionIndex, videos, setContentNavigate, viewBackupRef])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {
@@ -162,7 +161,7 @@ const Artist = ({ profile, artist, ...rest }) => {
                                 key={`artist-${artist.id}-${optionIndex}`}
                                 episodes={videos}
                                 episodeIndex={videoIndex}
-                                selectEpisode={setContentToPlay} />
+                                selectEpisode={setLocalContent} />
                         </Cell>
                     </Row>
                 </Cell>

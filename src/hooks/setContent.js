@@ -13,47 +13,13 @@ import back from '../back'
 import { isPlayable } from '../utils'
 
 /**
- * @callback setPlayableContent
- * @param {Object} obj
- * @param {Object} obj.contentToPlay
- * @param {String} [obj.backPath]
- * @param {Object} [obj.contentBak]
- */
-
-/** @return {setPlayableContent} */
-export function useSetPlayableContent() {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setPlayContent = useSetRecoilState(playContentState)
-    /** @type {Function} */
-    const setContentDetailBak = useSetRecoilState(contentDetailBakState)
-
-    return useCallback(
-        /** @type {setPlayableContent} */
-        ({ contentToPlay, backPath = '/profiles/home/content', contentBak = {} }) => {
-            back.pushHistory({
-                doBack: () => {
-                    setPath(backPath)
-                }
-            })
-            setContentDetailBak(contentBak)
-            setPlayContent(contentToPlay)
-            setPath('/profiles/home/player')
-        },
-        [setContentDetailBak, setPlayContent, setPath]
-    )
-}
-
-/**
- * @callback setContent
+ * @callback SetContent
  * @param {Object} obj
  * @param {Object} obj.content
- * @param {String} [obj.backPath]
  */
 
-/** @returns {setContent} */
-export function useSetContent() {
+/** @returns {SetContent} */
+export function useSetContentNavigate() {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
@@ -78,9 +44,28 @@ export function useSetContent() {
 
     return useCallback(
         /**
-         * @type {setContent}
+         * @type {SetContent}
          */
-        ({ content, backPath = '/profiles/home' }) => {
+        ({ content }) => {
+            let backPath = null
+            doBackRef.current = true  // active save state
+            if (isPlayable(content.type)) {
+                if (content.type === 'movie' && content.panel) {
+                    setPlayContent({ ...content, ...content.panel, panel: null })
+                } else {
+                    setPlayContent(content)
+                }
+                setPath(oldPath => {
+                    backPath = oldPath
+                    return '/profiles/home/player'
+                })
+            } else {
+                setSelectedContent(content)
+                setPath(oldPath => {
+                    backPath = oldPath
+                    return '/profiles/home/content'
+                })
+            }
             back.pushHistory({
                 doBack: () => {
                     setPath(backPath)
@@ -89,18 +74,6 @@ export function useSetContent() {
                     })
                 }
             })
-            doBackRef.current = true  // active save state
-            if (isPlayable(content.type)) {
-                if (content.type === 'movie' && content.panel) {
-                    setPlayContent({ ...content, ...content.panel, panel: null })
-                } else {
-                    setPlayContent(content)
-                }
-                setPath('/profiles/home/player')
-            } else {
-                setSelectedContent(content)
-                setPath('/profiles/home/content')
-            }
         }, [setPath, setPlayContent, setSelectedContent, setViewBackup]
     )
 }

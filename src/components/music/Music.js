@@ -23,7 +23,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, setContentNavagate,
+        backState, viewBackupRef, setContentNavigate,
     } = useContentList('music_browse')
 
     /** @type {[String, Function]} */
@@ -62,11 +62,11 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     }, [options, profile, mergeContentList])
 
     /** @type {Function} */
-    const onSelect = useCallback(newContent => {
+    const setLocalContent = useCallback(newContent => {
         /** backup all state to restore later */
         viewBackupRef.current = { query }
-        setContentNavagate(newContent)
-    }, [setContentNavagate, viewBackupRef, query])
+        setContentNavigate(newContent)
+    }, [setContentNavigate, viewBackupRef, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -124,7 +124,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
                     <ContentGridItems
                         contentList={contentList}
                         load={onLoad}
-                        onSelect={onSelect}
+                        onSelect={setLocalContent}
                         autoScroll={autoScroll} />
                 }
             </Cell>
