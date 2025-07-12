@@ -53,12 +53,12 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
- * @param {Object} obj.series
- * @param {Function} obj.setContentToPlay
+ * @param {{content: Object, setContent: Function}} obj.contentState
  * @param {Boolean} obj.isPremium account is premium?
  */
-const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
+const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
     const [backState, viewBackupRef] = useViewBackup('content-seasons')
+    const { content: series, setContent: setSeries } = contentState
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState(null)
     /** @type {[Number, Function]} */
@@ -77,15 +77,15 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
     ), [seasons, seasonIndex])
 
     /** @type {Function} */
-    const playEpisode = useCallback(ev => {
+    const setContent = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const index = parseInt(target.dataset.index)
         if (episodes && episodes.length) {
             /** backup all state to restore later */
             viewBackupRef.current = { seasonIndex }
-            setContentToPlay(episodes[index])
+            setSeries(episodes[index])
         }
-    }, [seasonIndex, episodes, setContentToPlay, viewBackupRef])
+    }, [seasonIndex, episodes, setSeries, viewBackupRef])
 
     /** @type {Function} */
     const markAsWatched = useCallback(ev => {
@@ -199,7 +199,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
                                 key={seasons?.[seasonIndex]?.id ? `seasons-${seasons[seasonIndex].id}` : undefined}
                                 episodes={episodes}
                                 episodeIndex={episodeIndex}
-                                selectEpisode={playEpisode} />
+                                selectEpisode={setContent} />
                         </Cell>
                     </Column>
                 </Cell>
@@ -210,8 +210,10 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, ...rest }) => {
 
 Seasons.propTypes = {
     profile: PropTypes.object.isRequired,
-    series: PropTypes.object.isRequired,
-    setContentToPlay: PropTypes.func.isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
     isPremium: PropTypes.bool.isRequired,
 }
 

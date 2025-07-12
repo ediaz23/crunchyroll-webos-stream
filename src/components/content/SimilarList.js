@@ -10,12 +10,11 @@ import ContentListPoster from '../ContentListPoster'
  * @fixme try to keep response to improve speed, now it is disabled for sync issues.
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {[Object, Function]} obj.contentState
+ * @param {{content: Object, setContent: Function}} obj.contentState
  1* @param {Function} obj.onLoadData
  */
 const SimilarList = ({ profile, contentState, onLoadData }) => {
-    const [content, setContent] = contentState
-
+    const { content, setContent } = contentState
     /** @type {Function} */
     const loadSimilar = useCallback(async options => {
         const similar = await api.discover.getSimilar(profile, {
@@ -42,11 +41,10 @@ const SimilarList = ({ profile, contentState, onLoadData }) => {
 
 SimilarList.propTypes = {
     profile: PropTypes.object.isRequired,
-    contentState: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-            PropTypes.object, PropTypes.func
-        ])
-    ).isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
     onLoadData: PropTypes.func.isRequired,
 }
 

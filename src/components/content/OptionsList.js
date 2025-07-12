@@ -200,11 +200,9 @@ const getNextContent = async (profile, content) => {
 }
 
 
-const OptionsList = ({ profile, music, similar, contentState, optionState, setSubtitle, setIndex }) => {
-    /** @type {[String, Function]} */
-    const [optionIndex, setOptionIndex] = optionState
-    /** @type {[Object, Function]} */
-    const [content, setContentToPlay] = contentState
+const OptionsList = ({ profile, music, similar, contentState, optionIndexState, setSubtitle, setIndex }) => {
+    const {optionIndex, setOptionIndex} = optionIndexState
+    const {content, setContent} = contentState
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
     /** @type {[{type: String, message: String}, Function]}  */
@@ -231,12 +229,12 @@ const OptionsList = ({ profile, music, similar, contentState, optionState, setSu
     const changeAudio = useChangeActivity(setIndex, 2)
     /** @type {Function} */
     const playNextContent = useCallback(() => {
-        setContentToPlay(nextContent)
-    }, [setContentToPlay, nextContent])
+        setContent(nextContent)
+    }, [setContent, nextContent])
     /** @type {Function} */
     const playLastContent = useCallback(() => {
-        setContentToPlay(lastContent)
-    }, [setContentToPlay, lastContent])
+        setContent(lastContent)
+    }, [setContent, lastContent])
 
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])

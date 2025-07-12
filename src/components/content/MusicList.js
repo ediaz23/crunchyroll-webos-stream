@@ -12,11 +12,11 @@ import api from '../../api'
  * MusicList
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
- * @param {[Object, Function]} obj.contentState
+ * @param {{content: Object, setContent: Function}} obj.contentState
  * @param {Function} obj.onLoadData
  */
 const MusicList = ({ profile, contentState, onLoadData }) => {
-    const [content, setContent] = contentState
+    const { content, setContent } = contentState
     /** @type {[Array<Object>, Function]} */
     const [videos, setVideos] = useState(null)
     /** @type {[Number, Function]} */
@@ -68,11 +68,10 @@ const MusicList = ({ profile, contentState, onLoadData }) => {
 
 MusicList.propTypes = {
     profile: PropTypes.object.isRequired,
-    contentState: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-            PropTypes.object, PropTypes.func
-        ])
-    ).isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
     onLoadData: PropTypes.func.isRequired,
 }
 

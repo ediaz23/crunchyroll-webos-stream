@@ -17,12 +17,12 @@ import { getIsPremium } from '../../utils'
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
- * @param {Object} obj.movieListing
- * @param {Function} obj.setContentToPlay
+ * @param {{content: Object, setContent: Function}} obj.contentState
  * @param {Boolean} obj.isPremium account is premium?
  */
-const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest }) => {
+const Movies = ({ profile, contentState, isPremium, ...rest }) => {
     const [backState, viewBackupRef] = useViewBackup('content-movies')
+    const { content: movieListing, setContent: setMovieListing } = contentState
     /** @type {[Array<Object>, Function]} */
     const [listings, setListings] = useState(null)
     /** @type {[Number, Function]} */
@@ -39,15 +39,15 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest })
     ), [listings, listingIndex])
 
     /** @type {Function} */
-    const playMovie = useCallback(ev => {
+    const setContent = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const index = parseInt(target.dataset.index)
         if (movies && movies.length) {
             /** backup all state to restore later */
             viewBackupRef.current = { listingIndex }
-            setContentToPlay(movies[index])
+            setMovieListing(movies[index])
         }
-    }, [listingIndex, movies, setContentToPlay, viewBackupRef])
+    }, [listingIndex, movies, setMovieListing, viewBackupRef])
 
     useBackVideoIndex(movies, setMovieIndex)
 
@@ -117,7 +117,7 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest })
                     key={listings?.[listingIndex]?.id ? `movies-${listings[listingIndex].id}` : undefined}
                     episodes={movies}
                     episodeIndex={movieIndex}
-                    selectEpisode={playMovie} />
+                    selectEpisode={setContent} />
             </Cell>
         </Row>
     )
@@ -125,8 +125,10 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, ...rest })
 
 Movies.propTypes = {
     profile: PropTypes.object.isRequired,
-    movieListing: PropTypes.object.isRequired,
-    setContentToPlay: PropTypes.func.isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
     isPremium: PropTypes.bool.isRequired,
 }
 
