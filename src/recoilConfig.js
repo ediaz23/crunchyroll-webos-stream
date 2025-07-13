@@ -74,30 +74,3 @@ export const isPremiumState = atom({
     key: 'isPremiumState',
     default: false
 })
-
-export const homePositionState = atom({
-    key: 'homePositionState',
-    default: { rowIndex: 0, columnIndex: 0 },
-})
-
-export const homeBackupState = atom({
-    key: 'homeBackupState',
-    default: null,
-})
-
-export const contentDetailBakState = atom({
-    key: 'contentDetailBakState',
-    default: {},
-})
-
-// similar to homeBackupState
-export const contentDetailBackupState = atom({
-    key: 'contentDetailBackupState',
-    default: null,
-})
-
-// similar to homePositionState
-export const contentDetailPositionState = atom({
-    key: 'contentDetailPositionState',
-    default: { rowIndex: 0, columnIndex: 0 },
-})
