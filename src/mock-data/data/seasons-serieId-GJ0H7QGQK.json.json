@@ -1,0 +1,86 @@
+{
+    "data": [
+        {
+            "id": "G68VCP8X0",
+            "channel_id": "crunchyroll",
+            "title": "Zom 100: Bucket List of the Dead",
+            "slug_title": "zom-100-bucket-list-of-the-dead",
+            "series_id": "GJ0H7QGQK",
+            "season_display_number": "",
+            "season_sequence_number": 1,
+            "season_number": 1,
+            "is_complete": false,
+            "description": "Akira ve cómo una empresa explotadora le absorbe por completo la vida. Mientras tanto, cuando su ciudad es azotada repentinamente por un apocalipsis zombi, encuentra un nuevo sentido a la vida.",
+            "keywords": [],
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "images": {},
+            "extended_maturity_rating": {
+                "system": "cr-tv",
+                "rating": "16",
+                "level": "M2"
+            },
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "is_mature": false,
+            "mature_blocked": false,
+            "is_subbed": true,
+            "is_dubbed": true,
+            "is_simulcast": false,
+            "seo_title": "",
+            "seo_description": "",
+            "availability_notes": "",
+            "audio_locales": [
+                "ja-JP"
+            ],
+            "subtitle_locales": [
+                "es-419",
+                "es-ES",
+                "en-US",
+                "pt-BR"
+            ],
+            "audio_locale": "ja-JP",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G68VCP8X0",
+                    "original": true,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GYJQC1GW7",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GRNQCJ9MJ",
+                    "original": false,
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G62PCVW7Z",
+                    "original": false,
+                    "variant": ""
+                }
+            ],
+            "identifier": "GJ0H7QGQK|S1",
+            "number_of_episodes": 12
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    },
+    "total": 1
+}

@@ -1,0 +1,660 @@
+{
+    "total": 6,
+    "data": [
+        {
+            "animeIds": [],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA3A6F3ABA",
+                        "name": "MONDO GROSSO",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "mondo-grosso"
+                    }
+                ]
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-04-25T00:00:00Z"
+            },
+            "description": "",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/37f118b2a52804b3340cdf8c13d3125b.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "originalRelease": "2017-04-25T00:00:00Z",
+            "streams_link": "/content/v2/music/MV22070F02/streams",
+            "maturityRatings": {},
+            "slug": "butterfly",
+            "artist": {
+                "id": "MA3A6F3ABA",
+                "name": "MONDO GROSSO",
+                "slug": "mondo-grosso"
+            },
+            "isMature": false,
+            "copyright": "(C)SonyMusic",
+            "hash": "ef8559ae902cc00fa32b69b8ebcf7044",
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "publishDate": "2023-04-27T13:00:00Z",
+            "createdAt": "2023-03-07T07:22:12.658Z",
+            "durationMs": 279000,
+            "genres": [
+                {
+                    "displayValue": "Jazz",
+                    "id": "jazz"
+                }
+            ],
+            "updatedAt": "2024-11-18T19:20:11.243Z",
+            "displayArtistName": "MONDO GROSSO",
+            "title": "BUTTERFLY",
+            "displayArtistNameRequired": false,
+            "id": "MV22070F02",
+            "licensor": "Sony Music Direct (Japan) Inc.",
+            "readyToPublish": true,
+            "type": "musicVideo",
+            "isPublic": true,
+            "sequenceNumber": 1
+        },
+        {
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA3A6F3ABA",
+                        "name": "MONDO GROSSO",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "mondo-grosso"
+                    }
+                ]
+            },
+            "hash": "0c00b86728beaef0f205f557ee26347c",
+            "originalRelease": "2002-10-30T00:00:00Z",
+            "readyToPublish": true,
+            "title": "Everything Needs Love",
+            "updatedAt": "2023-10-27T07:10:31.517Z",
+            "createdAt": "2023-03-07T07:22:03.824Z",
+            "description": "",
+            "isPremiumOnly": true,
+            "licensor": "Sony Music Direct (Japan) Inc.",
+            "artist": {
+                "id": "MA3A6F3ABA",
+                "name": "MONDO GROSSO",
+                "slug": "mondo-grosso"
+            },
+            "displayArtistNameRequired": false,
+            "type": "musicVideo",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-04-25T00:00:00Z"
+            },
+            "copyright": "(C) 2002 Sony Music Labels Inc.",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/bac01f54d43a865e6e26fa948caf1092.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "matureBlocked": false,
+            "slug": "everything-needs-love",
+            "maturityRatings": {},
+            "publishDate": "2023-04-27T13:00:00Z",
+            "animeIds": [],
+            "displayArtistName": "MONDO GROSSO",
+            "isMature": false,
+            "isPublic": true,
+            "durationMs": 294000,
+            "sequenceNumber": 1,
+            "streams_link": "/content/v2/music/MV368FAEDE/streams",
+            "genres": [
+                {
+                    "displayValue": "Jazz",
+                    "id": "jazz"
+                }
+            ],
+            "id": "MV368FAEDE"
+        },
+        {
+            "artist": {
+                "id": "MA3A6F3ABA",
+                "name": "MONDO GROSSO",
+                "slug": "mondo-grosso"
+            },
+            "description": "",
+            "hash": "0d7031c1f2d8a4165aff2bf5b2a9873f",
+            "originalRelease": "2017-06-07T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "readyToPublish": true,
+            "maturityRatings": {},
+            "sequenceNumber": 1,
+            "animeIds": [],
+            "createdAt": "2023-03-07T07:22:00.823Z",
+            "updatedAt": "2024-11-05T18:16:43.952Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-06-07T00:00:00Z"
+            },
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA3A6F3ABA",
+                        "name": "MONDO GROSSO",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "mondo-grosso"
+                    }
+                ]
+            },
+            "displayArtistName": "MONDO GROSSO",
+            "isPublic": true,
+            "licensor": "Sony Music Direct (Japan) Inc.",
+            "title": "DON'T LET GO",
+            "copyright": "(C)SonyMusic",
+            "displayArtistNameRequired": false,
+            "isPremiumOnly": true,
+            "slug": "dont-let-go",
+            "durationMs": 276000,
+            "isMature": false,
+            "type": "musicVideo",
+            "genres": [
+                {
+                    "displayValue": "Jazz",
+                    "id": "jazz"
+                }
+            ],
+            "id": "MV3B1C3E43",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/8939c41387aef2158d7af58763d389c2.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "matureBlocked": false,
+            "streams_link": "/content/v2/music/MV3B1C3E43/streams"
+        },
+        {
+            "originalRelease": "2017-06-07T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "title": "LIFE",
+            "createdAt": "2023-03-07T07:21:55.477Z",
+            "isPremiumOnly": true,
+            "hash": "134ecd42aedb2b91ca3189c77fa6fdac",
+            "id": "MV4C1B0ED5",
+            "matureBlocked": false,
+            "slug": "life",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-06-07T00:00:00Z"
+            },
+            "isMature": false,
+            "licensor": "Sony Music Direct (Japan) Inc.",
+            "maturityRatings": {},
+            "streams_link": "/content/v2/music/MV4C1B0ED5/streams",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/49faea1c6d91cd61c96ec52c9874e044.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "readyToPublish": true,
+            "genres": [
+                {
+                    "displayValue": "Jazz",
+                    "id": "jazz"
+                }
+            ],
+            "artists": {
+                "FeaturedArtist": [
+                    {
+                        "connector": "featuring",
+                        "id": "MA1631A4DC",
+                        "name": "bird",
+                        "roles": [
+                            "FeaturedArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "bird"
+                    }
+                ],
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA3A6F3ABA",
+                        "name": "MONDO GROSSO",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "mondo-grosso"
+                    }
+                ]
+            },
+            "copyright": "(C)SonyMusic",
+            "description": "",
+            "durationMs": 337000,
+            "updatedAt": "2024-11-05T18:16:39.371Z",
+            "animeIds": [],
+            "displayArtistName": "Mondo Grosso feat. bird",
+            "artist": {
+                "id": "MA3A6F3ABA",
+                "name": "MONDO GROSSO",
+                "slug": "mondo-grosso"
+            },
+            "sequenceNumber": 1,
+            "type": "musicVideo",
+            "displayArtistNameRequired": false
+        },
+        {
+            "durationMs": 285000,
+            "hash": "72ddb2928596a0b9fdf02106d806cb81",
+            "type": "musicVideo",
+            "streams_link": "/content/v2/music/MV5FEC0BEB/streams",
+            "genres": [
+                {
+                    "displayValue": "Jazz",
+                    "id": "jazz"
+                }
+            ],
+            "licensor": "Sony Music Direct (Japan) Inc.",
+            "matureBlocked": false,
+            "title": "Hikari",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-04-25T00:00:00Z"
+            },
+            "copyright": "(C) 2003 Sony Music Labels Inc.",
+            "id": "MV5FEC0BEB",
+            "slug": "hikari",
+            "displayArtistNameRequired": false,
+            "originalRelease": "2003-07-16T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "artist": {
+                "id": "MA3A6F3ABA",
+                "name": "MONDO GROSSO",
+                "slug": "mondo-grosso"
+            },
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/3e4ea81697998c3be1058748e7c16c3e.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "updatedAt": "2023-10-27T07:10:31.519Z",
+            "displayArtistName": "MONDO GROSSO",
+            "sequenceNumber": 1,
+            "readyToPublish": true,
+            "animeIds": [],
+            "createdAt": "2023-03-07T07:22:13.604Z",
+            "description": "",
+            "isPremiumOnly": true,
+            "isPublic": true,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA3A6F3ABA",
+                        "name": "MONDO GROSSO",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "mondo-grosso"
+                    }
+                ]
+            },
+            "isMature": false,
+            "maturityRatings": {}
+        },
+        {
+            "isMature": false,
+            "maturityRatings": {},
+            "description": "",
+            "isPremiumOnly": true,
+            "animeIds": [],
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA3A6F3ABA",
+                        "name": "MONDO GROSSO",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 1,
+                        "slug": "mondo-grosso"
+                    }
+                ]
+            },
+            "displayArtistName": "MONDO GROSSO",
+            "title": "BLZ",
+            "updatedAt": "2023-10-27T07:10:31.289Z",
+            "displayArtistNameRequired": false,
+            "hash": "aef1d291d2b9845dc8c418dc1b5018cf",
+            "id": "MVAF86FF64",
+            "type": "musicVideo",
+            "createdAt": "2023-03-07T07:22:00.859Z",
+            "genres": [
+                {
+                    "displayValue": "Jazz",
+                    "id": "jazz"
+                }
+            ],
+            "originalRelease": "2002-05-02T00:00:00Z",
+            "publishDate": "2023-04-27T13:00:00Z",
+            "slug": "blz",
+            "artist": {
+                "id": "MA3A6F3ABA",
+                "name": "MONDO GROSSO",
+                "slug": "mondo-grosso"
+            },
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2017-04-25T00:00:00Z"
+            },
+            "copyright": "(C) 2002 Sony Music Labels Inc.",
+            "readyToPublish": true,
+            "durationMs": 241000,
+            "licensor": "Sony Music Direct (Japan) Inc.",
+            "images": {
+                "thumbnail": [
+                    {
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/7ef572e5bdf5c7d5c312532007469e18.jpeg",
+                        "type": "thumbnail",
+                        "width": 1920
+                    }
+                ]
+            },
+            "isPublic": true,
+            "matureBlocked": false,
+            "sequenceNumber": 1,
+            "streams_link": "/content/v2/music/MVAF86FF64/streams"
+        }
+    ],
+    "meta": {}
+}
