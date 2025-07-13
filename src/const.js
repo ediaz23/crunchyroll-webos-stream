@@ -14,10 +14,11 @@ export const _LOCALHOST_SERVER_ = 'http://127.0.0.1:8052'
 // posible values series
 /** @type {String} */
 export const DEV_CONTENT_TYPE = null
-//export const DEV_CONTENT_TYPE = 'episode'
 //export const DEV_CONTENT_TYPE = 'series'
+//export const DEV_CONTENT_TYPE = 'episode'
 //export const DEV_CONTENT_TYPE = 'musicArtist'
 //export const DEV_CONTENT_TYPE = 'musicConcert'
+//export const DEV_CONTENT_TYPE = 'musicVideo'
 
 
 export const ERROR_CODES = {

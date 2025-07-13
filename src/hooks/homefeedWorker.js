@@ -366,8 +366,8 @@ const processItemFeedNew = async (feedItem, profile, type) => {
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @return {Promise<FeedItemType>}
  */
-export const processItemFeed = async (carousel, profile, type) => {
-    const fn = type === 'music' ? processItemFeedLegacy : processItemFeedNew
+export const processItemFeed = async (carousel, profile, type, homeFeedType) => {
+    const fn = homeFeedType === 'legacy' ? processItemFeedLegacy : processItemFeedNew
     return fn(carousel, profile, type)
 }
 

@@ -79,6 +79,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  * @property {'home'|'music'} feedType
  * @property {{id: String, items: Array}} fakeItem
  * @property {Function} setContent
+ * @property {'legacy'|'new'} homeFeedType
  *
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
@@ -90,7 +91,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  * @param {String} obj.className
  */
 const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
-    const { feedType, feedId, fakeItem, setContent } = rowInfo  // has to separte to avoid recall
+    const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
     const [backState, viewBackupRef] = useViewBackup(`homeFeedRow-${feedType}-${feedId}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
@@ -171,13 +172,14 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
     useEffect(() => {
         if (feedData && DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
-                series: 'GJ0H7QGQK',
-                episode: 'GZ7UV13VE',
-                musicArtist: 'MA899F289',
-                musicConcert: 'MC413F8154',
+                series: ['GJ0H7QGQK', 'GRDV0019R'],
+                episode: ['GZ7UV13VE'],
+                musicArtist: ['MA899F289'],
+                musicConcert: ['MC413F8154'],
+                musicVideo: ['MV22070F02']
             }
             const content = feedData.items.find(
-                val => val.type === DEV_CONTENT_TYPE && val.id === testContent[DEV_CONTENT_TYPE]
+                val => val.type === DEV_CONTENT_TYPE && testContent[DEV_CONTENT_TYPE].includes(val.id)
             )
             if (content) {
                 setContentNavigate({ content })
@@ -194,7 +196,7 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                 setFeedData(feedItemCache)
             } else {
                 try {
-                    const newFeedItem = await processItemFeed(feedRow, profile, feedType)
+                    const newFeedItem = await processItemFeed(feedRow, profile, feedType, homeFeedType)
                     if (newFeedItem.items.length) {
                         setFeedData(newFeedItem)
                         if (newFeedItem.resource_type !== 'dynamic_collection') {
@@ -209,7 +211,7 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
             }
         }
         loadData()
-    }, [profile, feedRow, feedType, feedId, fakeItem])
+    }, [profile, feedRow, feedType, homeFeedType, feedId, fakeItem])
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>
@@ -256,6 +258,7 @@ HomeFeedRow.propTypes = {
         feedType: PropTypes.oneOf(['home', 'music']),
         fakeItem: PropTypes.object.isRequired,
         setContent: PropTypes.func.isRequired,
+        homeFeedType: PropTypes.oneOf(['legacy', 'new']).isRequired,
     })
 }
 

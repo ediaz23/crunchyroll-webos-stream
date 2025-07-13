@@ -75,6 +75,7 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
                             feedType,
                             fakeItem,
                             setContent,
+                            homeFeedType: homeFeed.type,
                         }
                     }}
                     direction='vertical'

@@ -114,7 +114,7 @@ export const getHistory = async (profile, params) => {
 /**
  * Get index data
  * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise<{data: {total: Number, data: Array}, type:'legacy'|'new'}>}
+ * @return {Promise<{data: {total: Number, data: Array}, type: 'legacy'|'new'}>}
  */
 export const getHomeFeed = async (profile) => {
     let out = null
@@ -133,7 +133,7 @@ export const getHomeFeed = async (profile) => {
 
 /**
  * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise<{data: import('crunchyroll-js-api').Types.HomeItem, type:'legacy'|'new'}>}
+ * @return {Promise<{data: import('crunchyroll-js-api').Types.HomeItem, type: 'legacy'|'new'}>}
  */
 export const getNewHomeFeed = async (profile) => {
     /** @type {import('crunchyroll-js-api').Types.HomeItem} */
@@ -164,7 +164,7 @@ export const getPersonalRecomendation = async (profile, params) => {
     let out = null
     try {
         if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
-            out = await getMockData('personalRecomendation', [getPersonalRecomendation, profile])
+            out = await getMockData('personalRecomendation', params, [getPersonalRecomendation, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getPersonalRecomendation({ account, ...params })
@@ -246,7 +246,7 @@ export const getNext = async (profile, params) => {
     } catch (error) {
         await translateError(error)
     }
-    if (out) {
+    if (out?.data) {
         out.data = out.data.map(val => {
             const { panel } = val
             const newVal = { ...panel, ...val }

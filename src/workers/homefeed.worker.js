@@ -48,8 +48,9 @@ function processNewHomefeed(data, parent) {
 
 /**
  * @param {import('../hooks/homefeedWorker').HomefeedItem} data
+ * @param {String} type
  */
-function mergeNewHomefeed(data) {
+function mergeNewHomefeed(data, type) {
     /** @type {Object.<string, Array<import('../hooks/homefeedWorker').HomefeedItem>>} */
     const cards = {}
     /** @type {Object.<string, import('../hooks/homefeedWorker').HomefeedItem>} */
@@ -85,6 +86,7 @@ function mergeNewHomefeed(data) {
         return true
     })
     data.items.forEach((item, index) => { item.index = index })
+    data.type = type
     return data
 }
 
@@ -92,9 +94,10 @@ function mergeNewHomefeed(data) {
  * Process the feed
  * @param {Object} obj
  * @param {Array<{resource_type: String}>} obj.data
+ * @param {String} type
  * @return {Promise<Array<Object>>}
  */
-function processLegacyHomefeed({ data }) {
+function processLegacyHomefeed({ data }, type) {
     const mergedFeed = []
     const panelObject = { resource_type: 'panel', panels: [] }
     const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
@@ -176,7 +179,7 @@ function processLegacyHomefeed({ data }) {
         }
     }
     mergedFeed.forEach((item, index) => { item.index = index })
-    return { id: Date.now(), items: mergedFeed }
+    return { id: Date.now(), items: mergedFeed, type }
 }
 
 self.onmessage = ({ data }) => {
@@ -185,9 +188,9 @@ self.onmessage = ({ data }) => {
     try {
         let result
         if (type === 'legacy') {
-            result = processLegacyHomefeed(payload)
+            result = processLegacyHomefeed(payload, type)
         } else {
-            result = mergeNewHomefeed(processNewHomefeed(payload))
+            result = mergeNewHomefeed(processNewHomefeed(payload), type)
         }
         self.postMessage({ result, success: true })
     } catch (e) {
