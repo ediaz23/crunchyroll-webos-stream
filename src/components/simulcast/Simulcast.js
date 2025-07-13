@@ -165,6 +165,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
                     <Row className={css.scrollerContainer}>
                         <Cell grow>
                             <ContentGridItems
+                                type='simulcast'
                                 contentList={contentList}
                                 load={onLoad}
                                 onSelect={setLocalContent}

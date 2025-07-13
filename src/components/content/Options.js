@@ -23,8 +23,8 @@ import { useViewBackup } from '../../hooks/viewBackup'
  * @param {{moreEpisodes: Function, changeAudio: Function}} obj.setFunctions
  */
 const Options = ({ profile, contentState, setFunctions, ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup('content-options')
     const { content, setContent: setContentSuper } = contentState
+    const [backState, viewBackupRef] = useViewBackup(`content-options-${content.id}`)
     /** @type {[String, Function]} */
     const [optionIndex, setOptionIndex] = useState(backState?.optionIndex)
     /** @type {[Number, Function]} */

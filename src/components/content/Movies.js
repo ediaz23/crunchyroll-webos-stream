@@ -21,8 +21,8 @@ import { getIsPremium } from '../../utils'
  * @param {Boolean} obj.isPremium account is premium?
  */
 const Movies = ({ profile, contentState, isPremium, ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup('content-movies')
     const { content: movieListing, setContent: setMovieListing } = contentState
+    const [backState, viewBackupRef] = useViewBackup(`content-movies-${movieListing.id}`)
     /** @type {[Array<Object>, Function]} */
     const [listings, setListings] = useState(null)
     /** @type {[Number, Function]} */

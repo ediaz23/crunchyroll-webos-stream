@@ -15,6 +15,7 @@ import { useViewBackup } from '../../hooks/viewBackup'
 /**
  * Show grid of items
  * @param {Object} obj
+ * @param {String} obj.type
  * @param {Array<Object>} obj.contentList
  * @param {Function} obj.onSelect
  * @param {Function} [obj.load]
@@ -23,8 +24,8 @@ import { useViewBackup } from '../../hooks/viewBackup'
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Function} [obj.onLeave]
  */
-const ContentGridItems = ({ contentList, onSelect, load, autoScroll = true, onFocus, mode = 'tall', ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup(`contentGridItems`)
+const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true, onFocus, mode = 'tall', ...rest }) => {
+    const [backState, viewBackupRef] = useViewBackup(`contentGridItems-${type}`)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
@@ -120,6 +121,7 @@ const ContentGridItems = ({ contentList, onSelect, load, autoScroll = true, onFo
 }
 
 ContentGridItems.propTypes = {
+    type: PropTypes.string.isRequired,
     onSelect: PropTypes.func.isRequired,
     contentList: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.bool])),

@@ -92,7 +92,8 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  */
 const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
     const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
-    const [backState, viewBackupRef] = useViewBackup(`homeFeedRow-${feedType}-${feedId}`)
+    const [backState, viewBackupRef] = useViewBackup(`homeFeedRow-${feedId}-${feedRow.id}`)
+    const setContentNavigate = useSetContentNavigate(`homeFeedRow-${feedId}-${feedRow.id}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */
@@ -120,7 +121,6 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
         }
     }, [feedData, setContent, feedRow])
 
-    const setContentNavigate = useSetContentNavigate()
     /** @type {Function} */
     const setLocalContent = useCallback((ev) => {
         /** @type {HTMLElement} */

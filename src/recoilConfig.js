@@ -24,11 +24,6 @@ export const pathState = atom({
     default: '/init'
 })
 
-export const viewBackupState = atom({
-    key: 'viewBackupState',
-    default: {}
-})
-
 export const initScreenState = atom({
     key: 'initScreenState',
     default: '/init'
@@ -73,4 +68,9 @@ export const categoriesState = atom({
 export const isPremiumState = atom({
     key: 'isPremiumState',
     default: false
+})
+
+export const viewBackupState = atom({
+    key: 'viewBackupState',
+    default: {}
 })

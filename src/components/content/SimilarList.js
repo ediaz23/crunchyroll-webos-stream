@@ -33,7 +33,7 @@ const SimilarList = ({ profile, contentState, onLoadData }) => {
             profile={profile}
             loadData={loadSimilar}
             onSelect={onSelect}
-            type='similar'
+            type={`similar-${content.id}`}
             noPoster
         />
     )

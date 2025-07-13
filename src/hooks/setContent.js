@@ -1,22 +1,27 @@
 
-import { useCallback, useEffect, useRef, startTransition } from 'react'
+import { useCallback, startTransition } from 'react'
 import { useSetRecoilState } from 'recoil'
 
 import { pathState, playContentState, selectedContentState, viewBackupState } from '../recoilConfig'
 
 import back from '../back'
 import { isPlayable } from '../utils'
+import { viewMountInfo } from './viewBackup'
 
 /**
  * @callback SetContent
  * @param {Object} obj
  * @param {Object} obj.content
- * @param {Boolean} [obj.saveCurrentState]
+ * @param {Boolean} [obj.saveHistory]
  * @param {Boolean} [obj.restoreCurrentContent]
  */
 
-/** @returns {SetContent} */
-export function useSetContentNavigate() {
+/**
+ * @param {String} viewKey
+ * @returns {SetContent}
+ */
+export function useSetContentNavigate(viewKey) {
+    if (viewKey == null) { new Error(`ViewBackup viewKey require`) }
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
@@ -25,27 +30,19 @@ export function useSetContentNavigate() {
     const setSelectedContent = useSetRecoilState(selectedContentState)
     /** @type {Function} */
     const setViewBackup = useSetRecoilState(viewBackupState)
-    const backRef = useRef({})
-    const doBackRef = useRef(false)
-
-    useEffect(() => {
-        return () => {
-            if (doBackRef.current) {  // only on component can save all state
-                setViewBackup(prev => {
-                    backRef.current = prev
-                    return {}
-                })
-            }
-        }
-    }, [setViewBackup])
 
     return useCallback(
         /**
          * @type {SetContent}
          */
-        ({ content, restoreCurrentContent = false, saveCurrentState = true, saveHistory = true }) => {
+        ({ content, restoreCurrentContent = false, saveHistory = true }) => {
             let newPath, setContent
-            doBackRef.current = saveCurrentState  // active save state
+            if (viewMountInfo.viewKeyTrigger != null) {
+                /* set which component init unmounting process */
+                const errMsg = `viewKeyTrigger ${viewMountInfo.viewKeyTrigger}`
+                throw new Error(`ViewBackup viewKeyTrigger not clean. viewKey ${viewKey} ${errMsg}`)
+            }
+            viewMountInfo.viewKeyTrigger = viewKey
             if (isPlayable(content.type)) {
                 if (content.type === 'movie' && content.panel) {
                     content = { ...content, ...content.panel, panel: null }
@@ -72,19 +69,29 @@ export function useSetContentNavigate() {
             })
 
             if (saveHistory) {
-                back.pushHistory({
-                    doBack: () => {
-                        setPath(backPath)
-                        startTransition(() => {
-                            if (restoreCurrentContent) {
-                                setContent(backContent)
-                            }
-                            setViewBackup(backRef.current)
-                        })
+                new Promise(res => {
+                    /* this promise wait to know oldViewBackup to restore it later */
+                    if (viewMountInfo.saveViewBackup) {
+                        throw new Error(`ViewBackup saveViewBackup not clean. viewKey ${viewKey}`)
                     }
+                    viewMountInfo.saveViewBackup = res
+                }).then(oldViewBackup => {
+                    /* wish set this code outside promise but i need to know oldViewBackup to restore it later */
+                    back.pushHistory({
+                        doBack: () => {
+                            setPath(backPath)
+                            startTransition(() => {
+                                setViewBackup(oldViewBackup)
+                                if (restoreCurrentContent) {
+                                    setContent(backContent)
+                                }
+                                viewMountInfo.cleanStack()
+                            })
+                        }
+                    })
                 })
             }
-        }, [setPath, setPlayContent, setSelectedContent, setViewBackup]
+        }, [viewKey, setViewBackup, setPath, setPlayContent, setSelectedContent]
     )
 }
 
@@ -96,7 +103,8 @@ export function useResetHomeState() {
     const setViewBackup = useSetRecoilState(viewBackupState)
 
     return useCallback(() => {
-        setSelectedContent(null)
         setViewBackup({})
+        setSelectedContent(null)
+        viewMountInfo.cleanStack()
     }, [setSelectedContent, setViewBackup])
 }

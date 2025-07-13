@@ -48,7 +48,8 @@ const ActivityViews = ({ index, children }) => children[index]
  * @param {Object} obj.content
  */
 const ContentDetail = ({ profile, content, ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup('contentDetail')
+    const [backState, viewBackupRef] = useViewBackup(`contentDetail-${content.id}`)
+    const setContentNavigate = useSetContentNavigate(`contentDetail-${content.id}`)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
@@ -57,7 +58,6 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {[Number, Function]} */
     const [currentIndex, setCurrentIndex] = useState(backState?.currentIndex || 0)
-    const setContentNavigate = useSetContentNavigate()
     const options = useMemo(() => ({
         option: 0,
         moreEpisodes: 1,

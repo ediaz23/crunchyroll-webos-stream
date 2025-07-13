@@ -26,7 +26,8 @@ import css from './Artist.module.less'
  * @param {Object} obj.artist
  */
 const Artist = ({ profile, artist, ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup('artist')
+    const [backState, viewBackupRef] = useViewBackup(`artist-${artist.id}`)
+    const setContentNavigate = useSetContentNavigate(`artist-${artist.id}`)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -44,8 +45,6 @@ const Artist = ({ profile, artist, ...rest }) => {
     const cacheKey = useMemo(() => (
         options && optionIndex != null ? `artist/${options[optionIndex].id}` : null
     ), [options, optionIndex])
-
-    const setContentNavigate = useSetContentNavigate()
 
     /** @type {{video: Number, concert: Number}} */
     const optionIndexes = useMemo(() => {

@@ -43,7 +43,7 @@ export const useContentList = (type) => {
     const [backState, viewBackupRef] = useViewBackup(type)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    const setContentNavigate = useSetContentNavigate()
+    const setContentNavigate = useSetContentNavigate(type)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState(null)
     /** @type {[Boolean, Function]}  */

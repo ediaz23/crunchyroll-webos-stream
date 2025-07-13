@@ -24,7 +24,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
         backState, viewBackupRef, setContentNavigate,
-    } = useContentList('music_browse')
+    } = useContentList(`musicBrowse-${musicFeed.id}`)
 
     /** @type {[String, Function]} */
     const [query, setQuery] = useState(backState?.query || '')
@@ -122,6 +122,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
                 }
                 {query !== '' &&
                     <ContentGridItems
+                        type='music'
                         contentList={contentList}
                         load={onLoad}
                         onSelect={setLocalContent}

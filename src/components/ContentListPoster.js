@@ -73,6 +73,7 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
                 </Cell>
                 <Cell grow>
                     <ContentGridItems
+                        type={type}
                         contentList={contentList}
                         load={onLoad}
                         onSelect={onSelect || setContentNavagate}

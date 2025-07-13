@@ -168,6 +168,7 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
                         }
                         <Cell grow>
                             <ContentGridItems
+                                type={contentKey}
                                 contentList={contentList}
                                 load={onLoad}
                                 onSelect={setLocalContent}

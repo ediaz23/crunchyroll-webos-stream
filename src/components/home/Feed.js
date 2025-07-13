@@ -18,7 +18,7 @@ import { useViewBackup } from '../../hooks/viewBackup'
  * @param {'home'|'music'} obj.feedType
  */
 const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
-    const [backState, viewBackupRef] = useViewBackup(`homeFeed-${feedType}-${homeFeed.id}`)
+    const [backState, viewBackupRef] = useViewBackup(`homeFeed-${homeFeed.id}`)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
