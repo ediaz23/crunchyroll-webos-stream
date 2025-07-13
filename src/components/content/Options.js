@@ -68,13 +68,13 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
             <Row style={{ width: '100%' }}>
                 <Cell size='49%' style={{ overflow: 'hidden' }}>
                     <Column style={{ height: '100%', width: '100%' }}>
-                        <Cell size='32%'>
+                        <Cell size='33%' style={{ overflow: 'hidden' }}>
                             <ContentHeader content={content} />
-                            <Heading size='small' spacing='small' className={css.firstData}>
+                            <Heading size='small' spacing='small' style={{padding: `0.5rem 0`}}>
                                 {subtitle}
                             </Heading>
                         </Cell>
-                        <Cell size='15%'>
+                        <Cell size='17%'>
                             <div className={css.scrollerContainer}>
                                 <Scroller
                                     direction='vertical'
@@ -97,7 +97,7 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                                 )}
                             </BodyText>
                         </Cell>
-                        <Cell size='40%'>
+                        <Cell size='37%'>
                             <OptionsList
                                 profile={profile}
                                 music={music}
@@ -138,8 +138,8 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                         />
                     }
                 </Cell>
-            </Row>
-        </Row>
+            </Row >
+        </Row >
     )
 }
 
