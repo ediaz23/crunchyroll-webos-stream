@@ -17,7 +17,7 @@ export const getFeed = async (profile) => {
             out = await getMockData('musicFeed')
         } else {
             const account = await getContentParam(profile)
-            out = await api.music.getFeed({ account })
+            out = await api.music.getFeed({ account, fnConfig: { cache: false } })
         }
     } catch (error) {
         await translateError(error)

@@ -123,7 +123,7 @@ export const getHomeFeed = async (profile) => {
             out = await getMockData('homefeed')
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getHomeFeed({ account })
+            out = await api.discover.getHomeFeed({ account, fnConfig: { cache: false } })
         }
     } catch (error) {
         await translateError(error)
@@ -143,7 +143,7 @@ export const getNewHomeFeed = async (profile) => {
             out = await getMockData('homefeedNew2')
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getHome({ account })
+            out = await api.discover.getHome({ account, fnConfig: { cache: false } })
         }
     } catch (error) {
         await translateError(error)
