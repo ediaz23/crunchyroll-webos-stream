@@ -216,9 +216,10 @@ const findSubtitle = async ({ langConfig, subtitles }) => {
  * @param {import('./AudioList').Audio} obj.audio
  * @param {Function} obj.getLang
  * @param {Object} obj.content
+ * @param {import('react').MutableRefObject<string>} obj.lastTokenRef
  * @returns {Promise<Stream>}
  */
-const findStream = async ({ profile, langConfig, audios, audio, getLang, content }) => {
+const findStream = async ({ profile, langConfig, audios, audio, getLang, content, lastTokenRef }) => {
     /** @type {Stream} */
     let out = null, data = {}, urls = []
     if (_PLAY_TEST_) {  // test stream
@@ -238,11 +239,16 @@ const findStream = async ({ profile, langConfig, audios, audio, getLang, content
 
         }
     } else {
+        if (lastTokenRef.current) {
+            await api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastTokenRef.current })
+            lastTokenRef.current = null
+        }
         if (['episode', 'movie'].includes(audio.type)) {
             data = await api.drm.getStreams(profile, { episodeId: audio.guid })
         } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
             data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
         }
+        lastTokenRef.current = data.token
         if (data.hardSubs) {
             urls = Object.keys(data.hardSubs).map(locale => {
                 return { locale, url: data.hardSubs[locale].url }
@@ -683,6 +689,7 @@ const Player = ({ ...rest }) => {
     /** @type {{current: {index: int, url: String}} */
     const previewRef = useRef(null)
     const findPreviews = usePreviewWorker(!!stream.urls)
+    const lastTokenRef = useRef(null)
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -883,8 +890,6 @@ const Player = ({ ...rest }) => {
     }, [profile, audios, setAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
-        /** @type {Stream} */
-        let newStream = null
         if (audios.includes(audio)) {
             findStream({
                 profile,
@@ -892,24 +897,18 @@ const Player = ({ ...rest }) => {
                 audios,
                 audio,
                 getLang,
-                content
-            }).then(resStream => {
-                newStream = resStream
-                setStream(lastStream => {
-                    if (lastStream?.token) {
-                        Promise.resolve().then(async () => (
-                            await api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
-                        ))
-                    }
-                    return resStream
-                })
-            }).catch(handleCrunchyError)
+                content,
+                lastTokenRef
+            }).then(setStream).catch(handleCrunchyError)
         }
         return () => {
-            if (newStream?.token) {
-                Promise.resolve().then(async () => (
-                    await api.drm.deleteToken(profile, { episodeId: audio.guid, token: newStream.token })
-                ))
+            if (lastTokenRef.current) {
+                api.drm.deleteToken(profile, {
+                    episodeId: audio.guid,
+                    token: lastTokenRef.current
+                }).finally(() => {
+                    lastTokenRef.current = null
+                })
             }
             setStream(emptyStream)
         }
