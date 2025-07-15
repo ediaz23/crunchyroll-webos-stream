@@ -35,6 +35,7 @@ export const getPlayHeads = async (profile, params) => {
  * @param {Object} params
  * @param {String} params.contentId
  * @param {Number} params.playhead
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} params.fnConfig
  * @return {Promise}
  */
 export const savePlayhead = async (profile, params) => {

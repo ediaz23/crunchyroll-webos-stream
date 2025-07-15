@@ -95,6 +95,7 @@ const updatePlayHead = async ({ profile, content, playerCompRef }) => {
         return api.content.savePlayhead(profile, {
             contentId: content.id,
             playhead: Math.floor(state.currentTime),
+            fnConfig: { priority: true },
         })
     }
 }
@@ -895,8 +896,10 @@ const Player = ({ ...rest }) => {
             }).then(resStream => {
                 newStream = resStream
                 setStream(lastStream => {
-                    if (lastStream.token) {
-                        api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
+                    if (lastStream?.token) {
+                        Promise.resolve().then(async () => (
+                            await api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
+                        ))
                     }
                     return resStream
                 })
@@ -904,7 +907,9 @@ const Player = ({ ...rest }) => {
         }
         return () => {
             if (newStream?.token) {
-                api.drm.deleteToken(profile, { episodeId: audio.guid, token: newStream?.token })
+                Promise.resolve().then(async () => (
+                    await api.drm.deleteToken(profile, { episodeId: audio.guid, token: newStream.token })
+                ))
             }
             setStream(emptyStream)
         }
@@ -1006,7 +1011,6 @@ const Player = ({ ...rest }) => {
                     episodeId: audio.guid,
                     token: stream.token,
                     playhead: state.currentTime,
-                    fnConfig: { cache: false },
                 }).then(setSession).catch(e => {  // if fail retry in 2 second
                     logger.error('Error keep alive stream')
                     logger.error(e)

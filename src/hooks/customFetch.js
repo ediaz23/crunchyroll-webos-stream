@@ -2,7 +2,7 @@
 
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
-import utils from '../utils'
+import utils, { ResourcePool } from '../utils'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
 
@@ -12,8 +12,9 @@ const { webOS } = window
 export const worker = new Worker(new URL('../workers/cache.worker.js', import.meta.url), { type: 'module' })
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const pendingTasks = new Map()
-const CONCURRENT_REQ_LIMIT = 10
-let currentReqIndex = CONCURRENT_REQ_LIMIT
+// TODO: maybe decrease priority slots, maybe decide base on TV spec
+const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5])  //  6 normal slot 2 priority
+const requestSlotsPriority = new ResourcePool([6, 7])
 
 
 function setAdaptiveCacheSize() {
@@ -52,6 +53,14 @@ if (!worker.active) { setAdaptiveCacheSize() }
  * @property {Boolean} compress
  * @property {Number} [load]
  * @property {Number} [total]
+ *
+ * @typedef RequestSetup
+ * @type {Object}
+ * @property {String} slotId
+ * @property {RequestInit} config
+ * @property {Function} onSuccess
+ * @property {Function} onFailure
+ * @property {Function} [onProgress]
  */
 
 /**
@@ -244,10 +253,7 @@ const makeFetchProgress = (onProgress) => {
 
 /**
  * make face progress for a services
- * @param {Object} obj
- * @param {RequestInit} obj.config
- * @param {Function} obj.onSuccess
- * @param {Function} [obj.onProgress]
+ * @param {RequestSetup} obj
  * @returns {(res, sub) => Promise}
  */
 const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
@@ -287,17 +293,12 @@ const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
 
 /**
  * Does request throught service or fetch
- * @param {Object} obj
- * @param {RequestInit} obj.config
+ * @param {RequestSetup} obj
  * @param {Object} obj.parameters
- * @param {Function} obj.onSuccess
- * @param {Function} obj.onFailure
- * @param {Function} [obj.onProgress]
  */
-const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress }) => {
+const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress, slotId }) => {
     if (utils.isTv()) {
-        const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
-        const method = `forwardRequest${currentReq}`
+        const method = `forwardRequest${slotId}`
         if (onProgress) {
             const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
             const sub = webOS.service.request(serviceURL, {
@@ -331,66 +332,109 @@ const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress }) 
 }
 
 /**
+ * @param {RequestSetup} obj
+ * @returns {Promise}
+ */
+const getSlot = async (obj, priority) => {
+    const { onSuccess: superOnSuccess, onFailure: superOnFailure } = obj
+    /** @type {ResourcePool} */
+    const pool = priority ? requestSlotsPriority : requestSlots
+    obj.slotId = await pool.acquire()
+    logger.debug(`slot acquire ${obj.slotId} priority ${priority} free ${pool.freeSlots.size}`)
+    obj.onSuccess = (data) => {
+        logger.debug(`slot release ${obj.slotId} priority ${priority}`)
+        pool.release(obj.slotId)
+        if (superOnSuccess) {
+            superOnSuccess(data)
+        }
+    }
+    obj.onFailure = (data) => {
+        logger.debug(`slot release ${obj.slotId} priority ${priority}`)
+        pool.release(obj.slotId)
+        if (superOnFailure) {
+            superOnFailure(data)
+        }
+    }
+}
+
+/**
+ * @param {RequestSetup} obj
+ * @param {Boolean} cache
+ * @returns {Promise}
+ */
+const getCacheEntry = async (obj, cache) => {
+    const isGetMethod = !obj.config.method || obj.config.method === 'get'
+    /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
+    const cacheProm = isGetMethod && cache
+        ? getCache(obj.config.url)
+        : Promise.resolve(null)
+    const entry = await cacheProm
+    let response = null
+
+    if (entry) {
+        if (entry.etag || entry.lastModified) {
+            obj.config.headers = obj.config.headers || {}
+            if (entry.etag) {
+                obj.config.headers['If-None-Match'] = entry.etag
+            }
+            if (entry.lastModified) {
+                obj.config.headers['If-Modified-Since'] = entry.lastModified
+            }
+        } else {
+            response = entry.response
+        }
+    }
+    if (isGetMethod && cache) {
+        const { onSuccess: superOnSuccess } = obj
+        /** @param {ResponseProxy} data */
+        const checkSaveCache = (data) => {
+            if (data) {
+                if (data.status === 200) {
+                    saveCache(obj.config.url, data).catch(obj.onFailure)
+                }
+                if (entry && data.status === 304) {
+                    data = entry.response
+                }
+            }
+            superOnSuccess(data)
+        }
+        obj.onSuccess = checkSaveCache
+    }
+
+    return response
+}
+
+/**
  * @typedef MakeResquestConfig
  * @type {Object}
  * @property {Boolean} [sync] turn on sync mode
  * @property {Boolean} [cache] use cache
  *
  * Does request throught service or fetch
- * @param {Object} obj
- * @param {RequestInit} obj.config
- * @param {Function} obj.onSuccess
- * @param {Function} obj.onFailure
- * @param {Function} [obj.onProgress]
+ * @param {RequestSetup} obj
  * @param {MakeResquestConfig} [fnConfig]
  */
 export const makeRequest = (obj, fnConfig = {}) => {
     /** @type {MakeResquestConfig} */
-    const { sync = false, cache = true } = fnConfig
+    const { cache = true, sync = false, priority = false } = fnConfig
     obj.config.id = uuidv4()
     if (sync) {
         obj.parameters = { d: utils.encodeRequest(obj.config) }
-        _makeRequest(obj)
+        getSlot(obj, priority).then(() => _makeRequest(obj))
     } else {
-        const isGetMethod = !obj.config.method || obj.config.method === 'get'
-        /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
-        const cacheProm = isGetMethod && cache
-            ? getCache(obj.config.url)
-            : Promise.resolve(null)
-        cacheProm.then(async entry => {
-            if (entry) {
-                if (entry.etag || entry.lastModified) {
-                    obj.config.headers = obj.config.headers || {}
-                    if (entry.etag) {
-                        obj.config.headers['If-None-Match'] = entry.etag
-                    }
-                    if (entry.lastModified) {
-                        obj.config.headers['If-Modified-Since'] = entry.lastModified
-                    }
-                } else {
-                    return obj.onSuccess(entry.response)
-                }
-            }
-            const superOnSuccess = obj.onSuccess
-            /** @param {ResponseProxy} data */
-            const checkSaveCache = (data) => {
-                if (data) {
-                    if (isGetMethod && data.status === 200) {
-                        saveCache(obj.config.url, data).catch(obj.onFailure)
-                    }
-                    if (entry && data.status === 304) {
-                        data = entry.response
-                    }
-                }
-                superOnSuccess(data)
-            }
-            obj.onSuccess = checkSaveCache
-            if (obj.config.body instanceof FormData) {
-                obj.parameters = { d: utils.encodeRequest(obj.config) }
+        Promise.resolve().then(async () => {
+            const response = await getCacheEntry(obj, cache)
+            if (response) {
+                obj.onSuccess(response)
             } else {
-                obj.parameters = { d: await utils.encodeRequestAsync(obj.config) }
+                if (obj.config.body instanceof FormData) {
+                    obj.parameters = { d: utils.encodeRequest(obj.config) }
+                } else {
+                    obj.parameters = { d: await utils.encodeRequestAsync(obj.config) }
+                }
+                await getSlot(obj, priority)
+                _makeRequest(obj)
             }
-            _makeRequest(obj)
         })
     }
 }
@@ -401,6 +445,7 @@ export const makeRequest = (obj, fnConfig = {}) => {
  * @property {Boolean} [direct] turn on return response as raw content
  * @property {Boolean} [cache] use cache
  * @property {Boolean} [sync] turn on sync mode
+ * @property {Boolean} [priority] user priority slots
  *
  * Function to bypass cors issues
  * @param {String} url
@@ -411,7 +456,7 @@ export const makeRequest = (obj, fnConfig = {}) => {
 export const customFetch = async (url, options = {}, fnConfig = {}) => {
     let res, rej
     /** @type {FetchConfig} */
-    const { direct = false, cache = true, sync = false } = fnConfig
+    const { direct = false, cache = true, sync = false, priority = false } = fnConfig
     const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
     const configProm = setUpRequest(url, options, { sync })
     const config = sync ? configProm : await configProm
@@ -453,7 +498,7 @@ export const customFetch = async (url, options = {}, fnConfig = {}) => {
             rej(error)
         }
     }
-    makeRequest({ config, onFailure, onSuccess }, { sync, cache })
+    makeRequest({ config, onFailure, onSuccess }, { sync, cache, priority })
     return prom
 }
 
