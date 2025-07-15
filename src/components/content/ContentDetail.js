@@ -10,29 +10,27 @@ import Options from './Options'
 import Seasons from './Seasons'
 import Movies from './Movies'
 import LangSelector from './LangSelector'
-import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 
 import { isPremiumState } from '../../recoilConfig'
+import useGetImagePerResolution from '../../hooks/getImagePerResolution'
+import { useNavigateContent } from '../../hooks/navigate'
 import css from './ContentDetail.module.less'
-import back from '../../back'
-import { useSetContentNavigate } from '../../hooks/setContent'
-import { useViewBackup } from '../../hooks/viewBackup'
+
 
 /**
  * This hook is to allow go back when you are deep component
  * example: watching more episodes
+ * @param {Function} pushHistory
  * @param {Function} setIndex
  * @param {Number} index
  * @param {Number} backIndex
  * @return {Function}
  */
-const createChangeActivity = (setIndex, index, backIndex) => {
+const createChangeActivity = (pushHistory, setIndex, index, backIndex) => {
     return () => {
         if (backIndex != null) {
-            back.pushHistory({
-                doBack: () => {
-                    setIndex(backIndex)
-                }
+            pushHistory(() => {
+                setIndex(backIndex)
             })
         }
         setIndex(index)
@@ -48,8 +46,10 @@ const ActivityViews = ({ index, children }) => children[index]
  * @param {Object} obj.content
  */
 const ContentDetail = ({ profile, content, ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup(`contentDetail-${content.id}`)
-    const setContentNavigate = useSetContentNavigate(`contentDetail-${content.id}`)
+    const {
+        navigateContent, backState, viewBackupRef,
+        pushHistory, popHistory
+    } = useNavigateContent(`contentDetail-${content.id}`)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
@@ -64,22 +64,22 @@ const ContentDetail = ({ profile, content, ...rest }) => {
         changeAudio: 2,
     }), [])
     const setActivity = useMemo(() => ({
-        [options.option]: createChangeActivity(setCurrentIndex, options.option),
-        [options.moreEpisodes]: createChangeActivity(setCurrentIndex, options.moreEpisodes, options.option),
-        [options.changeAudio]: createChangeActivity(setCurrentIndex, options.changeAudio, options.option),
-    }), [options, setCurrentIndex])
+        [options.option]: createChangeActivity(pushHistory, setCurrentIndex, options.option),
+        [options.moreEpisodes]: createChangeActivity(pushHistory, setCurrentIndex, options.moreEpisodes, options.option),
+        [options.changeAudio]: createChangeActivity(pushHistory, setCurrentIndex, options.changeAudio, options.option),
+    }), [options, setCurrentIndex, pushHistory])
     const setActivityRef = useRef(setActivity)
     /** @type {Function} */
     const setContent = useCallback((newContent) => {
         if (currentIndex !== options.option) {
             // if your are setting content and not in "option" activity
             // then useChangeActivity add a history so it has to be removed
-            back.popHistory()
+            popHistory()
         }
         /** backup all state to restore later */
         viewBackupRef.current = { currentIndex, }
-        setContentNavigate({ content: newContent, restoreCurrentContent: true })
-    }, [currentIndex, setContentNavigate, options, viewBackupRef])
+        navigateContent(newContent, { restoreCurrentContent: true })
+    }, [currentIndex, navigateContent, options, viewBackupRef, popHistory])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {

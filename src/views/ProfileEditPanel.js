@@ -94,7 +94,7 @@ const ProfileEditPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe origin='profiles/edit' />
+                <ContactMe />
                 <Logout />
             </Header>
             <Row align='center center'>

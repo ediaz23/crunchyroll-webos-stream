@@ -33,7 +33,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, setContentNavigate,
+        backState, viewBackupRef, navigateContent,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
@@ -99,8 +99,8 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const setLocalContent = useCallback(newContent => {
         /** backup all state to restore later */
         viewBackupRef.current = { season, seasons, sort }
-        setContentNavigate(newContent)
-    }, [setContentNavigate, viewBackupRef, season, seasons, sort])
+        navigateContent(newContent)
+    }, [navigateContent, viewBackupRef, season, seasons, sort])
 
     useEffect(() => {
         if (delay >= 0) {

@@ -43,7 +43,7 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, setContentNavigate,
+        backState, viewBackupRef, navigateContent,
     } = useContentList(contentKey)
 
     /** @type {[String, Function]} */
@@ -96,8 +96,8 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
     const setLocalContent = useCallback(newContent => {
         /** backup all state to restore later */
         viewBackupRef.current = { category, query }
-        setContentNavigate(newContent)
-    }, [setContentNavigate, viewBackupRef, category, query])
+        navigateContent(newContent)
+    }, [navigateContent, viewBackupRef, category, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined

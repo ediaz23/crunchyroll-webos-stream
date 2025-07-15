@@ -24,7 +24,7 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        setContentNavagate,
+        navigateContent,
     } = useContentList(type)
 
     /** @type {[Object, Function]} */
@@ -76,7 +76,7 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
                         type={type}
                         contentList={contentList}
                         load={onLoad}
-                        onSelect={onSelect || setContentNavagate}
+                        onSelect={onSelect || navigateContent}
                         onFocus={onSelectItem}
                         autoScroll={autoScroll}
                         mode={mode} />

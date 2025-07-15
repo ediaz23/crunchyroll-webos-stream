@@ -1,37 +1,29 @@
 
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { Panel } from '@enact/moonstone/Panels'
 import PropTypes from 'prop-types'
 
 import { $L } from '../hooks/language'
+import { useNavigate } from '../hooks/navigate'
 import Alert from '../components/Alert'
-import { pathState, initScreenState, autoLoginState } from '../recoilConfig'
-import back from '../back'
+import { autoLoginState } from '../recoilConfig'
 
 
 const ErrorPanel = ({ message, closeErrorPanel, onlyClose, ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setInitScreenState = useSetRecoilState(initScreenState)
+    const { jumpTo } = useNavigate()
     /** @type {Function} */
     const setAutoLoginState = useSetRecoilState(autoLoginState)
-
 
     const onAccept = useCallback(() => {
         if (onlyClose) {
             closeErrorPanel()
         } else {
-            back.pushHistory({ doBack: () => setPath('/askClose') })
             setAutoLoginState(false)
-            setInitScreenState('/login')
-            setPath('/login')
+            jumpTo('/login')
             closeErrorPanel()
         }
-    }, [setAutoLoginState, setInitScreenState, setPath, closeErrorPanel, onlyClose])
-
-    useEffect(() => { back.cleanHistory() }, [])
+    }, [setAutoLoginState, closeErrorPanel, onlyClose, jumpTo])
 
     return (
         <Panel {...rest}>

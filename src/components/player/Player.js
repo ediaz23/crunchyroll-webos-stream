@@ -19,11 +19,11 @@ import { useGetLanguage } from '../../hooks/language'
 import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
+import { useNavigate } from '../../hooks/navigate'
 import logger from '../../logger'
 import api from '../../api'
 import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../assets/empty.mp4'
-import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
@@ -627,6 +627,7 @@ const findSkipEvents = async (stream) => {
  * @todo @fixme bug after playing video music "comet" of yoasobi
  */
 const Player = ({ ...rest }) => {
+    const { goBack } = useNavigate()
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
@@ -734,9 +735,9 @@ const Player = ({ ...rest }) => {
             setAudio({})
             setPlayContent({ ...changeEp.data[0] })
         } else {
-            back.doBack()
+            goBack()
         }
-    }, [playerCompRef, profile, content, setPlayContent, setAudio])
+    }, [playerCompRef, profile, content, setPlayContent, setAudio, goBack])
 
     /** @type {Function} */
     const onNextEp = useCallback((ev) => {
@@ -880,7 +881,7 @@ const Player = ({ ...rest }) => {
                         selectAudio={selectAudio}
                         triggerActivity={triggerActivity} />
                 }
-                <ContactMe origin='profiles/home/player' />
+                <ContactMe />
             </>
         );
     }, [stream, subtitle, selectSubtitle, audio, selectAudio, triggerActivity])
@@ -1037,12 +1038,10 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // plause / play watch
         let timeout = null
         if (session && isPaused) {
-            timeout = setTimeout(() => {
-                back.doBack()
-            }, session.maximumPauseSeconds * 1000)
+            timeout = setTimeout(goBack, session.maximumPauseSeconds * 1000)
         }
         return () => { clearTimeout(timeout) }
-    }, [session, isPaused])
+    }, [session, isPaused, goBack])
 
     useEffect(() => {  // loop playHead
         if (!_PLAY_TEST_) {

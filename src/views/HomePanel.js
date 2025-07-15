@@ -17,7 +17,7 @@ import api from '../api'
 import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
 import { $L } from '../hooks/language'
-import { useResetHomeState } from '../hooks/setContent'
+import { useResetHomeState } from '../hooks/navigate'
 import { useHomeFeedWorker } from '../hooks/homefeedWorker'
 import { useViewBackup } from '../hooks/viewBackup'
 

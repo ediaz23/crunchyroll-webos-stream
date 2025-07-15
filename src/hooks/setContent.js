@@ -94,17 +94,3 @@ export function useSetContentNavigate(viewKey) {
         }, [viewKey, setViewBackup, setPath, setPlayContent, setSelectedContent]
     )
 }
-
-/** @returns {Function} */
-export function useResetHomeState() {
-    /** @type {Function} */
-    const setSelectedContent = useSetRecoilState(selectedContentState)
-    /** @type {Function} */
-    const setViewBackup = useSetRecoilState(viewBackupState)
-
-    return useCallback(() => {
-        setViewBackup({})
-        setSelectedContent(null)
-        viewMountInfo.cleanStack()
-    }, [setSelectedContent, setViewBackup])
-}

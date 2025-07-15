@@ -3,24 +3,13 @@ import { useCallback } from 'react'
 import Button from '@enact/moonstone/Button'
 import Icon from '@enact/moonstone/Icon'
 
-import { useSetRecoilState } from 'recoil'
-
-import { pathState } from '../recoilConfig'
-import back from '../back'
+import { useNavigate } from '../hooks/navigate'
 
 const DevBtn = () => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+    const { goTo } = useNavigate()
     const onClick = useCallback(() => {
-        setPath(bak => {
-            back.pushHistory({
-                doBack: () => {
-                    setPath(bak)
-                }
-            })
-            return '/developer'
-        })
-    }, [setPath])
+        goTo('/developer')
+    }, [goTo])
 
     return (
         <Button onClick={onClick}>

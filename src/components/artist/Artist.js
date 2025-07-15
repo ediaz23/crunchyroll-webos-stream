@@ -9,8 +9,7 @@ import { $L } from '../../hooks/language'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useProcessMusicVideos } from '../../hooks/processMusicVideos'
 import { useBackVideoIndex } from '../../hooks/backVideoIndex'
-import { useViewBackup } from '../../hooks/viewBackup'
-import { useSetContentNavigate } from '../../hooks/setContent'
+import { useNavigateContent } from '../../hooks/navigate'
 import Scroller from '../../patch/Scroller'
 
 import { ContentHeader } from '../home/ContentBanner'
@@ -26,8 +25,7 @@ import css from './Artist.module.less'
  * @param {Object} obj.artist
  */
 const Artist = ({ profile, artist, ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup(`artist-${artist.id}`)
-    const setContentNavigate = useSetContentNavigate(`artist-${artist.id}`)
+    const { navigateContent, backState, viewBackupRef } = useNavigateContent(`artist-${artist.id}`)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -66,9 +64,9 @@ const Artist = ({ profile, artist, ...rest }) => {
         if (videos && videos.length) {
             /** backup all state to restore later */
             viewBackupRef.current = { optionIndex }
-            setContentNavigate({ content: videos[index] })
+            navigateContent(videos[index])
         }
-    }, [optionIndex, videos, setContentNavigate, viewBackupRef])
+    }, [optionIndex, videos, navigateContent, viewBackupRef])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {

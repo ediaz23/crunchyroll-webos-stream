@@ -44,8 +44,9 @@ const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true
     const onSelectItem = useCallback((ev) => {
         if (ev.currentTarget) {
             const rowIndex = parseInt(ev.currentTarget.dataset['index'])
+            /** backup all state to restore later */
             viewBackupRef.current = { rowIndex }
-            onSelect({ content: contentList[rowIndex], rowIndex })
+            onSelect(contentList[rowIndex])
         }
     }, [contentList, onSelect, viewBackupRef])
 

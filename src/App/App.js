@@ -8,9 +8,9 @@ import regions from 'i18n-iso-m49'
 import countries from 'i18n-iso-countries'
 import languages from '@cospired/i18n-iso-languages'
 
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
-import { pathState, initScreenState, contactBtnState } from '../recoilConfig'
+import { pathState, contactBtnState } from '../recoilConfig'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InitialPanel from '../views/InitialPanel'
 import HomePanel from '../views/HomePanel'
@@ -24,23 +24,22 @@ import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
 import useCustomFetch, { worker as fetchWorker } from '../hooks/customFetch'
+import { useNavigate } from '../hooks/navigate'
 import api from '../api'
 import utils from '../utils'
-import back from '../back'
 import './attachErrorHandler'
 
 
 const RoutablePanels = Routable({ navigate: 'onBack' }, Panels)
 
 const App = ({ ...rest }) => {
+    const { jumpTo } = useNavigate()
     /** @type {Function} */
     const customFetch = useCustomFetch()
-    /** @type {[String, Function]} */
+    /** @type {[Boolean, Function]} */
     const [dbInit, setDBInit] = useState(false)
-    /** @type {[String, Function]} */
-    const [path, setPath] = useRecoilState(pathState)
-    /** @type {Function} */
-    const setInitScreenState = useSetRecoilState(initScreenState)
+    /** @type {String} */
+    const path = useRecoilValue(pathState)
     /** @type {Function} */
     const setContactBtn = useSetRecoilState(contactBtnState)
 
@@ -52,28 +51,21 @@ const App = ({ ...rest }) => {
 
     useEffect(() => {
         const loadData = async () => {
-            let initPath
+            let initScreen
             if (await api.config.isNewInstallation()) {
-                initPath = '/warning'
+                initScreen = '/warning'
             } else if ((new Date()) > await api.config.getNextContactDate()) {
-                initPath = '/contact'
+                initScreen = '/contact'
                 setContactBtn(true)
             } else {
-                initPath = '/login'
+                initScreen = '/login'
             }
-            setInitScreenState(initPath)
-            setPath(initPath)
+            jumpTo(initScreen)
         }
         if (dbInit) {
             loadData()
         }
-    }, [dbInit, setPath, setInitScreenState, setContactBtn])
-
-    useEffect(() => {
-        if (dbInit) {
-            back.pushHistory({ doBack: () => setPath('/askClose') })
-        }
-    }, [dbInit, setPath])
+    }, [dbInit, setContactBtn, jumpTo])
 
     useEffect(() => {
         const initDB = async () => {

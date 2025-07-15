@@ -19,14 +19,14 @@ import PropTypes from 'prop-types'
 import Locale from 'ilib/lib/Locale'
 
 import { $L } from '../../hooks/language'
+import { useNavigate } from '../../hooks/navigate'
+import { useGetLanguage } from '../../hooks/language'
 import Field from '../Field'
 import SelectLanguage, { dropdownKeydown } from '../SelectLanguage'
 import Alert from '../Alert'
 import PopupMessage from '../Popup'
 import css from './Detail.module.less'
-import { useGetLanguage } from '../../hooks/language'
 import api from '../../api'
-import back from '../../back'
 
 
 /**
@@ -172,8 +172,9 @@ const ProfileLang = ({ profile, setProfile, audioLangs, subtitleLangs, contentLa
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {Function} obj.onShowDeleteProfile
  * @param {Function} obj.onSave
+ * @param {Function} obj.goBack
  */
-const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
+const ProfileAction = ({ profile, onShowDeleteProfile, onSave, goBack }) => {
     /** @type {Function} */
     const getLanguage = useGetLanguage()
     /** @type {String} */
@@ -181,10 +182,6 @@ const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
         const locale = new Locale()
         return getLanguage(locale.getSpec())
     }, [getLanguage])
-    /** @type {Function} */
-    const onBack = useCallback(() => {
-        back.doBack()
-    }, [])
 
     return (
         <Column className={css.formColumn}>
@@ -204,7 +201,7 @@ const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
                         </Icon>
                         {$L('Save')}
                     </Button>
-                    <Button onClick={onBack}>
+                    <Button onClick={goBack}>
                         <Icon className={css.buttonIcon}>
                             arrowhookleft
                         </Icon>
@@ -229,8 +226,9 @@ const ProfileAction = ({ profile, onShowDeleteProfile, onSave }) => {
  * @param {Boolean} obj.open
  * @param {Array<import('crunchyroll-js-api').Types.AssesItem>} obj.avatars
  * @param {Function} obj.setProfile
+ * * @param {Function} obj.goBack
  */
-const AvatarGridBase = ({ open, avatars, setProfile, ...rest }) => {
+const AvatarGridBase = ({ open, avatars, setProfile, goBack, ...rest }) => {
     /** @type {[Function, Function]} */
     const [makeFocus, setMakeFocus] = useState(null)
     /** @type {[Array<String>, Function]} */
@@ -251,9 +249,9 @@ const AvatarGridBase = ({ open, avatars, setProfile, ...rest }) => {
         if (ev.currentTarget) {
             const index = parseInt(ev.currentTarget.dataset['index'])
             saveAvatar(avatarsList[index].id)
-            back.doBack()
+            goBack()
         }
-    }, [avatarsList, saveAvatar])
+    }, [avatarsList, saveAvatar, goBack])
 
     /** @type {Function} */
     const onSelectAlbum = useCallback(({ selected }) => {
@@ -377,6 +375,7 @@ const saveProfile = async ({ profile, oldProfile }) => {
  * @param {Array<import('crunchyroll-js-api').Types.AssesItem>} obj.avatars
  */
 const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, contentLangs, usernames, avatars }) => {
+    const { pushHistory, goBack } = useNavigate()
     /** @type {{current: HTMLFormElement}} */
     const formRef = useRef(null)
     /** @type {[import('crunchyroll-js-api').Types.Profile, Function]} */
@@ -394,51 +393,42 @@ const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, conten
     const onClosePopup = useCallback(() => setMessage(''), [setMessage])
 
     const onShowSelectAvatar = useCallback(() => {
-        back.pushHistory({
-            doBack: () => {
-                setSelectAvatar(false)
-                setTimeout(() => Spotlight.focus(), 100)
-            }
+        pushHistory(() => {
+            setSelectAvatar(false)
+            setTimeout(() => Spotlight.focus(), 100)
         })
         setSelectAvatar(true)
-    }, [setSelectAvatar])
+    }, [setSelectAvatar, pushHistory])
 
     /** @type {Function} */
     const onShowDeleteProfile = useCallback(() => {
-        back.pushHistory({
-            doBack: () => {
-                setAskDelete(false)
-                setTimeout(() => Spotlight.focus(), 100)
-            }
+        pushHistory(() => {
+            setAskDelete(false)
+            setTimeout(() => Spotlight.focus(), 100)
         })
         setAskDelete(true)
-    }, [setAskDelete])
-
-    /** @type {Function} */
-    const onHideDeleteProfile = useCallback(() => {
-        back.doBack()
-    }, [])
+    }, [setAskDelete, pushHistory])
 
     /** @type {Function} */
     const deleteProfile = useCallback(() => {
-        back.doBack()
+        goBack()
         setLoading(true)
         api.account.deleteProfile(profile.profile_id)
-            .then(() => back.doBack())
+            .then(goBack)
             .catch(err => setMessage(err.message))
             .finally(() => setLoading(false))
-    }, [profile, setLoading, setMessage])
+    }, [profile, setLoading, setMessage, goBack])
 
     /** @type {Function} */
     const onSave = useCallback(() => {
         if (formRef.current.checkValidity()) {
             setLoading(true)
             saveProfile({ profile, oldProfile: profileBase })
-                .then(() => back.doBack())
+                .then(goBack)
                 .catch(err => setMessage(err.message))
                 .finally(() => setLoading(false))
         }
-    }, [profile, setLoading, setMessage, profileBase])
+    }, [profile, setLoading, setMessage, profileBase, goBack])
 
     return (
         <form id="profileForm" className={css.profileDetail} ref={formRef}>
@@ -459,7 +449,8 @@ const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, conten
                         <ProfileAction
                             profile={profile}
                             onShowDeleteProfile={onShowDeleteProfile}
-                            onSave={onSave} />
+                            onSave={onSave}
+                            goBack={goBack} />
                     </>
                     :
                     <Spinner />
@@ -468,7 +459,8 @@ const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, conten
             <AvatarGrid
                 open={selectAvatar}
                 avatars={avatars}
-                setProfile={setProfile} />
+                setProfile={setProfile}
+                goBack={goBack} />
             <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
                 {message}
             </PopupMessage>
@@ -476,7 +468,7 @@ const ProfileDetail = ({ profile: profileBase, audioLangs, subtitleLangs, conten
                 title={$L('Delete Profile')}
                 message={$L('Are you sure you want to delete this profile?')}
                 onAccept={deleteProfile}
-                onCancel={onHideDeleteProfile} />
+                onCancel={goBack} />
         </form>
     )
 }

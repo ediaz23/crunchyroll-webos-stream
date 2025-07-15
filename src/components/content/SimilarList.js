@@ -26,13 +26,11 @@ const SimilarList = ({ profile, contentState, onLoadData }) => {
         return similar
     }, [profile, content, onLoadData])
 
-    const onSelect = useCallback(({ content: newContent }) => setContent(newContent), [setContent])
-
     return (
         <ContentListPoster
             profile={profile}
             loadData={loadSimilar}
-            onSelect={onSelect}
+            onSelect={setContent}
             type={`similar-${content.id}`}
             noPoster
         />

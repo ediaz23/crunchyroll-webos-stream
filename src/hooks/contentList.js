@@ -2,8 +2,7 @@
 import { useCallback, useState, useRef } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { homeViewReadyState } from '../recoilConfig'
-import { useViewBackup } from './viewBackup'
-import { useSetContentNavigate } from './setContent'
+import { useNavigateContent } from './navigate'
 
 
 /**
@@ -30,7 +29,7 @@ import { useSetContentNavigate } from './setContent'
  * @property {Function} setAutoScroll setState function for autoScroll
  * @property {Object} backState Backup of options
  * @property {import('react').MutableRefObject} viewBackupRef Backup of options
- * @property {import('./setContent').SetContent} setContentNavigate set content an navegate
+ * @property {import('./setContent').SetContent} navigateContent set content an navegate
  */
 
 /**
@@ -40,10 +39,9 @@ import { useSetContentNavigate } from './setContent'
  * @returns {ListViewProps}
  */
 export const useContentList = (type) => {
-    const [backState, viewBackupRef] = useViewBackup(type)
+    const {navigateContent, backState, viewBackupRef} = useNavigateContent(type)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    const setContentNavigate = useSetContentNavigate(type)
     /** @type {[Array<Object>, Function]} */
     const [contentList, setContentList] = useState(null)
     /** @type {[Boolean, Function]}  */
@@ -108,7 +106,7 @@ export const useContentList = (type) => {
         onFilter,
         backState,
         viewBackupRef,
-        setContentNavigate
+        navigateContent
     }
 }
 

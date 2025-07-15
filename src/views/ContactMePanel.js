@@ -10,10 +10,11 @@ import ExpandableItem from '@enact/moonstone/ExpandableItem'
 import Spotlight from '@enact/spotlight'
 
 import PropTypes from 'prop-types'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 import { $L } from '../hooks/language'
-import { pathState, contactBtnState } from '../recoilConfig'
+import { useNavigate } from '../hooks/navigate'
+import { contactBtnState } from '../recoilConfig'
 import api from '../api'
 import ethImg from '../../assets/img/eth.png'
 import emailImg from '../../assets/img/email.png'
@@ -51,15 +52,14 @@ const ImageInfo = (props) => (
  * @param {{noAcceptBtn: boolean}}
  */
 const ContactMePanel = ({ noAcceptBtn, ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+    const { jumpTo } = useNavigate()
     /** @type {Boolean} */
     const contactBtn = useRecoilValue(contactBtnState)
 
     const accept = useCallback(async () => {
         await api.config.setNextContactDate()
-        setPath('/login')
-    }, [setPath])
+        jumpTo('/login')
+    }, [jumpTo])
 
     useEffect(() => {
         if (contactBtn && !noAcceptBtn) {

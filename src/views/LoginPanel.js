@@ -10,22 +10,17 @@ import { useSetRecoilState, useRecoilState } from 'recoil'
 import { LoginWithEmail, LoginWithCode, LoginWithQR } from '../components/login/Login'
 import ContactMe from '../components/login/ContactMe'
 import PopupMessage from '../components/Popup'
-import {
-    pathState, initScreenState, autoLoginState,
-    isPremiumState
-} from '../recoilConfig'
+import { autoLoginState, isPremiumState } from '../recoilConfig'
 import api from '../api'
 import { $L } from '../hooks/language'
+import { useNavigate } from '../hooks/navigate'
 import logger from '../logger'
 
 
 const ActivityViews = ({ index, children }) => children[index]
 
 const LoginPanel = ({ ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
-    /** @type {Function} */
-    const setInitScreenState = useSetRecoilState(initScreenState)
+    const { jumpTo } = useNavigate()
     /** @type {Function} */
     const setPremiumState = useSetRecoilState(isPremiumState)
     /** @type {[Boolean, Function]}  */
@@ -50,10 +45,9 @@ const LoginPanel = ({ ...rest }) => {
                 break
             }
         }
-        setInitScreenState('/profiles')
-        setPath('/profiles')
         setAutoLogin(true)
-    }, [setInitScreenState, setPath, setAutoLogin, setPremiumState])
+        jumpTo('/profiles')
+    }, [setAutoLogin, setPremiumState, jumpTo])
 
     /** @type {Function} */
     const setView = useCallback(ev => {
@@ -120,7 +114,7 @@ const LoginPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe origin='login' />
+                <ContactMe />
             </Header>
             <Column>
                 <Row align='center center'>

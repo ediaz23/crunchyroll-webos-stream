@@ -23,7 +23,7 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, setContentNavigate,
+        backState, viewBackupRef, navigateContent,
     } = useContentList(`musicBrowse-${musicFeed.id}`)
 
     /** @type {[String, Function]} */
@@ -65,8 +65,8 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
     const setLocalContent = useCallback(newContent => {
         /** backup all state to restore later */
         viewBackupRef.current = { query }
-        setContentNavigate(newContent)
-    }, [setContentNavigate, viewBackupRef, query])
+        navigateContent(newContent)
+    }, [navigateContent, viewBackupRef, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined

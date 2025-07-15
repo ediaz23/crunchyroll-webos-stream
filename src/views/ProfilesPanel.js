@@ -10,23 +10,18 @@ import Icon from '@enact/moonstone/Icon'
 import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
-import {
-    pathState, currentProfileState,
-    homeViewReadyState,
-} from '../recoilConfig'
+import { currentProfileState, homeViewReadyState } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
 import ContactMe from '../components/login/ContactMe'
 import Logout from '../components/login/Logout'
 import DevBtn from '../components/DevBtn'
 import api from '../api'
 import { DEV_FAST_SELECT } from '../const'
-import back from '../back'
-import { useResetHomeState } from '../hooks/setContent'
+import { useNavigate, useResetHomeState } from '../hooks/navigate'
 
 
 const ProfilesPanel = ({ ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+    const { goTo } = useNavigate()
     /** @type {Function} */
     const setCurrentProfile = useSetRecoilState(currentProfileState)
     /** @type {[import('crunchyroll-js-api').Types.ProfileResponse, Function]}  */
@@ -55,10 +50,9 @@ const ProfilesPanel = ({ ...rest }) => {
             setHomeViewReady(false)
             setCurrentProfile(profile)
             resetHomeState()
-            back.pushHistory({ doBack: () => { setPath('/profiles') } })
-            setPath('/profiles/home')
+            goTo('/profiles/home')
         })
-    }, [setCurrentProfile, setPath, resetHomeState, setHomeViewReady, setLoading])
+    }, [setCurrentProfile, goTo, resetHomeState, setHomeViewReady, setLoading])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {
@@ -72,9 +66,8 @@ const ProfilesPanel = ({ ...rest }) => {
             ...getProfileFromEvent(event),
             email: mainProfile.email,
         })
-        back.pushHistory({ doBack: () => { setPath('/profiles') } })
-        setPath('/profiles/edit')
-    }, [multiProfile, getProfileFromEvent, setCurrentProfile, setPath])
+        goTo('/profiles/edit')
+    }, [multiProfile, getProfileFromEvent, setCurrentProfile, goTo])
 
     /** @type {Function} */
     const onCreateProfile = useCallback(() => {
@@ -85,9 +78,8 @@ const ProfilesPanel = ({ ...rest }) => {
             profile_id: null,
             profile_name: ''
         })
-        back.pushHistory({ doBack: () => { setPath('/profiles') } })
-        setPath('/profiles/edit')
-    }, [multiProfile, setCurrentProfile, setPath])
+        goTo('/profiles/edit')
+    }, [multiProfile, setCurrentProfile, goTo])
 
     /** @type {Function} */
     const setFocus = useCallback(ev => {
@@ -112,7 +104,7 @@ const ProfilesPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe origin='profiles' />
+                <ContactMe />
                 <Logout />
             </Header>
             <Column align='center'>

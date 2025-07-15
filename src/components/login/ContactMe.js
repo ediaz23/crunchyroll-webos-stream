@@ -2,29 +2,24 @@
 import { useCallback } from 'react'
 import IconButton from '@enact/moonstone/IconButton'
 import { useSetRecoilState } from 'recoil'
-import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
-import { pathState, contactBtnState } from '../../recoilConfig'
-import back from '../../back'
+import { useNavigate } from '../../hooks/navigate'
+import { contactBtnState } from '../../recoilConfig'
 
 
 /**
  * @param {{origin: String}}
  */
-const ContactMe = ({ origin }) => {
-
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+const ContactMe = () => {
+    const { goTo } = useNavigate()
     /** @type {Function} */
     const setContactBtn = useSetRecoilState(contactBtnState)
 
     const contactMe = useCallback(() => {
-        const newOrigin = origin.startsWith('/') ? origin : `/${origin}`
-        back.pushHistory({ doBack: () => { setPath(newOrigin) } })
         setContactBtn(false)
-        setPath('/contact')
-    }, [setPath, origin, setContactBtn])
+        goTo('/contact')
+    }, [setContactBtn, goTo])
 
 
     return (
@@ -32,10 +27,6 @@ const ContactMe = ({ origin }) => {
             info
         </IconButton>
     )
-}
-
-ContactMe.propTypes = {
-    origin: PropTypes.string.isRequired
 }
 
 export default ContactMe

@@ -1,19 +1,17 @@
 
 import { useCallback, } from 'react'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { Panel } from '@enact/moonstone/Panels'
 
 import { $L } from '../hooks/language'
+import { useNavigate } from '../hooks/navigate'
 import Alert from '../components/Alert'
-import { pathState, initScreenState } from '../recoilConfig'
-import back from '../back'
+import { initScreenState } from '../recoilConfig'
 import utils from '../utils'
 
 
 const ConfirmExitPanel = ({ onCancel, ...rest }) => {
-
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+    const { jumpTo } = useNavigate()
     /** @type {String} */
     const initScreen = useRecoilValue(initScreenState)
 
@@ -21,10 +19,9 @@ const ConfirmExitPanel = ({ onCancel, ...rest }) => {
         if (onCancel) {
             onCancel()
         } else {
-            back.pushHistory({ doBack: () => setPath('/askClose') })
-            setPath(initScreen)
+            jumpTo(initScreen)
         }
-    }, [setPath, initScreen, onCancel])
+    }, [initScreen, onCancel, jumpTo])
 
     const closeApp = useCallback(() => {
         if (utils.isTv()) {

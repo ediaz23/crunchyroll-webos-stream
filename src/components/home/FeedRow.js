@@ -12,11 +12,10 @@ import { homeViewReadyState, isPremiumState } from '../../recoilConfig'
 import api from '../../api'
 import VirtualListNested from '../../patch/VirtualListNested'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { useSetContentNavigate } from '../../hooks/setContent'
+import { useNavigateContent } from '../../hooks/navigate'
 import { processItemFeed } from '../../hooks/homefeedWorker'
 import withNavigable from '../../hooks/navigable'
 import { $L } from '../../hooks/language'
-import { useViewBackup } from '../../hooks/viewBackup'
 import { formatDurationMs, getDuration, getIsPremium, isPlayable } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
@@ -92,8 +91,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  */
 const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
     const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
-    const [backState, viewBackupRef] = useViewBackup(`homeFeedRow-${feedId}-${feedRow.id}`)
-    const setContentNavigate = useSetContentNavigate(`homeFeedRow-${feedId}-${feedRow.id}`)
+    const { navigateContent, backState, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedId}-${feedRow.id}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */
@@ -129,9 +127,9 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
         const content = feedData.items[columnIndex]
         if (feedData.id !== 'fake_item') {
             viewBackupRef.current = { rowIndex: feedRow.index, columnIndex }
-            setContentNavigate({ content })
+            navigateContent(content)
         }
-    }, [feedData, feedRow, cellId, setContentNavigate, viewBackupRef])
+    }, [feedData, feedRow, cellId, navigateContent, viewBackupRef])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
@@ -182,10 +180,10 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                 val => val.type === DEV_CONTENT_TYPE && testContent[DEV_CONTENT_TYPE].includes(val.id)
             )
             if (content) {
-                setContentNavigate({ content })
+                navigateContent(content)
             }
         }
-    }, [feedData, setContentNavigate])
+    }, [feedData, navigateContent])
 
 
     useEffect(() => {
