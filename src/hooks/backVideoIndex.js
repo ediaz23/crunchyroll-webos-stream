@@ -28,7 +28,9 @@ export const useBackVideoIndex = (videos, setVideoIndex) => {
         }
     }, [videos, setVideoIndex])
 
-    useEffect(() => setPlayContent(null), [setPlayContent])
+    useEffect(() => {
+        setPlayContent(null)
+    }, [setPlayContent])
 
     return playContentRef
 }

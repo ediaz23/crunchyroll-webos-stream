@@ -88,13 +88,11 @@ export function useViewBackup(viewKey) {
             oldViewBackup = prev
             return {}
         })
-        debugger;
         viewMountInfo.oldViewBackups.push(oldViewBackup)
         viewMountInfo.cleanStack()  // Clears internal tracking to star again
     }, [])
 
     const restoreState = useCallback(() => {
-        debugger;
         const setViewBackup = viewBackupStateRef.current[1]
         const oldViewBackup = viewMountInfo.oldViewBackups.pop() || {}
         setViewBackup(oldViewBackup)
@@ -108,15 +106,12 @@ export function useViewBackup(viewKey) {
             throw new Error(`ViewBackup error view already mounted. ${viewKey}`)
         }
         viewMountInfo.mountOrder.add(viewKey)  // registers mounting
-        debugger;
         return () => {
             if (!viewMountInfo.mountOrder.has(viewKey)) {
                 throw new Error(`ViewBackup error view already unmounted. ${viewKey}`)
             }
             viewMountInfo.mountOrder.remove(viewKey)  // registers unmounting
-            debugger;
             if (viewMountInfo.direction === 'forward') {  // if has something to save
-                debugger;
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 setViewBackup(prev => ({ ...prev, [viewKey]: viewBackupRef.current }))  // save state
             }
@@ -125,7 +120,6 @@ export function useViewBackup(viewKey) {
 
     useEffect(() => {
         return () => {
-            debugger;
             if (viewMountInfo.direction === 'forward') {
                 if (viewMountInfo.mountOrder.lastElement == null) {
                     saveState()

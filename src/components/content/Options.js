@@ -4,6 +4,7 @@ import { Row, Cell, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import BodyText from '@enact/moonstone/BodyText'
 import IconButton from '@enact/moonstone/IconButton'
+import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import OptionsList from './OptionsList'
@@ -27,6 +28,8 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
     const { viewBackup, viewBackupRef } = useViewBackup(`contentOptions-${content.id}`)
     /** @type {[String, Function]} */
     const [optionIndex, setOptionIndex] = useState(viewBackup?.optionIndex)
+    /** @type {[Boolean, Function]}  */
+    const [loading, setLoading] = useState(true)
     /** @type {[Number, Function]} */
     const [rating, setRating] = useState(0)
     /** @type {[{total: Number}, Function]} */
@@ -110,6 +113,10 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                                     optionIndex,
                                     setOptionIndex
                                 }}
+                                loandingState={{
+                                    loading,
+                                    setLoading
+                                }}
                                 setFunctions={{
                                     ...setFunctions,
                                     setSubtitle,
@@ -118,7 +125,12 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                     </Column>
                 </Cell>
                 <Cell size='49%' style={{ overflow: 'hidden' }}>
-                    {optionIndex === 'music' &&
+                    {loading &&
+                        <Column align='center center' style={{ height: '100%', width: '100%' }}>
+                            <Spinner />
+                        </Column>
+                    }
+                    {!loading && optionIndex === 'music' &&
                         <MusicList
                             profile={profile}
                             onLoadData={setMusic}
@@ -127,7 +139,7 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                                 setContent
                             }} />
                     }
-                    {optionIndex === 'similar' &&
+                    {!loading && optionIndex === 'similar' &&
                         <SimilarList
                             profile={profile}
                             onLoadData={setSimilar}

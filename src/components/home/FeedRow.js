@@ -91,7 +91,7 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  */
 const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
     const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
-    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedId}-${feedRow.id}`)
+    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedId}-${feedRow.index}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */

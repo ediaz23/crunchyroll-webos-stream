@@ -14,6 +14,7 @@ import LangSelector from './LangSelector'
 import { isPremiumState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useNavigateContent } from '../../hooks/navigate'
+import { isPlayable } from '../../utils'
 import css from './ContentDetail.module.less'
 
 
@@ -78,7 +79,7 @@ const ContentDetail = ({ profile, content, ...rest }) => {
         }
         /** backup all state to restore later */
         viewBackupRef.current = { currentIndex, }
-        navigateContent(newContent, { restoreCurrentContent: true })
+        navigateContent(newContent, { restoreCurrentContent: !isPlayable(newContent.type) })
     }, [currentIndex, navigateContent, options, viewBackupRef, popHistory])
 
     /** @type {Function} */

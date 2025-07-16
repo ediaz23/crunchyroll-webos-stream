@@ -100,7 +100,6 @@ export function useNavigateContent(viewKey) {
          * @type {SetContent}
          */
         (content, { restoreCurrentContent = false } = {}) => {
-            debugger;
             let newPath, setContent
             viewMountInfo.direction = 'forward'
             viewMountInfo.viewKey = viewKey
@@ -123,7 +122,6 @@ export function useNavigateContent(viewKey) {
             })
             goTo(newPath, {
                 callBack: () => {
-                    debugger;
                     viewMountInfo.direction = 'backward'
                     restoreState()
                     if (restoreCurrentContent) {
