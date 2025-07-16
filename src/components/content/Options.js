@@ -24,9 +24,9 @@ import { useViewBackup } from '../../hooks/viewBackup'
  */
 const Options = ({ profile, contentState, setFunctions, ...rest }) => {
     const { content, setContent: setContentSuper } = contentState
-    const [backState, viewBackupRef] = useViewBackup(`content-options-${content.id}`)
+    const { viewBackup, viewBackupRef } = useViewBackup(`contentOptions-${content.id}`)
     /** @type {[String, Function]} */
-    const [optionIndex, setOptionIndex] = useState(backState?.optionIndex)
+    const [optionIndex, setOptionIndex] = useState(viewBackup?.optionIndex)
     /** @type {[Number, Function]} */
     const [rating, setRating] = useState(0)
     /** @type {[{total: Number}, Function]} */
@@ -70,7 +70,7 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                     <Column style={{ height: '100%', width: '100%' }}>
                         <Cell size='33%' style={{ overflow: 'hidden' }}>
                             <ContentHeader content={content} />
-                            <Heading size='small' spacing='small' style={{padding: `0.5rem 0`}}>
+                            <Heading size='small' spacing='small' style={{ padding: `0.5rem 0` }}>
                                 {subtitle}
                             </Heading>
                         </Cell>

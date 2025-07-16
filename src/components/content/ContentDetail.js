@@ -47,7 +47,7 @@ const ActivityViews = ({ index, children }) => children[index]
  */
 const ContentDetail = ({ profile, content, ...rest }) => {
     const {
-        navigateContent, backState, viewBackupRef,
+        navigateContent, viewBackup, viewBackupRef,
         pushHistory, popHistory
     } = useNavigateContent(`contentDetail-${content.id}`)
     /** @type {Boolean} */
@@ -57,7 +57,7 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {[Number, Function]} */
-    const [currentIndex, setCurrentIndex] = useState(backState?.currentIndex || 0)
+    const [currentIndex, setCurrentIndex] = useState(viewBackup?.currentIndex || 0)
     const options = useMemo(() => ({
         option: 0,
         moreEpisodes: 1,
@@ -90,12 +90,12 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     }, [content, getImagePerResolution])
 
     useEffect(() => { // to back state after back from playing
-        if (backState?.currentIndex != null) {
+        if (viewBackup?.currentIndex != null) {
             // if you are back from other view and need to restore previews state
             // has tu excecute useChangeActivity
-            setActivityRef.current[backState?.currentIndex]()
+            setActivityRef.current[viewBackup?.currentIndex]()
         }
-    }, [backState?.currentIndex])
+    }, [viewBackup?.currentIndex])
 
     return (
         <Row className={css.ContentDetail} {...rest}>

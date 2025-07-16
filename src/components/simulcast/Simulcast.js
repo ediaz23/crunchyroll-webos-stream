@@ -33,15 +33,15 @@ const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, navigateContent,
+        viewBackup, viewBackupRef, navigateContent,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
-    const [season, setSeason] = useState(backState?.season || undefined)
+    const [season, setSeason] = useState(viewBackup?.season || undefined)
     /** @type {[Array<Season>, Function]} */
-    const [seasons, setSeasons] = useState(backState?.seasons || undefined)
+    const [seasons, setSeasons] = useState(viewBackup?.seasons || undefined)
     /** @type {[String, Function]}  */
-    const [sort, setOrder] = useState(backState?.sort || 'newly_added')
+    const [sort, setOrder] = useState(viewBackup?.sort || 'newly_added')
 
     /** @type {Array<{key: String, value: String}>} */
     const order = useMemo(() => {

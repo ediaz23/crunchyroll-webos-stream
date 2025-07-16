@@ -43,13 +43,13 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, navigateContent,
+        viewBackup, viewBackupRef, navigateContent,
     } = useContentList(contentKey)
 
     /** @type {[String, Function]} */
-    const [category, setCategory] = useState(backState?.category || 'all')
+    const [category, setCategory] = useState(viewBackup?.category || 'all')
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState(backState?.query || '')
+    const [query, setQuery] = useState(viewBackup?.query || '')
 
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])

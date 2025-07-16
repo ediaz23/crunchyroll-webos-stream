@@ -25,11 +25,11 @@ import { useViewBackup } from '../hooks/viewBackup'
 const ActivityViews = ({ index, children }) => (children[index])
 
 const HomePanel = (props) => {
-    const [backState, viewBackupRef] = useViewBackup('homePanel')
+    const { viewBackup, viewBackupRef } = useViewBackup('homePanel')
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Number, Function]} */
-    const [currentActivity, setCurrentActivity] = useState(backState?.currentActivity || 0)
+    const [currentActivity, setCurrentActivity] = useState(viewBackup?.currentActivity || 0)
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {[Boolean, Function]} */

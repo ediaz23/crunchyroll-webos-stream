@@ -22,11 +22,11 @@ import { getIsPremium } from '../../utils'
  */
 const Movies = ({ profile, contentState, isPremium, ...rest }) => {
     const { content: movieListing, setContent: setMovieListing } = contentState
-    const [backState, viewBackupRef] = useViewBackup(`content-movies-${movieListing.id}`)
+    const { viewBackup, viewBackupRef } = useViewBackup(`content-movies-${movieListing.id}`)
     /** @type {[Array<Object>, Function]} */
     const [listings, setListings] = useState(null)
     /** @type {[Number, Function]} */
-    const [listingIndex, setListingIndex] = useState(backState?.listingIndex)
+    const [listingIndex, setListingIndex] = useState(viewBackup?.listingIndex)
     /** @type {[Array<Object>, Function]} */
     const [movies, setMovies] = useState(null)
     /** @type {[Number, Function]} */

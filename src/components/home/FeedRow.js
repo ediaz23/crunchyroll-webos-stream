@@ -91,13 +91,13 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  */
 const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
     const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
-    const { navigateContent, backState, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedId}-${feedRow.id}`)
+    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedId}-${feedRow.id}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: {rowIndex: Number, columnIndex: Number}}} */
-    const rowIndexRef = useRef(backState || {})
+    const rowIndexRef = useRef(viewBackup || {})
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
     /** @type {[Number, Function]} */

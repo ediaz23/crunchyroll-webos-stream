@@ -23,11 +23,11 @@ const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
-        backState, viewBackupRef, navigateContent,
+        viewBackup, viewBackupRef, navigateContent,
     } = useContentList(`musicBrowse-${musicFeed.id}`)
 
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState(backState?.query || '')
+    const [query, setQuery] = useState(viewBackup?.query || '')
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
     /** @type {import('../grid/ContentGrid').SearchOptions} */

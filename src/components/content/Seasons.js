@@ -58,11 +58,11 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
  */
 const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
     const { content: series, setContent: setSeries } = contentState
-    const [backState, viewBackupRef] = useViewBackup(`content-seasons-${series.id}`)
+    const { viewBackup, viewBackupRef } = useViewBackup(`content-seasons-${series.id}`)
     /** @type {[Array<Object>, Function]} */
     const [seasons, setSeasons] = useState(null)
     /** @type {[Number, Function]} */
-    const [seasonIndex, setSeasonIndex] = useState(backState?.seasonIndex)
+    const [seasonIndex, setSeasonIndex] = useState(viewBackup?.seasonIndex)
     /** @type {[Array<Object>, Function]} */
     const [episodes, setEpisodes] = useState(null)
     /** @type {[Number, Function]} */

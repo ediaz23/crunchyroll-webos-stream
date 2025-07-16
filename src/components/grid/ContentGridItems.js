@@ -25,11 +25,11 @@ import { useViewBackup } from '../../hooks/viewBackup'
  * @param {Function} [obj.onLeave]
  */
 const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true, onFocus, mode = 'tall', ...rest }) => {
-    const [backState, viewBackupRef] = useViewBackup(`contentGridItems-${type}`)
+    const { viewBackup, viewBackupRef } = useViewBackup(`contentGridItems-${type}`)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
-    const rowIndexRef = useRef(backState?.rowIndex || 0)
+    const rowIndexRef = useRef(viewBackup?.rowIndex || 0)
     /** @type {[Number, Number]} */
     const [itemHeight, itemWidth] = useMemo(() => {
         return mode === 'tall' ? [ri.scale(390), ri.scale(240)] : [ri.scale(270), ri.scale(320)]

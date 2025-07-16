@@ -27,7 +27,7 @@ import { useNavigateContent } from './navigate'
  * @property {Function} setDelay setState function for delay
  * @property {Boolean} autoScroll autoScroll grid
  * @property {Function} setAutoScroll setState function for autoScroll
- * @property {Object} backState Backup of options
+ * @property {Object} viewBackup Backup of options
  * @property {import('react').MutableRefObject} viewBackupRef Backup of options
  * @property {import('./setContent').SetContent} navigateContent set content an navegate
  */
@@ -39,7 +39,7 @@ import { useNavigateContent } from './navigate'
  * @returns {ListViewProps}
  */
 export const useContentList = (type) => {
-    const {navigateContent, backState, viewBackupRef} = useNavigateContent(type)
+    const {navigateContent, viewBackup, viewBackupRef} = useNavigateContent(type)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */
@@ -104,7 +104,7 @@ export const useContentList = (type) => {
         changeContentList,
         mergeContentList,
         onFilter,
-        backState,
+        viewBackup,
         viewBackupRef,
         navigateContent
     }

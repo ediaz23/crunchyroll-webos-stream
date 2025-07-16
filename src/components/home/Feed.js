@@ -18,11 +18,11 @@ import { useViewBackup } from '../../hooks/viewBackup'
  * @param {'home'|'music'} obj.feedType
  */
 const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
-    const [backState, viewBackupRef] = useViewBackup(`homeFeed-${homeFeed.id}`)
+    const { viewBackup, viewBackupRef } = useViewBackup(`homeFeed-${homeFeed.id}`)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
     /** @type {{current: Number}} */
-    const rowIndexRef = useRef(backState?.rowIndex || 0)
+    const rowIndexRef = useRef(viewBackup?.rowIndex || 0)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {[Object, Function]} */

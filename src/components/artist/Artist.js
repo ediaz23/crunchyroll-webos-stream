@@ -25,7 +25,7 @@ import css from './Artist.module.less'
  * @param {Object} obj.artist
  */
 const Artist = ({ profile, artist, ...rest }) => {
-    const { navigateContent, backState, viewBackupRef } = useNavigateContent(`artist-${artist.id}`)
+    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`artist-${artist.id}`)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
@@ -33,7 +33,7 @@ const Artist = ({ profile, artist, ...rest }) => {
     /** @type {[Array<{icon: String, title: String, id: String}>, Function]} */
     const [options, setOptions] = useState(null)
     /** @type {[Number, Function]} */
-    const [optionIndex, setOptionIndex] = useState(backState?.optionIndex)
+    const [optionIndex, setOptionIndex] = useState(viewBackup?.optionIndex)
     /** @type {[Array<Object>, Function]} */
     const [videos, setVideos] = useState(null)
     /** @type {[Number, Function]} */
