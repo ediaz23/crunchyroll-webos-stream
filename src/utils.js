@@ -346,6 +346,43 @@ export class ResourcePool {
     }
 }
 
+export class OrderedSet {
+    constructor() {
+        this.map = new Map()
+        this.list = []
+    }
+
+    add(item) {
+        if (!this.map.has(item)) {
+            this.map.set(item, true)
+            this.list.push(item)
+        }
+    }
+
+    has(item) {
+        return this.map.has(item)
+    }
+
+    remove(item) {
+        if (!this.map.has(item)) return
+        this.map.delete(item)
+        const index = this.list.indexOf(item)
+        if (index > -1) this.list.splice(index, 1)
+    }
+
+    indexOf(item) {
+        return this.list.indexOf(item)
+    }
+
+    get lastElement() {
+        return this.list.length ? this.list[this.list.length - 1] : null
+    }
+
+    getList() {
+        return this.list
+    }
+}
+
 
 export default {
     worker,

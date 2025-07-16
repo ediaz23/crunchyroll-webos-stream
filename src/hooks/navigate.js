@@ -2,11 +2,17 @@
 import { useCallback } from 'react'
 import { useSetRecoilState } from 'recoil'
 
-import { viewMountInfo } from './viewBackup'
-import { pathState, initScreenState, selectedContentState, viewBackupState } from '../recoilConfig'
-import back from '../back'
+import {
+    pathState, initScreenState,
+    viewBackupState, selectedContentState, playContentState
+} from '../recoilConfig'
 
-export const useNavigate = (viewKey) => {
+import back from '../back'
+import { isPlayable } from '../utils'
+import { viewMountInfo, useViewBackup } from './viewBackup'
+
+
+export const useNavigate = () => {
     /** @type {Function} */
     const setPath = useSetRecoilState(pathState)
     /** @type {Function} */
@@ -67,6 +73,69 @@ export const useNavigate = (viewKey) => {
 
     return { goTo, jumpTo, goBack, pushHistory, popHistory }
 }
+
+/**
+ * @callback SetContent
+ * @param {Object} content
+ * @param {Object} obj
+ * @param {Boolean} [obj.saveHistory]
+ * @param {Boolean} [obj.restoreCurrentContent]
+ */
+
+/**
+ * @param {String} viewKey
+ */
+export function useNavigateContent(viewKey) {
+    const [backState, viewBackupRef] = useViewBackup(viewKey)
+    /** @type {Function} */
+    const setPlayContent = useSetRecoilState(playContentState)
+    /** @type {Function} */
+    const setSelectedContent = useSetRecoilState(selectedContentState)
+
+    const navigate = useNavigate()
+    const { goTo } = navigate
+
+    const navigateContent = useCallback(
+        /**
+         * @type {SetContent}
+         */
+        (content, { restoreCurrentContent = false } = {}) => {
+            debugger;
+            let newPath, setContent
+            viewMountInfo.direction = 'forward'
+            viewMountInfo.viewKey = viewKey
+            if (isPlayable(content.type)) {
+                if (content.type === 'movie' && content.panel) {
+                    content = { ...content, ...content.panel, panel: null }
+                }
+                setContent = setPlayContent
+                newPath = '/profiles/home/player'
+            } else {
+                setContent = setSelectedContent
+                newPath = '/profiles/home/content'
+            }
+
+            let backContent
+
+            setContent(oldContent => {
+                backContent = oldContent
+                return content
+            })
+            goTo(newPath, {
+                callBack: () => {
+                    debugger;
+                    viewMountInfo.direction = 'backward'
+                    if (restoreCurrentContent) {
+                        viewMountInfo.beforeRestoreState = () => setContent(backContent)
+                    }
+                }
+            })
+        }, [viewKey, setPlayContent, setSelectedContent, goTo]
+    )
+
+    return { navigateContent, backState, viewBackupRef, ...navigate }
+}
+
 
 /** @returns {Function} */
 export function useResetHomeState() {
