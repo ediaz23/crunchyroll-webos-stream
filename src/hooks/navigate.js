@@ -86,14 +86,14 @@ export const useNavigate = () => {
  * @param {String} viewKey
  */
 export function useNavigateContent(viewKey) {
-    const [backState, viewBackupRef] = useViewBackup(viewKey)
+    const navigate = useNavigate()
+    const { goTo } = navigate
+    const viewBackupHook = useViewBackup(viewKey)
+    const { restoreState } = viewBackupHook
     /** @type {Function} */
     const setPlayContent = useSetRecoilState(playContentState)
     /** @type {Function} */
     const setSelectedContent = useSetRecoilState(selectedContentState)
-
-    const navigate = useNavigate()
-    const { goTo } = navigate
 
     const navigateContent = useCallback(
         /**
@@ -125,15 +125,16 @@ export function useNavigateContent(viewKey) {
                 callBack: () => {
                     debugger;
                     viewMountInfo.direction = 'backward'
+                    restoreState()
                     if (restoreCurrentContent) {
-                        viewMountInfo.beforeRestoreState = () => setContent(backContent)
+                        setContent(backContent)
                     }
                 }
             })
-        }, [viewKey, setPlayContent, setSelectedContent, goTo]
+        }, [viewKey, setPlayContent, setSelectedContent, goTo, restoreState]
     )
 
-    return { navigateContent, backState, viewBackupRef, ...navigate }
+    return { navigateContent, ...viewBackupHook, ...navigate }
 }
 
 
