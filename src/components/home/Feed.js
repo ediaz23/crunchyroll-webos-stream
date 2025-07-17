@@ -34,7 +34,9 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
 
     /** @type {Function} */
     const renderRow = useCallback(({ index, ...rest }) => (
-        <HomeFeedRow feedRow={homeFeed.items[index]} {...rest} />
+        <HomeFeedRow
+            feedRow={homeFeed.items[index]}
+            {...rest} />
     ), [homeFeed])
 
     /** @type {Function} */

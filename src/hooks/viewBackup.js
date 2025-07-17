@@ -42,19 +42,6 @@ export const viewMountInfo = {
         this._direction = direction
     },
 
-    /** @type {string | null} */
-    _viewKey: null,  // TODO: remover?
-    get viewKey() {
-        return this._viewKey
-    },
-    set viewKey(viewKey) {
-        if (viewKey != null) {
-            if (this._viewKey) {
-                throw new Error(`ViewBackup viewKey not clean. ${this._viewKey}`)
-            }
-        }
-        this._viewKey = viewKey
-    },
     cleanStack() {
         /* Clears internal tracking */
         this._viewKey = null
@@ -101,17 +88,14 @@ export function useViewBackup(viewKey) {
 
     useEffect(() => {
         const setViewBackup = viewBackupStateRef.current[1]
-
-        if (viewMountInfo.mountOrder.has(viewKey)) {
-            throw new Error(`ViewBackup error view already mounted. ${viewKey}`)
-        }
         viewMountInfo.mountOrder.add(viewKey)  // registers mounting
         return () => {
             if (!viewMountInfo.mountOrder.has(viewKey)) {
                 throw new Error(`ViewBackup error view already unmounted. ${viewKey}`)
             }
             viewMountInfo.mountOrder.remove(viewKey)  // registers unmounting
-            if (viewMountInfo.direction === 'forward') {  // if has something to save
+            // if has something to save
+            if (viewMountInfo.direction === 'forward' && Object.keys(viewBackupRef.current).length > 0) {
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 setViewBackup(prev => ({ ...prev, [viewKey]: viewBackupRef.current }))  // save state
             }

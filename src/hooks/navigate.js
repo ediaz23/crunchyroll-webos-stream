@@ -102,7 +102,6 @@ export function useNavigateContent(viewKey) {
         (content, { restoreCurrentContent = false } = {}) => {
             let newPath, setContent
             viewMountInfo.direction = 'forward'
-            viewMountInfo.viewKey = viewKey
             if (isPlayable(content.type)) {
                 if (content.type === 'movie' && content.panel) {
                     content = { ...content, ...content.panel, panel: null }
@@ -129,7 +128,7 @@ export function useNavigateContent(viewKey) {
                     }
                 }
             })
-        }, [viewKey, setPlayContent, setSelectedContent, goTo, restoreState]
+        }, [setPlayContent, setSelectedContent, goTo, restoreState]
     )
 
     return { navigateContent, ...viewBackupHook, ...navigate }

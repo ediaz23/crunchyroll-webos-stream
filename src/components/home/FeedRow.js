@@ -91,7 +91,8 @@ const HomeFeedItem = ({ feed, index, itemHeight, ...rest }) => {
  */
 const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
     const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
-    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedId}-${feedRow.index}`)
+    // to keep index after go back, key has to be same in each row
+    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedType}-${feedId}`)
     /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
     const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */
@@ -148,7 +149,8 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                 if (scrollToRef.current) {
                     clearInterval(interval)
                     let columnIndex = null
-                    if (feedData.index === (rowIndexRef.current.rowIndex || 0)) {
+                    const rowIndex = (rowIndexRef.current.rowIndex || 0)
+                    if (feedData.index === rowIndex) {
                         columnIndex = rowIndexRef.current.columnIndex || 0
                     }
                     if (columnIndex !== null) {

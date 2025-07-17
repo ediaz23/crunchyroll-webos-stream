@@ -353,10 +353,9 @@ export class OrderedSet {
     }
 
     add(item) {
-        if (!this.map.has(item)) {
-            this.map.set(item, true)
-            this.list.push(item)
-        }
+        const count = this.map.get(item) || 0
+        this.map.set(item, count + 1)
+        this.list.push(item)
     }
 
     has(item) {
@@ -365,7 +364,14 @@ export class OrderedSet {
 
     remove(item) {
         if (!this.map.has(item)) return
-        this.map.delete(item)
+
+        const count = this.map.get(item)
+        if (count > 1) {
+            this.map.set(item, count - 1)
+        } else {
+            this.map.delete(item)
+        }
+
         const index = this.list.indexOf(item)
         if (index > -1) this.list.splice(index, 1)
     }
