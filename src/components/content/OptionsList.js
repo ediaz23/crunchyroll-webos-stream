@@ -154,7 +154,8 @@ const getNextContent = async (profile, content) => {
     return new Promise(resolve => {
         const nextProm = api.discover.getNext(profile, {
             contentId: content.id,
-            contentType: content.type
+            contentType: content.type,
+            fnConfig: { cache: false },
         }).then(nextEp => {
             if (nextEp && nextEp.total > 0) {
                 if (nextEp.data[0].type === 'movie') {

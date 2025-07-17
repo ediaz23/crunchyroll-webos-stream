@@ -49,7 +49,7 @@ function init({ maxSize }) {
 function parseMaxAge({ headers }) {
     const cc = headers['cache-control'] || headers['Cache-Control'] || ''
     const m = cc.match(/max-age=(\d+)/i)
-    return m ? parseInt(m[1], 10) : 2 * 60  // 2 mins
+    return m ? parseInt(m[1], 10) : 4 * 60  // 4 mins
 }
 
 /**

@@ -13,8 +13,8 @@ export const worker = new Worker(new URL('../workers/cache.worker.js', import.me
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const pendingTasks = new Map()
 // TODO: maybe decrease priority slots, maybe decide base on TV spec
-const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5])  //  6 normal slot 2 priority
-const requestSlotsPriority = new ResourcePool([6, 7])
+const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5, 6, 7])  //  8 normal slot 2 priority
+const requestSlotsPriority = new ResourcePool([8, 9])
 
 
 function setAdaptiveCacheSize() {
@@ -32,7 +32,9 @@ function setAdaptiveCacheSize() {
 
             const MIN = 5 * 1024 * 1024  // 5 MB
             const MAX = 50 * 1024 * 1024  // 50 MB
-            worker.postMessage({ type: 'init', maxSize: Math.max(MIN, Math.min(MAX, Math.floor(base))) })
+            const maxSize = Math.max(MIN, Math.min(MAX, Math.floor(base)))
+            logger.debug(`cache init memory ${maxSize}`)
+            worker.postMessage({ type: 'init', maxSize })
         })
     } else {
         worker.postMessage({ type: 'init', maxSize: baseSize })

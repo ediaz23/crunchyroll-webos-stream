@@ -933,7 +933,7 @@ const Player = ({ ...rest }) => {
         let doFindPreviews = null
         if (stream.urls && !loading && playerRef.current) {
             doFindPreviews = ({ bufferLevel }) => {
-                if (bufferLevel >= 10) {
+                if (bufferLevel >= 16) {
                     playerRef.current.off(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
                     findPreviews(stream, playerRef.current.getAverageThroughput('video'),).then(setPreviews)
                 }
