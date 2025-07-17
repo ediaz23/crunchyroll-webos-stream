@@ -190,15 +190,15 @@ const getNextContent = async (profile, content) => {
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
  * @param {{content: Object, setContent: Function}} obj.contentState
  * @param {{optionIndex: Object, setOptionIndex: Function}} obj.optionIndexState
- * @param {{loading: Boolean, setLoading: Function}} obj.loandingState
+ * @param {{loading: Boolean, setLoading: Function}} obj.loadingState
  * @param {{moreEpisodes: Function, changeAudio: Function, setSubtitle: Function}} obj.setFunctions
  * @param {{total: Number}} obj.music
  * @param {{total: Number}} obj.similar
  */
-const OptionsList = ({ profile, contentState, optionIndexState, loandingState, setFunctions, music, similar }) => {
+const OptionsList = ({ profile, contentState, optionIndexState, loadingState, setFunctions, music, similar }) => {
     const { optionIndex, setOptionIndex } = optionIndexState
     const { content, setContent } = contentState
-    const { loading, setLoading } = loandingState
+    const { loading, setLoading } = loadingState
     const { moreEpisodes, changeAudio, setSubtitle } = setFunctions
     /** @type {[{type: String, message: String}, Function]}  */
     const [message, setMessage] = useState(null)
@@ -431,9 +431,9 @@ OptionsList.propTypes = {
         optionIndex: PropTypes.string,
         setOptionIndex: PropTypes.func.isRequired,
     }).isRequired,
-    loandingState: PropTypes.shape({
-        loanding: PropTypes.bool,
-        setLoanding: PropTypes.func.isRequired,
+    loadingState: PropTypes.shape({
+        loading: PropTypes.bool.isRequired,
+        setLoading: PropTypes.func.isRequired,
     }).isRequired,
     setFunctions: PropTypes.shape({
         moreEpisodes: PropTypes.func.isRequired,

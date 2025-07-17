@@ -113,7 +113,7 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                                     optionIndex,
                                     setOptionIndex
                                 }}
-                                loandingState={{
+                                loadingState={{
                                     loading,
                                     setLoading
                                 }}
