@@ -258,7 +258,7 @@ const makeFetchProgress = (onProgress) => {
  * @param {RequestSetup} obj
  * @returns {(res, sub) => Promise}
  */
-const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
+const makeServiceProgress = ({ config, onSuccess, onProgress, onFailure }) => {
     /** @type {Array<Uint8Array>} */
     let chunks = []
     /**
@@ -280,7 +280,7 @@ const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
                             res.content = arr
                             sub.cancel()
                             onSuccess(res)
-                        })
+                        }).catch(onFailure)
                     }
                 } else {
                     sub.cancel()
@@ -288,6 +288,7 @@ const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
                 }
             } else {
                 sub.cancel()
+                onSuccess(res)
             }
         }
     }
