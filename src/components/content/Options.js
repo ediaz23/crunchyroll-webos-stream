@@ -91,14 +91,21 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
                             </div>
                         </Cell>
                         <Cell size="13%">
-                            <BodyText component='div' size='small' style={{ marginTop: '1rem', marginBottom: '1rem' }}>
-                                {Array.from({ length: 5 }, (_v, i) =>
-                                    <IconButton size='small' key={i} data-star={i}
-                                        onClick={updateRating}>
-                                        {(i < rating) ? 'star' : 'hollowstar'}
-                                    </IconButton>
-                                )}
-                            </BodyText>
+                            {loading &&
+                                <Column align='center center' style={{ height: '100%', width: '100%' }}>
+                                    <Spinner />
+                                </Column>
+                            }
+                            {!loading &&
+                                <BodyText component='div' size='small' style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                                    {Array.from({ length: 5 }, (_v, i) =>
+                                        <IconButton size='small' key={i} data-star={i}
+                                            onClick={updateRating}>
+                                            {(i < rating) ? 'star' : 'hollowstar'}
+                                        </IconButton>
+                                    )}
+                                </BodyText>
+                            }
                         </Cell>
                         <Cell size='37%'>
                             <OptionsList

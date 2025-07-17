@@ -32,8 +32,8 @@ const convertItem2Object = async (item) => {
             const res = await api.utils.fetchAuth(item.link)
             if (res.url.startsWith('https://www.crunchyroll.com/')) {
                 let split = res.url.split('/')
-                if (split.length > 1) {
-                    out = split[split.length - 2]
+                if (split.length > 4) {
+                    out = split[4]
                 }
             }
         }

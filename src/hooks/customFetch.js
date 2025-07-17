@@ -13,8 +13,8 @@ export const worker = new Worker(new URL('../workers/cache.worker.js', import.me
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const pendingTasks = new Map()
 // TODO: maybe decrease priority slots, maybe decide base on TV spec
-const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5, 6, 7])  //  8 normal slot 2 priority
-const requestSlotsPriority = new ResourcePool([8, 9])
+const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5, 6, 7, 8])  //  9 normal slot 1 priority
+const requestSlotsPriority = new ResourcePool([9])
 
 
 function setAdaptiveCacheSize() {
