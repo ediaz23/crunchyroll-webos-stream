@@ -22,8 +22,9 @@ import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
+import AppConfigPanel from '../views/AppConfigPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
-import useCustomFetch, { worker as fetchWorker } from '../hooks/customFetch'
+import useCustomFetch, { initCache, finishCache } from '../hooks/customFetch'
 import { useNavigate } from '../hooks/navigate'
 import api from '../api'
 import utils from '../utils'
@@ -72,13 +73,14 @@ const App = ({ ...rest }) => {
             await api.config.init()
             api.config.setCustomFetch(customFetch)
             await api.config.setDeviceInformation()
+            await api.config.setAppConfig()
+            initCache()
             setDBInit(true)
         }
         initDB()
         return () => {
             utils.worker.terminate()
-            fetchWorker.postMessage({ type: 'close' })
-            fetchWorker.terminate()
+            finishCache()
         }
     }, [setDBInit, customFetch])
 
@@ -98,6 +100,7 @@ const App = ({ ...rest }) => {
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />
                     <Route path='askClose' component={ConfirmExitPanel} {...rest} />
+                    <Route path='appConfig' component={AppConfigPanel} {...rest} />
                     <Route path='developer' component={DeveloperPanel} {...rest} />
                 </RoutablePanels>
             </div>

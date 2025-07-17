@@ -8,7 +8,6 @@ import HomeContentBanner from '../home/ContentBanner'
 import PopupMessage from '../Popup'
 
 
-
 const ContentInfo = ({ content }) => {
     /** @type {[Function, Function]} */
     const [onShowSubPopup, setOnShowSubPopup] = useState(undefined)

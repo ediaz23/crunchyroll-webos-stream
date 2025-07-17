@@ -95,4 +95,31 @@ export const setDeviceInformation = async () => {
     }
 }
 
+/**
+ * @typedef AppConfig
+ * @type {Object}
+ * @property {'full'|'lite'} ui
+ * @property {'adaptive'|'2160p'|'1080p'|'720p'|'480p'|'360p'|'240p'} video
+ * @property {'hardsub'|'softsub'} subtitle
+ * @property {'yes'|'no'} preview
+ * @property {'adaptive'|5|10|15|20|30|50} cacheMemory
+ *
+ * @param {AppConfig} [newConfig]
+ * @return {Promise}
+ */
+export const setAppConfig = async (newConfig = {}) => {
+    /** @type {AppConfig} */
+    const defaultConfig = {
+        ui: 'full',
+        video: 'adaptive',
+        subtitle: 'hardsub',
+        preview: 'yes',
+        cacheMemory: 'adaptive',
+    }
+    await localStore.setNewData({ appConfig: { ...defaultConfig, ...(storage.appConfig || {}), ...newConfig } })
+}
+
+/** @returns {AppConfig} */
+export const getAppConfig = () => storage.appConfig
+
 export const SERVER_CERTIFICATE = 'CrsCCAMSEKDc0WAwLAQT1SB2ogyBJEwYv4Tx7gUijgIwggEKAoIBAQC8Xc/GTRwZDtlnBThq8V382D1oJAM0F/YgCQtNDLz7vTWJ+QskNGi5Dd2qzO4s48Cnx5BLvL4H0xCRSw2Ed6ekHSdrRUwyoYOE+M/t1oIbccwlTQ7o+BpV1X6TB7fxFyx1jsBtRsBWphU65w121zqmSiwzZzJ4xsXVQCJpQnNI61gzHO42XZOMuxytMm0F6puNHTTqhyY3Z290YqvSDdOB+UY5QJuXJgjhvOUD9+oaLlvT+vwmV2/NJWxKqHBKdL9JqvOnNiQUF0hDI7Wf8Wb63RYSXKE27Ky31hKgx1wuq7TTWkA+kHnJTUrTEfQxfPR4dJTquE+IDLAi5yeVVxzbAgMBAAE6DGNhc3RsYWJzLmNvbUABEoADMmGXpXg/0qxUuwokpsqVIHZrJfu62ar+BF8UVUKdK5oYQoiTZd9OzK3kr29kqGGk3lSgM0/p499p/FUL8oHHzgsJ7Hajdsyzn0Vs3+VysAgaJAkXZ+k+N6Ka0WBiZlCtcunVJDiHQbz1sF9GvcePUUi2fM/h7hyskG5ZLAyJMzTvgnV3D8/I5Y6mCFBPb/+/Ri+9bEvquPF3Ff9ip3yEHu9mcQeEYCeGe9zR/27eI5MATX39gYtCnn7dDXVxo4/rCYK0A4VemC3HRai2X3pSGcsKY7+6we7h4IycjqtuGtYg8AbaigovcoURAZcr1d/G0rpREjLdVLG0Gjqk63Gx688W5gh3TKemsK3R1jV0dOfj3e6uV/kTpsNRL9KsD0v7ysBQVdUXEbJotcFz71tI5qc3jwr6GjYIPA3VzusD17PN6AGQniMwxJV12z/EgnUopcFB13osydpD2AaDsgWo5RWJcNf+fzCgtUQx/0Au9+xVm5LQBdv8Ja4f2oiHN3dw'

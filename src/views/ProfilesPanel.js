@@ -12,9 +12,7 @@ import { useSetRecoilState } from 'recoil'
 import { $L } from '../hooks/language'
 import { currentProfileState, homeViewReadyState } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
-import ContactMe from '../components/login/ContactMe'
-import Logout from '../components/login/Logout'
-import DevBtn from '../components/DevBtn'
+import { ContactMeBtn, DevBtn, LogoutBtn, AppConfigBtn } from '../components/Buttons'
 import api from '../api'
 import { DEV_FAST_SELECT } from '../const'
 import { useNavigate, useResetHomeState } from '../hooks/navigate'
@@ -104,8 +102,9 @@ const ProfilesPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe />
-                <Logout />
+                <AppConfigBtn />
+                <ContactMeBtn />
+                <LogoutBtn />
             </Header>
             <Column align='center'>
                 {!loading && multiProfile && multiProfile.profiles.length ?
@@ -132,6 +131,7 @@ const ProfilesPanel = ({ ...rest }) => {
                                     {$L('Add')}
                                 </Button>
                             }
+                            <AppConfigBtn mode='full' />
                             <DevBtn />
                         </Row>
                     </>

@@ -14,6 +14,7 @@ import ContentGrid from '../components/grid/ContentGrid'
 import Simulcast from '../components/simulcast/Simulcast'
 import Watchlist from '../components/watchlist/Watchlist'
 import api from '../api'
+import AppConfigPanel from './AppConfigPanel'
 import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
 import { $L } from '../hooks/language'
@@ -57,6 +58,7 @@ const HomePanel = (props) => {
         { key: 'movies', icon: 'recordings', label: $L('Movies') },
         { key: 'musics', icon: 'music', label: $L('Music') },
         { key: 'my_list', icon: 'denselist', label: $L('My List') },
+        { key: 'config', icon: 'gear', label: $L('Configuration') },
         { key: 'info', icon: 'info', label: $L('About Me?') },
         { key: 'close', icon: 'closex', label: $L('Close') },
     ], [])
@@ -173,6 +175,7 @@ const HomePanel = (props) => {
                                 title={toolbarList[currentActivity].label}
                                 musicFeed={musicFeed} />
                             <Watchlist profile={profile} />
+                            <AppConfigPanel noButtons />
                             <ContactMePanel noAcceptBtn />
                             <ConfirmExitPanel onCancel={setActivity} />
                         </ActivityViews>

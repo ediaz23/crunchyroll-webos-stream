@@ -12,7 +12,7 @@ import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
 import Rating from './Rating'
 import ContentInfo from './ContentInfo'
-import ContactMe from '../login/ContactMe'
+import { ContactMeBtn, AppConfigBtn } from '../Buttons'
 import PopupMessage from '../Popup'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
@@ -22,7 +22,6 @@ import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
 import logger from '../../logger'
 import api from '../../api'
-import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../assets/empty.mp4'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
@@ -399,7 +398,7 @@ const requestDashLicense = (profile) => {
     /** @param {import('dashjs-webos5').LicenseRequest} req */
     return async (req) => {
         /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
-        const account = await getContentParam(profile)
+        const account = await api.utils.getContentParam(profile)
         req.headers = req.headers || {};
         if (req.url.endsWith('widevine')) {
             req.headers['Content-Type'] = 'application/octet-stream'
@@ -417,7 +416,7 @@ const requestDashLicense = (profile) => {
 const modifierDashRequest = (profile) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
-        const account = await getContentParam(profile)
+        const account = await api.utils.getContentParam(profile)
         /** @type {Request} */
         const request = req
         request.headers = { ...req.headers }
@@ -428,9 +427,59 @@ const modifierDashRequest = (profile) => {
 
 /**
  * @param {import('dashjs-webos5').MediaPlayerClass} dashPlayer
+ * @param {import('react').MutableRefObject<import('../../api/config').AppConfig>} appConfigRef
  */
-const setStreamingConfig = async (dashPlayer) => {
+const setVideoQuality = (dashPlayer, appConfigRef) => {
+    const audioBitrateLimits = {
+        '2160p': 192,
+        '1080p': 160,
+        '720p': 128,
+        '480p': 96,
+        '360p': 96,
+        '240p': 96
+    }
+    const _setVideoQuality = () => {
+        dashPlayer.off(dashjs.MediaPlayer.events.STREAM_INITIALIZED, _setVideoQuality)
+        // videos
+        const maxHeight = parseInt(appConfigRef.current.video.replace('p', ''))
+        const videoReps = dashPlayer.getRepresentationsByType('video')
+        const validReps = videoReps.filter(r => typeof r.height === 'number')
 
+        let selected = validReps
+            .filter(r => r.height <= maxHeight)
+            .sort((a, b) => b.height - a.height)[0]
+
+        if (!selected) {
+            selected = validReps.sort((a, b) => b.height - a.height)[0]
+        }
+
+        logger.debug(`player videos ${validReps.map(i => i.height).join(', ')}`)
+        logger.debug(`player video ${selected.height} for ${appConfigRef.current.video} id ${selected.id}`)
+        dashPlayer.setRepresentationForTypeById('video', selected.id, true)
+        // audios
+        const bitrateLimit = audioBitrateLimits[appConfigRef.current.video]
+        const audioReps = dashPlayer.getRepresentationsByType('audio')
+        const validAudios = audioReps.filter(r => typeof r.bitrateInKbit === 'number')
+
+        selected = validAudios
+            .filter(r => r.bitrateInKbit <= bitrateLimit)
+            .sort((a, b) => b.bitrateInKbit - a.bitrateInKbit)[0]
+
+        if (!selected) {
+            selected = validAudios.sort((a, b) => a.bitrateInKbit - b.bitrateInKbit)[0]
+        }
+        logger.debug(`player audios ${audioReps.map(i => i.bitrateInKbit).join(', ')}`)
+        logger.debug(`player audio ${selected.bitrateInKbit} for ${bitrateLimit} id ${selected.id}`)
+        dashPlayer.setRepresentationForTypeById('audio', selected.id, true)
+    }
+    dashPlayer.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, _setVideoQuality)
+}
+
+/**
+ * @param {import('dashjs-webos5').MediaPlayerClass} dashPlayer
+ * @param {import('react').MutableRefObject<import('../../api/config').AppConfig>} appConfigRef
+ */
+const setStreamingConfig = async (dashPlayer, appConfigRef) => {
     let bufferTimeAtTopQuality = 150
     let bufferTimeAtTopQualityLongForm = 300
     let initialBufferLevel = 16
@@ -466,7 +515,7 @@ const setStreamingConfig = async (dashPlayer) => {
             initialBufferLevel = 14
         }
     }
-
+    const isAdaptive = appConfigRef.current.video === 'adaptive'
     dashPlayer.updateSettings({
         streaming: {
             buffer: {
@@ -480,17 +529,13 @@ const setStreamingConfig = async (dashPlayer) => {
                 initialBufferLevel,
             },
             abr: {
-                autoSwitchBitrate: {
-                    audio: true,
-                    video: true
-                },
+                autoSwitchBitrate: { audio: isAdaptive, video: isAdaptive },
                 initialBitrate: { audio: -1, video: -1 },
-                // IA recomendation
-                // initialBitrate: { audio: 96000, video: 2000000 },
                 limitBitrateByPortal: true
             },
         }
     })
+
 }
 
 /**
@@ -498,9 +543,10 @@ const setStreamingConfig = async (dashPlayer) => {
  * @param {Stream} stream
  * @param {Object} content
  * @param {import('./SubtitleList').Subtitle} subtitle
+ * @param {import('react').MutableRefObject<import('../../api/config').AppConfig>} appConfigRef
  * @returns {Promise<import('dashjs-webos5').MediaPlayerClass>}
  */
-const createDashPlayer = async (audio, stream, content, subtitle) => {
+const createDashPlayer = async (audio, stream, content, subtitle, appConfigRef) => {
     let url = null
     const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
     /** @type {import('dashjs-webos5').MediaPlayerClass}*/
@@ -508,7 +554,7 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
 
     dashPlayer.extend('XHRLoader', XHRLoader)
     dashPlayer.addRequestInterceptor(modifierDashRequest(stream.profile))
-    await setStreamingConfig(dashPlayer)
+    await setStreamingConfig(dashPlayer, appConfigRef)
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
         url = stream.urls.find(val => val.locale === 'off')
@@ -691,6 +737,7 @@ const Player = ({ ...rest }) => {
     const previewRef = useRef(null)
     const findPreviews = usePreviewWorker(!!stream.urls)
     const lastTokenRef = useRef(null)
+    const appConfigRef = useRef(api.config.getAppConfig())
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -881,7 +928,8 @@ const Player = ({ ...rest }) => {
                         selectAudio={selectAudio}
                         triggerActivity={triggerActivity} />
                 }
-                <ContactMe />
+                <AppConfigBtn />
+                <ContactMeBtn />
             </>
         );
     }, [stream, subtitle, selectSubtitle, audio, selectAudio, triggerActivity])
@@ -931,7 +979,7 @@ const Player = ({ ...rest }) => {
 
     useEffect(() => {  // findPreviews
         let doFindPreviews = null
-        if (stream.urls && !loading && playerRef.current) {
+        if (stream.urls && !loading && playerRef.current && appConfigRef.current.preview === 'yes') {
             doFindPreviews = ({ bufferLevel }) => {
                 if (bufferLevel >= 16) {
                     playerRef.current.off(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
@@ -958,11 +1006,14 @@ const Player = ({ ...rest }) => {
             interval = setInterval(() => {
                 if (playerCompRef.current) {
                     clearInterval(interval)
-                    createDashPlayer(audio, stream, content, subtitle).then(player => {
+                    createDashPlayer(audio, stream, content, subtitle, appConfigRef).then(player => {
                         playerRef.current = player
                         playerRef.current.play()
                         setLoading(false)
                         setIsPaused(false)
+                        if (appConfigRef.current.video !== 'adaptive') {
+                            setVideoQuality(player, appConfigRef)
+                        }
                         /* how to log, add function and off events in clean up function
                         player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
                         player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)

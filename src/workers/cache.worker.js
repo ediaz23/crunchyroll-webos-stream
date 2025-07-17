@@ -32,7 +32,13 @@ const memoryCache = {
  */
 function init({ maxSize }) {
     memoryCache.maxSize = maxSize
+    if (memoryCache.lru) {
+        memoryCache.lru.clear()
+    }
     memoryCache.lru = new QuickLRU({ maxSize, size: v => v.size, })
+    if (memoryCache.gcTimer) {
+        clearInterval(memoryCache.gcTimer)
+    }
     memoryCache.gcTimer = setInterval(() => {
         for (const [key, entry] of memoryCache.lru) {
             if (expired(entry)) {

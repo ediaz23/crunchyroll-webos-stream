@@ -8,7 +8,7 @@ import Button from '@enact/moonstone/Button'
 import { useSetRecoilState, useRecoilState } from 'recoil'
 
 import { LoginWithEmail, LoginWithCode, LoginWithQR } from '../components/login/Login'
-import ContactMe from '../components/login/ContactMe'
+import { ContactMeBtn, AppConfigBtn } from '../components/Buttons'
 import PopupMessage from '../components/Popup'
 import { autoLoginState, isPremiumState } from '../recoilConfig'
 import api from '../api'
@@ -114,7 +114,8 @@ const LoginPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe />
+                <AppConfigBtn />
+                <ContactMeBtn />
             </Header>
             <Column>
                 <Row align='center center'>

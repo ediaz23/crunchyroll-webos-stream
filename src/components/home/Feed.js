@@ -9,6 +9,7 @@ import HomeFeedRow from './FeedRow'
 import VirtualListNested from '../../patch/VirtualListNested'
 import { getFakeFeedItem } from '../../hooks/homefeedWorker'
 import { useViewBackup } from '../../hooks/viewBackup'
+import api from '../../api'
 
 
 /**
@@ -31,6 +32,7 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
     const itemHeigth = ri.scale(270)
     /** @type {Object} */
     const fakeItem = useMemo(getFakeFeedItem, [])
+    const appConfigRef = useRef(api.config.getAppConfig())
 
     /** @type {Function} */
     const renderRow = useCallback(({ index, ...rest }) => (
@@ -60,7 +62,12 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
     return (
         <Column style={{ paddingLeft: '0.5rem' }} {...rest2}>
             <Cell size="47%">
-                {selectedContent && <HomeContentBanner content={selectedContent} noCategory />}
+                {selectedContent &&
+                    <HomeContentBanner
+                        content={selectedContent}
+                        noPoster={appConfigRef.current.ui === 'lite'}
+                        noCategory />
+                }
             </Cell>
             <Cell>
                 <VirtualListNested

@@ -2,6 +2,7 @@
 
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
+import api from '../api'
 import utils, { ResourcePool } from '../utils'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
@@ -12,37 +13,40 @@ const { webOS } = window
 export const worker = new Worker(new URL('../workers/cache.worker.js', import.meta.url), { type: 'module' })
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
 const pendingTasks = new Map()
-// TODO: maybe decrease priority slots, maybe decide base on TV spec
 const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5, 6, 7, 8])  //  9 normal slot 1 priority
 const requestSlotsPriority = new ResourcePool([9])
 
 
 function setAdaptiveCacheSize() {
-    const baseSize = 15 * 1024 * 1024  // 15MB
-    if (utils.isTv()) {
-        webOS.deviceInfo(deviceInfo => {
-            const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
-            const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
-            const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
+    const appConfig = api.config.getAppConfig()
+    const baseSize = 15  // 15MB
+    if (appConfig.cacheMemory === 'adaptive') {
+        if (utils.isTv()) {
+            webOS.deviceInfo(deviceInfo => {
+                const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+                const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
+                const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
 
-            let base = Math.floor(ramInGB * baseSize)  // 15MB per GB of RAM
+                let base = Math.floor(ramInGB * baseSize)  // 15MB per GB of RAM
 
-            if (is4K) base *= 0.9  // reduce if 45
-            if (hasHDR) base *= 0.9  // reduce HDR
+                if (is4K) base *= 0.9  // reduce if 45
+                if (hasHDR) base *= 0.9  // reduce HDR
 
-            const MIN = 5 * 1024 * 1024  // 5 MB
-            const MAX = 50 * 1024 * 1024  // 50 MB
-            const maxSize = Math.max(MIN, Math.min(MAX, Math.floor(base)))
-            logger.debug(`cache init memory ${maxSize}`)
-            worker.postMessage({ type: 'init', maxSize })
-        })
+                const MIN = 5  // 5 MB
+                const MAX = 50  // 50 MB
+                const maxSize = Math.max(MIN, Math.min(MAX, Math.floor(base)))
+                logger.debug(`cache init memory ${maxSize}`)
+                worker.postMessage({ type: 'init', maxSize: maxSize * 1024 * 1024 })
+            })
+        } else {
+            logger.debug(`cache init memory ${baseSize}`)
+            worker.postMessage({ type: 'init', maxSize: baseSize * 1024 * 1024 })
+        }
     } else {
-        worker.postMessage({ type: 'init', maxSize: baseSize })
+        logger.debug(`cache init memory ${appConfig.cacheMemory}`)
+        worker.postMessage({ type: 'init', maxSize: parseInt(appConfig.cacheMemory) * 1024 * 1024 })
     }
-    worker.active = true
 }
-
-if (!worker.active) { setAdaptiveCacheSize() }
 
 /**
  * @typedef ResponseProxy
@@ -92,6 +96,19 @@ worker.addEventListener('message', ({ data }) => {
     }
 })
 
+export function initCache() {
+    setAdaptiveCacheSize()
+}
+
+export function finishCache() {
+    worker.postMessage({ type: 'close' })
+    worker.terminate()
+}
+
+export function clearCache() {
+    worker.postMessage({ type: 'clear' })
+}
+
 /**
  * @param {String} url
  * @return {Promise<import('../workers/cache.worker').ReqEntry>}
@@ -113,10 +130,6 @@ export async function getCache(url) {
  */
 export async function saveCache(url, response) {
     worker.postMessage({ type: 'save', url, response })
-}
-
-export function clearCache() {
-    worker.postMessage({ type: 'clear' })
 }
 
 /**
