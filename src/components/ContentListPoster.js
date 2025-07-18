@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 import { Cell, Column } from '@enact/ui/Layout'
 
 import PropTypes from 'prop-types'
@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import HomeContentBanner from './home/ContentBanner'
 import ContentGridItems from './grid/ContentGridItems'
 import useContentList from '../hooks/contentList'
+import api from '../api'
 
 
 /**
@@ -18,9 +19,8 @@ import useContentList from '../hooks/contentList'
  * @param {Function} [obj.onSelect]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Boolean} [obj.noPoster]
- * @param {Boolean} [obj.noCache]
  */
-const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, ...rest }) => {
+const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noCategory = false, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
@@ -48,6 +48,8 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
         }
     }, [loadData, mergeContentList, options])
 
+    const appConfigRef = useRef(api.config.getAppConfig())
+
     useEffect(() => {
         if (delay >= 0) {
             changeContentList(null)
@@ -65,11 +67,10 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
         <Column {...rest}>
             <Column>
                 <Cell size="50%">
-                    {selectedContent &&
-                        <HomeContentBanner
-                            content={selectedContent}
-                            noPoster={noPoster} />
-                    }
+                    <HomeContentBanner
+                        content={selectedContent}
+                        noPoster={noPoster || appConfigRef.current.ui === 'lite'}
+                        noCategory={noCategory || appConfigRef.current.ui === 'lite'} />
                 </Cell>
                 <Cell grow>
                     <ContentGridItems
@@ -93,6 +94,7 @@ ContentListPoster.propTypes = {
     onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
+    noCategory: PropTypes.bool,
 }
 
 export default ContentListPoster

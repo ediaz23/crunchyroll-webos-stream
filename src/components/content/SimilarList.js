@@ -7,7 +7,6 @@ import ContentListPoster from '../ContentListPoster'
 
 /**
  * SimilarList
- * @fixme try to keep response to improve speed, now it is disabled for sync issues.
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {{content: Object, setContent: Function}} obj.contentState

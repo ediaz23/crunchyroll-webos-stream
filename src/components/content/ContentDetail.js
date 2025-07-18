@@ -15,7 +15,6 @@ import { isPremiumState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useNavigateContent } from '../../hooks/navigate'
 import { isPlayable } from '../../utils'
-import api from '../../api'
 import css from './ContentDetail.module.less'
 
 
@@ -71,7 +70,6 @@ const ContentDetail = ({ profile, content, ...rest }) => {
         [options.changeAudio]: createChangeActivity(pushHistory, setCurrentIndex, options.changeAudio, options.option),
     }), [options, setCurrentIndex, pushHistory])
     const setActivityRef = useRef(setActivity)
-    const appConfigRef = useRef(api.config.getAppConfig())
     /** @type {Function} */
     const setContent = useCallback((newContent) => {
         if (currentIndex !== options.option) {
@@ -87,10 +85,8 @@ const ContentDetail = ({ profile, content, ...rest }) => {
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {
         if (ref) {
-            if (appConfigRef.current.ui === 'full') {
-                const boundingRect = ref.getBoundingClientRect()
-                setImage(getImagePerResolution({ width: boundingRect.width, content }))
-            }
+            const boundingRect = ref.getBoundingClientRect()
+            setImage(getImagePerResolution({ width: boundingRect.width, content }))
         }
     }, [content, getImagePerResolution])
 

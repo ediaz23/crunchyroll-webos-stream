@@ -47,7 +47,6 @@ const Watchlist = ({ profile, ...rest }) => {
             profile={profile}
             loadData={loadData}
             type='watchlist'
-            noPoster={api.config.getAppConfig().ui === 'lite'}
             {...rest}
         />
     )

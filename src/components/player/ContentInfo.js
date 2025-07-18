@@ -16,7 +16,10 @@ const ContentInfo = ({ content }) => {
         <>
             <PopupMessage setShowPopup={setOnShowSubPopup}>
                 <div style={{ height: ri.scale(400) }}>
-                    <HomeContentBanner content={content} noCategory spotlightDisabled />
+                    <HomeContentBanner
+                        content={content}
+                        noCategory
+                        spotlightDisabled />
                 </div>
             </PopupMessage>
             <IconButton

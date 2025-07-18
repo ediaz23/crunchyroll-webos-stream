@@ -25,6 +25,7 @@ import useContentList from '../../hooks/contentList'
 
 /**
  * Simulcast view
+ * @TODO add poster for first weeks of season
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.title title for view

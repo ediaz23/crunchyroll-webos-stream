@@ -62,12 +62,10 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
     return (
         <Column style={{ paddingLeft: '0.5rem' }} {...rest2}>
             <Cell size="47%">
-                {selectedContent &&
-                    <HomeContentBanner
-                        content={selectedContent}
-                        noPoster={appConfigRef.current.ui === 'lite'}
-                        noCategory />
-                }
+                <HomeContentBanner
+                    content={selectedContent}
+                    noPoster={appConfigRef.current.ui === 'lite'}
+                    noCategory />
             </Cell>
             <Cell>
                 <VirtualListNested

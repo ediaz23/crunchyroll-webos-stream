@@ -321,6 +321,26 @@ export function isPlayable(type) {
     return ['episode', 'movie', 'musicConcert', 'musicVideo'].includes(type)
 }
 
+export function getIsBeginningSeason() {
+    const date = new Date()
+    const year = date.getFullYear()
+    const seasonChanges = [
+        new Date(year, 2, 21),   // March (month index 2)
+        new Date(year, 5, 21),   // June  (month index 5)
+        new Date(year, 8, 21),   // September (month index 8)
+        new Date(year, 11, 21),  // December (month index 11)
+    ];
+
+    const threeWeeksInMs = 30 * 24 * 60 * 60 * 1000; // Three weeks in milliseconds
+    // Check if today's date is within 3 weeks after any of the season change dates
+    return seasonChanges.some(changeDate => {
+        const start = changeDate.getTime()
+        const end = start + threeWeeksInMs
+        const today = date.getTime()
+        return start <= today && today < end
+    })
+}
+
 export class ResourcePool {
     constructor(slotIds) {
         this.freeSlots = new Set(slotIds)
