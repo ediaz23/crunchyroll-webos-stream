@@ -1,14 +1,92 @@
+/* global Worker */
 
 import 'webostvjs'
+import utilsImpl from './utils.impl'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
+const worker = new Worker(new URL('./workers/util.worker.js', import.meta.url), { type: 'module' })
+let taskCounter = 0
+const taskMap = new Map()
+
+
+worker.onmessage = ({ data }) => {
+    const { taskId, result, error, success } = data
+    const { res, rej } = taskMap.get(taskId) || {}
+    taskMap.delete(taskId)
+
+    if (success) {
+        res(result)
+    } else {
+        rej(new Error(error))
+    }
+}
 
 /**
  * Rreturn if is a tv device
  * @returns {Boolean}
  */
-export const isTv = () => window.PalmServiceBridge || window.PalmServiceBridge
+export const isTv = () => !!window.PalmServiceBridge
+
+
+/**
+ * @param {String} type
+ * @param {Array} args
+ * @return {Promise}
+ */
+const callWorker = (type, ...args) => {
+    return new Promise((res, rej) => {
+        const taskId = `task-${++taskCounter}`
+        taskMap.set(taskId, { res, rej })
+
+        worker.postMessage({ type, taskId, payload: args })
+    })
+}
+
+export const arrayToBase64 = utilsImpl.arrayToBase64
+/**
+ * @param {Uint8Array|ArrayBuffer} body
+ * @returns {Promise<String>}
+ */
+export const arrayToBase64Async = body => callWorker('arrayToBase64', body)
+
+export const base64toArray = utilsImpl.base64toArray
+/**
+ * @param {String} content
+ * @returns {Promise<Uint8Array>}
+ */
+export const base64toArrayAsync = content => callWorker('base64toArray', content)
+
+export const stringToUint8Array = utilsImpl.stringToUint8Array
+/**
+ * @param {String} content
+ * @returns {Promise<Uint8Array>}
+ */
+export const stringToUint8ArrayAsync = content => callWorker('stringToUint8Array', content)
+
+export const uint8ArrayToString = utilsImpl.uint8ArrayToString
+/**
+ * @param {Uint8Array} content
+ * @returns {Promise<String>}
+ */
+export const uint8ArrayToStringAsync = content => callWorker('uint8ArrayToString', content)
+
+export const decodeResponse = utilsImpl.decodeResponse
+/**
+ * @param {Object} obj
+ * @param {String} obj.content
+ * @param {Boolean} obj.compress
+ * @return {Promise<Uint8Array>}
+ */
+export const decodeResponseAsync = ({ content, compress }) => callWorker('decodeResponse', { content, compress })
+
+export const encodeRequest = utilsImpl.encodeRequest
+/**
+ * @param {Object} content
+ * @return {Promise<String>}
+ */
+export const encodeRequestAsync = content => callWorker('encodeRequest', content)
+
 
 /**
  * Convert object to json but sort keys before
@@ -170,50 +248,6 @@ export const loadTvTranslate = async (lib, lang) => {
     return out
 }
 
-/**
- * @param {Uint8Array} uint8Array
- * @returns {String}
- */
-export const uint8ArrayToString = (uint8Array) => {
-    return [...uint8Array].map(byte => String.fromCharCode(byte)).join('')
-}
-
-/**
- * @param {String} content
- * @returns {Uint8Array}
- */
-export const stringToUint8Array = (content) => {
-    const buffer = new ArrayBuffer(content.length)
-    const bytes = new Uint8Array(buffer)
-    for (let i = 0; i < content.length; i++) {
-        bytes[i] = content.charCodeAt(i) & 0xff
-    }
-    return bytes
-}
-
-/**
- * @param {Uint8Array|ArrayBuffer} body
- * @returns {String}
- */
-export const arrayToBase64 = (body) => {
-    const uint8Array = body instanceof Uint8Array ? body : new Uint8Array(body)
-    const str = uint8ArrayToString(uint8Array)
-    return btoa(str)
-}
-
-/**
- * @param {String} content
- * @returns {Uint8Array}
- */
-export const base64toArray = (content) => {
-    const binaryString = atob(content)
-    const buffer = new ArrayBuffer(binaryString.length)
-    const bytes = new Uint8Array(buffer)
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i) & 0xff
-    }
-    return bytes
-}
 
 /**
  * @param {Object} item
@@ -224,6 +258,16 @@ export const getIsPremium = (item) => {
         is_premium_only: item.isPremiumOnly || item.is_premium_only
     }).is_premium_only
 }
+
+/**
+ * @param {String} ddrSizeString
+ * @return {Number}
+ */
+export const parseRamSizeInGB = (ddrSizeString) => {
+    const match = ddrSizeString.match(/([\d.]+)G/i);
+    return match ? parseFloat(match[1]) : 0;
+}
+
 
 /**
  * @param {Object} obj
@@ -273,7 +317,101 @@ export function customStringify(obj, space = 2) {
     return helper(obj, 0);
 }
 
+export function isPlayable(type) {
+    return ['episode', 'movie', 'musicConcert', 'musicVideo'].includes(type)
+}
+
+export function getIsBeginningSeason() {
+    const date = new Date()
+    const year = date.getFullYear()
+    const seasonChanges = [
+        new Date(year, 2, 21),   // March (month index 2)
+        new Date(year, 5, 21),   // June  (month index 5)
+        new Date(year, 8, 21),   // September (month index 8)
+        new Date(year, 11, 21),  // December (month index 11)
+    ];
+
+    const threeWeeksInMs = 30 * 24 * 60 * 60 * 1000; // Three weeks in milliseconds
+    // Check if today's date is within 3 weeks after any of the season change dates
+    return seasonChanges.some(changeDate => {
+        const start = changeDate.getTime()
+        const end = start + threeWeeksInMs
+        const today = date.getTime()
+        return start <= today && today < end
+    })
+}
+
+export class ResourcePool {
+    constructor(slotIds) {
+        this.freeSlots = new Set(slotIds)
+        this.queue = []
+    }
+
+    async acquire() {
+        if (this.freeSlots.size > 0) {
+            const slot = this.freeSlots.values().next().value
+            this.freeSlots.delete(slot)
+            return slot
+        }
+        return new Promise(resolve => this.queue.push(resolve))
+    }
+
+    release(slotId) {
+        if (this.queue.length > 0) {
+            const next = this.queue.shift()
+            next(slotId)
+        } else {
+            this.freeSlots.add(slotId)
+        }
+    }
+}
+
+export class OrderedSet {
+    constructor() {
+        this.map = new Map()
+        this.list = []
+    }
+
+    add(item) {
+        const count = this.map.get(item) || 0
+        this.map.set(item, count + 1)
+        this.list.push(item)
+    }
+
+    has(item) {
+        return this.map.has(item)
+    }
+
+    remove(item) {
+        if (!this.map.has(item)) return
+
+        const count = this.map.get(item)
+        if (count > 1) {
+            this.map.set(item, count - 1)
+        } else {
+            this.map.delete(item)
+        }
+
+        const index = this.list.indexOf(item)
+        if (index > -1) this.list.splice(index, 1)
+    }
+
+    indexOf(item) {
+        return this.list.indexOf(item)
+    }
+
+    get lastElement() {
+        return this.list.length ? this.list[this.list.length - 1] : null
+    }
+
+    getList() {
+        return this.list
+    }
+}
+
+
 export default {
+    worker,
     isTv,
     stringifySorted,
     formatDurationMs,
@@ -284,9 +422,19 @@ export default {
     loadLibData,
     loadBrowserTranslate,
     loadTvTranslate,
-    arrayToBase64,
-    base64toArray,
-    uint8ArrayToString,
-    stringToUint8Array,
+    parseRamSizeInGB,
     customStringify,
+
+    arrayToBase64,
+    arrayToBase64Async,
+    base64toArray,
+    base64toArrayAsync,
+    stringToUint8Array,
+    stringToUint8ArrayAsync,
+    uint8ArrayToString,
+    uint8ArrayToStringAsync,
+    decodeResponse,
+    decodeResponseAsync,
+    encodeRequest,
+    encodeRequestAsync,
 }

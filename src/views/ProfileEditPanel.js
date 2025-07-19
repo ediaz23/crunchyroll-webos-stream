@@ -8,8 +8,7 @@ import Spinner from '@enact/moonstone/Spinner'
 import { useRecoilValue } from 'recoil'
 
 import ProfileDetail from '../components/profile/Detail'
-import ContactMe from '../components/login/ContactMe'
-import Logout from '../components/login/Logout'
+import { ContactMeBtn, LogoutBtn, AppConfigBtn } from '../components/Buttons'
 
 import { currentProfileState } from '../recoilConfig'
 import { useMapLang, $L } from '../hooks/language'
@@ -94,8 +93,9 @@ const ProfileEditPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe origin='profiles/edit' />
-                <Logout />
+                <AppConfigBtn />
+                <ContactMeBtn />
+                <LogoutBtn />
             </Header>
             <Row align='center center'>
                 <Heading size='large'>

@@ -1,30 +1,30 @@
 {
     "1s": {
-        "displayed": "1",
+        "displayed": "5.3",
         "unit": "K",
         "percentage": 1
     },
     "2s": {
-        "displayed": "443",
-        "unit": "",
+        "displayed": "2.3",
+        "unit": "K",
         "percentage": 1
     },
     "3s": {
-        "displayed": "1.4",
+        "displayed": "6",
         "unit": "K",
-        "percentage": 1
+        "percentage": 2
     },
     "4s": {
-        "displayed": "7.4",
+        "displayed": "26",
         "unit": "K",
-        "percentage": 6
+        "percentage": 5
     },
     "5s": {
-        "displayed": "134.4",
+        "displayed": "507.3",
         "unit": "K",
         "percentage": 93
     },
     "average": "4.9",
-    "total": 144601,
-    "rating": "5s"
+    "total": 546930,
+    "rating": "3s"
 }

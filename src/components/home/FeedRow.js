@@ -3,17 +3,20 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import ri from '@enact/ui/resolution'
 import Heading from '@enact/moonstone/Heading'
 import Image from '@enact/moonstone/Image'
+import Spinner from '@enact/moonstone/Spinner'
 import PropTypes from 'prop-types'
 
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 
-import { $L } from '../../hooks/language'
+import { homeViewReadyState, isPremiumState } from '../../recoilConfig'
+import api from '../../api'
 import VirtualListNested from '../../patch/VirtualListNested'
-import { homeViewReadyState, homePositionState, isPremiumState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-import { useSetContent } from '../../hooks/setContent'
+import { useNavigateContent } from '../../hooks/navigate'
+import { processItemFeed } from '../../hooks/homefeedWorker'
 import withNavigable from '../../hooks/navigable'
-import { formatDurationMs, getDuration, getIsPremium } from '../../utils'
+import { $L } from '../../hooks/language'
+import { formatDurationMs, getDuration, getIsPremium, isPlayable } from '../../utils'
 import css from './FeedRow.module.less'
 import globalCss from '../Share.module.less'
 import { DEV_FAST_SELECT, DEV_CONTENT_TYPE } from '../../const'
@@ -22,14 +25,11 @@ const NavigableDiv = withNavigable('div', '')
 
 
 export const Poster = ({ item, image, itemHeight, itemSize, isPremium, ...rest }) => {
-    /** @type {Array<String>} */
-    const playableTypes = useMemo(() =>
-        ['episode', 'movie', 'musicConcert', 'musicVideo'], [])
     rest.style.width = itemSize
     rest.style.height = itemHeight
     let progress = 0, duration = undefined, showPremium = false
 
-    if (playableTypes.includes(item.type)) {
+    if (isPlayable(item.type)) {
         duration = getDuration(item)
         if (duration !== undefined && item.playhead !== undefined) {
             progress = item.playhead / (duration / 1000) * 100
@@ -42,14 +42,14 @@ export const Poster = ({ item, image, itemHeight, itemSize, isPremium, ...rest }
     return (
         <NavigableDiv {...rest}>
             <Image src={image.source} sizing='none' style={image.size}>
-                {playableTypes.includes(item.type) &&
+                {isPlayable(item.type) &&
                     <div className={globalCss.progress} style={{ bottom: '1.8rem' }}>
                         <div style={{ width: `${progress}%` }} />
                     </div>
                 }
             </Image>
-            {playableTypes.includes(item.type) && <div className={css.playButton} />}
-            {playableTypes.includes(item.type) &&
+            {isPlayable(item.type) && <div className={css.playButton} />}
+            {isPlayable(item.type) &&
                 <div className={css.contentTime}>{formatDurationMs(duration)}</div>
             }
             {showPremium && <div className={globalCss.contenPremium}>{$L('Premium')}</div>}
@@ -73,15 +73,36 @@ const HomeFeedItem = ({ feed, index, imageHeight, ...rest }) => {
     )
 }
 
-const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, className, ...rest }) => {
+/**
+ * @typedef RowInfo
+ * @type {Object}
+ * @property {Number} feedId
+ * @property {'home'|'music'} feedType
+ * @property {{id: String, items: Array}} fakeItem
+ * @property {Function} setContent
+ * @property {'legacy'|'new'} homeFeedType
+ *
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
+ * @param {String} obj.cellId
+ * @param {Number} obj.itemSize
+ * @param {{id: String, items: Array, index: Number}} obj.feedRow
+ * @param {RowInfo} obj.rowInfo
+ * @param {String} obj.style
+ * @param {String} obj.className
+ */
+const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, className, ...rest }) => {
+    const { feedType, feedId, fakeItem, setContent, homeFeedType } = rowInfo  // has to separte to avoid recall
+    // to keep index after go back, key has to be same in each row
+    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(`homeFeedRow-${feedType}-${feedId}`)
+    /** @type {[import('../../hooks/homefeedWorker').FeedItemType, Function]} */
+    const [feedData, setFeedData] = useState(null)
     /** @type {{current: Function}} */
     const scrollToRef = useRef(null)
-    /** @type {{current: Number}} */
-    const columnIndexRef = useRef(null)
-    /** @type {{current: Object}} */
-    const feedRef = useRef(feed)
+    /** @type {{current: {rowIndex: Number, columnIndex: Number}}} */
+    const rowIndexRef = useRef(viewBackup || {})
     /** @type {{current: HTMLElement}} */
-    const compRef = useRef({ current: null })
+    const compRef = useRef(null)
     /** @type {[Number, Function]} */
     const [itemHeight, setItemHeight] = useState(0)
     /** @type {[Number, Function]} */
@@ -90,113 +111,131 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
     const itemWidth = ri.scale(320)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {{rowIndex: Number, columnIndex: Number}} */
-    const homePosition = useRecoilValue(homePositionState)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
     /** @type {Function} */
     const getScrollTo = useCallback((scrollTo) => { scrollToRef.current = scrollTo }, [])
     /** @type {Function} */
     const selectElement = useCallback((ev) => {
-        if (feed.id !== 'fake_item') {
-            setContent(feed.items[parseInt(ev.target.dataset.index)])
+        if (feedData.id !== 'fake_item') {
+            setContent(feedData.items[parseInt(ev.target.dataset.index)], feedRow.index)
         } else {
-            setContent(null)
+            setContent(null, feedRow.index)
         }
-    }, [setContent, feed])
+    }, [feedData, setContent, feedRow])
+
     /** @type {Function} */
-    const setContentNavagate = useSetContent()
-    /** @type {Function} */
-    const showContentDetail = useCallback((ev) => {
+    const setLocalContent = useCallback((ev) => {
         /** @type {HTMLElement} */
         const parentElement = ev.target.closest(`#${cellId}`)
         const columnIndex = parseInt(parentElement.dataset.index)
-        const content = feed.items[columnIndex]
-        if (feed.id !== 'fake_item') {
-            setContentNavagate({ content, rowIndex, columnIndex })
+        const content = feedData.items[columnIndex]
+        if (feedData.id !== 'fake_item') {
+            viewBackupRef.current = { rowIndex: feedRow.index, columnIndex }
+            navigateContent(content)
         }
-    }, [cellId, setContentNavagate, feed, rowIndex])
+    }, [feedData, feedRow, cellId, navigateContent, viewBackupRef])
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
 
     useEffect(() => {
-        if (compRef.current) {
+        if (feedData && compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect()
             setItemHeight(itemSize - boundingRect.height)
             setImageHeight(itemSize - boundingRect.height * 2)
         }
-    }, [itemSize, setItemHeight, setImageHeight])
+    }, [feedData, itemSize, setItemHeight, setImageHeight])
 
     useEffect(() => {
-        feedRef.current = feed
-        if (rowIndex === homePosition.rowIndex) {
-            columnIndexRef.current = homePosition.columnIndex
-        } else {
-            columnIndexRef.current = null
-        }
-    }, [feed, rowIndex, homePosition])
-
-    useEffect(() => {
-        if (columnIndexRef.current !== null) {
-            /** this need a Pormise cause Feed -> renderRow need a Promise as well. */
-            Promise.resolve().then(() => setHomeViewReady(true))
-        }
-    }, [setHomeViewReady])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (scrollToRef.current) {
-                clearInterval(interval)
-                if (columnIndexRef.current !== null && feedRef.current) {
-                    if (feedRef.current.resource_type === 'dynamic_collection') {
-                        scrollToRef.current({ index: 0, animate: false, focus: true })
-                    } else {
-                        scrollToRef.current({ index: columnIndexRef.current, animate: false, focus: true })
+        let interval = null
+        if (feedData) {
+            interval = setInterval(() => {
+                if (scrollToRef.current) {
+                    clearInterval(interval)
+                    let columnIndex = null
+                    const rowIndex = (rowIndexRef.current.rowIndex || 0)
+                    if (feedData.index === rowIndex) {
+                        columnIndex = rowIndexRef.current.columnIndex || 0
+                    }
+                    if (columnIndex !== null) {
+                        setHomeViewReady(true)
+                        if (feedData.resource_type === 'dynamic_collection') {
+                            scrollToRef.current({ index: 0, animate: false, focus: true })
+                        } else {
+                            scrollToRef.current({ index: columnIndex, animate: false, focus: true })
+                        }
                     }
                 }
-            }
-        }, 100)
-        return () => clearInterval(interval)
-    }, [])
+            }, 100)
+        }
+        return () => {
+            clearInterval(interval)
+        }
+    }, [feedData, setHomeViewReady])
 
     useEffect(() => {
-        if (DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
+        if (feedData && DEV_FAST_SELECT && DEV_CONTENT_TYPE) {
             const testContent = {
-                series: 'GJ0H7QGQK',
-                episode: 'GZ7UV13VE',
-                musicArtist: 'MA899F289',
-                musicConcert: 'MC413F8154',
+                series: ['GJ0H7QGQK', 'GRDV0019R'],
+                episode: ['GZ7UV13VE'],
+                musicArtist: ['MA899F289'],
+                musicConcert: ['MC413F8154'],
+                musicVideo: ['MV22070F02']
             }
-            const content = feed.items.find(val => val.type === DEV_CONTENT_TYPE &&
-                val.id === testContent[DEV_CONTENT_TYPE])
+            const content = feedData.items.find(
+                val => val.type === DEV_CONTENT_TYPE && testContent[DEV_CONTENT_TYPE].includes(val.id)
+            )
             if (content) {
-                setContentNavagate({
-                    content,
-                    rowIndex: 0,
-                    columnIndex: feed.items.findIndex(i => i === content)
-                })
+                navigateContent(content)
             }
         }
-    }, [feed.items, setContentNavagate])
+    }, [feedData, navigateContent])
+
+
+    useEffect(() => {
+        const loadData = async () => {
+            const cacheKey = `/home/${feedType}/${feedId}/${feedRow.index}`
+            const feedItemCache = await api.utils.getCustomCache(cacheKey)
+            if (feedItemCache) {
+                setFeedData(feedItemCache)
+            } else {
+                try {
+                    const newFeedItem = await processItemFeed(feedRow, profile, feedType, homeFeedType)
+                    if (newFeedItem.items.length) {
+                        setFeedData(newFeedItem)
+                        if (newFeedItem.resource_type !== 'dynamic_collection') {
+                            api.utils.saveCustomCache(cacheKey, newFeedItem, 3 * 60 * 60)  // 3h
+                        }
+                    } else {
+                        setFeedData(fakeItem)
+                    }
+                } catch (_e) {
+                    setFeedData(fakeItem)
+                }
+            }
+        }
+        loadData()
+    }, [profile, feedRow, feedType, homeFeedType, feedId, fakeItem])
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>
             <Heading size="title" spacing="small" componentRef={compRef} marqueeOn='hover'>
-                {feed.title}
+                {feedData?.title || ''}
             </Heading>
-            <div className={css.feedRowContainer} style={{ height: `${itemHeight}px` }}>
-                {itemHeight > 0 &&
+            <div style={{ height: `${itemHeight}px` }} className={css.feedRowContainer}>
+                {!feedData && <Spinner />}
+                {feedData && itemHeight > 0 && (
                     <VirtualListNested
-                        dataSize={feed.items.length}
+                        dataSize={feedData.items.length}
                         itemRenderer={HomeFeedItem}
                         itemSize={itemWidth}
                         childProps={{
                             id: cellId,
-                            feed,
                             itemSize: itemWidth,
+                            feed: feedData,
                             onFocus: selectElement,
-                            onClick: showContentDetail,
+                            onClick: setLocalContent,
                             itemHeight,
                             imageHeight,
                             isPremium,
@@ -206,18 +245,27 @@ const HomeFeedRow = ({ feed, itemSize, cellId, setContent, rowIndex, style, clas
                         horizontalScrollbar='hidden'
                         cbScrollTo={getScrollTo}
                     />
-                }
+                )}
             </div>
         </div>
     )
 }
 
 HomeFeedRow.propTypes = {
-    feed: PropTypes.object.isRequired,
-    itemSize: PropTypes.number.isRequired,
+    // required fields for virtualListNated
+    id: PropTypes.string.isRequired,
     cellId: PropTypes.string.isRequired,
-    setContent: PropTypes.func.isRequired,
-    rowIndex: PropTypes.number.isRequired,
+    itemSize: PropTypes.number.isRequired,
+    // <-
+    profile: PropTypes.object.isRequired,
+    feedRow: PropTypes.object.isRequired,
+    rowInfo: PropTypes.shape({
+        feedId: PropTypes.number.isRequired,
+        feedType: PropTypes.oneOf(['home', 'music']),
+        fakeItem: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+        homeFeedType: PropTypes.oneOf(['legacy', 'new']).isRequired,
+    })
 }
 
 export default HomeFeedRow

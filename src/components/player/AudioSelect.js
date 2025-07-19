@@ -5,6 +5,7 @@ import ContextualPopupDecorator from '@enact/moonstone/ContextualPopupDecorator'
 import PropTypes from 'prop-types'
 
 import AudioList from './AudioList'
+import { useNavigate } from '../../hooks/navigate'
 
 const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
 
@@ -16,16 +17,25 @@ const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
  * @param {Function} [obj.triggerActivity]
  */
 const AudioSelect = ({ audios, audio, selectAudio, triggerActivity, ...rest }) => {
-
+    const { pushHistory, popHistory } = useNavigate()
     /** @type {[Boolean, Function]} */
     const [showAudioList, setShowAudioList] = useState(false)
 
-    const onShowAudioList = useCallback(() => { setShowAudioList(oldVar => !oldVar) }, [setShowAudioList])
-    const onHideAudioList = useCallback(() => { setShowAudioList(false) }, [setShowAudioList])
+    const toggleAudioList = useCallback(() => {
+        if (showAudioList) {
+            setShowAudioList(false)
+            popHistory()
+        } else {
+            setShowAudioList(true)
+            pushHistory(() => setShowAudioList(false))
+        }
+    }, [showAudioList, setShowAudioList, pushHistory, popHistory])
+
     const onSelectAudio = useCallback(({ selected }) => {
         selectAudio(selected)
-        onHideAudioList()
-    }, [onHideAudioList, selectAudio])
+        toggleAudioList()
+    }, [toggleAudioList, selectAudio])
+
     const audioList = useCallback(() => (
         <AudioList
             audios={audios}
@@ -38,8 +48,8 @@ const AudioSelect = ({ audios, audio, selectAudio, triggerActivity, ...rest }) =
         <IconButtonWithPopup
             backgroundOpacity="lightTranslucent"
             open={showAudioList}
-            onClick={onShowAudioList}
-            onClose={onHideAudioList}
+            onClick={toggleAudioList}
+            onClose={toggleAudioList}
             popupComponent={audioList}
             direction='up'
             showCloseButton

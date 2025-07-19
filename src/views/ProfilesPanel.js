@@ -10,39 +10,22 @@ import Icon from '@enact/moonstone/Icon'
 import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
-import {
-    pathState, currentProfileState,
-    homeIndexState, homeViewReadyState,
-    homeFeedState, homeFeedExpirationState,
-    musicFeedExpirationState,
-} from '../recoilConfig'
+import { currentProfileState, homeViewReadyState } from '../recoilConfig'
 import Profile from '../components/profile/Profile'
-import ContactMe from '../components/login/ContactMe'
-import Logout from '../components/login/Logout'
-import DevBtn from '../components/DevBtn'
+import { ContactMeBtn, DevBtn, LogoutBtn, AppConfigBtn } from '../components/Buttons'
 import api from '../api'
 import { DEV_FAST_SELECT } from '../const'
-import back from '../back'
-import { useResetHomeState } from '../hooks/setContent'
+import { useNavigate, useResetHomeState } from '../hooks/navigate'
 
 
 const ProfilesPanel = ({ ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+    const { goTo } = useNavigate()
     /** @type {Function} */
     const setCurrentProfile = useSetRecoilState(currentProfileState)
     /** @type {[import('crunchyroll-js-api').Types.ProfileResponse, Function]}  */
     const [multiProfile, setMultiProfile] = useState(null)
     /** @type {Function} */
-    const setHomeFeed = useSetRecoilState(homeFeedState)
-    /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
-    /** @type {Function} */
-    const setHomeFeedExpiration = useSetRecoilState(homeFeedExpirationState)
-    /** @type {Function} */
-    const setMusicFeedExpiration = useSetRecoilState(musicFeedExpirationState)
-    /** @type {Function} */
-    const setCurrentActivity = useSetRecoilState(homeIndexState)
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(false)
     /** @type {Function} */
@@ -59,21 +42,15 @@ const ProfilesPanel = ({ ...rest }) => {
     /** @type {Function} */
     const doSelectProfile = useCallback(profile => {
         setLoading(true)
+        api.utils.clearCache()
         api.auth.switchProfile(profile.profile_id).then(() => {
             setLoading(false)
             setHomeViewReady(false)
-            setHomeFeed([])
             setCurrentProfile(profile)
-            setHomeFeedExpiration(null)
-            setMusicFeedExpiration(null)
-            setCurrentActivity(0)
             resetHomeState()
-            back.pushHistory({ doBack: () => { setPath('/profiles') } })
-            setPath('/profiles/home')
+            goTo('/profiles/home')
         })
-    }, [setCurrentProfile, setPath, setCurrentActivity, resetHomeState,
-        setHomeFeed, setHomeViewReady,
-        setMusicFeedExpiration, setHomeFeedExpiration, setLoading])
+    }, [setCurrentProfile, goTo, resetHomeState, setHomeViewReady, setLoading])
 
     /** @type {Function} */
     const onSelectProfile = useCallback(event => {
@@ -87,9 +64,8 @@ const ProfilesPanel = ({ ...rest }) => {
             ...getProfileFromEvent(event),
             email: mainProfile.email,
         })
-        back.pushHistory({ doBack: () => { setPath('/profiles') } })
-        setPath('/profiles/edit')
-    }, [multiProfile, getProfileFromEvent, setCurrentProfile, setPath])
+        goTo('/profiles/edit')
+    }, [multiProfile, getProfileFromEvent, setCurrentProfile, goTo])
 
     /** @type {Function} */
     const onCreateProfile = useCallback(() => {
@@ -100,9 +76,8 @@ const ProfilesPanel = ({ ...rest }) => {
             profile_id: null,
             profile_name: ''
         })
-        back.pushHistory({ doBack: () => { setPath('/profiles') } })
-        setPath('/profiles/edit')
-    }, [multiProfile, setCurrentProfile, setPath])
+        goTo('/profiles/edit')
+    }, [multiProfile, setCurrentProfile, goTo])
 
     /** @type {Function} */
     const setFocus = useCallback(ev => {
@@ -127,8 +102,9 @@ const ProfilesPanel = ({ ...rest }) => {
     return (
         <Panel {...rest}>
             <Header type='compact' hideLine>
-                <ContactMe origin='profiles' />
-                <Logout />
+                <AppConfigBtn />
+                <ContactMeBtn />
+                <LogoutBtn />
             </Header>
             <Column align='center'>
                 {!loading && multiProfile && multiProfile.profiles.length ?
@@ -155,6 +131,7 @@ const ProfilesPanel = ({ ...rest }) => {
                                     {$L('Add')}
                                 </Button>
                             }
+                            <AppConfigBtn mode='full' />
                             <DevBtn />
                         </Row>
                     </>

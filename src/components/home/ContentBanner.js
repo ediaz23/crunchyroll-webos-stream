@@ -210,12 +210,13 @@ ContentHeader.propTypes = {
     noCategory: PropTypes.bool,
 }
 
-const RowNavigable = withNavigable(Row, css.active)
+export const RowNavigable = withNavigable(Row, css.active)
+export const CellNavigable = withNavigable(Cell, css.active)
 
 
 /**
  * @param {Object} obj
- * @param {Object} obj.content
+ * @param {Object} [obj.content]
  * @param {Boolean} [obj.noCategory]
  * @param {Boolean} [obj.noPoster]
  */
@@ -227,7 +228,7 @@ const HomeContentBanner = ({ content, noCategory = false, noPoster = false, ...r
     const compRef = useRef(null)
 
     useEffect(() => {
-        if (compRef && compRef.current) {
+        if (content && compRef && compRef.current) {
             const boundingRect = compRef.current.getBoundingClientRect()
             setImage(getImagePerResolution({
                 height: boundingRect.height,
@@ -241,12 +242,16 @@ const HomeContentBanner = ({ content, noCategory = false, noPoster = false, ...r
         <RowNavigable id='content-banner' className={css.homeContentBanner} {...rest}>
             <Cell size="50%">
                 <Column>
-                    <Cell shrink>
-                        <ContentHeader content={content} noCategory={noCategory} />
-                    </Cell>
+                    {content &&
+                        <Cell shrink>
+                            <ContentHeader
+                                content={content}
+                                noCategory={noCategory} />
+                        </Cell>
+                    }
                     <Cell grow style={{ height: 'auto' }}>
                         <BodyText size='small'>
-                            {content.description}
+                            {content?.description || ''}
                         </BodyText>
                     </Cell>
                 </Column>
@@ -263,7 +268,7 @@ const HomeContentBanner = ({ content, noCategory = false, noPoster = false, ...r
 }
 
 HomeContentBanner.propTypes = {
-    content: PropTypes.object.isRequired,
+    content: PropTypes.object,
     noCategory: PropTypes.bool,
     noPoster: PropTypes.bool,
 }

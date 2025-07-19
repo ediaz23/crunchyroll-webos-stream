@@ -91,6 +91,32 @@
         {
             "id": "shonen",
             "images": {
+                "low": [
+                    {
+                        "width": 24,
+                        "height": 24,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    },
+                    {
+                        "width": 48,
+                        "height": 48,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    },
+                    {
+                        "width": 72,
+                        "height": 72,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    },
+                    {
+                        "width": 96,
+                        "height": 96,
+                        "type": "low",
+                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
+                    }
+                ],
                 "background": [
                     {
                         "width": 320,
@@ -139,32 +165,6 @@
                         "height": 1080,
                         "type": "background",
                         "source": "https://static.vrv.co/imgsrv/display/resize/1920x1080/categories/background_c1b1b1b5dbe78c68b19ab4e3d05b21f4.jpg"
-                    }
-                ],
-                "low": [
-                    {
-                        "width": 24,
-                        "height": 24,
-                        "type": "low",
-                        "source": "https://static.vrv.co/imgsrv/display/resize/24x24/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
-                    },
-                    {
-                        "width": 48,
-                        "height": 48,
-                        "type": "low",
-                        "source": "https://static.vrv.co/imgsrv/display/resize/48x48/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
-                    },
-                    {
-                        "width": 72,
-                        "height": 72,
-                        "type": "low",
-                        "source": "https://static.vrv.co/imgsrv/display/resize/72x72/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
-                    },
-                    {
-                        "width": 96,
-                        "height": 96,
-                        "type": "low",
-                        "source": "https://static.vrv.co/imgsrv/display/resize/96x96/categories/low_b8c4545305b3c4e4a6ed8e631510a2bf.png"
                     }
                 ]
             },

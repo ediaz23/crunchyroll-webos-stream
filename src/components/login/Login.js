@@ -11,7 +11,7 @@ import { config, localStore } from 'crunchyroll-js-api'
 import QRCode from 'react-qr-code'
 
 import css from './Login.module.less'
-import DevBtn from '../DevBtn'
+import { DevBtn, AppConfigBtn } from '../Buttons'
 import Field from '../Field'
 import { $L } from '../../hooks/language'
 import api from '../../api'
@@ -177,6 +177,7 @@ export const LoginWithEmail = ({ autoLogin, makeLogin, setErrorMessage, ...rest 
                         </Icon>
                         {$L('Login')}
                     </Button>
+                    <AppConfigBtn mode='full' />
                     <DevBtn />
                 </Row>
             </>}

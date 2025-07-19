@@ -22,8 +22,8 @@ import { translateError, getContentParam } from './utils'
 export const getBrowseAll = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA && !('noMock' in params)) {
-            out = await getMockData('browse', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('browse', params, [getBrowseAll, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getBrowseAll({ account, ...params })
@@ -52,8 +52,8 @@ export const search = async (profile, params) => {
                 params.type = [params.type]
             }
         }
-        if (LOAD_MOCK_DATA && !('noMock' in params)) {
-            out = await getMockData('search', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('search', params, [search, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.search({ account, ...params })
@@ -76,8 +76,8 @@ export const search = async (profile, params) => {
 export const getCategories = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('categories', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('categories', params, [getCategories, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getCategories({ account, ...params })
@@ -99,8 +99,8 @@ export const getCategories = async (profile, params) => {
 export const getHistory = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('discoverHistory', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('discoverHistory', params, [getHistory, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getHistory({ account, ...params })
@@ -114,7 +114,7 @@ export const getHistory = async (profile, params) => {
 /**
  * Get index data
  * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise}
+ * @return {Promise<{data: {total: Number, data: Array}, type: 'legacy'|'new'}>}
  */
 export const getHomeFeed = async (profile) => {
     let out = null
@@ -123,7 +123,51 @@ export const getHomeFeed = async (profile) => {
             out = await getMockData('homefeed')
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getHomeFeed({ account })
+            out = await api.discover.getHomeFeed({ account, fnConfig: { cache: false } })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return { data: out, type: 'legacy' }
+}
+
+/**
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @return {Promise<{data: import('crunchyroll-js-api').Types.HomeItem, type: 'legacy'|'new'}>}
+ */
+export const getNewHomeFeed = async (profile) => {
+    /** @type {import('crunchyroll-js-api').Types.HomeItem} */
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA) {
+            out = await getMockData('homefeedNew2')
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getHome({ account, fnConfig: { cache: false } })
+        }
+    } catch (error) {
+        await translateError(error)
+    }
+    return { data: out, type: 'new' }
+}
+
+/**
+ * @param {import('crunchyroll-js-api').Types.Profile} profile
+ * @param {Object} params
+ * @param {Number} params.collectionId
+ * @param {Boolean} params.ratings
+ * @param {Number} [params.vendor]
+ * @return {Promise<{recommendations: Array}>}
+ */
+export const getPersonalRecomendation = async (profile, params) => {
+    /** @type {import('crunchyroll-js-api').Types.HomeItem} */
+    let out = null
+    try {
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('personalRecomendation', params, [getPersonalRecomendation, profile])
+        } else {
+            const account = await getContentParam(profile)
+            out = await api.discover.getPersonalRecomendation({ account, ...params })
         }
     } catch (error) {
         await translateError(error)
@@ -131,20 +175,21 @@ export const getHomeFeed = async (profile) => {
     return out
 }
 
+
 /**
  * Get object data
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Number} [params.quantity]
  * @param {Number} [params.start]
- * @param {Boolean} [obj.ratings]
+ * @param {Boolean} [params.ratings]
  * @return {Promise}
  */
 export const getRecomendation = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('discoverRecomendantion', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('discoverRecomendantion', params, [getRecomendation, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getRecommendations({ account, ...params })
@@ -168,8 +213,8 @@ export const getRecomendation = async (profile, params) => {
 export const getSimilar = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('similar', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('similar', params, [getSimilar, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getSimilar({ account, ...params })
@@ -185,14 +230,15 @@ export const getSimilar = async (profile, params) => {
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} [params.fnConfig]
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getNext = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
             const { contentId } = params
-            out = await getMockData('upNext', { contentId })
+            out = await getMockData('upNext', { contentId }, [getNext, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getNext({ account, ...params })
@@ -200,7 +246,7 @@ export const getNext = async (profile, params) => {
     } catch (error) {
         await translateError(error)
     }
-    if (out) {
+    if (out?.data) {
         out.data = out.data.map(val => {
             const { panel } = val
             const newVal = { ...panel, ...val }
@@ -216,14 +262,15 @@ export const getNext = async (profile, params) => {
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {String} params.contentId
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} [params.fnConfig]
  * @return {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getPrev = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
             const { contentId } = params
-            out = await getMockData('prev', { contentId })
+            out = await getMockData('prev', { contentId }, [getPrev, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.discover.getPrev({ account, ...params })
@@ -253,11 +300,11 @@ export const getPrev = async (profile, params) => {
 export const getWatchlist = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('discoverWatchlist', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('discoverWatchlist', params, [getWatchlist, profile])
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getWatchlist({ account, ...params, order: 'desc' })
+            out = await api.discover.getWatchlist({ account, fnConfig: { cache: false }, ...params, order: 'desc' })
         }
     } catch (error) {
         await translateError(error)

@@ -1,17 +1,73 @@
+/* global Worker */
 
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
-import { gzipSync, gunzipSync } from 'fflate/esm/browser.js'
-import utils from '../utils'
+import api from '../api'
+import utils, { ResourcePool } from '../utils'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
 
+export const worker = new Worker(new URL('../workers/cache.worker.js', import.meta.url), { type: 'module' })
 export const serviceURL = 'luna://com.crunchyroll.stream.app.service/'
-const CONCURRENT_REQ_LIMIT = 10
-let currentReqIndex = CONCURRENT_REQ_LIMIT
+const pendingTasks = new Map()
+const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5, 6, 7, 8])  //  9 normal slot 1 priority
+const requestSlotsPriority = new ResourcePool([9])
+
+
+function setAdaptiveCacheSize() {
+    const appConfig = api.config.getAppConfig()
+    const baseSize = 15  // 15MB
+    if (appConfig.cacheMemory === 'adaptive') {
+        if (utils.isTv()) {
+            webOS.deviceInfo(deviceInfo => {
+                const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+                const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
+                const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
+
+                let base = Math.floor(ramInGB * baseSize)  // 15MB per GB of RAM
+
+                if (is4K) base *= 0.9  // reduce if 45
+                if (hasHDR) base *= 0.9  // reduce HDR
+
+                const MIN = 5  // 5 MB
+                const MAX = 50  // 50 MB
+                const maxSize = Math.max(MIN, Math.min(MAX, Math.floor(base)))
+                logger.debug(`cache init memory ${maxSize}`)
+                worker.postMessage({ type: 'init', maxSize: maxSize * 1024 * 1024 })
+            })
+        } else {
+            logger.debug(`cache init memory ${baseSize}`)
+            worker.postMessage({ type: 'init', maxSize: baseSize * 1024 * 1024 })
+        }
+    } else {
+        logger.debug(`cache init memory ${appConfig.cacheMemory}`)
+        worker.postMessage({ type: 'init', maxSize: parseInt(appConfig.cacheMemory) * 1024 * 1024 })
+    }
+}
+
+/**
+ * @typedef ResponseProxy
+ * @type {Object}
+ * @property {Number} status
+ * @property {String} statusText
+ * @property {String|Uint8Array} [content]  base64
+ * @property {Object.<string, string>} headers
+ * @property {String} resUrl
+ * @property {Boolean} compress
+ * @property {Number} [load]
+ * @property {Number} [total]
+ *
+ * @typedef RequestSetup
+ * @type {Object}
+ * @property {String} slotId
+ * @property {RequestInit} config
+ * @property {Function} onSuccess
+ * @property {Function} onFailure
+ * @property {Function} [onProgress]
+ */
 
 /**
  * Hack class to set url property
@@ -30,14 +86,103 @@ class ResponseHack extends Response {
     }
 }
 
+worker.addEventListener('message', ({ data }) => {
+    /** @type {{taskId: String, response: ResponseProxy}} */
+    const { taskId } = data
+    if (taskId && pendingTasks.has(taskId)) {
+        const resolve = pendingTasks.get(taskId)
+        pendingTasks.delete(taskId)
+        resolve(data.response ? data : null)
+    }
+})
+
+export function initCache() {
+    setAdaptiveCacheSize()
+}
+
+export function finishCache() {
+    worker.postMessage({ type: 'close' })
+    worker.terminate()
+}
+
+export function clearCache() {
+    worker.postMessage({ type: 'clear' })
+}
+
 /**
+ * @param {String} url
+ * @return {Promise<import('../workers/cache.worker').ReqEntry>}
+ */
+export async function getCache(url) {
+    const taskId = uuidv4()
+    const prom = new Promise((resolve) => {
+        pendingTasks.set(taskId, resolve)
+    })
+    worker.postMessage({ type: 'get', url, taskId })
+    const data = await prom
+    logger.debug(`cache ${data ? 'hit' : 'miss'} ${url}`)
+    return data
+}
+
+/**
+ * @param {String} url
+ * @param {ResponseProxy} response
+ */
+export async function saveCache(url, response) {
+    worker.postMessage({ type: 'save', url, response })
+}
+
+/**
+ * @param {String} url
+ * @return {Promise<Object>}
+ */
+export async function getCustomCache(url) {
+    const item = await getCache(url)
+    let out = null
+    if (item) {
+        out = JSON.parse(item.response.content)
+    }
+    return out
+}
+
+/**
+ * Save cache custom cache
+ * @param {String} url
+ * @param {Object} data
+ * @param {Number} maxAge seconds
+ * @return {Promise}
+ */
+export async function saveCustomCache(url, data, maxAge = 60) {
+    /** @type {import('../workers/cache.worker').ResponseProxy} */
+    const response = {
+        status: 200,
+        statusText: 'OK',
+        content: typeof data === 'string' ? data : JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': `max-age=${maxAge}`
+        },
+        resUrl: url,
+        compress: false
+    }
+    worker.postMessage({ type: 'save', url, response })
+}
+
+
+/**
+ * @typedef SetUpRequestConfig
+ * @type {Object}
+ * @property {Boolean} [sync] turn on sync mode
+ *
  * set up request to be done
  * @param {String | Request} url
  * @param {RequestInit} [options]
- * @return {RequestInit}
+ * @param {SetUpRequestConfig} fnConfig
+ * @return {RequestInit | Promise<RequestInit>}
  */
-export const setUpRequest = (url, options = {}) => {
-    let config
+export const setUpRequest = (url, options = {}, fnConfig = {}) => {
+    const { sync = true } = fnConfig
+    let config, out
     if (url instanceof Request) {
         config = {
             url: url.url,
@@ -55,39 +200,22 @@ export const setUpRequest = (url, options = {}) => {
             ...options,
         }
     }
+    out = config
     if (config.body) {
         if (config.body instanceof URLSearchParams) {
             config.body = config.body.toString()
         } else if (config.body instanceof Uint8Array || config.body instanceof ArrayBuffer) {
-            config.body = utils.arrayToBase64(config.body)
+            if (sync) {
+                config.body = utils.arrayToBase64(config.body)
+            } else {
+                out = utils.arrayToBase64Async(config.body).then(body => {
+                    config.body = body
+                    return config
+                })
+            }
         }
     }
-    return config
-}
-
-
-/**
- * @param {Object} obj
- * @param {String} obj.content
- * @param {Boolean} obj.compress
- * @return {Uint8Array}
- */
-export const decodeResponse = ({ content, compress }) => {
-    let out
-    if (compress) {
-        out = gunzipSync(utils.base64toArray(content))
-    } else {
-        out = utils.base64toArray(content)
-    }
     return out
-}
-
-/**
- * @param {Object} data
- * @return {String}
- */
-export const encodeRequest = (data) => {
-    return utils.arrayToBase64(gzipSync(utils.stringToUint8Array(JSON.stringify(data))))
 }
 
 /**
@@ -95,7 +223,7 @@ export const encodeRequest = (data) => {
  * @param {Function} [onProgress]
  * @returns {Function}
  */
-export const makeFetchProgressXHR = (onProgress) => {
+const makeFetchProgressXHR = (onProgress) => {
     /**
      * @param {string} url
      * @param {object} options
@@ -103,13 +231,13 @@ export const makeFetchProgressXHR = (onProgress) => {
      */
     return (url, options) => {
         return new Promise((resolve, reject) => {
-            const xhr = new window.XMLHttpRequest();
-            xhr.open(options.method || 'GET', url, true);
+            const xhr = new window.XMLHttpRequest()
+            xhr.open(options.method || 'GET', url, true)
 
             if (options.headers) {
                 Object.entries(options.headers).forEach(([key, value]) => {
-                    xhr.setRequestHeader(key, value);
-                });
+                    xhr.setRequestHeader(key, value)
+                })
             }
 
             xhr.responseType = 'arraybuffer';
@@ -123,46 +251,44 @@ export const makeFetchProgressXHR = (onProgress) => {
                     loaded = event.loaded;
                     onProgress({ loaded, total })
                 }
-            };
+            }
 
             xhr.onload = async () => {
                 if (xhr.status) {
                     const arrayBuffer = xhr.response;
                     const resTmp = new window.Response(new window.Blob([arrayBuffer]))
                     const { status, statusText, content, headers, resUrl, compress } = await resTmp.json()
-                    const buffContent = decodeResponse({ content, compress })
-                    resolve({ status, statusText, content: buffContent.buffer, headers, resUrl });
+                    const buffContent = await utils.decodeResponseAsync({ content, compress })
+                    resolve({ status, statusText, content: buffContent.buffer, headers, resUrl })
                 } else {
-                    reject(new Error(`Error: ${xhr.statusText}`));
+                    reject(new Error(`Error: ${xhr.statusText}`))
                 }
-            };
-            xhr.onerror = () => reject(new Error('Network error'));
-            xhr.send(options.body ? options.body : null);
-        });
-    };
-};
+            }
+            xhr.onerror = () => reject(new Error('Network error'))
+            xhr.send(options.body ? options.body : null)
+        })
+    }
+}
 
 /**
  * make face progress for a services
- * @param {Object} obj
- * @param {RequestInit} obj.config
- * @param {Function} obj.onSuccess
- * @param {Function} [obj.onProgress]
- * * @param {Function} [obj.onFailure]
+ * @param {RequestSetup} obj
+ * @returns {(res, sub) => Promise}
  */
-export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
+const makeServiceProgress = ({ config, onSuccess, onProgress, onFailure }) => {
     /** @type {Array<Uint8Array>} */
     let chunks = []
     /**
      * @param {Response} res
      * @param {Object} sub
      */
-    return (res, sub) => {
+    return async (res, sub) => {
         if (res.id === config.id) {
             if (config.resStatus === 'active') {
+                /** @type {ResponseProxy} */
                 const { loaded, total, status, content, compress } = res
                 if (200 <= status && status < 300) {
-                    chunks.push(decodeResponse({ content, compress }))
+                    chunks.push(await utils.decodeResponseAsync({ content, compress }))
                     onProgress({ loaded, total })
                     if (loaded === total) {
                         const resTmp = new window.Response(new window.Blob(chunks))
@@ -171,7 +297,7 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
                             res.content = arr
                             sub.cancel()
                             onSuccess(res)
-                        })
+                        }).catch(onFailure)
                     }
                 } else {
                     sub.cancel()
@@ -179,6 +305,7 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
                 }
             } else {
                 sub.cancel()
+                onSuccess(res)
             }
         }
     }
@@ -186,18 +313,12 @@ export const makeServiceProgress = ({ config, onSuccess, onProgress }) => {
 
 /**
  * Does request throught service or fetch
- * @param {Object} obj
- * @param {RequestInit} obj.config
- * @param {Function} obj.onSuccess
- * @param {Function} obj.onFailure
- * @param {Function} [obj.onProgress]
+ * @param {RequestSetup} obj
+ * @param {Object} obj.parameters
  */
-export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
-    config.id = uuidv4()
-    const parameters = { d: encodeRequest(config) }
+const _makeRequest = ({ config, parameters, onSuccess, onFailure, onProgress, slotId }) => {
     if (utils.isTv()) {
-        const currentReq = currentReqIndex = (currentReqIndex + 1) % CONCURRENT_REQ_LIMIT
-        const method = `forwardRequest${currentReq}`
+        const method = `forwardRequest${slotId}`
         if (onProgress) {
             const serviceProgress = makeServiceProgress({ config, onProgress, onSuccess, onFailure })
             const sub = webOS.service.request(serviceURL, {
@@ -244,50 +365,174 @@ export const makeRequest = ({ config, onSuccess, onFailure, onProgress }) => {
 }
 
 /**
+ * @param {RequestSetup} obj
+ * @returns {Promise}
+ */
+const getSlot = async (obj, priority) => {
+    const { onSuccess: superOnSuccess, onFailure: superOnFailure } = obj
+    /** @type {ResourcePool} */
+    const pool = priority ? requestSlotsPriority : requestSlots
+    obj.slotId = await pool.acquire()
+    logger.debug(`slot acquire ${obj.slotId} priority ${priority} free ${pool.freeSlots.size}`)
+    obj.onSuccess = (data) => {
+        logger.debug(`slot release ${obj.slotId} priority ${priority}`)
+        pool.release(obj.slotId)
+        if (superOnSuccess) {
+            superOnSuccess(data)
+        }
+    }
+    obj.onFailure = (data) => {
+        logger.debug(`slot release ${obj.slotId} priority ${priority}`)
+        pool.release(obj.slotId)
+        if (superOnFailure) {
+            superOnFailure(data)
+        }
+    }
+}
+
+/**
+ * @param {RequestSetup} obj
+ * @param {Boolean} cache
+ * @returns {Promise}
+ */
+const getCacheEntry = async (obj, cache) => {
+    const isGetMethod = !obj.config.method || obj.config.method === 'get'
+    /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
+    const cacheProm = isGetMethod && cache
+        ? getCache(obj.config.url)
+        : Promise.resolve(null)
+    const entry = await cacheProm
+    let response = null
+
+    if (entry) {
+        if (entry.etag || entry.lastModified) {
+            obj.config.headers = obj.config.headers || {}
+            if (entry.etag) {
+                obj.config.headers['If-None-Match'] = entry.etag
+            }
+            if (entry.lastModified) {
+                obj.config.headers['If-Modified-Since'] = entry.lastModified
+            }
+        } else {
+            response = entry.response
+        }
+    }
+    if (isGetMethod && cache) {
+        const { onSuccess: superOnSuccess } = obj
+        /** @param {ResponseProxy} data */
+        const checkSaveCache = (data) => {
+            if (data) {
+                if (data.status === 200) {
+                    saveCache(obj.config.url, data).catch(obj.onFailure)
+                }
+                if (entry && data.status === 304) {
+                    data = entry.response
+                }
+            }
+            superOnSuccess(data)
+        }
+        obj.onSuccess = checkSaveCache
+    }
+
+    return response
+}
+
+/**
+ * @typedef MakeResquestConfig
+ * @type {Object}
+ * @property {Boolean} [sync] turn on sync mode
+ * @property {Boolean} [cache] use cache
+ *
+ * Does request throught service or fetch
+ * @param {RequestSetup} obj
+ * @param {MakeResquestConfig} [fnConfig]
+ */
+export const makeRequest = (obj, fnConfig = {}) => {
+    /** @type {MakeResquestConfig} */
+    const { cache = true, sync = false, priority = false } = fnConfig
+    obj.config.id = uuidv4()
+    if (sync) {
+        obj.parameters = { d: utils.encodeRequest(obj.config) }
+        getSlot(obj, priority).then(() => _makeRequest(obj))
+    } else {
+        Promise.resolve().then(async () => {
+            const response = await getCacheEntry(obj, cache)
+            if (response) {
+                obj.onSuccess(response)
+            } else {
+                if (obj.config.body instanceof FormData) {
+                    obj.parameters = { d: utils.encodeRequest(obj.config) }
+                } else {
+                    obj.parameters = { d: await utils.encodeRequestAsync(obj.config) }
+                }
+                await getSlot(obj, priority)
+                _makeRequest(obj)
+            }
+        })
+    }
+}
+
+/**
+ * @typedef FetchConfig
+ * @type {Object}
+ * @property {Boolean} [direct] turn on return response as raw content
+ * @property {Boolean} [cache] use cache
+ * @property {Boolean} [sync] turn on sync mode
+ * @property {Boolean} [priority] user priority slots
+ *
  * Function to bypass cors issues
  * @param {String} url
  * @param {RequestInit} [options]
- * * @param {Boolean} [direct] turn on return response as raw content
+ * @param {FetchConfig} [fnConfig]
  * @returns {Promise<Response>}
  */
-export const customFetch = async (url, options = {}, direct = false) => {
-    return new Promise((res, rej) => {
-        const config = setUpRequest(url, options)
-        const onSuccess = (data) => {
-            config.resStatus = 'done'
-            const { status, statusText, content, headers, resUrl, compress } = data
-            logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
-            const decodedContent = content ? decodeResponse({ content, compress }) : undefined
-            if (direct) {
-                if (200 <= status && status < 300) {
-                    res(decodedContent)
-                } else {
-                    rej({ status, statusText, headers })
-                }
+export const customFetch = async (url, options = {}, fnConfig = {}) => {
+    let res, rej
+    /** @type {FetchConfig} */
+    const { direct = false, cache = true, sync = false, priority = false } = fnConfig
+    const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
+    const configProm = setUpRequest(url, options, { sync })
+    const config = sync ? configProm : await configProm
+    /**
+     * @param {ResponseProxy} data
+     */
+    const onSuccess = async (data) => {
+        config.resStatus = 'done'
+        /** @type {ResponseProxy} */
+        const { status, statusText, content, headers, resUrl, compress } = data
+        logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
+        /**  @type {Uint8Array} */
+        const decodedContent = content ? await utils.decodeResponseAsync({ content, compress }) : undefined
+        if (direct) {
+            if (200 <= status && status < 300) {
+                res(decodedContent)
             } else {
-                res(new ResponseHack(decodedContent, {
-                    status,
-                    statusText,
-                    headers,
-                    url: resUrl || config.url,
-                }))
+                rej({ status, statusText, headers })
             }
+        } else {
+            res(new ResponseHack(decodedContent, {
+                status,
+                statusText,
+                headers,
+                url: resUrl || config.url,
+            }))
         }
-        const onFailure = (error) => {
-            config.resStatus = 'fail'
-            logger.error(`req ${config.method || 'get'} ${config.url}`)
-            if (error.error) {
-                if (error.retry) {
-                    rej(error)
-                } else {
-                    rej(new Error(error.error))
-                }
-            } else {
+    }
+    const onFailure = (error) => {
+        config.resStatus = 'fail'
+        logger.error(`req ${config.method || 'get'} ${config.url}`)
+        if (error.error) {
+            if (error.retry) {
                 rej(error)
+            } else {
+                rej(new Error(error.error))
             }
+        } else {
+            rej(error)
         }
-        makeRequest({ config, onFailure, onSuccess })
-    })
+    }
+    makeRequest({ config, onFailure, onSuccess }, { sync, cache, priority })
+    return prom
 }
 
 const useCustomFetch = () => customFetch

@@ -8,9 +8,9 @@ import regions from 'i18n-iso-m49'
 import countries from 'i18n-iso-countries'
 import languages from '@cospired/i18n-iso-languages'
 
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
-import { pathState, initScreenState, contactBtnState } from '../recoilConfig'
+import { pathState, contactBtnState } from '../recoilConfig'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InitialPanel from '../views/InitialPanel'
 import HomePanel from '../views/HomePanel'
@@ -22,11 +22,12 @@ import ProfilesPanel from '../views/ProfilesPanel'
 import ConfirmExitPanel from '../views/ConfirnExitPanel'
 import ProfileEditPanel from '../views/ProfileEditPanel'
 import ContentPanel from '../views/ContentPanel'
+import AppConfigPanel from '../views/AppConfigPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
-import useCustomFetch from '../hooks/customFetch'
+import useCustomFetch, { initCache, finishCache } from '../hooks/customFetch'
+import { useNavigate } from '../hooks/navigate'
 import api from '../api'
 import utils from '../utils'
-import back from '../back'
 import css from './App.module.less'
 import './attachErrorHandler'
 
@@ -34,14 +35,13 @@ import './attachErrorHandler'
 const RoutablePanels = Routable({ navigate: 'onBack' }, Panels)
 
 const App = ({ ...rest }) => {
+    const { jumpTo } = useNavigate()
     /** @type {Function} */
     const customFetch = useCustomFetch()
-    /** @type {[String, Function]} */
+    /** @type {[Boolean, Function]} */
     const [dbInit, setDBInit] = useState(false)
-    /** @type {[String, Function]} */
-    const [path, setPath] = useRecoilState(pathState)
-    /** @type {Function} */
-    const setInitScreenState = useSetRecoilState(initScreenState)
+    /** @type {String} */
+    const path = useRecoilValue(pathState)
     /** @type {Function} */
     const setContactBtn = useSetRecoilState(contactBtnState)
     const newClassName = useMemo(() => `${rest.className} ${css.app}`, [rest.className])
@@ -54,42 +54,41 @@ const App = ({ ...rest }) => {
 
     useEffect(() => {
         const loadData = async () => {
-            let initPath
+            let initScreen
             if (await api.config.isNewInstallation()) {
-                initPath = '/warning'
+                initScreen = '/warning'
             } else if ((new Date()) > await api.config.getNextContactDate()) {
-                initPath = '/contact'
+                initScreen = '/contact'
                 setContactBtn(true)
             } else {
-                initPath = '/login'
+                initScreen = '/login'
             }
-            setInitScreenState(initPath)
-            setPath(initPath)
+            jumpTo(initScreen)
         }
         if (dbInit) {
             loadData()
         }
-    }, [dbInit, setPath, setInitScreenState, setContactBtn])
-
-    useEffect(() => {
-        if (dbInit) {
-            back.pushHistory({ doBack: () => setPath('/askClose') })
-        }
-    }, [dbInit, setPath])
+    }, [dbInit, setContactBtn, jumpTo])
 
     useEffect(() => {
         const initDB = async () => {
             await api.config.init()
             api.config.setCustomFetch(customFetch)
             await api.config.setDeviceInformation()
+            await api.config.setAppConfig()
+            initCache()
             setDBInit(true)
         }
         initDB()
+        return () => {
+            utils.worker.terminate()
+            finishCache()
+        }
     }, [setDBInit, customFetch])
 
     return (
         <ErrorBoundary {...rest}>
-            <div {...rest} className={newClassName}>
+            <div className={newClassName} {...rest}>
                 <RoutablePanels {...rest} path={path} onApplicationClose={closeApp} noCloseButton>
                     <Route path='init' component={InitialPanel} {...rest} />
                     <Route path='warning' component={WarningPanel} {...rest} />
@@ -103,6 +102,7 @@ const App = ({ ...rest }) => {
                     </Route>
                     <Route path='contact' component={ContactMePanel} {...rest} />
                     <Route path='askClose' component={ConfirmExitPanel} {...rest} />
+                    <Route path='appConfig' component={AppConfigPanel} {...rest} />
                     <Route path='developer' component={DeveloperPanel} {...rest} />
                 </RoutablePanels>
             </div>

@@ -9,21 +9,21 @@ import Spotlight from '@enact/spotlight'
 import { useSetRecoilState } from 'recoil'
 
 import { $L } from '../hooks/language'
-import { pathState, contactBtnState } from '../recoilConfig'
+import { useNavigate } from '../hooks/navigate'
+import { contactBtnState } from '../recoilConfig'
 import api from '../api'
 
 
 const WarningPanel = ({ ...rest }) => {
-    /** @type {Function} */
-    const setPath = useSetRecoilState(pathState)
+    const { goTo } = useNavigate()
     /** @type {Function} */
     const setContactBtn = useSetRecoilState(contactBtnState)
 
     const accept = useCallback(async () => {
         await api.config.setInstalled()
         setContactBtn(true)
-        setPath('/login')
-    }, [setPath, setContactBtn])
+        goTo('/login')
+    }, [goTo, setContactBtn])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -32,7 +32,9 @@ const WarningPanel = ({ ...rest }) => {
                 clearInterval(interval)
             }
         })
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     return (

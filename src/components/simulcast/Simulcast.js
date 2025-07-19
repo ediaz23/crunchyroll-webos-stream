@@ -1,5 +1,5 @@
 
-import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Button from '@enact/moonstone/Button'
 import LabeledItem from '@enact/moonstone/LabeledItem'
@@ -25,6 +25,7 @@ import useContentList from '../../hooks/contentList'
 
 /**
  * Simulcast view
+ * @TODO add poster for first weeks of season
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.title title for view
@@ -32,16 +33,16 @@ import useContentList from '../../hooks/contentList'
 const Simulcast = ({ profile, title, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak, optionBak,
+        mergeContentList, changeContentList, onFilter,
+        viewBackup, viewBackupRef, navigateContent,
     } = useContentList('simulcast')
 
     /** @type {[import('./SeasonButtons').Season, Function]} */
-    const [season, setSeason] = useState(optionBak.season || undefined)
+    const [season, setSeason] = useState(viewBackup?.season || undefined)
     /** @type {[Array<Season>, Function]} */
-    const [seasons, setSeasons] = useState(optionBak.seasons || undefined)
+    const [seasons, setSeasons] = useState(viewBackup?.seasons || undefined)
     /** @type {[String, Function]}  */
-    const [sort, setOrder] = useState(optionBak.sort || 'newly_added')
+    const [sort, setOrder] = useState(viewBackup?.sort || 'newly_added')
 
     /** @type {Array<{key: String, value: String}>} */
     const order = useMemo(() => {
@@ -68,9 +69,6 @@ const Simulcast = ({ profile, title, ...rest }) => {
             sort,
         }
     }, [season, sort, quantity])
-
-    /** @type {{current: Boolean}} */
-    const autoScrollRef = useRef(true)
 
     /** @type {Function} */
     const onSelectOrder = useCallback(({ selected }) => {
@@ -99,17 +97,18 @@ const Simulcast = ({ profile, title, ...rest }) => {
     }, [profile, mergeContentList, options])
 
     /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave({ season, seasons, sort }, false)
-    }, [onLeave, season, seasons, sort])
+    const setLocalContent = useCallback(newContent => {
+        /** backup all state to restore later */
+        viewBackupRef.current = { season, seasons, sort }
+        navigateContent(newContent)
+    }, [navigateContent, viewBackupRef, season, seasons, sort])
 
     useEffect(() => {
         if (delay >= 0) {
             changeContentList(null)
             if (season && season.id) {
                 api.discover.getBrowseAll(profile, options).then(res => {
-                    changeContentList([...res.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
-                    autoScrollRef.current = true
+                    changeContentList([...res.data, ...new Array(res.total - res.data.length)])
                 })
             }
         }
@@ -126,13 +125,8 @@ const Simulcast = ({ profile, title, ...rest }) => {
     }, [profile, setSeason, delay, season])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-            autoScrollRef.current = false
-        }
-    }, [profile, contentListBak, changeContentList, onFilter])
+        onFilter({ delay: 0 })
+    }, [profile, changeContentList, onFilter])
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -172,9 +166,10 @@ const Simulcast = ({ profile, title, ...rest }) => {
                     <Row className={css.scrollerContainer}>
                         <Cell grow style={{ height: '100%' }}>
                             <ContentGridItems
+                                type='simulcast'
                                 contentList={contentList}
                                 load={onLoad}
-                                onLeave={onLeaveView}
+                                onSelect={setLocalContent}
                                 autoScroll={autoScroll} />
                         </Cell>
                     </Row>

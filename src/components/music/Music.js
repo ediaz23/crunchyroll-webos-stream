@@ -17,35 +17,32 @@ import useContentList from '../../hooks/contentList'
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile current profile
  * @param {String} obj.title title for view
- * @param {String} obj.contentKey key to identify and reload view
- * @param {String} obj.contentType type of content to show, series, movies, etc
- * @param {Array<Object>} obj.musicFeed Music feed array
- * @param {Function} obj.setMusicFeed setState for musicFeed
+ * @param {{id: Number, items: Array<import('../hooks/homefeedWorker').HomefeedItem>}} obj.musicFeed Music feed array
  */
-const MusicBrowse = ({
-    profile, title, contentKey, contentType = 'music', musicFeed, setMusicFeed, ...rest }) => {
+const MusicBrowse = ({ profile, title, musicFeed, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak, optionBak,
-    } = useContentList('music_browse')
+        mergeContentList, changeContentList, onFilter,
+        viewBackup, viewBackupRef, navigateContent,
+    } = useContentList(`musicBrowse-${musicFeed.id}`)
 
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState(optionBak.query || '')
+    const [query, setQuery] = useState(viewBackup?.query || '')
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
     /** @type {import('../grid/ContentGrid').SearchOptions} */
     const options = useMemo(() => {
+        const contentKey = 'music'
         return {
             quantity,
             ratings: true,
             noMock: true,
-            type: contentType,
+            type: contentKey,
             contentKey,
             sort,
             query,
         }
-    }, [contentType, sort, query, contentKey, quantity])
+    }, [sort, query, quantity])
 
     /** @type {Function} */
     const onSearch = useCallback(({ value }) => {
@@ -56,19 +53,20 @@ const MusicBrowse = ({
     /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (mergeContentList(false, index)) {
-            api.discover.search(profile, { ...options, start: index })
-                .then(res => {
-                    if (res.total) {
-                        mergeContentList(res.data[0].items, index)
-                    }
-                })
+            api.discover.search(profile, { ...options, start: index }).then(res => {
+                if (res.total) {
+                    mergeContentList(res.data[0].items, index)
+                }
+            })
         }
     }, [options, profile, mergeContentList])
 
     /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave({ query })
-    }, [onLeave, query])
+    const setLocalContent = useCallback(newContent => {
+        /** backup all state to restore later */
+        viewBackupRef.current = { query }
+        navigateContent(newContent)
+    }, [navigateContent, viewBackupRef, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -92,15 +90,11 @@ const MusicBrowse = ({
             }, delay)
         }
         return () => clearTimeout(delayDebounceFn)
-    }, [profile, changeContentList, options, contentKey, delay])
+    }, [profile, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-        }
-    }, [profile, contentListBak, changeContentList, onFilter, contentKey])
+        onFilter({ delay: 0 })
+    }, [profile, changeContentList, onFilter])
 
     return (
         <Column id="music-feed" style={{ width: '100%' }} {...rest}>
@@ -125,14 +119,14 @@ const MusicBrowse = ({
                     <HomeFeed
                         profile={profile}
                         homeFeed={musicFeed}
-                        setHomeFeed={setMusicFeed}
-                        type='music' />
+                        feedType='music' />
                 }
                 {query !== '' &&
                     <ContentGridItems
+                        type='music'
                         contentList={contentList}
                         load={onLoad}
-                        onLeave={onLeaveView}
+                        onSelect={setLocalContent}
                         autoScroll={autoScroll} />
                 }
             </Cell>
@@ -142,11 +136,11 @@ const MusicBrowse = ({
 
 MusicBrowse.propTypes = {
     profile: PropTypes.object.isRequired,
-    contentKey: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    musicFeed: PropTypes.arrayOf(PropTypes.object).isRequired,
-    setMusicFeed: PropTypes.func.isRequired,
-    contentType: PropTypes.string,
+    musicFeed: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    }).isRequired,
 }
 
 export default MusicBrowse

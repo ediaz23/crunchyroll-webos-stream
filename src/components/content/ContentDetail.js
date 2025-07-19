@@ -1,24 +1,45 @@
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import Image from '@enact/moonstone/Image'
 
 import PropTypes from 'prop-types'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 import Options from './Options'
 import Seasons from './Seasons'
 import Movies from './Movies'
 import LangSelector from './LangSelector'
+
+import { isPremiumState } from '../../recoilConfig'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
-
-import { isPremiumState, contentDetailBakState } from '../../recoilConfig'
+import { useNavigateContent } from '../../hooks/navigate'
+import { isPlayable } from '../../utils'
 import css from './ContentDetail.module.less'
-import back from '../../back'
-import { useSetPlayableContent } from '../../hooks/setContent'
 
+
+/**
+ * This hook is to allow go back when you are deep component
+ * example: watching more episodes
+ * @param {Function} pushHistory
+ * @param {Function} setIndex
+ * @param {Number} index
+ * @param {Number} backIndex
+ * @return {Function}
+ */
+const createChangeActivity = (pushHistory, setIndex, index, backIndex) => {
+    return () => {
+        if (backIndex != null) {
+            pushHistory(() => {
+                setIndex(backIndex)
+            })
+        }
+        setIndex(index)
+    }
+}
 
 const ActivityViews = ({ index, children }) => children[index]
+
 
 /**
  * @param {Object} obj
@@ -26,29 +47,40 @@ const ActivityViews = ({ index, children }) => children[index]
  * @param {Object} obj.content
  */
 const ContentDetail = ({ profile, content, ...rest }) => {
+    const {
+        navigateContent, viewBackup, viewBackupRef,
+        pushHistory, popHistory
+    } = useNavigateContent(`contentDetail-${content.id}`)
     /** @type {Boolean} */
     const isPremium = useRecoilValue(isPremiumState)
-    /** @type {[{currentIndex: Number}, Function]}  */
-    const [contentDetailBak, setContentDetailBak] = useRecoilState(contentDetailBakState)
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
     /** @type {[{source: String, size: {width: Number, height: Number}}, Function]} */
     const [image, setImage] = useState(getImagePerResolution({}))
     /** @type {[Number, Function]} */
-    const [currentIndex, setCurrentIndex] = useState(contentDetailBak.currentIndex || 0)
-    /** @type {{current: Number}} */
-    const ratingRef = useRef(0)
+    const [currentIndex, setCurrentIndex] = useState(viewBackup?.currentIndex || 0)
+    const options = useMemo(() => ({
+        option: 0,
+        moreEpisodes: 1,
+        changeAudio: 2,
+    }), [])
+    const setActivity = useMemo(() => ({
+        [options.option]: createChangeActivity(pushHistory, setCurrentIndex, options.option),
+        [options.moreEpisodes]: createChangeActivity(pushHistory, setCurrentIndex, options.moreEpisodes, options.option),
+        [options.changeAudio]: createChangeActivity(pushHistory, setCurrentIndex, options.changeAudio, options.option),
+    }), [options, setCurrentIndex, pushHistory])
+    const setActivityRef = useRef(setActivity)
     /** @type {Function} */
-    const setPlayableContent = useSetPlayableContent()
-
-    /** @type {Function} */
-    const setContentToPlay = useCallback((contentToPlay, backState) => {
-        if (currentIndex !== 0) {
-            back.popHistory()
+    const setContent = useCallback((newContent) => {
+        if (currentIndex !== options.option) {
+            // if your are setting content and not in "option" activity
+            // then useChangeActivity add a history so it has to be removed
+            popHistory()
         }
-        const contentBak = { currentIndex, rating: ratingRef.current, ...(backState || {}) }
-        setPlayableContent({ contentToPlay, contentBak })
-    }, [currentIndex, setPlayableContent])
+        /** backup all state to restore later */
+        viewBackupRef.current = { currentIndex, }
+        navigateContent(newContent, { restoreCurrentContent: !isPlayable(newContent.type) })
+    }, [currentIndex, navigateContent, options, viewBackupRef, popHistory])
 
     /** @type {Function} */
     const calculateImage = useCallback((ref) => {
@@ -58,20 +90,13 @@ const ContentDetail = ({ profile, content, ...rest }) => {
         }
     }, [content, getImagePerResolution])
 
-    /** @type {Function} */
-    const onSetCurrentIndex = useCallback(tmpIndex => {
-        setContentDetailBak({})
-        setCurrentIndex(tmpIndex)
-    }, [setContentDetailBak, setCurrentIndex])
-
-    /** @type {Function} */
-    const saveRating = useCallback(rating => { ratingRef.current = rating }, [])
-
     useEffect(() => { // to back state after back from playing
-        if (contentDetailBak.currentIndex != null && contentDetailBak.currentIndex !== 0) {
-            back.pushHistory({ doBack: () => { setCurrentIndex(0) } })
+        if (viewBackup?.currentIndex != null) {
+            // if you are back from other view and need to restore previews state
+            // has tu excecute useChangeActivity
+            setActivityRef.current[viewBackup?.currentIndex]()
         }
-    }, [contentDetailBak.currentIndex])
+    }, [viewBackup?.currentIndex])
 
     return (
         <Row className={css.ContentDetail} {...rest}>
@@ -83,24 +108,31 @@ const ContentDetail = ({ profile, content, ...rest }) => {
                     <ActivityViews index={currentIndex}>
                         <Options
                             profile={profile}
-                            content={content}
-                            saveRating={saveRating}
-                            setIndex={onSetCurrentIndex}
-                            setContentToPlay={setContentToPlay} />
+                            contentState={{
+                                content,
+                                setContent,
+                            }}
+                            setFunctions={{
+                                moreEpisodes: setActivity[options.moreEpisodes],
+                                changeAudio: setActivity[options.changeAudio],
+                            }} />
+
                         {content.type === 'series' ?
                             <Seasons
                                 profile={profile}
-                                series={content}
-                                setContentToPlay={setContentToPlay}
-                                isPremium={isPremium}
-                                contentDetailBak={contentDetailBak} />
+                                contentState={{
+                                    content,
+                                    setContent,
+                                }}
+                                isPremium={isPremium} />
                             :
                             <Movies
                                 profile={profile}
-                                movieListing={content}
-                                setContentToPlay={setContentToPlay}
-                                isPremium={isPremium}
-                                contentDetailBak={contentDetailBak} />
+                                contentState={{
+                                    content,
+                                    setContent,
+                                }}
+                                isPremium={isPremium} />
                         }
                         <LangSelector
                             profile={profile}

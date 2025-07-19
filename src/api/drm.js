@@ -17,7 +17,7 @@ export const getStreams = async (profile, params) => {
     let out = null
     try {
         const account = await getContentParam(profile)
-        out = await api.drm.getStream({ account, ...params })
+        out = await api.drm.getStream({ account, fnConfig: { cache: false, priority: true }, ...params })
     } catch (error) {
         await translateError(error)
     }
@@ -36,7 +36,7 @@ export const getStreams = async (profile, params) => {
 export const deleteToken = async (profile, params) => {
     try {
         const account = await getContentParam(profile)
-        await api.drm.deleteToken({ account, ...params })
+        await api.drm.deleteToken({ account, fnConfig: { cache: false, priority: true }, ...params })
     } catch (error) {
         await translateError(error)
     }
@@ -56,7 +56,7 @@ export const keepAlive = async (profile, params) => {
     let out = null
     try {
         const account = await getContentParam(profile)
-        out = await api.drm.keepAlive({ account, ...params })
+        out = await api.drm.keepAlive({ account, fnConfig: { cache: false, priority: true }, ...params })
     } catch (error) {
         await translateError(error)
     }

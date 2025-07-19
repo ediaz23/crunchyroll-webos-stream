@@ -272,9 +272,8 @@ class VirtualListBase extends VirtualListSuperBase {
      * Returns null if no matching node is found.
      */
     getItemNodePatch(index, cellPosition) {
-        const
-            { numOfItems } = this.uiRefCurrent.state,
-            itemContainerNode = this.uiRefCurrent.itemContainerRef.current;
+        const { numOfItems } = this.uiRefCurrent.state
+        const itemContainerNode = this.uiRefCurrent.itemContainerRef.current;
         let out = null
 
         if (itemContainerNode) {

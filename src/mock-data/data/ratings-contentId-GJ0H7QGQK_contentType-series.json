@@ -1,0 +1,30 @@
+{
+    "1s": {
+        "displayed": "1",
+        "unit": "K",
+        "percentage": 2
+    },
+    "2s": {
+        "displayed": "657",
+        "unit": "",
+        "percentage": 1
+    },
+    "3s": {
+        "displayed": "2",
+        "unit": "K",
+        "percentage": 3
+    },
+    "4s": {
+        "displayed": "6.9",
+        "unit": "K",
+        "percentage": 9
+    },
+    "5s": {
+        "displayed": "70.5",
+        "unit": "K",
+        "percentage": 87
+    },
+    "average": "4.8",
+    "total": 81032,
+    "rating": "4s"
+}

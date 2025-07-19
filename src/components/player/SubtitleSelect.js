@@ -5,6 +5,7 @@ import ContextualPopupDecorator from '@enact/moonstone/ContextualPopupDecorator'
 import PropTypes from 'prop-types'
 
 import SubtitleList from './SubtitleList'
+import { useNavigate } from '../../hooks/navigate'
 
 const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
 
@@ -17,16 +18,25 @@ const IconButtonWithPopup = ContextualPopupDecorator(IconButton)
  * @param {Function} [obj.triggerActivity]
  */
 const SubtitleSelect = ({ subtitles, subtitle, selectSubtitle, triggerActivity, ...rest }) => {
-
+    const { pushHistory, popHistory } = useNavigate()
     /** @type {[Boolean, Function]} */
     const [showSubtitleList, setShowSubtitleList] = useState(false)
 
-    const onShowSubtitleList = useCallback(() => { setShowSubtitleList(oldVar => !oldVar) }, [setShowSubtitleList])
-    const onHideSubtitleList = useCallback(() => { setShowSubtitleList(false) }, [setShowSubtitleList])
+    const toggleSubtitleList = useCallback(() => {
+        if (showSubtitleList) {
+            setShowSubtitleList(false)
+            popHistory()
+        } else {
+            setShowSubtitleList(true)
+            pushHistory(() => setShowSubtitleList(false))
+        }
+    }, [showSubtitleList, setShowSubtitleList, pushHistory, popHistory])
+
     const onSelectSubtitle = useCallback(({ selected }) => {
         selectSubtitle(selected)
-        onHideSubtitleList()
-    }, [onHideSubtitleList, selectSubtitle])
+        toggleSubtitleList()
+    }, [selectSubtitle, toggleSubtitleList])
+
     const subtitleList = useCallback(() => (
         <SubtitleList
             subtitles={subtitles}
@@ -39,8 +49,8 @@ const SubtitleSelect = ({ subtitles, subtitle, selectSubtitle, triggerActivity, 
         <IconButtonWithPopup
             backgroundOpacity="lightTranslucent"
             open={showSubtitleList}
-            onClick={onShowSubtitleList}
-            onClose={onHideSubtitleList}
+            onClick={toggleSubtitleList}
+            onClose={toggleSubtitleList}
             popupComponent={subtitleList}
             direction='up'
             showCloseButton

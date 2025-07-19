@@ -1,0 +1,18 @@
+{
+    "total": 2,
+    "data": [
+        {
+            "playhead": 1447,
+            "content_id": "GN7UD2X4Z",
+            "fully_watched": true,
+            "last_modified": "2024-12-29T21:29:36Z"
+        },
+        {
+            "playhead": 1420,
+            "content_id": "G14U49QM1",
+            "fully_watched": true,
+            "last_modified": "2025-01-12T21:34:51Z"
+        }
+    ],
+    "meta": {}
+}

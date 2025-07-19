@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import HomeContentBanner from './home/ContentBanner'
 import ContentGridItems from './grid/ContentGridItems'
 import useContentList from '../hooks/contentList'
+import api from '../api'
 
 
 /**
@@ -18,22 +19,18 @@ import useContentList from '../hooks/contentList'
  * @param {Function} [obj.onSelect]
  * @param {'tall'|'wide'} [obj.mode]
  * @param {Boolean} [obj.noPoster]
- * @param {Boolean} [obj.noSaveList]
- * @param {Object} [obj.homeBackupOverride]
- * @param {Object} [obj.homePositionOverride]
  */
-const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noSaveList = false,
-    homeBackupOverride, homePositionOverride, ...rest }) => {
+const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', noPoster = false, noCategory = false, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak,
-    } = useContentList(type, homeBackupOverride, homePositionOverride)
+        mergeContentList, changeContentList, onFilter,
+        navigateContent,
+    } = useContentList(type)
 
     /** @type {[Object, Function]} */
     const [selectedContent, setSelectedContent] = useState(null)
 
-    /** @type {import('../grid/ContentGrid').SearchOptions} */
+    /** @type {import('./grid/ContentGrid').SearchOptions} */
     const options = useMemo(() => { return { quantity } }, [quantity])
 
     /** @type {Function} */
@@ -47,59 +44,43 @@ const ContentListPoster = ({ profile, type, loadData, onSelect, mode = 'wide', n
     /** @type {Function} */
     const onLoad = useCallback((index) => {
         if (mergeContentList(false, index)) {
-            loadData({ ...options, start: index }).then(res => {
-                mergeContentList(res.data, index)
-            })
+            loadData({ ...options, start: index }).then(res => mergeContentList(res.data, index))
         }
     }, [loadData, mergeContentList, options])
 
-    /** @type {{current: Boolean}} */
-    const autoScrollRef = useRef(true)
-
-    /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave(null, !noSaveList)
-    }, [onLeave, noSaveList])
+    const appConfigRef = useRef(api.config.getAppConfig())
 
     useEffect(() => {
         if (delay >= 0) {
             changeContentList(null)
             loadData(options).then(res => {
-                changeContentList([...res.data, ...new Array(res.total - res.data.length)], autoScrollRef.current)
-                autoScrollRef.current = true
+                changeContentList([...res.data, ...new Array(res.total - res.data.length)])
             })
         }
     }, [profile, loadData, changeContentList, options, delay])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-            autoScrollRef.current = false
-        }
-    }, [profile, contentListBak, changeContentList, onFilter])
+        onFilter({ delay: 0 })
+    }, [profile, changeContentList, onFilter])
 
     return (
         <Column {...rest}>
             <Column>
                 <Cell size="50%" style={{ height: '50%' }}>
-                    {selectedContent &&
-                        <HomeContentBanner
-                            content={selectedContent}
-                            noPoster={noPoster} />
-                    }
+                    <HomeContentBanner
+                        content={selectedContent}
+                        noPoster={noPoster || appConfigRef.current.ui === 'lite'}
+                        noCategory={noCategory || appConfigRef.current.ui === 'lite'} />
                 </Cell>
                 <Cell grow style={{ height: '50%' }}>
                     <ContentGridItems
+                        type={type}
                         contentList={contentList}
                         load={onLoad}
-                        onLeave={onLeaveView}
-                        onSelect={onSelect}
+                        onSelect={onSelect || navigateContent}
                         onFocus={onSelectItem}
                         autoScroll={autoScroll}
-                        mode={mode}
-                        homePositionOverride={homePositionOverride} />
+                        mode={mode} />
                 </Cell>
             </Column>
         </Column>
@@ -113,9 +94,7 @@ ContentListPoster.propTypes = {
     onSelect: PropTypes.func,
     mode: PropTypes.oneOf(['tall', 'wide']),
     noPoster: PropTypes.bool,
-    noSaveList: PropTypes.bool,
-    homeBackupOverride: PropTypes.any,
-    homePositionOverride: PropTypes.any,
+    noCategory: PropTypes.bool,
 }
 
 export default ContentListPoster

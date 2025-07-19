@@ -2,43 +2,61 @@
     "total": 1,
     "data": [
         {
+            "external_id": "EPI.797867",
+            "type": "episode",
+            "recent_audio_locale": "ja-JP",
+            "recent_variant": "",
+            "streams_link": "/content/v2/cms/videos/G71F4K1WE/streams",
             "channel_id": "crunchyroll",
-            "slug": "",
-            "id": "G0DUNJ2JP",
-            "title": "El tesoro escondido",
-            "streams_link": "/content/v2/cms/videos/G9XFEG0GJ/streams",
+            "description": "Yuuji deberá demostrar que es apto para formar parte de la Preparatoria de Hechicería. Además, conocerán a la tercera integrante del equipo.",
             "episode_metadata": {
                 "audio_locale": "ja-JP",
                 "availability_ends": "9998-11-30T08:00:00Z",
                 "availability_notes": "",
-                "availability_starts": "2023-07-06T17:00:00Z",
+                "availability_starts": "2020-10-16T17:45:00Z",
+                "availability_status": "available",
                 "available_date": null,
                 "available_offline": true,
                 "closed_captions_available": false,
-                "duration_ms": 1435019,
+                "content_descriptors": [
+                    "Desnudez",
+                    "Lenguaje ofensivo",
+                    "Tabaquismo",
+                    "Violencia"
+                ],
+                "duration_ms": 1435080,
                 "eligible_region": "CL",
-                "episode": "25",
-                "episode_air_date": "2023-07-06T23:56:00+09:00",
-                "episode_number": 25,
-                "extended_maturity_rating": {},
-                "free_available_date": "2023-07-06T17:00:00Z",
-                "identifier": "GRDV0019R|S2|E25",
+                "episode": "3",
+                "episode_air_date": "2020-10-17T01:25:00+09:00",
+                "episode_number": 3,
+                "extended_maturity_rating": {
+                    "level": "M2",
+                    "rating": "16",
+                    "system": "cr-tv"
+                },
+                "free_available_date": "2020-10-23T17:45:00Z",
+                "identifier": "GRDV0019R|S1|E3",
                 "is_clip": false,
-                "is_dubbed": false,
+                "is_dubbed": true,
                 "is_mature": false,
-                "is_premium_only": true,
+                "is_premium_only": false,
                 "is_subbed": true,
                 "mature_blocked": false,
                 "maturity_ratings": [
                     "TV-14"
                 ],
-                "premium_available_date": "2023-07-06T17:00:00Z",
+                "premium_available_date": "2020-10-16T17:45:00Z",
                 "premium_date": null,
-                "season_id": "G6MGC3778",
-                "season_number": 2,
-                "season_slug_title": "jujutsu-kaisen-season-2",
-                "season_title": "JUJUTSU KAISEN",
-                "sequence_number": 25,
+                "roles": [
+                    "main"
+                ],
+                "season_display_number": "1",
+                "season_id": "G6Q9GGV46",
+                "season_number": 1,
+                "season_sequence_number": 1,
+                "season_slug_title": "jujutsu-kaisen",
+                "season_title": "[JAP] JUJUTSU KAISEN",
+                "sequence_number": 3,
                 "series_id": "GRDV0019R",
                 "series_slug_title": "jujutsu-kaisen",
                 "series_title": "JUJUTSU KAISEN",
@@ -53,83 +71,170 @@
                     "de-DE",
                     "ru-RU"
                 ],
-                "upload_date": "2023-07-06T23:56:00+09:00",
+                "upload_date": "2020-10-17T01:25:00+09:00",
                 "versions": [
                     {
                         "audio_locale": "ja-JP",
-                        "guid": "G0DUNJ2JP",
-                        "is_premium_only": true,
-                        "media_guid": "G9XFEG0GJ",
+                        "guid": "G6JK7W70R",
+                        "is_premium_only": false,
+                        "media_guid": "G71F4K1WE",
                         "original": true,
-                        "season_guid": "G6MGC3778",
+                        "roles": [
+                            "main"
+                        ],
+                        "season_guid": "G6Q9GGV46",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "es-419",
+                        "guid": "GN7UDZJ78",
+                        "is_premium_only": false,
+                        "media_guid": "GVMF0V2Z3",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "GR9PC2W90",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "en-US",
+                        "guid": "GK9U3ZN47",
+                        "is_premium_only": false,
+                        "media_guid": "G3WFXP23M",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "G6X0C4N21",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "pt-BR",
+                        "guid": "G0DUN3X04",
+                        "is_premium_only": false,
+                        "media_guid": "G9XFEX2P7",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "GR75CDK31",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "fr-FR",
+                        "guid": "G7PU45DVZ",
+                        "is_premium_only": false,
+                        "media_guid": "G4GFQ37XJ",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "GYE5CQ5WX",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "de-DE",
+                        "guid": "GX9UQD475",
+                        "is_premium_only": false,
+                        "media_guid": "GJKF2M1XZ",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "GR09CXQMJ",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "it-IT",
+                        "guid": "GN7UD9GD7",
+                        "is_premium_only": false,
+                        "media_guid": "GVMF05J0Z",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "G65VCD4PZ",
+                        "variant": ""
+                    },
+                    {
+                        "audio_locale": "es-ES",
+                        "guid": "GK9U30Q3Q",
+                        "is_premium_only": false,
+                        "media_guid": "G3WFXDQXQ",
+                        "original": false,
+                        "roles": [
+                            "dub"
+                        ],
+                        "season_guid": "GYWEC3KX7",
                         "variant": ""
                     }
                 ]
             },
-            "external_id": "EPI.905007",
             "images": {
                 "thumbnail": [
                     [
                         {
                             "height": 180,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 320
                         },
                         {
                             "height": 338,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 600
                         },
                         {
                             "height": 360,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 640
                         },
                         {
                             "height": 450,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 800
                         },
                         {
                             "height": 675,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 1200
                         },
                         {
                             "height": 810,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 1440
                         },
                         {
                             "height": 900,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 1600
                         },
                         {
                             "height": 1080,
-                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/cf62a54eb63cc376a41d363ff69eeb99.jpe",
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/f30887fcbc7fd381afafcc1b768e18b9.jpg",
                             "type": "thumbnail",
                             "width": 1920
                         }
                     ]
                 ]
             },
-            "linked_resource_key": "cms:/episodes/G0DUNJ2JP",
-            "slug_title": "hidden-inventory",
-            "type": "episode",
-            "description": "La historia nos devuelve al pasado, cuando Gojo y Geto todavía eran compañeros y no eran completos enemigos.",
+            "linked_resource_key": "cms:/episodes/G6JK7W70R",
             "promo_title": "",
+            "slug": "",
+            "id": "G6JK7W70R",
             "promo_description": "",
+            "slug_title": "girl-of-steel",
+            "title": "Chica de acero",
             "fully_watched": false,
             "never_watched": false,
-            "playhead": 29,
+            "playhead": 210,
             "shortcut": false
         }
     ],

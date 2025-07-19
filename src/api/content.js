@@ -9,14 +9,15 @@ import { translateError, getContentParam } from './utils'
  * @param {import('crunchyroll-js-api').Types.Profile} profile
  * @param {Object} params
  * @param {Array<String>} params.contentIds
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} params.fnConfig
  * @return {Promise<{data: Array<Object>}>}
  */
 export const getPlayHeads = async (profile, params) => {
     let out = null
     try {
         params = params || {}
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('play-heads', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('play-heads', params, [getPlayHeads, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.content.getPlayheads({ account, ...params })
@@ -34,6 +35,7 @@ export const getPlayHeads = async (profile, params) => {
  * @param {Object} params
  * @param {String} params.contentId
  * @param {Number} params.playhead
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} params.fnConfig
  * @return {Promise}
  */
 export const savePlayhead = async (profile, params) => {
@@ -73,8 +75,8 @@ export const addWatchlistItem = async (profile, params) => {
 export const getWatchlistItems = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('watchlist-items', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('watchlist-items', params, [getWatchlistItems, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.content.getWatchlistItems({ account, ...params })

@@ -24,11 +24,6 @@ export const pathState = atom({
     default: '/init'
 })
 
-export const homeIndexState = atom({
-    key: 'homeIndexState',
-    default: 0
-})
-
 export const initScreenState = atom({
     key: 'initScreenState',
     default: '/init'
@@ -42,38 +37,6 @@ export const currentProfileState = atom({
 export const autoLoginState = atom({
     key: 'autoLoginState',
     default: true
-})
-
-export const homeFeedState = atom({
-    key: 'homeFeedState',
-    default: [],
-    effects: [localStorageEffect('homeFeedState')]
-})
-
-export const homeFeedExpirationState = atom({
-    key: 'homeFeedExpirationState',
-    default: null,
-})
-
-export const homePositionState = atom({
-    key: 'homePositionState',
-    default: { rowIndex: 0, columnIndex: 0 },
-})
-
-export const homeBackupState = atom({
-    key: 'homeBackupState',
-    default: null,
-})
-
-export const musicFeedState = atom({
-    key: 'musicFeedState',
-    default: [],
-    effects: [localStorageEffect('musicFeedState')]
-})
-
-export const musicFeedExpirationState = atom({
-    key: 'musicFeedExpirationState',
-    default: null
 })
 
 export const selectedContentState = atom({
@@ -107,19 +70,7 @@ export const isPremiumState = atom({
     default: false
 })
 
-export const contentDetailBakState = atom({
-    key: 'contentDetailBakState',
-    default: {},
-})
-
-// similar to homeBackupState
-export const contentDetailBackupState = atom({
-    key: 'contentDetailBackupState',
-    default: null,
-})
-
-// similar to homePositionState
-export const contentDetailPositionState = atom({
-    key: 'contentDetailPositionState',
-    default: { rowIndex: 0, columnIndex: 0 },
+export const viewBackupState = atom({
+    key: 'viewBackupState',
+    default: {}
 })

@@ -54,22 +54,12 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
                 this._readyStateChange(window.XMLHttpRequest.DONE)
             }, this.timeout)
         }
-        if (this.async) {
-            Promise.resolve().then(() => {
-                fetchUtils.makeRequest({
-                    config: this.reqConfig,
-                    onSuccess: this._onSuccess.bind(this),
-                    onFailure: this._onFailure.bind(this),
-                    onProgress: this._onProgress.bind(this),
-                })
-            }).catch(this._onFailure.bind(this))
-        } else {
-            fetchUtils.makeRequest({
-                config: this.reqConfig,
-                onSuccess: this._onSuccess.bind(this),
-                onFailure: this._onFailure.bind(this),
-            })
-        }
+        fetchUtils.makeRequest({
+            config: this.reqConfig,
+            onSuccess: this._onSuccess.bind(this),
+            onFailure: this._onFailure.bind(this),
+            onProgress: this.async ? this._onProgress.bind(this) : null,
+        }, { sync: !this.async, cache: false })
     }
 
     /**
@@ -127,7 +117,7 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
 
     /**
      * call on request end
-     * @param {Object} data
+     * @param {import('../hooks/customFetch').ResponseProxy} data
      */
     _onSuccess(data) {
         const { status, content, headers, resUrl } = data

@@ -15,8 +15,8 @@ import { translateError, getContentParam } from './utils'
 export const getObjects = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('objects', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('objects', params, [getObjects, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.cms.getObjects({ account, ...params })
@@ -37,8 +37,8 @@ export const getObjects = async (profile, params) => {
 export const getSeasons = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('seasons', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('seasons', params, [getSeasons, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.cms.getSeasons({ account, ...params })
@@ -59,8 +59,8 @@ export const getSeasons = async (profile, params) => {
 export const getSerie = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('serie', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('serie', params, [getSerie, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.cms.getSeries({ account, ...params })
@@ -81,8 +81,8 @@ export const getSerie = async (profile, params) => {
 export const getEpisodes = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('episodes', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('episodes', params, [getEpisodes, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.cms.getEpisodes({ account, ...params })
@@ -103,8 +103,8 @@ export const getEpisodes = async (profile, params) => {
 export const getMovies = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('movies', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('movies', params, [getMovies, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.cms.getMovies({ account, ...params })
@@ -125,8 +125,8 @@ export const getMovies = async (profile, params) => {
 export const getStreamsWithURL = async (profile, params) => {
     let out = null
     try {
-        if (LOAD_MOCK_DATA) {
-            out = await getMockData('streams-url', params)
+        if (LOAD_MOCK_DATA && !('noMock' in (params || {}))) {
+            out = await getMockData('streams-url', params, [getStreamsWithURL, profile])
         } else {
             const account = await getContentParam(profile)
             out = await api.cms.getStreamsWithURL({ account, ...params })

@@ -1,0 +1,2214 @@
+{
+    "total": 12,
+    "data": [
+        {
+            "channel_id": "crunchyroll",
+            "identifier": "GJ0H7QGQK|S1|E1",
+            "duration_ms": 1447040,
+            "available_date": null,
+            "listing_id": "",
+            "roles": [
+                "main"
+            ],
+            "premium_date": null,
+            "title": "Akira of the Dead",
+            "availability_status": "available",
+            "hd_flag": true,
+            "season_id": "G68VCP8X0",
+            "availability_starts": "2023-07-09T09:00:00Z",
+            "mature_blocked": false,
+            "media_type": "episode",
+            "slug": "",
+            "description": "Akira ve cómo una empresa explotadora le absorbe por completo la vida. Mientras tanto, cuando su ciudad es azotada repentinamente por un apocalipsis zombi, encuentra un nuevo sentido a la vida.",
+            "seo_title": "",
+            "availability_notes": "",
+            "slug_title": "akira-of-the-dead",
+            "available_offline": true,
+            "audio_locale": "ja-JP",
+            "episode_air_date": "2023-07-09T17:00:00+09:00",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "sequence_number": 1,
+            "seo_description": "",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "recent_variant": "",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "season_display_number": "",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "next_episode_id": "GK9U3MVX8",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "is_dubbed": true,
+            "episode": "1",
+            "is_premium_only": false,
+            "is_subbed": true,
+            "upload_date": "2023-07-09T17:00:00+09:00",
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "series_id": "GJ0H7QGQK",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "GN7UD2X4Z",
+                    "is_premium_only": false,
+                    "media_guid": "GVMF0WN9V",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GK9U3MGDP",
+                    "is_premium_only": false,
+                    "media_guid": "G3WFXWVZJ",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "G31UXWVZP",
+                    "is_premium_only": false,
+                    "media_guid": "G8MFNG70D",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G8WUNG70E",
+                    "is_premium_only": false,
+                    "media_guid": "GQ9FGVMQ7",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "id": "GN7UD2X4Z",
+            "premium_available_date": "2023-07-09T09:00:00Z",
+            "season_sequence_number": 1,
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/b32afe874b5c2e5232dab5cd25536262.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "recent_audio_locale": "ja-JP",
+            "episode_number": 1,
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "production_episode_id": "",
+            "is_clip": false,
+            "eligible_region": "CL",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "season_number": 1,
+            "next_episode_title": "Bucket List of the Dead",
+            "closed_captions_available": false,
+            "is_mature": false,
+            "streams_link": "/content/v2/cms/videos/GVMF0WN9V/streams"
+        },
+        {
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "next_episode_title": "Best Friend of the Dead",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "is_subbed": true,
+            "title": "Bucket List of the Dead",
+            "availability_starts": "2023-07-16T09:00:00Z",
+            "series_id": "GJ0H7QGQK",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "eligible_region": "CL",
+            "episode_number": 2,
+            "available_date": null,
+            "season_id": "G68VCP8X0",
+            "season_display_number": "",
+            "is_mature": false,
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "seo_description": "",
+            "slug_title": "bucket-list-of-the-dead",
+            "channel_id": "crunchyroll",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "episode_air_date": "2023-07-16T17:00:00+09:00",
+            "season_sequence_number": 1,
+            "recent_variant": "",
+            "next_episode_id": "G50UZXK54",
+            "availability_notes": "",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "premium_available_date": "2023-07-16T09:00:00Z",
+            "id": "GK9U3MVX8",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "is_premium_only": false,
+            "listing_id": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/00c97ed6cf34dadf8b865c7fdf0b9495.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "slug": "",
+            "streams_link": "/content/v2/cms/videos/G3WFXWK97/streams",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "roles": [
+                "main"
+            ],
+            "production_episode_id": "",
+            "closed_captions_available": false,
+            "availability_status": "available",
+            "upload_date": "2023-07-16T17:00:00+09:00",
+            "audio_locale": "ja-JP",
+            "is_dubbed": true,
+            "is_clip": false,
+            "season_number": 1,
+            "premium_date": null,
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "recent_audio_locale": "ja-JP",
+            "episode": "2",
+            "seo_title": "",
+            "sequence_number": 2,
+            "hd_flag": true,
+            "description": "Akira Tendo pasó de ser un asalariado a llevar una vida relajada pese a los zombis, pero cuando quiere pasar un día tomando cerveza en casa, encuentra un problema.",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "GK9U3MVX8",
+                    "is_premium_only": false,
+                    "media_guid": "G3WFXWK97",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GMKUXQEGN",
+                    "is_premium_only": false,
+                    "media_guid": "GPPFKZ8D3",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GPWUKZ8D0",
+                    "is_premium_only": false,
+                    "media_guid": "GZ4FV2D1P",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GZ7UV2D10",
+                    "is_premium_only": false,
+                    "media_guid": "G5JFZXM17",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "duration_ms": 1447073,
+            "available_offline": true,
+            "identifier": "GJ0H7QGQK|S1|E2",
+            "media_type": "episode",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "mature_blocked": false
+        },
+        {
+            "sequence_number": 3,
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "description": "Akira decide que es momento de recuperar a su mejor amigo, Kencho, así que cuando lo llama por teléfono y descubre que sigue vivo, se lanza a rescatarlo.",
+            "episode_number": 3,
+            "mature_blocked": false,
+            "next_episode_id": "GWDU8EVDG",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "series_id": "GJ0H7QGQK",
+            "production_episode_id": "",
+            "audio_locale": "ja-JP",
+            "eligible_region": "CL",
+            "is_premium_only": false,
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/02d81ecb4788be50c23b382841c9cffd.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "closed_captions_available": false,
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "premium_available_date": "2023-07-23T09:00:00Z",
+            "episode_air_date": "2023-07-23T17:00:00+09:00",
+            "seo_description": "",
+            "next_episode_title": "Flight Attendant of the Dead",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "season_sequence_number": 1,
+            "media_type": "episode",
+            "seo_title": "",
+            "episode": "3",
+            "availability_starts": "2023-07-23T09:00:00Z",
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "season_id": "G68VCP8X0",
+            "is_subbed": true,
+            "listing_id": "",
+            "available_date": null,
+            "id": "G50UZXK54",
+            "available_offline": true,
+            "premium_date": null,
+            "recent_variant": "",
+            "streams_link": "/content/v2/cms/videos/G07FNDG80/streams",
+            "season_display_number": "",
+            "availability_status": "available",
+            "availability_notes": "",
+            "hd_flag": true,
+            "slug": "",
+            "duration_ms": 1446989,
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "upload_date": "2023-07-23T17:00:00+09:00",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "identifier": "GJ0H7QGQK|S1|E3",
+            "is_clip": false,
+            "roles": [
+                "main"
+            ],
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G50UZXK54",
+                    "is_premium_only": false,
+                    "media_guid": "G07FNDG80",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GVWU0W84D",
+                    "is_premium_only": false,
+                    "media_guid": "G25F04NDZ",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "G2XU04ND3",
+                    "is_premium_only": false,
+                    "media_guid": "GDVFVQE8W",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GD9UVQE8J",
+                    "is_premium_only": false,
+                    "media_guid": "GWMF8E7QW",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "season_number": 1,
+            "is_mature": false,
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "recent_audio_locale": "ja-JP",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "channel_id": "crunchyroll",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "is_dubbed": true,
+            "title": "Best Friend of the Dead",
+            "slug_title": "best-friend-of-the-dead"
+        },
+        {
+            "slug_title": "flight-attendant-of-the-dead",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "season_sequence_number": 1,
+            "next_episode_id": "GG1U24WG3",
+            "availability_starts": "2023-07-31T09:00:00Z",
+            "is_mature": false,
+            "season_number": 1,
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "title": "Flight Attendant of the Dead",
+            "identifier": "GJ0H7QGQK|S1|E4",
+            "series_id": "GJ0H7QGQK",
+            "episode_number": 4,
+            "mature_blocked": false,
+            "listing_id": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/feb8095e9ae3d4bbcb62ee1fa075eb7d.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "episode_air_date": "2023-07-30T17:00:00+09:00",
+            "is_premium_only": false,
+            "recent_variant": "",
+            "is_dubbed": true,
+            "upload_date": "2023-07-30T17:00:00+09:00",
+            "sequence_number": 4,
+            "is_clip": false,
+            "next_episode_title": "Hero of the Dead",
+            "duration_ms": 1446989,
+            "closed_captions_available": false,
+            "seo_description": "",
+            "available_offline": true,
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "channel_id": "crunchyroll",
+            "eligible_region": "CL",
+            "season_display_number": "",
+            "available_date": null,
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "GWDU8EVDG",
+                    "is_premium_only": false,
+                    "media_guid": "GEMFZXJEK",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GEVUZX1MW",
+                    "is_premium_only": true,
+                    "media_guid": "GXMFQJVX3",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GG1U24K9V",
+                    "is_premium_only": true,
+                    "media_guid": "G71F4MGED",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "G0DUNDVPN",
+                    "is_premium_only": true,
+                    "media_guid": "G9XFE5KJE",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                }
+            ],
+            "production_episode_id": "",
+            "availability_notes": "",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "episode": "4",
+            "premium_available_date": "2023-07-31T09:00:00Z",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "description": "Kencho y Akira se dirigen a Ikebukuro a buscar una TV gigante, pero lo que encuentran allí son más supervivientes, incluyendo a tres chicas que eran... ¿azafatas?",
+            "streams_link": "/content/v2/cms/videos/GEMFZXJEK/streams",
+            "audio_locale": "ja-JP",
+            "slug": "",
+            "id": "GWDU8EVDG",
+            "media_type": "episode",
+            "hd_flag": true,
+            "premium_date": null,
+            "seo_title": "",
+            "roles": [
+                "main"
+            ],
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "availability_status": "available",
+            "season_id": "G68VCP8X0",
+            "recent_audio_locale": "ja-JP",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "is_subbed": true
+        },
+        {
+            "mature_blocked": false,
+            "next_episode_title": "RV of the Dead",
+            "sequence_number": 5,
+            "hd_flag": true,
+            "recent_audio_locale": "ja-JP",
+            "episode_number": 5,
+            "eligible_region": "CL",
+            "description": "Akira tenía un sueño de niño: ser un superhéroe. ¿Qué mejor momento para convertirse en uno que un apocalipsis zombi?",
+            "is_subbed": true,
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "identifier": "GJ0H7QGQK|S1|E5",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "streams_link": "/content/v2/cms/videos/G71F4MP9X/streams",
+            "upload_date": "2023-08-13T17:00:00+09:00",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "production_episode_id": "",
+            "is_clip": false,
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "next_episode_id": "G0DUNDG81",
+            "season_display_number": "",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "is_premium_only": false,
+            "slug": "",
+            "listing_id": "",
+            "id": "GG1U24WG3",
+            "episode_air_date": "2023-08-13T17:00:00+09:00",
+            "availability_status": "available",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "episode": "5",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "available_date": null,
+            "premium_available_date": "2023-08-13T09:00:00Z",
+            "seo_description": "",
+            "seo_title": "",
+            "is_mature": false,
+            "available_offline": true,
+            "season_id": "G68VCP8X0",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/d62f7af5600986dd7256be3a7aea9849.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "season_sequence_number": 1,
+            "premium_date": null,
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "GG1U24WG3",
+                    "is_premium_only": false,
+                    "media_guid": "G71F4MP9X",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GG1U247JQ",
+                    "is_premium_only": true,
+                    "media_guid": "G71F4MK7Z",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "G0DUNDQ2P",
+                    "is_premium_only": true,
+                    "media_guid": "G9XFE5W0J",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GEVUZX579",
+                    "is_premium_only": true,
+                    "media_guid": "GXMFQJNE5",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "closed_captions_available": false,
+            "roles": [
+                "main"
+            ],
+            "season_number": 1,
+            "availability_starts": "2023-08-13T09:00:00Z",
+            "recent_variant": "",
+            "is_dubbed": true,
+            "audio_locale": "ja-JP",
+            "availability_notes": "",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "slug_title": "hero-of-the-dead",
+            "title": "Hero of the Dead",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "series_id": "GJ0H7QGQK",
+            "media_type": "episode",
+            "duration_ms": 1446947,
+            "channel_id": "crunchyroll"
+        },
+        {
+            "is_mature": false,
+            "premium_date": null,
+            "duration_ms": 1446989,
+            "closed_captions_available": false,
+            "availability_notes": "",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G0DUNDG81",
+                    "is_premium_only": false,
+                    "media_guid": "G9XFE5Z3Q",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GWDU8EG0P",
+                    "is_premium_only": true,
+                    "media_guid": "GEMFZXK08",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "G50UZXWG2",
+                    "is_premium_only": true,
+                    "media_guid": "G07FND4Z3",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GG1U2401E",
+                    "is_premium_only": true,
+                    "media_guid": "G71F4M08V",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "roles": [
+                "main"
+            ],
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/b3bd1252f51a1a926526cd0cee642108.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "series_id": "GJ0H7QGQK",
+            "availability_starts": "2023-08-28T09:00:00Z",
+            "eligible_region": "CL",
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "recent_audio_locale": "ja-JP",
+            "episode_air_date": "2023-08-27T17:00:00+09:00",
+            "channel_id": "crunchyroll",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "season_number": 1,
+            "is_premium_only": false,
+            "audio_locale": "ja-JP",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "premium_available_date": "2023-08-28T09:00:00Z",
+            "upload_date": "2023-08-27T17:00:00+09:00",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "season_sequence_number": 1,
+            "is_clip": false,
+            "seo_title": "",
+            "is_subbed": true,
+            "id": "G0DUNDG81",
+            "hd_flag": true,
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "available_date": null,
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "sequence_number": 6,
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "season_display_number": "",
+            "season_id": "G68VCP8X0",
+            "listing_id": "",
+            "mature_blocked": false,
+            "slug": "",
+            "episode_number": 6,
+            "production_episode_id": "",
+            "streams_link": "/content/v2/cms/videos/G9XFE5Z3Q/streams",
+            "title": "RV of the Dead",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "next_episode_id": "GEVUZXJEM",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "next_episode_title": "Truck Stop of the Dead",
+            "is_dubbed": true,
+            "available_offline": true,
+            "identifier": "GJ0H7QGQK|S1|E6",
+            "description": "Tokio comienza a ser muy peligroso, así que es hora de partir hacia Gunma, pero ¿qué mejor que hacerlo en una buena autocaravana? ¡Es el vehículo ideal en un apocalipsis zombi!",
+            "recent_variant": "",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "availability_status": "available",
+            "media_type": "episode",
+            "seo_description": "",
+            "slug_title": "rv-of-the-dead",
+            "episode": "6"
+        },
+        {
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "is_premium_only": false,
+            "identifier": "GJ0H7QGQK|S1|E7",
+            "media_type": "episode",
+            "description": "Con Akira, Shizuka y Kencho en el campamento de Kosugi, Akira poco a poco vuelve a su antiguo yo, perdiendo su voluntad y quedando a merced de los abusos de su jefe.",
+            "episode": "7",
+            "mature_blocked": false,
+            "upload_date": "2023-09-03T17:00:00+09:00",
+            "availability_starts": "2023-09-04T09:00:00Z",
+            "streams_link": "/content/v2/cms/videos/GXMFQJ10X/streams",
+            "season_display_number": "",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "next_episode_title": "Sushi & Hot Springs of the Dead",
+            "title": "Truck Stop of the Dead",
+            "listing_id": "",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "slug_title": "truck-stop-of-the-dead",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "is_mature": false,
+            "recent_audio_locale": "ja-JP",
+            "season_number": 1,
+            "duration_ms": 1447073,
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/0891700be9736a3461d6b4365f72a670.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "is_dubbed": true,
+            "episode_number": 7,
+            "premium_date": null,
+            "channel_id": "crunchyroll",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "GEVUZXJEM",
+                    "is_premium_only": false,
+                    "media_guid": "GXMFQJ10X",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GEVUZXK04",
+                    "is_premium_only": true,
+                    "media_guid": "GXMFQJ92P",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "G0DUND4Z4",
+                    "is_premium_only": true,
+                    "media_guid": "G9XFE5747",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G7PU4M08Z",
+                    "is_premium_only": true,
+                    "media_guid": "G4GFQ1ZDJ",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "hd_flag": true,
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "series_id": "GJ0H7QGQK",
+            "roles": [
+                "main"
+            ],
+            "is_clip": false,
+            "season_id": "G68VCP8X0",
+            "premium_available_date": "2023-09-04T09:00:00Z",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "recent_variant": "",
+            "sequence_number": 7,
+            "production_episode_id": "",
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "eligible_region": "CL",
+            "seo_description": "",
+            "closed_captions_available": false,
+            "availability_notes": "",
+            "available_offline": true,
+            "available_date": null,
+            "audio_locale": "ja-JP",
+            "slug": "",
+            "season_sequence_number": 1,
+            "seo_title": "",
+            "availability_status": "available",
+            "next_episode_id": "G7PU4MP9Q",
+            "id": "GEVUZXJEM",
+            "is_subbed": true,
+            "episode_air_date": "2023-09-03T17:00:00+09:00"
+        },
+        {
+            "roles": [
+                "main"
+            ],
+            "media_type": "episode",
+            "identifier": "GJ0H7QGQK|S1|E8",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "mature_blocked": false,
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "episode_air_date": "2023-09-17T17:00:00+09:00",
+            "premium_available_date": "2023-09-18T09:00:00Z",
+            "is_dubbed": true,
+            "availability_starts": "2023-09-18T09:00:00Z",
+            "seo_description": "",
+            "description": "Akira, Kencho y Shizuka siguen camino a casa de los padres de Akira cuando encuentran un camión en la carretera rodeado por zombis. ¿Son supervivientes y necesitan ayuda? Akira no lo piensa dos veces y se lanza a ayudar, pero a quien encuentran...",
+            "closed_captions_available": false,
+            "is_premium_only": false,
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "streams_link": "/content/v2/cms/videos/G4GFQ1K2N/streams",
+            "production_episode_id": "",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "is_clip": false,
+            "upload_date": "2023-09-17T17:00:00+09:00",
+            "eligible_region": "CL",
+            "duration_ms": 1432016,
+            "next_episode_id": "G9DUE5Z33",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "availability_status": "available",
+            "listing_id": "",
+            "next_episode_title": "Treehouse of the Dead",
+            "hd_flag": true,
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "episode_number": 8,
+            "id": "G7PU4MP9Q",
+            "season_display_number": "",
+            "seo_title": "",
+            "recent_variant": "",
+            "premium_date": null,
+            "season_number": 1,
+            "slug": "",
+            "is_subbed": true,
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/eac66c867c0fca2ce17f21faf27613b2.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G7PU4MP9Q",
+                    "is_premium_only": false,
+                    "media_guid": "G4GFQ1K2N",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "G9DUE574J",
+                    "is_premium_only": true,
+                    "media_guid": "G1QF4925D",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GX9UQJ925",
+                    "is_premium_only": true,
+                    "media_guid": "GJKF298KZ",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G4VUQ1ZD2",
+                    "is_premium_only": true,
+                    "media_guid": "GNJFD2G04",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "episode": "8",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "slug_title": "sushi--hot-springs-of-the-dead",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "audio_locale": "ja-JP",
+            "sequence_number": 8,
+            "is_mature": false,
+            "season_id": "G68VCP8X0",
+            "availability_notes": "",
+            "channel_id": "crunchyroll",
+            "available_date": null,
+            "recent_audio_locale": "ja-JP",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "title": "Sushi & Hot Springs of the Dead",
+            "series_id": "GJ0H7QGQK",
+            "season_sequence_number": 1,
+            "available_offline": true
+        },
+        {
+            "closed_captions_available": false,
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G9DUE5Z33",
+                    "is_premium_only": false,
+                    "media_guid": "G1QF49QMM",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "G14U4925G",
+                    "is_premium_only": true,
+                    "media_guid": "GKKF3MQWD",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GJWU298K9",
+                    "is_premium_only": true,
+                    "media_guid": "GM8FXQW0Q",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GN7UD2G01",
+                    "is_premium_only": true,
+                    "media_guid": "GVMF0WJ17",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "series_id": "GJ0H7QGQK",
+            "episode": "9",
+            "next_episode_id": "GX9UQJ10Z",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "roles": [
+                "main"
+            ],
+            "premium_date": null,
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "listing_id": "",
+            "episode_number": 9,
+            "duration_ms": 1432058,
+            "episode_air_date": "2023-09-24T17:00:00+09:00",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "hd_flag": true,
+            "sequence_number": 9,
+            "is_premium_only": false,
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "availability_starts": "2023-09-25T09:00:00Z",
+            "production_episode_id": "",
+            "seo_description": "",
+            "audio_locale": "ja-JP",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "media_type": "episode",
+            "season_id": "G68VCP8X0",
+            "next_episode_title": "Hometown of the Dead I",
+            "recent_variant": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/a04c5bed427321f3267b3dd07850319a.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "is_mature": false,
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "availability_notes": "",
+            "title": "Treehouse of the Dead",
+            "channel_id": "crunchyroll",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "description": "Akira y sus amigos están cerca de su pueblo natal, pero el túnel que conecta el aislado lugar está cerrado, así que tendrán que adentrarse en el bosque y dar un rodeo.",
+            "season_number": 1,
+            "upload_date": "2023-09-24T17:00:00+09:00",
+            "available_date": null,
+            "is_subbed": true,
+            "eligible_region": "CL",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "identifier": "GJ0H7QGQK|S1|E9",
+            "streams_link": "/content/v2/cms/videos/G1QF49QMM/streams",
+            "slug": "",
+            "is_clip": false,
+            "mature_blocked": false,
+            "season_display_number": "",
+            "id": "G9DUE5Z33",
+            "available_offline": true,
+            "premium_available_date": "2023-09-25T09:00:00Z",
+            "is_dubbed": true,
+            "availability_status": "available",
+            "season_sequence_number": 1,
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "slug_title": "treehouse-of-the-dead",
+            "recent_audio_locale": "ja-JP",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "seo_title": ""
+        },
+        {
+            "availability_starts": "2023-12-25T15:30:00Z",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "roles": [
+                "main"
+            ],
+            "available_offline": true,
+            "duration_ms": 1432016,
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "available_date": null,
+            "episode_number": 10,
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/4cfa44b7945ea122085c7547b87abbeb.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "season_display_number": "",
+            "channel_id": "crunchyroll",
+            "is_mature": false,
+            "availability_notes": "",
+            "is_subbed": true,
+            "season_sequence_number": 1,
+            "media_type": "episode",
+            "season_id": "G68VCP8X0",
+            "recent_variant": "",
+            "slug_title": "hometown-of-the-dead-i",
+            "next_episode_title": "Hometown of the Dead II",
+            "episode_air_date": "2023-12-25T23:40:00+09:00",
+            "description": "Akira y el resto tienen unos momentos de paz en ese pequeño asentamiento remoto, pero pronto se desatará el caos, y no de forma natural.",
+            "id": "GX9UQJ10Z",
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "identifier": "GJ0H7QGQK|S1|E10",
+            "is_premium_only": false,
+            "season_number": 1,
+            "episode": "10",
+            "next_episode_id": "G4VUQ1K21",
+            "streams_link": "/content/v2/cms/videos/GJKF29NVE/streams",
+            "audio_locale": "ja-JP",
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "premium_available_date": "2023-12-25T15:30:00Z",
+            "availability_status": "available",
+            "production_episode_id": "",
+            "series_id": "GJ0H7QGQK",
+            "closed_captions_available": false,
+            "seo_title": "",
+            "sequence_number": 10,
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "slug": "",
+            "upload_date": "2023-12-25T23:40:00+09:00",
+            "premium_date": null,
+            "seo_description": "",
+            "listing_id": "",
+            "recent_audio_locale": "ja-JP",
+            "hd_flag": true,
+            "is_dubbed": true,
+            "mature_blocked": false,
+            "is_clip": false,
+            "title": "Hometown of the Dead I",
+            "eligible_region": "CL",
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "GX9UQJ10Z",
+                    "is_premium_only": false,
+                    "media_guid": "GJKF29NVE",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GD9UV3NGG",
+                    "is_premium_only": true,
+                    "media_guid": "GWMF8J933",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "GQJUG3DZG",
+                    "is_premium_only": true,
+                    "media_guid": "GGVF2NMV2",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "G50UZV2DM",
+                    "is_premium_only": true,
+                    "media_guid": "G07FNK3XM",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "availability_ends": "9998-11-30T08:00:00Z"
+        },
+        {
+            "available_date": null,
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "eligible_region": "CL",
+            "sequence_number": 11,
+            "id": "G4VUQ1K21",
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "production_episode_id": "",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/d7819feceffbcda1f1af42033ac46188.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "seo_title": "",
+            "hd_flag": true,
+            "series_id": "GJ0H7QGQK",
+            "availability_status": "available",
+            "slug": "",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "closed_captions_available": false,
+            "premium_available_date": "2023-12-25T16:00:00Z",
+            "is_subbed": true,
+            "channel_id": "crunchyroll",
+            "episode": "11",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "availability_notes": "",
+            "is_premium_only": false,
+            "season_number": 1,
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "next_episode_id": "G14U49QM1",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "duration_ms": 1432016,
+            "recent_audio_locale": "ja-JP",
+            "season_display_number": "",
+            "episode_number": 11,
+            "upload_date": "2023-12-26T00:10:00+09:00",
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "recent_variant": "",
+            "description": "Los amigos de Akira tienen que vérselas con los miembros del grupo de Higurashi.",
+            "streams_link": "/content/v2/cms/videos/GNJFD2X42/streams",
+            "episode_air_date": "2023-12-26T00:10:00+09:00",
+            "mature_blocked": false,
+            "season_id": "G68VCP8X0",
+            "is_mature": false,
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G4VUQ1K21",
+                    "is_premium_only": false,
+                    "media_guid": "GNJFD2X42",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GG1U2NMVP",
+                    "is_premium_only": true,
+                    "media_guid": "G71F415DN",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "G0DUNK3XV",
+                    "is_premium_only": true,
+                    "media_guid": "G9XFEMX2K",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "GEVUZDPQ5",
+                    "is_premium_only": true,
+                    "media_guid": "GXMFQWD4N",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                }
+            ],
+            "is_dubbed": true,
+            "slug_title": "hometown-of-the-dead-ii",
+            "media_type": "episode",
+            "availability_starts": "2023-12-25T16:00:00Z",
+            "title": "Hometown of the Dead II",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "season_sequence_number": 1,
+            "premium_date": null,
+            "is_clip": false,
+            "available_offline": true,
+            "audio_locale": "ja-JP",
+            "listing_id": "",
+            "next_episode_title": "Hometown of the Dead III",
+            "roles": [
+                "main"
+            ],
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "identifier": "GJ0H7QGQK|S1|E11",
+            "seo_description": ""
+        },
+        {
+            "is_premium_only": false,
+            "slug": "",
+            "description": "Akira tiene que salvar a su padre del odioso Higurashi, que lo ha tomado como rehén.",
+            "audio_locale": "ja-JP",
+            "is_dubbed": true,
+            "availability_notes": "",
+            "identifier": "GJ0H7QGQK|S1|E12",
+            "media_type": "episode",
+            "season_number": 1,
+            "is_subbed": true,
+            "availability_ends": "9998-11-30T08:00:00Z",
+            "id": "G14U49QM1",
+            "production_episode_id": "",
+            "subtitle_locales": [
+                "en-US",
+                "es-419",
+                "es-ES",
+                "pt-BR"
+            ],
+            "availability_starts": "2023-12-25T16:30:00Z",
+            "premium_available_date": "2023-12-25T16:30:00Z",
+            "roles": [
+                "main"
+            ],
+            "available_date": null,
+            "premium_date": null,
+            "season_title": "Zom 100: The Bucket List of the Dead",
+            "title": "Hometown of the Dead III",
+            "episode": "12",
+            "hd_flag": true,
+            "eligible_region": "CL",
+            "available_offline": true,
+            "series_id": "GJ0H7QGQK",
+            "series_title": "Zom 100: The Bucket List of the Dead",
+            "streams_link": "/content/v2/cms/videos/GKKF3MVXK/streams",
+            "slug_title": "hometown-of-the-dead-iii",
+            "season_slug_title": "zom-100-bucket-list-of-the-dead",
+            "sequence_number": 12,
+            "versions": [
+                {
+                    "audio_locale": "ja-JP",
+                    "guid": "G14U49QM1",
+                    "is_premium_only": false,
+                    "media_guid": "GKKF3MVXK",
+                    "original": true,
+                    "roles": [
+                        "main"
+                    ],
+                    "season_guid": "G68VCP8X0",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "es-419",
+                    "guid": "G7PU415D5",
+                    "is_premium_only": true,
+                    "media_guid": "G4GFQV373",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GYJQC1GW7",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "pt-BR",
+                    "guid": "G9DUEMX2D",
+                    "is_premium_only": true,
+                    "media_guid": "G1QF413PX",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "GRNQCJ9MJ",
+                    "variant": ""
+                },
+                {
+                    "audio_locale": "en-US",
+                    "guid": "GX9UQWD47",
+                    "is_premium_only": true,
+                    "media_guid": "GJKF20M1X",
+                    "original": false,
+                    "roles": [
+                        "dub"
+                    ],
+                    "season_guid": "G62PCVW7Z",
+                    "variant": ""
+                }
+            ],
+            "season_id": "G68VCP8X0",
+            "seo_description": "",
+            "season_sequence_number": 1,
+            "episode_air_date": "2023-12-26T00:40:00+09:00",
+            "recent_variant": "",
+            "content_descriptors": [
+                "Desnudez",
+                "Tabaquismo",
+                "Diálogos sugerentes",
+                "Violencia"
+            ],
+            "seo_title": "",
+            "extended_maturity_rating": {
+                "level": "M2",
+                "rating": "16",
+                "system": "cr-tv"
+            },
+            "recent_audio_locale": "ja-JP",
+            "listing_id": "",
+            "images": {
+                "thumbnail": [
+                    [
+                        {
+                            "height": 180,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 320
+                        },
+                        {
+                            "height": 338,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 600
+                        },
+                        {
+                            "height": 360,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 640
+                        },
+                        {
+                            "height": 450,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 800
+                        },
+                        {
+                            "height": 675,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 1200
+                        },
+                        {
+                            "height": 810,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 1440
+                        },
+                        {
+                            "height": 900,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 1600
+                        },
+                        {
+                            "height": 1080,
+                            "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/crunchyroll/302c77203089922a2924a088d7bdee2b.jpg",
+                            "type": "thumbnail",
+                            "width": 1920
+                        }
+                    ]
+                ]
+            },
+            "is_clip": false,
+            "maturity_ratings": [
+                "TV-14"
+            ],
+            "episode_number": 12,
+            "availability_status": "available",
+            "upload_date": "2023-12-26T00:40:00+09:00",
+            "mature_blocked": false,
+            "season_display_number": "",
+            "series_slug_title": "zom-100-bucket-list-of-the-dead",
+            "closed_captions_available": false,
+            "duration_ms": 1421964,
+            "season_tags": [
+                "Verano-2023",
+                "Otoño-2023"
+            ],
+            "free_available_date": "1970-01-01T00:00:00Z",
+            "channel_id": "crunchyroll",
+            "is_mature": false
+        }
+    ],
+    "meta": {
+        "versions_considered": true
+    }
+}

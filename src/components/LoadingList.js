@@ -24,7 +24,7 @@ const LoadingList = ({ list, index, scrollFn, children }) => {
     useEffect(() => {
         if (scrollFn && clientHeight.current != null) {
             if (clientHeight.current !== containerRef.current.clientHeight) {
-                scrollFn({ index: index || 0, animate: false, focus: false })
+                scrollFn({ index: Math.min(index, list.length - 1), animate: false, focus: false })
             }
         }
         clientHeight.current = containerRef.current.clientHeight

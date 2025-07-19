@@ -1,12 +1,12 @@
 {
     "up": {
-        "displayed": "9.9",
+        "displayed": "12.1",
         "unit": "K"
     },
     "down": {
-        "displayed": "22",
+        "displayed": "32",
         "unit": ""
     },
-    "total": 9901,
+    "total": 12136,
     "rating": "up"
 }

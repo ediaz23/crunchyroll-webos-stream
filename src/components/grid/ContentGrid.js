@@ -25,6 +25,7 @@ import css from './ContentGrid.module.less'
  * @property {String} seasonTag
  * @property {String} sort
  * @property {String} query
+ * @property {import('crunchyroll-js-api').Types.FetchConfig} fnConfig
  */
 
 /**
@@ -38,18 +39,17 @@ import css from './ContentGrid.module.less'
  * @param {Boolean} obj.noCategory Not show category
  * @param {Boolean} obj.noSearch Not show input
  */
-const ContentGrid = ({
-    profile, title, contentKey, contentType, engine = 'browse', noCategory, noSearch, ...rest }) => {
+const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse', noCategory, noSearch, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
-        mergeContentList, changeContentList, onLeave, onFilter,
-        contentListBak, optionBak,
-    } = useContentList('content_grid')
+        mergeContentList, changeContentList, onFilter,
+        viewBackup, viewBackupRef, navigateContent,
+    } = useContentList(contentKey)
 
     /** @type {[String, Function]} */
-    const [category, setCategory] = useState(optionBak.category || 'all')
+    const [category, setCategory] = useState(viewBackup?.category || 'all')
     /** @type {[String, Function]} */
-    const [query, setQuery] = useState(optionBak.query || '')
+    const [query, setQuery] = useState(viewBackup?.query || '')
 
     /** @type {String} */
     const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
@@ -77,25 +77,27 @@ const ContentGrid = ({
     const onLoad = useCallback((index) => {
         if (mergeContentList(false, index)) {
             if (engine === 'search') {
-                api.discover.search(profile, { ...options, start: index })
-                    .then(res => {
-                        if (res.total) {
-                            mergeContentList(res.data[0].items || [], index)
-                        } else {
-                            mergeContentList([], index)
-                        }
-                    })
+                api.discover.search(profile, { ...options, start: index }).then(res => {
+                    if (res.total) {
+                        mergeContentList(res.data[0].items || [], index)
+                    } else {
+                        mergeContentList([], index)
+                    }
+                })
             } else {
-                api.discover.getBrowseAll(profile, { ...options, start: index })
-                    .then(res => mergeContentList(res.data || [], index))
+                api.discover.getBrowseAll(profile, { ...options, start: index }).then(
+                    res => mergeContentList(res.data || [], index)
+                )
             }
         }
     }, [engine, options, profile, mergeContentList])
 
     /** @type {Function} */
-    const onLeaveView = useCallback(() => {
-        onLeave({ category, query })
-    }, [onLeave, category, query])
+    const setLocalContent = useCallback(newContent => {
+        /** backup all state to restore later */
+        viewBackupRef.current = { category, query }
+        navigateContent(newContent)
+    }, [navigateContent, viewBackupRef, category, query])
 
     useEffect(() => {
         let delayDebounceFn = undefined
@@ -118,12 +120,12 @@ const ContentGrid = ({
                         changeContentList([])
                     }
                 } else {
-                    api.discover.getBrowseAll(profile, options).then(res => {
-                        changeContentList([
+                    api.discover.getBrowseAll(profile, options).then(
+                        res => changeContentList([
                             ...res.data,
                             ...new Array(res.total - res.data.length)
                         ])
-                    })
+                    )
                 }
             }, delay)
         }
@@ -131,12 +133,8 @@ const ContentGrid = ({
     }, [profile, changeContentList, options, contentKey, delay, engine])
 
     useEffect(() => {  // initializing
-        if (contentListBak) {
-            changeContentList(contentListBak)
-        } else {
-            onFilter({ delay: 0, scroll: true })
-        }
-    }, [profile, contentListBak, changeContentList, onFilter, contentKey])
+        onFilter({ delay: 0 })
+    }, [profile, changeContentList, onFilter, contentKey])
 
     return (
         <Row className={css.ContentGrid} {...rest}>
@@ -171,9 +169,10 @@ const ContentGrid = ({
                         }
                         <Cell grow style={{ height: '100%', width: noCategory ? '100%' : '80%' }}>
                             <ContentGridItems
+                                type={contentKey}
                                 contentList={contentList}
                                 load={onLoad}
-                                onLeave={onLeaveView}
+                                onSelect={setLocalContent}
                                 autoScroll={autoScroll} />
                         </Cell>
                     </Row>

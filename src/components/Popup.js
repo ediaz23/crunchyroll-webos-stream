@@ -7,12 +7,12 @@ import Spotlight from '@enact/spotlight'
 
 import PropTypes from 'prop-types'
 
-import back from '../back'
-
+import { useNavigate } from '../hooks/navigate'
 
 export const PopupBaseSkin = Skinnable({ defaultSkin: 'dark' }, PopupBase)
 
 const PopupMessage = ({ type, show, children, setShowPopup: callBack, onClose }) => {
+    const { pushHistory, goBack } = useNavigate()
     /** @type {[Boolean, Function]} */
     const [showPopup, setShowPopup] = useState(false)
     /** @type {Object} */
@@ -30,12 +30,12 @@ const PopupMessage = ({ type, show, children, setShowPopup: callBack, onClose })
 
     /** @type {Function} */
     const onHideSubPopup = useCallback(() => {
-        back.doBack()
+        goBack()
         if (onClose) {
             onClose()
         }
         setTimeout(() => Spotlight.focus(), 100)
-    }, [onClose])
+    }, [onClose, goBack])
 
     const togglePopup = useCallback((newVal) => {
         setShowPopup(oldVar => {
@@ -43,13 +43,13 @@ const PopupMessage = ({ type, show, children, setShowPopup: callBack, onClose })
                 return oldVar
             }
             if (oldVar) {
-                back.doBack()
+                goBack()
             } else {
-                back.pushHistory({ doBack: () => { setShowPopup(false) } })
+                pushHistory(() => { setShowPopup(false) })
             }
             return !oldVar
         })
-    }, [])
+    }, [pushHistory, goBack])
 
     useEffect(() => {
         if (callBack) {

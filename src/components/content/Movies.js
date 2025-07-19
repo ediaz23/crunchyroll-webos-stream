@@ -1,10 +1,11 @@
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 
 import PropTypes from 'prop-types'
 
 import { useBackVideoIndex } from '../../hooks/backVideoIndex'
+import { useViewBackup } from '../../hooks/viewBackup'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
@@ -16,72 +17,85 @@ import { getIsPremium } from '../../utils'
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
- * @param {Object} obj.movieListing
- * @param {Function} obj.setContentToPlay
+ * @param {{content: Object, setContent: Function}} obj.contentState
  * @param {Boolean} obj.isPremium account is premium?
- * @param {Object} obj.contentDetailBak
  */
-const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
+const Movies = ({ profile, contentState, isPremium, ...rest }) => {
+    const { content: movieListing, setContent: setMovieListing } = contentState
+    const { viewBackup, viewBackupRef } = useViewBackup(`content-movies-${movieListing.id}`)
     /** @type {[Array<Object>, Function]} */
-    const [listings, setListings] = useState(contentDetailBak.listings
-        ? JSON.parse(JSON.stringify(contentDetailBak.listings))  // to avoid error setting movies, line 74
-        : null
-    )
+    const [listings, setListings] = useState(null)
     /** @type {[Number, Function]} */
-    const [listingIndex, setListingIndex] = useState(contentDetailBak.listingIndex)
+    const [listingIndex, setListingIndex] = useState(viewBackup?.listingIndex)
     /** @type {[Array<Object>, Function]} */
     const [movies, setMovies] = useState(null)
     /** @type {[Number, Function]} */
     const [movieIndex, setMovieIndex] = useState(null)
     /** @type {{current: Number}} */
     const listingIndexRef = useRef(null)
+    /** @type {String} */
+    const cacheKey = useMemo(() => (
+        listings && listingIndex != null ? `listings/${listings[listingIndex].id}/movies` : null
+    ), [listings, listingIndex])
 
     /** @type {Function} */
-    const playMovie = useCallback(ev => {
+    const setContent = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const index = parseInt(target.dataset.index)
         if (movies && movies.length) {
-            listings.forEach(e => { e.movies = [] })
-            setContentToPlay(movies[index], { listings, listingIndex })
+            /** backup all state to restore later */
+            viewBackupRef.current = { listingIndex }
+            setMovieListing(movies[index])
         }
-    }, [listings, listingIndex, movies, setContentToPlay])
+    }, [listingIndex, movies, setMovieListing, viewBackupRef])
 
     useBackVideoIndex(movies, setMovieIndex)
 
     useEffect(() => {
-        if (contentDetailBak.listings == null) {
-            const listingsTmp = [{ ...movieListing, movies: [] }]
-            setListings(listingsTmp)
-            setListingIndex(0)
+        listingIndexRef.current = listingIndex
+        setMovies(null)  // for activate loading
+        setMovieIndex(null)  // for activate loading
+        if (listingIndex != null && listings != null) {
+            const loadMovies = async () => {
+                const cacheMovies = await api.utils.getCustomCache(cacheKey)
+
+                if (cacheMovies) {
+                    setMovies(cacheMovies)
+                } else {
+                    const { data: movieData } = await api.cms.getMovies(
+                        profile, { movieListingId: listings[listingIndex].id }
+                    )
+
+                    movieData.forEach(ep => {
+                        ep.type = 'movie'
+                        ep.showPremium = !isPremium && getIsPremium(ep)
+                    })
+
+                    if (movieData.length) {
+                        await calculatePlayheadProgress({ profile, episodesData: movieData })
+                    }
+                    await api.utils.saveCustomCache(cacheKey, movieData)
+                    if (listingIndex === listingIndexRef.current) {
+                        setMovies(movieData)
+                    }
+                }
+            }
+            loadMovies()
         }
-    }, [profile, movieListing, setListings, contentDetailBak.listings])
+    }, [profile, listings, listingIndex, isPremium, cacheKey])
 
     useEffect(() => {
-        listingIndexRef.current = listingIndex
-        setMovies(null)
-        setMovieIndex(null)
-        if (listingIndex != null && listings != null) {
-            if (listings[listingIndex].movies.length) {
-                setMovies(listings[listingIndex].movies)
+        const listingsTmp = [{ ...movieListing }]
+        setListings(listingsTmp)
+        setListingIndex(lastIndex => {
+            if (lastIndex == null) {
+                lastIndex = listingsTmp.length ? 0 : null
             } else {
-                api.cms.getMovies(profile, { movieListingId: listings[listingIndex].id })
-                    .then(({ data }) => Promise.all([
-                        Promise.resolve().then(() => {
-                            data.forEach(ep => {
-                                ep.type = 'movie'
-                                ep.showPremium = !isPremium && getIsPremium(ep)
-                            })
-                            listings[listingIndex].movies = data
-                        }),
-                        Promise.resolve().then(() => {
-                            if (data.length) {
-                                return calculatePlayheadProgress({ profile, episodesData: data })
-                            }
-                        }),
-                    ]).then(() => listingIndex === listingIndexRef.current && setMovies(data)))
+                lastIndex = Math.min(lastIndex, listingsTmp.length)
             }
-        }
-    }, [profile, listings, listingIndex, isPremium])
+            return lastIndex
+        })
+    }, [profile, movieListing])
 
     return (
         <Row align='start space-between' {...rest}>
@@ -100,10 +114,10 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
             </Cell>
             <Cell size="49%" style={{ height: '100%', width: '49%' }}>
                 <EpisodesList
-                    seasonIndex={listingIndex}
+                    key={listings?.[listingIndex]?.id ? `movies-${listings[listingIndex].id}` : undefined}
                     episodes={movies}
-                    selectEpisode={playMovie}
-                    episodeIndex={movieIndex} />
+                    episodeIndex={movieIndex}
+                    selectEpisode={setContent} />
             </Cell>
         </Row>
     )
@@ -111,10 +125,11 @@ const Movies = ({ profile, movieListing, setContentToPlay, isPremium, contentDet
 
 Movies.propTypes = {
     profile: PropTypes.object.isRequired,
-    movieListing: PropTypes.object.isRequired,
-    setContentToPlay: PropTypes.func.isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
     isPremium: PropTypes.bool.isRequired,
-    contentDetailBak: PropTypes.object.isRequired,
 }
 
 export default Movies

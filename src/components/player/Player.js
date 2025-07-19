@@ -12,17 +12,17 @@ import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
 import Rating from './Rating'
 import ContentInfo from './ContentInfo'
-import ContactMe from '../login/ContactMe'
+import { ContactMeBtn, AppConfigBtn } from '../Buttons'
 import PopupMessage from '../Popup'
 import { currentProfileState, playContentState } from '../../recoilConfig'
 import { useGetLanguage } from '../../hooks/language'
 import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
+import { usePreviewWorker } from '../../hooks/previewWorker'
+import { useNavigate } from '../../hooks/navigate'
 import logger from '../../logger'
 import api from '../../api'
-import { getContentParam } from '../../api/utils'
 import emptyVideo from '../../../assets/empty.mp4'
-import back from '../../back'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
@@ -94,6 +94,7 @@ const updatePlayHead = async ({ profile, content, playerCompRef }) => {
         return api.content.savePlayhead(profile, {
             contentId: content.id,
             playhead: Math.floor(state.currentTime),
+            fnConfig: { priority: true },
         })
     }
 }
@@ -115,7 +116,9 @@ const updatePlayHeadLoop = ({ profile, content, playerCompRef }) => {
             }
         }
     }, 1000 * 15) // every 15 sec
-    return () => clearInterval(interval)
+    return () => {
+        clearInterval(interval)
+    }
 }
 
 /**
@@ -130,7 +133,10 @@ const findPlayHead = async ({ profile, content }) => {
         fully_watched: false,
     }
     if (['episode', 'movie'].includes(content.type)) {
-        const { data } = await api.content.getPlayHeads(profile, { contentIds: [content.id] })
+        const { data } = await api.content.getPlayHeads(profile, {
+            contentIds: [content.id],
+            fnConfig: { cache: false }
+        })
         if (data && data.length > 0) {
             playhead = data[0]
         }
@@ -209,9 +215,10 @@ const findSubtitle = async ({ langConfig, subtitles }) => {
  * @param {import('./AudioList').Audio} obj.audio
  * @param {Function} obj.getLang
  * @param {Object} obj.content
+ * @param {import('react').MutableRefObject<string>} obj.lastTokenRef
  * @returns {Promise<Stream>}
  */
-const findStream = async ({ profile, langConfig, audios, audio, getLang, content }) => {
+const findStream = async ({ profile, langConfig, audios, audio, getLang, content, lastTokenRef }) => {
     /** @type {Stream} */
     let out = null, data = {}, urls = []
     if (_PLAY_TEST_) {  // test stream
@@ -231,11 +238,16 @@ const findStream = async ({ profile, langConfig, audios, audio, getLang, content
 
         }
     } else {
+        if (lastTokenRef.current) {
+            await api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastTokenRef.current })
+            lastTokenRef.current = null
+        }
         if (['episode', 'movie'].includes(audio.type)) {
             data = await api.drm.getStreams(profile, { episodeId: audio.guid })
         } else if (['musicConcert', 'musicVideo'].includes(audio.type)) {
             data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
         }
+        lastTokenRef.current = data.token
         if (data.hardSubs) {
             urls = Object.keys(data.hardSubs).map(locale => {
                 return { locale, url: data.hardSubs[locale].url }
@@ -256,83 +268,6 @@ const findStream = async ({ profile, langConfig, audios, audio, getLang, content
             session: data.session,
             token: data.token,
         }
-    }
-    return out
-}
-
-/**
- * Download file per chunkSize
- * @param {String} url
- * @param {Number} chunkSize
- * @returns {Promise<{bifData: Uint8Array, requests: Array<Promise>}>}
- */
-const downloadBifFile = async (url, chunkSize = 256 * 1024) => {
-    const headResponse = await fetchUtils.customFetch(url, { method: 'HEAD' })
-    /** @type {Uint8Array} */
-    let bifData = null
-    /** @type {Array<Promise>} */
-    const requests = []
-    if (headResponse.ok) {
-        const totalSize = parseInt(headResponse.headers.get('Content-Length'))
-        if (isNaN(totalSize) || !totalSize) {
-            throw new Error('Bif size not working')
-        }
-        bifData = new Uint8Array(totalSize)
-        for (let start = 0; start < totalSize; start += chunkSize) {
-            const end = Math.min(start + chunkSize - 1, totalSize - 1)
-            const reqConfig = { headers: { Range: `bytes=${start}-${end}` } }
-            requests.push(fetchUtils.customFetch(url, reqConfig, true))
-            requests[requests.length - 1].then(chunkArray => bifData.set(chunkArray, start))
-        }
-    }
-
-    return { bifData, requests }
-}
-
-/**
- * @todo improve memory usage
- * @param {{ bif: String }} obj
- * @returns {Promise<{chunks: Array<{start: int, end: int, url: string}>}>}
- */
-const findPreviews = async ({ bif }) => {
-    /** @type {{chunks: Array<{start: int, end: int, url: string}>}} */
-    const out = { chunks: [] }
-
-    try {
-        if (bif) {
-            /** @type {{bifData: Uint8Array, requests: Array<Promise>}} */
-            const { bifData, requests } = await downloadBifFile(bif)
-            const jpegStartMarker = new Uint8Array([0xFF, 0xD8]) // JPEG Init
-
-            let imageStartIndex = -1
-            let currentChunkIndex = -1;
-            for (let i = 0; i < bifData.length - 1; i++) {
-                const chunkIndex = Math.floor((i / bifData.length) * requests.length);
-
-                if (chunkIndex !== currentChunkIndex) {
-                    currentChunkIndex = chunkIndex
-                    await requests[chunkIndex]
-                }
-                if (bifData[i] === jpegStartMarker[0] && bifData[i + 1] === jpegStartMarker[1]) {
-                    if (imageStartIndex !== -1) {
-                        const chunk = bifData.slice(imageStartIndex, i)
-                        const blob = new window.Blob([chunk], { type: 'image/jpeg' })
-                        const url = window.URL.createObjectURL(blob)
-                        out.chunks.push({ start: imageStartIndex, end: i, url })
-                    }
-                    imageStartIndex = i
-                }
-            }
-            await requests[requests.length - 1]
-            if (imageStartIndex !== -1) {
-                const chunk = bifData.slice(imageStartIndex)
-                const blob = new window.Blob([chunk], { type: 'image/jpeg' })
-                const url = window.URL.createObjectURL(blob)
-                out.chunks.push({ start: imageStartIndex, url })
-            }
-        }
-    } catch (e) {
-        logger.error(e)
     }
     return out
 }
@@ -386,9 +321,9 @@ const findNextEp = async ({ profile, content, step }) => {
     let out = null
     if (['episode'].includes(content.type)) {
         if (step > 0) {
-            out = await api.discover.getNext(profile, { contentId: content.id })
+            out = await api.discover.getNext(profile, { contentId: content.id, fnConfig: { cache: false } })
         } else {
-            out = await api.discover.getPrev(profile, { contentId: content.id })
+            out = await api.discover.getPrev(profile, { contentId: content.id, fnConfig: { cache: false } })
         }
     } else if (['movie'].includes(content.type)) {
         const movies = await api.cms.getMovies(profile, { movieListingId: content.listing_id })
@@ -463,7 +398,7 @@ const requestDashLicense = (profile) => {
     /** @param {import('dashjs-webos5').LicenseRequest} req */
     return async (req) => {
         /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
-        const account = await getContentParam(profile)
+        const account = await api.utils.getContentParam(profile)
         req.headers = req.headers || {};
         if (req.url.endsWith('widevine')) {
             req.headers['Content-Type'] = 'application/octet-stream'
@@ -481,7 +416,7 @@ const requestDashLicense = (profile) => {
 const modifierDashRequest = (profile) => {
     return async (req) => {
         /** @type {import('crunchyroll-js-api').Types.AccountAuth} */
-        const account = await getContentParam(profile)
+        const account = await api.utils.getContentParam(profile)
         /** @type {Request} */
         const request = req
         request.headers = { ...req.headers }
@@ -492,22 +427,67 @@ const modifierDashRequest = (profile) => {
 
 /**
  * @param {import('dashjs-webos5').MediaPlayerClass} dashPlayer
+ * @param {import('react').MutableRefObject<import('../../api/config').AppConfig>} appConfigRef
  */
-const setStreamingConfig = async (dashPlayer) => {
+const setVideoQuality = (dashPlayer, appConfigRef) => {
+    const audioBitrateLimits = {
+        '2160p': 192,
+        '1080p': 160,
+        '720p': 128,
+        '480p': 96,
+        '360p': 96,
+        '240p': 96
+    }
+    const _setVideoQuality = () => {
+        dashPlayer.off(dashjs.MediaPlayer.events.STREAM_INITIALIZED, _setVideoQuality)
+        // videos
+        const maxHeight = parseInt(appConfigRef.current.video.replace('p', ''))
+        const videoReps = dashPlayer.getRepresentationsByType('video')
+        const validReps = videoReps.filter(r => typeof r.height === 'number')
 
+        let selected = validReps
+            .filter(r => r.height <= maxHeight)
+            .sort((a, b) => b.height - a.height)[0]
+
+        if (!selected) {
+            selected = validReps.sort((a, b) => b.height - a.height)[0]
+        }
+
+        logger.debug(`player videos ${validReps.map(i => i.height).join(', ')}`)
+        logger.debug(`player video ${selected.height} for ${appConfigRef.current.video} id ${selected.id}`)
+        dashPlayer.setRepresentationForTypeById('video', selected.id, true)
+        // audios
+        const bitrateLimit = audioBitrateLimits[appConfigRef.current.video]
+        const audioReps = dashPlayer.getRepresentationsByType('audio')
+        const validAudios = audioReps.filter(r => typeof r.bitrateInKbit === 'number')
+
+        selected = validAudios
+            .filter(r => r.bitrateInKbit <= bitrateLimit)
+            .sort((a, b) => b.bitrateInKbit - a.bitrateInKbit)[0]
+
+        if (!selected) {
+            selected = validAudios.sort((a, b) => a.bitrateInKbit - b.bitrateInKbit)[0]
+        }
+        logger.debug(`player audios ${audioReps.map(i => i.bitrateInKbit).join(', ')}`)
+        logger.debug(`player audio ${selected.bitrateInKbit} for ${bitrateLimit} id ${selected.id}`)
+        dashPlayer.setRepresentationForTypeById('audio', selected.id, true)
+    }
+    dashPlayer.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, _setVideoQuality)
+}
+
+/**
+ * @param {import('dashjs-webos5').MediaPlayerClass} dashPlayer
+ * @param {import('react').MutableRefObject<import('../../api/config').AppConfig>} appConfigRef
+ */
+const setStreamingConfig = async (dashPlayer, appConfigRef) => {
     let bufferTimeAtTopQuality = 150
     let bufferTimeAtTopQualityLongForm = 300
     let initialBufferLevel = 16
 
     if (utils.isTv()) {
-        const parseRamSizeInGB = (ddrSizeString) => {
-            const match = ddrSizeString.match(/([\d.]+)G/i);
-            return match ? parseFloat(match[1]) : 0;
-        }
-
         /** @type {import('webostvjs').DeviceInfo}*/
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
-        const ramInGB = parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+        const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
         const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
         const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
 
@@ -535,7 +515,7 @@ const setStreamingConfig = async (dashPlayer) => {
             initialBufferLevel = 14
         }
     }
-
+    const isAdaptive = appConfigRef.current.video === 'adaptive'
     dashPlayer.updateSettings({
         streaming: {
             buffer: {
@@ -549,17 +529,13 @@ const setStreamingConfig = async (dashPlayer) => {
                 initialBufferLevel,
             },
             abr: {
-                autoSwitchBitrate: {
-                    audio: true,
-                    video: true
-                },
+                autoSwitchBitrate: { audio: isAdaptive, video: isAdaptive },
                 initialBitrate: { audio: -1, video: -1 },
-                // IA recomendation
-                // initialBitrate: { audio: 96000, video: 2000000 },
                 limitBitrateByPortal: true
             },
         }
     })
+
 }
 
 /**
@@ -567,9 +543,10 @@ const setStreamingConfig = async (dashPlayer) => {
  * @param {Stream} stream
  * @param {Object} content
  * @param {import('./SubtitleList').Subtitle} subtitle
+ * @param {import('react').MutableRefObject<import('../../api/config').AppConfig>} appConfigRef
  * @returns {Promise<import('dashjs-webos5').MediaPlayerClass>}
  */
-const createDashPlayer = async (audio, stream, content, subtitle) => {
+const createDashPlayer = async (audio, stream, content, subtitle, appConfigRef) => {
     let url = null
     const startSec = Math.min(content.playhead.playhead, (content.duration_ms / 1000) - 30)
     /** @type {import('dashjs-webos5').MediaPlayerClass}*/
@@ -577,7 +554,7 @@ const createDashPlayer = async (audio, stream, content, subtitle) => {
 
     dashPlayer.extend('XHRLoader', XHRLoader)
     dashPlayer.addRequestInterceptor(modifierDashRequest(stream.profile))
-    await setStreamingConfig(dashPlayer)
+    await setStreamingConfig(dashPlayer, appConfigRef)
     url = stream.urls.find(val => val.locale === subtitle.locale)
     if (!url) {
         url = stream.urls.find(val => val.locale === 'off')
@@ -696,6 +673,7 @@ const findSkipEvents = async (stream) => {
  * @todo @fixme bug after playing video music "comet" of yoasobi
  */
 const Player = ({ ...rest }) => {
+    const { goBack } = useNavigate()
     /** @type {[Boolean, Function]} */
     const [loading, setLoading] = useState(true)
     /** @type {Function} */
@@ -722,10 +700,6 @@ const Player = ({ ...rest }) => {
     const [audio, setAudio] = useState({})
     /** @type {[import('./SubtitleList').Subtitle, Function]} */
     const [subtitle, setSubtitle] = useState(null)
-    /** @type {[{chunks: Array<{start: int, end: int, url: String}>}, Function]} */
-    const [previews, setPreviews] = useState({ chunks: [] })
-    /** @type {[String, Function]} */
-    const [preview, setPreview] = useState(null)
     /** @type {[Event, Function]} */
     const [endEvent, setEndEvent] = useState(null)
     /** @type {{current: import('@enact/moonstone/VideoPlayer/VideoPlayer').VideoPlayerBase}} */
@@ -755,6 +729,15 @@ const Player = ({ ...rest }) => {
     const [currentSkipEvent, setCurrentSkipEvent] = useState(null)
     /** @type {[String, Function]}  */
     const [message, setMessage] = useState('')
+    /** @type {[{chunks: Array<{start: int, end: int, slice: Uint8Array}>}, Function]} */
+    const [previews, setPreviews] = useState({ chunks: [] })
+    /** @type {[String, Function]} */
+    const [preview, setPreview] = useState(null)
+    /** @type {{current: {index: int, url: String}} */
+    const previewRef = useRef(null)
+    const findPreviews = usePreviewWorker(!!stream.urls)
+    const lastTokenRef = useRef(null)
+    const appConfigRef = useRef(api.config.getAppConfig())
 
     /** @type {Function} */
     const selectAudio = useCallback((select) => {
@@ -771,10 +754,22 @@ const Player = ({ ...rest }) => {
     /** @type {Function} */
     const onScrub = useCallback(({ proportion }) => {
         if (previews.chunks.length > 0 && proportion && !isNaN(proportion)) {
-            const chunk = previews.chunks[Math.floor(proportion * previews.chunks.length)]
+            const index = Math.floor(proportion * previews.chunks.length)
+            const chunk = previews.chunks[index]
             if (chunk) {
-                setPreview(chunk.url)
+                if (!previewRef.current || previewRef.current.index !== index) {
+                    if (previewRef.current?.url) {
+                        window.URL.revokeObjectURL(previewRef.current.url)
+                    }
+                    previewRef.current = { index, url: null }
+                    previewRef.current.url = window.URL.createObjectURL(new Blob([chunk.slice], { type: 'image/jpeg' }))
+                    setPreview(previewRef.current.url)
+                }
             } else {
+                if (previewRef.current?.url) {
+                    window.URL.revokeObjectURL(previewRef.current.url)
+                    previewRef.current = null
+                }
                 setPreview(null)
             }
         }
@@ -787,9 +782,9 @@ const Player = ({ ...rest }) => {
             setAudio({})
             setPlayContent({ ...changeEp.data[0] })
         } else {
-            back.doBack()
+            goBack()
         }
-    }, [playerCompRef, profile, content, setPlayContent, setAudio])
+    }, [playerCompRef, profile, content, setPlayContent, setAudio, goBack])
 
     /** @type {Function} */
     const onNextEp = useCallback((ev) => {
@@ -899,41 +894,111 @@ const Player = ({ ...rest }) => {
         playerCompRef.current?.activityDetected()
     }, [])
 
+    const leftComponents = useMemo(() => {
+        return (
+            <>
+                <ContentInfo content={content} />
+                {['episode'].includes(content.type) && (
+                    <>
+                        <IconButton
+                            backgroundOpacity="lightTranslucent"
+                            onClick={markAsWatched}
+                            tooltipText={$L('Mark as watched')}>
+                            checkselection
+                        </IconButton>
+                        <Rating profile={profile} content={content} />
+                    </>
+                )}
+            </>
+        );
+    }, [content, markAsWatched, profile])
+
+    const rightComponents = useMemo(() => {
+        return (
+            <>
+                {stream.subtitles.length > 1 &&
+                    <SubtitleSelect subtitles={stream.subtitles}
+                        subtitle={subtitle}
+                        selectSubtitle={selectSubtitle}
+                        triggerActivity={triggerActivity} />
+                }
+                {stream.audios.length > 1 &&
+                    <AudioSelect audios={stream.audios}
+                        audio={audio}
+                        selectAudio={selectAudio}
+                        triggerActivity={triggerActivity} />
+                }
+                <AppConfigBtn />
+                <ContactMeBtn />
+            </>
+        );
+    }, [stream, subtitle, selectSubtitle, audio, selectAudio, triggerActivity])
+
     useEffect(() => {  // find audios, it's needed to find stream url
         findAudio({ profile, langConfig: langConfigRef.current, audios }).then(setAudio)
     }, [profile, audios, setAudio, setEndEvent])
 
     useEffect(() => {  // find stream url
         if (audios.includes(audio)) {
-            findStream({ profile, langConfig: langConfigRef.current, audios, audio, getLang, content })
-                .then(setStream)
-                .catch(handleCrunchyError)
+            findStream({
+                profile,
+                langConfig: langConfigRef.current,
+                audios,
+                audio,
+                getLang,
+                content,
+                lastTokenRef
+            }).then(setStream).catch(handleCrunchyError)
         }
         return () => {
-            setStream(lastStream => {
-                if (lastStream.token) {
-                    api.drm.deleteToken(profile, { episodeId: audio.guid, token: lastStream.token })
-                }
-                return emptyStream
-            })
+            if (lastTokenRef.current) {
+                api.drm.deleteToken(profile, {
+                    episodeId: audio.guid,
+                    token: lastTokenRef.current
+                }).finally(() => {
+                    lastTokenRef.current = null
+                })
+            }
+            setStream(emptyStream)
         }
     }, [profile, content, audios, audio, getLang, setStream, emptyStream, handleCrunchyError])
 
-    useEffect(() => {  // find subtitles preview and skip events
+    useEffect(() => {  // findSubtitle
         if (stream.urls) {
             findSubtitle(stream).then(setSubtitle)
-            findPreviews(stream).then(setPreviews)
+        }
+        return () => setSubtitle(null)
+    }, [profile, stream, setSubtitle])
+
+    useEffect(() => {  // findSkipEvents
+        if (stream.urls) {
             findSkipEvents(stream).then(setSkipEvents)
         }
-        return () => {
-            setPreviews(lastPreview => {
-                lastPreview.chunks.forEach(prev => window.URL.revokeObjectURL(prev))
-                return { chunks: [], data: null }
-            })
-            setSubtitle(null)
-            setSkipEvents(null)
+        return () => setSkipEvents(null)
+    }, [profile, stream, setSkipEvents])
+
+    useEffect(() => {  // findPreviews
+        let doFindPreviews = null
+        if (stream.urls && !loading && playerRef.current && appConfigRef.current.preview === 'yes') {
+            doFindPreviews = ({ bufferLevel }) => {
+                if (bufferLevel >= 16) {
+                    playerRef.current.off(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
+                    findPreviews(stream, playerRef.current.getAverageThroughput('video'),).then(setPreviews)
+                }
+            }
+            playerRef.current.on(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
         }
-    }, [profile, stream, setSubtitle, setPreviews, setSkipEvents])
+        return () => {
+            setPreviews({ chunks: [] })
+            if (previewRef.current?.url) {
+                window.URL.revokeObjectURL(previewRef.current.url)
+                previewRef.current = null
+            }
+            if (doFindPreviews && playerRef.current) {
+                playerRef.current.off(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, doFindPreviews)
+            }
+        }
+    }, [profile, stream, setPreviews, findPreviews, loading])
 
     useEffect(() => {  // attach subs
         let interval = null
@@ -941,30 +1006,21 @@ const Player = ({ ...rest }) => {
             interval = setInterval(() => {
                 if (playerCompRef.current) {
                     clearInterval(interval)
-                    createDashPlayer(audio, stream, content, subtitle).then(player => {
+                    createDashPlayer(audio, stream, content, subtitle, appConfigRef).then(player => {
                         playerRef.current = player
                         playerRef.current.play()
                         setLoading(false)
                         setIsPaused(false)
-                        /* how to log, add function and off events in clean up function
-                        const logPlayer = (name) => ev => {
-                            if (name === 'ERROR') {
-                                console.log(name, ev)
-                            }
+                        if (appConfigRef.current.video !== 'adaptive') {
+                            setVideoQuality(player, appConfigRef)
                         }
-                        player.updateSettings({ debug: { logLevel: dashjsBase.Debug.LOG_LEVEL_DEBUG } })
-                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_LOADED, logPlayer('MANIFEST_LOADED'))
-                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_LOADING_FINISHED, logPlayer('MANIFEST_LOADING_FINISHED'))
-                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_LOADING_STARTED, logPlayer('MANIFEST_LOADING_STARTED'))
-                        player.on(dashjsBase.MediaPlayer.events.MANIFEST_VALIDITY_CHANGED, logPlayer('MANIFEST_VALIDITY_CHANGED'))
-                        player.on(dashjsBase.MediaPlayer.events.BUFFER_EMPTY, logPlayer('BUFFER_EMPTY'))
-                        player.on(dashjsBase.MediaPlayer.events.BUFFER_LOADED, logPlayer('BUFFER_LOADED'))
-                        player.on(dashjsBase.MediaPlayer.events.FRAGMENT_LOADING_STARTED, logPlayer('FRAGMENT_LOADING_STARTED'))
-                        player.on(dashjsBase.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, logPlayer('FRAGMENT_LOADING_PROGRESS'))
-                        player.on(dashjsBase.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, logPlayer('FRAGMENT_LOADING_COMPLETED'))
-                        player.on(dashjsBase.MediaPlayer.events.ERROR, logPlayer('ERROR'))
-                        player.on(dashjsBase.MediaPlayer.events.KEY_ERROR, logPlayer('KEY_ERROR'))
-                        player.on(dashjsBase.MediaPlayer.events.PLAYBACK_ERROR, logPlayer('PLAYBACK_ERROR'))
+                        /* how to log, add function and off events in clean up function
+                        player.updateSettings({ debug: { logLevel: dashjs.Debug.LOG_LEVEL_DEBUG } })
+                        player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, onBufferEmpty)
+                        player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, onBufferLoaded)
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_STARTED, onBufferLogging)
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, onBufferLogging)
+                        player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, onBufferLogging)
                         player.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_REQUESTED, e => {
                             console.log('Cambio de calidad solicitado:', e.mediaType, 'nivel:', e.newQuality);
                         })
@@ -1033,12 +1089,10 @@ const Player = ({ ...rest }) => {
     useEffect(() => {  // plause / play watch
         let timeout = null
         if (session && isPaused) {
-            timeout = setTimeout(() => {
-                back.doBack()
-            }, session.maximumPauseSeconds * 1000)
+            timeout = setTimeout(goBack, session.maximumPauseSeconds * 1000)
         }
         return () => { clearTimeout(timeout) }
-    }, [session, isPaused])
+    }, [session, isPaused, goBack])
 
     useEffect(() => {  // loop playHead
         if (!_PLAY_TEST_) {
@@ -1147,34 +1201,8 @@ const Player = ({ ...rest }) => {
                     <source src={emptyVideo} />
                 </video>
                 <MediaControls id="media-controls">
-                    <leftComponents>
-                        <ContentInfo content={content} />
-                        {['episode'].includes(content.type) && (<>
-                            <IconButton
-                                backgroundOpacity="lightTranslucent"
-                                onClick={markAsWatched}
-                                tooltipText={$L('Mark as watched')}>
-                                checkselection
-                            </IconButton>
-                            <Rating profile={profile} content={content} />
-
-                        </>)}
-                    </leftComponents>
-                    <rightComponents>
-                        {stream.subtitles.length > 1 &&
-                            <SubtitleSelect subtitles={stream.subtitles}
-                                subtitle={subtitle}
-                                selectSubtitle={selectSubtitle}
-                                triggerActivity={triggerActivity} />
-                        }
-                        {stream.audios.length > 1 &&
-                            <AudioSelect audios={stream.audios}
-                                audio={audio}
-                                selectAudio={selectAudio}
-                                triggerActivity={triggerActivity} />
-                        }
-                        <ContactMe origin='/profiles/home/player' />
-                    </rightComponents>
+                    <leftComponents>{leftComponents}</leftComponents>
+                    <rightComponents>{rightComponents}</rightComponents>
                 </MediaControls>
             </VideoPlayer>
             <Button id="skip-button"

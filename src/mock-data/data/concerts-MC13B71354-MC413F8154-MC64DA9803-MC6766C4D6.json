@@ -2,135 +2,24 @@
     "total": 4,
     "data": [
         {
-            "sequenceNumber": 0,
-            "durationMs": 13775000,
-            "id": "MC6766C4D6",
-            "images": {
-                "thumbnail": [
-                    {
-                        "height": 180,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 320
-                    },
-                    {
-                        "height": 338,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 600
-                    },
-                    {
-                        "height": 360,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 640
-                    },
-                    {
-                        "height": 450,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 800
-                    },
-                    {
-                        "height": 675,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 1200
-                    },
-                    {
-                        "height": 810,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 1440
-                    },
-                    {
-                        "height": 900,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 1600
-                    },
-                    {
-                        "height": 1080,
-                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
-                        "type": "thumbnail",
-                        "width": 1920
-                    }
-                ]
-            },
-            "readyToPublish": true,
-            "artists": {
-                "MainArtist": [
-                    {
-                        "connector": "",
-                        "id": "MA899F289",
-                        "name": "MAN WITH A MISSION",
-                        "roles": [
-                            "MainArtist"
-                        ],
-                        "sequenceNumber": 1,
-                        "slug": "man-with-a-mission"
-                    }
-                ]
-            },
-            "displayArtistName": "MAN WITH A MISSION",
-            "licensor": "BMG",
-            "title": "Wolf Complete Works -LIVE STREAMING Edition- RE",
-            "isPremiumOnly": true,
-            "type": "musicConcert",
-            "artist": {
-                "id": "MA899F289",
-                "name": "MAN WITH A MISSION",
-                "slug": "man-with-a-mission"
-            },
-            "copyright": "© 2021 Sony Music Labels Inc.",
-            "createdAt": "2023-02-28T12:48:20.241Z",
-            "isMature": false,
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "hash": "de21ad53bbbd431d2e3190a8c28cf2b0",
-            "slug": "wolf-complete-works-live-streaming-edition-re",
-            "displayArtistNameRequired": false,
-            "matureBlocked": false,
-            "maturityRatings": {},
-            "updatedAt": "2023-05-31T07:11:21.535Z",
-            "isPublic": true,
-            "originalRelease": "2021-09-08T00:00:00Z",
-            "publishDate": "2023-05-31T13:00:00Z",
-            "streams_link": "/content/v2/music/MC6766C4D6/streams",
-            "description": "Este producto presenta la forma más reciente de \"transmisión en vivo\" de MAN WITH A MISSION, cuyos miembros tienen una sólida reputación en Japón y en el extranjero como experimentados intérpretes en vivo. Incluye tres conciertos, desde el concierto especial de promoción del décimo aniversario en julio de 2020 hasta el espectáculo de mayo de 2021, que fue el punto culminante de la gira ONE WISH TOUR."
-        },
-        {
-            "copyright": "© 2022 Sony Music Labels Inc.",
-            "isPublic": true,
-            "createdAt": "2023-02-28T12:46:44.82Z",
-            "description": "Un video que incluye el segmento de la Yokohama Arena de la gira de tres ciudades con seis conciertos titulada \"MAN WITH A MISSION presents ～Merry-Go-Round Tour 2021～\", que tuvo lugar en diciembre de 2021 en Yokohama, Nagoya y Osaka. Incluso la prolongada pandemia no pudo detener a los Wölfe, y el tour en vivo muestra la esencia misma de la banda. Basado en el concepto que divide la época activa de MAN WITH A MISSION en dos fases, el concierto ofrece el mejor repertorio que han podido tener para coronar su décimo aniversario en 2020 y aumentar la emoción por el próximo capítulo.",
-            "hash": "0c743dc1ed5c66b78c6fcbf5d2f7e01f",
-            "updatedAt": "2023-05-31T07:11:21.297Z",
-            "streams_link": "/content/v2/music/MC413F8154/streams",
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
-            },
-            "id": "MC413F8154",
-            "isPremiumOnly": true,
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
-            "isMature": false,
-            "originalRelease": "2022-03-23T00:00:00Z",
             "publishDate": "2023-05-31T13:00:00Z",
             "slug": "wolf-complete-works-7-merry-go-round-tour-2021-",
+            "title": "Wolf Complete Works 7 -Merry-Go-Round Tour 2021-",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
+            },
+            "description": "Un video que incluye el segmento de la Yokohama Arena de la gira de tres ciudades con seis conciertos titulada \"MAN WITH A MISSION presents ～Merry-Go-Round Tour 2021～\", que tuvo lugar en diciembre de 2021 en Yokohama, Nagoya y Osaka. Incluso la prolongada pandemia no pudo detener a los Wölfe, y el tour en vivo muestra la esencia misma de la banda. Basado en el concepto que divide la época activa de MAN WITH A MISSION en dos fases, el concierto ofrece el mejor repertorio que han podido tener para coronar su décimo aniversario en 2020 y aumentar la emoción por el próximo capítulo.",
+            "originalRelease": "2022-03-23T00:00:00Z",
+            "displayArtistNameRequired": false,
+            "hash": "0c743dc1ed5c66b78c6fcbf5d2f7e01f",
+            "createdAt": "2023-02-28T12:46:44.82Z",
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
             "images": {
                 "thumbnail": [
                     {
@@ -183,9 +72,22 @@
                     }
                 ]
             },
+            "isPremiumOnly": true,
+            "matureBlocked": false,
+            "updatedAt": "2023-05-31T07:11:21.297Z",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
+            },
+            "displayArtistName": "MAN WITH A MISSION",
+            "id": "MC413F8154",
+            "durationMs": 11795033,
+            "sequenceNumber": 0,
+            "type": "musicConcert",
             "licensor": "BMG",
+            "maturityRatings": {},
             "readyToPublish": true,
-            "title": "Wolf Complete Works 7 -Merry-Go-Round Tour 2021-",
             "artists": {
                 "MainArtist": [
                     {
@@ -195,31 +97,67 @@
                         "roles": [
                             "MainArtist"
                         ],
-                        "sequenceNumber": 1,
+                        "sequenceNumber": 2,
                         "slug": "man-with-a-mission"
                     }
                 ]
             },
+            "copyright": "© 2022 Sony Music Labels Inc.",
+            "isPublic": true,
+            "isMature": false,
+            "streams_link": "/content/v2/music/MC413F8154/streams"
+        },
+        {
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
+            },
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "hash": "f4233402aa68bb26f5e3a5a28641c534",
+            "isPremiumOnly": true,
+            "readyToPublish": true,
             "displayArtistName": "MAN WITH A MISSION",
-            "matureBlocked": false,
+            "displayArtistNameRequired": false,
+            "id": "MC13B71354",
+            "slug": "wolf-complete-works-6-chasing-the-horizon-tour-2018-tour-final-in-hanshin-koshien-stadium-",
+            "updatedAt": "2023-05-31T07:11:21.189Z",
+            "publishDate": "2023-05-31T13:00:00Z",
             "sequenceNumber": 0,
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "maturityRatings": {},
+            "originalRelease": "2019-04-24T00:00:00Z",
+            "copyright": "© 2019 Sony Music Labels Inc.",
+            "description": "Uno de los conciertos más grandes hasta ahora de los Wölfe, que tuvo lugar el 17 de noviembre de 2018 en el Hanshin Koshien Ballpark, como apoyo a su exitoso álbum \"Chasing the Horizon\".",
+            "durationMs": 7156191,
+            "matureBlocked": false,
+            "createdAt": "2023-02-28T12:48:17.978Z",
+            "licensor": "BMG",
+            "type": "musicConcert",
+            "streams_link": "/content/v2/music/MC13B71354/streams",
+            "isMature": false,
             "artist": {
                 "id": "MA899F289",
                 "name": "MAN WITH A MISSION",
                 "slug": "man-with-a-mission"
             },
-            "displayArtistNameRequired": false,
-            "durationMs": 11179000,
-            "maturityRatings": {},
-            "type": "musicConcert"
-        },
-        {
-            "copyright": "© 2019 Sony Music Labels Inc.",
-            "durationMs": 5371000,
-            "matureBlocked": false,
-            "displayArtistNameRequired": false,
-            "id": "MC13B71354",
-            "hash": "f4233402aa68bb26f5e3a5a28641c534",
             "images": {
                 "thumbnail": [
                     {
@@ -272,36 +210,85 @@
                     }
                 ]
             },
-            "originalRelease": "2019-04-24T00:00:00Z",
-            "slug": "wolf-complete-works-6-chasing-the-horizon-tour-2018-tour-final-in-hanshin-koshien-stadium-",
-            "updatedAt": "2023-05-31T07:11:21.189Z",
-            "description": "Uno de los conciertos más grandes hasta ahora de los Wölfe, que tuvo lugar el 17 de noviembre de 2018 en el Hanshin Koshien Ballpark, como apoyo a su exitoso álbum \"Chasing the Horizon\".",
-            "licensor": "BMG",
-            "maturityRatings": {},
-            "publishDate": "2023-05-31T13:00:00Z",
-            "title": "Wolf Complete Works 6 -Chasing the Horizon Tour 2018 Tour Final in Hanshin Koshien Stadium-",
-            "artists": {
-                "MainArtist": [
+            "isPublic": true,
+            "title": "Wolf Complete Works 6 -Chasing the Horizon Tour 2018 Tour Final in Hanshin Koshien Stadium-"
+        },
+        {
+            "streams_link": "/content/v2/music/MC6766C4D6/streams",
+            "displayArtistName": "MAN WITH A MISSION",
+            "images": {
+                "thumbnail": [
                     {
-                        "connector": "",
-                        "id": "MA899F289",
-                        "name": "MAN WITH A MISSION",
-                        "roles": [
-                            "MainArtist"
-                        ],
-                        "sequenceNumber": 1,
-                        "slug": "man-with-a-mission"
+                        "height": 180,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/320x180/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 320
+                    },
+                    {
+                        "height": 338,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/600x338/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 600
+                    },
+                    {
+                        "height": 360,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/640x360/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 640
+                    },
+                    {
+                        "height": 450,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/800x450/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 800
+                    },
+                    {
+                        "height": 675,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 1200
+                    },
+                    {
+                        "height": 810,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1440x810/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 1440
+                    },
+                    {
+                        "height": 900,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1600x900/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 1600
+                    },
+                    {
+                        "height": 1080,
+                        "source": "https://www.crunchyroll.com/imgsrv/display/thumbnail/1920x1080/catalog/music/4f5fbc9ab96c4d8a9d8edc47ba1366a2.JPEG",
+                        "type": "thumbnail",
+                        "width": 1920
                     }
                 ]
+            },
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "isMature": false,
+            "sequenceNumber": 0,
+            "slug": "wolf-complete-works-live-streaming-edition-re",
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
             },
             "availability": {
                 "endDate": "2099-05-14T00:00:00Z",
                 "startDate": "2023-05-31T13:00:00Z"
             },
-            "displayArtistName": "MAN WITH A MISSION",
-            "isMature": false,
+            "createdAt": "2023-02-28T12:48:20.241Z",
+            "matureBlocked": false,
+            "licensor": "BMG",
+            "publishDate": "2023-05-31T13:00:00Z",
+            "description": "Este producto presenta la forma más reciente de \"transmisión en vivo\" de MAN WITH A MISSION, cuyos miembros tienen una sólida reputación en Japón y en el extranjero como experimentados intérpretes en vivo. Incluye tres conciertos, desde el concierto especial de promoción del décimo aniversario en julio de 2020 hasta el espectáculo de mayo de 2021, que fue el punto culminante de la gira ONE WISH TOUR.",
             "isPremiumOnly": true,
-            "createdAt": "2023-02-28T12:48:17.978Z",
+            "title": "Wolf Complete Works -LIVE STREAMING Edition- RE",
+            "updatedAt": "2023-05-31T07:11:21.535Z",
             "genres": [
                 {
                     "displayValue": "Rock",
@@ -309,23 +296,12 @@
                 }
             ],
             "isPublic": true,
+            "durationMs": 15333985,
+            "hash": "de21ad53bbbd431d2e3190a8c28cf2b0",
+            "id": "MC6766C4D6",
+            "maturityRatings": {},
+            "originalRelease": "2021-09-08T00:00:00Z",
             "readyToPublish": true,
-            "streams_link": "/content/v2/music/MC13B71354/streams",
-            "artist": {
-                "id": "MA899F289",
-                "name": "MAN WITH A MISSION",
-                "slug": "man-with-a-mission"
-            },
-            "sequenceNumber": 0,
-            "type": "musicConcert"
-        },
-        {
-            "genres": [
-                {
-                    "displayValue": "Rock",
-                    "id": "rock"
-                }
-            ],
             "artists": {
                 "MainArtist": [
                     {
@@ -335,17 +311,25 @@
                         "roles": [
                             "MainArtist"
                         ],
-                        "sequenceNumber": 1,
+                        "sequenceNumber": 2,
                         "slug": "man-with-a-mission"
                     }
                 ]
             },
-            "availability": {
-                "endDate": "2099-05-14T00:00:00Z",
-                "startDate": "2023-05-31T13:00:00Z"
+            "displayArtistNameRequired": false,
+            "type": "musicConcert"
+        },
+        {
+            "isMature": false,
+            "readyToPublish": true,
+            "sequenceNumber": 0,
+            "artist": {
+                "id": "MA899F289",
+                "name": "MAN WITH A MISSION",
+                "slug": "man-with-a-mission"
             },
-            "createdAt": "2023-02-28T12:48:24.661Z",
-            "displayArtistName": "MAN WITH A MISSION",
+            "copyright": "© 2021 Sony Music Labels Inc.",
+            "id": "MC64DA9803",
             "images": {
                 "thumbnail": [
                     {
@@ -398,32 +382,48 @@
                     }
                 ]
             },
-            "matureBlocked": false,
-            "copyright": "© 2021 Sony Music Labels Inc.",
-            "sequenceNumber": 0,
+            "publishDate": "2023-05-31T13:00:00Z",
             "title": "Wolf Complete Works -LIVE STREAMING Edition- BOOT",
-            "artist": {
-                "id": "MA899F289",
-                "name": "MAN WITH A MISSION",
-                "slug": "man-with-a-mission"
-            },
-            "description": "Un video que nos deja la forma filal del \"transmisión en vivo\" de MAN WITH A MISSION, una banda que ha ganado renombre tanto en el país como en el extranjero por sus actuaciones en vivo. El video incluye tres conciertos mensuales a partir de octubre de 2020.",
-            "id": "MC64DA9803",
-            "isMature": false,
+            "updatedAt": "2023-05-31T07:11:21.418Z",
+            "isPremiumOnly": true,
             "maturityRatings": {},
+            "createdAt": "2023-02-28T12:48:24.661Z",
+            "matureBlocked": false,
+            "slug": "wolf-complete-works-live-streaming-edition-boot",
+            "displayArtistName": "MAN WITH A MISSION",
             "displayArtistNameRequired": false,
             "hash": "bdb1863ecc199d345dbd4cc0c8d52585",
-            "readyToPublish": true,
-            "streams_link": "/content/v2/music/MC64DA9803/streams",
-            "isPremiumOnly": true,
-            "originalRelease": "2021-09-08T00:00:00Z",
-            "publishDate": "2023-05-31T13:00:00Z",
-            "type": "musicConcert",
-            "updatedAt": "2023-05-31T07:11:21.418Z",
-            "durationMs": 13094000,
             "isPublic": true,
             "licensor": "BMG",
-            "slug": "wolf-complete-works-live-streaming-edition-boot"
+            "streams_link": "/content/v2/music/MC64DA9803/streams",
+            "artists": {
+                "MainArtist": [
+                    {
+                        "connector": "",
+                        "id": "MA899F289",
+                        "name": "MAN WITH A MISSION",
+                        "roles": [
+                            "MainArtist"
+                        ],
+                        "sequenceNumber": 2,
+                        "slug": "man-with-a-mission"
+                    }
+                ]
+            },
+            "durationMs": 14588491,
+            "genres": [
+                {
+                    "displayValue": "Rock",
+                    "id": "rock"
+                }
+            ],
+            "originalRelease": "2021-09-08T00:00:00Z",
+            "availability": {
+                "endDate": "2099-05-14T00:00:00Z",
+                "startDate": "2023-05-31T13:00:00Z"
+            },
+            "description": "Un video que nos deja la forma filal del \"transmisión en vivo\" de MAN WITH A MISSION, una banda que ha ganado renombre tanto en el país como en el extranjero por sus actuaciones en vivo. El video incluye tres conciertos mensuales a partir de octubre de 2020.",
+            "type": "musicConcert"
         }
     ],
     "meta": {}

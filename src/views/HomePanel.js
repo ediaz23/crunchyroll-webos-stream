@@ -6,12 +6,7 @@ import Spinner from '@enact/moonstone/Spinner'
 
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
-import {
-    currentProfileState, categoriesState,
-    homeViewReadyState, homeIndexState,
-    homeFeedState, homeFeedExpirationState,
-    musicFeedState, musicFeedExpirationState,
-} from '../recoilConfig'
+import { currentProfileState, categoriesState, homeViewReadyState } from '../recoilConfig'
 import HomeToolbar, { FloatingHomeToolbar } from '../components/home/Toolbar'
 import HomeFeed from '../components/home/Feed'
 import MusicBrowse from '../components/music/Music'
@@ -19,124 +14,23 @@ import ContentGrid from '../components/grid/ContentGrid'
 import Simulcast from '../components/simulcast/Simulcast'
 import Watchlist from '../components/watchlist/Watchlist'
 import api from '../api'
+import AppConfigPanel from './AppConfigPanel'
 import ContactMePanel from './ContactMePanel'
 import ConfirmExitPanel from './ConfirnExitPanel'
 import { $L } from '../hooks/language'
-import { useResetHomeState } from '../hooks/setContent'
+import { useResetHomeState } from '../hooks/navigate'
+import { useHomeFeedWorker } from '../hooks/homefeedWorker'
+import { useViewBackup } from '../hooks/viewBackup'
 
-
-/**
- * Process the feed
- * @param {Array<{resource_type: String}>} feed
- * @param {import('crunchyroll-js-api').Types.Profile} profile
- * @return {Promise<Array<Object>>}
- */
-const postProcessHomefeed = (feed) => {
-    const mergedFeed = []
-    const panelObject = { resource_type: 'panel', panels: [] }
-    const bannerObject = { resource_type: 'in_feed_banner', panels: [] }
-    const musicArtistObject = { resource_type: 'music_artist_banner', panels: [] }
-    for (let item of feed) {
-        if (item.resource_type === 'panel') {
-            // find one panel then add to panelObject
-            // only if not added before
-            if (panelObject.panels.length === 0) {
-                mergedFeed.push(panelObject)
-            }
-            let newItem = { panel: item.panel }
-            if (panelObject.panels.length === 0) {
-                Object.assign(newItem, {
-                    resource_type: item.resource_type,
-                    response_type: item.response_type,
-                })
-            }
-            panelObject.panels.push(newItem)
-        } else if (item.resource_type === 'in_feed_banner') {
-            if (bannerObject.panels.length === 0) {
-                mergedFeed.push(bannerObject)
-            }
-            let newItem = {
-                resource_type: item.resource_type,
-                link: item.link,
-            }
-            if (bannerObject.panels.length === 0) {
-                Object.assign(newItem, {
-                    id: item.id,
-                    response_type: item.response_type,
-                })
-            }
-            bannerObject.panels.push(newItem)
-        } else if (item.resource_type === 'musicArtist') {
-            if (musicArtistObject.panels.length === 0) {
-                mergedFeed.push(musicArtistObject)
-            }
-            let newItem = { object: item.object }
-            if (musicArtistObject.panels.length === 0) {
-                Object.assign(newItem, {
-                    id: item.id,
-                    resource_type: item.resource_type,
-                    response_type: item.response_type,
-                })
-            }
-            musicArtistObject.panels.push(newItem)
-        } else {
-            let newItem = {
-                id: item.id,
-                resource_type: item.resource_type,
-                response_type: item.response_type,
-            }
-            if (item.resource_type === 'hero_carousel') {
-                newItem.items = item.items.map(i => {
-                    return {
-                        slug: i.slug,
-                        link: i.link,
-                    }
-                })
-            } else if (item.resource_type === 'curated_collection') {
-                Object.assign(newItem, {
-                    title: item.title,
-                    ids: item.ids,
-                })
-                if (item.collection_items) {
-                    newItem.ids = item.collection_items.map(i => i.id)
-                }
-            } else if (item.resource_type === 'dynamic_collection') {
-                Object.assign(newItem, {
-                    title: item.title,
-                    source_media_id: item.source_media_id,
-                    query_params: item.query_params,
-                })
-            } else {
-                Object.assign(newItem, item)
-            }
-            mergedFeed.push(newItem)
-        }
-    }
-    return mergedFeed
-}
-
-/**
- * Hook helper
- * @param {Function} setHomeFeed
- * @returns {Function}
- */
-const useSetFeed = (setHomeFeed) => {
-    return (index, feedItem) => {
-        setHomeFeed(prevArray => [
-            ...prevArray.slice(0, index),
-            feedItem,
-            ...prevArray.slice(index + 1)
-        ])
-    }
-}
 
 const ActivityViews = ({ index, children }) => (children[index])
 
 const HomePanel = (props) => {
+    const { viewBackup, viewBackupRef } = useViewBackup('homePanel')
     /** @type {import('crunchyroll-js-api').Types.Profile}*/
     const profile = useRecoilValue(currentProfileState)
     /** @type {[Number, Function]} */
-    const [currentActivity, setCurrentActivity] = useRecoilState(homeIndexState)
+    const [currentActivity, setCurrentActivity] = useState(viewBackup?.currentActivity || 0)
     /** @type {[Array<Object>, Function]} */
     const [showFullToolbar, setShowFullToolbar] = useState(false)
     /** @type {[Boolean, Function]} */
@@ -146,21 +40,14 @@ const HomePanel = (props) => {
     /** @type {[Boolean, Function]}  */
     const [loading, setLoading] = useState(true)
 
-    /** @type {[Array<Object>, Function]} */
-    const [homeFeed, setHomeFeed] = useRecoilState(homeFeedState)
-    /** @type {[Date, Function]} */
-    const [homeFeedExpiration, setHomeFeedExpiration] = useRecoilState(homeFeedExpirationState)
-    /** @type {Function} */
-    const setHomeFeedFn = useSetFeed(setHomeFeed)
+    /** @type {[{id: Number, items: Array<import('../hooks/homefeedWorker').HomefeedItem>}, Function]} */
+    const [homeFeed, setHomeFeed] = useState({ id: Date.now(), items: [] })
 
-    /** @type {[Array<Object>, Function]} */
-    const [musicFeed, setMusicFeed] = useRecoilState(musicFeedState)
-    /** @type {[Date, Function]} */
-    const [musicFeedExpiration, setMusicFeedExpiration] = useRecoilState(musicFeedExpirationState)
-    /** @type {Function} */
-    const setMusicFeedFn = useSetFeed(setMusicFeed)
+    /** @type {[{id: Number, items: Array<Object>}, Function]} */
+    const [musicFeed, setMusicFeed] = useState({ id: Date.now(), items: [] })
     /** @type {Function} */
     const resetHomeState = useResetHomeState()
+    const processHomeFeed = useHomeFeedWorker()
 
     /** @type {Array<{key: String, icon: String, label: String}>} */
     const toolbarList = useMemo(() => [
@@ -171,6 +58,7 @@ const HomePanel = (props) => {
         { key: 'movies', icon: 'recordings', label: $L('Movies') },
         { key: 'musics', icon: 'music', label: $L('Music') },
         { key: 'my_list', icon: 'denselist', label: $L('My List') },
+        { key: 'config', icon: 'gear', label: $L('Configuration') },
         { key: 'info', icon: 'info', label: $L('About Me?') },
         { key: 'close', icon: 'closex', label: $L('Close') },
     ], [])
@@ -183,7 +71,7 @@ const HomePanel = (props) => {
     /** @type {Function} */
     const setActivity = useCallback((ev) => {
         setShowFullToolbar(false)
-        const tmpIndex = parseInt(ev.currentTarget.dataset.index)
+        const tmpIndex = ev ? parseInt(ev.currentTarget.dataset.index) : 0
         setCurrentActivity(tmpIndex)
         if (tmpIndex !== currentActivity) {
             resetHomeState()
@@ -200,45 +88,54 @@ const HomePanel = (props) => {
 
     useEffect(() => {
         const loadFeed = async () => {
-            const now = new Date()
-            if (currentActivity === 0 && (!homeFeedExpiration || (now > homeFeedExpiration))) {
-                await Promise.all([
-                    api.discover.getCategories(profile).then(({ data: categs }) => {
-                        setCategories([
-                            { id: 'all', title: $L('All') },
-                            ...categs.map(cat => { return { id: cat.id, title: cat.localization.title } })
-                        ])
-                    }),
-                    api.discover.getHomeFeed(profile).then(({ data }) => {
-                        setHomeFeed(
-                            postProcessHomefeed(
-                                data.filter(item => item.response_type !== 'news_feed')
-                            )
-                        )
-                    })
+            if (currentActivity === 0) {
+                const [homeFeedCache, categoriesCache] = await Promise.all([
+                    api.utils.getCustomCache('/homeFeed'),
+                    api.utils.getCustomCache('/categories')
                 ])
-                now.setHours(now.getHours() + 3)
-                setHomeFeedExpiration(now)
-            }
-            if (currentActivity === 5 && (!musicFeedExpiration || (now > musicFeedExpiration))) {
-                const { data } = await api.music.getFeed(profile)
-                setMusicFeed(postProcessHomefeed(data.filter(item => item.response_type !== 'news_feed')))
-                now.setHours(now.getHours() + 3)
-                setMusicFeedExpiration(now)
+
+                if (homeFeedCache && categoriesCache) {
+                    setHomeFeed(homeFeedCache)
+                    setCategories(categoriesCache)
+                } else {
+                    const homeFeedProm = api.discover.getNewHomeFeed(profile).then(processHomeFeed)
+                    const categoriesProm = api.discover.getCategories(profile).then(({ data: categs }) => {
+                        return [
+                            { id: 'all', title: $L('All') },
+                            ...categs.map(cat => ({ id: cat.id, title: cat.localization.title }))
+                        ]
+                    })
+
+                    const [newHomeFeed, categories] = await Promise.all([homeFeedProm, categoriesProm])
+                    setHomeFeed(newHomeFeed)
+                    setCategories(categories)
+
+                    api.utils.saveCustomCache('/homeFeed', newHomeFeed, 3 * 60 * 60)  // 3h
+                    api.utils.saveCustomCache('/categories', categories, 3 * 60 * 60) // 3h
+                }
+            } else if (currentActivity === 5) {
+                const musicFeedCache = await api.utils.getCustomCache('/musicFeed')
+                if (musicFeedCache) {
+                    setMusicFeed(musicFeedCache)
+                } else {
+                    const newMusicFeed = await api.music.getFeed(profile).then(processHomeFeed)
+                    setMusicFeed(newMusicFeed)
+                    api.utils.saveCustomCache('/musicFeed', newMusicFeed, 3 * 60 * 60) // 3h
+                }
             }
         }
         setLoading(true)
-        loadFeed().then(() => setLoading(false))
-    }, [profile, currentActivity, setCategories,
-        setHomeFeed, homeFeedExpiration, setHomeFeedExpiration,
-        setMusicFeed, musicFeedExpiration, setMusicFeedExpiration,
-    ])
+        loadFeed().then(() => currentActivity != null && setLoading(false))
+    }, [profile, currentActivity, setCategories, setHomeFeed, setMusicFeed, processHomeFeed])
 
     useEffect(() => {
         return () => {
             setHomeViewReady(false)
         }
     }, [setHomeViewReady])
+
+    /** backup all state to restore later */
+    viewBackupRef.current = { currentActivity }
 
     return (
         <Panel id="home-panel" {...props}>
@@ -260,28 +157,27 @@ const HomePanel = (props) => {
                         <ActivityViews index={currentActivity}>
                             <HomeFeed profile={profile}
                                 homeFeed={homeFeed}
-                                setHomeFeed={setHomeFeedFn} />
+                                feedType='home' />
                             <Simulcast profile={profile}
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='search'
+                                contentKey='home-search'
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='series'
+                                contentKey='home-series'
                                 contentType='series'
                                 title={toolbarList[currentActivity].label} />
                             <ContentGrid profile={profile}
-                                contentKey='movies'
+                                contentKey='home-movies'
                                 contentType='movie_listing'
                                 title={toolbarList[currentActivity].label} />
                             <MusicBrowse profile={profile}
-                                contentKey='music'
                                 title={toolbarList[currentActivity].label}
-                                musicFeed={musicFeed}
-                                setMusicFeed={setMusicFeedFn} />
+                                musicFeed={musicFeed} />
                             <Watchlist profile={profile} />
+                            <AppConfigPanel noButtons />
                             <ContactMePanel noAcceptBtn />
-                            <ConfirmExitPanel onCancel={hideShowFullToolbar} />
+                            <ConfirmExitPanel onCancel={setActivity} />
                         </ActivityViews>
                     }
                 </Cell>

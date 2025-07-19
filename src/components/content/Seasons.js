@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Row, Cell, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import LabeledIconButton from '@enact/moonstone/LabeledIconButton'
@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 
 import { $L } from '../../hooks/language'
 import { useBackVideoIndex } from '../../hooks/backVideoIndex'
+import { useViewBackup } from '../../hooks/viewBackup'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
@@ -52,19 +53,16 @@ export async function calculatePlayheadProgress({ profile, episodesData }) {
 /**
  * @param {Object} obj
  * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
- * @param {Object} obj.series
- * @param {Function} obj.setContentToPlay
+ * @param {{content: Object, setContent: Function}} obj.contentState
  * @param {Boolean} obj.isPremium account is premium?
- * @param {Object} obj.contentDetailBak
  */
-const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBak, ...rest }) => {
+const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
+    const { content: series, setContent: setSeries } = contentState
+    const { viewBackup, viewBackupRef } = useViewBackup(`content-seasons-${series.id}`)
     /** @type {[Array<Object>, Function]} */
-    const [seasons, setSeasons] = useState(contentDetailBak.seasons
-        ? JSON.parse(JSON.stringify(contentDetailBak.seasons))  // to avoid error setting episodes, line 132
-        : null
-    )
+    const [seasons, setSeasons] = useState(null)
     /** @type {[Number, Function]} */
-    const [seasonIndex, setSeasonIndex] = useState(contentDetailBak.seasonIndex)
+    const [seasonIndex, setSeasonIndex] = useState(viewBackup?.seasonIndex)
     /** @type {[Array<Object>, Function]} */
     const [episodes, setEpisodes] = useState(null)
     /** @type {[Number, Function]} */
@@ -73,16 +71,21 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
     const [loading, setLoading] = useState(false)
     /** @type {{current: Number}} */
     const seasonIndexRef = useRef(null)
+    /** @type {String} */
+    const cacheKey = useMemo(() => (
+        seasons && seasonIndex != null ? `seasons/${seasons[seasonIndex].id}/episodes` : null
+    ), [seasons, seasonIndex])
 
     /** @type {Function} */
-    const playEpisode = useCallback(ev => {
+    const setContent = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const index = parseInt(target.dataset.index)
         if (episodes && episodes.length) {
-            seasons.forEach(e => { e.episodes = [] })  // force reload
-            setContentToPlay(episodes[index], { seasons, seasonIndex })
+            /** backup all state to restore later */
+            viewBackupRef.current = { seasonIndex }
+            setSeries(episodes[index])
         }
-    }, [seasons, seasonIndex, episodes, setContentToPlay])
+    }, [seasonIndex, episodes, setSeries, viewBackupRef])
 
     /** @type {Function} */
     const markAsWatched = useCallback(ev => {
@@ -97,54 +100,60 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                     ep.playhead.progress = 100
                 }
                 setEpisodes([...episodes])
+                api.utils.saveCustomCache(cacheKey, episodes)
                 api.discover.markAsWatched(profile, seasons[seasonIndex].id)
                     .then(() => console.log('watched'))
                     .catch(console.error)
                     .finally(() => setLoading(false))
             }
         }
-    }, [profile, seasons, seasonIndex, episodes, setLoading])
+    }, [profile, seasons, seasonIndex, episodes, setLoading, cacheKey])
 
     useBackVideoIndex(episodes, setEpisodeIndex)
 
     useEffect(() => {
-        if (contentDetailBak.seasons == null) {
-            api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
-                data.forEach(e => { e.episodes = [] })
-                setSeasons(data)
-                setSeasonIndex(0)
-            })
+        seasonIndexRef.current = seasonIndex
+        setEpisodes(null)  // for activate loading
+        setEpisodeIndex(null)  // for activate loading
+        if (seasonIndex != null && seasons != null) {
+            const loadEpisodes = async () => {
+                const cacheEpisodes = await api.utils.getCustomCache(cacheKey)
+                if (cacheEpisodes) {
+                    setEpisodes(cacheEpisodes)
+                } else {
+                    const { data: epsData } = await api.cms.getEpisodes(profile, { seasonId: seasons[seasonIndex].id })
+
+                    epsData.forEach(ep => {
+                        ep.type = 'episode'
+                        ep.showPremium = !isPremium && getIsPremium(ep)
+                    })
+
+                    if (epsData.length) {
+                        await calculatePlayheadProgress({ profile, episodesData: epsData })
+                    }
+                    await api.utils.saveCustomCache(cacheKey, epsData)
+                    if (seasonIndex === seasonIndexRef.current) {
+                        setEpisodes(epsData)
+                    }
+                }
+            }
+            loadEpisodes()
         }
-    }, [profile, series, contentDetailBak.seasons])
+    }, [profile, seasons, seasonIndex, isPremium, cacheKey])
 
     useEffect(() => {
-        seasonIndexRef.current = seasonIndex
-        setEpisodes(null)
-        setEpisodeIndex(null)
-        if (seasonIndex != null && seasons != null) {
-            if (seasons[seasonIndex].episodes.length) {
-                if (seasonIndex === seasonIndexRef.current) {
-                    setEpisodes(seasons[seasonIndex].episodes)
+        api.cms.getSeasons(profile, { serieId: series.id }).then(({ data }) => {
+            setSeasons(data)
+            setSeasonIndex(lastIndex => {
+                if (lastIndex == null) {
+                    lastIndex = data.length ? 0 : null
+                } else {
+                    lastIndex = Math.min(lastIndex, data.length)
                 }
-            } else {
-                api.cms.getEpisodes(profile, { seasonId: seasons[seasonIndex].id })
-                    .then(({ data }) => Promise.all([
-                        Promise.resolve().then(() => {
-                            data.forEach(ep => {
-                                ep.type = 'episode'
-                                ep.showPremium = !isPremium && getIsPremium(ep)
-                            })
-                            seasons[seasonIndex].episodes = data
-                        }),
-                        Promise.resolve().then(() => {
-                            if (data.length) {
-                                return calculatePlayheadProgress({ profile, episodesData: data })
-                            }
-                        }),
-                    ]).then(() => seasonIndex === seasonIndexRef.current && setEpisodes(data)))
-            }
-        }
-    }, [profile, seasons, seasonIndex, isPremium])
+                return lastIndex
+            })
+        })
+    }, [profile, series])
 
     return (
         <Row align='start space-between' {...rest}>
@@ -157,8 +166,8 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                         <Cell grow style={{ height: 'auto', overflow: 'hidden' }}>
                             <SeasonsList
                                 seasons={seasons}
-                                selectSeason={setSeasonIndex}
-                                seasonIndex={seasonIndex} />
+                                seasonIndex={seasonIndex}
+                                selectSeason={setSeasonIndex} />
                         </Cell>
                     </Column>
                 </Cell>
@@ -167,7 +176,7 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                         {series.type === 'series' && seasons != null && seasons.length > 0 && (
                             <Cell shrink style={{ height: '15%' }}>
                                 <Heading size="small">
-                                    {seasons[seasonIndex].season_tags.join(', ')}
+                                    {seasons[seasonIndex].season_tags.join(', ') || '\u00A0'}
                                 </Heading>
                                 {loading && <Spinner />}
                                 {!loading &&
@@ -189,10 +198,10 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
                             height: series.type === 'series' && seasons != null && seasons.length > 0 ? '85%' : '100%'
                         }}>
                             <EpisodesList
-                                seasonIndex={seasonIndex}
+                                key={seasons?.[seasonIndex]?.id ? `seasons-${seasons[seasonIndex].id}` : undefined}
                                 episodes={episodes}
-                                selectEpisode={playEpisode}
-                                episodeIndex={episodeIndex} />
+                                episodeIndex={episodeIndex}
+                                selectEpisode={setContent} />
                         </Cell>
                     </Column>
                 </Cell>
@@ -203,10 +212,11 @@ const Seasons = ({ profile, series, setContentToPlay, isPremium, contentDetailBa
 
 Seasons.propTypes = {
     profile: PropTypes.object.isRequired,
-    series: PropTypes.object.isRequired,
-    setContentToPlay: PropTypes.func.isRequired,
+    contentState: PropTypes.shape({
+        content: PropTypes.object.isRequired,
+        setContent: PropTypes.func.isRequired,
+    }).isRequired,
     isPremium: PropTypes.bool.isRequired,
-    contentDetailBak: PropTypes.object.isRequired,
 }
 
 export default Seasons
