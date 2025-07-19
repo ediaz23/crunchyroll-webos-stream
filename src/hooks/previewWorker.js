@@ -4,7 +4,6 @@ import { useEffect, useCallback, useState } from 'react'
 import * as fetchUtils from './customFetch'
 import logger from '../logger'
 
-const BifWorker = new URL('../workers/bif.worker.js', import.meta.url)
 
 /**
  * Download file per chunkSize
@@ -147,7 +146,7 @@ export function usePreviewWorker(active) {
 
     useEffect(() => {
         if (active) {
-            setWorker(new Worker(BifWorker))
+            setWorker(new Worker(new URL('../workers/bif.worker.js', import.meta.url), { type: 'module' }))
         }
         return () => {
             setWorker(oldWorker => {

@@ -1,3 +1,4 @@
+/* global Worker */
 
 import { useEffect, useCallback, useRef } from 'react'
 
@@ -8,8 +9,6 @@ import logger from '../logger'
 import kidImg from '../../assets/img/child.jpg'
 import { isPlayable } from '../utils'
 
-
-const HomeFeedWorker = new URL('../workers/homefeed.worker.js', import.meta.url)
 
 /**
  * @typedef FeedItemType
@@ -451,7 +450,7 @@ export function useHomeFeedWorker() {
     }), [])
 
     useEffect(() => {
-        workerRef.current = new window.Worker(HomeFeedWorker)
+        workerRef.current = new Worker(new URL('../workers/homefeed.worker.js', import.meta.url), { type: 'module' })
         return () => {
             workerRef.current.terminate()
         }

@@ -5,7 +5,11 @@ module.exports = function(api) {
         chrome: '38'
     }
     out.presets[0][1].corejs = '3.39'
-    out.presets[0][1].exclude = out.presets[0][1].exclude.filter(x => x !== 'transform-regenerator')
+    out.presets[0][1].exclude = out.presets[0][1].exclude.filter(x => ![
+        'transform-regenerator',
+        process.env.REACT_APP_SERVING === 'true'? 'web.url': null,
+        process.env.REACT_APP_SERVING === 'true'? 'web.url-search-params': null,
+    ].includes(x))
     const newPlugins = [
         require('@babel/plugin-transform-modules-commonjs').default,
         require('@babel/plugin-transform-runtime').default,

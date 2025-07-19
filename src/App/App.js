@@ -88,7 +88,7 @@ const App = ({ ...rest }) => {
 
     return (
         <ErrorBoundary {...rest}>
-            <div className={newClassName} {...rest}>
+            <div {...rest} className={newClassName}>
                 <RoutablePanels {...rest} path={path} onApplicationClose={closeApp} noCloseButton>
                     <Route path='init' component={InitialPanel} {...rest} />
                     <Route path='warning' component={WarningPanel} {...rest} />

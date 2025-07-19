@@ -1,5 +1,5 @@
 
-import { gzipSync, gunzipSync } from 'fflate'
+import { gzipSync, gunzipSync } from 'fflate/esm/browser.js'
 
 /**
  * @param {String} content

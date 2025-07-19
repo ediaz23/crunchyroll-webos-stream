@@ -1,5 +1,7 @@
 /* global self */
 
+import './worker_polyfills.js'
+
 const tasks = new Map()  // taskId → { tail: Uint8Array }
 const JPEG0 = 0xff
 const JPEG1 = 0xd8

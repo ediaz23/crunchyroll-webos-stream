@@ -103,10 +103,10 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
     const rowIndexRef = useRef(viewBackup || {})
     /** @type {{current: HTMLElement}} */
     const compRef = useRef(null)
-    /** @type {[Number, Function]} */
-    const [itemHeight, setItemHeight] = useState(0)
-    /** @type {[Number, Function]} */
-    const [imageHeight, setImageHeight] = useState(0)
+    /** @type {Number} */
+    const itemHeight = useMemo(() => itemSize - ri.scale(42), [itemSize])
+    /** @type {Number} */
+    const imageHeight = useMemo(() => itemSize - ri.scale(42) * 2, [itemSize])
     /** @type {Number} */
     const itemWidth = ri.scale(320)
     /** @type {Function} */
@@ -138,14 +138,6 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
 
     const newStyle = useMemo(() => Object.assign({}, style, { height: itemSize, }), [style, itemSize])
     const newClassName = useMemo(() => `${className} ${css.homeFeedRow}`, [className])
-
-    useEffect(() => {
-        if (feedData && compRef.current) {
-            const boundingRect = compRef.current.getBoundingClientRect()
-            setItemHeight(itemSize - boundingRect.height)
-            setImageHeight(itemSize - boundingRect.height * 2)
-        }
-    }, [feedData, itemSize, setItemHeight, setImageHeight])
 
     useEffect(() => {
         let interval = null
@@ -223,7 +215,7 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
             <Heading size="title" spacing="small" componentRef={compRef} marqueeOn='hover'>
                 {feedData?.title || ''}
             </Heading>
-            <div style={{ height: `${itemHeight}px` }} className={css.feedRowContainer}>
+            <div className={css.feedRowContainer} style={{ height: `${itemHeight}px` }} >
                 {!feedData && <Spinner />}
                 {feedData && itemHeight > 0 && (
                     <VirtualListNested

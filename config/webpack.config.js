@@ -322,6 +322,7 @@ module.exports = function(
                                 'punycode',
                                 'react-dev-utils',
                                 'react-error-overlay',
+                                'quick-lru',
                             ].map(v => path.resolve(__dirname, `../node_modules/${v}`))
                         },
                         /*

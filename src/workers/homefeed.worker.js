@@ -1,5 +1,7 @@
 /* global self */
 
+import './worker_polyfills.js'
+
 /**
  * @param {import('crunchyroll-js-api').Types.HomeItem} data
  * @param {import('crunchyroll-js-api').Types.HomeItem} parent

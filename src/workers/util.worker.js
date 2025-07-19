@@ -1,5 +1,6 @@
 /* global self */
 
+import './worker_polyfills.js'
 import utilsImpl from '../utils.impl.js'
 
 

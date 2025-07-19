@@ -1,5 +1,6 @@
 /* global self */
 
+import './worker_polyfills.js'
 import QuickLRU from 'quick-lru';
 
 /**
