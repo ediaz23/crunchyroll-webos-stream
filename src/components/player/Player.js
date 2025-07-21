@@ -26,6 +26,7 @@ import emptyVideo from '../../../assets/empty.mp4'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
+//import JassubOverlay from './JassubOverlay'
 
 
 /**
@@ -216,9 +217,10 @@ const findSubtitle = async ({ langConfig, subtitles }) => {
  * @param {Function} obj.getLang
  * @param {Object} obj.content
  * @param {import('react').MutableRefObject<string>} obj.lastTokenRef
+ * @param {import('../../api/config').AppConfig} obj.appConfig
  * @returns {Promise<Stream>}
  */
-const findStream = async ({ profile, langConfig, audios, audio, getLang, content, lastTokenRef }) => {
+const findStream = async ({ profile, langConfig, audios, audio, getLang, content, lastTokenRef, appConfig }) => {
     /** @type {Stream} */
     let out = null, data = {}, urls = []
     if (_PLAY_TEST_) {  // test stream
@@ -248,7 +250,7 @@ const findStream = async ({ profile, langConfig, audios, audio, getLang, content
             data = await api.drm.getStreams(profile, { episodeId: audio.guid, type: 'music' })
         }
         lastTokenRef.current = data.token
-        if (data.hardSubs) {
+        if (appConfig.subtitle === 'hardsub' && data.hardSubs) {
             urls = Object.keys(data.hardSubs).map(locale => {
                 return { locale, url: data.hardSubs[locale].url }
             })
@@ -555,12 +557,16 @@ const createDashPlayer = async (audio, stream, content, subtitle, appConfigRef) 
     dashPlayer.extend('XHRLoader', XHRLoader)
     dashPlayer.addRequestInterceptor(modifierDashRequest(stream.profile))
     await setStreamingConfig(dashPlayer, appConfigRef)
-    url = stream.urls.find(val => val.locale === subtitle.locale)
-    if (!url) {
-        url = stream.urls.find(val => val.locale === 'off')
-    }
-    if (url) {
-        url = url.url
+    if (appConfigRef.current.subtitle === 'hardsub') {
+        url = stream.urls.find(val => val.locale === subtitle.locale)
+        if (!url) {
+            url = stream.urls.find(val => val.locale === 'off')
+        }
+        if (url) {
+            url = url.url
+        }
+    } else {
+        url = stream.urls[0].url
     }
     dashPlayer.initialize()
     dashPlayer.setAutoPlay(false)
@@ -947,7 +953,8 @@ const Player = ({ ...rest }) => {
                 audio,
                 getLang,
                 content,
-                lastTokenRef
+                lastTokenRef,
+                appConfig: appConfigRef.current
             }).then(setStream).catch(handleCrunchyError)
         }
         return () => {
@@ -1220,6 +1227,12 @@ const Player = ({ ...rest }) => {
                 onSpotlightUp={onSkipBtnNavigate}>
                 {currentSkipEvent && currentSkipEvent.title}
             </Button>
+            {/*
+            <JassubOverlay
+                subtitle={subtitle}
+                playPause={onPlayPause}
+                onError={handleCrunchyError} />
+                */}
             <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
                 {message}
             </PopupMessage>
