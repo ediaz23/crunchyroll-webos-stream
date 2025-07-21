@@ -38,9 +38,10 @@ const HomeFeed = ({ profile, homeFeed, feedType, ...rest2 }) => {
     /** @type {Function} */
     const renderRow = useCallback(({ index, ...rest }) => (
         <HomeFeedRow
+            key={`homeRow-${feedType}-${homeFeed.id}-${index}`}
             feedRow={homeFeed.items[index]}
             {...rest} />
-    ), [homeFeed])
+    ), [feedType, homeFeed])
 
     /** @type {Function} */
     const setContent = useCallback((content, rowIndex) => {

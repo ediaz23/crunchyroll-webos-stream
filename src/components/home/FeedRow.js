@@ -123,6 +123,7 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
             setContent(null, feedRow.index)
         }
     }, [feedData, setContent, feedRow])
+    const currentIndex = useRef(feedRow.index)
 
     /** @type {Function} */
     const setLocalContent = useCallback((ev) => {
@@ -184,40 +185,46 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
         }
     }, [feedData, navigateContent])
 
+    useEffect(() => {  // have to save current index and clean setFeedData for lazy load or virtualList
+        currentIndex.current = feedRow.index
+        return () => setFeedData(null)
+    }, [feedRow])
 
     useEffect(() => {
         const loadData = async () => {
-            const cacheKey = `/home/${feedType}/${feedId}/${feedRow.index}`
-            const feedItemCache = await api.utils.getCustomCache(cacheKey)
-            if (feedItemCache) {
-                setFeedData(feedItemCache)
-            } else {
+            const cacheKey = `/home/${feedType}/feed/${feedId}/${feedRow.index}`
+            let newFeedItem = await api.utils.getCustomCache(cacheKey)
+            if (!newFeedItem) {
                 try {
-                    const newFeedItem = await processItemFeed(feedRow, profile, feedType, homeFeedType)
+                    newFeedItem = await processItemFeed(feedRow, profile, feedType, homeFeedType)
                     if (newFeedItem.items.length) {
-                        setFeedData(newFeedItem)
                         if (newFeedItem.resource_type !== 'dynamic_collection') {
                             api.utils.saveCustomCache(cacheKey, newFeedItem, 3 * 60 * 60)  // 3h
                         }
                     } else {
-                        setFeedData(fakeItem)
+                        newFeedItem = fakeItem
                     }
                 } catch (_e) {
-                    setFeedData(fakeItem)
+                    newFeedItem = fakeItem
                 }
             }
+            return newFeedItem
         }
-        loadData()
+        loadData().then(newFeedItem => {
+            if (currentIndex.current === feedRow.index) {
+                setFeedData(newFeedItem)
+            }
+        })
     }, [profile, feedRow, feedType, homeFeedType, feedId, fakeItem])
 
     return (
         <div className={newClassName} style={newStyle} {...rest}>
-            <Heading size="title" spacing="small" componentRef={compRef} marqueeOn='hover'>
-                {feedData?.title || ''}
-            </Heading>
-            <div className={css.feedRowContainer} style={{ height: `${itemHeight}px` }} >
-                {!feedData && <Spinner />}
-                {feedData && itemHeight > 0 && (
+            {!feedData && <Spinner />}
+            {feedData && itemHeight > 0 && <>
+                <Heading size="title" spacing="small" componentRef={compRef} marqueeOn='hover'>
+                    {feedData?.title || ''}
+                </Heading>
+                <div className={css.feedRowContainer} style={{ height: `${itemHeight}px` }} >
                     <VirtualListNested
                         dataSize={feedData.items.length}
                         itemRenderer={HomeFeedItem}
@@ -237,8 +244,8 @@ const HomeFeedRow = ({ profile, cellId, itemSize, feedRow, rowInfo, style, class
                         horizontalScrollbar='hidden'
                         cbScrollTo={getScrollTo}
                     />
-                )}
-            </div>
+                </div>
+            </>}
         </div>
     )
 }
