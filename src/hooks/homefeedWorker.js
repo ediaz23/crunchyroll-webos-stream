@@ -223,6 +223,7 @@ const processDynamicCollection = async (carousel, profile) => {
                 return out
             })
         }
+        await api.content.calculatePlayheadProgress({ profile, episodesData: res.data })
     } else if ('browse' === carousel.response_type) {
         const hash = { q: 'quantity', season_tag: 'seasonTag', sort_by: 'sort' }
         const params = {}
