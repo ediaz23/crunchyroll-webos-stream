@@ -26,7 +26,7 @@ import emptyVideo from '../../../assets/empty.mp4'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
-//import JassubOverlay from './JassubOverlay'
+import JassubOverlay from './JassubOverlay'
 
 
 /**
@@ -880,6 +880,7 @@ const Player = ({ ...rest }) => {
 
     /** @type {Function} */
     const handleCrunchyError = useCallback((err) => {
+        logger.error(err)
         if (err instanceof CrunchyrollError) {
             if (err.httpStatus === 403) {
                 setMessage(err.message + '. ' + $L('Maybe it is a premium content.'))
@@ -1227,12 +1228,10 @@ const Player = ({ ...rest }) => {
                 onSpotlightUp={onSkipBtnNavigate}>
                 {currentSkipEvent && currentSkipEvent.title}
             </Button>
-            {/*
             <JassubOverlay
                 subtitle={subtitle}
                 playPause={onPlayPause}
                 onError={handleCrunchyError} />
-                */}
             <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
                 {message}
             </PopupMessage>
