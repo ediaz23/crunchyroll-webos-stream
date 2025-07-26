@@ -1,18 +1,24 @@
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { Row, Column } from '@enact/ui/Layout'
+import ri from '@enact/ui/resolution'
 import { Panel, Header } from '@enact/moonstone/Panels'
 import Heading from '@enact/moonstone/Heading'
 import Dropdown from '@enact/moonstone/Dropdown'
 import CheckboxItem from '@enact/moonstone/CheckboxItem'
+import Spinner from '@enact/moonstone/Spinner'
+import Item from '@enact/moonstone/Item';
 
-import { ContactMeBtn, LogoutBtn } from '../components/Buttons'
+import { ContactMeBtn, LogoutBtn, AppIconButton } from '../components/Buttons'
+import PopupMessage from '../components/Popup'
 import Field from '../components/Field'
 import { dropdownKeydown } from '../components/SelectLanguage'
+import Scroller from '../patch/Scroller'
 import css from '../components/profile/Detail.module.less'
 
 import { $L } from '../hooks/language'
 import { initCache } from '../hooks/customFetch'
+import { syncFonts, availableFonts } from '../hooks/fonts'
 import api from '../api'
 
 /**
@@ -33,6 +39,11 @@ const useSaveConfigField = ({ setAppConfig, field }) => {
 
 const AppConfigPanel = ({ noButtons, ...rest }) => {
     const [appConfig, setAppConfig] = useState(api.config.getAppConfig())
+    const [isLogged, setIsLogged] = useState(false)
+    const [loading, setLoading] = useState(false)
+    /** @type {[{type: String, message: String}, Function]}  */
+    const [message, setMessage] = useState(null)
+    const [fontList, setFontList] = useState([])
 
     /** -> UI */  // TODO: maybe hide banner?
     const saveUI = useSaveConfigField({ setAppConfig, field: 'ui' })
@@ -76,6 +87,29 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
         saveCache(caches[selected])
         initCache()
     }, [caches, saveCache])
+
+    const doSyncFonts = useCallback(async () => {
+        setLoading(true)
+        syncFonts().then(() => {
+            setMessage({ type: 'info', message: 'Okey' })
+            setFontList(Object.keys(availableFonts))
+            setTimeout(() => setMessage(null), 1500)
+        }).catch(err => {
+            if (err) {
+                setMessage({ type: 'error', message: err.message || `${err}` })
+            } else {
+                setMessage({ type: 'error', message: $L('An error occurred') })
+            }
+        }).finally(() => setLoading(false))
+    }, [setMessage, setLoading])
+
+    useEffect(() => {
+        setFontList(Object.keys(availableFonts))
+    }, [setFontList])
+
+    useEffect(() => {
+        api.auth.getSession().then(token => setIsLogged(!!token))
+    }, [])
 
     return (
         <Panel {...rest}>
@@ -139,7 +173,35 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
                             </Dropdown>
                         </Field>
                     </Column>
+                    {isLogged &&
+                        <Column className={css.formColumn}>
+                            <Heading size="large">{$L('Fonts')}</Heading>
+                            <Field size='large' title={$L('Sync')}>
+                                {loading && <Spinner />}
+                                {!loading &&
+                                    <AppIconButton
+                                        mode='full'
+                                        icon='gear'
+                                        tooltipText={$L('Sync Fonts')}
+                                        onClick={doSyncFonts}
+                                    />
+                                }
+                            </Field>
+                            <Field size='large' title={$L('Available Fonts')}>
+                                <div style={{ height: ri.scale(200), width: ri.scale(350) }}>
+                                    <Scroller direction='vertical'
+                                        horizontalScrollbar='hidden'
+                                        verticalScrollbar='visible'>
+                                        {fontList.map(item => <Item key={item}>{item}</Item>)}
+                                    </Scroller>
+                                </div>
+                            </Field>
+                        </Column>
+                    }
                 </Row>
+                <PopupMessage show={!!(message?.type)} type={message?.type}>
+                    {message?.message || 'nothing'}
+                </PopupMessage>
             </form>
         </Panel>
     )

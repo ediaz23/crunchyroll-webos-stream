@@ -26,6 +26,7 @@ import AppConfigPanel from '../views/AppConfigPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
 import useCustomFetch, { initCache, finishCache } from '../hooks/customFetch'
 import { useNavigate } from '../hooks/navigate'
+import { requestCachedFonts } from '../hooks/fonts'
 import api from '../api'
 import utils from '../utils'
 import './attachErrorHandler'
@@ -74,6 +75,7 @@ const App = ({ ...rest }) => {
             api.config.setCustomFetch(customFetch)
             await api.config.setDeviceInformation()
             await api.config.setAppConfig()
+            await requestCachedFonts()
             initCache()
             setDBInit(true)
         }

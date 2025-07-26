@@ -1,5 +1,5 @@
 
-import { localStore, CrunchyrollError } from 'crunchyroll-js-api'
+import { localStore, CrunchyrollError, utils } from 'crunchyroll-js-api'
 import Locale from 'ilib/lib/Locale'
 import { $L } from '../hooks/language'
 import { ERROR_CODES } from '../const'
@@ -11,11 +11,15 @@ export { getCustomCache, saveCustomCache, clearCache }
 /**
  * Expand a sort url
  * @param {String} url
+ * @param {RequestInit} options
+ * @param {import('crunchyroll-js-api').Types.FetchConfig} [fnConfig]
  * @return {Promise<Response>}
  */
-export const fetchAuth = async (url) => {
+export const fetchAuth = async (url, options = {}, fnConfig ={}) => {
     const token = await localStore.getAuthToken()
-    return customFetch(url, { headers: { Autorization: token } })
+    const headers = { Autorization: token }
+    headers['User-Agent'] = utils.getUserAgent()
+    return customFetch(url, { ...options, headers }, fnConfig)
 }
 
 /**

@@ -456,26 +456,15 @@ export const makeRequest = (obj, fnConfig = {}) => {
 }
 
 /**
- * @typedef FetchConfig
- * @type {Object}
- * @property {Boolean} [direct] turn on return response as raw content
- * @property {Boolean} [cache] use cache
- * @property {Boolean} [sync] turn on sync mode
- * @property {Boolean} [priority] user priority slots
- *
- * Function to bypass cors issues
- * @param {String} url
- * @param {RequestInit} [options]
- * @param {FetchConfig} [fnConfig]
- * @returns {Promise<Response>}
+ * @param {Object} obj
+ * @param {RequestInit} obj.config
+ * @param {Boolean} [obj.direct]
+ * @param {Boolean} [obj.decode]
+ * @return {{onSuccess: () => Promise, onFailure: Function, onProgress: Function, prom: Promise}}
  */
-export const customFetch = async (url, options = {}, fnConfig = {}) => {
+export const makeResponseHandle = ({ config, direct = false, decode = true }) => {
     let res, rej
-    /** @type {FetchConfig} */
-    const { direct = false, cache = true, sync = false, priority = false } = fnConfig
     const prom = new Promise((resolve, reject) => { res = resolve; rej = reject })
-    const configProm = setUpRequest(url, options, { sync })
-    const config = sync ? configProm : await configProm
     /**
      * @param {ResponseProxy} data
      */
@@ -485,12 +474,15 @@ export const customFetch = async (url, options = {}, fnConfig = {}) => {
         const { status, statusText, content, headers, resUrl, compress } = data
         logger.debug(`req ${config.method || 'get'} ${config.url} ${status}`)
         /**  @type {Uint8Array} */
-        const decodedContent = content ? await utils.decodeResponseAsync({ content, compress }) : undefined
+        let decodedContent = content
+        if (decode) {
+            decodedContent = content ? await utils.decodeResponseAsync({ content, compress }) : undefined
+        }
         if (direct) {
             if (200 <= status && status < 300) {
                 res(decodedContent)
             } else {
-                rej({ status, statusText, headers })
+                rej({ status, statusText, headers, decodedContent })
             }
         } else {
             res(new ResponseHack(decodedContent, {
@@ -514,6 +506,30 @@ export const customFetch = async (url, options = {}, fnConfig = {}) => {
             rej(error)
         }
     }
+    const onProgress = makeFetchProgress()
+    return { onSuccess, onFailure, onProgress, prom }
+}
+
+/**
+ * @typedef FetchConfig
+ * @type {Object}
+ * @property {Boolean} [direct] turn on return response as raw content
+ * @property {Boolean} [cache] use cache
+ * @property {Boolean} [sync] turn on sync mode
+ * @property {Boolean} [priority] user priority slots
+ *
+ * Function to bypass cors issues
+ * @param {String} url
+ * @param {RequestInit} [options]
+ * @param {FetchConfig} [fnConfig]
+ * @returns {Promise<Response>}
+ */
+export const customFetch = async (url, options = {}, fnConfig = {}) => {
+    /** @type {FetchConfig} */
+    const { direct = false, cache = true, sync = false, priority = false } = fnConfig
+    const configProm = setUpRequest(url, options, { sync })
+    const config = sync ? configProm : await configProm
+    const { onSuccess, onFailure, prom } = makeResponseHandle({ config, direct })
     makeRequest({ config, onFailure, onSuccess }, { sync, cache, priority })
     return prom
 }

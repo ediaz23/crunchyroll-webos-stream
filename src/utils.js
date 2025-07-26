@@ -12,12 +12,14 @@ const taskMap = new Map()
 
 worker.onmessage = ({ data }) => {
     const { taskId, result, error, success } = data
-    const { res, rej } = taskMap.get(taskId) || {}
+    const { res, rej, stack } = taskMap.get(taskId) || {}
     taskMap.delete(taskId)
 
     if (success) {
         res(result)
     } else {
+        console.error(data)
+        console.error(stack)
         rej(new Error(error))
     }
 }
@@ -37,41 +39,40 @@ export const isTv = () => !!window.PalmServiceBridge
 const callWorker = (type, ...args) => {
     return new Promise((res, rej) => {
         const taskId = `task-${++taskCounter}`
-        taskMap.set(taskId, { res, rej })
+        taskMap.set(taskId, { res, rej, stack: new Error().stack })
 
         worker.postMessage({ type, taskId, payload: args })
     })
 }
 
-export const arrayToBase64 = utilsImpl.arrayToBase64
 /**
  * @param {Uint8Array|ArrayBuffer} body
  * @returns {Promise<String>}
  */
 export const arrayToBase64Async = body => callWorker('arrayToBase64', body)
+export const arrayToBase64 = utilsImpl.arrayToBase64
 
-export const base64toArray = utilsImpl.base64toArray
 /**
  * @param {String} content
  * @returns {Promise<Uint8Array>}
  */
 export const base64toArrayAsync = content => callWorker('base64toArray', content)
+export const base64toArray = utilsImpl.base64toArray
 
-export const stringToUint8Array = utilsImpl.stringToUint8Array
 /**
  * @param {String} content
  * @returns {Promise<Uint8Array>}
  */
 export const stringToUint8ArrayAsync = content => callWorker('stringToUint8Array', content)
+export const stringToUint8Array = utilsImpl.stringToUint8Array
 
-export const uint8ArrayToString = utilsImpl.uint8ArrayToString
 /**
  * @param {Uint8Array} content
  * @returns {Promise<String>}
  */
 export const uint8ArrayToStringAsync = content => callWorker('uint8ArrayToString', content)
+export const uint8ArrayToString = utilsImpl.uint8ArrayToString
 
-export const decodeResponse = utilsImpl.decodeResponse
 /**
  * @param {Object} obj
  * @param {String} obj.content
@@ -79,14 +80,14 @@ export const decodeResponse = utilsImpl.decodeResponse
  * @return {Promise<Uint8Array>}
  */
 export const decodeResponseAsync = ({ content, compress }) => callWorker('decodeResponse', { content, compress })
+export const decodeResponse = utilsImpl.decodeResponse
 
-export const encodeRequest = utilsImpl.encodeRequest
 /**
  * @param {Object} content
  * @return {Promise<String>}
  */
 export const encodeRequestAsync = content => callWorker('encodeRequest', content)
-
+export const encodeRequest = utilsImpl.encodeRequest
 
 /**
  * Convert object to json but sort keys before
@@ -170,17 +171,19 @@ export const supportDRM = async () => {
 /**
  * Load data from local folder
  * @param {String} file
+ * @param {Boolean} ab
  * @return {Promise<Object>}
  */
-export const loadData = async (file) => {
+export const loadData = async (file, ab = false) => {
     return new Promise((res, rej) => {
         const path = webOS.fetchAppRootPath()
         const xhr = new window.XMLHttpRequest()
         xhr.open('GET', `${path}${file}`, true)
+        xhr.responseType = ab ? 'arraybuffer' : 'text'
         xhr.onload = () => {
             if (xhr.status === 0 || xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
-                    res(JSON.parse(xhr.responseText))
+                    res(ab ? xhr.response : JSON.parse(xhr.responseText))
                 } else {
                     rej(xhr)
                 }
@@ -196,10 +199,11 @@ export const loadData = async (file) => {
 /**
  * Load data from node_module
  * @param {String} file
+ * @param {Boolean} ab
  * @return {Promise<Object>}
  */
-export const loadLibData = async (file) => {
-    return loadData(`node_modules/${file}`)
+export const loadLibData = async (file, ab = false) => {
+    return loadData(`node_modules/${file}`, ab)
 }
 
 /**
