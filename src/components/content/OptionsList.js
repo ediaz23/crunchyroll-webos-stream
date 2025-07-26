@@ -9,9 +9,8 @@ import PropTypes from 'prop-types'
 import { $L } from '../../hooks/language'
 import api from '../../api'
 
-import Scroller from '../../patch/Scroller'
 import PopupMessage from '../Popup'
-import { calculatePlayheadProgress } from './Seasons'
+import Scroller from '../../patch/Scroller'
 import css from './ContentDetail.module.less'
 
 
@@ -123,7 +122,7 @@ const getNextEpisode = async (profile, content) => {
         }
         const eps = [out.firstEp, out.lastEp].filter(ep => !!ep)
         if (eps.length > 0) {
-            await calculatePlayheadProgress({ profile, episodesData: eps })
+            await api.content.calculatePlayheadProgress({ profile, episodesData: eps })
         }
         return out
     })
@@ -140,7 +139,7 @@ const getNextMovie = async (profile, content) => {
     let tmpMovie = moviesData[0]
     tmpMovie.type = 'movie'
     tmpMovie = { ...tmpMovie, ...(tmpMovie.panel || {}), panel: null }
-    await calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
+    await api.content.calculatePlayheadProgress({ profile, episodesData: [tmpMovie] })
     return tmpMovie
 }
 
