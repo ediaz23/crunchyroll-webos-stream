@@ -45,6 +45,7 @@ Field.propTypes = {
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.object,
         PropTypes.string,
+        PropTypes.node,
     ]).isRequired,
     type: PropTypes.oneOf(['text', 'image', 'input']),
     size: PropTypes.oneOf(['normal', 'small', 'large']),

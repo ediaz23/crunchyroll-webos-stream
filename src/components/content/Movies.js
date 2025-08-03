@@ -9,7 +9,6 @@ import { useViewBackup } from '../../hooks/viewBackup'
 import { ContentHeader } from '../home/ContentBanner'
 import SeasonsList from './SeasonsList'
 import EpisodesList from './EpisodesList'
-import { calculatePlayheadProgress } from './Seasons'
 import api from '../../api'
 import { getIsPremium } from '../../utils'
 
@@ -72,7 +71,7 @@ const Movies = ({ profile, contentState, isPremium, ...rest }) => {
                     })
 
                     if (movieData.length) {
-                        await calculatePlayheadProgress({ profile, episodesData: movieData })
+                        await api.content.calculatePlayheadProgress({ profile, episodesData: movieData })
                     }
                     await api.utils.saveCustomCache(cacheKey, movieData)
                     if (listingIndex === listingIndexRef.current) {

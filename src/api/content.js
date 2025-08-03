@@ -103,3 +103,33 @@ export const deleteWatchlistItem = async (profile, params) => {
     }
 }
 
+/**
+ * Caculate playhead progress
+ * @param {Object} obj
+ * @param {import('crunchyroll-js-api').Types.Profile} obj.profile
+ * @param {Array<Object>} obj.episodesData
+ */
+export const calculatePlayheadProgress = async ({ profile, episodesData }) => {
+    const epIds = episodesData.map(e => e.id)
+    const { data: data2 } = await getPlayHeads(profile, { contentIds: epIds })
+    const playheads = data2.reduce((total, value) => {
+        total[value.content_id] = value
+        return total
+    }, {})
+    for (const ep of episodesData) {
+        if (playheads[ep.id]) {
+            const duration = ep.duration_ms / 1000
+            const playhead = playheads[ep.id].fully_watched ? duration : playheads[ep.id].playhead
+            ep.playhead = {
+                ...playheads[ep.id],
+                progress: playhead / duration * 100
+            }
+        } else {
+            ep.playhead = {
+                playhead: 0,
+                fully_watched: false,
+                progress: 0,
+            }
+        }
+    }
+}
