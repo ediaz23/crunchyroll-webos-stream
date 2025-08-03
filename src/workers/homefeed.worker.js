@@ -27,6 +27,8 @@ function processNewHomefeed(data, parent) {
         newItem.link = data.props.link
     } else if (['MusicVideoCard'].includes(data.type)) {
         newItem.contentId = data.props.musicVideoId
+    } else if (['MusicConcertCard'].includes(data.type)) {
+        newItem.contentId = data.props.musicConcertId
     }
     const filteredItems = newItem.items.filter(item => (
         item.contentId ||
@@ -36,7 +38,8 @@ function processNewHomefeed(data, parent) {
             'WatchlistCollection',
             'HistoryCollection',
             'RecentEpisodesCollection',
-            'MusicVideoCollection'
+            'MusicVideoCollection',
+            'MusicConcertCollection',
         ].includes(item.type)
     ))
     if (filteredItems.length !== newItem.items.length) {

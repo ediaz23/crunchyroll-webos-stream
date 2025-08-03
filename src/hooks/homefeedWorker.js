@@ -323,15 +323,26 @@ const processItemFeedNew = async (feedItem, profile, type) => {
         HeroCollection: 'generic_card',
         HeroMediaCard: 'generic_card',
         MusicVideoCollection: 'music_video',
+        MusicConcertCollection: 'music_concert',
     }
-
-    if (['PersonalizedCollection',
+    const dynamicTypes = [
+        'PersonalizedCollection',
         'HistoryCollection',
         'WatchlistCollection',
-        'RecentEpisodesCollection'].includes(feedItem.type)) {
+        'RecentEpisodesCollection'
+    ]
+    const curatedTypes = [
+        'MediaCard',
+        'HeroCollection',
+        'HeroMediaCard',
+        'MusicVideoCollection',
+        'MusicConcertCollection'
+    ]
+
+    if (dynamicTypes.includes(feedItem.type)) {
         response_type = responseTypeMap[feedItem.type]
         res = processDynamicCollection({ ...feedItem, response_type }, profile, type)
-    } else if (['MediaCard', 'HeroCollection', 'HeroMediaCard', 'MusicVideoCollection'].includes(feedItem.type)) {
+    } else if (curatedTypes.includes(feedItem.type)) {
         response_type = responseTypeMap[feedItem.type]
         feedItem.title = feedItem.title || $L('Watch Now')
         res = processCuratedCollection({ ...feedItem, response_type, ids: feedItem.contentIds }, profile)
