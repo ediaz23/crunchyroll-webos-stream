@@ -81,11 +81,7 @@ async function makeRequest(parameters) {
 async function fetchRemoteHeaders(url) {
     logger.debug(`fonts fetchRemoteHeaders in ${url}`)
     await new Promise(wait => setTimeout(wait, 200))
-    const reqHeaders = {
-        method: 'HEAD',
-        referer: 'https://www.crunchyroll.com/webos/'
-    }
-    const res = await api.utils.fetchAuth(url, reqHeaders, { cache: false })
+    const res = await api.utils.fetchAuth(url, { method: 'HEAD' }, { cache: false })
     let out = null
     if (res.ok) {
         out = getHeadInfo(res)
@@ -123,7 +119,7 @@ async function saveFont(url, name, headers, cached) {
     if (headers?.lastModified) {
         reqHeaders['If-Modified-Since'] = headers.lastModified
     }
-    debugger;
+
     const res = await api.utils.fetchAuth(url, { headers: reqHeaders }, { cache: false })
     let payload = null
 
