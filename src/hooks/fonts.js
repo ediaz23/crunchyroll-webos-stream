@@ -10,8 +10,10 @@ import { serviceURL, makeResponseHandle } from './customFetch'
 const { webOS } = window
 
 const fontNames = [
-    'Lato-Bold.ttf',
     'Lato-Regular.ttf',
+    'Lato-Bold.ttf',
+    'Lato-Black.ttf',
+    'Lato-Heavy.ttf',
     'RobotoMono-Regular.ttf',
     'CourierPrime-Regular.ttf',
     'Gupter-Regular.ttf',
@@ -79,7 +81,11 @@ async function makeRequest(parameters) {
 async function fetchRemoteHeaders(url) {
     logger.debug(`fonts fetchRemoteHeaders in ${url}`)
     await new Promise(wait => setTimeout(wait, 200))
-    const res = await api.utils.fetchAuth(url, { method: 'HEAD' }, { cache: false })
+    const reqHeaders = {
+        method: 'HEAD',
+        referer: 'https://www.crunchyroll.com/webos/'
+    }
+    const res = await api.utils.fetchAuth(url, reqHeaders, { cache: false })
     let out = null
     if (res.ok) {
         out = getHeadInfo(res)
@@ -117,6 +123,7 @@ async function saveFont(url, name, headers, cached) {
     if (headers?.lastModified) {
         reqHeaders['If-Modified-Since'] = headers.lastModified
     }
+    debugger;
     const res = await api.utils.fetchAuth(url, { headers: reqHeaders }, { cache: false })
     let payload = null
 
