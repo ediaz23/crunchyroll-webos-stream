@@ -26,7 +26,7 @@ import emptyVideo from '../../../assets/empty.mp4'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
-import JassubOverlay from './JassubOverlay'
+import { useJassub } from './JassubOverlay'
 
 
 /**
@@ -978,6 +978,13 @@ const Player = ({ ...rest }) => {
         return () => setSubtitle(null)
     }, [profile, stream, setSubtitle])
 
+    useJassub({
+        appConfigRef,
+        subtitle,
+        playPause: onPlayPause,
+        onError: handleCrunchyError
+    })
+
     useEffect(() => {  // findSkipEvents
         if (stream.urls) {
             findSkipEvents(stream).then(setSkipEvents)
@@ -1228,10 +1235,6 @@ const Player = ({ ...rest }) => {
                 onSpotlightUp={onSkipBtnNavigate}>
                 {currentSkipEvent && currentSkipEvent.title}
             </Button>
-            <JassubOverlay
-                subtitle={subtitle}
-                playPause={onPlayPause}
-                onError={handleCrunchyError} />
             <PopupMessage show={!!message} type='error' onClose={onClosePopup}>
                 {message}
             </PopupMessage>

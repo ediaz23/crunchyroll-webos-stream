@@ -10,12 +10,17 @@ import { serviceURL, makeResponseHandle } from './customFetch'
 const { webOS } = window
 
 const fontNames = [
+    // 'Lato-Hairline.ttf',
+    // 'Lato-Thin.ttf',
+    'Lato-Light.ttf',
+    'Lato-Medium.ttf',
     'Lato-Regular.ttf',
+    'Lato-Semibold.ttf',
     'Lato-Bold.ttf',
     'Lato-Black.ttf',
     'Lato-Heavy.ttf',
     'RobotoMono-Regular.ttf',
-    'CourierPrime-Regular.ttf',
+    // 'CourierPrime-Regular.ttf', monospace keep roboto
     'Gupter-Regular.ttf',
     'Satisfy-Regular.ttf',
 ]
@@ -96,7 +101,10 @@ export async function requestCachedFonts() {
     const res = await makeRequest({ type: 'get' })
     /** @type {{fonts: Array<FontEntry>}} */
     const { fonts } = await res.json()
-    Object.assign(availableFonts, Object.fromEntries(fonts.map(f => [f.name, f])))
+
+    for (const font of fonts) {
+        availableFonts[font.name] = font
+    }
     logger.debug(`fonts fonst ${JSON.stringify(availableFonts)}`)
     logger.debug(`fonts requestCachedFonts out`)
 }
@@ -112,7 +120,9 @@ async function saveFont(url, name, headers, cached) {
     logger.debug(`fonts saveFont in ${name}`)
     await new Promise(wait => setTimeout(wait, 200))
 
-    const reqHeaders = {}
+    const reqHeaders = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0'
+    }
     if (headers?.etag) {
         reqHeaders['If-None-Match'] = headers.etag
     }
