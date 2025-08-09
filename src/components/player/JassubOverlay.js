@@ -71,7 +71,8 @@ const JassubOverlay = ({ subtitle, playPause, onError }) => {
         if (subtitle && subtitle.locale !== 'off' && canvasRef.current) {
             const loadSub = async () => {
                 const subRes = await fetchUtils.customFetch(subtitle.url)
-                const subContent = await subRes.text()
+                const decoder = new window.TextDecoder('utf-8', { fatal: false })
+                const subContent = decoder.decode(new Uint8Array(await subRes.arrayBuffer()))
                 const video = document.querySelector('video')
                 const { width, height } = video.getBoundingClientRect()
                 const fontConfig = await getFonts()
