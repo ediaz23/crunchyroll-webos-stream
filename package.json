@@ -57,7 +57,8 @@
             "ignore": [
                 "service/**",
                 "org.webosbrew.manifest.json",
-                "screenshots"
+                "screenshots",
+                "docker"
             ]
         }
     },
