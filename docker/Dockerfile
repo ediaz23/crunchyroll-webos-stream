@@ -1,5 +1,5 @@
-# Base contemporánea a Chromium 68; bionic aún tiene repos en old-releases
-FROM ubuntu:18.04
+# Usar una imagen base de Ubuntu 14.04
+FROM ubuntu:14.04
 
 # Crear un usuario no privilegiado para ejecutar Chromium
 RUN groupadd -g 1000 chromium && useradd -u 1000 -g chromium -m -d /home/chromium chromium
@@ -12,7 +12,7 @@ RUN chown chromium:chromium --recursive /home/chromium/chromium_data
 ENV DEBIAN_FRONTEND=noninteractive
 ENV GTK_THEME=Adwaita-dark
 
-# Actualizar los repositorios e instalar las dependencias mínimas necesarias para Chromium 68
+# Actualizar los repositorios e instalar las dependencias mínimas necesarias para Chromium 38
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     curl \
@@ -25,15 +25,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrandr2 \
     libasound2 \
     libnss3 \
+    gconf-service \
     libatk1.0-0 \
     libcairo2 \
     libcups2 \
-    libgtk-3-0 \
+    libgconf-2-4 \
+    libgtk2.0-0 \
     libxtst6 \
     xdg-utils \
+    libgnome-keyring0 \
     libxss1 \
-    fonts-liberation \
-    libappindicator3-1
+    gnome-themes-standard \
+    man
 
 # Copiar todos los archivos .deb desde el directorio local al contenedor
 COPY *.deb /tmp/
