@@ -10,8 +10,8 @@ import { serviceURL, makeResponseHandle } from './customFetch'
 const { webOS } = window
 
 const fontNames = [
-    // 'Lato-Hairline.ttf',
-    // 'Lato-Thin.ttf',
+    // 'Lato-Hairline.ttf',  too many
+    // 'Lato-Thin.ttf',  too many
     'Lato-Light.ttf',
     'Lato-Medium.ttf',
     'Lato-Regular.ttf',
@@ -37,8 +37,87 @@ const fontNames = [
  *
  * @type {Object.<String, FontEntry>}
  */
-export const availableFonts = {}
+const availableFonts = {}
 
+const fontsData = {
+    /** @type {Boolean} */
+    ready: false,
+    /** @type {Array<String>} */
+    names: null,
+    /** @type {Array<Uint8Array>} */
+    data: null,
+    /** @type {Promise} */
+    promise: null,
+    /** @type {String} */
+    defaultFont: null,
+}
+
+const defaultFont = new URL('jassub-webos5/default-font', import.meta.url)
+
+/**
+ * @returns {Promise}
+ */
+const loadFonts = async () => {
+    const fontMap = {}
+
+    fontsData.ready = false
+    fontsData.defaultFont = 'liberation sans'
+    fontsData.names = []
+    fontsData.data = []
+
+    if (utils.isTv()) {
+        const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
+        const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+        const liteFonts = [
+            'lato-regular.ttf',
+            'lato-bold.ttf',
+            'lato-black.ttf',
+            'robotomono-regular.ttf'
+        ]
+
+        fontMap['liberation sans'] = defaultFont.pathname.split('/').filter(Boolean).slice(1).join('/')
+        for (const entry of Object.values(availableFonts)) {
+            if (ramInGB <= 0.8) {
+                if (liteFonts.includes(entry.name)) {
+                    fontMap[entry.name] = entry.url
+                }
+            } else {
+                fontMap[entry.name] = entry.url
+            }
+        }
+    } else {
+        fontMap['liberation sans'] = defaultFont.href
+        for (const entry of Object.values(availableFonts)) {
+            fontMap[entry.name] = `${_LOCALHOST_SERVER_}/fonts?url=${encodeURIComponent(entry.url)}`
+        }
+    }
+    return Promise.all(Object.entries(fontMap).map(async ([name, url]) => {
+        fontsData.names.push(name)
+        fontsData.data.push(
+            new Uint8Array(
+                await (utils.isTv()
+                    ? utils.loadData(url, true)
+                    : (await fetch(url)).arrayBuffer()
+                )
+            )
+        )
+        if (name === 'lato-regular.ttf') {
+            fontsData.defaultFont = 'lato'
+        }
+    })).then(() => {
+        fontsData.ready = true
+    })
+}
+
+export const getFonts = async () => {
+    if (!fontsData.ready) {
+        if (!fontsData.promise) {
+            fontsData.promise = loadFonts()
+        }
+        await fontsData.promise
+    }
+    return fontsData
+}
 
 /**
  * @param {Response} res
@@ -86,7 +165,10 @@ async function makeRequest(parameters) {
 async function fetchRemoteHeaders(url) {
     logger.debug(`fonts fetchRemoteHeaders in ${url}`)
     await new Promise(wait => setTimeout(wait, 200))
-    const res = await api.utils.fetchAuth(url, { method: 'HEAD' }, { cache: false })
+    const headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0'
+    }
+    const res = await api.utils.fetchAuth(url, { method: 'HEAD', headers }, { cache: false })
     let out = null
     if (res.ok) {
         out = getHeadInfo(res)
@@ -216,4 +298,10 @@ export async function syncFonts() {
             delete availableFonts[name]
         }
     }
+    if (fontsData.promise) {
+        await fontsData.promise
+    }
+    fontsData.ready = false
+    fontsData.promise = null
+    await getFonts()
 }
