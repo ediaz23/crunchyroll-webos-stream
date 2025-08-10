@@ -24,7 +24,7 @@ xhost +local:docker
 # Ejecutar el contenedor Docker
 docker run --name "$CONTAINER_NAME" -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v "$(pwd)/user_data:/home/chromium/chromium_data" \
+  -v "$(pwd)/user_data_68:/home/chromium/chromium_data" \
   --privileged --shm-size=3g -it chromium-68
 
 cleanup
