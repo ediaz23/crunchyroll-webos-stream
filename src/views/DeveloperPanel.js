@@ -155,6 +155,30 @@ const DeveloperPanel = (props) => {
         })
     }, [runTest])
 
+    const onTestWasm = useCallback(() => {
+        runTest(async () => {
+            let out = 'WASM: no soportado'
+            if ('WebAssembly' in window) {
+                const bytes = new Uint8Array([
+                    0x00, 0x61, 0x73, 0x6D, 0x01, 0x00, 0x00, 0x00,        // magic + version
+                    0x01, 0x05, 0x01, 0x60, 0x00, 0x01, 0x7F,              // Type: 1 type (func [] -> i32)
+                    0x03, 0x02, 0x01, 0x00,                                // Function: 1 function (type 0)
+                    0x07, 0x07, 0x01, 0x03, 0x66, 0x6F, 0x6F, 0x00, 0x00,  // Export: 1, name "foo", func 0
+                    0x0A, 0x06, 0x01, 0x04, 0x00, 0x41, 0x2A, 0x0B         // Code: 1 body, size 4, (i32.const 42; end)
+                ]);
+
+                try {
+                    const { instance } = await WebAssembly.instantiate(bytes)
+                    out = `WASM soportado, foo() = ${instance.exports.foo()}`
+                } catch (e) {
+                    out = `WASM fallo: ${e}`
+                }
+            }
+            return out
+        })
+    }, [runTest])
+
+
     return (
         <Panel {...props}>
             <Header title="Developer Options" hideLine />
@@ -189,6 +213,9 @@ const DeveloperPanel = (props) => {
                         </Button>
                         <Button style={btnStyle} onClick={onTestGetHomefeed}>
                             {$L('Show Homefeed')}
+                        </Button>
+                        <Button style={btnStyle} onClick={onTestWasm}>
+                            {$L('Wasm?')}
                         </Button>
                     </Cell>
                     <Cell>

@@ -18,7 +18,7 @@ import css from '../components/profile/Detail.module.less'
 
 import { $L } from '../hooks/language'
 import { initCache } from '../hooks/customFetch'
-import { syncFonts, availableFonts } from '../hooks/fonts'
+import { syncFonts, getFonts } from '../hooks/fonts'
 import api from '../api'
 
 /**
@@ -90,21 +90,23 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
 
     const doSyncFonts = useCallback(async () => {
         setLoading(true)
-        syncFonts().then(() => {
-            setMessage({ type: 'info', message: 'Okey' })
-            setFontList(Object.keys(availableFonts))
-            setTimeout(() => setMessage(null), 1500)
-        }).catch(err => {
-            if (err) {
-                setMessage({ type: 'error', message: err.message || `${err}` })
-            } else {
-                setMessage({ type: 'error', message: $L('An error occurred') })
-            }
-        }).finally(() => setLoading(false))
+        syncFonts()
+            .then(() => getFonts())
+            .then(fontsData => {
+                setMessage({ type: 'info', message: 'Okey' })
+                setFontList(fontsData.names)
+                setTimeout(() => setMessage(null), 1500)
+            }).catch(err => {
+                if (err) {
+                    setMessage({ type: 'error', message: err.message || `${err}` })
+                } else {
+                    setMessage({ type: 'error', message: $L('An error occurred') })
+                }
+            }).finally(() => setLoading(false))
     }, [setMessage, setLoading])
 
     useEffect(() => {
-        setFontList(Object.keys(availableFonts))
+        getFonts().then(fontsData => setFontList(fontsData.names))
     }, [setFontList])
 
     useEffect(() => {
