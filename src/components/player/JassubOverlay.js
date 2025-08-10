@@ -59,6 +59,7 @@ export const useJassub = ({ appConfigRef, subtitle, playPause, onError }) => {
                         blendMode: 'js',
                         workerUrl: JassubWorker.href,
                         legacyWasmUrl: JassubWorkerWasm.href,
+                        dropAllBlur: true,
                     })
                     jassubRef.current.addEventListener('ready', res)
                     jassubRef.current.addEventListener('error', rej)
