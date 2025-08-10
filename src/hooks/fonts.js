@@ -92,9 +92,10 @@ const loadFonts = async () => {
             })
     )
     proms.push(
-        fetch(defaultFont.href)
-            .then(r => r.arrayBuffer())
-            .then(ab => ({ name: 'liberation sans', data: new Uint8Array(ab) }))
+        (utils.isTv()
+            ? utils.loadData(defaultFont.href, true)
+            : fetch(defaultFont.href).then(r => r.arrayBuffer())
+        ).then(ab => ({ name: 'liberation sans', data: new Uint8Array(ab) }))
     )
     await Promise.all(proms).then(fonts => fonts.filter(f => !!f)).then(fonts => {
         fonts.sort((a, b) => a.name.localeCompare(b.name))
