@@ -25,19 +25,27 @@ const fontNames = [
     'Satisfy-Regular.ttf',
 ]
 
+const liteFontNames = [
+    'lato-regular.ttf',
+    'lato-bold.ttf',
+    'lato-black.ttf',
+    'robotomono-regular.ttf'
+]
+
 /**
  * @typedef FontEntry
  * @type {Object}
  * @property {String} name
- * @property {String} url
  * @property {String} [etag]
  * @property {String} [lastModified]
  * @property {String} [contentType]
  * @property {String} [contentLength]
- *
- * @type {Object.<String, FontEntry>}
  */
-const availableFonts = {}
+
+/**
+ * @type {Object.<string, FontEntry>}
+ */
+const availableFonts = {};
 
 const fontsData = {
     /** @type {Boolean} */
@@ -58,55 +66,45 @@ const defaultFont = new URL('jassub-webos5/default-font', import.meta.url)
  * @returns {Promise}
  */
 const loadFonts = async () => {
-    const fontMap = {}
-
     fontsData.ready = false
-    fontsData.defaultFont = 'liberation sans'
     fontsData.names = []
     fontsData.data = []
+
+    let isFontValid = () => true
 
     if (utils.isTv()) {
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
         const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
-        const liteFonts = [
-            'lato-regular.ttf',
-            'lato-bold.ttf',
-            'lato-black.ttf',
-            'robotomono-regular.ttf'
-        ]
-
-        fontMap['liberation sans'] = defaultFont.pathname.split('/').filter(Boolean).slice(1).join('/')
-        for (const entry of Object.values(availableFonts)) {
-            if (ramInGB <= 0.8) {
-                if (liteFonts.includes(entry.name)) {
-                    fontMap[entry.name] = entry.url
-                }
-            } else {
-                fontMap[entry.name] = entry.url
-            }
-        }
-    } else {
-        fontMap['liberation sans'] = defaultFont.href
-        for (const entry of Object.values(availableFonts)) {
-            fontMap[entry.name] = `${_LOCALHOST_SERVER_}/fonts?url=${encodeURIComponent(entry.url)}`
+        if (ramInGB <= 0.8) {
+            isFontValid = entry => liteFontNames.includes(entry.name)
         }
     }
-    return Promise.all(Object.entries(fontMap).map(async ([name, url]) => {
-        fontsData.names.push(name)
-        fontsData.data.push(
-            new Uint8Array(
-                await (utils.isTv()
-                    ? utils.loadData(url, true)
-                    : (await fetch(url)).arrayBuffer()
-                )
-            )
-        )
-        if (name === 'lato-regular.ttf') {
-            fontsData.defaultFont = 'lato'
+    const proms = Object.values(availableFonts).filter(isFontValid).map(entry =>
+        makeRequest({ type: 'get_detail', entry })
+            .then(res => res.json())
+            .then(async ({ fonts }) => ({
+                name: entry.name,
+                data: await utils.base64toArrayAsync(fonts[0].data)
+            }))
+            .catch(err => {
+                logger.error('error getting fonts', err)
+                return null
+            })
+    )
+    proms.push(
+        fetch(defaultFont.href)
+            .then(r => r.arrayBuffer())
+            .then(ab => ({ name: 'liberation sans', data: new Uint8Array(ab) }))
+    )
+    await Promise.all(proms).then(fonts => fonts.filter(f => !!f)).then(fonts => {
+        fonts.sort((a, b) => a.name.localeCompare(b.name))
+        for (const font of fonts) {
+            fontsData.data.push(font.data)
+            fontsData.names.push(font.name)
         }
-    })).then(() => {
-        fontsData.ready = true
     })
+    fontsData.defaultFont = fontsData.names.includes('lato-regular.ttf') ? 'lato' : fontsData.defaultFont
+    fontsData.ready = true
 }
 
 export const getFonts = async () => {
@@ -222,10 +220,7 @@ async function saveFont(url, name, headers, cached) {
         payload = { name, ...getHeadInfo(res) }
         const buf = await res.arrayBuffer()
         const fontData = utils.arrayToBase64(buf)
-        const resSave = await makeRequest({ type: 'upsert', entry: payload, data: fontData })
-        /** @type {{fonts: Array<FontEntry>}} */
-        const { fonts } = await resSave.json()
-        payload.url = fonts[0].url
+        await makeRequest({ type: 'upsert', entry: payload, data: fontData })
         logger.debug(`fonts saveFont ${name} save`)
     } else {
         await deleteFont(name)

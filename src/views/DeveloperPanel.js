@@ -160,12 +160,12 @@ const DeveloperPanel = (props) => {
             let out = 'WASM: no soportado'
             if ('WebAssembly' in window) {
                 const bytes = new Uint8Array([
-                    0, 97, 115, 109, 1, 0, 0, 0,      // encabezado WASM
-                    1, 4, 1, 96, 0, 1, 127,           // sección tipo: func sin args, retorna i32
-                    3, 2, 1, 0,                       // sección funciones: 1 función tipo 0
-                    7, 7, 1, 3, 102, 111, 111, 0, 0,  // exporta "foo" como función 0
-                    10, 9, 1, 7, 0, 65, 42, 11        // cuerpo: push 42 y retornar
-                ])
+                    0x00, 0x61, 0x73, 0x6D, 0x01, 0x00, 0x00, 0x00,        // magic + version
+                    0x01, 0x05, 0x01, 0x60, 0x00, 0x01, 0x7F,              // Type: 1 type (func [] -> i32)
+                    0x03, 0x02, 0x01, 0x00,                                // Function: 1 function (type 0)
+                    0x07, 0x07, 0x01, 0x03, 0x66, 0x6F, 0x6F, 0x00, 0x00,  // Export: 1, name "foo", func 0
+                    0x0A, 0x06, 0x01, 0x04, 0x00, 0x41, 0x2A, 0x0B         // Code: 1 body, size 4, (i32.const 42; end)
+                ]);
 
                 try {
                     const { instance } = await WebAssembly.instantiate(bytes)

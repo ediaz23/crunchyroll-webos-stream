@@ -178,7 +178,11 @@ export const loadData = async (file, ab = false) => {
     return new Promise((res, rej) => {
         const path = webOS.fetchAppRootPath()
         const xhr = new window.XMLHttpRequest()
-        xhr.open('GET', `${path}${file}`, true)
+        if (file.startsWith('file://')) {
+            xhr.open('GET', file, true)
+        } else {
+            xhr.open('GET', `${path}${file}`, true)
+        }
         xhr.responseType = ab ? 'arraybuffer' : 'text'
         xhr.onload = () => {
             if (xhr.status === 0 || xhr.readyState === 4) {
