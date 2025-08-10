@@ -54,6 +54,7 @@ export const useJassub = ({ appConfigRef, subtitle, playPause, onError }) => {
                         subContent,
                         fonts: fonts.data,
                         fallbackFont: fonts.defaultFont,
+                        timeOffset: 0.3,
                         libassMemoryLimit,
                         libassGlyphLimit,
                         blendMode: 'js',

@@ -97,7 +97,7 @@
         "i18n-iso-countries": "^7.14.0",
         "i18n-iso-m49": "^1.0.0",
         "ilib": "^14.21.1",
-        "jassub-webos5": "^1.8.601-3",
+        "jassub-webos5": "^1.8.601-4",
         "prop-types": "^15.8.1",
         "quick-lru": "~5.1.1",
         "react": "^18.2.0",
