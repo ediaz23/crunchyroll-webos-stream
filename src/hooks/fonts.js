@@ -1,10 +1,12 @@
 
 import 'webostvjs'
+import ri from '@enact/ui/resolution'
+import Jassub from 'jassub-webos5'
 import api from '../api'
 import logger from '../logger'
 import utils from '../utils'
 import { _LOCALHOST_SERVER_ } from '../const'
-import { serviceURL, makeResponseHandle } from './customFetch'
+import { serviceURL, makeResponseHandle, customFetch } from './customFetch'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -116,6 +118,93 @@ export const getFonts = async () => {
         await fontsData.promise
     }
     return fontsData
+}
+
+/** @type {import('jassub-webos5').default} */
+let jassubObj = null
+const JassubWorker = new URL('jassub-webos5/modern/jassub.worker.min.js', import.meta.url)
+const JassubWorkerWasm = new URL('jassub-webos5/modern/worker.min.wasm', import.meta.url)
+
+const getMemoryLimits = async () => {
+    let libassMemoryLimit = 24, libassGlyphLimit = 2
+
+    if (utils.isTv()) {
+        const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
+        const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+
+        if (ramInGB <= 0.8) {
+            libassMemoryLimit = 8
+            libassGlyphLimit = 1
+        }
+    }
+
+    return { libassMemoryLimit, libassGlyphLimit }
+}
+
+/**
+ * create or reuse sub worker
+ * @param {HTMLVideoElement} video
+ * @param {String} subUrl
+ */
+export const createSubWorker = async (video, subUrl) => {
+    let resolve, reject
+    const prom = new Promise((res, rej) => { resolve = res; reject = rej })
+    const subRes = await customFetch(subUrl)
+    const subContent = await subRes.text()
+    if (jassubObj) {
+        jassubObj.setNewContext({ video, subContent }).then(resolve).catch(reject)
+    } else {
+        const { libassMemoryLimit, libassGlyphLimit } = await getMemoryLimits()
+        const fonts = await getFonts()
+        jassubObj = new Jassub({
+            video,
+            subContent,
+            fonts: fonts.data,
+            fallbackFont: fonts.defaultFont,
+            timeOffset: 0.3,
+            libassMemoryLimit,
+            libassGlyphLimit,
+            blendMode: 'wasm',
+            workerUrl: JassubWorker.href,
+            wasmUrl: JassubWorkerWasm.href,
+        })
+        jassubObj.addEventListener('ready', resolve, { once: true })
+        jassubObj.addEventListener('error', reject, { once: true })
+        prom.then(() => {
+            // free memory
+            fonts.data = null
+            fonts.names = null
+            fonts.promise = null
+            fonts.ready = false
+        })
+    }
+    return prom.then(() => new Promise(res => {
+        if (jassubObj) {
+            jassubObj.getStyles((error, styles) => {
+                if (error) {
+                    logger.error('jassub get styles')
+                    logger.error(error)
+                }
+                if (utils.isTv()) {
+                    styles.forEach((st, i) => {
+                        const outline = Math.max(ri.scale(st.Outline || 0) + ri.scale(7), ri.scale(2))
+                        jassubObj.setStyle({ ...st, Outline: outline, BorderStyle: 1, OutlineColour: 0x000000 }, i)
+                    })
+                }
+                res()
+            })
+        } else {
+            res()
+        }
+    }))
+}
+
+/**
+ * Destroy current sub worker
+ */
+export const destroySubWorker = () => {
+    jassubObj?.destroy()
+    jassubObj = null
 }
 
 /**

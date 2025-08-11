@@ -26,7 +26,7 @@ import AppConfigPanel from '../views/AppConfigPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
 import useCustomFetch, { initCache, finishCache } from '../hooks/customFetch'
 import { useNavigate } from '../hooks/navigate'
-import { requestCachedFonts, getFonts } from '../hooks/fonts'
+import { requestCachedFonts, getFonts, destroySubWorker } from '../hooks/fonts'
 import api from '../api'
 import utils from '../utils'
 import './attachErrorHandler'
@@ -84,6 +84,7 @@ const App = ({ ...rest }) => {
         return () => {
             utils.worker.terminate()
             finishCache()
+            destroySubWorker()
         }
     }, [setDBInit, customFetch])
 
