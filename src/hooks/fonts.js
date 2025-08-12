@@ -1,6 +1,5 @@
 
 import 'webostvjs'
-import ri from '@enact/ui/resolution'
 import Jassub from 'jassub-webos5'
 import api from '../api'
 import logger from '../logger'
@@ -142,6 +141,24 @@ const getMemoryLimits = async () => {
 }
 
 /**
+ * @TODO ajustar por el tamaño de la fuente
+ * @param {Object} obj
+ * @param {Number} obj.screenHeight
+ * @param {import('jassub-webos5').ASS_Style} obj.style
+ * @returns {Number}
+ */
+function adjustOutline({ screenHeight, style }) {
+    let out = style.Outline
+    if ((style.Outline || 0) <= 3) {
+        const base = Math.max((style.Outline || 0), 1)
+        const factor0 = screenHeight / (2160 / 10)
+        const atten = 1 / (1 + (style.Outline || 0))
+        out = Math.round(base * (factor0 * atten))
+    }
+    return out
+}
+
+/**
  * create or reuse sub worker
  * @param {HTMLVideoElement} video
  * @param {String} subUrl
@@ -185,13 +202,21 @@ export const createSubWorker = async (video, subUrl) => {
                     logger.error('jassub get styles')
                     logger.error(error)
                 }
-                if (utils.isTv()) {
-                    styles.forEach((st, i) => {
-                        const outline = Math.max(ri.scale(st.Outline || 0) + ri.scale(7), ri.scale(2))
-                        jassubObj.setStyle({ ...st, Outline: outline, BorderStyle: 1, OutlineColour: 0x000000 }, i)
+                if (!error && utils.isTv()) {
+                    webOS.deviceInfo(info => {
+                        styles.forEach((st, i) => {
+                            jassubObj.setStyle({
+                                ...st,
+                                Outline: adjustOutline({ screenHeight: info.screenHeight, style: st }),
+                                BorderStyle: 1,
+                                OutlineColour: 0x000000
+                            }, i)
+                        })
+                        res()
                     })
+                } else {
+                    res()
                 }
-                res()
             })
         } else {
             res()
