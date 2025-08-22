@@ -118,6 +118,16 @@ const DeveloperPanel = (props) => {
         })
     }, [runTest])
 
+    const onForceReloadSession = useCallback(() => {
+        runTest(async () => {
+            let out = await api.auth.forceReloadSession()
+            if (!out) {
+                out = $L('No session stored')
+            }
+            return out
+        })
+    }, [runTest])
+
     const onTestLogin = useCallback(() => {
         runTest(async () => {
             await api.auth.login()
@@ -201,6 +211,9 @@ const DeveloperPanel = (props) => {
                         </Button>
                         <Button style={btnStyle} onClick={onShowSession}>
                             {$L('Show session')}
+                        </Button>
+                        <Button style={btnStyle} onClick={onForceReloadSession}>
+                            {$L('Force Reload session')}
                         </Button>
                         <Button style={btnStyle} onClick={onTestLogin}>
                             {$L('Test login')}

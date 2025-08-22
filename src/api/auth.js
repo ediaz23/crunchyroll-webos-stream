@@ -36,6 +36,19 @@ export const getCredentials = async () => storage.credential
 export const getSession = async () => storage.token
 
 /**
+ * Force reload session
+ * @returns {Promise<import('crunchyroll-js-api').Types.TokenObj>}
+ */
+export const forceReloadSession = async () => {
+    if (storage.token) {
+        await api.auth.revokeRefreshToken({ refreshToken: storage.token.accessToken })
+        storage.token.expiresIn = 0
+        await localStore.getAuthToken()
+    }
+    return storage.token
+}
+
+/**
  * Send a login request
  * @returns {Promise<import('crunchyroll-js-api').Types.TokenObj>}
  */
