@@ -1,4 +1,5 @@
 
+import emptyImg from '../../assets/img/empty.jpg'
 
 /**
  * @param {Object} obj
@@ -26,7 +27,12 @@ const getImagePerResolution = ({ width, height, content, mode }) => {
             } else if (content.images.thumbnail) {
                 images = content.images.thumbnail
             } else {
-                throw new Error('Image not handle')
+                images = [{
+                    source: emptyImg,
+                    height: 180,
+                    width: 320,
+                    type: 'poster_wide',
+                }]
             }
         }
         images = Array.isArray(images[0]) ? images[0] : images

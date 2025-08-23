@@ -20,13 +20,13 @@ import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
+import { createSubWorker } from '../../hooks/fonts'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../assets/empty.mp4'
 import { _PLAY_TEST_, _LOCALHOST_SERVER_ } from '../../const'
 import XHRLoader from '../../patch/XHRLoader'
 import utils from '../../utils'
-import { useJassub } from './JassubOverlay'
 
 
 /**
@@ -978,12 +978,15 @@ const Player = ({ ...rest }) => {
         return () => setSubtitle(null)
     }, [profile, stream, setSubtitle])
 
-    useJassub({
-        appConfigRef,
-        subtitle,
-        playPause: onPlayPause,
-        onError: handleCrunchyError
-    })
+    useEffect(() => {
+        if (appConfigRef.current.subtitle === 'softsub' && subtitle && subtitle.locale !== 'off') {
+            const video = document.querySelector('video')
+            onPlayPause()
+            createSubWorker(video, subtitle.url)
+                .then(onPlayPause)
+                .catch(handleCrunchyError)
+        }
+    }, [appConfigRef, subtitle, onPlayPause, handleCrunchyError])
 
     useEffect(() => {  // findSkipEvents
         if (stream.urls) {

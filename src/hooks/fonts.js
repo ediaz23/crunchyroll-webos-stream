@@ -1,10 +1,11 @@
 
 import 'webostvjs'
+import Jassub from 'jassub-webos5/legacy'
 import api from '../api'
 import logger from '../logger'
 import utils from '../utils'
 import { _LOCALHOST_SERVER_ } from '../const'
-import { serviceURL, makeResponseHandle } from './customFetch'
+import { serviceURL, makeResponseHandle, customFetch } from './customFetch'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -116,6 +117,125 @@ export const getFonts = async () => {
         await fontsData.promise
     }
     return fontsData
+}
+
+/** @type {import('jassub-webos5').default} */
+let jassubObj = null
+const JassubWorker = new URL('jassub-webos5/legacy/jassub.worker.min.js', import.meta.url)
+const JassubWorkerWasm = new URL('jassub-webos5/legacy/worker.min.js', import.meta.url)
+
+const getMemoryLimits = async () => {
+    let libassMemoryLimit = 24, libassGlyphLimit = 2
+
+    if (utils.isTv()) {
+        const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
+        const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+
+        if (ramInGB <= 0.8) {
+            libassMemoryLimit = 8
+            libassGlyphLimit = 1
+        }
+    }
+
+    return { libassMemoryLimit, libassGlyphLimit }
+}
+
+/**
+ * @param {Object} obj
+ * @param {Number} obj.screenHeight
+ * @param {import('jassub-webos5').ASS_Style} obj.style
+ * @returns {Number}
+ */
+function adjustOutline({ screenHeight, style }) {
+    let out = style.Outline
+    if ((style.Outline || 0) <= 3) {
+        const base = Math.max((style.Outline || 0), 1)
+        const factor0 = screenHeight / (2160 / 10)
+        const atten = 1 / (1 + (style.Outline || 0))
+        out = Math.round(base * (factor0 * atten))
+    }
+    return out
+}
+
+/**
+ * create or reuse sub worker
+ * @param {HTMLVideoElement} video
+ * @param {String} subUrl
+ */
+export const createSubWorker = async (video, subUrl) => {
+    let resolve, reject
+    const prom = new Promise((res, rej) => { resolve = res; reject = rej })
+    const subRes = await customFetch(subUrl)
+    const decoder = new window.TextDecoder('utf-8', { fatal: false })
+    const subContent = decoder.decode(new Uint8Array(await subRes.arrayBuffer()))
+    if (jassubObj) {
+        jassubObj.setNewContext({ video, subContent }).then(resolve).catch(reject)
+    } else {
+        const { libassMemoryLimit, libassGlyphLimit } = await getMemoryLimits()
+        const fonts = await getFonts()
+        jassubObj = new Jassub({
+            video,
+            subContent,
+            fonts: fonts.data,
+            fallbackFont: fonts.defaultFont,
+            timeOffset: 0.3,
+            libassMemoryLimit,
+            libassGlyphLimit,
+            blendMode: 'js',
+            workerUrl: JassubWorker.href,
+            legacyWasmUrl: JassubWorkerWasm.href,
+            dropAllBlur: true,
+        })
+        jassubObj.addEventListener('ready', resolve, { once: true })
+        jassubObj.addEventListener('error', reject, { once: true })
+        prom.then(() => {
+            // free memory
+            fonts.data = null
+            fonts.names = null
+            fonts.promise = null
+            fonts.ready = false
+        })
+    }
+    return prom.then(() => new Promise(res => {
+        if (jassubObj) {
+            jassubObj.getStyles((error, styles) => {
+                if (error) {
+                    logger.error('jassub get styles')
+                    logger.error(error)
+                }
+                if (!error) {
+                    const setOutline = info => {
+                        styles.forEach((st, i) => {
+                            jassubObj.setStyle({
+                                ...st,
+                                Outline: adjustOutline({ screenHeight: info.screenHeight, style: st }),
+                                BorderStyle: 1,
+                                OutlineColour: 0x000000
+                            }, i)
+                        })
+                        res()
+                    }
+                    if (utils.isTv()) {
+                        webOS.deviceInfo(setOutline)
+                    } else {
+                        setOutline({ screenHeight: 2160 })
+                    }
+                } else {
+                    res()
+                }
+            })
+        } else {
+            res()
+        }
+    }))
+}
+
+/**
+ * Destroy current sub worker
+ */
+export const destroySubWorker = () => {
+    jassubObj?.destroy()
+    jassubObj = null
 }
 
 /**

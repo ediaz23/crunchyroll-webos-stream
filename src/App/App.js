@@ -26,7 +26,7 @@ import AppConfigPanel from '../views/AppConfigPanel'
 import DeveloperPanel from '../views/DeveloperPanel'
 import useCustomFetch, { initCache, finishCache } from '../hooks/customFetch'
 import { useNavigate } from '../hooks/navigate'
-import { requestCachedFonts, getFonts } from '../hooks/fonts'
+import { requestCachedFonts, getFonts, destroySubWorker } from '../hooks/fonts'
 import api from '../api'
 import utils from '../utils'
 import css from './App.module.less'
@@ -74,6 +74,7 @@ const App = ({ ...rest }) => {
     useEffect(() => {
         const initDB = async () => {
             await api.config.init()
+            api.config.setUserAgent()
             api.config.setCustomFetch(customFetch)
             await api.config.setDeviceInformation()
             await api.config.setAppConfig()
@@ -86,6 +87,7 @@ const App = ({ ...rest }) => {
         return () => {
             utils.worker.terminate()
             finishCache()
+            destroySubWorker()
         }
     }, [setDBInit, customFetch])
 

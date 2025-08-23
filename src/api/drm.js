@@ -17,7 +17,13 @@ export const getStreams = async (profile, params) => {
     let out = null
     try {
         const account = await getContentParam(profile)
-        out = await api.drm.getStream({ account, fnConfig: { cache: false, priority: true }, ...params })
+        out = await api.drm.getStream({
+            account,
+            fnConfig: { cache: false, priority: true },
+            plataform: 'tv',  // i don't like it
+            browser: 'lg',
+            ...params
+        })
     } catch (error) {
         await translateError(error)
     }

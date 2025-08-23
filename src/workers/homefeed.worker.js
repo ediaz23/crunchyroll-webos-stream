@@ -45,7 +45,7 @@ function processNewHomefeed(data, parent) {
         ].includes(item.type)
     ))
     if (filteredItems.length !== newItem.items.length) {
-        console.log('homefeedWorker', 'filtered', newItem.items.filter(i => !filteredItems.includes(i)))
+        console.log('homefeedWorker', 'filtered', JSON.stringify(newItem.items.filter(i => !filteredItems.includes(i))))
     }
     newItem.items = filteredItems
     return newItem
