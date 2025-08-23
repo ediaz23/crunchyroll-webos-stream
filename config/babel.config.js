@@ -7,8 +7,8 @@ module.exports = function(api) {
     out.presets[0][1].corejs = '3.39'
     out.presets[0][1].exclude = out.presets[0][1].exclude.filter(x => ![
         'transform-regenerator',
-        process.env.REACT_APP_SERVING === 'true'? 'web.url': null,
-        process.env.REACT_APP_SERVING === 'true'? 'web.url-search-params': null,
+        process.env.REACT_APP_SERVING === 'true' ? 'web.url' : null,
+        process.env.REACT_APP_SERVING === 'true' ? 'web.url-search-params' : null,
     ].includes(x))
     const newPlugins = [
         require('@babel/plugin-transform-modules-commonjs').default,
@@ -17,7 +17,7 @@ module.exports = function(api) {
     out.plugins = [
         ...out.plugins.filter(plugin => {
             let out = true
-            if(Array.isArray(plugin)) {
+            if (Array.isArray(plugin)) {
                 out = !newPlugins.includes(plugin[0])
             } else {
                 out = !newPlugins.includes(plugin)
@@ -26,6 +26,6 @@ module.exports = function(api) {
         }),
         ...newPlugins
     ]
-    out.sourceMaps = true // Habilita los mapas de origen
+    out.sourceMaps = process.env.GENERATE_SOURCEMAP !== 'false'
     return out
 }

@@ -204,16 +204,16 @@ const DeveloperPanel = (props) => {
                             {$L('Clear')}
                         </Button>
                         <Button style={btnStyle} onClick={onShowPassword}>
-                            {$L('Show credentials')}
+                            {$L('Show Credentials')}
                         </Button>
                         <Button style={btnStyle} onClick={onTestService}>
                             {$L('Test Service Up')}
                         </Button>
                         <Button style={btnStyle} onClick={onShowSession}>
-                            {$L('Show session')}
+                            {$L('Show Session')}
                         </Button>
                         <Button style={btnStyle} onClick={onForceReloadSession}>
-                            {$L('Force Reload session')}
+                            {$L('Force Reload Session')}
                         </Button>
                         <Button style={btnStyle} onClick={onTestLogin}>
                             {$L('Test login')}
@@ -222,7 +222,7 @@ const DeveloperPanel = (props) => {
                             {$L('List Account Benefits')}
                         </Button>
                         <Button style={btnStyle} onClick={onTestGetProfiles}>
-                            {$L('Show profiles')}
+                            {$L('Show Profiles')}
                         </Button>
                         <Button style={btnStyle} onClick={onTestGetHomefeed}>
                             {$L('Show Homefeed')}
