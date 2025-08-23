@@ -37,6 +37,12 @@ export const setCustomFetch = (fetchFn) => {
     crunchUtils.setFetchFunction(fetchFn)
 }
 
+export const setUserAgent = (newUserAgent) => {
+    crunchUtils.setUserAgent(
+        newUserAgent || 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0'
+    )
+}
+
 /**
  * Return if it is new installation
  * @return {Promise<Boolean>}

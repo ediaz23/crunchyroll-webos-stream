@@ -72,6 +72,7 @@ const App = ({ ...rest }) => {
     useEffect(() => {
         const initDB = async () => {
             await api.config.init()
+            api.config.setUserAgent()
             api.config.setCustomFetch(customFetch)
             await api.config.setDeviceInformation()
             await api.config.setAppConfig()

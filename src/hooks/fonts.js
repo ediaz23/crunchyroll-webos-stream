@@ -141,7 +141,6 @@ const getMemoryLimits = async () => {
 }
 
 /**
- * @TODO ajustar por el tamaño de la fuente
  * @param {Object} obj
  * @param {Number} obj.screenHeight
  * @param {import('jassub-webos5').ASS_Style} obj.style
@@ -202,8 +201,8 @@ export const createSubWorker = async (video, subUrl) => {
                     logger.error('jassub get styles')
                     logger.error(error)
                 }
-                if (!error && utils.isTv()) {
-                    webOS.deviceInfo(info => {
+                if (!error) {
+                    const setOutline = info => {
                         styles.forEach((st, i) => {
                             jassubObj.setStyle({
                                 ...st,
@@ -213,7 +212,12 @@ export const createSubWorker = async (video, subUrl) => {
                             }, i)
                         })
                         res()
-                    })
+                    }
+                    if (utils.isTv()) {
+                        webOS.deviceInfo(setOutline)
+                    } else {
+                        setOutline({ screenHeight: 2160 })
+                    }
                 } else {
                     res()
                 }
