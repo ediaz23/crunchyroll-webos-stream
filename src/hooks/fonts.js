@@ -177,7 +177,7 @@ export const createSubWorker = async (video, subUrl) => {
             subContent,
             fonts: fonts.data,
             fallbackFont: fonts.defaultFont,
-            timeOffset: 0.3,
+            timeOffset: 0.2,
             libassMemoryLimit,
             libassGlyphLimit,
             blendMode: 'wasm',
