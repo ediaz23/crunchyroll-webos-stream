@@ -1,4 +1,5 @@
 
+import 'url-search-params-polyfill';
 import 'core-js/web/url-search-params';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';

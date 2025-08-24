@@ -26,6 +26,6 @@ docker run --name "$CONTAINER_NAME" -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v "$(pwd)/user_data_38:/home/chromium/chromium_data" \
   -v "$(pwd)/..:/home/chromium/project" \
-  --privileged --shm-size=3g -it chromium-38 --allow-file-access-from-files
+  --privileged --shm-size=4g -it chromium-38 --allow-file-access-from-files
 
 cleanup
