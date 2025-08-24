@@ -4,7 +4,7 @@ import path from 'path'
 import gulp from 'gulp'
 import crypto from 'crypto'
 import { deleteAsync } from 'del'
-import { exec } from 'child_process'
+import { exec, spawn } from 'child_process'
 import packageJson from './package.json' assert { type: 'json' }
 import appInfo from './webos-meta/appinfo.json' assert { type: 'json' }
 import ilibmanifest from './resources/ilibmanifest.json' assert { type: 'json' }
@@ -118,7 +118,7 @@ var _increment = function increment(state) {  // crunchypatch
     } catch (err) {
         return handleError(cb)(err)
     }
-    
+
     try {
         const fixCommonjs = file => {
             const packagePath = file
@@ -289,5 +289,17 @@ gulp.task('build-dev', gulp.series('clean', 'update-appinfo', 'pack', 'copy-in18
 
 gulp.task('build-p', gulp.series('clean', 'update-appinfo', 'pack-p', 'copy-in18',
     'installService', 'buildService-p', 'app-p', 'cleanService', 'manifest', 'license'));
+
+gulp.task('watch', function() {
+    const proc = spawn('npm', ['run', 'watch-raw'], { stdio: ['pipe', 'pipe', 'inherit'] });
+
+    proc.stdout.on('data', (data) => {
+        process.stdout.write(data.toString())
+
+        if (!fs.existsSync('./dist/node_modules/i18n-iso-countries')) {
+            copyIn18(() => process.stdout.write('watch initiated\n'))
+        }
+    });
+})
 
 export default gulp
