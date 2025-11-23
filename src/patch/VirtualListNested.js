@@ -363,7 +363,6 @@ const Scrollable = Skinnable(
     )
 )
 
-/* eslint-disable enact/prop-types */
 const listItemsRenderer = (props) => {
     const {
         cc,
@@ -392,7 +391,6 @@ const listItemsRenderer = (props) => {
     )
 }
 
-/* eslint-enable enact/prop-types */
 const ScrollableVirtualList = ({ ...rest }) => {
     const { role, ...combinedRest } = { ...ScrollableVirtualListSuperBase.defaultProps, ...rest }
     warning(

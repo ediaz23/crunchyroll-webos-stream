@@ -1,8 +1,9 @@
 
+/*
 import React from 'react'
 import { default as VideoPlayerBase } from '@enact/moonstone/VideoPlayer'
 
-/*
+
 videoPlayerStack
     I18nContextDecorator,
     Slottable,
@@ -16,7 +17,7 @@ videoPlayerStack
     div,
     SpotlightContainerDecoratorAdapter,
     MediaSliderDecorator
-*/
+
 
 const videoPlayerCheckChildren = ['noname', 'SpotlightContainerDecoratorAdapter', 'div']
 const videoPlayerChidrenMap = {
@@ -164,3 +165,4 @@ const VideoPlayer = class extends VideoPlayerBase {
 
 
 export default VideoPlayer
+*/

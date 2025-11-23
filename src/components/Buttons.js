@@ -104,6 +104,7 @@ export const LogoutBtn = () => {
 
     const doLogout = useCallback(async () => {
         await api.auth.logout()
+        api.utils.clearCache()
         jumpTo('/login')
     }, [jumpTo])
 

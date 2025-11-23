@@ -25,7 +25,9 @@ export const getUserBenefits = async (account) => {
         }
     } catch (error) {
         if (error instanceof Error) {
-            if (error.message === 'Forbidden' || error.code === ERROR_CODES.subscription_not_found) {
+            if (error.message === 'Forbidden'
+                || error.httpStatusText === 'Forbidden'
+                || error.code === ERROR_CODES.subscription_not_found) {
                 out = { items: [] }
             } else {
                 await translateError(error)
