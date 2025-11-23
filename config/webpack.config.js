@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env node, es6 */
 
 const fs = require('fs');
@@ -5,9 +6,9 @@ const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin =
-    process.env.TSC_COMPILE_ON_ERROR === 'true'
-        ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
-        : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
+    process.env.TSC_COMPILE_ON_ERROR === 'true' ?
+        require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin') :
+        require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -30,10 +31,11 @@ const createEnvironmentHash = require('./createEnvironmentHash');
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 module.exports = function(
     env,
+    noLinting = false,
     contentHash = false,
     isomorphic = false,
     noAnimation = false,
-    framework = false,
+    noSplitCSS = false,
     ilibAdditionalResourcesPath
 ) {
     process.chdir(app.context);
@@ -43,20 +45,6 @@ module.exports = function(
 
     // Sets the browserslist default fallback set of browsers to the Enact default browser support list.
     app.setEnactTargetsAsDefault();
-
-    // Check if JSX transform is able
-    const hasJsxRuntime = (() => {
-        if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
-            return false;
-        }
-
-        try {
-            require.resolve('react/jsx-runtime');
-            return true;
-        } catch (e) {
-            return false;
-        }
-    })();
 
     // Check if TypeScript is setup
     const useTypeScript = fs.existsSync('tsconfig.json');
@@ -87,11 +75,22 @@ module.exports = function(
         // from them won't be in the main CSS file.
         // When INLINE_STYLES env var is set, instead of MiniCssExtractPlugin, uses
         // `style` loader to dynamically inline CSS in style tags at runtime.
+        const mergedCssLoaderOptions = {
+            ...cssLoaderOptions,
+            modules: {
+                ...cssLoaderOptions.modules,
+                // Options to restore 6.x behavior:
+                // https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md#700-2024-04-04
+                namedExport: false,
+                exportLocalsConvention: 'as-is'
+            }
+        };
+
         const loaders = [
             process.env.INLINE_STYLES ? require.resolve('style-loader') : MiniCssExtractPlugin.loader,
             {
                 loader: require.resolve('css-loader'),
-                options: Object.assign({ sourceMap: shouldUseSourceMap }, cssLoaderOptions, {
+                options: Object.assign({ sourceMap: shouldUseSourceMap }, mergedCssLoaderOptions, {
                     url: {
                         filter: url => {
                             // Don't handle absolute path urls
@@ -119,8 +118,6 @@ module.exports = function(
                             // Fix and adjust for known flexbox issues
                             // See https://github.com/philipwalton/flexbugs
                             'postcss-flexbugs-fixes',
-                            // Support @global-import syntax to import css in a global context.
-                            'postcss-global-import',
                             // Transpile stage-3 CSS standards based on browserslist targets.
                             // See https://preset-env.cssdb.org/features for supported features.
                             // Includes support for targetted auto-prefixing.
@@ -139,7 +136,98 @@ module.exports = function(
                             // the browserslist targets.
                             !useTailwind && require('postcss-normalize'),
                             // Resolution indepedence support
-                            app.ri !== false && require('postcss-resolution-independence')(app.ri)
+                            app.ri !== false && require('postcss-resolution-independence')(app.ri),
+                            // Support importing JSON files with ~ alias - custom plugin (must run first)
+                            {
+                                postcssPlugin: 'postcss-import-json-tilde',
+                                Once(root) {
+                                    // Process all @import-json rules with ~ prefix first, before other plugins
+                                    root.walkAtRules('import-json', atRule => {
+                                        let src = atRule.params.slice(1, -1); // Remove quotes
+
+                                        // Only handle ~ alias paths
+                                        if (src.startsWith('~')) {
+                                            const packagePath = src.substring(1); // Remove ~
+
+                                            try {
+                                                // Use Node.js standard module resolution
+                                                // This mimics webpack's ~ alias behavior
+                                                const currentFileDir = path.dirname(atRule.source.input.file || '');
+
+                                                // Try to resolve the module using require.resolve
+                                                // This follows standard Node.js module resolution algorithm
+                                                let resolvedPath;
+                                                try {
+                                                    // First try from current file's directory
+                                                    resolvedPath = require.resolve(packagePath, {
+                                                        paths: [currentFileDir]
+                                                    });
+                                                } catch (e) {
+                                                    // Fallback to current working directory
+                                                    resolvedPath = require.resolve(packagePath, {
+                                                        paths: [process.cwd()]
+                                                    });
+                                                }
+
+                                                // Convert to relative path for the original plugin
+                                                const relativePath = path.relative(currentFileDir, resolvedPath);
+                                                atRule.params = `"${relativePath}"`;
+                                            } catch (error) {
+                                                // If resolution fails, try manual node_modules lookup
+                                                try {
+                                                    let currentDir = path.dirname(
+                                                        atRule.source.input.file || process.cwd()
+                                                    );
+                                                    let found = false;
+
+                                                    // Walk up directories to find node_modules
+                                                    while (currentDir !== path.parse(currentDir).root && !found) {
+                                                        const moduleDir = path.join(
+                                                            currentDir,
+                                                            'node_modules',
+                                                            packagePath
+                                                        );
+                                                        if (fs.existsSync(moduleDir)) {
+                                                            const relativePath = path.relative(
+                                                                path.dirname(atRule.source.input.file || ''),
+                                                                moduleDir
+                                                            );
+                                                            atRule.params = `"${relativePath}"`;
+                                                            found = true;
+                                                            break;
+                                                        }
+                                                        currentDir = path.dirname(currentDir);
+                                                    }
+
+                                                    if (!found) {
+                                                        console.warn(`Could not resolve module path: ${packagePath}`);
+                                                    }
+                                                } catch (fallbackError) {
+                                                    console.warn(
+                                                        `Failed to resolve ${packagePath}:`,
+                                                        fallbackError.message
+                                                    );
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            },
+                            // Support importing JSON files in CSS - original plugin (for non-~ paths)
+                            [
+                                '@daltontan/postcss-import-json',
+                                {
+                                    map: (selector, value) => {
+                                        if (typeof value === 'object' && value !== null && value.$ref) {
+                                            const tokenPath = value.$ref.split('#/')[1];
+                                            const cssVariableName = '--' + tokenPath.replace(/\//g, '-');
+
+                                            return `var(${cssVariableName})`;
+                                        }
+                                        return value;
+                                    }
+                                }
+                            ]
                         ].filter(Boolean)
                     },
                     sourceMap: shouldUseSourceMap
@@ -180,8 +268,8 @@ module.exports = function(
         mode: isEnvProduction ? 'production' : 'development',
         // Don't attempt to continue if there are any errors.
         bail: true,
-        // Webpack noise constrained to errors and warnings
-        stats: 'errors-warnings',
+        // Webpack noise constrained to errors only
+        stats: 'errors-only',
         // Use source maps during development builds or when specified by GENERATE_SOURCEMAP
         devtool: shouldUseSourceMap && (isEnvProduction ? 'source-map' : 'cheap-module-source-map'),
         // These are the "entry points" to our application.
@@ -208,9 +296,9 @@ module.exports = function(
             publicPath,
             // Improved sourcemap path name mapping for system filepaths
             devtoolModuleFilenameTemplate: info => {
-                let file = isEnvProduction
-                    ? path.relative(app.context, info.absoluteResourcePath)
-                    : path.resolve(info.absoluteResourcePath);
+                let file = isEnvProduction ?
+                    path.relative(app.context, info.absoluteResourcePath) :
+                    path.resolve(info.absoluteResourcePath);
                 file = file.replace(/\\/g, '/').replace(/\.\./g, '_');
                 const loader = info.allLoaders.match(/[^\\/]+-loader/);
                 if (info.resource.includes('.less') && loader) {
@@ -231,6 +319,7 @@ module.exports = function(
             store: 'pack',
             buildDependencies: {
                 defaultWebpack: ['webpack/lib/'],
+                // eslint-disable-next-line no-undef
                 config: [__filename],
                 tsconfig: useTypeScript ? ['tsconfig.json'] : []
             }
@@ -260,9 +349,9 @@ module.exports = function(
             symlinks: false,
             // Backward compatibility for apps using new ilib references with old Enact
             // and old apps referencing old iLib location with new Enact
-            alias: fs.existsSync(path.join(app.context, 'node_modules', '@enact', 'i18n', 'ilib'))
-                ? Object.assign({ ilib: '@enact/i18n/ilib' }, app.alias)
-                : Object.assign({ '@enact/i18n/ilib': 'ilib' }, app.alias),
+            alias: fs.existsSync(path.join(app.context, 'node_modules', '@enact', 'i18n', 'ilib')) ?
+                Object.assign({ ilib: '@enact/i18n/ilib' }, app.alias) :
+                Object.assign({ '@enact/i18n/ilib': 'ilib' }, app.alias),
             // Optional configuration for redirecting module requests.
             fallback: app.resolveFallback
         },
@@ -293,7 +382,7 @@ module.exports = function(
                                 cacheDirectory: !isEnvProduction,
                                 cacheCompression: false,
                                 compact: isEnvProduction
-                            },
+                            }
                         },
                         // process node_module libraries
                         {
@@ -323,6 +412,8 @@ module.exports = function(
                                 'react-dev-utils',
                                 'react-error-overlay',
                                 'quick-lru',
+                                'generator-function',
+                                'strip-ansi',
                             ].map(v => path.resolve(__dirname, `../node_modules/${v}`))
                         },
                         /*
@@ -354,7 +445,7 @@ module.exports = function(
                             use: getStyleLoaders({
                                 importLoaders: 1,
                                 modules: {
-                                    getLocalIdent
+                                    ...(isEnvProduction ? {} : { getLocalIdent })
                                 }
                             })
                         },
@@ -365,7 +456,8 @@ module.exports = function(
                             use: getStyleLoaders({
                                 importLoaders: 1,
                                 modules: {
-                                    ...(app.forceCSSModules ? { getLocalIdent } : { mode: 'icss' })
+                                    ...(app.forceCSSModules ? {} : { mode: 'icss' }),
+                                    ...(!app.forceCSSModules && isEnvProduction ? {} : { getLocalIdent })
                                 }
                             }),
                             // Don't consider CSS imports dead code even if the
@@ -379,7 +471,7 @@ module.exports = function(
                             use: getLessStyleLoaders({
                                 importLoaders: 2,
                                 modules: {
-                                    getLocalIdent
+                                    ...(isEnvProduction ? {} : { getLocalIdent })
                                 }
                             })
                         },
@@ -388,7 +480,8 @@ module.exports = function(
                             use: getLessStyleLoaders({
                                 importLoaders: 2,
                                 modules: {
-                                    ...(app.forceCSSModules ? { getLocalIdent } : { mode: 'icss' })
+                                    ...(app.forceCSSModules ? {} : { mode: 'icss' }),
+                                    ...(!app.forceCSSModules && isEnvProduction ? {} : { getLocalIdent })
                                 }
                             }),
                             sideEffects: true
@@ -400,7 +493,7 @@ module.exports = function(
                             use: getScssStyleLoaders({
                                 importLoaders: 3,
                                 modules: {
-                                    getLocalIdent
+                                    ...(isEnvProduction ? {} : { getLocalIdent })
                                 }
                             })
                         },
@@ -410,7 +503,8 @@ module.exports = function(
                             use: getScssStyleLoaders({
                                 importLoaders: 3,
                                 modules: {
-                                    ...(app.forceCSSModules ? { getLocalIdent } : { mode: 'icss' })
+                                    ...(app.forceCSSModules ? {} : { mode: 'icss' }),
+                                    ...(!app.forceCSSModules && isEnvProduction ? {} : { getLocalIdent })
                                 }
                             })
                         },
@@ -474,6 +568,7 @@ module.exports = function(
                             comments: false,
                             // Turned on because emoji and regex is not minified properly using default
                             // https://github.com/facebook/create-react-app/issues/2488
+                            // eslint-disable-next-line camelcase
                             ascii_only: true
                         }
                     },
@@ -482,7 +577,17 @@ module.exports = function(
                     parallel: true
                 }),
                 new CssMinimizerPlugin()
-            ]
+            ],
+            splitChunks: noSplitCSS && {
+                cacheGroups: {
+                    styles: {
+                        name: 'main',
+                        type: 'css/mini-extract',
+                        chunks: 'all',
+                        enforce: true
+                    }
+                }
+            }
         },
         plugins: [
             // Generates an `index.html` file with the js and css tags injected.
@@ -526,10 +631,13 @@ module.exports = function(
             !process.env.INLINE_STYLES &&
             new MiniCssExtractPlugin({
                 filename: contentHash ? '[name].[contenthash].css' : '[name].css',
-                chunkFilename: contentHash ? 'chunk.[name].[contenthash].css' : 'chunk.[name].css'
+                chunkFilename: contentHash ? 'chunk.[name].[contenthash].css' : 'chunk.[name].css',
+                ignoreOrder: noSplitCSS
             }),
             // Webpack5 removed node polyfills but we need this to run screenshot tests
-            new NodePolyfillPlugin(),
+            new NodePolyfillPlugin({
+                additionalAliases: ['console', 'domain', 'process', 'stream']
+            }),
             // Provide meaningful information when modules are not found
             new ModuleNotFoundPlugin(app.context),
             // Ensure correct casing in module filepathes
@@ -588,13 +696,13 @@ module.exports = function(
                     infrastructure: 'silent'
                 }
             }),
+            !noLinting &&
             new ESLintPlugin({
                 // Plugin options
+                configType: 'flat',
                 extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
                 formatter: require.resolve('react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
-                // ESLint class options
-                resolvePluginsRelativeTo: __dirname,
                 cache: true
             })
         ].filter(Boolean)

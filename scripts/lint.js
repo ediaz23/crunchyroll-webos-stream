@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env node, es6 */
 const cp = require('child_process');
 const path = require('path');
@@ -9,7 +10,7 @@ const globOpts = {
 	nodir: true
 };
 
-function displayHelp() {
+function displayHelp () {
 	let e = 'node ' + path.relative(process.cwd(), __filename);
 	if (require.main !== module) e = 'enact lint';
 
@@ -30,16 +31,16 @@ function displayHelp() {
 	process.exit(0);
 }
 
-function shouldESLint() {
+function shouldESLint () {
 	return glob.sync('**/*.+(js|jsx|ts|tsx)', globOpts).length > 0;
 }
 
-function eslint({strict = false, local = false, fix = false, eslintArgs = []} = {}) {
+function eslint ({strict = false, local = false, fix = false, eslintArgs = []} = {}) {
 	let args = [];
 	if (strict) {
-		args.push('--no-eslintrc', '--config', require.resolve('eslint-config-enact/strict'));
+		args.push('--no-config-lookup', '--config', require.resolve('eslint-config-enact/strict'));
 	} else if (!local) {
-		args.push('--no-eslintrc', '--config', require.resolve('eslint-config-enact'));
+		args.push('--no-config-lookup', '--config', require.resolve('eslint-config-enact'));
 	}
 	if (local) {
 		args.push('--ignore-pattern', '**/node_modules/*');
@@ -66,11 +67,11 @@ function eslint({strict = false, local = false, fix = false, eslintArgs = []} = 
 	});
 }
 
-function api(opts) {
+function api (opts) {
 	return Promise.resolve().then(() => shouldESLint() && eslint(opts));
 }
 
-function cli(args) {
+function cli (args) {
 	const opts = minimist(args, {
 		boolean: ['local', 'strict', 'fix', 'help'],
 		alias: {l: 'local', s: 'strict', framework: 'strict', f: 'fix', h: 'help'}

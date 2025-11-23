@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env node, es6 */
 const fs = require('fs');
 const path = require('path');
@@ -25,14 +26,16 @@ process.on('unhandledRejection', err => {
 // "npm run build" with no way to modify it yet, we provide a basic override
 // to console.log to ensure the correct output is displayed to the user.
 // prettier-ignore
-console.log = (log => (data, ...rest) =>
-	typeof data === 'undefined'
-		? log()
-		: typeof data === 'string'
-		? log(data.replace(/npm run build/, 'npm run pack-p'), ...rest)
-		: log.call(this, data, ...rest))(console.log);
+console.log = (log => (data, ...rest) => {
+	if (typeof data === 'undefined') {
+		return log();
+	} else if (typeof data === 'string') {
+		return log(data.replace(/npm run build/, 'npm run pack-p'), ...rest);
+	}
+	return log.call(this, data, ...rest);
+})(console.log);
 
-function displayHelp() {
+function displayHelp () {
 	let e = 'node ' + path.relative(process.cwd(), __filename);
 	if (require.main !== module) e = 'enact serve';
 
@@ -45,13 +48,14 @@ function displayHelp() {
 	console.log('    -f, --fast        Enables experimental frast refresh');
 	console.log('    -p, --port        Server port number');
 	console.log('    -m, --meta        JSON to override package.json enact metadata');
+	console.log('    --no-linting      Build without code linting');
 	console.log('    -v, --version     Display version information');
 	console.log('    -h, --help        Display help information');
 	console.log();
 	process.exit(0);
 }
 
-function hotDevServer(config, fastRefresh) {
+function hotDevServer (config, fastRefresh) {
 	// Keep webpack alive when there are any errors, so user can fix and rebuild.
 	config.bail = false;
 	// Ensure the CLI version of Chalk is used for webpackHotDevClient
@@ -82,13 +86,18 @@ function hotDevServer(config, fastRefresh) {
 	return config;
 }
 
-function devServerConfig(host, port, protocol, publicPath, proxy, allowedHost) {
-	let https = false;
+function devServerConfig (host, port, protocol, publicPath, proxy, allowedHost) {
+	let server = {
+		type: 'http'
+	};
 	const {SSL_CRT_FILE, SSL_KEY_FILE} = process.env;
 	if (protocol === 'https' && [SSL_CRT_FILE, SSL_KEY_FILE].every(f => f && fs.existsSync(f))) {
-		https = {
-			cert: fs.readFileSync(SSL_CRT_FILE),
-			key: fs.readFileSync(SSL_KEY_FILE)
+		server = {
+			type: 'https',
+			options: {
+				cert: fs.readFileSync(SSL_CRT_FILE),
+				key: fs.readFileSync(SSL_KEY_FILE)
+			}
 		};
 	}
 	const disableFirewall = !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
@@ -114,7 +123,7 @@ function devServerConfig(host, port, protocol, publicPath, proxy, allowedHost) {
 		// want to allow setting the allowedHosts manually for more complex setups
 		allowedHosts: disableFirewall ? 'all' : [allowedHost],
 		// Enable HTTPS if the HTTPS environment variable is set to 'true'
-		https,
+		server,
 		host,
 		port,
 		// Allow cross-origin HTTP requests
@@ -201,7 +210,7 @@ function devServerConfig(host, port, protocol, publicPath, proxy, allowedHost) {
 		},
 		// `proxy` is run between `before` and `after` `webpack-dev-server` hooks
 		proxy,
-		setupMiddlewares(middlewares, devServer) {
+		setupMiddlewares (middlewares, devServer) {
 			if (!devServer) {
 				throw new Error('webpack-dev-server is not defined');
 			}
@@ -230,7 +239,7 @@ function devServerConfig(host, port, protocol, publicPath, proxy, allowedHost) {
 	};
 }
 
-function serve(config, host, port, open) {
+function serve (config, host, port, open) {
 	// We attempt to use the default port but if it is busy, we offer the user to
 	// run on a different port. `detect()` Promise resolves to the next free port.
 	return choosePort(host, port).then(resolvedPort => {
@@ -284,7 +293,7 @@ function serve(config, host, port, open) {
 
 		['SIGINT', 'SIGTERM'].forEach(sig => {
 			process.on(sig, () => {
-				devServer.close();
+				devServer.stopCallback(() => {});
 				process.exit();
 			});
 		});
@@ -292,14 +301,14 @@ function serve(config, host, port, open) {
 		if (process.env.CI !== 'true') {
 			// Gracefully exit when stdin ends
 			process.stdin.on('end', () => {
-				devServer.close();
+				devServer.stopCallback(() => {});
 				process.exit();
 			});
 		}
 	});
 }
 
-function api(opts) {
+function api (opts) {
 	if (opts.meta) {
 		let meta;
 		try {
@@ -320,7 +329,7 @@ function api(opts) {
 	// Setup the development config with additional webpack-dev-server customizations.
 	const configFactory = require('../config/webpack.config');
 	const fastRefresh = process.env.FAST_REFRESH || opts.fast;
-	const config = hotDevServer(configFactory('development'), fastRefresh);
+	const config = hotDevServer(configFactory('development', !opts.linting), fastRefresh);
 
 	// Tools like Cloud9 rely on this.
 	const host = process.env.HOST || opts.host || '0.0.0.0';
@@ -334,10 +343,11 @@ function api(opts) {
 	}
 }
 
-function cli(args) {
+function cli (args) {
 	const opts = minimist(args, {
 		string: ['host', 'port', 'meta'],
-		boolean: ['browser', 'fast', 'help'],
+		boolean: ['browser', 'fast', 'help', 'linting'],
+		default: {linting: true},
 		alias: {b: 'browser', i: 'host', p: 'port', f: 'fast', m: 'meta', h: 'help'}
 	});
 	if (opts.help) displayHelp();
@@ -347,7 +357,7 @@ function cli(args) {
 	import('chalk').then(({default: _chalk}) => {
 		chalk = _chalk;
 		api(opts).catch(err => {
-			//console.error(chalk.red('ERROR: ') + (err.message || err));
+			// console.error(chalk.red('ERROR: ') + (err.message || err));
 			console.log(err);
 			process.exit(1);
 		});

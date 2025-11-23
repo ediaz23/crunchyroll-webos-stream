@@ -16,13 +16,13 @@ module.exports = function(api) {
     ]
     out.plugins = [
         ...out.plugins.filter(plugin => {
-            let out = true
+            let out2 = true
             if (Array.isArray(plugin)) {
-                out = !newPlugins.includes(plugin[0])
+                out2 = !newPlugins.includes(plugin[0])
             } else {
-                out = !newPlugins.includes(plugin)
+                out2 = !newPlugins.includes(plugin)
             }
-            return out
+            return out2
         }),
         ...newPlugins
     ]

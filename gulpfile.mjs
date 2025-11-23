@@ -144,6 +144,22 @@ var _increment = function increment(state) {  // crunchypatch
     } catch (err) {
         return handleError(cb)(err)
     }
+    
+    try {
+        const moduleName = './node_modules/strip-ansi'
+        const packagePath = `${moduleName}/package.json`
+        /** @type {Object} */
+        const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+        packageContent.exports = {
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+        fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+        fs.copyFileSync(`${moduleName}-cjs/index.js`, `${moduleName}/index.cjs`)
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
 
     try {
         const packagePath = './package-lock.json'

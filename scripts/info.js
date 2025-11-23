@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env node, es6 */
 const path = require('path');
 const fs = require('fs');
@@ -7,7 +8,7 @@ const resolveSync = require('resolve').sync;
 
 let chalk;
 
-function displayHelp() {
+function displayHelp () {
 	let e = 'node ' + path.relative(process.cwd(), __filename);
 	if (require.main !== module) e = 'enact info';
 
@@ -23,7 +24,7 @@ function displayHelp() {
 	process.exit(0);
 }
 
-function logVersion(pkg, rel = __dirname) {
+function logVersion (pkg, rel = __dirname) {
 	try {
 		const jsonPath = resolveSync(pkg + '/package.json', {basedir: rel});
 		const meta = require(jsonPath);
@@ -41,7 +42,7 @@ function logVersion(pkg, rel = __dirname) {
 	}
 }
 
-function gitInfo(dir) {
+function gitInfo (dir) {
 	const git = (args = []) => {
 		try {
 			const result = spawn.sync('git', args, {encoding: 'utf8', cwd: dir, env: process.env});
@@ -60,7 +61,7 @@ function gitInfo(dir) {
 	}
 }
 
-function globalModules() {
+function globalModules () {
 	try {
 		const result = spawn.sync('npm', ['config', 'get', 'prefix', '-g'], {
 			cwd: process.cwd(),
@@ -78,7 +79,7 @@ function globalModules() {
 	}
 }
 
-function api({cliInfo = false, dev = false} = {}) {
+function api ({cliInfo = false, dev = false} = {}) {
 	return new Promise((resolve, reject) => {
 		try {
 			if (cliInfo) {
@@ -163,7 +164,7 @@ function api({cliInfo = false, dev = false} = {}) {
 	});
 }
 
-function cli(args) {
+function cli (args) {
 	const opts = minimist(args, {
 		boolean: ['cli', 'help'],
 		alias: {h: 'help'}

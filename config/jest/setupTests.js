@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env jest */
 const fs = require('fs');
 const path = require('path');
@@ -56,7 +57,7 @@ const ilibPaths = Object.keys(global).filter(k => /ILIB_[^_]+_PATH/.test(k));
 const pkg = packageRoot();
 const XHR = global.XMLHttpRequest;
 class ILibXHR extends XHR {
-	open(method, url) {
+	open (method, url) {
 		if (ilibPaths.some(p => url.startsWith(global[p]))) {
 			this.send = () => {
 				try {
@@ -75,13 +76,13 @@ class ILibXHR extends XHR {
 			return super.open(...arguments);
 		}
 	}
-	get readyState() {
+	get readyState () {
 		return typeof this.fileStatus !== 'undefined' ? XHR.DONE : super.readyState;
 	}
-	get status() {
+	get status () {
 		return typeof this.fileStatus !== 'undefined' ? this.fileStatus : super.status;
 	}
-	get responseText() {
+	get responseText () {
 		return typeof this.fileText !== 'undefined' ? this.fileText : super.responseText;
 	}
 }

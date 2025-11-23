@@ -22,7 +22,7 @@ module.exports = {
 			.map(env => path.join(context, env))
 			.forEach(env => {
 				if (fs.existsSync(env)) {
-					expand(dotenv.config({path: env}));
+					expand(dotenv.config({path: env, processEnv: {}}));
 				}
 			});
 	}

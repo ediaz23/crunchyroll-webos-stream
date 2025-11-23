@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env node, es6 */
 const path = require('path');
 const fs = require('fs-extra');
@@ -6,14 +7,10 @@ const packageRoot = require('@enact/dev-utils').packageRoot;
 
 let chalk;
 
-const build = 'build';
-const dist = 'dist';
-const node_modules = 'node_modules';
-const samples = 'samples';
 const ssTests = path.join('tests', 'screenshot');
 const uiTests = path.join('tests', 'ui');
 
-function displayHelp() {
+function displayHelp () {
 	let e = 'node ' + path.relative(process.cwd(), __filename);
 	if (require.main !== module) e = 'enact clean';
 
@@ -32,25 +29,25 @@ function displayHelp() {
 	process.exit(0);
 }
 
-function api({paths = [], all = false} = {}) {
-	const known = [build, dist];
-	if (all) known.push(node_modules);
-	if (fs.existsSync(samples)) {
+function api ({paths = [], all = false} = {}) {
+	const known = ['build', 'dist'];
+	if (all) known.push('node_modules');
+	if (fs.existsSync('samples')) {
 		const sampleDirs = fs
-			.readdirSync(samples)
-			.map(p => path.join(samples, p))
+			.readdirSync('samples')
+			.map(p => path.join('samples', p))
 			.filter(p => fs.existsSync(path.join(p, 'package.json')));
 		sampleDirs.forEach(p => {
-			known.push(path.join(p, build), path.join(p, dist));
-			if (all) known.push(path.join(p, node_modules));
+			known.push(path.join(p, 'build'), path.join(p, 'dist'));
+			if (all) known.push(path.join(p, 'node_modules'));
 		});
 	}
-	if (fs.existsSync(ssTests)) known.push(path.join(ssTests, dist));
-	if (fs.existsSync(uiTests)) known.push(path.join(uiTests, dist));
+	if (fs.existsSync(ssTests)) known.push(path.join(ssTests, 'dist'));
+	if (fs.existsSync(uiTests)) known.push(path.join(uiTests, 'dist'));
 	return Promise.all(paths.concat(known).map(d => fs.remove(d)));
 }
 
-function cli(args) {
+function cli (args) {
 	const opts = minimist(args, {
 		boolean: ['help', 'all'],
 		alias: {h: 'help', a: 'all'}

@@ -1,3 +1,4 @@
+/* eslint no-console: off, no-undef: off */
 /* eslint-env node, es6 */
 const path = require('path');
 const checker = require('license-checker');
@@ -9,7 +10,7 @@ let chalk;
 const pkgPathResolve = m => path.dirname(require.resolve(m + '/package.json'));
 const enactCLIProdModules = ['@babel/core', 'core-js'].map(pkgPathResolve);
 
-function displayHelp() {
+function displayHelp () {
 	let e = 'node ' + path.relative(process.cwd(), __filename);
 	if (require.main !== module) e = 'enact license';
 
@@ -27,7 +28,7 @@ function displayHelp() {
 	process.exit(0);
 }
 
-function api({modules = []} = {}) {
+function api ({modules = []} = {}) {
 	if (!modules.length) {
 		modules = modules.concat(enactCLIProdModules, '.');
 	}
@@ -47,7 +48,7 @@ function api({modules = []} = {}) {
 	).then(values => values.reduce((a, b) => Object.assign(a, b)));
 }
 
-function cli(args) {
+function cli (args) {
 	const opts = minimist(args, {
 		boolean: ['help'],
 		alias: {h: 'help'}
