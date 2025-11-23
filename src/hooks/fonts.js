@@ -64,6 +64,7 @@ const fontsData = {
 const defaultFont = new URL('jassub-webos5/default-font', import.meta.url)
 
 /**
+ * @FIXME quitaron permisos para escribir en disco
  * @returns {Promise}
  */
 const loadFonts = async () => {

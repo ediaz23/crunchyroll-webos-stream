@@ -1,16 +1,16 @@
 {
     "name": "com.crunchyroll.webos.stream",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
         "serve": "NODE_ENV=development REACT_APP_SERVING=true enact serve",
         "serve-p": "NODE_ENV=production REACT_APP_SERVING=true enact serve",
         "pack": "NODE_ENV=development REACT_APP_SERVING=false enact pack",
-        "pack-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p",
+        "pack-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p && gulp pack-p-fix",
         "watch": "NODE_ENV=development REACT_APP_SERVING=false enact pack --watch",
         "clean": "enact clean",
-        "lint": "enact lint .",
+        "lint": "enact lint -l .",
         "license": "enact license",
         "test": "enact test",
         "test-watch": "enact test --watch",
@@ -65,17 +65,6 @@
     "engines": {
         "node": ">=20"
     },
-    "eslintConfig": {
-        "extends": "enact-proxy/strict"
-    },
-    "eslintIgnore": [
-        "node_modules/*",
-        "build/*",
-        "dist/*",
-        "service/*",
-        "libs/*",
-        "src/components/player/dash*.js"
-    ],
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.2.0",
         "@enact/core": "^4.8.0",
@@ -114,7 +103,7 @@
         "@types/uuid": "^10.0.0",
         "@types/webostvjs": "^1.2.6",
         "del": "^8.0.1",
-        "eslint-config-enact-proxy": "^1.0.9",
+        "eslint-config-enact": "^5.0.2",
         "gulp": "^5.0.1",
         "gulp-shell": "^0.8.0",
         "i18next-scanner": "^4.6.0",

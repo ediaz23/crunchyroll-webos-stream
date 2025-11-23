@@ -2,7 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 import gulp from 'gulp'
-import crypto from 'crypto'
+import { createHash } from 'node:crypto'
 import { deleteAsync } from 'del'
 import { exec } from 'child_process'
 import packageJson from './package.json' with { type: 'json' }
@@ -155,7 +155,7 @@ function generateManifest(cb) {
             throw new Error('ipk not found.')
         }
         const ikpFile = fs.readFileSync(`./bin/${ipkName}`)
-        const hash = crypto.createHash('sha256')
+        const hash = createHash('sha256')
         hash.update(ikpFile)
 
         const out = {
@@ -226,6 +226,13 @@ gulp.task('clean', () =>
 
 gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
 gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
+// webpack agrega __webpack_require__ al código, lo más fácil fue limpiarlo así.
+gulp.task('pack-p-fix', cb => { exec(`
+    for f in dist/chunk*.js;
+    do
+        sed -i 's/__webpack_require__\.ilib_cache_id="[^"]*";//g' "$f";
+    done
+`, handleError(cb)) })
 
 gulp.task('installService', cb => { exec('NODE_ENV=development npm ci --prefix=./service', handleError(cb)) })
 
