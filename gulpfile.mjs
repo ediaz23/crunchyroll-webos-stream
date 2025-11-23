@@ -5,9 +5,9 @@ import gulp from 'gulp'
 import crypto from 'crypto'
 import { deleteAsync } from 'del'
 import { exec } from 'child_process'
-import packageJson from './package.json' assert { type: 'json' }
-import appInfo from './webos-meta/appinfo.json' assert { type: 'json' }
-import ilibmanifest from './resources/ilibmanifest.json' assert { type: 'json' }
+import packageJson from './package.json' with { type: 'json' }
+import appInfo from './webos-meta/appinfo.json' with { type: 'json' }
+import ilibmanifest from './resources/ilibmanifest.json' with { type: 'json' }
 
 
 function handleError(cb) {
