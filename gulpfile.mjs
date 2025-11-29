@@ -128,6 +128,8 @@ var _increment = function increment(state) {  // crunchypatch
         }
         fixCommonjs('./node_modules/crunchyroll-js-api/package.json')
         fixCommonjs('./node_modules/i18n-iso-m49/package.json')
+        fixCommonjs('./node_modules/strip-ansi/package.json')
+        fixCommonjs('./node_modules/idb/package.json')
     } catch (err) {
         return handleError(cb)(err)
     }
@@ -144,22 +146,6 @@ var _increment = function increment(state) {  // crunchypatch
     } catch (err) {
         return handleError(cb)(err)
     }
-    
-    try {
-        const moduleName = './node_modules/strip-ansi'
-        const packagePath = `${moduleName}/package.json`
-        /** @type {Object} */
-        const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
-        packageContent.exports = {
-            "import": "./index.js",
-            "require": "./index.cjs"
-        }
-        fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
-        fs.copyFileSync(`${moduleName}-cjs/index.js`, `${moduleName}/index.cjs`)
-    } catch (err) {
-        return handleError(cb)(err)
-    }
-
 
     try {
         const packagePath = './package-lock.json'
@@ -282,12 +268,14 @@ gulp.task('clean', () =>
 gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
 gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 // webpack agrega __webpack_require__ al código, lo más fácil fue limpiarlo así.
-gulp.task('pack-p-fix', cb => { exec(`
+gulp.task('pack-p-fix', cb => {
+    exec(`
     for f in dist/chunk*.js;
     do
         sed -i 's/__webpack_require__\.ilib_cache_id="[^"]*";//g' "$f";
     done
-`, handleError(cb)) })
+`, handleError(cb))
+})
 
 gulp.task('installService', cb => { exec('cd service; NODE_ENV=development npm ci', handleError(cb)) })
 

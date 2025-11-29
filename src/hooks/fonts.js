@@ -1,11 +1,11 @@
 
 import 'webostvjs'
 import Jassub from 'jassub-webos5/legacy'
+import { openDB } from 'idb'
 import api from '../api'
 import logger from '../logger'
 import utils from '../utils'
-import { _LOCALHOST_SERVER_ } from '../const'
-import { serviceURL, makeResponseHandle, customFetch } from './customFetch'
+import { customFetch } from './customFetch'
 
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
@@ -64,7 +64,6 @@ const fontsData = {
 const defaultFont = new URL('jassub-webos5/default-font', import.meta.url)
 
 /**
- * @FIXME quitaron permisos para escribir en disco
  * @returns {Promise}
  */
 const loadFonts = async () => {
@@ -82,14 +81,12 @@ const loadFonts = async () => {
         }
     }
     const proms = Object.values(availableFonts).filter(isFontValid).map(entry =>
-        makeRequest({ type: 'get_detail', entry })
-            .then(res => res.json())
-            .then(async ({ fonts }) => ({
-                name: entry.name,
-                data: await utils.base64toArrayAsync(fonts[0].data)
-            }))
+        crudFonts({ type: 'get_detail', entry })
+            .then(res => (new window.Response(res.data)).arrayBuffer())
+            .then(font => ({ name: entry.name, data: new Uint8Array(font) }))
             .catch(err => {
-                logger.error('error getting fonts', err)
+                logger.error('error getting fonts')
+                logger.error(err)
                 return null
             })
     )
@@ -253,34 +250,6 @@ function getHeadInfo(res) {
 }
 
 /**
- * @param {Object} parameters
- * @return {Promise<Response>}
- */
-async function makeRequest(parameters) {
-    const decode = false
-    const { onSuccess, onFailure, onProgress, prom } = makeResponseHandle({ config: {}, decode })
-    const method = 'fonts'
-    if (utils.isTv()) {
-        webOS.service.request(serviceURL, {
-            method,
-            parameters,
-            onSuccess,
-            onFailure,
-        })
-    } else {
-        onProgress(`${_LOCALHOST_SERVER_}/${method}`, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(parameters),
-            noDecode: !decode,
-        }).then(onSuccess).catch(onFailure)
-    }
-    return prom
-}
-
-/**
  * @type {String} url
  * @return {Promise<FontEntry>}
  */
@@ -301,10 +270,8 @@ async function fetchRemoteHeaders(url) {
 
 export async function requestCachedFonts() {
     logger.debug(`fonts requestCachedFonts in`)
-    /** @type {Response} */
-    const res = await makeRequest({ type: 'get' })
     /** @type {{fonts: Array<FontEntry>}} */
-    const { fonts } = await res.json()
+    const { fonts } = await crudFonts({ type: 'get' })
 
     for (const font of fonts) {
         availableFonts[font.name] = font
@@ -342,12 +309,10 @@ async function saveFont(url, name, headers, cached) {
         logger.debug(`fonts saveFont ${name} on cache`)
     } else if (res.ok) {
         payload = { name, ...getHeadInfo(res) }
-        const buf = await res.arrayBuffer()
-        const fontData = utils.arrayToBase64(buf)
-        await makeRequest({ type: 'upsert', entry: payload, data: fontData })
+        await crudFonts({ type: 'upsert', entry: payload, data: await res.blob() })
         logger.debug(`fonts saveFont ${name} save`)
     } else {
-        await deleteFont(name)
+        await crudFonts({ type: 'delete', entry: { name } })
         logger.debug(`fonts saveFont ${name} delete`)
     }
     logger.debug(`fonts saveFont out ${name}`)
@@ -355,14 +320,43 @@ async function saveFont(url, name, headers, cached) {
 }
 
 /**
- * @param {String} name
- * @returns {Promise}
+ * @param {Object} obj
+ * @param {'get'|'get_detail'|'upsert'|'delete'} obj.type
+ * @param {FontEntry} obj.entry
+ * @param {Blob} [obj.data]
+ * @return {Promise<{fonts: Array<FontEntry>, data: Blob}>}
  */
-async function deleteFont(name) {
-    logger.debug(`fonts deleteFont in ${name}`)
-    await makeRequest({ type: 'delete', entry: { name } })
-    logger.debug(`fonts deleteFont in ${name}`)
+async function crudFonts({ type, entry, data }) {
+    logger.debug(`fonts crudFonts in ${type}`)
+    const out = { fonts: [], data: null }
+
+    /** @type {import('idb').IDBPDatabase} */
+    const db = await openDB('fontsDB', 1, {
+        upgrade(db2) {
+            db2.createObjectStore('fonts_meta', { keyPath: 'name' })
+            db2.createObjectStore('fonts_data')
+        }
+    })
+
+    if (type === 'get') {
+        out.fonts = await db.getAll('fonts_meta')
+    } else if (type === 'get_detail') {
+        out.data = await db.get('fonts_data', entry.name)
+    } else if (type === 'upsert') {
+        await db.put('fonts_data', data, entry.name)
+        await db.put('fonts_meta', entry)
+    } else if (type === 'delete') {
+        await db.delete('fonts_meta', entry.name)
+        await db.delete('fonts_data', entry.name)
+    } else {
+        throw new Error('type not defined')
+    }
+
+    db.close()
+    logger.debug(`fonts crudFonts out ${type}`)
+    return out
 }
+
 
 export async function syncFonts() {
     await requestCachedFonts()
@@ -407,7 +401,7 @@ export async function syncFonts() {
 
     for (const name in availableFonts) {
         if (!processed.has(name)) {
-            await deleteFont(name)
+            await crudFonts({ type: 'delete', entry: { name } })
             availableFonts[name] = null
         }
     }

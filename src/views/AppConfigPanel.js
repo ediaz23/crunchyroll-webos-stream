@@ -97,6 +97,7 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
                 setFontList(fontsData.names)
                 setTimeout(() => setMessage(null), 1500)
             }).catch(err => {
+                console.error(err)
                 if (err) {
                     setMessage({ type: 'error', message: err.message || `${err}` })
                 } else {

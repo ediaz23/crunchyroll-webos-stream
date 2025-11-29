@@ -84,6 +84,7 @@
         "html-entities": "^2.5.2",
         "i18n-iso-countries": "^7.14.0",
         "i18n-iso-m49": "^1.0.0",
+        "idb": "^8.0.3",
         "ilib": "^14.21.1",
         "jassub-webos5": "^1.8.601-6",
         "prop-types": "^15.8.1",
@@ -104,6 +105,7 @@
         "react-error-overlay": "6.0.9"
     },
     "devDependencies": {
+        "@babel/plugin-syntax-import-meta": "^7.10.4",
         "@babel/plugin-transform-modules-commonjs": "^7.24.8",
         "@babel/plugin-transform-runtime": "^7.25.9",
         "@daltontan/postcss-import-json": "^1.1.1",

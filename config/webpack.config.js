@@ -414,6 +414,7 @@ module.exports = function(
                                 'quick-lru',
                                 'generator-function',
                                 'strip-ansi',
+                                'idb',
                             ].map(v => path.resolve(__dirname, `../node_modules/${v}`))
                         },
                         /*
