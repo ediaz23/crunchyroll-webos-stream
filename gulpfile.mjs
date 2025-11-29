@@ -128,8 +128,6 @@ var _increment = function increment(state) {  // crunchypatch
         }
         fixCommonjs('./node_modules/crunchyroll-js-api/package.json')
         fixCommonjs('./node_modules/i18n-iso-m49/package.json')
-        fixCommonjs('./node_modules/strip-ansi/package.json')
-        fixCommonjs('./node_modules/idb/package.json')
     } catch (err) {
         return handleError(cb)(err)
     }
@@ -143,6 +141,21 @@ var _increment = function increment(state) {  // crunchypatch
             require: "./esm/browser.js"
         }
         fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
+    try {
+        const moduleName = './node_modules/strip-ansi'
+        const packagePath = `${moduleName}/package.json`
+        /** @type {Object} */
+        const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+        packageContent.exports = {
+            "import": "./index.js",
+            "require": "./index.cjs"
+        }
+        fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+        fs.copyFileSync(`${moduleName}-cjs/index.js`, `${moduleName}/index.cjs`)
     } catch (err) {
         return handleError(cb)(err)
     }

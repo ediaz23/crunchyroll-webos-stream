@@ -1,7 +1,7 @@
 
 import 'webostvjs'
 import Jassub from 'jassub-webos5/legacy'
-import { openDB } from 'idb'
+import Dexie from 'dexie/dist/dexie'
 import api from '../api'
 import logger from '../logger'
 import utils from '../utils'
@@ -330,29 +330,30 @@ async function crudFonts({ type, entry, data }) {
     logger.debug(`fonts crudFonts in ${type}`)
     const out = { fonts: [], data: null }
 
-    /** @type {import('idb').IDBPDatabase} */
-    const db = await openDB('fontsDB', 1, {
-        upgrade(db2) {
-            db2.createObjectStore('fonts_meta', { keyPath: 'name' })
-            db2.createObjectStore('fonts_data')
+    try {
+        const db = new Dexie('fontsDB')
+
+        db.version(1).stores({ fonts_meta: 'name', fonts_data: '' })
+
+        if (type === 'get') {
+            out.fonts = await db.fonts_meta.toArray()
+        } else if (type === 'get_detail') {
+            out.data = await db.fonts_data.get(entry.name)
+        } else if (type === 'upsert') {
+            await db.fonts_data.put(data, entry.name)
+            await db.fonts_meta.put(entry)
+        } else if (type === 'delete') {
+            await db.fonts_meta.delete(entry.name)
+            await db.fonts_data.delete(entry.name)
+        } else {
+            throw new Error('type not defined')
         }
-    })
 
-    if (type === 'get') {
-        out.fonts = await db.getAll('fonts_meta')
-    } else if (type === 'get_detail') {
-        out.data = await db.get('fonts_data', entry.name)
-    } else if (type === 'upsert') {
-        await db.put('fonts_data', data, entry.name)
-        await db.put('fonts_meta', entry)
-    } else if (type === 'delete') {
-        await db.delete('fonts_meta', entry.name)
-        await db.delete('fonts_data', entry.name)
-    } else {
-        throw new Error('type not defined')
+        db.close()
+    } catch (err) {
+        logger.error('Error handle fonts')
+        logger.error(err)
     }
-
-    db.close()
     logger.debug(`fonts crudFonts out ${type}`)
     return out
 }
