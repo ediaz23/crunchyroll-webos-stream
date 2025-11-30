@@ -78,7 +78,7 @@
         "core-js": "3.39.0",
         "crunchyroll-js-api": "^1.5.1",
         "dashjs-webos5": "^5.1.100",
-        "dexie": "^2.0.4",
+        "dexie": "~2.0.4",
         "element-closest-polyfill": "^1.0.7",
         "fake-xml-http-request": "^2.1.2",
         "fflate": "^0.8.2",
