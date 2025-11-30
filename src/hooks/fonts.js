@@ -320,6 +320,7 @@ async function saveFont(url, name, headers, cached) {
 }
 
 /**
+ * not working for webos 3 emulator
  * @param {Object} obj
  * @param {'get'|'get_detail'|'upsert'|'delete'} obj.type
  * @param {FontEntry} obj.entry
