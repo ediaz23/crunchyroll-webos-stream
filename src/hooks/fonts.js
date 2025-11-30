@@ -328,25 +328,30 @@ async function crudFonts({ type, entry, data }) {
     logger.debug(`fonts crudFonts in ${type}`)
     const out = { fonts: [], data: null }
 
-    const db = new Dexie('fontsDB');
+    try {
+        const db = new Dexie('fontsDB')
 
-    db.version(1).stores({ fonts_meta: 'name', fonts_data: '' })
+        db.version(1).stores({ fonts_meta: 'name', fonts_data: '' })
 
-    if (type === 'get') {
-        out.fonts = await db.fonts_meta.toArray();
-    } else if (type === 'get_detail') {
-        out.data = await db.fonts_data.get(entry.name);
-    } else if (type === 'upsert') {
-        await db.fonts_data.put(data, entry.name);
-        await db.fonts_meta.put(entry);
-    } else if (type === 'delete') {
-        await db.fonts_meta.delete(entry.name);
-        await db.fonts_data.delete(entry.name);
-    } else {
-        throw new Error('type not defined');
+        if (type === 'get') {
+            out.fonts = await db.fonts_meta.toArray()
+        } else if (type === 'get_detail') {
+            out.data = await db.fonts_data.get(entry.name)
+        } else if (type === 'upsert') {
+            await db.fonts_data.put(data, entry.name)
+            await db.fonts_meta.put(entry)
+        } else if (type === 'delete') {
+            await db.fonts_meta.delete(entry.name)
+            await db.fonts_data.delete(entry.name)
+        } else {
+            throw new Error('type not defined')
+        }
+
+        db.close()
+    } catch (err) {
+        logger.error('Error handle fonts')
+        logger.error(err)
     }
-
-    db.close()
     logger.debug(`fonts crudFonts out ${type}`)
     return out
 }
