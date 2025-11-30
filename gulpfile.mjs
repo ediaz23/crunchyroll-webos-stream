@@ -180,8 +180,7 @@ function generateManifest(cb) {
         if (!out.ipkHash.sha256) {
             throw new Error('key sha256 is not define')
         }
-        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '),
-            { encoding: 'utf-8' })
+        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '), { encoding: 'utf-8' })
         cb()
     } catch (err) {
         handleError(cb)(err)
@@ -227,12 +226,15 @@ gulp.task('clean', () =>
 gulp.task('pack', cb => { exec('npm run pack', handleError(cb)) })
 gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 // webpack agrega __webpack_require__ al código, lo más fácil fue limpiarlo así.
-gulp.task('pack-p-fix', cb => { exec(`
-    for f in dist/chunk*.js;
-    do
-        sed -i 's/__webpack_require__\.ilib_cache_id="[^"]*";//g' "$f";
-    done
-`, handleError(cb)) })
+gulp.task('pack-p-fix', cb => {
+    exec(`
+        for f in dist/chunk*.js;
+        do
+            sed -i 's/__webpack_require__\.ilib_cache_id="[^"]*";//g' "$f";
+        done`.trim(),
+        handleError(cb)
+    )
+})
 
 gulp.task('installService', cb => { exec('NODE_ENV=development npm ci --prefix=./service', handleError(cb)) })
 

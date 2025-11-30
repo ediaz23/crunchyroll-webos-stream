@@ -76,7 +76,7 @@
         "classnames": "^2.5.1",
         "crunchyroll-js-api": "^1.5.1",
         "dashjs-webos5": "^5.1.100",
-        "dexie": "^4.2.1",
+        "dexie": "~2.0.4",
         "fake-xml-http-request": "^2.1.2",
         "fflate": "^0.8.2",
         "html-entities": "^2.5.2",
