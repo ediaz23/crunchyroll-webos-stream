@@ -119,6 +119,27 @@ var _increment = function increment(state) {  // crunchypatch
         return handleError(cb)(err)
     }
 
+    try {
+        exec('npx which enact', { encoding: 'utf-8' }, (err, cliPath) => {
+            if (err) { throw err }
+            cliPath = cliPath.split('/').slice(0, -2).join('/') + '/lib/node_modules/@enact/cli'
+            const packageContent = JSON.parse(fs.readFileSync(`${cliPath}/package.json`, 'utf8'))
+            if (packageContent.version === '7.2.1') {
+                /** @type {String} */
+                let fileContent = fs.readFileSync(`${cliPath}/commands/serve.js`, 'utf-8')
+                if (!fileContent.includes('compiler.hooks.failed.tap')) {
+                    fileContent = fileContent.replace('compiler.hooks.afterEmit.tapAsync',`
+            compiler.hooks.failed.tap('EnactCLI', console.error)
+            compiler.hooks.afterEmit.tapAsync`
+                    )
+                    fs.writeFileSync(`${cliPath}/commands/serve.js`, fileContent, 'utf-8')
+                }
+            }
+        })
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
     cb()
 }
 
