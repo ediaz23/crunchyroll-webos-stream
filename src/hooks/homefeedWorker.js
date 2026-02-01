@@ -209,6 +209,7 @@ const processDynamicCollection = async (carousel, profile) => {
     } else if ('recent_episodes' === carousel.response_type) {
         res = await api.discover.getBrowseAll(profile, { quantity, ratings, type: 'episode', sort: 'newly_added' })
         const added = new Set()
+        const today = new Date()
         res = {
             data: res.data.filter(val => {
                 let out = true
@@ -218,6 +219,9 @@ const processDynamicCollection = async (carousel, profile) => {
                         added.add(val.episode_metadata.series_id)
                     } else {
                         out = false
+                    }
+                    if (out && val.last_public) {
+                        out = new Date(val.last_public) <= today
                     }
                 }
                 return out

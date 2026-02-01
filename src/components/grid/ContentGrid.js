@@ -3,14 +3,16 @@ import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Cell, Row, Column } from '@enact/ui/Layout'
 import Heading from '@enact/moonstone/Heading'
 import Input from '@enact/moonstone/Input'
+import Dropdown from '@enact/moonstone/Dropdown'
 import PropTypes from 'prop-types'
 
-import { $L } from '../../hooks/language'
 import CategoryList from './CategoryList'
 import ContentGridItems from './ContentGridItems'
-import api from '../../api'
-import useContentList from '../../hooks/contentList'
 import css from './ContentGrid.module.less'
+import { dropdownKeydown } from '../SelectLanguage'
+import api from '../../api'
+import { useContentList, useOrderOptions, useViewModes } from '../../hooks/contentList'
+import { $L } from '../../hooks/language'
 
 
 /**
@@ -19,6 +21,7 @@ import css from './ContentGrid.module.less'
  * @property {Number} quantity
  * @property {Boolean} ratings
  * @property {Boolean} noMock
+ * @property {'all' | 'sub' | 'dub'} viewMode
  * @property {String} type
  * @property {String} contentKey
  * @property {String} category
@@ -37,9 +40,8 @@ import css from './ContentGrid.module.less'
  * @param {String} obj.contentType type of content to show, series, movies, etc
  * @param {String} obj.engine Engine to search, can be search or browse
  * @param {Boolean} obj.noCategory Not show category
- * @param {Boolean} obj.noSearch Not show input
  */
-const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse', noCategory, noSearch, ...rest }) => {
+const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse', noCategory, ...rest }) => {
 
     const { contentList, quantity, autoScroll, delay,
         mergeContentList, changeContentList, onFilter,
@@ -50,9 +52,12 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
     const [category, setCategory] = useState(viewBackup?.category || 'all')
     /** @type {[String, Function]} */
     const [query, setQuery] = useState(viewBackup?.query || '')
-
-    /** @type {String} */
-    const sort = useMemo(() => query === '' ? 'popularity' : 'alphabetical', [query])
+    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(
+        profile, viewBackup?.sort || 'popularity', onFilter
+    )
+    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(
+        profile, viewBackup?.viewMode || 'all', onFilter
+    )
     /** @type {SearchOptions} */
     const options = useMemo(() => {
         return {
@@ -64,8 +69,9 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
             category: category !== 'all' ? [category] : [],
             sort,
             query,
+            viewMode,
         }
-    }, [category, contentType, sort, query, contentKey, quantity])
+    }, [category, contentType, sort, query, contentKey, quantity, viewMode])
 
     /** @type {Function} */
     const onSearch = useCallback(({ value }) => {
@@ -146,14 +152,32 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
                                 {title}
                             </Heading>
                         </Cell>
-                        {!noSearch &&
-                            <Cell shrink>
-                                <Input placeholder={$L('Search')}
-                                    value={query}
-                                    onChange={onSearch}
-                                    iconAfter="search" />
-                            </Cell>
-                        }
+                        <Cell shrink>
+                            <Input placeholder={$L('Search')}
+                                value={query}
+                                onChange={onSearch}
+                                iconAfter="search" />
+                        </Cell>
+                        <Cell shrink>
+                            <Dropdown title={$L('Order')}
+                                selected={orderLabels.findIndex(i => i.key === sort)}
+                                width='small'
+                                onSelect={onSelectOrder}
+                                onKeyDown={dropdownKeydown}
+                                showCloseButton>
+                                {orderStr}
+                            </Dropdown>
+                        </Cell>
+                        <Cell shrink>
+                            <Dropdown title={$L('Presentation')}
+                                selected={viewModeLabels.findIndex(i => i.key === viewMode)}
+                                width='small'
+                                onSelect={onSelectViewMode}
+                                onKeyDown={dropdownKeydown}
+                                showCloseButton>
+                                {viewModeStr}
+                            </Dropdown>
+                        </Cell>
                     </Row>
                 </Cell>
                 <Cell grow>

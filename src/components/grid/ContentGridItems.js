@@ -4,12 +4,14 @@ import Spinner from '@enact/moonstone/Spinner'
 import { VirtualGridList } from '@enact/moonstone/VirtualList'
 import GridListImageItem from '@enact/moonstone/GridListImageItem'
 import ri from '@enact/ui/resolution'
+import DateFmt from 'ilib/lib/DateFmt'
 
 import PropTypes from 'prop-types'
 
 import LoadingList from '../LoadingList'
 import useGetImagePerResolution from '../../hooks/getImagePerResolution'
 import { useViewBackup } from '../../hooks/viewBackup'
+import css from './ContentGrid.module.less'
 
 
 /**
@@ -60,10 +62,13 @@ const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true
                 content: contentItem,
                 mode
             })
+            const dateFormatter = new DateFmt({ type: 'date', length: 'short' })
             out = (
                 <GridListImageItem
                     {...rest2}
+                    className={css.GridListImageItemBadge}
                     data-index={index}
+                    data-date={contentItem.last_public && dateFormatter.format(new Date(contentItem.last_public))}
                     source={image.source}
                     caption={(contentItem.title || '').replace(/\n/g, "")}
                     subCaption={(contentItem.description || '').replace(/\n/g, "")}
