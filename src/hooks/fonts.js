@@ -322,14 +322,19 @@ async function saveFont(url, name, headers, cached) {
  * @param {'get'|'get_detail'|'upsert'|'delete'} obj.type
  * @param {FontEntry} obj.entry
  * @param {Blob} [obj.data]
+ * @param {Boolean} [obj.cleanDB]
  * @return {Promise<{fonts: Array<FontEntry>, data: Blob}>}
  */
-async function crudFonts({ type, entry, data }) {
+async function crudFonts({ type, entry, data, cleanDB }) {
     logger.debug(`fonts crudFonts in ${type}`)
-    const out = { fonts: [], data: null }
+    let out = { fonts: [], data: null }
+    const DB_NAME = 'fontsDB'
 
     try {
-        const db = new Dexie('fontsDB')
+        if (cleanDB) {
+            await Dexie.delete(DB_NAME)
+        }
+        const db = new Dexie(DB_NAME)
 
         db.version(1).stores({ fonts_meta: 'name', fonts_data: '' })
 
@@ -350,7 +355,14 @@ async function crudFonts({ type, entry, data }) {
         db.close()
     } catch (err) {
         logger.error('Error handle fonts')
-        logger.error(err)
+        if (err instanceof Dexie.DexieError) {
+            logger.error(err.message)
+            if (err.message && err.message.includes('UpgradeError') && !cleanDB) {
+                out = await crudFonts({ type, entry, data, cleanDB: true })
+            }
+        } else {
+            logger.error(err)
+        }
     }
     logger.debug(`fonts crudFonts out ${type}`)
     return out
