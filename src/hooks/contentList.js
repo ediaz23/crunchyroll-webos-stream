@@ -1,8 +1,10 @@
 
-import { useCallback, useState, useRef } from 'react'
+import { useCallback, useState, useRef, useMemo } from 'react'
 import { useSetRecoilState } from 'recoil'
+
 import { homeViewReadyState } from '../recoilConfig'
 import { useNavigateContent } from './navigate'
+import { $L } from './language'
 
 
 /**
@@ -33,13 +35,100 @@ import { useNavigateContent } from './navigate'
  */
 
 /**
+ * @param {import('crunchyroll-js-api').Types.Profile} _profile current profile
+ * @param {String} sortBack
+ * @param {Function} onFilter
+ * @returns {[String, Array<{key: String, value: String}>,String, Function]}
+ */
+export const useOrderOptions = (_profile, sortBack, onFilter) => {
+    /** @type {[String, Function]}  */
+    const [sort, setOrder] = useState(sortBack || 'newly_added')
+
+    /** @type {Array<{key: String, value: String}>} */
+    const orderLabels = useMemo(() => {
+        return [{
+            key: 'newly_added',
+            value: $L('Newly'),
+        }, {
+            key: 'popularity',
+            value: $L('Popularity'),
+        }, {
+            key: 'alphabetical',
+            value: $L('Alphabetical'),
+        }]
+    }, [])
+
+    /** @type {Array<String>} */
+    const orderStr = useMemo(() => orderLabels.map(i => i.value), [orderLabels])
+
+    /** @type {Function} */
+    const onSelectOrder = useCallback(({ selected }) => {
+        setOrder(orderLabels[selected].key)
+        onFilter({ delay: 0 })
+    }, [orderLabels, setOrder, onFilter])
+
+    return [sort, orderLabels, orderStr, onSelectOrder]
+}
+
+/**
+ * @param {import('crunchyroll-js-api').Types.Profile} profile current profile
+ * @param {String} viewModeBack
+ * @param {Function} onFilter
+ * @returns {[String, Array<{key: String, value: String}>,String, Function]}
+ */
+export const useViewModes = (profile, viewModeBack, onFilter) => {
+    /** @type {[String, Function]}  */
+    const [viewMode, setViewMode] = useState(
+        viewModeBack || (
+            (
+                profile.preferred_content_audio_language === 'ja-JP'
+                &&
+                profile.preferred_content_subtitle_language !== 'off'
+            )
+                ? 'sub'
+                : (
+                    profile.preferred_content_audio_language !== 'ja-JP'
+                        ? 'dub'
+                        : 'all'
+                )
+        )
+    )
+
+    /** @type {Array<{key: String, value: String}>} */
+    const viewModeLabels = useMemo(() => {
+        return [{
+            key: 'all',
+            value: $L('All'),
+        }, {
+            key: 'sub',
+            value: $L('Subtitled'),
+        }, {
+            key: 'dub',
+            value: $L('Dubbed'),
+        }]
+    }, [])
+
+    /** @type {Array<String>} */
+    const viewModeStr = useMemo(() => viewModeLabels.map(i => i.value), [viewModeLabels])
+
+    /** @type {Function} */
+    const onSelectViewMode = useCallback(({ selected }) => {
+        setViewMode(viewModeLabels[selected].key)
+        onFilter({ delay: 0 })
+    }, [viewModeLabels, setViewMode, onFilter])
+
+    return [viewMode, viewModeLabels, viewModeStr, onSelectViewMode]
+}
+
+
+/**
  * @param {String} type
  * @param {Object} [homeBackupOverride]
  * @param {Object} [homePositionOverride]
  * @returns {ListViewProps}
  */
 export const useContentList = (type) => {
-    const {navigateContent, viewBackup, viewBackupRef} = useNavigateContent(type)
+    const { navigateContent, viewBackup, viewBackupRef } = useNavigateContent(type)
     /** @type {Function} */
     const setHomeViewReady = useSetRecoilState(homeViewReadyState)
     /** @type {[Array<Object>, Function]} */

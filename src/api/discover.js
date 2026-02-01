@@ -17,6 +17,7 @@ import { translateError, getContentParam } from './utils'
  * @param {String} [params.sort] sort results
  * @param {String} [params.type] type for search, example episode
  * @param {Boolean} [params.ratings]
+ * @param {'all' | 'sub' | 'dub'} [params.viewMode]
  * @returns {Promise<{total: Number, data: Array<Object>, meta: Object}>}
  */
 export const getBrowseAll = async (profile, params) => {
@@ -26,7 +27,13 @@ export const getBrowseAll = async (profile, params) => {
             out = await getMockData('browse', params, [getBrowseAll, profile])
         } else {
             const account = await getContentParam(profile)
-            out = await api.discover.getBrowseAll({ account, ...params })
+            const newPrams = { ...params }
+            if (params.viewMode === 'sub') {
+                newPrams.isSubbed = true
+            } else if (params.viewMode === 'dub') {
+                newPrams.isDubbed = true
+            }
+            out = await api.discover.getBrowseAll({ account, ...newPrams })
         }
     } catch (error) {
         await translateError(error)

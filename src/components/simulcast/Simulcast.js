@@ -11,7 +11,8 @@ import css from '../grid/ContentGrid.module.less'
 import { dropdownKeydown } from '../SelectLanguage'
 import { $L } from '../../hooks/language'
 import api from '../../api'
-import useContentList from '../../hooks/contentList'
+import { useContentList, useOrderOptions, useViewModes } from '../../hooks/contentList'
+import { sortContent } from '../../utils'
 
 
 /**
@@ -41,24 +42,15 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const [season, setSeason] = useState(viewBackup?.season || undefined)
     /** @type {[Array<Season>, Function]} */
     const [seasons, setSeasons] = useState(viewBackup?.seasons || undefined)
-    /** @type {[String, Function]}  */
-    const [sort, setOrder] = useState(viewBackup?.sort || 'newly_added')
+    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(
+        profile, viewBackup?.sort, onFilter
+    )
+    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(
+        profile, viewBackup?.viewMode, onFilter
+    )
+    /** @type {Array} */
+    const contentListSorted = useMemo(() => contentList && [...contentList].sort(sortContent), [contentList])
 
-    /** @type {Array<{key: String, value: String}>} */
-    const order = useMemo(() => {
-        return [{
-            key: 'newly_added',
-            value: $L('Newly'),
-        }, {
-            key: 'popularity',
-            value: $L('Popularity'),
-        }, {
-            key: 'alphabetical',
-            value: $L('Alphabetical'),
-        }]
-    }, [])
-    /** @type {Array<String>} */
-    const orderStr = useMemo(() => order.map(i => i.value), [order])
     /** @type {import('../grid/ContentGrid').SearchOptions} */
     const options = useMemo(() => {
         return {
@@ -67,14 +59,9 @@ const Simulcast = ({ profile, title, ...rest }) => {
             noMock: true,
             seasonTag: season && season.id,
             sort,
+            viewMode,
         }
-    }, [season, sort, quantity])
-
-    /** @type {Function} */
-    const onSelectOrder = useCallback(({ selected }) => {
-        setOrder(order[selected].key)
-        onFilter({ delay: 0 })
-    }, [order, setOrder, onFilter])
+    }, [season, quantity, sort, viewMode])
 
     /** @type {Function} */
     const prevSeason = useCallback(() => {
@@ -99,9 +86,9 @@ const Simulcast = ({ profile, title, ...rest }) => {
     /** @type {Function} */
     const setLocalContent = useCallback(newContent => {
         /** backup all state to restore later */
-        viewBackupRef.current = { season, seasons, sort }
+        viewBackupRef.current = { season, seasons, sort, viewMode }
         navigateContent(newContent)
-    }, [navigateContent, viewBackupRef, season, seasons, sort])
+    }, [navigateContent, viewBackupRef, season, seasons, sort, viewMode])
 
     useEffect(() => {
         if (delay >= 0) {
@@ -135,12 +122,22 @@ const Simulcast = ({ profile, title, ...rest }) => {
                     <Row>
                         <Cell shrink>
                             <Dropdown title={$L('Order')}
-                                selected={order.findIndex(i => i.key === sort)}
+                                selected={orderLabels.findIndex(i => i.key === sort)}
                                 width='small'
                                 onSelect={onSelectOrder}
                                 onKeyDown={dropdownKeydown}
                                 showCloseButton>
                                 {orderStr}
+                            </Dropdown>
+                        </Cell>
+                        <Cell shrink>
+                            <Dropdown title={$L('Presentation')}
+                                selected={viewModeLabels.findIndex(i => i.key === viewMode)}
+                                width='small'
+                                onSelect={onSelectViewMode}
+                                onKeyDown={dropdownKeydown}
+                                showCloseButton>
+                                {viewModeStr}
                             </Dropdown>
                         </Cell>
                         {season && season.index + 1 < seasons.length &&
@@ -167,7 +164,7 @@ const Simulcast = ({ profile, title, ...rest }) => {
                         <Cell grow style={{ height: '100%' }}>
                             <ContentGridItems
                                 type='simulcast'
-                                contentList={contentList}
+                                contentList={contentListSorted}
                                 load={onLoad}
                                 onSelect={setLocalContent}
                                 autoScroll={autoScroll} />
