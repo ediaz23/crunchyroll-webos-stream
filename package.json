@@ -4,7 +4,7 @@
     "description": "Unofficial Crunchyroll app for LG Smart TVs.",
     "main": "src/index.js",
     "scripts": {
-        "serve": "NODE_ENV=development REACT_APP_SERVING=true enact serve --verbose",
+        "serve": "NODE_ENV=development REACT_APP_SERVING=true enact serve",
         "serve-p": "NODE_ENV=production REACT_APP_SERVING=true enact serve",
         "pack": "NODE_ENV=development REACT_APP_SERVING=false enact pack",
         "pack-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p && gulp pack-p-fix",
