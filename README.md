@@ -25,9 +25,15 @@ software is not the responsibility of the project contributors or maintainers.
 
 ## Tested on Devices
 
-  - NANO079SNA, WebOS 5.5.0-1107
-  - 86QNED866RE, WebOS 23
-
+```text
+49LJ5500     WebOS 3.5
+65UJ7507     WebOS 3.5
+OLED55B7D    WebOS 3.5
+43UK6750PLD  WebOS 4
+75UM7570AUE  WebOS 4
+NANO079SNA   WebOS 5.5.0-1107
+86QNED866RE  WebOS 23
+```
 
 ## How to run on local? (Linux)
 
