@@ -35,12 +35,11 @@ import { $L } from './language'
  */
 
 /**
- * @param {import('crunchyroll-js-api').Types.Profile} _profile current profile
  * @param {String} sortBack
  * @param {Function} onFilter
  * @returns {[String, Array<{key: String, value: String}>,String, Function]}
  */
-export const useOrderOptions = (_profile, sortBack, onFilter) => {
+export const useOrderOptions = (sortBack, onFilter) => {
     /** @type {[String, Function]}  */
     const [sort, setOrder] = useState(sortBack || 'newly_added')
 
@@ -71,28 +70,13 @@ export const useOrderOptions = (_profile, sortBack, onFilter) => {
 }
 
 /**
- * @param {import('crunchyroll-js-api').Types.Profile} profile current profile
  * @param {String} viewModeBack
  * @param {Function} onFilter
  * @returns {[String, Array<{key: String, value: String}>,String, Function]}
  */
-export const useViewModes = (profile, viewModeBack, onFilter) => {
+export const useViewModes = (viewModeBack, onFilter) => {
     /** @type {[String, Function]}  */
-    const [viewMode, setViewMode] = useState(
-        viewModeBack || (
-            (
-                profile.preferred_content_audio_language === 'ja-JP'
-                &&
-                profile.preferred_content_subtitle_language !== 'off'
-            )
-                ? 'sub'
-                : (
-                    profile.preferred_content_audio_language !== 'ja-JP'
-                        ? 'dub'
-                        : 'all'
-                )
-        )
-    )
+    const [viewMode, setViewMode] = useState(viewModeBack || 'all')
 
     /** @type {Array<{key: String, value: String}>} */
     const viewModeLabels = useMemo(() => {

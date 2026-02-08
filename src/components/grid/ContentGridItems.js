@@ -36,6 +36,8 @@ const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true
     const [itemHeight, itemWidth] = useMemo(() => {
         return mode === 'tall' ? [ri.scale(390), ri.scale(240)] : [ri.scale(270), ri.scale(320)]
     }, [mode])
+    /** @type {import('ilib/lib/DateFmt')} */
+    const dateFmt = useMemo(() => new DateFmt({ type: 'datetime', length: 'short', clock: '12' }), [])
     /** @type {Function} */
     const getImagePerResolution = useGetImagePerResolution()
 
@@ -62,13 +64,15 @@ const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true
                 content: contentItem,
                 mode
             })
-            const dateFormatter = new DateFmt({ type: 'date', length: 'short' })
+            /** @type {String} */
+            let dateStr = contentItem.last_public && dateFmt.format(new Date(contentItem.last_public)) || ''
+            dateStr = dateStr.endsWith('.') ? dateStr.slice(0, -1) : dateStr
             out = (
                 <GridListImageItem
                     {...rest2}
                     className={css.GridListImageItemBadge}
                     data-index={index}
-                    data-date={contentItem.last_public && dateFormatter.format(new Date(contentItem.last_public))}
+                    data-date={dateStr}
                     source={image.source}
                     caption={(contentItem.title || '').replace(/\n/g, "")}
                     subCaption={(contentItem.description || '').replace(/\n/g, "")}
@@ -87,7 +91,7 @@ const ContentGridItems = ({ type, contentList, onSelect, load, autoScroll = true
             )
         }
         return out
-    }, [contentList, itemHeight, getImagePerResolution, onSelectItem, onFocus, load, mode])
+    }, [contentList, itemHeight, getImagePerResolution, onSelectItem, onFocus, load, mode, dateFmt])
 
     useEffect(() => {
         let interval = null

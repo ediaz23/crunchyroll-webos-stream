@@ -334,22 +334,16 @@ export function sortContent(a, b) {
     if (!a?.last_public) return 1
     if (!b?.last_public) return -1
 
-    const da = new Date(a.last_public)
-    const db = new Date(b.last_public)
-    const today = new Date()
-    const diffA = da - today
-    const diffB = db - today
+    const now = Date.now()
+    const da = new Date(a.last_public).getTime() - now
+    const db = new Date(b.last_public).getTime() - now
 
-    const aFuture = diffA > 0
-    const bFuture = diffB > 0
+    const aFuture = da > 0
+    const bFuture = db > 0
 
     if (aFuture !== bFuture) return aFuture ? 1 : -1
 
-    if (!aFuture) {
-        return Math.abs(diffA) - Math.abs(diffB)
-    }
-
-    return Math.abs(diffB) - Math.abs(diffA)
+    return db - da
 }
 
 export function getIsBeginningSeason() {

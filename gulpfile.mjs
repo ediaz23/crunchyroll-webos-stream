@@ -34,6 +34,19 @@ function cleanIlib(cb) {
         return handleError(cb)(err)
     }
     try {
+        const filePath = 'node_modules/ilib/locale/es/dateformats.json'
+        const content = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+        content.gregorian.date.dmy = {
+            "f": "dd 'de' MMMM 'de' yyyy",
+            "l": "dd 'de' MMMM 'de' yyyy",
+            "m": "dd MMM yyyy",
+            "s": "dd/MM/yy"
+        }
+        fs.writeFileSync(filePath, JSON.stringify(content), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+    try {
         const filePath = './node_modules/@enact/moonstone/VideoPlayer/VideoPlayer.js'
         /** @type {String} */
         let fileContent = fs.readFileSync(filePath, 'utf-8')
@@ -128,7 +141,7 @@ var _increment = function increment(state) {  // crunchypatch
                 /** @type {String} */
                 let fileContent = fs.readFileSync(`${cliPath}/commands/serve.js`, 'utf-8')
                 if (!fileContent.includes('compiler.hooks.failed')) {
-                    fileContent = fileContent.replace('compiler.hooks.afterEmit.tapAsync',`
+                    fileContent = fileContent.replace('compiler.hooks.afterEmit.tapAsync', `
         compiler.hooks.failed.tap('EnactCLI', (err) => {
             devServer.invalidate();     // ← permite recargar
             console.error(err);      // ← muestra el error

@@ -42,12 +42,8 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const [season, setSeason] = useState(viewBackup?.season || undefined)
     /** @type {[Array<Season>, Function]} */
     const [seasons, setSeasons] = useState(viewBackup?.seasons || undefined)
-    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(
-        profile, viewBackup?.sort, onFilter
-    )
-    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(
-        profile, viewBackup?.viewMode, onFilter
-    )
+    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(viewBackup?.sort, onFilter)
+    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(viewBackup?.viewMode, onFilter)
     /** @type {Array} */
     const contentListSorted = useMemo(() => contentList && [...contentList].sort(sortContent), [contentList])
 
