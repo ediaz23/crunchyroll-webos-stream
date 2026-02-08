@@ -20,7 +20,8 @@ import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
-import { createSubWorker } from '../../hooks/fonts'
+import { createSubLocalWorker } from '../../hooks/subtitleLocal'
+import { createSubRemoteWorker } from '../../hooks/subtitleRemote'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../assets/empty.mp4'
@@ -979,12 +980,18 @@ const Player = ({ ...rest }) => {
     }, [profile, stream, setSubtitle])
 
     useEffect(() => {
-        if (appConfigRef.current.subtitle === 'softsub' && subtitle && subtitle.locale !== 'off') {
+        if (subtitle && subtitle.locale !== 'off') {
             const video = document.querySelector('video')
             onPlayPause()
-            createSubWorker(video, subtitle.url)
-                .then(onPlayPause)
-                .catch(handleCrunchyError)
+            if (appConfigRef.current.subtitle === 'remotesub') {
+                createSubRemoteWorker(video, subtitle.url)
+                    .then(onPlayPause)
+                    .catch(handleCrunchyError)
+            } else { // softsub
+                createSubLocalWorker(video, subtitle.url)
+                    .then(onPlayPause)
+                    .catch(handleCrunchyError)
+            }
         }
     }, [appConfigRef, subtitle, onPlayPause, handleCrunchyError])
 

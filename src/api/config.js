@@ -106,7 +106,7 @@ export const setDeviceInformation = async () => {
  * @type {Object}
  * @property {'full'|'lite'} ui
  * @property {'adaptive'|'2160p'|'1080p'|'720p'|'480p'|'360p'|'240p'} video
- * @property {'hardsub'|'softsub'} subtitle
+ * @property {'hardsub'|'softsub'|'remotesub'} subtitle
  * @property {'yes'|'no'} preview
  * @property {'adaptive'|5|10|15|20|30|50} cacheMemory
  *
