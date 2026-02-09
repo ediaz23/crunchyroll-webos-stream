@@ -980,7 +980,7 @@ const Player = ({ ...rest }) => {
     }, [profile, stream, setSubtitle])
 
     useEffect(() => {
-        if (subtitle && subtitle.locale !== 'off') {
+        if (subtitle && subtitle.locale !== 'off' && appConfigRef.current.subtitle !== 'hardsub') {
             const video = document.querySelector('video')
             onPlayPause()
             if (appConfigRef.current.subtitle === 'remotesub') {
