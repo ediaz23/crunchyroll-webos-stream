@@ -1,6 +1,8 @@
 /* global self OffscreenCanvas */
 
-const cache = new Map()
+import LRUCache from '../LRUCache'
+
+const cache = new LRUCache({ maxBytes: 5 * 1024 * 1024 })
 const KEEP_AHEAD_MS = 2000
 const stepOffsetsSec = [-20, -10, -5, 5, 10, 20]
 let url
@@ -10,7 +12,7 @@ let debug = null
 let offCanvas
 let offCanvasCtx
 let offscreenRender
-let lastCurrentTime = 0, lastRenderedTMs = 0, gcTimer = null
+let lastCurrentTime = 0, lastRenderedTMs = 0
 let asyncRender = false
 let subtitleColorSpace = null
 
@@ -48,21 +50,6 @@ if (typeof console === 'undefined') {
  * @return {Number}
  */
 const quantizeTimeMs = (tMs) => Math.round(tMs / stepMs) * stepMs
-
-/**
- * Clear orphans
- */
-const gc = () => {
-    const tMs = quantizeTimeMs(lastCurrentTime * 1000)
-    const maxStepMs = Math.max.apply(null, stepOffsetsSec.map(n => Math.abs(n))) * 1000
-
-    const minT = tMs - maxStepMs - 5000
-    const maxT = tMs + maxStepMs + 5000
-
-    for (const k of cache.keys()) {
-        if (k < minT || k > maxT) cache.delete(k)
-    }
-}
 
 /**
  * @param {Number} tMs
@@ -195,8 +182,11 @@ const render = async (time, force) => {
         const buffers = []
 
         try {
-            const buf = cache.get(tMs) || null
+            const buf = cache.get(tMs) || false
             if (!buf) {
+                if (buf === null) {
+                    lastRenderedTMs = tMs
+                }
                 await paintImages({ images, buffers, times })
             } else {
                 images.push({ w: self.width, h: self.height, x: 0, y: 0, image: buf })
@@ -217,11 +207,6 @@ const setTrack = async content => {
     cache.clear()
     lastCurrentTime = 0
     lastRenderedTMs = 0
-
-    if (gcTimer) {
-        clearInterval(gcTimer)
-    }
-    gcTimer = setInterval(gc, 2000)
 
     const r = await fetch(`${url}/init`, {
         method: 'POST',
@@ -255,6 +240,7 @@ const init = async data => {
 
     const healtRes = await fetch(`${url}/health?subName=${subName}`)
     if (healtRes.ok) {
+        cache.maxBytes = data.maxBytesCache || cache.maxBytes
         await setTrack(data.subContent)
     } else {
         throw new Error('Server is down')
@@ -285,8 +271,6 @@ const canvas = ({ width, height, force }) => {
 }
 
 const freeTrack = () => {
-    clearInterval(gcTimer)
-    gcTimer = null
     cache.clear()
 }
 
@@ -302,7 +286,7 @@ const demand = async ({ time }) => {
 
     const promises = toFetch.map(async nextTMs => {
         if (!cache.has(nextTMs)) {
-            cache.set(nextTMs, null)
+            cache.set(nextTMs, false)
             try {
                 const buf = await fetchFrame(nextTMs)
                 cache.set(nextTMs, buf)
@@ -314,11 +298,6 @@ const demand = async ({ time }) => {
     })
 
     await promises[0]
-
-    cache.delete(quantizeTimeMs(tMs - stepMs))
-    for (const oldTMs of stepOffsetsSec.map(n => quantizeTimeMs(tMs - stepMs + n * 1000))) {
-        cache.delete(oldTMs)
-    }
 
     render(time)
 }
