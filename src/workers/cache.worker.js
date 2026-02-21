@@ -1,6 +1,6 @@
 /* global self */
 
-import QuickLRU from 'quick-lru';
+import LRUCache from '../LRUCache'
 
 /**
  * @typedef ReqEntry
@@ -8,7 +8,7 @@ import QuickLRU from 'quick-lru';
  * @property {import('../hooks/customFetch').ResponseProxy} response
  * @property {Number} ts timespan
  * @property {Number} maxAge seconds, -1 = no max‑age
- * @property {Number} size butes
+ * @property {Number} size bytes
  * @property {String} [etag]
  * @property {String} [lastModified]
  */
@@ -16,7 +16,7 @@ import QuickLRU from 'quick-lru';
 /**
  * @type {{
     maxSize: Number,
-    lru: import('quick-lru'),
+    lru: LRUCache,
     gcTimer: Number
 }}
  */
@@ -35,7 +35,7 @@ function init({ maxSize }) {
     if (memoryCache.lru) {
         memoryCache.lru.clear()
     }
-    memoryCache.lru = new QuickLRU({ maxSize, size: v => v.size, })
+    memoryCache.lru = new LRUCache({ maxSize, size: v => v.size, })
     if (memoryCache.gcTimer) {
         clearInterval(memoryCache.gcTimer)
     }
