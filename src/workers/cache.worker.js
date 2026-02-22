@@ -1,6 +1,6 @@
 /* global self */
 
-import LRUCache from '../LRUCache'
+import LRUCache from '../lib/LRUCache'
 
 /**
  * @typedef ReqEntry

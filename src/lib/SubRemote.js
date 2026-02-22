@@ -1,3 +1,5 @@
+/* global Worker ResizeObserver Image createImageBitmap  */
+
 import 'rvfc-legacy-polyfill'
 
 let EventTargetBase = EventTarget
@@ -15,7 +17,6 @@ export default class SubRemote extends EventTargetBase {
      * @param {Object} options
      * @param {HTMLVideoElement} options.video
      * @param {HTMLCanvasElement=} options.canvas
-     * @param {String} options.workerUrl
      * @param {String} options.serverUrl
      * @param {String=} options.subUrl
      * @param {String=} options.subContent
@@ -29,10 +30,7 @@ export default class SubRemote extends EventTargetBase {
     constructor(options) {
         super()
 
-        if (!globalThis.Worker) {
-            throw new Error('Worker not supported')
-        }
-        if (!options || !options.video || !options.workerUrl || !options.serverUrl) {
+        if (!options || !options.video || !options.serverUrl) {
             throw new Error('Missing options (video/workerUrl/serverUrl required)')
         }
 
@@ -68,8 +66,7 @@ export default class SubRemote extends EventTargetBase {
         this._lastDemandTime = null
 
         this._boundResize = this.resize.bind(this)
-
-        this._worker = new window.Worker(options.workerUrl, { type: 'module' })
+        this._worker = new Worker(new URL('./workers/subtitleRemote.worker.js', import.meta.url), { type: 'module' })
         this._worker.onmessage = e => this._onmessage(e)
         this._worker.onerror = e => this._error(e)
 
@@ -93,8 +90,8 @@ export default class SubRemote extends EventTargetBase {
         if (this._video.videoWidth > 0) {
             this.resize()
         }
-        if (typeof window.ResizeObserver !== 'undefined') {
-            this._ro = new window.ResizeObserver(() => this.resize())
+        if (typeof ResizeObserver !== 'undefined') {
+            this._ro = new ResizeObserver(() => this.resize())
             this._ro.observe(this._video)
         }
     }
@@ -313,8 +310,8 @@ export default class SubRemote extends EventTargetBase {
             const image = images[i]
             if (image && image.image) {
                 if (image.image instanceof ArrayBuffer) {
-                    if (asyncRender && typeof window.createImageBitmap === 'function') {
-                        window.createImageBitmap(new Blob([image.image], { type: 'image/webp' })).then(bmp => {
+                    if (asyncRender && typeof createImageBitmap === 'function') {
+                        createImageBitmap(new Blob([image.image], { type: 'image/webp' })).then(bmp => {
                             try {
                                 this._ctx.drawImage(bmp, image.x, image.y)
                             } finally {
@@ -325,7 +322,7 @@ export default class SubRemote extends EventTargetBase {
                         }).catch(() => { })
                     } else {
                         const blobUrl = URL.createObjectURL(new Blob([image.image], { type: 'image/webp' }))
-                        const img = new window.Image()
+                        const img = new Image()
                         img.onload = () => {
                             try {
                                 this._ctx.drawImage(img, image.x, image.y)

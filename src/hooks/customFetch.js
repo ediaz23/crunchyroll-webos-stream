@@ -3,7 +3,8 @@
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
 import api from '../api'
-import utils, { ResourcePool } from '../utils'
+import utils from '../utils'
+import ResourcePool from '../lib/ResourcePool'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
 
