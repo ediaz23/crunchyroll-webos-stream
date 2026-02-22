@@ -21,7 +21,7 @@ import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
 import { createSubLocalWorker } from '../../hooks/subtitleLocal'
-import { createSubRemoteWorker } from '../../hooks/subtitleRemote'
+import { createSubRemoteWorker, destroySubRemoteWorker } from '../../hooks/subtitleRemote'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../assets/empty.mp4'
@@ -471,9 +471,11 @@ const setVideoQuality = (dashPlayer, appConfigRef) => {
         if (!selected) {
             selected = validAudios.sort((a, b) => a.bitrateInKbit - b.bitrateInKbit)[0]
         }
-        logger.debug(`player audios ${audioReps.map(i => i.bitrateInKbit).join(', ')}`)
-        logger.debug(`player audio ${selected.bitrateInKbit} for ${bitrateLimit} id ${selected.id}`)
-        dashPlayer.setRepresentationForTypeById('audio', selected.id, true)
+        if (selected) {
+            logger.debug(`player audios ${audioReps.map(i => i.bitrateInKbit).join(', ')}`)
+            logger.debug(`player audio ${selected.bitrateInKbit} for ${bitrateLimit} id ${selected.id}`)
+            dashPlayer.setRepresentationForTypeById('audio', selected.id, true)
+        }
     }
     dashPlayer.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, _setVideoQuality)
 }
@@ -980,20 +982,29 @@ const Player = ({ ...rest }) => {
     }, [profile, stream, setSubtitle])
 
     useEffect(() => {
-        if (subtitle && subtitle.locale !== 'off' && appConfigRef.current.subtitle !== 'hardsub') {
-            const video = document.querySelector('video')
-            onPlayPause()
-            if (appConfigRef.current.subtitle === 'remotesub') {
-                createSubRemoteWorker(video, subtitle.url)
-                    .then(onPlayPause)
-                    .catch(handleCrunchyError)
-            } else { // softsub
-                createSubLocalWorker(video, subtitle.url)
-                    .then(onPlayPause)
-                    .catch(handleCrunchyError)
+        if (!loading) {
+            const playVideo = () => {
+                playerRef.current.play()
+                setIsPaused(false)
+            }
+            if (subtitle && subtitle.locale !== 'off' && appConfigRef.current.subtitle !== 'hardsub') {
+                const video = document.querySelector('video')
+                playerRef.current.pause()
+                setIsPaused(true)
+                if (appConfigRef.current.subtitle === 'remotesub') {
+                    createSubRemoteWorker(video, subtitle.url)
+                        .then(playVideo)
+                        .catch(handleCrunchyError)
+                } else { // softsub
+                    createSubLocalWorker(video, subtitle.url)
+                        .then(playVideo)
+                        .catch(handleCrunchyError)
+                }
+            } else {
+                playVideo()
             }
         }
-    }, [appConfigRef, subtitle, onPlayPause, handleCrunchyError])
+    }, [loading, appConfigRef, subtitle, handleCrunchyError])
 
     useEffect(() => {  // findSkipEvents
         if (stream.urls) {
@@ -1033,9 +1044,7 @@ const Player = ({ ...rest }) => {
                     clearInterval(interval)
                     createDashPlayer(audio, stream, content, subtitle, appConfigRef).then(player => {
                         playerRef.current = player
-                        playerRef.current.play()
                         setLoading(false)
-                        setIsPaused(false)
                         if (appConfigRef.current.video !== 'adaptive') {
                             setVideoQuality(player, appConfigRef)
                         }
@@ -1204,6 +1213,12 @@ const Player = ({ ...rest }) => {
             setCurrentSkipEvent(resetCurrentSkipEvent)
         }
     }, [loading, skipEvents, resetCurrentSkipEvent])
+
+    useEffect(() => {
+        return () => {
+            destroySubRemoteWorker()
+        }
+    }, [])
 
     return (
         <div className={rest.className}>

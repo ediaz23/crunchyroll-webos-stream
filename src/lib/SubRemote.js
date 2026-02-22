@@ -66,7 +66,7 @@ export default class SubRemote extends EventTargetBase {
         this._lastDemandTime = null
 
         this._boundResize = this.resize.bind(this)
-        this._worker = new Worker(new URL('./workers/subtitleRemote.worker.js', import.meta.url), { type: 'module' })
+        this._worker = new Worker(new URL('../workers/subtitleRemote.worker.js', import.meta.url), { type: 'module' })
         this._worker.onmessage = e => this._onmessage(e)
         this._worker.onerror = e => this._error(e)
 
@@ -141,7 +141,7 @@ export default class SubRemote extends EventTargetBase {
         await this._loaded
 
         if (typeof subContent === 'string') {
-            this.sendMessage('setTrack', { content: subContent })
+            this.sendMessage('setTrack', subContent)
         }
 
         if (this._video) {

@@ -1,21 +1,25 @@
 /* global self OffscreenCanvas */
 
-import LRUCache from '../LRUCache'
+import LRUCache from '../lib/LRUCache'
 
-const cache = new LRUCache({ maxBytes: 5 * 1024 * 1024 })
-const KEEP_AHEAD_MS = 2000
-const stepOffsetsSec = [-20, -10, -5, 5, 10, 20]
+const cache = new LRUCache({ maxBytes: 50 * 1024 * 1024 })
+const KEEP_AHEAD_MS = 3000
+
+// keep some past (for quick back seeks) + some future (to stay ahead)
+const stepOffsetsSec = [-10, -5, -2, -1, 1, 2, 5, 10, 20]
+
 let url
 let stepMs
 let subName
 let debug = null
-let offCanvas
-let offCanvasCtx
-let offscreenRender
+let ready = false
+
+let offCanvas, offCanvasCtx, offscreenRender
+
 let lastCurrentTime = 0, lastRenderedTMs = 0
+
 let asyncRender = false
 let subtitleColorSpace = null
-
 
 if (typeof console === 'undefined') {
     const msg = (command, a) => {
@@ -26,21 +30,11 @@ if (typeof console === 'undefined') {
         })
     }
     self.console = {
-        log: function() {
-            msg('log', arguments)
-        },
-        debug: function() {
-            msg('debug', arguments)
-        },
-        info: function() {
-            msg('info', arguments)
-        },
-        warn: function() {
-            msg('warn', arguments)
-        },
-        error: function() {
-            msg('error', arguments)
-        }
+        log: function() { msg('log', arguments) },
+        debug: function() { msg('debug', arguments) },
+        info: function() { msg('info', arguments) },
+        warn: function() { msg('warn', arguments) },
+        error: function() { msg('error', arguments) }
     }
     console.log('Detected lack of console, overridden console')
 }
@@ -53,7 +47,7 @@ const quantizeTimeMs = (tMs) => Math.round(tMs / stepMs) * stepMs
 
 /**
  * @param {Number} tMs
- * @returns {Promise<ArrayBuffer>}
+ * @returns {Promise<ArrayBuffer|null>}
  */
 const fetchFrame = async (tMs) => {
     const r = await fetch(`${url}/render`, {
@@ -63,7 +57,7 @@ const fetchFrame = async (tMs) => {
             tMs,
             width: self.width,
             height: self.height,
-            subName,
+            subName
         })
     })
     let out = null
@@ -73,11 +67,32 @@ const fetchFrame = async (tMs) => {
     return out
 }
 
+/**
+ * Request a frame only once.
+ * cache values:
+ *  - undefined: not requested
+ *  - false: requested / in-flight
+ *  - null: requested / no frame
+ *  - ArrayBuffer: requested / has frame
+ */
+const requestFrame = (tMs) => {
+    const v = cache.peek(tMs)
+    if (v === undefined) {
+        cache.set(tMs, false)
+        fetchFrame(tMs).then(buf => {
+            cache.set(tMs, buf)
+        }).catch(e => {
+            cache.delete(tMs)
+            console.error('requestFrame', e)
+        })
+    }
+}
+
 function b64ToU8(b64) {
-    const bin = atob(b64);
-    const u8 = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
-    return u8.buffer;
+    const bin = atob(b64)
+    const u8 = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i)
+    return u8.buffer
 }
 
 const paintImages = async ({ times, images, buffers }) => {
@@ -93,55 +108,49 @@ const paintImages = async ({ times, images, buffers }) => {
 
     if (offscreenRender) {
         if (offCanvas.height !== self.height || offCanvas.width !== self.width) {
-            if (!isNaN(self.width)) {
-                offCanvas.width = self.width
-            }
-            if (!isNaN(self.height)) {
-                offCanvas.height = self.height
-            }
+            if (!isNaN(self.width)) offCanvas.width = self.width
+            if (!isNaN(self.height)) offCanvas.height = self.height
         }
 
         offCanvasCtx.clearRect(0, 0, self.width, self.height)
 
         let drewSomething = false
-        let bitmap = null
         for (const image of images) {
             if (image && image.image && offCanvasCtx && typeof offCanvasCtx.drawImage === 'function') {
                 try {
                     if (asyncRender && typeof self.createImageBitmap === 'function' && image.image instanceof ArrayBuffer) {
-                        bitmap = bitmap || await self.createImageBitmap(new Blob([image.image], { type: 'image/webp' }))
-                        offCanvasCtx.drawImage(bitmap, image.x, image.y)
-                        if (typeof bitmap.close === 'function') {
-                            bitmap.close()
+                        const bmp = await self.createImageBitmap(new Blob([image.image], { type: 'image/webp' }))
+                        try {
+                            offCanvasCtx.drawImage(bmp, image.x, image.y)
+                        } finally {
+                            if (typeof bmp.close === 'function') bmp.close()
                         }
-                        bitmap = null
                     } else {
                         offCanvasCtx.drawImage(image.image, image.x, image.y)
-                        if (typeof image.image.close === 'function') {
-                            image.image.close()
-                        }
+                        if (typeof image.image.close === 'function') image.image.close()
                     }
                     drewSomething = true
                 } catch (e) {
-                    console.error(`paintImages ${e}`)
+                    console.error('paintImages', e)
                 }
             }
         }
 
         if (offscreenRender === 'hybrid') {
             if (!drewSomething) {
-                return self.postMessage({ target: 'unbusy' })
-            }
-            if (debug) {
-                times.bitmaps = images.length
-            }
-            try {
-                const image = offCanvas.transferToImageBitmap()
-                resultObject.images = [{ image, x: 0, y: 0 }]
-                resultObject.asyncRender = true
-                self.postMessage(resultObject, [image])
-            } catch (e) {
                 self.postMessage({ target: 'unbusy' })
+            } else {
+                if (debug) {
+                    times.bitmaps = images.length
+                }
+                try {
+                    const image = offCanvas.transferToImageBitmap()
+                    resultObject.images = [{ image, x: 0, y: 0 }]
+                    resultObject.asyncRender = true
+                    self.postMessage(resultObject, [image])
+                } catch (e) {
+                    self.postMessage({ target: 'unbusy' })
+                }
             }
         } else {
             if (!drewSomething) {
@@ -150,9 +159,7 @@ const paintImages = async ({ times, images, buffers }) => {
                 if (debug) {
                     times.JSRenderTime = Date.now() - times.JSRenderTime
                     let total = 0
-                    for (const key in times) {
-                        total += times[key]
-                    }
+                    for (const key in times) total += times[key]
                     console.log('Bitmaps: ' + images.length + ' Total: ' + (total | 0) + 'ms', times)
                 }
                 self.postMessage({ target: 'unbusy' })
@@ -166,7 +173,6 @@ const paintImages = async ({ times, images, buffers }) => {
 const render = async (time, force) => {
     const times = {}
     const renderStartTime = performance.now()
-
     const tMs = quantizeTimeMs(time * 1000)
 
     if (debug) {
@@ -182,20 +188,21 @@ const render = async (time, force) => {
         const buffers = []
 
         try {
-            const buf = cache.get(tMs) || false
-            if (!buf) {
-                if (buf === null) {
-                    lastRenderedTMs = tMs
-                }
-                await paintImages({ images, buffers, times })
-            } else {
+            const buf = cache.get(tMs)
+
+            if (buf && buf !== false) {
                 images.push({ w: self.width, h: self.height, x: 0, y: 0, image: buf })
                 buffers.push(buf)
                 lastRenderedTMs = tMs
                 await paintImages({ images, buffers, times })
+            } else {
+                if (buf === null) {
+                    lastRenderedTMs = tMs
+                }
+                await paintImages({ images, buffers, times })
             }
         } catch (e) {
-            console.error('render pain', e)
+            console.error('render', e)
             self.postMessage({ target: 'unbusy' })
         }
     } else {
@@ -203,11 +210,24 @@ const render = async (time, force) => {
     }
 }
 
-const setTrack = async content => {
+const freeTrack = () => {
     cache.clear()
     lastCurrentTime = 0
     lastRenderedTMs = 0
+}
 
+const destroy = async () => {
+    ready = false
+    freeTrack()
+    await fetch(`${url}/destroy`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ subName })
+    })
+}
+
+const setTrack = async (content) => {
+    await destroy()
     const r = await fetch(`${url}/init`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -217,7 +237,7 @@ const setTrack = async content => {
             width: self.width,
             height: self.height,
             quantityMs: KEEP_AHEAD_MS,
-            subName,
+            subName
         })
     })
     const data = await r.json()
@@ -225,10 +245,11 @@ const setTrack = async content => {
     for (const f of data.frames) {
         cache.set(f.t_ms, f.data ? b64ToU8(f.data) : null)
     }
+    ready = true
     self.postMessage({ target: 'ready' })
 }
 
-const init = async data => {
+const init = async (data) => {
     self.width = data.width
     self.height = data.height
     stepMs = Math.round(1000 / (data.fpsObjetivo || 30))
@@ -270,46 +291,27 @@ const canvas = ({ width, height, force }) => {
     }
 }
 
-const freeTrack = () => {
-    cache.clear()
-}
-
 const demand = async ({ time }) => {
-    lastCurrentTime = time
+    if (ready) {
+        lastCurrentTime = time
 
-    const tMs = quantizeTimeMs(time * 1000)
+        const tMs = quantizeTimeMs(time * 1000)
 
-    const stepTms = stepOffsetsSec.map(n => quantizeTimeMs(tMs + n * 1000))
-    const futureTMs = quantizeTimeMs(tMs + stepMs)
+        // always prioritize "now" and "next frame"
+        requestFrame(tMs)
+        requestFrame(quantizeTimeMs(tMs + stepMs))
 
-    const toFetch = [tMs, futureTMs, ...stepTms]
-
-    const promises = toFetch.map(async nextTMs => {
-        if (!cache.has(nextTMs)) {
-            cache.set(nextTMs, false)
-            try {
-                const buf = await fetchFrame(nextTMs)
-                cache.set(nextTMs, buf)
-            } catch (e) {
-                cache.delete(nextTMs)
-                console.error('deman fetch', e)
-            }
+        // keep some past/future around to handle quick back seeks and stay ahead
+        for (const s of stepOffsetsSec) {
+            requestFrame(quantizeTimeMs(tMs + s * 1000))
         }
-    })
 
-    await promises[0]
-
-    render(time)
+        render(time)
+    } else {
+        self.postMessage({ target: 'unbusy' })
+    }
 }
 
-const destroy = async () => {
-    freeTrack()
-    await fetch(`${url}/destroy`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ subName })
-    })
-}
 
 const func = {
     init,
@@ -320,9 +322,9 @@ const func = {
     freeTrack,
     demand,
     render,
+    video: () => { },
     destroy,
-
-    getColorSpace: () => { },
+    getColorSpace: () => { }
 }
 
 self.onmessage = ({ data }) => {

@@ -38,13 +38,23 @@ const getMemoryLimits = async () => {
  * @returns {Number}
  */
 function adjustOutline({ screenHeight, style }) {
-    let out = style.Outline
-    if ((style.Outline || 0) <= 3) {
-        const base = Math.max((style.Outline || 0), 1)
-        const factor0 = screenHeight / (2160 / 10)
-        const atten = 1 / (1 + (style.Outline || 0))
-        out = Math.round(base * (factor0 * atten))
+    const cur = style.Outline || 0
+    let out = cur
+
+    if (cur <= 3) {
+        const base = Math.max(cur, 1)
+        const ratio = screenHeight / 2160
+        const k = 6
+        const atten = 1 / (1 + cur)
+
+        const calc = Math.round(base * (k * ratio) * atten)
+
+        const fs = Number(style.FontSize) || 48
+        const cap = Math.max(3, Math.round(fs * 0.18))
+
+        out = Math.min(cap, Math.max(cur, calc))
     }
+
     return out
 }
 
@@ -77,8 +87,7 @@ export const createSubLocalWorker = async (video, subUrl) => {
         })
         jassubObj.addEventListener('ready', resolve, { once: true })
         jassubObj.addEventListener('error', reject, { once: true })
-        prom.then(() => {
-            // free memory
+        prom.then(() => {  // free memory
             fonts.data = null
             fonts.names = null
             fonts.promise = null

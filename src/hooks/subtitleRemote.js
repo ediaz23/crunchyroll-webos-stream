@@ -1,13 +1,11 @@
 
-import SubRemote from '../SubRemote'
+import SubRemote from '../lib/SubRemote'
 
 import { customFetch } from './customFetch'
 //import { getFonts } from './fonts'
 //import logger from '../logger'
 //import utils from '../utils'
 
-
-const SubtitleRemoteWorker = new URL('../workers/subtitleRemote.worker.js', import.meta.url)
 
 /** @type {SubRemote} */
 let subRemoteObj = null
@@ -33,8 +31,7 @@ export const createSubRemoteWorker = async (video, subUrl) => {
             subContent,
             //            fonts: fonts.data,
             //            fallbackFont: fonts.defaultFont,
-            workerUrl: SubtitleRemoteWorker.href,
-            serverUrl: 'http://192.168.0.7:19090',
+            serverUrl: 'http://localhost:19090',
             maxBytesCache: 20 * 1024 * 1024,
         })
         subRemoteObj.addEventListener('ready', resolve, { once: true })
