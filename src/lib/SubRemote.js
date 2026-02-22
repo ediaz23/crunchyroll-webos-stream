@@ -57,8 +57,11 @@ export default class SubRemote extends EventTargetBase {
             this._video.insertAdjacentElement('afterend', this._canvasParent)
         }
 
-        this._ctx = this._canvas.getContext('2d')
-        if (!this._ctx) {
+        this._offscreenRender = typeof this._canvas.transferControlToOffscreen === 'function'
+        this._canvasctrl = this._offscreenRender ? this._canvas.transferControlToOffscreen() : null
+        this._canvasctrl = this._canvasctrl || this._canvas
+        this._ctx = !this._offscreenRender ? this._canvasctrl.getContext('2d') : null
+        if (!this._offscreenRender && !this._ctx) {
             throw new Error('Canvas rendering not supported')
         }
 
@@ -70,26 +73,26 @@ export default class SubRemote extends EventTargetBase {
         this._worker.onmessage = e => this._onmessage(e)
         this._worker.onerror = e => this._error(e)
 
+        const videoSize = this.resize()
+
         this._worker.postMessage({
             target: 'init',
-            width: this._canvas.width || 0,
-            height: this._canvas.height || 0,
-            wasmUrl: options.serverUrl, // reusing field name from worker code
+            ...videoSize,
+            wasmUrl: options.serverUrl,
             subUrl: options.subUrl || '',
             subContent: options.subContent || null,
             debug: this.debug,
-            // the worker uses this to decide decode strategy on its side
             asyncRender: typeof createImageBitmap !== 'undefined',
             maxBytesCache: options.maxBytesCache,
+            initTimeSec: this._video.currentTime + this.timeOffset,
         })
 
-        // RVFC (polyfilled) time source
+        if (this._offscreenRender) {
+            this.sendMessage('offscreenCanvas', null, [this._canvasctrl])
+        }
+
         this._video.requestVideoFrameCallback(this._handleRVFC.bind(this))
 
-        // resize management
-        if (this._video.videoWidth > 0) {
-            this.resize()
-        }
         if (typeof ResizeObserver !== 'undefined') {
             this._ro = new ResizeObserver(() => this.resize())
             this._ro.observe(this._video)
@@ -142,6 +145,10 @@ export default class SubRemote extends EventTargetBase {
 
         if (typeof subContent === 'string') {
             this.sendMessage('setTrack', subContent)
+            this._reAttachOffscreen()
+            if (this._ctx) {
+                this._ctx.filter = 'none'
+            }
         }
 
         if (this._video) {
@@ -158,6 +165,7 @@ export default class SubRemote extends EventTargetBase {
      * @param  {Number} [height=0]
      * @param  {Number} [top=0]
      * @param  {Number} [left=0]
+     * @returns {{width: Number, height: Number}}
      */
     resize(width, height, top, left) {
         width = width || 0
@@ -192,11 +200,12 @@ export default class SubRemote extends EventTargetBase {
             videoHeight: this._videoHeight || this._video.videoHeight,
             force: false
         })
+        return { width, height }
     }
 
     _getVideoPosition(width, height) {
-        width = width || this._video.videoWidth
-        height = height || this._video.videoHeight
+        width = width || this._video.videoWidth || window.innerWidth
+        height = height || this._video.videoHeight || window.innerHeight
 
         const videoRatio = width / height
         const offsetWidth = this._video.offsetWidth
@@ -225,7 +234,6 @@ export default class SubRemote extends EventTargetBase {
         if (height <= 0 || width <= 0) {
             out = { width: 0, height: 0 }
         } else {
-
             const sgn = scalefactor < 1 ? -1 : 1
             let newH = height * ratio
 
@@ -286,7 +294,40 @@ export default class SubRemote extends EventTargetBase {
         this.sendMessage('demand', { time: payload.mediaTime + this.timeOffset })
     }
 
+    // if we're using offscreen render, we can't use ctx filters, so we can't use a transfered canvas
+    _detachOffscreen() {
+        if (!this._offscreenRender || this._ctx) {
+            return null
+        }
+        this._canvas.remove()
+        this._createCanvas()
+        this._canvasctrl = this._canvas
+        this._ctx = this._canvasctrl.getContext('2d')
+        this.sendMessage('detachOffscreen')
+        // force a render after resize
+        this.busy = false
+        this.resize(0, 0, 0, 0, true)
+    }
+
+    // if the video or track changed, we need to re-attach the offscreen canvas
+    _reAttachOffscreen() {
+        if (!this._offscreenRender || !this._ctx) {
+            return null
+        }
+        this._canvas.remove()
+        this._createCanvas()
+        this._canvasctrl = this._canvas.transferControlToOffscreen()
+        this._ctx = false
+        this.sendMessage('offscreenCanvas', null, [this._canvasctrl])
+        this.resize(0, 0, 0, 0, true)
+    }
+
     _render(data) {
+        if (!this._ctx) {
+            this._unbusy()
+            return
+        }
+
         this._unbusy()
 
         const images = data.images || []
@@ -336,7 +377,6 @@ export default class SubRemote extends EventTargetBase {
                         img.src = blobUrl
                     }
                 } else {
-                    // ImageBitmap path (e.g. hybrid worker)
                     this._ctx.drawImage(image.image, image.x, image.y)
                     if (typeof image.image.close === 'function') {
                         image.image.close()

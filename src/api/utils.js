@@ -84,5 +84,6 @@ export const getContentParam = async (profile) => {
         accountId: token.accountId,
         locale: profile.preferred_communication_language,
         audioLanguage: profile.preferred_content_audio_language,
+        profileId: token.profileId,
     }
 }

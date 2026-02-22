@@ -2,21 +2,29 @@
 
 import LRUCache from '../lib/LRUCache'
 
+/**
+ * @typedef SubEvent
+ * @type {Object}
+ * @property {Number} id
+ * @property {Number} start_ms
+ * @property {Number} end_ms
+ * @property {Number} dur_ms
+ * @property {'static'|'dynamic'} type
+ */
+/** @type {Array<SubEvent>} */
+const eventList = []
 const cache = new LRUCache({ maxBytes: 50 * 1024 * 1024 })
 const KEEP_AHEAD_MS = 3000
 
-// keep some past (for quick back seeks) + some future (to stay ahead)
-const stepOffsetsSec = [-10, -5, -2, -1, 1, 2, 5, 10, 20]
 
 let url
-let stepMs
 let subName
 let debug = null
 let ready = false
 
 let offCanvas, offCanvasCtx, offscreenRender
 
-let lastCurrentTime = 0, lastRenderedTMs = 0
+let lastCurrentTime = 0, lastEventRendered = null
 
 let asyncRender = false
 let subtitleColorSpace = null
@@ -39,25 +47,86 @@ if (typeof console === 'undefined') {
     console.log('Detected lack of console, overridden console')
 }
 
-/**
- * @param {Number} tMs
- * @return {Number}
- */
-const quantizeTimeMs = (tMs) => Math.round(tMs / stepMs) * stepMs
+const u32le = (u8, o) => (u8[o]) | (u8[o + 1] << 8) | (u8[o + 2] << 16) | (u8[o + 3] << 24) >>> 0
+const i32le = (u8, o) => (u8[o]) | (u8[o + 1] << 8) | (u8[o + 2] << 16) | (u8[o + 3] << 24)
 
 /**
- * @param {Number} tMs
+ * @param {ArrayBuffer} buf
+ * @return {Array<{id: Number, data: ArrayBuffer}>}
+ */
+const parseBinaryFile = (buf) => {
+    const u8 = new Uint8Array(buf)
+    let o = 0
+
+    if (u8[o] !== 87 || u8[o + 1] !== 82 || u8[o + 2] !== 77 || u8[o + 3] !== 83) {  // MAGIC 'WRMS'
+        throw new Error('Invalid batch magic')
+    }
+    o += 4
+
+    const ver = u8[o]; o += 1
+    if (ver !== 1) {
+        throw new Error('Unsupported batch version ' + ver)
+    }
+
+    /** @type {Array<{id: Number, data: ArrayBuffer}>} */
+    const out = []
+    const count = (u8[o]) | (u8[o + 1] << 8)
+    o += 2
+
+    for (let i = 0; i < count; i++) {
+        const id = i32le(u8, o); o += 4
+        const len = u32le(u8, o); o += 4
+        if (len === 0) {
+            out.push({ id, data: null })
+        } else {
+            out.push({ id, data: u8.slice(o, o + len).buffer })
+            o += len
+        }
+    }
+    return out
+}
+
+/**
+ * @param {Number} tms
+ * @returns {Number}
+ */
+function findEventIndex(tms) {
+    let left = 0
+    let right = eventList.length - 1
+
+    while (left <= right) {
+        const mid = (left + right) >> 1
+        const item = eventList[mid]
+
+        if (tms < item.start_ms) {
+            right = mid - 1
+        } else if (tms >= item.end_ms) {
+            left = mid + 1
+        } else {
+            left = mid
+            break
+        }
+    }
+
+    left = left < 0 ? 0 : left
+    left = left >= eventList.length ? eventList.length - 1 : left
+
+    return left
+}
+
+/**
+ * @param {Array<Number>} tMsList
  * @returns {Promise<ArrayBuffer|null>}
  */
-const fetchFrame = async (tMs) => {
+const fetchEvents = async (eventIndexList) => {
     const r = await fetch(`${url}/render`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-            tMs,
+            subName,
             width: self.width,
             height: self.height,
-            subName
+            eventIndexList,
         })
     })
     let out = null
@@ -67,32 +136,35 @@ const fetchFrame = async (tMs) => {
     return out
 }
 
-/**
- * Request a frame only once.
- * cache values:
- *  - undefined: not requested
- *  - false: requested / in-flight
- *  - null: requested / no frame
- *  - ArrayBuffer: requested / has frame
- */
-const requestFrame = (tMs) => {
-    const v = cache.peek(tMs)
-    if (v === undefined) {
-        cache.set(tMs, false)
-        fetchFrame(tMs).then(buf => {
-            cache.set(tMs, buf)
+
+const requestEvent = (time) => {
+    const tMs = time * 1000
+    const maxPrefetch = 3
+    const indexList = []
+    let evIndex = findEventIndex(tMs)
+
+    for (let i = 0; i < maxPrefetch; ++i) {
+        if (evIndex < eventList.length) {
+            if (cache.peek(eventList[evIndex].id) === undefined) {
+                cache.set(eventList[evIndex].id, false)
+                indexList.push(evIndex)
+            }
+        }
+        evIndex += 1
+    }
+
+    if (indexList.length) {
+        fetchEvents(indexList).then(parseBinaryFile).then(arr => {
+            for (const i of arr) {
+                cache.set(i.id, i.data)
+            }
         }).catch(e => {
-            cache.delete(tMs)
+            for (const index of indexList) {
+                cache.delete(eventList[index].id)
+            }
             console.error('requestFrame', e)
         })
     }
-}
-
-function b64ToU8(b64) {
-    const bin = atob(b64)
-    const u8 = new Uint8Array(bin.length)
-    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i)
-    return u8.buffer
 }
 
 const paintImages = async ({ times, images, buffers }) => {
@@ -159,21 +231,24 @@ const paintImages = async ({ times, images, buffers }) => {
                 if (debug) {
                     times.JSRenderTime = Date.now() - times.JSRenderTime
                     let total = 0
-                    for (const key in times) total += times[key]
+                    for (const key in times) {
+                        total += times[key]
+                    }
                     console.log('Bitmaps: ' + images.length + ' Total: ' + (total | 0) + 'ms', times)
                 }
                 self.postMessage({ target: 'unbusy' })
             }
         }
     } else {
-        self.postMessage(resultObject, buffers)
+        self.postMessage(resultObject, buffers.slice(0))
     }
 }
 
 const render = async (time, force) => {
     const times = {}
     const renderStartTime = performance.now()
-    const tMs = quantizeTimeMs(time * 1000)
+    const tMs = time * 1000
+    const ev = eventList[findEventIndex(tMs)]
 
     if (debug) {
         const decodeEndTime = performance.now()
@@ -183,23 +258,26 @@ const render = async (time, force) => {
         times.JSRenderTime = Date.now()
     }
 
-    if (lastRenderedTMs !== tMs || force) {
+    if ((lastEventRendered !== ev || force)) {
         const images = []
         const buffers = []
-
         try {
-            const buf = cache.get(tMs)
+            const isMyEvent = (ev.start_ms <= tMs && tMs < ev.end_ms)
+            const buf = isMyEvent ? cache.get(ev.id) : null
 
+            if (debug) {
+                console.log('time: ' + time + ' type: ' + (isMyEvent && ev.type) + ' buf: ' + (buf ? true : buf))
+            }
             if (buf && buf !== false) {
                 images.push({ w: self.width, h: self.height, x: 0, y: 0, image: buf })
                 buffers.push(buf)
-                lastRenderedTMs = tMs
+                lastEventRendered = ev
+                await paintImages({ images, buffers, times })
+            } else if (buf === null) {
+                lastEventRendered = ev
                 await paintImages({ images, buffers, times })
             } else {
-                if (buf === null) {
-                    lastRenderedTMs = tMs
-                }
-                await paintImages({ images, buffers, times })
+                self.postMessage({ target: 'unbusy' })
             }
         } catch (e) {
             console.error('render', e)
@@ -213,7 +291,7 @@ const render = async (time, force) => {
 const freeTrack = () => {
     cache.clear()
     lastCurrentTime = 0
-    lastRenderedTMs = 0
+    lastEventRendered = null
 }
 
 const destroy = async () => {
@@ -226,33 +304,43 @@ const destroy = async () => {
     })
 }
 
-const setTrack = async (content) => {
+const setTrack = async (content, initTimeSec) => {
     await destroy()
     const r = await fetch(`${url}/init`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-            content,
-            stepMs,
-            width: self.width,
-            height: self.height,
-            quantityMs: KEEP_AHEAD_MS,
-            subName
-        })
+        body: JSON.stringify({ subName, content })
     })
     const data = await r.json()
 
-    for (const f of data.frames) {
-        cache.set(f.t_ms, f.data ? b64ToU8(f.data) : null)
+    eventList.length = 0
+    eventList.push(...data.events)
+    const r2 = await fetch(`${url}/initRender`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+            subName,
+            width: self.width,
+            height: self.height,
+            quantityMs: KEEP_AHEAD_MS,
+            initEvent: findEventIndex(initTimeSec * 1000),
+        })
+    })
+    if (r2.status === 200) {
+        const data2 = parseBinaryFile(await r2.arrayBuffer())
+        for (const ev of data2) {
+            cache.set(ev.id, ev.data)
+        }
+        ready = true
+        self.postMessage({ target: 'ready' })
+    } else {
+        throw new Error('Error init process')
     }
-    ready = true
-    self.postMessage({ target: 'ready' })
 }
 
 const init = async (data) => {
     self.width = data.width
     self.height = data.height
-    stepMs = Math.round(1000 / (data.fpsObjetivo || 30))
     url = data.wasmUrl
     subName = data.subUrl.split('/').filter(Boolean).pop()
     debug = data.debug
@@ -262,19 +350,25 @@ const init = async (data) => {
     const healtRes = await fetch(`${url}/health?subName=${subName}`)
     if (healtRes.ok) {
         cache.maxBytes = data.maxBytesCache || cache.maxBytes
-        await setTrack(data.subContent)
+        await setTrack(data.subContent, data.initTimeSec || 0)
     } else {
         throw new Error('Server is down')
     }
 }
 
 const offscreenCanvas = ({ transferable }) => {
+    if (debug) {
+        console.log('offscreenCanvas')
+    }
     offCanvas = transferable[0]
     offCanvasCtx = offCanvas.getContext('2d')
     offscreenRender = true
 }
 
 const detachOffscreen = () => {
+    if (debug) {
+        console.log('detachOffscreen')
+    }
     offCanvas = new OffscreenCanvas(self.width, self.height)
     offCanvasCtx = offCanvas.getContext('2d', { desynchronized: true })
     offscreenRender = 'hybrid'
@@ -294,18 +388,7 @@ const canvas = ({ width, height, force }) => {
 const demand = async ({ time }) => {
     if (ready) {
         lastCurrentTime = time
-
-        const tMs = quantizeTimeMs(time * 1000)
-
-        // always prioritize "now" and "next frame"
-        requestFrame(tMs)
-        requestFrame(quantizeTimeMs(tMs + stepMs))
-
-        // keep some past/future around to handle quick back seeks and stay ahead
-        for (const s of stepOffsetsSec) {
-            requestFrame(quantizeTimeMs(tMs + s * 1000))
-        }
-
+        requestEvent(time)
         render(time)
     } else {
         self.postMessage({ target: 'unbusy' })

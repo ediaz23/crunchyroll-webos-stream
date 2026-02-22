@@ -240,7 +240,13 @@ const processDynamicCollection = async (carousel, profile) => {
         params.ratings = true
         res = await api.discover.getBrowseAll(profile, params)
     } else if ('personalization' === carousel.response_type) {
-        res = await api.discover.getPersonalRecomendation(profile, { collectionId: carousel.analyticsId, ratings })
+        let vendor = undefined
+        try {
+            vendor = new URL(carousel.link, 'http://dummy').searchParams.get('vendor')
+        } catch {
+            // nothing
+        }
+        res = await api.discover.getPersonalRecomendation(profile, { collectionId: carousel.analyticsId, ratings, vendor })
         res = { data: res.recommendations }
     } else {
         new Error(`Dynamic Collection not supported ${carousel.resource_type} - ${carousel.response_type}`)
@@ -306,6 +312,7 @@ const processItemFeedLegacy = async (carousel, profile, type) => {
     }).catch(e => {
         logger.error('Feed')
         console.log(e)
+        console.log(carousel)
     })
 }
 
@@ -373,6 +380,7 @@ const processItemFeedNew = async (feedItem, profile, type) => {
     }).catch(e => {
         logger.error('Feed new')
         console.log(e)
+        console.log(feedItem)
     })
 }
 

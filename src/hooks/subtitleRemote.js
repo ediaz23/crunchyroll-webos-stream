@@ -33,6 +33,7 @@ export const createSubRemoteWorker = async (video, subUrl) => {
             //            fallbackFont: fonts.defaultFont,
             serverUrl: 'http://localhost:19090',
             maxBytesCache: 20 * 1024 * 1024,
+            //            debug: true,
         })
         subRemoteObj.addEventListener('ready', resolve, { once: true })
         subRemoteObj.addEventListener('error', reject, { once: true })
