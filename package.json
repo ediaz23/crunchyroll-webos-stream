@@ -63,7 +63,7 @@
         }
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=22"
     },
     "dependencies": {
         "@cospired/i18n-iso-languages": "^4.2.0",
