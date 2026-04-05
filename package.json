@@ -10,7 +10,7 @@
         "pack-p": "NODE_ENV=production REACT_APP_SERVING=false enact pack -p && gulp pack-p-fix",
         "watch": "NODE_ENV=development REACT_APP_SERVING=false enact pack --watch",
         "clean": "enact clean",
-        "lint": "enact lint -l .",
+        "lint": "bash -lc 'enact lint -l -- \"$@\"' --",
         "license": "enact license",
         "test": "enact test",
         "test-watch": "enact test --watch",

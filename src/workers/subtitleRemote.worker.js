@@ -9,7 +9,8 @@ import LRUCache from '../lib/LRUCache'
  * @property {Number} start_ms
  * @property {Number} end_ms
  * @property {Number} dur_ms
- * @property {'static'|'dynamic'} type
+ * @property {String} text
+ * @property {'static'|'simple'|'complex'|'karaoke'} type
  */
 /** @type {Array<SubEvent>} */
 const eventList = []
@@ -38,11 +39,11 @@ if (typeof console === 'undefined') {
         })
     }
     self.console = {
-        log: function() { msg('log', arguments) },
-        debug: function() { msg('debug', arguments) },
-        info: function() { msg('info', arguments) },
-        warn: function() { msg('warn', arguments) },
-        error: function() { msg('error', arguments) }
+        log: function () { msg('log', arguments) },
+        debug: function () { msg('debug', arguments) },
+        info: function () { msg('info', arguments) },
+        warn: function () { msg('warn', arguments) },
+        error: function () { msg('error', arguments) }
     }
     console.log('Detected lack of console, overridden console')
 }
@@ -55,6 +56,7 @@ const i32le = (u8, o) => (u8[o]) | (u8[o + 1] << 8) | (u8[o + 2] << 16) | (u8[o 
  * @return {Array<{id: Number, data: ArrayBuffer}>}
  */
 const parseBinaryFile = (buf) => {
+    const textDecoder = new TextDecoder('utf-8')
     const u8 = new Uint8Array(buf)
     let o = 0
 
@@ -78,10 +80,12 @@ const parseBinaryFile = (buf) => {
         const len = u32le(u8, o); o += 4
         if (len === 0) {
             out.push({ id, data: null })
+        } else if (eventList[id].type === 'simple') {
+            out.push({ id, data: JSON.parse(textDecoder.decode(u8.slice(o, o + len).buffer)) })
         } else {
             out.push({ id, data: u8.slice(o, o + len).buffer })
-            o += len
         }
+        o += len
     }
     return out
 }
@@ -90,7 +94,7 @@ const parseBinaryFile = (buf) => {
  * @param {Number} tms
  * @returns {Number}
  */
-function findEventIndex(tms) {
+function findEventIndex (tms) {
     let left = 0
     let right = eventList.length - 1
 
@@ -195,11 +199,15 @@ const paintImages = async ({ times, images, buffers }) => {
                         try {
                             offCanvasCtx.drawImage(bmp, image.x, image.y)
                         } finally {
-                            if (typeof bmp.close === 'function') bmp.close()
+                            if (typeof bmp.close === 'function') {
+                                bmp.close()
+                            }
                         }
                     } else {
                         offCanvasCtx.drawImage(image.image, image.x, image.y)
-                        if (typeof image.image.close === 'function') image.image.close()
+                        if (typeof image.image.close === 'function') {
+                            image.image.close()
+                        }
                     }
                     drewSomething = true
                 } catch (e) {
@@ -243,6 +251,123 @@ const paintImages = async ({ times, images, buffers }) => {
         self.postMessage(resultObject, buffers.slice(0))
     }
 }
+const paintJson = async ({ time, times, images, buffers }) => {
+    const resultObject = {
+        target: 'render',
+        asyncRender,
+        images,
+        times,
+        width: self.width,
+        height: self.height,
+        colorSpace: subtitleColorSpace
+    }
+
+    const lerp = (a, b, k) => a + (b - a) * k
+
+
+    const sampleAnim = (recipe) => {
+        const t = time - recipe.t1
+        const anim = recipe.anim
+
+        let a = anim[0]
+        let b = anim[anim.length - 1]
+
+        for (let i = 0; i < anim.length - 1; i++) {
+            if (t >= anim[i].t && t <= anim[i + 1].t) {
+                a = anim[i]
+                b = anim[i + 1]
+                break
+            }
+        }
+
+        let k = 0
+        if (b.t > a.t) {
+            k = (t - a.t) / (b.t - a.t)
+        }
+
+        return {
+            x: lerp(a.x, b.x, k),
+            y: lerp(a.y, b.y, k),
+            alpha: lerp(a.alpha, b.alpha, k)
+        }
+    }
+
+    const drawRecipe = (ctx, recipe) => {
+        const st = recipe.style
+
+        ctx.save()
+
+        ctx.globalAlpha = 1
+        ctx.font = `${st.size}px ${st.font}`
+        ctx.fillStyle = st.color
+        ctx.textBaseline = 'top'
+
+        const s = sampleAnim(recipe)
+
+        if (st.outline > 0) {
+            ctx.lineWidth = st.outline * 2
+            ctx.strokeStyle = '#000000'
+            ctx.strokeText(recipe.text, s.x, s.y)
+        }
+
+        ctx.globalAlpha = s.alpha
+        ctx.fillText(recipe.text, s.x, s.y)
+
+        ctx.restore()
+    }
+
+    if (offscreenRender) {
+        if (offCanvas.height !== self.height || offCanvas.width !== self.width) {
+            offCanvas.width = self.width
+            offCanvas.height = self.height
+        }
+
+        offCanvasCtx.clearRect(0, 0, self.width, self.height)
+
+        let drewSomething = false
+
+        for (const image of images) {
+            const recipe = image.image
+            drawRecipe(offCanvasCtx, recipe)
+            drewSomething = true
+        }
+
+        if (offscreenRender === 'hybrid') {
+            if (!drewSomething) {
+                self.postMessage({ target: 'unbusy' })
+            } else {
+                try {
+                    const out = offCanvas.transferToImageBitmap()
+                    resultObject.images = [{ image: out, x: 0, y: 0 }]
+                    resultObject.asyncRender = true
+                    self.postMessage(resultObject, [out])
+                } catch (e) {
+                    self.postMessage({ target: 'unbusy' })
+                }
+            }
+        } else {
+            self.postMessage({ target: 'unbusy' })
+        }
+    } else {
+        self.postMessage(resultObject, buffers.slice(0))
+    }
+}
+
+/**
+ * @param {Object} obj
+ * @param {Number} obj.time
+ * @param {SubEvent} obj.ev
+ * @param {Object} obj.times
+ * @param {Array} obj.images
+ * @param {Array} obj.buffers
+ */
+const renderEvent = async ({ time, ev, times, images, buffers }) => {
+    if (ev.type === 'simple') {
+        await paintJson({ time, times, images, buffers })
+    } else {
+        await paintImages({ images, buffers, times })
+    }
+}
 
 const render = async (time, force) => {
     const times = {}
@@ -272,10 +397,10 @@ const render = async (time, force) => {
                 images.push({ w: self.width, h: self.height, x: 0, y: 0, image: buf })
                 buffers.push(buf)
                 lastEventRendered = ev
-                await paintImages({ images, buffers, times })
+                await renderEvent({ time: tMs, ev, images, buffers, times })
             } else if (buf === null) {
                 lastEventRendered = ev
-                await paintImages({ images, buffers, times })
+                await renderEvent({ time: tMs, ev, images, buffers, times })
             } else {
                 self.postMessage({ target: 'unbusy' })
             }
@@ -327,12 +452,13 @@ const setTrack = async (content, initTimeSec) => {
         })
     })
     if (r2.status === 200) {
-        const data2 = parseBinaryFile(await r2.arrayBuffer())
-        for (const ev of data2) {
-            cache.set(ev.id, ev.data)
-        }
-        ready = true
-        self.postMessage({ target: 'ready' })
+        r2.arrayBuffer().then(parseBinaryFile).then(arr => {
+            for (const i of arr) {
+                cache.set(i.id, i.data)
+            }
+            ready = true
+            self.postMessage({ target: 'ready' })
+        })
     } else {
         throw new Error('Error init process')
     }
