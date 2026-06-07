@@ -31,6 +31,8 @@ const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
     const [seasons, setSeasons] = useState(null)
     /** @type {[Number, Function]} */
     const [seasonIndex, setSeasonIndex] = useState(viewBackup?.seasonIndex)
+    /** @type {['up'|'down', Function]} */
+    const [order, setOrder] = useState(viewBackup?.order || 'up')
     /** @type {[Array<Object>, Function]} */
     const [episodes, setEpisodes] = useState(null)
     /** @type {[Number, Function]} */
@@ -44,16 +46,29 @@ const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
         seasons && seasonIndex != null ? `seasons/${seasons[seasonIndex].id}/episodes` : null
     ), [seasons, seasonIndex])
 
+    /** @type {Array<Object>} */
+    const orderedEpisodes = useMemo(
+        () => episodes == null ? null : order === 'up' ? episodes : [...episodes].reverse(),
+        [episodes, order]
+    )
+
+    /** @type {Function} */
+    const toggleOrder = useCallback(ev => {
+        if (ev.type === 'click' || (ev.type === 'keyup' && ev.key === 'Enter')) {
+            setOrder(prev => prev === 'up' ? 'down' : 'up')
+        }
+    }, [setOrder])
+
     /** @type {Function} */
     const setContent = useCallback(ev => {
         const target = ev.currentTarget || ev.target
         const index = parseInt(target.dataset.index)
-        if (episodes && episodes.length) {
+        if (orderedEpisodes && orderedEpisodes.length) {
             /** backup all state to restore later */
-            viewBackupRef.current = { seasonIndex }
-            setSeries(episodes[index])
+            viewBackupRef.current = { seasonIndex, order }
+            setSeries(orderedEpisodes[index])
         }
-    }, [seasonIndex, episodes, setSeries, viewBackupRef])
+    }, [seasonIndex, orderedEpisodes, setSeries, order, viewBackupRef])
 
     /** @type {Function} */
     const markAsWatched = useCallback(ev => {
@@ -77,7 +92,7 @@ const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
         }
     }, [profile, seasons, seasonIndex, episodes, setLoading, cacheKey])
 
-    useBackVideoIndex(episodes, setEpisodeIndex)
+    useBackVideoIndex(orderedEpisodes, setEpisodeIndex)
 
     useEffect(() => {
         seasonIndexRef.current = seasonIndex
@@ -124,50 +139,60 @@ const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
     }, [profile, series])
 
     return (
-        <Row align='start space-between' {...rest}>
-            <Row style={{ width: '100%' }}>
+        <Row align='start space-between' { ...rest }>
+            <Row style={ { width: '100%' } }>
                 <Cell size='49%'>
                     <Column>
                         <Cell shrink>
-                            <ContentHeader content={series} />
+                            <ContentHeader content={ series } />
                         </Cell>
                         <Cell grow>
                             <SeasonsList
-                                seasons={seasons}
-                                seasonIndex={seasonIndex}
-                                selectSeason={setSeasonIndex} />
+                                seasons={ seasons }
+                                seasonIndex={ seasonIndex }
+                                selectSeason={ setSeasonIndex } />
                         </Cell>
                     </Column>
                 </Cell>
                 <Cell size='49%'>
                     <Column>
-                        {series.type === 'series' && seasons != null && seasons.length > 0 && (
+                        { series.type === 'series' && seasons != null && seasons.length > 0 && (
                             <Cell shrink>
                                 <Heading size="small">
-                                    {seasons[seasonIndex].season_tags.join(', ') || '\u00A0'}
+                                    { seasons[seasonIndex].season_tags.join(', ') || '\u00A0' }
                                 </Heading>
-                                {loading && <Spinner />}
-                                {!loading &&
-                                    <LabeledIconButton
-                                        icon='checkselection'
-                                        labelPosition='after'
-                                        onClick={markAsWatched}
-                                        onKeyUp={markAsWatched}
-                                        style={{ maxWidth: '13rem' }}
-                                        disabled={!(episodes &&
-                                            episodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)
-                                        }>
-                                        {$L('Mark as watched')}
-                                    </LabeledIconButton>
-                                }
+                                { loading && <Spinner /> }
+                                { !loading && (
+                                    <Row style={ { width: '100%' } }>
+                                        <LabeledIconButton
+                                            icon='checkselection'
+                                            labelPosition='after'
+                                            onClick={ markAsWatched }
+                                            onKeyUp={ markAsWatched }
+                                            style={ { maxWidth: '13rem' } }
+                                            disabled={ !(orderedEpisodes &&
+                                                orderedEpisodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)
+                                            }>
+                                            { $L('Mark as watched') }
+                                        </LabeledIconButton>
+                                        <LabeledIconButton
+                                            icon={ `arrowsmall${order}` }
+                                            labelPosition='after'
+                                            onClick={ toggleOrder }
+                                            onKeyUp={ toggleOrder }
+                                            style={ { maxWidth: '13rem' } }>
+                                            { $L('Order') }
+                                        </LabeledIconButton>
+                                    </Row>
+                                ) }
                             </Cell>
-                        )}
+                        ) }
                         <Cell grow>
                             <EpisodesList
-                                key={seasons?.[seasonIndex]?.id ? `seasons-${seasons[seasonIndex].id}` : undefined}
-                                episodes={episodes}
-                                episodeIndex={episodeIndex}
-                                selectEpisode={setContent} />
+                                key={ seasons?.[seasonIndex]?.id ? `seasons-${seasons[seasonIndex].id}` : undefined }
+                                episodes={ orderedEpisodes }
+                                episodeIndex={ episodeIndex }
+                                selectEpisode={ setContent } />
                         </Cell>
                     </Column>
                 </Cell>
