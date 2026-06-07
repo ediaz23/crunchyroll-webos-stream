@@ -139,60 +139,60 @@ const Seasons = ({ profile, contentState, isPremium, ...rest }) => {
     }, [profile, series])
 
     return (
-        <Row align='start space-between' { ...rest }>
-            <Row style={ { width: '100%' } }>
+        <Row align='start space-between' {...rest}>
+            <Row style={{ width: '100%' }}>
                 <Cell size='49%'>
                     <Column>
                         <Cell shrink>
-                            <ContentHeader content={ series } />
+                            <ContentHeader content={series} />
                         </Cell>
                         <Cell grow>
                             <SeasonsList
-                                seasons={ seasons }
-                                seasonIndex={ seasonIndex }
-                                selectSeason={ setSeasonIndex } />
+                                seasons={seasons}
+                                seasonIndex={seasonIndex}
+                                selectSeason={setSeasonIndex} />
                         </Cell>
                     </Column>
                 </Cell>
                 <Cell size='49%'>
                     <Column>
-                        { series.type === 'series' && seasons != null && seasons.length > 0 && (
+                        {series.type === 'series' && seasons != null && seasons.length > 0 && (
                             <Cell shrink>
                                 <Heading size="small">
-                                    { seasons[seasonIndex].season_tags.join(', ') || '\u00A0' }
+                                    {seasons[seasonIndex].season_tags.join(', ') || '\u00A0'}
                                 </Heading>
-                                { loading && <Spinner /> }
-                                { !loading && (
-                                    <Row style={ { width: '100%' } }>
+                                {loading && <Spinner />}
+                                {!loading && (
+                                    <Row style={{ width: '100%' }}>
                                         <LabeledIconButton
                                             icon='checkselection'
                                             labelPosition='after'
-                                            onClick={ markAsWatched }
-                                            onKeyUp={ markAsWatched }
-                                            style={ { maxWidth: '13rem' } }
-                                            disabled={ !(orderedEpisodes &&
+                                            onClick={markAsWatched}
+                                            onKeyUp={markAsWatched}
+                                            style={{ maxWidth: '13rem' }}
+                                            disabled={!(orderedEpisodes &&
                                                 orderedEpisodes.filter(ep => !(ep?.playhead?.fully_watched)).length > 0)
                                             }>
-                                            { $L('Mark as watched') }
+                                            {$L('Mark as watched')}
                                         </LabeledIconButton>
                                         <LabeledIconButton
-                                            icon={ `arrowsmall${order}` }
+                                            icon={`arrowsmall${order}`}
                                             labelPosition='after'
-                                            onClick={ toggleOrder }
-                                            onKeyUp={ toggleOrder }
-                                            style={ { maxWidth: '13rem' } }>
-                                            { $L('Order') }
+                                            onClick={toggleOrder}
+                                            onKeyUp={toggleOrder}
+                                            style={{ maxWidth: '13rem' }}>
+                                            {$L('Order')}
                                         </LabeledIconButton>
                                     </Row>
-                                ) }
+                                )}
                             </Cell>
-                        ) }
+                        )}
                         <Cell grow>
                             <EpisodesList
-                                key={ seasons?.[seasonIndex]?.id ? `seasons-${seasons[seasonIndex].id}` : undefined }
-                                episodes={ orderedEpisodes }
-                                episodeIndex={ episodeIndex }
-                                selectEpisode={ setContent } />
+                                key={seasons?.[seasonIndex]?.id ? `seasons-${seasons[seasonIndex].id}` : undefined}
+                                episodes={orderedEpisodes}
+                                episodeIndex={episodeIndex}
+                                selectEpisode={setContent} />
                         </Cell>
                     </Column>
                 </Cell>
