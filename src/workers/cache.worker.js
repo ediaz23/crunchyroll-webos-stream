@@ -1,7 +1,7 @@
 /* global self */
 
 import './worker_polyfills.js'
-import QuickLRU from 'quick-lru';
+import LRUCache from '../lib/LRUCache'
 
 /**
  * @typedef ReqEntry
@@ -9,7 +9,7 @@ import QuickLRU from 'quick-lru';
  * @property {import('../hooks/customFetch').ResponseProxy} response
  * @property {Number} ts timespan
  * @property {Number} maxAge seconds, -1 = no max‑age
- * @property {Number} size butes
+ * @property {Number} size bytes
  * @property {String} [etag]
  * @property {String} [lastModified]
  */
@@ -17,7 +17,7 @@ import QuickLRU from 'quick-lru';
 /**
  * @type {{
     maxSize: Number,
-    lru: import('quick-lru'),
+    lru: LRUCache,
     gcTimer: Number
 }}
  */
@@ -31,12 +31,12 @@ const memoryCache = {
 /**
  * @param {{maxSize: Number}}
  */
-function init({ maxSize }) {
+function init ({ maxSize }) {
     memoryCache.maxSize = maxSize
     if (memoryCache.lru) {
         memoryCache.lru.clear()
     }
-    memoryCache.lru = new QuickLRU({ maxSize, size: v => v.size, })
+    memoryCache.lru = new LRUCache({ maxSize, size: v => v.size, })
     if (memoryCache.gcTimer) {
         clearInterval(memoryCache.gcTimer)
     }
@@ -53,7 +53,7 @@ function init({ maxSize }) {
  * @param {import('../hooks/customFetch').ResponseProxy} obj
  * @return {Number}
  */
-function parseMaxAge({ headers }) {
+function parseMaxAge ({ headers }) {
     const cc = headers['cache-control'] || headers['Cache-Control'] || ''
     const m = cc.match(/max-age=(\d+)/i)
     return m ? parseInt(m[1], 10) : 4 * 60  // 4 mins
@@ -64,7 +64,7 @@ function parseMaxAge({ headers }) {
  * @param {String} name
  * @return {String}
  */
-function extractHeader({ headers }, name) {
+function extractHeader ({ headers }, name) {
     const lower = name.toLowerCase()
     return headers[lower] || headers[name]
 }
@@ -73,7 +73,7 @@ function extractHeader({ headers }, name) {
  * @param {ReqEntry} entry
  * @return {Boolean}
  */
-function expired(entry) {
+function expired (entry) {
     let out = false
     if (entry.maxAge >= 0) {
         out = (Date.now() - entry.ts) > entry.maxAge * 1000
@@ -86,7 +86,7 @@ function expired(entry) {
  * @param {String} obj.url
  * @param {String} taskId
  */
-function handleGet({ url: key, taskId }) {
+function handleGet ({ url: key, taskId }) {
     let out = { taskId, response: false }
     if (memoryCache.lru) {
         const entry = memoryCache.lru.get(key)
@@ -106,7 +106,7 @@ function handleGet({ url: key, taskId }) {
  * @param {String} obj.url
  * @param {import('../hooks/customFetch').ResponseProxy} obj.response
  */
-function handleSave({ url: key, response }) {
+function handleSave ({ url: key, response }) {
     const maxAge = parseMaxAge(response)
     const size = response.content?.byteLength || response.content?.length || 0;
     if (memoryCache.lru && size < memoryCache.maxSize) {
@@ -125,6 +125,16 @@ function handleSave({ url: key, response }) {
     }
 }
 
+/**
+ * @param {Object} obj
+ * @param {String} obj.url
+ */
+function handleRemove ({ url: key }) {
+    if (memoryCache.lru) {
+        memoryCache.lru.delete(key)
+    }
+}
+
 self.onmessage = ({ data }) => {
     const { type } = data
     if (type === 'init') {
@@ -133,6 +143,8 @@ self.onmessage = ({ data }) => {
         self.postMessage(handleGet(data))
     } else if (type === 'save') {
         handleSave(data)
+    } else if (type === 'remove') {
+        handleRemove(data)
     } else if (type === 'close') {
         clearInterval(memoryCache.gcTimer)
     } else if (type === 'clear') {

@@ -23,6 +23,38 @@ import { sortContent } from '../../utils'
  * @property {{title: String, description: String}} localization
  */
 
+/**
+ * @param {Date} [date=new Date()]
+ * @returns {String}
+ */
+function getLocalSeason (date = new Date()) {
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    let out = 'spring'
+
+    if (
+        (month === 12 && day >= 21) ||
+        month < 3 ||
+        (month === 3 && day < 21)
+    ) {
+        return 'summer'
+    } else if (
+        (month === 3 && day >= 21) ||
+        month < 6 ||
+        (month === 6 && day < 21)
+    ) {
+        out = 'fall'
+    } else if (
+        (month === 6 && day >= 21) ||
+        month < 9 ||
+        (month === 9 && day < 23)
+    ) {
+        out = 'winter'
+    }
+
+    return out
+}
+
 
 /**
  * Simulcast view
@@ -42,12 +74,8 @@ const Simulcast = ({ profile, title, ...rest }) => {
     const [season, setSeason] = useState(viewBackup?.season || undefined)
     /** @type {[Array<Season>, Function]} */
     const [seasons, setSeasons] = useState(viewBackup?.seasons || undefined)
-    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(
-        profile, viewBackup?.sort, onFilter
-    )
-    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(
-        profile, viewBackup?.viewMode, onFilter
-    )
+    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(viewBackup?.sort, onFilter)
+    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(viewBackup?.viewMode, onFilter)
     /** @type {Array} */
     const contentListSorted = useMemo(() => contentList && [...contentList].sort(sortContent), [contentList])
 
@@ -106,7 +134,11 @@ const Simulcast = ({ profile, title, ...rest }) => {
             api.discover.getSeasonList(profile).then(({ data: seasonsList }) => {
                 seasonsList.forEach((item, index) => { item.index = index })
                 setSeasons(seasonsList)
-                setSeason(seasonsList[0])
+                if (seasonsList[0].id.split('-')[0] === getLocalSeason()) {
+                    setSeason(seasonsList[0])
+                } else {
+                    setSeason(seasonsList[1])
+                }
             })
         }
     }, [profile, setSeason, delay, season])

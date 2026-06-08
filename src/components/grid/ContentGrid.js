@@ -52,12 +52,8 @@ const ContentGrid = ({ profile, title, contentKey, contentType, engine = 'browse
     const [category, setCategory] = useState(viewBackup?.category || 'all')
     /** @type {[String, Function]} */
     const [query, setQuery] = useState(viewBackup?.query || '')
-    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(
-        profile, viewBackup?.sort || 'popularity', onFilter
-    )
-    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(
-        profile, viewBackup?.viewMode || 'all', onFilter
-    )
+    const [sort, orderLabels, orderStr, onSelectOrder] = useOrderOptions(viewBackup?.sort || 'popularity', onFilter)
+    const [viewMode, viewModeLabels, viewModeStr, onSelectViewMode] = useViewModes(viewBackup?.viewMode, onFilter)
     /** @type {SearchOptions} */
     const options = useMemo(() => {
         return {

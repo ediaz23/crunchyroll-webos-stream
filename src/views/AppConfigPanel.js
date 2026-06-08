@@ -40,7 +40,7 @@ const useSaveConfigField = ({ setAppConfig, field }) => {
 const AppConfigPanel = ({ noButtons, ...rest }) => {
     const [appConfig, setAppConfig] = useState(api.config.getAppConfig())
     const [isLogged, setIsLogged] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loadingFonts, setLoadingFonts] = useState(false)
     /** @type {[{type: String, message: String}, Function]}  */
     const [message, setMessage] = useState(null)
     const [fontList, setFontList] = useState([])
@@ -54,8 +54,17 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
     const onTogglePreview = useCallback(({ selected }) => savePreview(selected ? 'yes' : 'no'), [savePreview])
 
     /** -> subtitle */
+    const subtitles = useMemo(() => ['hardsub', 'softsub', 'remotesub'], [])
+    const subtitleLabel = useMemo(() => {
+        const sLable = {
+            'hardsub': $L('Hardsub'),
+            'softsub': $L('Softsub'),
+            'remotesub': $L('Remotesub'),
+        }
+        return subtitles.map(i => sLable[i])
+    }, [subtitles])
     const saveSubtitle = useSaveConfigField({ setAppConfig, field: 'subtitle' })
-    const onToggleSubtitle = useCallback(({ selected }) => saveSubtitle(selected ? 'hardsub' : 'softsub'), [saveSubtitle])
+    const onSelectSubtitle = useCallback(({ selected }) => saveSubtitle(subtitles[selected]), [subtitles, saveSubtitle])
 
     /** -> video */
     const videos = useMemo(() => ['adaptive', '2160p', '1080p', '720p', '480p', '360p', '240p'], [])
@@ -89,7 +98,7 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
     }, [caches, saveCache])
 
     const doSyncFonts = useCallback(async () => {
-        setLoading(true)
+        setLoadingFonts(true)
         syncFonts()
             .then(() => getFonts())
             .then(fontsData => {
@@ -103,8 +112,8 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
                 } else {
                     setMessage({ type: 'error', message: $L('An error occurred') })
                 }
-            }).finally(() => setLoading(false))
-    }, [setMessage, setLoading])
+            }).finally(() => setLoadingFonts(false))
+    }, [setMessage, setLoadingFonts])
 
     useEffect(() => {
         getFonts().then(fontsData => setFontList(fontsData.names))
@@ -141,11 +150,15 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
                             </Dropdown>
                         </Field>
                         <Field title={$L('Subtitles')}>
-                            <CheckboxItem
-                                defaultSelected={appConfig.subtitle === 'hardsub'}
-                                onToggle={onToggleSubtitle}>
-                                {appConfig.subtitle === 'hardsub' ? $L('Hardsub') : $L('Softsub')}
-                            </CheckboxItem>
+                            <Dropdown
+                                title={$L('Subtitles')}
+                                selected={subtitles.indexOf(appConfig.subtitle)}
+                                width='x-large'
+                                onSelect={onSelectSubtitle}
+                                onKeyDown={dropdownKeydown}
+                                showCloseButton>
+                                {subtitleLabel}
+                            </Dropdown>
                         </Field>
                         <Field title={$L('Previews')}>
                             <CheckboxItem
@@ -180,8 +193,8 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
                         <Column className={css.formColumn}>
                             <Heading size="large">{$L('Fonts')}</Heading>
                             <Field size='large' title={$L('Sync')}>
-                                {loading && <Spinner />}
-                                {!loading &&
+                                {loadingFonts && <Spinner />}
+                                {!loadingFonts &&
                                     <AppIconButton
                                         mode='full'
                                         icon='gear'

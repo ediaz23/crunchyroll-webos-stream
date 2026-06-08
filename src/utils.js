@@ -334,22 +334,16 @@ export function sortContent(a, b) {
     if (!a?.last_public) return 1
     if (!b?.last_public) return -1
 
-    const da = new Date(a.last_public)
-    const db = new Date(b.last_public)
-    const today = new Date()
-    const diffA = da - today
-    const diffB = db - today
+    const now = Date.now()
+    const da = new Date(a.last_public).getTime() - now
+    const db = new Date(b.last_public).getTime() - now
 
-    const aFuture = diffA > 0
-    const bFuture = diffB > 0
+    const aFuture = da > 0
+    const bFuture = db > 0
 
     if (aFuture !== bFuture) return aFuture ? 1 : -1
 
-    if (!aFuture) {
-        return Math.abs(diffA) - Math.abs(diffB)
-    }
-
-    return Math.abs(diffB) - Math.abs(diffA)
+    return db - da
 }
 
 export function getIsBeginningSeason() {
@@ -371,75 +365,6 @@ export function getIsBeginningSeason() {
         return start <= today && today < end
     })
 }
-
-export class ResourcePool {
-    constructor(slotIds) {
-        this.freeSlots = new Set(slotIds)
-        this.queue = []
-    }
-
-    async acquire() {
-        if (this.freeSlots.size > 0) {
-            const slot = this.freeSlots.values().next().value
-            this.freeSlots.delete(slot)
-            return slot
-        }
-        return new Promise(resolve => this.queue.push(resolve))
-    }
-
-    release(slotId) {
-        if (this.queue.length > 0) {
-            const next = this.queue.shift()
-            next(slotId)
-        } else {
-            this.freeSlots.add(slotId)
-        }
-    }
-}
-
-export class OrderedSet {
-    constructor() {
-        this.map = new Map()
-        this.list = []
-    }
-
-    add(item) {
-        const count = this.map.get(item) || 0
-        this.map.set(item, count + 1)
-        this.list.push(item)
-    }
-
-    has(item) {
-        return this.map.has(item)
-    }
-
-    remove(item) {
-        if (!this.map.has(item)) return
-
-        const count = this.map.get(item)
-        if (count > 1) {
-            this.map.set(item, count - 1)
-        } else {
-            this.map.delete(item)
-        }
-
-        const index = this.list.indexOf(item)
-        if (index > -1) this.list.splice(index, 1)
-    }
-
-    indexOf(item) {
-        return this.list.indexOf(item)
-    }
-
-    get lastElement() {
-        return this.list.length ? this.list[this.list.length - 1] : null
-    }
-
-    getList() {
-        return this.list
-    }
-}
-
 
 export default {
     worker,

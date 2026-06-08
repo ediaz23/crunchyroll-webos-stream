@@ -275,6 +275,8 @@ const OptionsList = ({ profile, contentState, optionIndexState, loadingState, se
         } else {
             api.content.addWatchlistItem(profile, { contentId: content.id })
         }
+        // invalid cache
+        api.content.getWatchlistItems(profile, { contentIds: [content.id], fnConfig: { cache: null } })
         setIsInWatchlist(prev => !prev)
     }, [profile, content, isInWatchlist, setIsInWatchlist])
 
@@ -312,7 +314,6 @@ const OptionsList = ({ profile, contentState, optionIndexState, loadingState, se
             ['series', 'movie_listing'].includes(content.type)
                 ? api.content.getWatchlistItems(profile, { contentIds: [content.id] })
                 : null,
-            api.review.getRatings(profile, { contentId: content.id, contentType: content.type, })
         ]).then(([nextEpRes, watchlistRes]) => {
             if (nextEpRes) {
                 if (nextEpRes.firstEp) {

@@ -2,7 +2,7 @@
 import { useRef, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { viewBackupState } from '../recoilConfig'
-import { OrderedSet } from '../utils'
+import OrderedSet from '../lib/OrderedSet'
 
 /*
 

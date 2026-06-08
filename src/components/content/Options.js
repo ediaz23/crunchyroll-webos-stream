@@ -55,11 +55,15 @@ const Options = ({ profile, contentState, setFunctions, ...rest }) => {
             contentId: content.id,
             contentType: content.type,
             rating: `${star}s`
-        }).then(() => setRating(star))
+        }).then(() => {
+            setRating(star)
+            // invalid cache
+            api.review.getRatings(profile, { contentId: content.id, contentType: content.type, fnConfig: { cache: null } })
+        })
     }, [profile, content])
 
     useEffect(() => {
-        api.review.getRatings(profile, { contentId: content.id, contentType: content.type, }).then(ratingRes => {
+        api.review.getRatings(profile, { contentId: content.id, contentType: content.type }).then(ratingRes => {
             if (ratingRes) {
                 setRating(parseInt(ratingRes.rating.trimEnd('s')))
             }

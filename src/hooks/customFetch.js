@@ -3,7 +3,8 @@
 import 'webostvjs'
 import { v4 as uuidv4 } from 'uuid'
 import api from '../api'
-import utils, { ResourcePool } from '../utils'
+import utils from '../utils'
+import ResourcePool from '../lib/ResourcePool'
 import logger from '../logger'
 import { _LOCALHOST_SERVER_ } from '../const'
 
@@ -17,7 +18,7 @@ const requestSlots = new ResourcePool([0, 1, 2, 3, 4, 5, 6, 7, 8])  //  9 normal
 const requestSlotsPriority = new ResourcePool([9])
 
 
-function setAdaptiveCacheSize() {
+function setAdaptiveCacheSize () {
     const appConfig = api.config.getAppConfig()
     const baseSize = 15  // 15MB
     if (appConfig.cacheMemory === 'adaptive') {
@@ -96,16 +97,16 @@ worker.addEventListener('message', ({ data }) => {
     }
 })
 
-export function initCache() {
+export function initCache () {
     setAdaptiveCacheSize()
 }
 
-export function finishCache() {
+export function finishCache () {
     worker.postMessage({ type: 'close' })
     worker.terminate()
 }
 
-export function clearCache() {
+export function clearCache () {
     worker.postMessage({ type: 'clear' })
 }
 
@@ -113,7 +114,7 @@ export function clearCache() {
  * @param {String} url
  * @return {Promise<import('../workers/cache.worker').ReqEntry>}
  */
-export async function getCache(url) {
+export async function getCache (url) {
     const taskId = uuidv4()
     const prom = new Promise((resolve) => {
         pendingTasks.set(taskId, resolve)
@@ -128,15 +129,22 @@ export async function getCache(url) {
  * @param {String} url
  * @param {ResponseProxy} response
  */
-export async function saveCache(url, response) {
+export async function saveCache (url, response) {
     worker.postMessage({ type: 'save', url, response })
+}
+
+/**
+ * @param {String} url
+ */
+export async function removeCache (url) {
+    worker.postMessage({ type: 'remove', url })
 }
 
 /**
  * @param {String} url
  * @return {Promise<Object>}
  */
-export async function getCustomCache(url) {
+export async function getCustomCache (url) {
     const item = await getCache(url)
     let out = null
     if (item) {
@@ -152,7 +160,7 @@ export async function getCustomCache(url) {
  * @param {Number} maxAge seconds
  * @return {Promise}
  */
-export async function saveCustomCache(url, data, maxAge = 60) {
+export async function saveCustomCache (url, data, maxAge = 60) {
     /** @type {import('../workers/cache.worker').ResponseProxy} */
     const response = {
         status: 200,
@@ -403,9 +411,7 @@ const getSlot = async (obj, priority) => {
 const getCacheEntry = async (obj, cache) => {
     const isGetMethod = !obj.config.method || obj.config.method === 'get'
     /** @type {Promise<import('../workers/cache.worker').ReqEntry>} */
-    const cacheProm = isGetMethod && cache
-        ? getCache(obj.config.url)
-        : Promise.resolve(null)
+    const cacheProm = isGetMethod && cache ? getCache(obj.config.url) : Promise.resolve(null)
     const entry = await cacheProm
     let response = null
 
@@ -552,7 +558,11 @@ export const customFetch = async (url, options = {}, fnConfig = {}) => {
     const configProm = setUpRequest(url, options, { sync })
     const config = sync ? configProm : await configProm
     const { onSuccess, onFailure, prom } = makeResponseHandle({ config, direct })
-    makeRequest({ config, onFailure, onSuccess }, { sync, cache, priority })
+    if (cache === null) {
+        removeCache(config.url).finally(() => onSuccess({ status: 200 }))
+    } else {
+        makeRequest({ config, onFailure, onSuccess }, { sync, cache, priority })
+    }
     return prom
 }
 

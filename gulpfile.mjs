@@ -34,6 +34,19 @@ function cleanIlib(cb) {
         return handleError(cb)(err)
     }
     try {
+        const filePath = 'node_modules/ilib/locale/es/dateformats.json'
+        const content = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+        content.gregorian.date.dmy = {
+            "f": "dd 'de' MMMM 'de' yyyy",
+            "l": "dd 'de' MMMM 'de' yyyy",
+            "m": "dd MMM yyyy",
+            "s": "dd/MM/yy"
+        }
+        fs.writeFileSync(filePath, JSON.stringify(content), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+    try {
         const filePath = './node_modules/@enact/moonstone/VideoPlayer/VideoPlayer.js'
         /** @type {String} */
         let fileContent = fs.readFileSync(filePath, 'utf-8')
@@ -129,11 +142,11 @@ var _increment = function increment(state) {  // crunchypatch
                 let fileContent = fs.readFileSync(`${cliPath}/commands/serve.js`, 'utf-8')
                 if (!fileContent.includes('compiler.hooks.failed')) {
                     fileContent = fileContent.replace('compiler.hooks.afterEmit.tapAsync', `
-            compiler.hooks.failed.tap('EnactCLI', (err) => {
-                devServer.invalidate();     // ← permite recargar
-                console.error(err);      // ← muestra el error
-            });
-            compiler.hooks.afterEmit.tapAsync`
+        compiler.hooks.failed.tap('EnactCLI', (err) => {
+            devServer.invalidate();     // ← permite recargar
+            console.error(err);      // ← muestra el error
+        });
+        compiler.hooks.afterEmit.tapAsync`
                     )
                     fs.writeFileSync(`${cliPath}/commands/serve.js`, fileContent, 'utf-8')
                 }
@@ -185,6 +198,21 @@ var _increment = function increment(state) {  // crunchypatch
     }
 
     try {
+        const packagePath = './node_modules/generator-function/package.json'
+        /** @type {Object} */
+        const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
+        packageContent.exports = {
+            "import": "./index.js",
+            "default": "./index.js",
+            "require":  "./index.js",
+        }
+        fs.writeFileSync(packagePath, JSON.stringify(packageContent, null, '    '), 'utf8')
+    } catch (err) {
+        return handleError(cb)(err)
+    }
+
+    /* no quitare fsevents?
+    try {
         const packagePath = './package-lock.json'
         const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'))
         const filteredPackages = Object.fromEntries(
@@ -196,6 +224,7 @@ var _increment = function increment(state) {  // crunchypatch
     } catch (err) {
         return handleError(cb)(err)
     }
+    */
 
     cb()
 }
@@ -258,8 +287,7 @@ function generateManifest(cb) {
         if (!out.ipkHash.sha256) {
             throw new Error('key sha256 is not define')
         }
-        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '),
-            { encoding: 'utf-8' })
+        fs.writeFileSync('./bin/org.webosbrew.manifest.json', JSON.stringify(out, null, '    '), { encoding: 'utf-8' })
         cb()
     } catch (err) {
         handleError(cb)(err)
@@ -307,17 +335,18 @@ gulp.task('pack-p', cb => { exec('npm run pack-p', handleError(cb)) })
 // webpack agrega __webpack_require__ al código, lo más fácil fue limpiarlo así.
 gulp.task('pack-p-fix', cb => {
     exec(`
-    for f in dist/chunk*.js;
-    do
-        sed -i 's/__webpack_require__\.ilib_cache_id="[^"]*";//g' "$f";
-    done
-`, handleError(cb))
+        for f in dist/chunk*.js;
+        do
+            sed -i 's/__webpack_require__\.ilib_cache_id="[^"]*";//g' "$f";
+        done`.trim(),
+        handleError(cb)
+    )
 })
 
-gulp.task('installService', cb => { exec('cd service; NODE_ENV=development npm ci', handleError(cb)) })
+gulp.task('installService', cb => { exec('NODE_ENV=development npm ci --prefix=./service', handleError(cb)) })
 
-gulp.task('buildService', cb => { exec('cd service; npm run build;', handleError(cb)) })
-gulp.task('buildService-p', cb => { exec('cd service; npm run build-p;', handleError(cb)) })
+gulp.task('buildService', cb => { exec('npm run build --prefix=./service', handleError(cb)) })
+gulp.task('buildService-p', cb => { exec('npm run build-p --prefix=./service', handleError(cb)) })
 
 gulp.task('app', cb => { exec('ares-package --no-minify dist/ ./service/dist -o bin/', handleError(cb)) })
 gulp.task('app-p', cb => { exec('ares-package dist/ ./service/dist -o bin/', handleError(cb)) })

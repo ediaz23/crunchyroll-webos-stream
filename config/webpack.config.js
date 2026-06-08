@@ -411,9 +411,10 @@ module.exports = function(
                                 'punycode',
                                 'react-dev-utils',
                                 'react-error-overlay',
-                                'quick-lru',
                                 'generator-function',
                                 'strip-ansi',
+                                'event-target-shim',
+                                'rvfc-legacy-polyfill',
                             ].map(v => path.resolve(__dirname, `../node_modules/${v}`))
                         },
                         /*
