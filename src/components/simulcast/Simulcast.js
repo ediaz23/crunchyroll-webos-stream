@@ -30,26 +30,26 @@ import { sortContent } from '../../utils'
 function getLocalSeason (date = new Date()) {
     const month = date.getMonth() + 1
     const day = date.getDate()
-    let out = 'spring'
+    let out = 'fall'
 
     if (
         (month === 12 && day >= 21) ||
         month < 3 ||
         (month === 3 && day < 21)
     ) {
-        return 'summer'
+        return 'winter'
     } else if (
         (month === 3 && day >= 21) ||
         month < 6 ||
         (month === 6 && day < 21)
     ) {
-        out = 'fall'
+        out = 'spring'
     } else if (
         (month === 6 && day >= 21) ||
         month < 9 ||
         (month === 9 && day < 23)
     ) {
-        out = 'winter'
+        out = 'summer'
     }
 
     return out
