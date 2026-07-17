@@ -495,8 +495,11 @@ const setStreamingConfig = async (dashPlayer, appConfigRef) => {
         const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
         const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
         const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
+        // Softsub runs libass (worker + WASM heap + LRU cache); penalize the
+        // dashjs buffer budget so both can coexist without OOM.
+        const isSoftsub = appConfigRef.current.subtitle !== 'hardsub'
 
-        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0)
+        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0) - (isSoftsub ? 1 : 0)
 
         if (score >= 6) {
             // Gama alta

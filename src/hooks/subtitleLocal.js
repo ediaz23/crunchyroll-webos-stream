@@ -16,21 +16,44 @@ const LibassWorker = new URL('libass-webos-legacy/modern/libass.worker.debug.js'
 const LibassWorkerWasm = new URL('libass-webos-legacy/modern/worker.debug.wasm', import.meta.url)
 
 const getMemoryLimits = async () => {
-    // libassMemoryLimit: bitmap cache in MB (libass default: 500).
-    // libassGlyphLimit:  glyph cache count  (libass default: 1000).
-    let libassMemoryLimit = 24, libassGlyphLimit = 2000
+    // libassMemoryLimit: libass bitmap cache in MB (libass default: 500).
+    // libassGlyphLimit:  libass glyph cache count  (libass default: 1000).
+    // renderCacheBytes:  main-thread LRU of ImageBitmap (JS heap).
+    // Non-TV (desktop): assume plenty of RAM.
+    let libassMemoryLimit = 24, libassGlyphLimit = 3000, renderCacheBytes = 24 * 1024 * 1024
 
     if (utils.isTv()) {
+        /** @type {import('webostvjs').DeviceInfo} */
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
         const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
+        const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
+        const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
+        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0)
 
-        if (ramInGB <= 0.8) {
+        if (score >= 6) {
+            // Gama alta
+            libassMemoryLimit = 24
+            libassGlyphLimit = 3000
+            renderCacheBytes = 24 * 1024 * 1024
+        } else if (score >= 5) {
+            // Gama media-alta
+            libassMemoryLimit = 20
+            libassGlyphLimit = 2500
+            renderCacheBytes = 16 * 1024 * 1024
+        } else if (score >= 3.5) {
+            // Gama media
+            libassMemoryLimit = 16
+            libassGlyphLimit = 2000
+            renderCacheBytes = 12 * 1024 * 1024
+        } else {
+            // Gama baja
             libassMemoryLimit = 8
-            libassGlyphLimit = 500
+            libassGlyphLimit = 1000
+            renderCacheBytes = 8 * 1024 * 1024
         }
     }
 
-    return { libassMemoryLimit, libassGlyphLimit }
+    return { libassMemoryLimit, libassGlyphLimit, renderCacheBytes }
 }
 
 /**
@@ -107,7 +130,7 @@ export const createSubLocalWorker = async (video, subUrl) => {
     if (libassObj) {
         await libassObj.setNewContext({ video, subContent })
     } else {
-        const { libassMemoryLimit, libassGlyphLimit } = await getMemoryLimits()
+        const { libassMemoryLimit, libassGlyphLimit, renderCacheBytes } = await getMemoryLimits()
         const fonts = await getFonts()
         libassObj = new LibAss()
         await libassObj.load({
@@ -118,6 +141,7 @@ export const createSubLocalWorker = async (video, subUrl) => {
             timeOffset: 0.2,
             libassMemoryLimit,
             libassGlyphLimit,
+            maxCacheBytes: renderCacheBytes,
             workerUrl: LibassWorker.href,
             wasmUrl: LibassWorkerWasm.href,
             debug: true,
