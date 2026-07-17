@@ -1,6 +1,6 @@
 
 import 'webostvjs'
-import Jassub from 'jassub-webos5'
+import LibAss from 'libass-webos-legacy/debug'
 
 import { customFetch } from './customFetch'
 import { getFonts } from './fonts'
@@ -10,13 +10,15 @@ import utils from '../utils'
 /** @type {{webOS: import('webostvjs').WebOS}} */
 const { webOS } = window
 
-/** @type {import('jassub-webos5').default} */
-let jassubObj = null
-const JassubWorker = new URL('jassub-webos5/modern/jassub.worker.min.js', import.meta.url)
-const JassubWorkerWasm = new URL('jassub-webos5/modern/worker.min.wasm', import.meta.url)
+/** @type {LibAss} */
+let libassObj = null
+const LibassWorker = new URL('libass-webos-legacy/modern/libass.worker.debug.js', import.meta.url)
+const LibassWorkerWasm = new URL('libass-webos-legacy/modern/worker.debug.wasm', import.meta.url)
 
 const getMemoryLimits = async () => {
-    let libassMemoryLimit = 24, libassGlyphLimit = 2
+    // libassMemoryLimit: bitmap cache in MB (libass default: 500).
+    // libassGlyphLimit:  glyph cache count  (libass default: 1000).
+    let libassMemoryLimit = 24, libassGlyphLimit = 2000
 
     if (utils.isTv()) {
         const deviceInfo = await new Promise(res => webOS.deviceInfo(res))
@@ -24,7 +26,7 @@ const getMemoryLimits = async () => {
 
         if (ramInGB <= 0.8) {
             libassMemoryLimit = 8
-            libassGlyphLimit = 1
+            libassGlyphLimit = 500
         }
     }
 
@@ -34,7 +36,7 @@ const getMemoryLimits = async () => {
 /**
  * @param {Object} obj
  * @param {Number} obj.screenHeight
- * @param {import('jassub-webos5').ASS_Style} obj.style
+ * @param {import('libass-webos-legacy').ASSStyle} obj.style
  * @returns {Number}
  */
 function adjustOutline({ screenHeight, style }) {
@@ -59,21 +61,56 @@ function adjustOutline({ screenHeight, style }) {
 }
 
 /**
+ * @returns {Promise<void>}
+ */
+const applyStyleOverrides = async () => {
+    let styles = null
+    try {
+        const res = await libassObj.getStyles()
+        styles = res.styles
+    } catch (error) {
+        logger.error('libass get styles')
+        logger.error(error)
+    }
+
+    if (styles) {
+        const families = [...new Set(styles.map(s => s.FontName))]
+        logger.info('libass style families: ' + JSON.stringify(families))
+        const loaded = await libassObj.getFontFamilies()
+        logger.info('libass loaded fonts: ' + JSON.stringify(loaded.families))
+
+        const screenHeight = utils.isTv()
+            ? await new Promise(res => webOS.deviceInfo(info => res(info.screenHeight)))
+            : 2160
+
+        for (let i = 0; i < styles.length; i++) {
+            const st = styles[i]
+            await libassObj.setStyle(i, {
+                ...st,
+                Outline: adjustOutline({ screenHeight, style: st }),
+                BorderStyle: 1,
+                OutlineColour: 0x000000,
+            })
+        }
+    }
+}
+
+/**
  * create or reuse sub worker
  * @param {HTMLVideoElement} video
  * @param {String} subUrl
  */
 export const createSubLocalWorker = async (video, subUrl) => {
-    let resolve, reject
-    const prom = new Promise((res, rej) => { resolve = res; reject = rej })
     const subRes = await customFetch(subUrl)
     const subContent = await subRes.text()
-    if (jassubObj) {
-        jassubObj.setNewContext({ video, subContent }).then(resolve).catch(reject)
+
+    if (libassObj) {
+        await libassObj.setNewContext({ video, subContent })
     } else {
         const { libassMemoryLimit, libassGlyphLimit } = await getMemoryLimits()
         const fonts = await getFonts()
-        jassubObj = new Jassub({
+        libassObj = new LibAss()
+        await libassObj.load({
             video,
             subContent,
             fonts: fonts.data,
@@ -81,57 +118,26 @@ export const createSubLocalWorker = async (video, subUrl) => {
             timeOffset: 0.2,
             libassMemoryLimit,
             libassGlyphLimit,
-            blendMode: 'wasm',
-            workerUrl: JassubWorker.href,
-            wasmUrl: JassubWorkerWasm.href,
+            workerUrl: LibassWorker.href,
+            wasmUrl: LibassWorkerWasm.href,
+            debug: true,
         })
-        jassubObj.addEventListener('ready', resolve, { once: true })
-        jassubObj.addEventListener('error', reject, { once: true })
-        prom.then(() => {  // free memory
-            fonts.data = null
-            fonts.names = null
-            fonts.promise = null
-            fonts.ready = false
-        })
+
+        fonts.data = null
+        fonts.names = null
+        fonts.promise = null
+        fonts.ready = false
     }
-    return prom.then(() => new Promise(res => {
-        if (jassubObj) {
-            jassubObj.getStyles((error, styles) => {
-                if (error) {
-                    logger.error('jassub get styles')
-                    logger.error(error)
-                }
-                if (!error) {
-                    const setOutline = info => {
-                        styles.forEach((st, i) => {
-                            jassubObj.setStyle({
-                                ...st,
-                                Outline: adjustOutline({ screenHeight: info.screenHeight, style: st }),
-                                BorderStyle: 1,
-                                OutlineColour: 0x000000
-                            }, i)
-                        })
-                        res()
-                    }
-                    if (utils.isTv()) {
-                        webOS.deviceInfo(setOutline)
-                    } else {
-                        setOutline({ screenHeight: 2160 })
-                    }
-                } else {
-                    res()
-                }
-            })
-        } else {
-            res()
-        }
-    }))
+
+    await applyStyleOverrides()
 }
 
 /**
  * Destroy current sub worker
  */
-export const destroySubLocalWorker = () => {
-    jassubObj?.destroy()
-    jassubObj = null
+export const destroySubLocalWorker = async () => {
+    if (libassObj) {
+        await libassObj.destroy()
+        libassObj = null
+    }
 }
