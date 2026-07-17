@@ -84,7 +84,7 @@
         "i18n-iso-m49": "^1.0.0",
         "ilib": "^14.22.0",
         "jassub-webos5": "^1.8.601-7",
-        "libass-webos-legacy": "file:libass-webos-legacy-1.0.9.tgz",
+        "libass-webos-legacy": "file:libass-webos-legacy-1.0.11.tgz",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",

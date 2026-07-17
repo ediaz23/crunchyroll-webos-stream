@@ -1,6 +1,6 @@
 
 import 'webostvjs'
-import LibAss from 'libass-webos-legacy/debug'
+import LibAss from 'libass-webos-legacy'
 
 import { customFetch } from './customFetch'
 import { getFonts } from './fonts'
@@ -12,8 +12,8 @@ const { webOS } = window
 
 /** @type {LibAss} */
 let libassObj = null
-const LibassWorker = new URL('libass-webos-legacy/modern/libass.worker.debug.js', import.meta.url)
-const LibassWorkerWasm = new URL('libass-webos-legacy/modern/worker.debug.wasm', import.meta.url)
+const LibassWorker = new URL('libass-webos-legacy/modern/libass.worker.min.js', import.meta.url)
+const LibassWorkerWasm = new URL('libass-webos-legacy/modern/worker.min.wasm', import.meta.url)
 
 const getMemoryLimits = async () => {
     // libassMemoryLimit: libass bitmap cache in MB (libass default: 500).
@@ -58,35 +58,32 @@ const getMemoryLimits = async () => {
 
 /**
  * @param {Object} obj
- * @param {Number} obj.screenHeight
+ * @param {Number} obj.playResY Vertical resolution declared by the .ass track.
+ * @param {Number} obj.screenHeight Physical screen height in pixels.
+ * @param {Boolean} obj.scaledBorder Whether the track has ScaledBorderAndShadow enabled.
  * @param {import('libass-webos-legacy').ASSStyle} obj.style
  * @returns {Number}
  */
-function adjustOutline({ screenHeight, style }) {
-    const cur = style.Outline || 0
-    let out = cur
-
-    if (cur <= 3) {
-        const base = Math.max(cur, 1)
-        const ratio = screenHeight / 2160
-        const k = 6
-        const atten = 1 / (1 + cur)
-
-        const calc = Math.round(base * (k * ratio) * atten)
-
-        const fs = Number(style.FontSize) || 48
-        const cap = Math.max(3, Math.round(fs * 0.18))
-
-        out = Math.min(cap, Math.max(cur, calc))
-    }
-
-    return out
+function adjustOutline({ playResY, screenHeight, scaledBorder, style }) {
+    // When the track has ScaledBorderAndShadow=yes libass renders the outline
+    // as `value × (renderH / playResY)` pixels. When it doesn't, libass uses
+    // the value as raw pixels. To normalize both cases, multiply the input
+    // outline (and cap) by (screenHeight / playResY) in the unscaled case so
+    // the on-screen thickness ends up equivalent.
+    const scale = scaledBorder ? 1 : (screenHeight / playResY)
+    const cur = (style.Outline || 0) * scale
+    const targetPct = utils.isTv() ? 0.003 : 0.0015
+    const target = targetPct * (scaledBorder ? playResY : screenHeight)
+    const fs = Number(style.FontSize) || 48
+    const cap = Math.max(3, Math.round(fs * 0.18 * scale))
+    return Math.min(cap, Math.max(cur, target))
 }
 
 /**
+ * @param {String} subContent
  * @returns {Promise<void>}
  */
-const applyStyleOverrides = async () => {
+const applyStyleOverrides = async (subContent) => {
     let styles = null
     try {
         const res = await libassObj.getStyles()
@@ -97,20 +94,18 @@ const applyStyleOverrides = async () => {
     }
 
     if (styles) {
-        const families = [...new Set(styles.map(s => s.FontName))]
-        logger.info('libass style families: ' + JSON.stringify(families))
-        const loaded = await libassObj.getFontFamilies()
-        logger.info('libass loaded fonts: ' + JSON.stringify(loaded.families))
-
+        const playResMatch = subContent && subContent.match(/PlayResY:\s*(\d+)/i)
+        const playResY = playResMatch ? parseInt(playResMatch[1], 10) : 1080
+        const scaledBorder = !!subContent && /^ScaledBorderAndShadow:\s*yes/im.test(subContent)
         const screenHeight = utils.isTv()
             ? await new Promise(res => webOS.deviceInfo(info => res(info.screenHeight)))
-            : 2160
+            : (typeof window !== 'undefined' && window.screen ? window.screen.height : 1080)
 
         for (let i = 0; i < styles.length; i++) {
             const st = styles[i]
             await libassObj.setStyle(i, {
                 ...st,
-                Outline: adjustOutline({ screenHeight, style: st }),
+                Outline: adjustOutline({ playResY, screenHeight, scaledBorder, style: st }),
                 BorderStyle: 1,
                 OutlineColour: 0x000000,
             })
@@ -144,7 +139,6 @@ export const createSubLocalWorker = async (video, subUrl) => {
             maxCacheBytes: renderCacheBytes,
             workerUrl: LibassWorker.href,
             wasmUrl: LibassWorkerWasm.href,
-            debug: true,
         })
 
         fonts.data = null
@@ -153,7 +147,7 @@ export const createSubLocalWorker = async (video, subUrl) => {
         fonts.ready = false
     }
 
-    await applyStyleOverrides()
+    await applyStyleOverrides(subContent)
 }
 
 /**
