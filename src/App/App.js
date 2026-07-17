@@ -28,7 +28,6 @@ import useCustomFetch, { initCache, finishCache } from '../hooks/customFetch'
 import { useNavigate } from '../hooks/navigate'
 import { requestCachedFonts, getFonts } from '../hooks/fonts'
 import { destroySubLocalWorker } from '../hooks/subtitleLocal'
-import { destroySubRemoteWorker } from '../hooks/subtitleRemote'
 import api from '../api'
 import utils from '../utils'
 import './attachErrorHandler'
@@ -88,7 +87,6 @@ const App = ({ ...rest }) => {
             utils.worker.terminate()
             finishCache()
             destroySubLocalWorker()
-            destroySubRemoteWorker()
         }
     }, [setDBInit, customFetch])
 

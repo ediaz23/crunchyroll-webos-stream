@@ -21,7 +21,6 @@ import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
 import { createSubLocalWorker } from '../../hooks/subtitleLocal'
-import { createSubRemoteWorker, destroySubRemoteWorker } from '../../hooks/subtitleRemote'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../assets/empty.mp4'
@@ -994,15 +993,9 @@ const Player = ({ ...rest }) => {
                 const video = document.querySelector('video')
                 playerRef.current.pause()
                 setIsPaused(true)
-                if (appConfigRef.current.subtitle === 'remotesub') {
-                    createSubRemoteWorker(video, subtitle.url)
-                        .then(playVideo)
-                        .catch(handleCrunchyError)
-                } else { // softsub
-                    createSubLocalWorker(video, subtitle.url)
-                        .then(playVideo)
-                        .catch(handleCrunchyError)
-                }
+                createSubLocalWorker(video, subtitle.url)
+                    .then(playVideo)
+                    .catch(handleCrunchyError)
             } else {
                 playVideo()
             }
@@ -1216,12 +1209,6 @@ const Player = ({ ...rest }) => {
             setCurrentSkipEvent(resetCurrentSkipEvent)
         }
     }, [loading, skipEvents, resetCurrentSkipEvent])
-
-    useEffect(() => {
-        return () => {
-            destroySubRemoteWorker()
-        }
-    }, [])
 
     return (
         <div className={rest.className}>

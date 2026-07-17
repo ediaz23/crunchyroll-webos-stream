@@ -54,12 +54,11 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
     const onTogglePreview = useCallback(({ selected }) => savePreview(selected ? 'yes' : 'no'), [savePreview])
 
     /** -> subtitle */
-    const subtitles = useMemo(() => ['hardsub', 'softsub', 'remotesub'], [])
+    const subtitles = useMemo(() => ['hardsub', 'softsub'], [])
     const subtitleLabel = useMemo(() => {
         const sLable = {
-            'hardsub': $L('Hardsub'),
-            'softsub': $L('Softsub'),
-            'remotesub': $L('Remotesub'),
+            hardsub: $L('Hardsub'),
+            softsub: $L('Softsub'),
         }
         return subtitles.map(i => sLable[i])
     }, [subtitles])

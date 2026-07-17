@@ -61,7 +61,7 @@ const fontsData = {
     defaultFont: null,
 }
 
-const defaultFont = new URL('jassub-webos5/default-font', import.meta.url)
+const defaultFont = new URL('libass-webos-legacy/default-font', import.meta.url)
 
 /**
  * @returns {Promise}
