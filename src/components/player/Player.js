@@ -21,7 +21,7 @@ import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
-import { createSubLocalWorker } from '../../hooks/subtitleLocal'
+import { createSubLocalWorker, waitForSubsReady } from '../../hooks/subtitleLocal'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../assets/empty.mp4'
@@ -1008,6 +1008,40 @@ const Player = ({ ...rest }) => {
             }
         }
     }, [loading, appConfigRef, subtitle, handleCrunchyError])
+
+    useEffect(() => {  // pause across seek so libass can warm the cache first (softsub only)
+        let cleanup = () => {}
+        const shouldWire = !loading && subtitle && subtitle.locale !== 'off'
+            && appConfigRef.current.subtitle !== 'hardsub'
+        if (shouldWire) {
+            const video = document.querySelector('video')
+            if (video) {
+                let wasPlaying = false
+                const onSeeking = () => {
+                    wasPlaying = !video.paused
+                }
+                const onSeeked = () => {
+                    // Only stall on seeks that happen mid-playback; leave the
+                    // initial playhead restore (video paused) and user pauses
+                    // alone so the normal play flow can proceed.
+                    if (wasPlaying) {
+                        const t = video.currentTime + (appConfigRef.current.subtitleTimeOffset || 0)
+                        playerRef.current.pause()
+                        waitForSubsReady(t)
+                            .catch(logger.error)
+                            .then(() => playerRef.current.play())
+                    }
+                }
+                video.addEventListener('seeking', onSeeking)
+                video.addEventListener('seeked', onSeeked)
+                cleanup = () => {
+                    video.removeEventListener('seeking', onSeeking)
+                    video.removeEventListener('seeked', onSeeked)
+                }
+            }
+        }
+        return cleanup
+    }, [loading, subtitle, appConfigRef])
 
     useEffect(() => {  // findSkipEvents
         if (stream.urls) {

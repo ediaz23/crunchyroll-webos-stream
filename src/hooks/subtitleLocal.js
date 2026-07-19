@@ -195,6 +195,21 @@ export const createSubLocalWorker = async (video, subUrl, settings) => {
     }
 
     await applyStyleOverrides(subContent, fontScale, outlineScale)
+    // Warm the cache so playback starts with the first cacheable subs ready.
+    await libassObj.awaitNextCacheableEvents(video.currentTime || 0)
+}
+
+/**
+ * Block until the next cacheable subs from `fromTime` are in the LRU (or a
+ * safety timeout fires). Called by the Player on seek to avoid the "video
+ * plays, subs missing" gap. No-op when hardsub / not loaded.
+ * @param {Number} fromTime
+ * @returns {Promise<void>}
+ */
+export const waitForSubsReady = async (fromTime) => {
+    if (libassObj) {
+        await libassObj.awaitNextCacheableEvents(fromTime)
+    }
 }
 
 /**
