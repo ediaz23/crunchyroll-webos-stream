@@ -499,7 +499,8 @@ const setStreamingConfig = async (dashPlayer, appConfigRef) => {
         // dashjs buffer budget so both can coexist without OOM.
         const isSoftsub = appConfigRef.current.subtitle !== 'hardsub'
 
-        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0) - (isSoftsub ? 1 : 0)
+        // 4K weighs more than RAM (kept in sync with subtitleLocal's score).
+        const score = (ramInGB * 2) + (is4K ? 2 : 0) + (hasHDR ? 1 : 0) - (isSoftsub ? 1 : 0)
 
         if (score >= 6) {
             // Gama alta
