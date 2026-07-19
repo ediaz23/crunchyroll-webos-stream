@@ -10,6 +10,7 @@ import { CrunchyrollError } from 'crunchyroll-js-api'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
+import SubtitleStyleSelect from './SubtitleStyleSelect'
 import Rating from './Rating'
 import ContentInfo from './ContentInfo'
 import { ContactMeBtn, AppConfigBtn } from '../Buttons'
@@ -934,6 +935,9 @@ const Player = ({ ...rest }) => {
                         selectSubtitle={selectSubtitle}
                         triggerActivity={triggerActivity} />
                 }
+                {stream.subtitles.length > 1 && appConfigRef.current.subtitle !== 'hardsub' &&
+                    <SubtitleStyleSelect triggerActivity={triggerActivity} />
+                }
                 {stream.audios.length > 1 &&
                     <AudioSelect audios={stream.audios}
                         audio={audio}
@@ -993,9 +997,11 @@ const Player = ({ ...rest }) => {
                 const video = document.querySelector('video')
                 playerRef.current.pause()
                 setIsPaused(true)
-                createSubLocalWorker(video, subtitle.url)
-                    .then(playVideo)
-                    .catch(handleCrunchyError)
+                createSubLocalWorker(video, subtitle.url, {
+                    fontScale: appConfigRef.current.subtitleFontScale,
+                    outlineScale: appConfigRef.current.subtitleOutlineScale,
+                    timeOffset: appConfigRef.current.subtitleTimeOffset,
+                }).then(playVideo).catch(handleCrunchyError)
             } else {
                 playVideo()
             }

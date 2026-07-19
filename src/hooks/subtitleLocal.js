@@ -15,6 +15,13 @@ let libassObj = null
 const LibassWorker = new URL('libass-webos-legacy/modern/libass.worker.min.js', import.meta.url)
 const LibassWorkerWasm = new URL('libass-webos-legacy/modern/worker.min.wasm', import.meta.url)
 
+// Context captured on load so runtime scale changes can recompute from the
+// original track values instead of compounding on previously-scaled ones.
+let styleCtx = null
+// Latest applied settings — merged with partial updates so the caller can
+// change one field without having to resend the others.
+let currentSettings = { fontScale: 100, outlineScale: 100, timeOffset: 0 }
+
 const getMemoryLimits = async () => {
     // libassMemoryLimit: libass bitmap cache in MB (libass default: 500).
     // libassGlyphLimit:  libass glyph cache count  (libass default: 1000).
@@ -80,10 +87,44 @@ function adjustOutline({ playResY, screenHeight, scaledBorder, style }) {
 }
 
 /**
- * @param {String} subContent
+ * Apply scale multipliers to the captured original styles and push them to
+ * libass. Called both on initial load and whenever the user changes the
+ * scale pickers. Percentages, not multipliers (100 = 1.0×).
+ * @param {Object} obj
+ * @param {Number} obj.fontScale
+ * @param {Number} obj.outlineScale
  * @returns {Promise<void>}
  */
-const applyStyleOverrides = async (subContent) => {
+const applyStyleScales = async ({ fontScale, outlineScale }) => {
+    const shouldApply = libassObj && styleCtx
+    if (shouldApply) {
+        const fs = fontScale / 100
+        const os = outlineScale / 100
+        const { originalStyles, playResY, screenHeight, scaledBorder } = styleCtx
+
+        for (let i = 0; i < originalStyles.length; i++) {
+            const st = originalStyles[i]
+            const baseOutline = adjustOutline({ playResY, screenHeight, scaledBorder, style: st })
+            await libassObj.setStyle(i, {
+                ...st,
+                FontSize: (Number(st.FontSize) || 48) * fs,
+                Outline: baseOutline * os,
+                BorderStyle: 1,
+                OutlineColour: 0x000000,
+            })
+        }
+    }
+}
+
+/**
+ * Capture original styles + render context from the track, then apply the
+ * initial scales.
+ * @param {String} subContent
+ * @param {Number} fontScale
+ * @param {Number} outlineScale
+ * @returns {Promise<void>}
+ */
+const applyStyleOverrides = async (subContent, fontScale, outlineScale) => {
     let styles = null
     try {
         const res = await libassObj.getStyles()
@@ -101,15 +142,8 @@ const applyStyleOverrides = async (subContent) => {
             ? await new Promise(res => webOS.deviceInfo(info => res(info.screenHeight)))
             : (typeof window !== 'undefined' && window.screen ? window.screen.height : 1080)
 
-        for (let i = 0; i < styles.length; i++) {
-            const st = styles[i]
-            await libassObj.setStyle(i, {
-                ...st,
-                Outline: adjustOutline({ playResY, screenHeight, scaledBorder, style: st }),
-                BorderStyle: 1,
-                OutlineColour: 0x000000,
-            })
-        }
+        styleCtx = { originalStyles: styles, playResY, screenHeight, scaledBorder }
+        await applyStyleScales({ fontScale, outlineScale })
     }
 }
 
@@ -117,13 +151,24 @@ const applyStyleOverrides = async (subContent) => {
  * create or reuse sub worker
  * @param {HTMLVideoElement} video
  * @param {String} subUrl
+ * @param {Object} [settings]
+ * @param {Number} [settings.fontScale] Percentage; 100 = 1.0×.
+ * @param {Number} [settings.outlineScale] Percentage; 100 = 1.0×.
+ * @param {Number} [settings.timeOffset] Seconds; positive advances, negative delays.
  */
-export const createSubLocalWorker = async (video, subUrl) => {
+export const createSubLocalWorker = async (video, subUrl, settings) => {
+    currentSettings = {
+        fontScale: (settings && settings.fontScale) || 100,
+        outlineScale: (settings && settings.outlineScale) || 100,
+        timeOffset: (settings && settings.timeOffset) || 0,
+    }
+    const { fontScale, outlineScale, timeOffset } = currentSettings
     const subRes = await customFetch(subUrl)
     const subContent = await subRes.text()
 
     if (libassObj) {
         await libassObj.setNewContext({ video, subContent })
+        libassObj.timeOffset = timeOffset
     } else {
         const { libassMemoryLimit, libassGlyphLimit, renderCacheBytes } = await getMemoryLimits()
         const fonts = await getFonts()
@@ -133,7 +178,7 @@ export const createSubLocalWorker = async (video, subUrl) => {
             subContent,
             fonts: fonts.data,
             fallbackFont: fonts.defaultFont,
-            timeOffset: 0.2,
+            timeOffset,
             libassMemoryLimit,
             libassGlyphLimit,
             maxCacheBytes: renderCacheBytes,
@@ -147,7 +192,32 @@ export const createSubLocalWorker = async (video, subUrl) => {
         fonts.ready = false
     }
 
-    await applyStyleOverrides(subContent)
+    await applyStyleOverrides(subContent, fontScale, outlineScale)
+}
+
+/**
+ * Update sub settings at runtime. Any field can be omitted to keep its
+ * current value. Called by the pickers during playback.
+ * @param {Object} settings
+ * @param {Number} [settings.fontScale]
+ * @param {Number} [settings.outlineScale]
+ * @param {Number} [settings.timeOffset]
+ */
+export const updateSubtitleSettings = async (settings) => {
+    const stylesChanged = settings.fontScale !== undefined || settings.outlineScale !== undefined
+    const offsetChanged = settings.timeOffset !== undefined
+    currentSettings = { ...currentSettings, ...settings }
+    if (libassObj) {
+        if (offsetChanged) {
+            libassObj.timeOffset = currentSettings.timeOffset
+        }
+        if (stylesChanged) {
+            await applyStyleScales({
+                fontScale: currentSettings.fontScale,
+                outlineScale: currentSettings.outlineScale,
+            })
+        }
+    }
 }
 
 /**
@@ -158,4 +228,6 @@ export const destroySubLocalWorker = async () => {
         await libassObj.destroy()
         libassObj = null
     }
+    styleCtx = null
+    currentSettings = { fontScale: 100, outlineScale: 100, timeOffset: 0 }
 }

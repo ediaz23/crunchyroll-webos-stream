@@ -109,6 +109,9 @@ export const setDeviceInformation = async () => {
  * @property {'hardsub'|'softsub'} subtitle
  * @property {'yes'|'no'} preview
  * @property {'adaptive'|5|10|15|20|30|50} cacheMemory
+ * @property {Number} subtitleFontScale Font-size multiplier as percentage; 100 = 1.0×.
+ * @property {Number} subtitleOutlineScale Outline multiplier as percentage; 100 = 1.0×.
+ * @property {Number} subtitleTimeOffset Seconds added to every incoming media time; positive advances subs, negative delays them.
  *
  * @param {AppConfig} [newConfig]
  * @return {Promise}
@@ -121,6 +124,9 @@ export const setAppConfig = async (newConfig = {}) => {
         subtitle: 'hardsub',
         preview: 'yes',
         cacheMemory: 'adaptive',
+        subtitleFontScale: 100,
+        subtitleOutlineScale: 100,
+        subtitleTimeOffset: 0,
     }
     await localStore.setNewData({ appConfig: { ...defaultConfig, ...(storage.appConfig || {}), ...newConfig } })
 }
