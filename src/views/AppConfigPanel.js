@@ -7,7 +7,8 @@ import Heading from '@enact/moonstone/Heading'
 import Dropdown from '@enact/moonstone/Dropdown'
 import CheckboxItem from '@enact/moonstone/CheckboxItem'
 import Spinner from '@enact/moonstone/Spinner'
-import Item from '@enact/moonstone/Item';
+import Item from '@enact/moonstone/Item'
+import ToggleButton from '@enact/moonstone/ToggleButton'
 
 import { ContactMeBtn, LogoutBtn, AppIconButton } from '../components/Buttons'
 import PopupMessage from '../components/Popup'
@@ -54,16 +55,8 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
     const onTogglePreview = useCallback(({ selected }) => savePreview(selected ? 'yes' : 'no'), [savePreview])
 
     /** -> subtitle */
-    const subtitles = useMemo(() => ['hardsub', 'softsub'], [])
-    const subtitleLabel = useMemo(() => {
-        const sLable = {
-            hardsub: $L('Hardsub'),
-            softsub: $L('Softsub'),
-        }
-        return subtitles.map(i => sLable[i])
-    }, [subtitles])
     const saveSubtitle = useSaveConfigField({ setAppConfig, field: 'subtitle' })
-    const onSelectSubtitle = useCallback(({ selected }) => saveSubtitle(subtitles[selected]), [subtitles, saveSubtitle])
+    const onToggleSubtitle = useCallback(({ selected }) => saveSubtitle(selected ? 'hardsub' : 'softsub'), [saveSubtitle])
 
     /** -> video */
     const videos = useMemo(() => ['adaptive', '2160p', '1080p', '720p', '480p', '360p', '240p'], [])
@@ -149,15 +142,12 @@ const AppConfigPanel = ({ noButtons, ...rest }) => {
                             </Dropdown>
                         </Field>
                         <Field title={$L('Subtitles')}>
-                            <Dropdown
-                                title={$L('Subtitles')}
-                                selected={subtitles.indexOf(appConfig.subtitle)}
-                                width='x-large'
-                                onSelect={onSelectSubtitle}
-                                onKeyDown={dropdownKeydown}
-                                showCloseButton>
-                                {subtitleLabel}
-                            </Dropdown>
+                            <ToggleButton
+                                selected={appConfig.subtitle === 'hardsub'}
+                                toggleOnLabel={$L('Hardsub')}
+                                toggleOffLabel={$L('Softsub')}
+                                onToggle={onToggleSubtitle}
+                            />
                         </Field>
                         <Field title={$L('Previews')}>
                             <CheckboxItem
