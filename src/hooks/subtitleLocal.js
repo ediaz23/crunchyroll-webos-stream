@@ -186,7 +186,7 @@ export const createSubLocalWorker = async (video, subUrl, settings) => {
             libassGlyphLimit,
             maxCacheBytes: renderCacheBytes,
             workerUrl: LibassWorker.href,
-            wasmUrl: LibassWorkerWasm.href,
+            legacyWasmUrl: LibassWorkerWasm.href,
         })
 
         fonts.data = null
