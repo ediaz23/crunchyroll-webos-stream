@@ -10,6 +10,7 @@ import { CrunchyrollError } from 'crunchyroll-js-api'
 
 import AudioSelect from './AudioSelect'
 import SubtitleSelect from './SubtitleSelect'
+import SubtitleStyleSelect from './SubtitleStyleSelect'
 import Rating from './Rating'
 import ContentInfo from './ContentInfo'
 import { ContactMeBtn, AppConfigBtn } from '../Buttons'
@@ -20,8 +21,7 @@ import * as fetchUtils from '../../hooks/customFetch'
 import { $L } from '../../hooks/language'
 import { usePreviewWorker } from '../../hooks/previewWorker'
 import { useNavigate } from '../../hooks/navigate'
-import { createSubLocalWorker } from '../../hooks/subtitleLocal'
-import { createSubRemoteWorker, destroySubRemoteWorker } from '../../hooks/subtitleRemote'
+import { createSubLocalWorker, waitForSubsReady } from '../../hooks/subtitleLocal'
 import logger from '../../logger'
 import api from '../../api'
 import emptyVideo from '../../../assets/empty.mp4'
@@ -495,8 +495,12 @@ const setStreamingConfig = async (dashPlayer, appConfigRef) => {
         const ramInGB = utils.parseRamSizeInGB(deviceInfo.ddrSize || '1G')
         const is4K = deviceInfo.screenWidth >= 3840 && deviceInfo.screenHeight >= 2160
         const hasHDR = !!(deviceInfo.hdr10 || deviceInfo.dolbyVision)
+        // Softsub runs libass (worker + WASM heap + LRU cache); penalize the
+        // dashjs buffer budget so both can coexist without OOM.
+        const isSoftsub = appConfigRef.current.subtitle !== 'hardsub'
 
-        const score = (ramInGB * 2) + (is4K ? 1 : 0) + (hasHDR ? 1 : 0)
+        // 4K weighs more than RAM (kept in sync with subtitleLocal's score).
+        const score = (ramInGB * 2) + (is4K ? 2 : 0) + (hasHDR ? 1 : 0) - (isSoftsub ? 1 : 0)
 
         if (score >= 6) {
             // Gama alta
@@ -932,6 +936,9 @@ const Player = ({ ...rest }) => {
                         selectSubtitle={selectSubtitle}
                         triggerActivity={triggerActivity} />
                 }
+                {stream.subtitles.length > 1 && appConfigRef.current.subtitle !== 'hardsub' &&
+                    <SubtitleStyleSelect triggerActivity={triggerActivity} />
+                }
                 {stream.audios.length > 1 &&
                     <AudioSelect audios={stream.audios}
                         audio={audio}
@@ -991,20 +998,50 @@ const Player = ({ ...rest }) => {
                 const video = document.querySelector('video')
                 playerRef.current.pause()
                 setIsPaused(true)
-                if (appConfigRef.current.subtitle === 'remotesub') {
-                    createSubRemoteWorker(video, subtitle.url)
-                        .then(playVideo)
-                        .catch(handleCrunchyError)
-                } else { // softsub
-                    createSubLocalWorker(video, subtitle.url)
-                        .then(playVideo)
-                        .catch(handleCrunchyError)
-                }
+                createSubLocalWorker(video, subtitle.url, {
+                    fontScale: appConfigRef.current.subtitleFontScale,
+                    outlineScale: appConfigRef.current.subtitleOutlineScale,
+                    timeOffset: appConfigRef.current.subtitleTimeOffset,
+                }).then(playVideo).catch(handleCrunchyError)
             } else {
                 playVideo()
             }
         }
     }, [loading, appConfigRef, subtitle, handleCrunchyError])
+
+    useEffect(() => {  // pause across seek so libass can warm the cache first (softsub only)
+        let cleanup = () => {}
+        const shouldWire = !loading && subtitle && subtitle.locale !== 'off'
+            && appConfigRef.current.subtitle !== 'hardsub'
+        if (shouldWire) {
+            const video = document.querySelector('video')
+            if (video) {
+                let wasPlaying = false
+                const onSeeking = () => {
+                    wasPlaying = !video.paused
+                }
+                const onSeeked = () => {
+                    // Only stall on seeks that happen mid-playback; leave the
+                    // initial playhead restore (video paused) and user pauses
+                    // alone so the normal play flow can proceed.
+                    if (wasPlaying) {
+                        const t = video.currentTime + (appConfigRef.current.subtitleTimeOffset || 0)
+                        playerRef.current.pause()
+                        waitForSubsReady(t)
+                            .catch(logger.error)
+                            .then(() => playerRef.current.play())
+                    }
+                }
+                video.addEventListener('seeking', onSeeking)
+                video.addEventListener('seeked', onSeeked)
+                cleanup = () => {
+                    video.removeEventListener('seeking', onSeeking)
+                    video.removeEventListener('seeked', onSeeked)
+                }
+            }
+        }
+        return cleanup
+    }, [loading, subtitle, appConfigRef])
 
     useEffect(() => {  // findSkipEvents
         if (stream.urls) {
@@ -1213,12 +1250,6 @@ const Player = ({ ...rest }) => {
             setCurrentSkipEvent(resetCurrentSkipEvent)
         }
     }, [loading, skipEvents, resetCurrentSkipEvent])
-
-    useEffect(() => {
-        return () => {
-            destroySubRemoteWorker()
-        }
-    }, [])
 
     return (
         <div className={rest.className}>
