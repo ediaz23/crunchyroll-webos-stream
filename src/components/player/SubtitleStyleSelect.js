@@ -5,6 +5,7 @@ import ContextualPopupDecorator from '@enact/moonstone/ContextualPopupDecorator'
 import Picker from '@enact/moonstone/Picker'
 import ri from '@enact/ui/resolution'
 import $L from '@enact/i18n/$L'
+import PropTypes from 'prop-types'
 
 import api from '../../api'
 import { updateSubtitleSettings } from '../../hooks/subtitleLocal'
@@ -50,7 +51,12 @@ const rowStyle = {
     padding: `${ri.scale(4)}px ${ri.scale(12)}px`,
 }
 
-const Panel = () => {
+/**
+ * @param {Object} obj
+ * @param {Function} obj.triggerActivity Signals the player overlay to reset
+ * its inactivity timer so it doesn't auto-hide while the user is adjusting.
+ */
+const Panel = ({ triggerActivity }) => {
     const initialConfig = api.config.getAppConfig() || {}
     const [fontScale, setFontScale] = useState(initialConfig.subtitleFontScale || 100)
     const [outlineScale, setOutlineScale] = useState(initialConfig.subtitleOutlineScale || 100)
@@ -66,24 +72,27 @@ const Panel = () => {
         setFontScale(next)
         api.config.setAppConfig({ subtitleFontScale: next })
         updateSubtitleSettings({ fontScale: next })
-    }, [])
+        triggerActivity()
+    }, [triggerActivity])
 
     const onChangeOutline = useCallback(({ value }) => {
         const next = OUTLINE_VALUES[value]
         setOutlineScale(next)
         api.config.setAppConfig({ subtitleOutlineScale: next })
         updateSubtitleSettings({ outlineScale: next })
-    }, [])
+        triggerActivity()
+    }, [triggerActivity])
 
     const onChangeOffset = useCallback(({ value }) => {
         const next = OFFSET_VALUES[value]
         setTimeOffset(next)
         api.config.setAppConfig({ subtitleTimeOffset: next })
         updateSubtitleSettings({ timeOffset: next })
-    }, [])
+        triggerActivity()
+    }, [triggerActivity])
 
     return (
-        <div>
+        <div onFocus={triggerActivity}>
             <div style={rowStyle}>
                 <span>{$L('Size')}</span>
                 <Picker value={fontIndex} onChange={onChangeFont} width='small' joined>
@@ -106,7 +115,15 @@ const Panel = () => {
     )
 }
 
-const SubtitleStyleSelect = ({ ...rest }) => {
+Panel.propTypes = {
+    triggerActivity: PropTypes.func.isRequired,
+}
+
+/**
+ * @param {Object} obj
+ * @param {Function} obj.triggerActivity
+ */
+const SubtitleStyleSelect = ({ triggerActivity, ...rest }) => {
     const { pushHistory, popHistory } = useNavigate()
     /** @type {[Boolean, Function]} */
     const [showPanel, setShowPanel] = useState(false)
@@ -121,7 +138,9 @@ const SubtitleStyleSelect = ({ ...rest }) => {
         }
     }, [showPanel, setShowPanel, pushHistory, popHistory])
 
-    const panel = useCallback(() => <Panel />, [])
+    const panel = useCallback(() => (
+        <Panel triggerActivity={triggerActivity} />
+    ), [triggerActivity])
 
     return (
         <IconButtonWithPopup
@@ -136,6 +155,10 @@ const SubtitleStyleSelect = ({ ...rest }) => {
             aA
         </IconButtonWithPopup>
     )
+}
+
+SubtitleStyleSelect.propTypes = {
+    triggerActivity: PropTypes.func.isRequired,
 }
 
 export default SubtitleStyleSelect
