@@ -85,6 +85,21 @@ class ResponseHack extends Response {
             get: () => { return this.originUrl },
         })
     }
+
+    /**
+     * whatwg-fetch decodes the body as Latin-1, so non-ASCII comes out
+     * garbled. Its json() goes through text(), so this fixes both.
+     * @returns {Promise<String>}
+     */
+    text() {
+        let out
+        if (window.TextDecoder) {
+            out = this.arrayBuffer().then(buffer => new window.TextDecoder('utf-8').decode(buffer))
+        } else {
+            out = super.text()
+        }
+        return out
+    }
 }
 
 worker.addEventListener('message', ({ data }) => {
