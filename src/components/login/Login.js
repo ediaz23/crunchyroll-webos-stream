@@ -129,8 +129,9 @@ export const LoginWithEmail = ({ autoLogin, makeLogin, setErrorMessage, ...rest 
             const setCredentiasl = async () => {
                 const credentials = await api.auth.getCredentials()
                 if (credentials) {
+                    // Only the email: a pre-filled password stays readable in the DOM,
+                    // and Developer Mode exposes the web inspector to the whole LAN.
                     setEmail(credentials.username)
-                    setPassword(credentials.password)
                 }
                 setLoading(false)
             }
