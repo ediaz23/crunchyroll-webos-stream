@@ -138,6 +138,28 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
     }
 }
 
+/** CDN hosts answer CORS for the app, so media segments can skip the service */
+const DIRECT_CDN = /^https:\/\/[^/?#]+\.crunchyrollcdn\.com\//
+/** After this many native errors, go back to the service for the session */
+const MAX_DIRECT_ERRORS = 3
+let directErrors = 0
+
+/**
+ * Native XHR for CDN segments: routing them through the webOS service
+ * (base64 over Luna) can't keep up with playback on webOS 3.x/4.x.
+ * @returns {XMLHttpRequest}
+ */
+function createDirectXhr() {
+    const req = new window.XMLHttpRequest()
+    req.addEventListener('error', () => {
+        directErrors++
+        if (directErrors === MAX_DIRECT_ERRORS) {
+            logger.error('direct CDN requests failing, falling back to the service')
+        }
+    })
+    return req
+}
+
 /**
  * @module XHRLoader
  * @description Manages download by webOS service
@@ -153,7 +175,8 @@ function XHRLoader() {
      */
     function load(commonMediaRequest, commonMediaResponse) {
         xhr = null;
-        xhr = new FakeXMLHttpRequest();
+        const useDirect = DIRECT_CDN.test(commonMediaRequest.url) && directErrors < MAX_DIRECT_ERRORS
+        xhr = useDirect ? createDirectXhr() : new FakeXMLHttpRequest();
         xhr.open(commonMediaRequest.method, commonMediaRequest.url, true);
 
         if (commonMediaRequest.responseType) {
@@ -173,7 +196,7 @@ function XHRLoader() {
         xhr.timeout = commonMediaRequest.timeout;
 
         xhr.onload = function() {
-            commonMediaResponse.url = this.responseURL;
+            commonMediaResponse.url = this.responseURL || commonMediaRequest.url;
             commonMediaResponse.status = this.status;
             commonMediaResponse.statusText = this.statusText;
             commonMediaResponse.headers = dashjs.Utils.parseHttpHeaders(this.getAllResponseHeaders());
