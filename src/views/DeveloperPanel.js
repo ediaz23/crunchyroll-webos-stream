@@ -199,7 +199,7 @@ const DeveloperPanel = (props) => {
                 :
                 <Row style={{ height: '100%' }}>
                     <Cell>
-                        <BodyText className='app-version'>{$L('Version') + ' 2.2.0'} </BodyText>
+                        <BodyText className='app-version'>{$L('Version') + ' 2.2.1'} </BodyText>
                         <Button style={btnStyle} onClick={onClear}>
                             {$L('Clear')}
                         </Button>
