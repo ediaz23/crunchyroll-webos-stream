@@ -94,7 +94,7 @@ class ResponseHack extends Response {
     text() {
         let out
         if (window.TextDecoder) {
-            out = this.arrayBuffer().then(buffer => new window.TextDecoder('utf-8').decode(buffer))
+            out = this.arrayBuffer().then(buffer => new window.TextDecoder('utf-8').decode(new Uint8Array(buffer)))
         } else {
             out = super.text()
         }
