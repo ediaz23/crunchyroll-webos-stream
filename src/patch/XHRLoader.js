@@ -7,6 +7,23 @@ import logger from '../logger'
 const { dashjs } = window
 
 
+/** Media CDN hosts answer CORS for the app, so segments can skip the service */
+const DIRECT_HOST = /\.crunchyrollcdn\.com$/
+/** Hosts that refused a direct request, they use the service for the rest of the session */
+const noDirectHosts = new Set()
+
+/**
+ * Host to ask directly, or null to go through the service
+ * @param {String} url
+ * @returns {String}
+ */
+const findDirectHost = url => {
+    const match = /^https:\/\/([^/?#]+)/.exec(url)
+    const host = match ? match[1] : ''
+    return DIRECT_HOST.test(host) && !noDirectHosts.has(host) ? host : null
+}
+
+
 /**
  * Fix other type of response
  */
@@ -54,12 +71,17 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
                 this._readyStateChange(window.XMLHttpRequest.DONE)
             }, this.timeout)
         }
-        fetchUtils.makeRequest({
-            config: this.reqConfig,
-            onSuccess: this._onSuccess.bind(this),
-            onFailure: this._onFailure.bind(this),
-            onProgress: this.async ? this._onProgress.bind(this) : null,
-        }, { sync: !this.async, cache: false })
+        const directHost = this.async ? findDirectHost(this.url) : null
+        if (directHost) {
+            this._sendDirect(directHost)
+        } else {
+            fetchUtils.makeRequest({
+                config: this.reqConfig,
+                onSuccess: this._onSuccess.bind(this),
+                onFailure: this._onFailure.bind(this),
+                onProgress: this.async ? this._onProgress.bind(this) : null,
+            }, { sync: !this.async, cache: false })
+        }
     }
 
     /**
@@ -67,6 +89,7 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
      */
     abort() {
         clearTimeout(this.reqTimeout)
+        this.directXhr?.abort()
         this.reqConfig.resStatus = 'abort'
         logger.debug(`abort ${this.logReq}`)
         super.abort()
@@ -84,8 +107,8 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
         } else if (this.responseType === 'blob') {
             this.response = new window.Blob([body])
         } else {
-            const decoder = new window.TextDecoder()
-            this.responseText = decoder.decode(body)
+            const decoder = new window.TextDecoder('utf-8')
+            this.responseText = decoder.decode(new Uint8Array(body))
             if (this.responseType === 'json') {
                 this.response = JSON.parse(this.responseText)
             } else if (this.responseType === 'document') {
@@ -135,6 +158,38 @@ class FakeXMLHttpRequest extends FakeXMLHttpRequestBase {
         } else {
             this.respond(500, {}, error)
         }
+    }
+
+    /**
+     * Ask the CDN directly, skipping the service. If it fails at network
+     * level the host is remembered, and the dash.js retry uses the service.
+     * @param {String} host
+     */
+    _sendDirect(host) {
+        const xhr = new window.XMLHttpRequest()
+        this.directXhr = xhr
+        xhr.open(this.method, this.url, true)
+        xhr.responseType = 'arraybuffer'
+        for (let header in this.requestHeaders) {
+            xhr.setRequestHeader(header, this.requestHeaders[header])
+        }
+        xhr.onload = () => {
+            this.directXhr = null
+            this._onSuccess({
+                status: xhr.status,
+                content: xhr.response,
+                headers: dashjs.Utils.parseHttpHeaders(xhr.getAllResponseHeaders()),
+                resUrl: xhr.responseURL || this.url,
+            })
+        }
+        xhr.onerror = () => {
+            this.directXhr = null
+            noDirectHosts.add(host)
+            logger.error(`direct ${this.logReq}, using the service from now on`)
+            this._onFailure({})
+        }
+        xhr.onprogress = ({ loaded, total }) => this._onProgress({ loaded, total })
+        xhr.send()
     }
 }
 
