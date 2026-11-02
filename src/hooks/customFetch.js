@@ -85,6 +85,20 @@ class ResponseHack extends Response {
             get: () => { return this.originUrl },
         })
     }
+
+    /**
+     * Old webOS engines get the whatwg-fetch polyfill instead of a native
+     * Response, and its text() decodes the body byte by byte as Latin-1, so
+     * every non-ASCII character comes out garbled. The polyfill's json()
+     * goes through text(), so this fixes both.
+     * @returns {Promise<String>}
+     */
+    text() {
+        if (!window.TextDecoder) {
+            return super.text()
+        }
+        return this.arrayBuffer().then(buffer => new window.TextDecoder('utf-8').decode(buffer))
+    }
 }
 
 worker.addEventListener('message', ({ data }) => {
