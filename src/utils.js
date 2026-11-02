@@ -272,8 +272,14 @@ export const getIsPremium = (item) => {
  * @return {Number}
  */
 export const parseRamSizeInGB = (ddrSizeString) => {
-    const match = ddrSizeString.match(/([\d.]+)G/i);
-    return match ? parseFloat(match[1]) : 0;
+    /** webOS 3.x reports MB without a unit, e.g. "1280" */
+    const match = ddrSizeString.match(/([\d.]+)\s*(G|M)?/i);
+    let out = 0;
+    if (match) {
+        const size = parseFloat(match[1]);
+        out = (match[2] || 'M').toUpperCase() === 'G' ? size : size / 1024;
+    }
+    return out;
 }
 
 
