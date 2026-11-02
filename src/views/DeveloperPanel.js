@@ -82,7 +82,9 @@ const DeveloperPanel = (props) => {
     const onShowPassword = useCallback(() => {
         runTest(async () => {
             let out = await api.auth.getCredentials()
-            if (!out) {
+            if (out) {
+                out = { username: out.username, password: out.password ? '********' : '' }
+            } else {
                 out = $L('No credentials')
             }
             return out
